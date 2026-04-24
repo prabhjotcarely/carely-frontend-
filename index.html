@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carely — Never Miss a Dose Again</title>
+  <meta name="description" content="Smart medication reminders with an AI caretaker that actually cares. Join 200 founding members at $5/month — locked forever." />
+  <meta property="og:title" content="Carely — Never Miss a Dose Again" />
+  <meta property="og:description" content="AI-powered medication reminders. 200 founding spots at $5/month, locked forever." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://carely.fit" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #028090; --deep-teal: #0D3347; --seafoam: #00A896; --mint: #02C39A;
+      --light-mint: #E0FAF4; --off-white: #F7FBFA; --grey-100: #F1F5F4;
+      --grey-300: #C8D6D3; --grey-500: #7A9490; --grey-700: #3D5550;
+      --text: #0D2B24; --white: #fff;
+      --shadow: 0 4px 32px rgba(13,51,71,0.10);
+      --shadow-lg: 0 16px 64px rgba(13,51,71,0.16);
+      --radius: 16px; --radius-sm: 10px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--off-white); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* ── Nav ── */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(247,251,250,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(200,214,211,0.5); padding: 0 20px; }
+    .nav-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: var(--deep-teal); text-decoration: none; }
+    .logo svg { width: 36px; height: 36px; flex-shrink: 0; }
+    .nav-pill { background: linear-gradient(135deg, var(--seafoam), var(--mint)); color: white; font-weight: 600; font-size: 0.85rem; padding: 8px 18px; border-radius: 100px; border: none; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; text-decoration: none; white-space: nowrap; }
+    .nav-pill:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,168,150,0.4); }
+
+    /* ── Hero ── */
+    .hero { background: linear-gradient(160deg, var(--deep-teal) 0%, var(--teal) 55%, var(--seafoam) 100%); color: white; padding: 64px 20px 80px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Ccircle cx='30' cy='30' r='3' fill='%23ffffff' fill-opacity='0.04'/%3E%3C/g%3E%3C/svg%3E"); pointer-events: none; }
+    .hero-inner { max-width: 660px; margin: 0 auto; position: relative; }
+    .founding-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 100px; padding: 5px 16px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 24px; }
+    .badge-dot { width: 8px; height: 8px; background: var(--mint); border-radius: 50%; animation: pulse 2s infinite; flex-shrink: 0; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+    .hero h1 { font-size: clamp(2rem, 7vw, 3.6rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 18px; }
+    .hero h1 span { color: var(--mint); }
+    .hero p { font-size: clamp(0.95rem, 2.5vw, 1.1rem); opacity: 0.85; max-width: 500px; margin: 0 auto 36px; line-height: 1.7; }
+
+    /* ── Signup box ── */
+    .signup-box { background: white; border-radius: 20px; padding: 28px; box-shadow: var(--shadow-lg); max-width: 460px; margin: 0 auto; color: var(--text); }
+    .signup-box h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; color: var(--deep-teal); }
+    .signup-box .subtext { font-size: 0.85rem; color: var(--grey-500); margin-bottom: 18px; }
+    .spots-bar { background: var(--grey-100); border-radius: 100px; height: 7px; margin-bottom: 7px; overflow: hidden; }
+    .spots-fill { height: 100%; width: 23%; background: linear-gradient(90deg, var(--seafoam), var(--mint)); border-radius: 100px; transition: width 1.2s ease; }
+    .spots-label { display: flex; justify-content: space-between; font-size: 0.76rem; font-weight: 600; margin-bottom: 18px; }
+    .spots-label .taken { color: var(--seafoam); } .spots-label .left { color: var(--grey-500); }
+    .form-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .form-row input, .email-input { width: 100%; padding: 13px 15px; border: 1.5px solid var(--grey-300); border-radius: var(--radius-sm); font-size: 0.92rem; font-family: inherit; color: var(--text); outline: none; transition: border-color 0.15s; margin-bottom: 10px; }
+    .form-row input { flex: 1; margin-bottom: 0; }
+    .form-row input:focus, .email-input:focus { border-color: var(--seafoam); }
+    .form-row input::placeholder, .email-input::placeholder { color: var(--grey-500); }
+    .cta-btn { width: 100%; background: linear-gradient(135deg, var(--seafoam), var(--mint)); color: white; font-weight: 700; font-size: 0.97rem; padding: 15px; border-radius: var(--radius-sm); border: none; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; letter-spacing: 0.01em; }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,168,150,0.4); }
+    .fine-print { font-size: 0.74rem; color: var(--grey-500); text-align: center; margin-top: 11px; line-height: 1.5; }
+    .fine-print strong { color: var(--seafoam); }
+    .success-state { display: none; text-align: center; padding: 8px 0; }
+    .success-icon { width: 52px; height: 52px; background: var(--light-mint); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 14px; }
+    .success-state h3 { font-size: 1.1rem; font-weight: 800; color: var(--deep-teal); margin-bottom: 6px; }
+    .success-state p { font-size: 0.86rem; color: var(--grey-500); }
+    .trust-strip { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 28px; }
+    .trust-item { display: flex; align-items: center; gap: 6px; font-size: 0.79rem; font-weight: 500; color: rgba(255,255,255,0.85); }
+
+    /* ── Sections ── */
+    .section { padding: 64px 20px; }
+    .section.white { background: white; }
+    .section.light { background: var(--off-white); }
+    .section.dark { background: linear-gradient(160deg, var(--deep-teal), var(--teal)); color: white; }
+    .section-inner { max-width: 1060px; margin: 0 auto; }
+    .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--seafoam); margin-bottom: 10px; }
+    .section.dark .section-label { color: var(--mint); opacity: 0.9; }
+    .section-head { text-align: center; margin-bottom: 48px; }
+    .section-head h2 { font-size: clamp(1.5rem, 4vw, 2.3rem); font-weight: 800; color: var(--deep-teal); letter-spacing: -0.02em; margin-bottom: 10px; }
+    .section.dark .section-head h2 { color: white; }
+    .section-head p { color: var(--grey-500); max-width: 440px; margin: 0 auto; font-size: 0.95rem; }
+    .section.dark .section-head p { color: rgba(255,255,255,0.7); }
+
+    /* ── Phone mockups ── */
+    .phones-wrapper { display: flex; justify-content: center; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+    .phone { width: 190px; background: var(--deep-teal); border-radius: 30px; padding: 9px; box-shadow: var(--shadow-lg); position: relative; flex-shrink: 0; }
+    .phone.center { width: 210px; transform: translateY(-20px); box-shadow: 0 24px 72px rgba(13,51,71,0.28); }
+    .phone-notch { width: 56px; height: 7px; background: rgba(255,255,255,0.12); border-radius: 100px; margin: 0 auto 7px; }
+    .phone-screen { background: var(--off-white); border-radius: 22px; padding: 14px 11px; min-height: 340px; overflow: hidden; }
+    .screen-header { text-align: center; margin-bottom: 12px; }
+    .greeting { font-size: 0.65rem; color: var(--grey-500); }
+    .screen-title { font-size: 0.95rem; font-weight: 800; color: var(--deep-teal); }
+    .adherence-ring { width: 64px; height: 64px; margin: 0 auto 10px; position: relative; }
+    .adherence-ring svg { width: 100%; height: 100%; }
+    .adherence-ring .pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; color: var(--deep-teal); }
+    .ai-bubble { background: linear-gradient(135deg, var(--deep-teal), var(--teal)); color: white; border-radius: 11px; padding: 9px 11px; font-size: 0.57rem; line-height: 1.5; margin-bottom: 10px; }
+    .ai-tag { font-size: 0.52rem; opacity: 0.6; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .dose-row { display: flex; align-items: center; background: white; border-radius: 9px; padding: 7px 9px; margin-bottom: 5px; gap: 7px; }
+    .dose-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .dose-name { font-size: 0.58rem; font-weight: 700; color: var(--deep-teal); }
+    .dose-time { font-size: 0.52rem; color: var(--grey-500); }
+    .dose-check { font-size: 11px; margin-left: auto; }
+    .sched-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .sched-title { font-size: 0.82rem; font-weight: 800; color: var(--deep-teal); }
+    .add-tag { font-size: 0.57rem; background: var(--seafoam); color: white; border-radius: 5px; padding: 2px 7px; font-weight: 600; }
+    .med-card { background: white; border-radius: 10px; padding: 8px; margin-bottom: 7px; display: flex; gap: 8px; align-items: center; }
+    .med-card.c1 { border-left: 3px solid #028090; } .med-card.c2 { border-left: 3px solid #02C39A; }
+    .med-card.c3 { border-left: 3px solid #E87070; } .med-card.c4 { border-left: 3px solid #5BA4CF; }
+    .med-ico { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+    .med-ico.c1{background:rgba(2,128,144,.12)} .med-ico.c2{background:rgba(2,195,154,.12)} .med-ico.c3{background:rgba(232,112,112,.12)} .med-ico.c4{background:rgba(91,164,207,.12)}
+    .med-name { font-size: 0.59rem; font-weight: 700; color: var(--deep-teal); }
+    .med-sched { font-size: 0.52rem; color: var(--grey-500); }
+    .ai-avatar { width: 38px; height: 38px; background: linear-gradient(135deg, var(--seafoam), var(--mint)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; margin: 0 auto 5px; }
+    .ai-screen-name { font-size: 0.72rem; font-weight: 800; color: var(--deep-teal); text-align: center; }
+    .ai-online { font-size: 0.52rem; color: var(--seafoam); text-align: center; margin-bottom: 10px; }
+    .chat-msg { border-radius: 10px; padding: 7px 9px; font-size: 0.55rem; line-height: 1.5; margin-bottom: 7px; max-width: 88%; }
+    .chat-msg.bot { background: white; color: var(--deep-teal); }
+    .chat-msg.user { background: linear-gradient(135deg, var(--seafoam), var(--teal)); color: white; margin-left: auto; }
+    .chat-input { display: flex; gap: 5px; margin-top: 10px; }
+    .chat-field { flex: 1; background: white; border-radius: 7px; padding: 6px 9px; font-size: 0.55rem; color: var(--grey-500); border: 1.5px solid var(--grey-300); }
+    .chat-send { background: var(--seafoam); color: white; border-radius: 7px; padding: 6px 9px; font-size: 11px; border: none; cursor: pointer; }
+
+    /* ── Features grid ── */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+    .feature-card { background: white; border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .feature-icon { width: 46px; height: 46px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 14px; }
+    .fi-green{background:var(--light-mint)} .fi-teal{background:rgba(2,128,144,.1)} .fi-purple{background:rgba(139,103,210,.1)} .fi-orange{background:rgba(240,147,75,.1)} .fi-blue{background:rgba(79,141,234,.1)} .fi-red{background:rgba(232,112,112,.1)}
+    .feature-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--deep-teal); margin-bottom: 6px; }
+    .feature-card p { font-size: 0.84rem; color: var(--grey-500); line-height: 1.6; }
+    .feature-tag { display: inline-block; background: var(--light-mint); color: var(--seafoam); font-size: 0.67rem; font-weight: 700; padding: 2px 9px; border-radius: 100px; margin-top: 10px; }
+
+    /* ── Steps ── */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 28px; }
+    .step { text-align: center; }
+    .step-num { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--seafoam), var(--mint)); color: white; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; box-shadow: 0 4px 16px rgba(0,168,150,0.3); }
+    .step h3 { font-size: 0.92rem; font-weight: 700; color: var(--deep-teal); margin-bottom: 6px; }
+    .step p { font-size: 0.82rem; color: var(--grey-500); line-height: 1.6; }
+
+    /* ── Pricing ── */
+    .pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; max-width: 840px; margin: 0 auto 40px; }
+    .pricing-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 28px; text-align: left; position: relative; transition: transform 0.2s; }
+    .pricing-card:hover { transform: translateY(-4px); }
+    .pricing-card.featured { background: white; color: var(--text); border-color: white; box-shadow: 0 20px 60px rgba(0,0,0,0.28); }
+    .founding-ribbon { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--mint); color: white; font-size: 0.68rem; font-weight: 700; padding: 3px 14px; border-radius: 100px; white-space: nowrap; letter-spacing: 0.04em; text-transform: uppercase; }
+    .plan-name { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.55; margin-bottom: 7px; }
+    .pricing-card.featured .plan-name { color: var(--seafoam); opacity: 1; }
+    .price-row { display: flex; align-items: baseline; gap: 4px; margin-bottom: 5px; }
+    .price-row .amount { font-size: 2.2rem; font-weight: 900; letter-spacing: -0.03em; }
+    .price-row .period { font-size: 0.82rem; opacity: 0.55; }
+    .pricing-card.featured .price-row .amount { color: var(--deep-teal); }
+    .price-note { font-size: 0.75rem; opacity: 0.55; margin-bottom: 22px; }
+    .pricing-card.featured .price-note { color: var(--seafoam); opacity: 1; font-weight: 600; }
+    .plan-features { list-style: none; margin-bottom: 24px; }
+    .plan-features li { display: flex; align-items: flex-start; gap: 9px; font-size: 0.82rem; margin-bottom: 9px; opacity: 0.82; }
+    .pricing-card.featured .plan-features li { opacity: 1; color: var(--grey-700); }
+    .plan-features li .ck { color: var(--mint); font-weight: 700; flex-shrink: 0; }
+    .plan-btn { width: 100%; padding: 13px; border-radius: 11px; font-weight: 700; font-size: 0.88rem; border: 2px solid rgba(255,255,255,0.28); background: transparent; color: white; cursor: pointer; transition: all 0.15s; }
+    .plan-btn:hover { background: rgba(255,255,255,0.1); }
+    .plan-btn.featured-btn { background: linear-gradient(135deg, var(--seafoam), var(--mint)); border-color: transparent; color: white; }
+    .plan-btn.featured-btn:hover { box-shadow: 0 6px 20px rgba(0,168,150,0.4); transform: translateY(-1px); }
+    .founding-note { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 13px; padding: 18px 24px; display: inline-flex; align-items: center; gap: 14px; max-width: 560px; text-align: left; }
+    .founding-note .ico { font-size: 26px; flex-shrink: 0; }
+    .founding-note p { font-size: 0.82rem; opacity: 0.72; line-height: 1.6; }
+    .founding-note p strong { opacity: 1; color: var(--mint); }
+
+    /* ── Testimonials ── */
+    .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
+    .tcard { background: white; border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); }
+    .tcard .stars { color: #F5A623; font-size: 0.88rem; margin-bottom: 12px; }
+    .tcard p { font-size: 0.85rem; color: var(--grey-700); line-height: 1.7; margin-bottom: 14px; }
+    .author { display: flex; align-items: center; gap: 9px; }
+    .author-av { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .author-name { font-size: 0.8rem; font-weight: 700; color: var(--deep-teal); }
+    .author-detail { font-size: 0.72rem; color: var(--grey-500); }
+
+    /* ── FAQ ── */
+    .faq-list { max-width: 620px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid var(--grey-100); padding: 18px 0; }
+    .faq-q { display: flex; justify-content: space-between; align-items: flex-start; cursor: pointer; font-weight: 600; font-size: 0.9rem; color: var(--deep-teal); gap: 14px; }
+    .faq-q:hover { color: var(--seafoam); }
+    .faq-arrow { font-size: 1rem; transition: transform 0.2s; flex-shrink: 0; margin-top: 1px; }
+    .faq-a { font-size: 0.85rem; color: var(--grey-500); line-height: 1.7; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding-top 0.3s; }
+    .faq-item.open .faq-a { max-height: 220px; padding-top: 11px; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+    /* ── Final CTA ── */
+    .final-cta { padding: 72px 20px 90px; background: linear-gradient(160deg, var(--deep-teal), var(--teal) 60%, var(--seafoam)); color: white; text-align: center; }
+    .final-cta .inner { max-width: 520px; margin: 0 auto; }
+    .final-cta h2 { font-size: clamp(1.7rem, 5vw, 2.8rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 14px; }
+    .final-cta p { opacity: 0.72; margin-bottom: 32px; font-size: 0.97rem; }
+    .final-form { display: flex; flex-direction: column; gap: 10px; max-width: 380px; margin: 0 auto; }
+    .final-form input { padding: 14px 18px; border-radius: var(--radius-sm); border: 2px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.1); color: white; font-family: inherit; font-size: 0.92rem; outline: none; }
+    .final-form input::placeholder { color: rgba(255,255,255,0.5); }
+    .final-form input:focus { border-color: var(--mint); }
+    .final-cta-btn { background: white; color: var(--deep-teal); font-weight: 800; font-size: 0.97rem; padding: 15px; border-radius: var(--radius-sm); border: none; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
+    .final-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* ── Footer ── */
+    footer { background: var(--deep-teal); color: rgba(255,255,255,0.5); padding: 36px 20px; font-size: 0.8rem; line-height: 1.9; }
+    .footer-inner { max-width: 900px; margin: 0 auto; }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 28px; margin-bottom: 28px; }
+    .footer-brand .logo { color: white; font-size: 1rem; margin-bottom: 8px; display: inline-flex; }
+    .footer-brand p { font-size: 0.78rem; max-width: 240px; line-height: 1.6; }
+    .footer-links-col h4 { font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+    .footer-links-col a { display: block; color: rgba(255,255,255,0.5); text-decoration: none; margin-bottom: 6px; transition: color 0.15s; }
+    .footer-links-col a:hover { color: white; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 0.76rem; }
+    .footer-bottom a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    .footer-bottom a:hover { color: white; }
+    .compliance-badges { display: flex; gap: 10px; flex-wrap: wrap; }
+    .comp-badge { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; padding: 3px 9px; font-size: 0.68rem; font-weight: 600; color: rgba(255,255,255,0.6); }
+
+    /* ── Scroll animation ── */
+    .fade-up { opacity: 0; transform: translateY(22px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+      .phones-wrapper .phone:not(.center) { display: none; }
+      .phone.center { transform: none; width: 200px; }
+      .form-row { flex-direction: column; }
+      .form-row input { margin-bottom: 0; }
+      .trust-strip { gap: 12px; }
+      .trust-item { font-size: 0.73rem; }
+      .footer-top { flex-direction: column; }
+      .footer-bottom { flex-direction: column; align-items: center; text-align: center; }
+      .pricing-cards { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .hero { padding: 48px 16px 64px; }
+      .signup-box { padding: 20px 16px; }
+      .section { padding: 48px 16px; }
+      nav { padding: 0 16px; }
+      .logo span { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <!-- Original Carely logo: a rounded square with a pulse-heart formed from a C -->
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="36" rx="10" fill="url(#logoGrad)"/>
+        <path d="M10 18 C10 13.6 13.6 10 18 10 C20.6 10 22.9 11.2 24.4 13.1" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <path d="M8 18 L11 18 L13 14 L15.5 22 L17.5 16 L19.5 20 L21 18 L28 18" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="28" cy="18" r="1.5" fill="#02C39A"/>
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="36" y2="36">
+            <stop offset="0%" stop-color="#028090"/>
+            <stop offset="100%" stop-color="#00A896"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span>Carely</span>
+    </a>
+    <a href="#founding" class="nav-pill">Get Founding Access →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="founding-badge"><div class="badge-dot"></div> Founding Member Offer — Limited Spots</div>
+    <h1>Your meds, on time.<br><span>Every single day.</span></h1>
+    <p>Smart medication reminders powered by an AI caretaker that checks in, celebrates your streaks, and alerts your loved ones when it matters.</p>
+
+    <div class="signup-box" id="founding">
+      <h2>Claim Your Founding Spot</h2>
+      <p class="subtext">Lock in $5/month — forever. Regular price: $9.99/month.</p>
+      <div class="spots-bar"><div class="spots-fill" id="spotsBar"></div></div>
+      <div class="spots-label">
+        <span class="taken"><span id="spotsTaken">46</span> spots claimed</span>
+        <span class="left"><span id="spotsLeft">154</span> left of 200</span>
+      </div>
+      <div id="signupForm">
+        <div class="form-row">
+          <input type="text" placeholder="First name" id="heroFirst" />
+          <input type="text" placeholder="Last name" id="heroLast" />
+        </div>
+        <input type="email" placeholder="Email address" id="heroEmail" class="email-input" />
+        <button class="cta-btn" onclick="submitSignup('hero')">🔒 Lock In $5/Month — Join Founding Members</button>
+        <p class="fine-print">7-day free trial · Cancel anytime · <strong>Price locked for 1 year</strong><br>iOS &amp; Android · Launching Q2 2026</p>
+      </div>
+      <div class="success-state" id="heroSuccess">
+        <div class="success-icon">🎉</div>
+        <h3>You're on the list!</h3>
+        <p>We'll email you the moment Carely launches.<br>Your founding price of <strong>$5/month</strong> is locked in.</p>
+      </div>
+    </div>
+
+    <div class="trust-strip">
+      <div class="trust-item"><span>🔒</span> PIPEDA &amp; CCPA</div>
+      <div class="trust-item"><span>🇨🇦</span> Built in BC, Canada</div>
+      <div class="trust-item"><span>🤖</span> GPT-4o AI</div>
+      <div class="trust-item"><span>📱</span> iOS &amp; Android</div>
+      <div class="trust-item"><span>🚫</span> No data sold. Ever.</div>
+    </div>
+  </div>
+</section>
+
+<!-- APP PREVIEW -->
+<section class="section white fade-up">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-label">App Preview</div>
+      <h2>Everything you need, nothing you don't</h2>
+      <p>Designed for real people — simple setup, powerful reminders, genuine care.</p>
+    </div>
+    <div class="phones-wrapper">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="sched-header"><div class="sched-title">My Medicines</div><div class="add-tag">+ Add</div></div>
+          <div class="med-card c1"><div class="med-ico c1">💊</div><div><div class="med-name">Lisinopril 10mg</div><div class="med-sched">Daily · 8:00 AM</div></div></div>
+          <div class="med-card c2"><div class="med-ico c2">🌿</div><div><div class="med-name">Vitamin D3</div><div class="med-sched">Daily · 8AM &amp; 2PM</div></div></div>
+          <div class="med-card c3"><div class="med-ico c3">💙</div><div><div class="med-name">Metformin 500mg</div><div class="med-sched">Twice daily · With food</div></div></div>
+          <div class="med-card c4"><div class="med-ico c4">✨</div><div><div class="med-name">Omega-3</div><div class="med-sched">Daily · 8:00 PM</div></div></div>
+        </div>
+      </div>
+      <div class="phone center">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="screen-header"><div class="greeting">Good morning ☀️</div><div class="screen-title">Today's Doses</div></div>
+          <div class="adherence-ring">
+            <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" fill="none" stroke="#F1F5F4" stroke-width="3"/><circle cx="18" cy="18" r="15.9" fill="none" stroke="#00A896" stroke-width="3" stroke-dasharray="87 13" stroke-dashoffset="25" stroke-linecap="round"/></svg>
+            <div class="pct">87%</div>
+          </div>
+          <div class="ai-bubble"><div class="ai-tag">✨ AI Caretaker</div>Great week! You've hit 87% — your Vitamin D streak is 12 days! 💪</div>
+          <div class="dose-row"><div class="dose-dot" style="background:#028090"></div><div style="flex:1"><div class="dose-name">Lisinopril 10mg</div><div class="dose-time">8:00 AM · 1 tablet</div></div><div class="dose-check">✅</div></div>
+          <div class="dose-row"><div class="dose-dot" style="background:#02C39A"></div><div style="flex:1"><div class="dose-name">Vitamin D3</div><div class="dose-time">2:00 PM · Due soon</div></div><div class="dose-check">⏰</div></div>
+          <div class="dose-row"><div class="dose-dot" style="background:#E87070"></div><div style="flex:1"><div class="dose-name">Metformin 500mg</div><div class="dose-time">6:00 PM · With dinner</div></div><div class="dose-check">⬜</div></div>
+        </div>
+      </div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="ai-avatar">🤖</div>
+          <div class="ai-screen-name">AI Caretaker</div>
+          <div class="ai-online">● Online — here to help</div>
+          <div class="chat-msg bot">Hi! I noticed you've been really consistent — 6 days straight! How are you feeling on the Lisinopril?</div>
+          <div class="chat-msg user">Feeling good! A little tired though.</div>
+          <div class="chat-msg bot">That can happen. Worth mentioning to your doctor. Want me to add it to your weekly report?</div>
+          <div class="chat-input"><div class="chat-field">Ask anything…</div><button class="chat-send">➤</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section light">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <div class="section-label">Features</div>
+      <h2>More than just reminders</h2>
+      <p>A complete medication companion that fits in your pocket.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-up"><div class="feature-icon fi-green">🤖</div><h3>AI Caretaker</h3><p>Checks in daily, celebrates streaks, asks how you're feeling — warm and personal, never robotic.</p><span class="feature-tag">GPT-4o Powered</span></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-teal">🔔</div><h3>Smart Reminders</h3><p>Rich push notifications with one-tap Taken, Snooze, or Skip — respond from your lock screen.</p><span class="feature-tag">iOS &amp; Android</span></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-purple">👨‍👩‍👧</div><h3>Caregiver Mode</h3><p>Family members get instant alerts for missed doses — without seeing your personal details.</p><span class="feature-tag">Privacy First</span></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-orange">🩺</div><h3>Doctor Reports</h3><p>Automated weekly adherence reports sent directly to your clinic. Zero effort on your part.</p><span class="feature-tag">Auto-generated</span></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-blue">📊</div><h3>Adherence Streaks</h3><p>Visual streaks and adherence scores keep you motivated — day by day, week by week.</p><span class="feature-tag">Dashboard View</span></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-red">🔒</div><h3>Privacy by Design</h3><p>Your health data is never sold. PIPEDA &amp; CCPA compliant. The AI only sees anonymised data.</p><span class="feature-tag">Zero Data Selling</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section white">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <div class="section-label">How It Works</div>
+      <h2>Up and running in 3 minutes</h2>
+      <p>No complicated setup. Just your meds, your schedule, your AI.</p>
+    </div>
+    <div class="steps fade-up">
+      <div class="step"><div class="step-num">1</div><h3>Add Your Medicines</h3><p>Type the name, choose a colour, pick your schedule. Carely remembers everything.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Get Reminded</h3><p>At the right time, every day. Tap Taken right from the notification — no app needed.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>AI Checks In</h3><p>Every morning your AI caretaker reviews your week and sends you a personal message.</p></div>
+      <div class="step"><div class="step-num">4</div><h3>Share with Care</h3><p>Invite a caregiver or connect your doctor. Automated reports, zero effort.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section dark" id="pricing">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <div class="section-label">Pricing</div>
+      <h2>Simple, honest pricing</h2>
+      <p>7-day free trial. No credit card required. Founding members lock in half price forever.</p>
+    </div>
+    <div class="pricing-cards fade-up">
+      <div class="pricing-card">
+        <div class="plan-name">Monthly</div>
+        <div class="price-row"><span class="amount">$9.99</span><span class="period">/month</span></div>
+        <div class="price-note">After 7-day free trial</div>
+        <ul class="plan-features">
+          <li><span class="ck">✓</span> Unlimited medicines</li>
+          <li><span class="ck">✓</span> AI Caretaker daily check-ins</li>
+          <li><span class="ck">✓</span> Caregiver alerts</li>
+          <li><span class="ck">✓</span> Doctor report emails</li>
+          <li><span class="ck">✓</span> Adherence streaks</li>
+          <li><span class="ck">✓</span> iOS &amp; Android</li>
+        </ul>
+        <button class="plan-btn" onclick="scrollToForm()">Start Free Trial →</button>
+      </div>
+      <div class="pricing-card featured">
+        <div class="founding-ribbon">⭐ Founding Member</div>
+        <div class="plan-name">Founding Price</div>
+        <div class="price-row"><span class="amount">$5</span><span class="period">/month</span></div>
+        <div class="price-note">Locked for 1 full year · 200 spots only</div>
+        <ul class="plan-features">
+          <li><span class="ck">✓</span> Everything in Monthly</li>
+          <li><span class="ck">✓</span> 50% off, locked 12 months</li>
+          <li><span class="ck">✓</span> Founding member badge</li>
+          <li><span class="ck">✓</span> Early access to new features</li>
+          <li><span class="ck">✓</span> Direct line to the founder</li>
+          <li><span class="ck">✓</span> Shape the product roadmap</li>
+        </ul>
+        <button class="plan-btn featured-btn" onclick="scrollToForm()">Claim My Founding Spot →</button>
+      </div>
+      <div class="pricing-card">
+        <div class="plan-name">Annual</div>
+        <div class="price-row"><span class="amount">$90</span><span class="period">/year</span></div>
+        <div class="price-note">Save $30 vs monthly</div>
+        <ul class="plan-features">
+          <li><span class="ck">✓</span> Everything in Monthly</li>
+          <li><span class="ck">✓</span> 2 months free</li>
+          <li><span class="ck">✓</span> Priority support</li>
+          <li><span class="ck">✓</span> PDF adherence exports</li>
+          <li><span class="ck">✓</span> Family plan add-ons (soon)</li>
+          <li><span class="ck">✓</span> Bulk invite caregivers</li>
+        </ul>
+        <button class="plan-btn" onclick="scrollToForm()">Start Free Trial →</button>
+      </div>
+    </div>
+    <div style="text-align:center">
+      <div class="founding-note fade-up">
+        <div class="ico">⏳</div>
+        <p>Only <strong id="foundingCount">154</strong> founding spots remain. Once they're gone, the price goes to $9.99/month permanently. This is a one-time offer for the people who believed in Carely first.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section light">
+  <div class="section-inner fade-up">
+    <div class="section-head"><h2>What beta testers are saying</h2></div>
+    <div class="testimonials">
+      <div class="tcard"><div class="stars">★★★★★</div><p>"I've tried three other medication apps and they all felt cold. Carely's AI actually feels like it knows me. When it said 'great week, you crushed it' I genuinely smiled."</p><div class="author"><div class="author-av" style="background:#E0FAF4">👩</div><div><div class="author-name">Margaret T.</div><div class="author-detail">Vancouver, BC · Managing 5 meds daily</div></div></div></div>
+      <div class="tcard"><div class="stars">★★★★★</div><p>"My mom has early-stage dementia and the caregiver alerts are a game changer. I get pinged if she misses a dose — without her feeling watched. The privacy piece was important to us."</p><div class="author"><div class="author-av" style="background:#F0EAFF">🧑</div><div><div class="author-name">David K.</div><div class="author-detail">Toronto, ON · Caregiver for parent</div></div></div></div>
+      <div class="tcard"><div class="stars">★★★★★</div><p>"I sent my first doctor report after 3 weeks and my doctor commented on it during our appointment. She said she wished all patients used something like this."</p><div class="author"><div class="author-av" style="background:#FFF0E0">👨</div><div><div class="author-name">James R.</div><div class="author-detail">Seattle, WA · Type 2 Diabetes</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section white">
+  <div class="section-inner fade-up">
+    <div class="section-head"><h2>Questions? Good.</h2></div>
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">When does Carely launch? <span class="faq-arrow">▾</span></div><div class="faq-a">Carely is launching Q2 2026 on both iOS and Android. Founding members get early access before the public launch — we'll email you a direct TestFlight / Play Store link the moment it's ready.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What does the AI Caretaker actually do? <span class="faq-arrow">▾</span></div><div class="faq-a">Every morning, the AI reviews your last 7 days and sends a short personal message — celebrating streaks, gently checking in on missed doses, or asking how you're feeling. You can also chat with it directly. It never gives medical advice.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is my health data safe? What does the AI see? <span class="faq-arrow">▾</span></div><div class="faq-a">Your health data is never sold. The AI only sees your first name, medicine nicknames (not real drug names), and anonymised adherence stats. No diagnosis, no dose amounts, no PII. PIPEDA (Canada) and CCPA (California) compliant.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What happens after my founding year is up? <span class="faq-arrow">▾</span></div><div class="faq-a">After 12 months, your plan rolls to the standard $9.99/month. You'll get a 30-day notice email. You can cancel any time — we'll never silently change your rate.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I use this for a family member? <span class="faq-arrow">▾</span></div><div class="faq-a">Yes. Caregiver Mode links your account to a patient's. You'll receive missed dose alerts via push notification and can see their schedule and adherence — but never dose amounts or doctor notes.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Do I pay now to get the founding price? <span class="faq-arrow">▾</span></div><div class="faq-a">No. Sign up with your email today to reserve your spot. You're not charged until launch day when your 7-day free trial starts. The $5/month price is locked from your first payment.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="inner fade-up">
+    <h2>Don't miss another dose.</h2>
+    <p>Join <span id="finalCount">46</span> founding members already on the list. $5/month, locked. Forever.</p>
+    <div class="final-form">
+      <input type="text" placeholder="Your first name" id="finalName" />
+      <input type="email" placeholder="Your email address" id="finalEmail" />
+      <button class="final-cta-btn" onclick="submitSignup('final')">🔒 Reserve My Founding Spot</button>
+    </div>
+    <p style="opacity:.45;font-size:.78rem;margin-top:14px">No credit card · 7-day free trial · Cancel anytime</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" class="logo">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:28px;margin-right:8px">
+            <rect width="36" height="36" rx="10" fill="url(#logoGrad2)"/>
+            <path d="M10 18 C10 13.6 13.6 10 18 10 C20.6 10 22.9 11.2 24.4 13.1" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M8 18 L11 18 L13 14 L15.5 22 L17.5 16 L19.5 20 L21 18 L28 18" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="28" cy="18" r="1.5" fill="#02C39A"/>
+            <defs><linearGradient id="logoGrad2" x1="0" y1="0" x2="36" y2="36"><stop offset="0%" stop-color="#028090"/><stop offset="100%" stop-color="#00A896"/></linearGradient></defs>
+          </svg>
+          Carely
+        </a>
+        <p>Smart medication reminders with an AI caretaker that actually cares. Built in British Columbia, Canada.</p>
+      </div>
+      <div class="footer-links-col">
+        <h4>Product</h4>
+        <a href="#pricing">Pricing</a>
+        <a href="#founding">Founding Members</a>
+        <a href="#pricing">Download</a>
+      </div>
+      <div class="footer-links-col">
+        <h4>Legal</h4>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="terms.html#refunds">Refund Policy</a>
+      </div>
+      <div class="footer-links-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@carely.fit">hello@carely.fit</a>
+        <a href="#">@carely</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Carely. All rights reserved. Made in BC, Canada 🍁</span>
+      <div class="compliance-badges">
+        <span class="comp-badge">PIPEDA</span>
+        <span class="comp-badge">CCPA</span>
+        <span class="comp-badge">No Data Sold</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  let spotsTaken = 46;
+  const totalSpots = 200;
+
+  function updateSpots(n) {
+    spotsTaken = n;
+    const left = totalSpots - n;
+    document.getElementById('spotsTaken').textContent = n;
+    document.getElementById('spotsLeft').textContent = left;
+    document.getElementById('foundingCount').textContent = left;
+    document.getElementById('finalCount').textContent = n;
+    document.getElementById('spotsBar').style.width = (n / totalSpots * 100) + '%';
+  }
+  updateSpots(46);
+
+  function submitSignup(src) {
+    const firstName = src === 'hero'
+      ? document.getElementById('heroFirst').value.trim()
+      : document.getElementById('finalName').value.trim().split(' ')[0];
+    const lastName = src === 'hero'
+      ? (document.getElementById('heroLast') ? document.getElementById('heroLast').value.trim() : '')
+      : document.getElementById('finalName').value.trim().split(' ').slice(1).join(' ');
+    const email = src === 'hero'
+      ? document.getElementById('heroEmail').value.trim()
+      : document.getElementById('finalEmail').value.trim();
+
+    if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+
+    // Submit to Mailchimp via JSONP (avoids CORS)
+    const MC_BASE = 'https://fit.us22.list-manage.com/subscribe/post-json?u=017d53fe6828e6c87112b9485&id=cc6d996450&f_id=00b4c2e1f0';
+    const params = new URLSearchParams({
+      EMAIL: email,
+      FNAME: firstName,
+      LNAME: lastName,
+      'b_017d53fe6828e6c87112b9485_cc6d996450': ''
+    });
+    const cbName = 'mc_cb_' + Date.now();
+    window[cbName] = function() { delete window[cbName]; if (s.parentNode) s.parentNode.removeChild(s); };
+    const s = document.createElement('script');
+    s.src = MC_BASE + '&' + params.toString() + '&c=' + cbName;
+    document.head.appendChild(s);
+
+    // Show success UI
+    if (src === 'hero') {
+      document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('heroSuccess').style.display = 'block';
+    } else {
+      const btn = document.querySelector('.final-cta-btn');
+      btn.textContent = "🎉 You're on the list!";
+      btn.style.background = '#02C39A'; btn.disabled = true;
+    }
+    updateSpots(spotsTaken + 1);
+  }
+
+  function scrollToForm() { document.getElementById('founding').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+
+  function toggleFaq(el) {
+    const item = el.closest('.faq-item');
+    const open = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!open) item.classList.add('open');
+  }
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  window.addEventListener('load', () => { setTimeout(() => updateSpots(46), 400); });
+
+  let sim = setInterval(() => { if (spotsTaken < 52) updateSpots(spotsTaken + 1); else clearInterval(sim); }, 20000);
+</script>
+</body>
+</html>
