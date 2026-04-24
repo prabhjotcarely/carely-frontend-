@@ -69,6 +69,14 @@
     .success-state p { font-size: 0.86rem; color: var(--grey-500); }
     .trust-strip { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 28px; }
     .trust-item { display: flex; align-items: center; gap: 6px; font-size: 0.79rem; font-weight: 500; color: rgba(255,255,255,0.85); }
+    /* ── Countdown ── */
+    .countdown-bar { background: rgba(2,195,154,0.15); border: 1px solid rgba(2,195,154,0.3); border-radius: 14px; padding: 14px 20px; margin-bottom: 28px; display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+    .countdown-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mint); }
+    .countdown-units { display: flex; gap: 12px; }
+    .countdown-unit { text-align: center; }
+    .countdown-num { font-size: 1.8rem; font-weight: 900; color: white; line-height: 1; display: block; }
+    .countdown-sub { font-size: 0.62rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; }
+    .countdown-sep { font-size: 1.4rem; font-weight: 900; color: var(--mint); align-self: flex-start; margin-top: 2px; }
 
     /* ── Sections ── */
     .section { padding: 64px 20px; }
@@ -267,13 +275,27 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="founding-badge"><div class="badge-dot"></div> Founding Member Offer — Limited Spots</div>
+    <div class="founding-badge"><div class="badge-dot"></div> Launching May 5, 2026 — 200 Founding Spots</div>
+
+    <div class="countdown-bar">
+      <span class="countdown-label">🚀 App goes live in</span>
+      <div class="countdown-units">
+        <div class="countdown-unit"><span class="countdown-num" id="cdDays">11</span><span class="countdown-sub">Days</span></div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit"><span class="countdown-num" id="cdHours">00</span><span class="countdown-sub">Hours</span></div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit"><span class="countdown-num" id="cdMins">00</span><span class="countdown-sub">Mins</span></div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit"><span class="countdown-num" id="cdSecs">00</span><span class="countdown-sub">Secs</span></div>
+      </div>
+    </div>
+
     <h1>Your meds, on time.<br><span>Every single day.</span></h1>
     <p>Smart medication reminders powered by an AI caretaker that checks in, celebrates your streaks, and alerts your loved ones when it matters.</p>
 
     <div class="signup-box" id="founding">
-      <h2>Claim Your Founding Spot</h2>
-      <p class="subtext">Lock in $5/month for your first year. Regular price: $9.99/month.</p>
+      <h2>🚀 Reserve Your Spot — Launches May 5</h2>
+      <p class="subtext">Lock in $5/month for your first year. Regular price $9.99/month after.</p>
       <div class="spots-bar"><div class="spots-fill" id="spotsBar"></div></div>
       <div class="spots-label">
         <span class="taken"><span id="spotsTaken">46</span> spots claimed</span>
@@ -285,13 +307,13 @@
           <input type="text" placeholder="Last name" id="heroLast" />
         </div>
         <input type="email" placeholder="Email address" id="heroEmail" class="email-input" />
-        <button class="cta-btn" onclick="submitSignup('hero')">🔒 Lock In $5/Month — Join Founding Members</button>
-        <p class="fine-print">7-day free trial · Cancel anytime · <strong>Price locked for 1 year</strong><br>iOS &amp; Android · Launching Q2 2026</p>
+        <button class="cta-btn" onclick="submitSignup('hero')">🔒 Reserve My Spot — Launching May 5</button>
+        <p class="fine-print">No credit card now · 7-day free trial at launch · <strong>$5/month locked for 1 year</strong><br>iOS &amp; Android · May 5, 2026</p>
       </div>
       <div class="success-state" id="heroSuccess">
         <div class="success-icon">🎉</div>
         <h3>You're on the list!</h3>
-        <p>We'll email you the moment Carely launches.<br>Your founding price of <strong>$5/month</strong> is locked in.</p>
+        <p>We'll email you your download link on <strong>May 5th</strong>.<br>Your founding price of <strong>$5/month</strong> is locked in for year one.</p>
       </div>
     </div>
 
@@ -469,7 +491,7 @@
   <div class="section-inner fade-up">
     <div class="section-head"><h2>Questions? Good.</h2></div>
     <div class="faq-list">
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">When does Carely launch? <span class="faq-arrow">▾</span></div><div class="faq-a">Carely is launching Q2 2026 on both iOS and Android. Founding members get early access before the public launch — we'll email you a direct TestFlight / Play Store link the moment it's ready.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">When does Carely launch? <span class="faq-arrow">▾</span></div><div class="faq-a">Carely launches May 5, 2026 on both iOS and Android. Everyone on the waitlist gets an email with their download link on launch day. No waiting, no hunting for it in the store.</div></div>
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What does the AI Caretaker actually do? <span class="faq-arrow">▾</span></div><div class="faq-a">Every morning, the AI reviews your last 7 days and sends a short personal message — celebrating streaks, gently checking in on missed doses, or asking how you're feeling. You can also chat with it directly. It never gives medical advice.</div></div>
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is my health data safe? What does the AI see? <span class="faq-arrow">▾</span></div><div class="faq-a">Your health data is never sold. The AI only sees your first name, medicine nicknames (not real drug names), and anonymised adherence stats. No diagnosis, no dose amounts, no PII. PIPEDA (Canada) and CCPA (California) compliant.</div></div>
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What happens after my founding year is up? <span class="faq-arrow">▾</span></div><div class="faq-a">After 12 months, your plan rolls to the standard $9.99/month. You'll get a 30-day notice email before anything changes. You can cancel any time — we'll never silently change your rate.</div></div>
@@ -482,8 +504,8 @@
 <!-- FINAL CTA -->
 <section class="final-cta">
   <div class="inner fade-up">
-    <h2>Don't miss another dose.</h2>
-    <p>Join <span id="finalCount">46</span> founding members already on the list. $5/month for your first year — then $9.99/month.</p>
+    <h2>Launching May 5. Don't miss it.</h2>
+    <p>Join <span id="finalCount">46</span> founding members already on the list. <strong>$5/month for your first year</strong> — locked in before we go live.</p>
     <div class="final-form">
       <input type="text" placeholder="Your first name" id="finalName" />
       <input type="email" placeholder="Your email address" id="finalEmail" />
@@ -540,6 +562,30 @@
 </footer>
 
 <script>
+  // Countdown to May 5, 2026 midnight PT
+  function updateCountdown() {
+    const launch = new Date('2026-05-05T07:00:00Z'); // midnight PT = 7am UTC
+    const now = new Date();
+    const diff = launch - now;
+    if (diff <= 0) {
+      document.getElementById('cdDays').textContent = '00';
+      document.getElementById('cdHours').textContent = '00';
+      document.getElementById('cdMins').textContent = '00';
+      document.getElementById('cdSecs').textContent = '00';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cdDays').textContent = String(d).padStart(2,'0');
+    document.getElementById('cdHours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cdMins').textContent = String(m).padStart(2,'0');
+    document.getElementById('cdSecs').textContent = String(s).padStart(2,'0');
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
   let spotsTaken = 46;
   const totalSpots = 200;
 
