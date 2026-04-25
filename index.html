@@ -567,6 +567,13 @@
 
     if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
 
+    // Fire to backend — triggers welcome email + nurture sequence immediately
+    fetch('https://carely-backend-production.up.railway.app/waitlist/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, firstName }),
+    }).catch(() => {}); // silent fail — Mailchimp is the backup
+
     // Submit to Mailchimp via JSONP (avoids CORS)
     const MC_BASE = 'https://fit.us22.list-manage.com/subscribe/post-json?u=017d53fe6828e6c87112b9485&id=cc6d996450&f_id=00b4c2e1f0';
     const params = new URLSearchParams({
