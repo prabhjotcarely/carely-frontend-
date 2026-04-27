@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Caregiver App for Elderly Parents (2026) — Carely</title>
+  <meta name="description" content="Carely is the AI caregiver app that checks in on your elderly parents, confirms they took their medication, and alerts your family if something's wrong. Try free for 7 days." />
+  <meta name="keywords" content="AI caregiver app, AI caretaker app, AI medication reminder, artificial intelligence caregiver, smart caregiver app elderly" />
+  <link rel="canonical" href="https://carely.fit/blog/ai-caregiver-app.html" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Inter',sans-serif; background:#fff; color:#0D2B24; -webkit-font-smoothing:antialiased; }
+    nav { background:#fff; border-bottom:1px solid #e8efed; padding:0 24px; height:56px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+    .nav-logo { font-size:16px; font-weight:900; color:#028090; letter-spacing:1px; text-decoration:none; }
+    .nav-cta { background:#02C39A; color:#0D3347; font-weight:700; font-size:12px; padding:7px 16px; border-radius:7px; text-decoration:none; }
+    .hero { background:linear-gradient(135deg,#0D3347 0%,#028090 100%); color:#fff; padding:80px 24px 60px; text-align:center; }
+    .hero-badge { display:inline-block; background:rgba(2,195,154,0.2); border:1px solid rgba(2,195,154,0.4); color:#02C39A; font-size:11px; font-weight:700; letter-spacing:2px; padding:5px 14px; border-radius:20px; margin-bottom:20px; }
+    .hero h1 { font-size:clamp(28px,5vw,48px); font-weight:900; line-height:1.15; margin-bottom:16px; }
+    .hero h1 span { color:#02C39A; }
+    .hero p { font-size:18px; color:rgba(255,255,255,0.75); max-width:600px; margin:0 auto 32px; line-height:1.7; }
+    .hero-cta { display:inline-block; background:#02C39A; color:#0D3347; font-weight:800; font-size:15px; padding:14px 32px; border-radius:10px; text-decoration:none; }
+    .hero-sub { font-size:12px; color:rgba(255,255,255,0.4); margin-top:12px; }
+    .section { max-width:860px; margin:0 auto; padding:60px 24px; }
+    .section h2 { font-size:28px; font-weight:800; margin-bottom:16px; line-height:1.3; }
+    .section h3 { font-size:20px; font-weight:700; margin:32px 0 10px; color:#0D3347; }
+    .section p { font-size:16px; color:#374151; line-height:1.8; margin-bottom:16px; }
+    .feature-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin:32px 0; }
+    .feature-card { background:#f4f7f6; border-radius:12px; padding:20px; }
+    .feature-icon { font-size:24px; margin-bottom:10px; }
+    .feature-card h3 { font-size:14px; font-weight:800; color:#0D3347; margin-bottom:6px; margin-top:0; }
+    .feature-card p { font-size:13px; color:#6B7280; line-height:1.6; margin:0; }
+    .pain-list { list-style:none; margin:20px 0; }
+    .pain-list li { padding:10px 14px; border-left:3px solid #fbbf24; background:#fffbeb; border-radius:0 8px 8px 0; margin-bottom:8px; font-size:14px; color:#374151; line-height:1.5; }
+    .chat-demo { background:#f9fafb; border-radius:16px; padding:24px; margin:32px 0; border:1px solid #e5e7eb; }
+    .chat-demo h3 { font-size:14px; font-weight:800; color:#6B7280; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px; }
+    .chat-bubble { display:flex; margin-bottom:12px; gap:10px; align-items:flex-start; }
+    .chat-bubble.ai { flex-direction:row; }
+    .chat-bubble.user { flex-direction:row-reverse; }
+    .bubble-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+    .bubble-avatar.ai-av { background:#028090; }
+    .bubble-avatar.user-av { background:#e5e7eb; }
+    .bubble-text { max-width:80%; padding:10px 14px; border-radius:12px; font-size:14px; line-height:1.6; }
+    .chat-bubble.ai .bubble-text { background:#fff; border:1px solid #e5e7eb; color:#374151; border-radius:4px 12px 12px 12px; }
+    .chat-bubble.user .bubble-text { background:#0D3347; color:#fff; border-radius:12px 4px 12px 12px; }
+    .cta-section { background:linear-gradient(135deg,#0D3347,#028090); color:#fff; padding:60px 24px; text-align:center; }
+    .cta-section h2 { font-size:32px; font-weight:900; margin-bottom:12px; }
+    .cta-section p { font-size:16px; color:rgba(255,255,255,0.7); margin-bottom:28px; }
+    .cta-btn { display:inline-block; background:#02C39A; color:#0D3347; font-weight:800; font-size:15px; padding:14px 36px; border-radius:10px; text-decoration:none; }
+    .faq { max-width:700px; margin:0 auto; padding:60px 24px; }
+    .faq h2 { font-size:26px; font-weight:800; margin-bottom:28px; }
+    .faq-item { border-bottom:1px solid #e8efed; padding:18px 0; }
+    .faq-q { font-size:15px; font-weight:700; color:#0D3347; margin-bottom:8px; }
+    .faq-a { font-size:14px; color:#6B7280; line-height:1.7; }
+    .highlight-box { background:linear-gradient(135deg,#E0FAF4,#f0fdf4); border:1px solid #bbf7d0; border-radius:12px; padding:24px; margin:24px 0; }
+    .highlight-box h3 { font-size:15px; font-weight:800; color:#065f46; margin-bottom:8px; margin-top:0; }
+    .highlight-box p { font-size:14px; color:#374151; line-height:1.7; margin:0; }
+    .stat-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin:32px 0; }
+    .stat-card { text-align:center; padding:24px 16px; background:#f4f7f6; border-radius:12px; }
+    .stat-num { font-size:36px; font-weight:900; color:#028090; }
+    .stat-label { font-size:13px; color:#6B7280; margin-top:6px; line-height:1.4; }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HNNSVW5Q57"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-HNNSVW5Q57");</script>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="https://carely.fit">CARELY</a>
+  <a class="nav-cta" href="https://carely.fit/#pricing">Start Free Trial →</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🤖 AI CAREGIVER</div>
+  <h1>Your parents have an<br><span>AI caregiver now.</span></h1>
+  <p>Carely's AI checks in on your elderly loved ones every day — confirms medications were taken, asks how they're feeling, and alerts your whole family if something seems wrong.</p>
+  <a class="hero-cta" href="https://carely.fit/#pricing">Try Carely Free for 7 Days →</a>
+  <div class="hero-sub">No credit card required · Set up in 10 minutes</div>
+</div>
+
+<div class="section">
+  <h2>What is an AI caregiver app?</h2>
+  <p>An AI caregiver app uses artificial intelligence to do what a human caregiver would do — but available 24 hours a day, 7 days a week, at a fraction of the cost. It checks in on your elderly family members, confirms they've taken their medications, monitors their wellbeing, and immediately alerts family members if anything seems off.</p>
+  <p>Traditional medication reminder apps just send a notification. Your parent dismisses it, and nobody knows if they actually took the pill. An AI caregiver app goes further — it has a real conversation.</p>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-num">50%</div>
+      <div class="stat-label">of elderly patients don't take medications as prescribed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">125K</div>
+      <div class="stat-label">preventable deaths per year from medication non-adherence in North America</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">$300B</div>
+      <div class="stat-label">annual healthcare cost of medication non-adherence</div>
+    </div>
+  </div>
+
+  <h2>Meet Elara — Carely's AI caretaker</h2>
+  <p>Elara is the AI at the heart of Carely. Every day, Elara reaches out to your elderly loved one after their scheduled medications. Not just a ping — a real, warm conversation:</p>
+
+  <div class="chat-demo">
+    <h3>💬 Example check-in conversation</h3>
+    <div class="chat-bubble ai">
+      <div class="bubble-avatar ai-av">🤖</div>
+      <div class="bubble-text">Good morning Margaret! It's time for your morning medications — Metformin and Lisinopril. Did you take them?</div>
+    </div>
+    <div class="chat-bubble user">
+      <div class="bubble-avatar user-av">👵</div>
+      <div class="bubble-text">Yes I did dear, just had them with breakfast</div>
+    </div>
+    <div class="chat-bubble ai">
+      <div class="bubble-avatar ai-av">🤖</div>
+      <div class="bubble-text">Wonderful! How are you feeling today? Any side effects or anything that feels different?</div>
+    </div>
+    <div class="chat-bubble user">
+      <div class="bubble-avatar user-av">👵</div>
+      <div class="bubble-text">A little tired but otherwise good</div>
+    </div>
+    <div class="chat-bubble ai">
+      <div class="bubble-avatar ai-av">🤖</div>
+      <div class="bubble-text">Good to hear. Some fatigue with Lisinopril is normal — but if it gets worse, mention it to your doctor. Your next medications are at 6 PM. Have a lovely day! 💚</div>
+    </div>
+  </div>
+
+  <p>While this conversation happens, Elara logs everything and immediately notifies family members if Margaret misses a dose or reports feeling unwell. Your family gets peace of mind without having to call every day.</p>
+
+  <div class="highlight-box">
+    <h3>✅ What makes Elara different from other AI health apps</h3>
+    <p>Elara remembers. She knows Margaret's medication history, past conversations, and patterns over time. If Margaret has been saying she feels tired for three days in a row, Elara flags that pattern to the family — proactively, before it becomes a crisis.</p>
+  </div>
+
+  <h2>What Carely's AI caregiver does</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">💊</div>
+      <h3>Daily Medication Check-Ins</h3>
+      <p>Elara reaches out after every scheduled dose with a warm, conversational message — not a cold notification. Your parent responds naturally, like texting a friend.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">❤️</div>
+      <h3>Wellbeing Monitoring</h3>
+      <p>Beyond medications, Elara asks how your loved one is feeling. Signs of distress, confusion, or pain are flagged immediately to family members.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🚨</div>
+      <h3>Missed Dose Alerts</h3>
+      <p>If your parent misses a dose and doesn't respond to Elara, your entire family gets an alert within minutes. Not hours — minutes.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <h3>Persistent Memory</h3>
+      <p>Elara remembers every conversation. She tracks patterns, notices changes, and builds a picture of your loved one's health over time.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👨‍👩‍👧</div>
+      <h3>Family Dashboard</h3>
+      <p>Multiple family members can monitor the same elderly patient. Everyone sees adherence history, recent check-ins, and any alerts — in real time.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏥</div>
+      <h3>Doctor Reports</h3>
+      <p>Carely automatically compiles weekly medication adherence reports and sends them to your parent's doctor — keeping their care team informed without extra work.</p>
+    </div>
+  </div>
+
+  <h2>Who is an AI caregiver app for?</h2>
+  <h3>Families with elderly parents living alone</h3>
+  <p>If your mum or dad lives independently but you worry about whether they're taking their medications correctly, Carely gives you real-time visibility and peace of mind — without making them feel watched or dependent.</p>
+  <h3>People managing chronic conditions</h3>
+  <p>Diabetes, hypertension, heart disease, Parkinson's — chronic conditions require strict medication adherence. Carely's AI acts as a daily accountability partner, gently checking in and celebrating streaks when medications are taken consistently.</p>
+  <h3>Healthcare workers who know the cost of missed doses</h3>
+  <p>Nurses, pharmacists, and care workers who understand what happens when medications are skipped are some of Carely's most passionate users. They've seen the consequences — and they use Carely for their own family members.</p>
+</div>
+
+<div class="cta-section">
+  <h2>Give your parents an AI caregiver today</h2>
+  <p>7-day free trial. No credit card. Takes 10 minutes to set up.</p>
+  <a class="cta-btn" href="https://carely.fit/#pricing">Start Free Trial →</a>
+  <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:12px;">200 founding member spots at $5/month — limited availability</div>
+</div>
+
+<div class="faq">
+  <h2>Common Questions</h2>
+  <div class="faq-item">
+    <div class="faq-q">Does Carely's AI give medical advice?</div>
+    <div class="faq-a">No — Carely's AI never gives medical advice. It monitors adherence, checks on wellbeing, and alerts family members. Any health concerns flagged by the AI always include a recommendation to speak with their doctor.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">How does Elara talk to my parent?</div>
+    <div class="faq-a">Through the Carely app on their phone. Elara sends a gentle in-app message after each scheduled medication. Your parent responds by tapping or typing — it's as simple as replying to a text message.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">What happens if my parent misses a dose?</div>
+    <div class="faq-a">Elara tries to reach out once. If there's no response after the check-in window, all connected family members receive an immediate push notification alert. You can then call or check in directly.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Is this a replacement for in-home care?</div>
+    <div class="faq-a">No — Carely is a complement to in-home care, not a replacement. It fills the gaps between caregiver visits, especially for medication monitoring and daily wellbeing check-ins. For seniors with serious medical needs, in-person care is still essential.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">How much does an AI caregiver app cost?</div>
+    <div class="faq-a">Carely starts at $5/month for founding members (200 spots only) and $9.99/month after that. Compare that to in-home care at $20–$35/hour — Carely is the most affordable daily check-in solution available.</div>
+  </div>
+</div>
+
+</body>
+</html>
