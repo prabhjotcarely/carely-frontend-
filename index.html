@@ -465,12 +465,16 @@
       <div class="section-label">Pricing</div>
       <h2>Simple, honest pricing</h2>
       <p>7-day free trial. No credit card required. Founding members lock in half price forever.</p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:0;margin-top:20px;background:rgba(255,255,255,0.1);border-radius:100px;padding:4px;width:fit-content;margin-left:auto;margin-right:auto;">
+        <button id="btnUSD" onclick="setCurrency('usd')" style="background:#02C39A;color:#0D3347;border:none;padding:7px 22px;border-radius:100px;font-weight:700;font-size:13px;cursor:pointer;">🇺🇸 USD</button>
+        <button id="btnCAD" onclick="setCurrency('cad')" style="background:transparent;color:rgba(255,255,255,0.7);border:none;padding:7px 22px;border-radius:100px;font-weight:700;font-size:13px;cursor:pointer;">🇨🇦 CAD</button>
+      </div>
     </div>
     <div class="pricing-cards fade-up">
       <div class="pricing-card">
         <div class="plan-name">Monthly</div>
-        <div class="price-row"><span class="amount">$9.99</span><span class="period">/month</span></div>
-        <div class="price-note">After 7-day free trial</div>
+        <div class="price-row"><span class="amount" id="price-monthly">$9.99</span><span class="period">/month</span></div>
+        <div class="price-note" id="note-monthly">After 7-day free trial</div>
         <ul class="plan-features">
           <li><span class="ck">✓</span> Unlimited medicines</li>
           <li><span class="ck">✓</span> AI Caretaker daily check-ins</li>
@@ -484,8 +488,8 @@
       <div class="pricing-card featured">
         <div class="founding-ribbon">⭐ Founding Member</div>
         <div class="plan-name">Founding Price</div>
-        <div class="price-row"><span class="amount">$5</span><span class="period">/month</span></div>
-        <div class="price-note">Locked for 1 full year · 200 spots only</div>
+        <div class="price-row"><span class="amount" id="price-founding">$5</span><span class="period">/month</span></div>
+        <div class="price-note" id="note-founding">Locked for 1 full year · 200 spots only</div>
         <ul class="plan-features">
           <li><span class="ck">✓</span> Everything in Monthly</li>
           <li><span class="ck">✓</span> 50% off, locked 12 months</li>
@@ -498,8 +502,8 @@
       </div>
       <div class="pricing-card">
         <div class="plan-name">Annual</div>
-        <div class="price-row"><span class="amount">$90</span><span class="period">/year</span></div>
-        <div class="price-note">Save $30 vs monthly</div>
+        <div class="price-row"><span class="amount" id="price-annual">$90</span><span class="period">/year</span></div>
+        <div class="price-note" id="note-annual">Save $30 vs monthly</div>
         <ul class="plan-features">
           <li><span class="ck">✓</span> Everything in Monthly</li>
           <li><span class="ck">✓</span> 2 months free</li>
@@ -602,6 +606,37 @@
 </footer>
 
 <script>
+  var PRICES = {
+    usd: { monthly:'$9.99', founding:'$5', annual:'$90', noteMonthly:'After 7-day free trial', noteFounding:'Locked for 1 full year · 200 spots only', noteAnnual:'Save $30 vs monthly · ~2 months free' },
+    cad: { monthly:'CA$13.99', founding:'CA$7', annual:'CA$119', noteMonthly:'After 7-day free trial', noteFounding:'Locked for 1 full year · 200 spots only', noteAnnual:'Save ~CA$49 vs monthly · ~2 months free' }
+  };
+  var currentCurrency = 'usd';
+
+  // Auto-detect Canadian users by timezone
+  (function(){
+    try {
+      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      if(tz.startsWith('America/') && ['Vancouver','Edmonton','Calgary','Winnipeg','Toronto','Ottawa','Montreal','Halifax','St_Johns','Regina','Whitehorse','Yellowknife','Iqaluit','Moncton','Fredericton'].some(function(c){ return tz.includes(c); })) {
+        setCurrency('cad');
+      }
+    } catch(e){}
+  })();
+
+  function setCurrency(c) {
+    currentCurrency = c;
+    var p = PRICES[c];
+    document.getElementById('price-monthly').textContent = p.monthly;
+    document.getElementById('price-founding').textContent = p.founding;
+    document.getElementById('price-annual').textContent = p.annual;
+    document.getElementById('note-monthly').textContent = p.noteMonthly;
+    document.getElementById('note-founding').textContent = p.noteFounding;
+    document.getElementById('note-annual').textContent = p.noteAnnual;
+    document.getElementById('btnUSD').style.background = c==='usd' ? '#02C39A' : 'transparent';
+    document.getElementById('btnUSD').style.color = c==='usd' ? '#0D3347' : 'rgba(255,255,255,0.7)';
+    document.getElementById('btnCAD').style.background = c==='cad' ? '#02C39A' : 'transparent';
+    document.getElementById('btnCAD').style.color = c==='cad' ? '#0D3347' : 'rgba(255,255,255,0.7)';
+  }
+
   let spotsTaken = 46;
   const totalSpots = 200;
 
