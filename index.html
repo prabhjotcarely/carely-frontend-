@@ -238,9 +238,56 @@
       nav { padding: 0 16px; }
       .logo span { display: none; }
     }
+
+    /* ── Pre-launch countdown banner ── */
+    .prelaunch-bar { background: linear-gradient(90deg, #0D3347 0%, #028090 100%); color: white; text-align: center; padding: 10px 20px; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.01em; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .prelaunch-bar .pb-label { opacity: 0.75; }
+    .prelaunch-bar .pb-date { color: #02C39A; font-weight: 800; }
+    .countdown-wrap { display: inline-flex; gap: 6px; align-items: center; }
+    .cd-block { background: rgba(255,255,255,0.15); border-radius: 6px; padding: 2px 8px; font-size: 0.85rem; font-weight: 800; min-width: 36px; text-align: center; }
+    .cd-sep { opacity: 0.5; font-weight: 700; }
+    .prelaunch-live { display:none; background: linear-gradient(90deg, #0D3347 0%, #028090 100%); color: white; text-align: center; padding: 10px 20px; font-size: 0.9rem; font-weight: 700; }
+    .prelaunch-live a { color: #02C39A; text-decoration: none; }
   </style>
 </head>
 <body>
+
+<!-- PRE-LAUNCH COUNTDOWN BAR -->
+<div class="prelaunch-bar" id="prelaunchBar">
+  <span class="pb-label">🎉 Pre-Launch Sale starts</span>
+  <span class="pb-date">May 5</span>
+  <span class="pb-label">— App launches</span>
+  <span class="pb-date">May 15</span>
+  <span class="pb-label">· Founding spots close at launch ·</span>
+  <span class="countdown-wrap">
+    <span class="cd-block" id="cd-days">--</span><span class="cd-sep">d</span>
+    <span class="cd-block" id="cd-hours">--</span><span class="cd-sep">h</span>
+    <span class="cd-block" id="cd-mins">--</span><span class="cd-sep">m</span>
+    <span class="cd-block" id="cd-secs">--</span><span class="cd-sep">s</span>
+  </span>
+</div>
+<div class="prelaunch-live" id="prelaunchLive">
+  🚀 Pre-Launch Sale is LIVE! &nbsp;·&nbsp; App launches May 15 &nbsp;·&nbsp; <a href="#founding">Claim Your Founding Spot →</a>
+</div>
+<script>
+  (function(){
+    var target = new Date('2026-05-05T00:00:00-07:00').getTime();
+    function tick(){
+      var now = Date.now(), diff = target - now;
+      if(diff <= 0){
+        document.getElementById('prelaunchBar').style.display='none';
+        document.getElementById('prelaunchLive').style.display='block';
+        return;
+      }
+      var d=Math.floor(diff/86400000), h=Math.floor((diff%86400000)/3600000), m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
+      document.getElementById('cd-days').textContent=String(d).padStart(2,'0');
+      document.getElementById('cd-hours').textContent=String(h).padStart(2,'0');
+      document.getElementById('cd-mins').textContent=String(m).padStart(2,'0');
+      document.getElementById('cd-secs').textContent=String(s).padStart(2,'0');
+    }
+    tick(); setInterval(tick,1000);
+  })();
+</script>
 
 <!-- NAV -->
 <nav>
@@ -255,7 +302,7 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="founding-badge"><div class="badge-dot"></div> Founding Member Offer — Limited Spots</div>
+    <div class="founding-badge"><div class="badge-dot"></div> Pre-Launch Sale · May 5 · App Launches May 15</div>
     <h1>Your meds, on time.<br><span>Every single day.</span></h1>
     <p>Smart medication reminders powered by an AI caretaker that checks in, celebrates your streaks, and alerts your loved ones when it matters.</p>
 
@@ -279,7 +326,7 @@
       <div class="success-state" id="heroSuccess">
         <div class="success-icon">🎉</div>
         <h3>You're on the list!</h3>
-        <p>We'll email you the moment Carely launches.<br>Your founding price of <strong>$5/month</strong> is locked in.</p>
+        <p>🚀 Pre-launch sale starts <strong>May 5</strong>. App launches <strong>May 15</strong> on iOS &amp; Android.<br>Your founding price of <strong>$5/month</strong> is locked in forever.</p>
       </div>
     </div>
 
