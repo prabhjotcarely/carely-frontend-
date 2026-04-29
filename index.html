@@ -353,7 +353,11 @@
           <input type="text" placeholder="Last name" id="heroLast" />
         </div>
         <input type="email" placeholder="Email address" id="heroEmail" class="email-input" />
-        <button class="cta-btn" onclick="submitSignup('hero')">🔒 Lock In $5/Month — Join Founding Members</button>
+        <button class="cta-btn" onclick="submitSignup('hero')">🔒 Join the Waitlist — Lock In $5/Month</button>
+        <div style="text-align:center;margin:10px 0 4px;">
+          <span style="color:rgba(255,255,255,0.4);font-size:12px;">— or —</span>
+        </div>
+        <button class="cta-btn" onclick="buyNow()" style="background:linear-gradient(135deg,#02C39A,#00A896);margin-top:0;">⚡ Buy Now — Skip the Wait, Start Today</button>
         <p class="fine-print">By joining, you confirm you are <strong>16 years of age or older</strong> and agree to our <a href="terms.html" style="color:var(--seafoam)">Terms of Service</a> and <a href="privacy.html" style="color:var(--seafoam)">Privacy Policy</a>.<br>7-day free trial · Cancel anytime · <strong>Price locked for 1 year</strong> · iOS &amp; Android</p>
       </div>
       <div class="success-state" id="heroSuccess">
@@ -698,6 +702,33 @@
   }
 
   function scrollToForm() { document.getElementById('founding').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+
+  async function buyNow() {
+    const email = document.getElementById('heroEmail').value.trim();
+    const firstName = document.getElementById('heroFirst').value.trim();
+    if (!email || !email.includes('@')) {
+      alert('Enter your email above first, then click Buy Now.');
+      document.getElementById('heroEmail').focus();
+      return;
+    }
+    const btn = event.target;
+    btn.textContent = '⏳ Redirecting to checkout...';
+    btn.disabled = true;
+    try {
+      const res = await fetch('https://carely-backend-production.up.railway.app/subscription/buy-founding', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, firstName }),
+      });
+      const { url } = await res.json();
+      if (url) { window.location.href = url; }
+      else { throw new Error('No checkout URL'); }
+    } catch {
+      btn.textContent = '⚡ Buy Now — Skip the Wait, Start Today';
+      btn.disabled = false;
+      alert('Something went wrong. Please try again or email hello@carely.fit');
+    }
+  }
 
   function toggleFaq(el) {
     const item = el.closest('.faq-item');
