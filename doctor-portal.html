@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Report — Carely</title>
+  <link rel="icon" type="image/png" href="carely-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #028090; --deep-teal: #0D3347; --mint: #02C39A;
+      --off-white: #F7FBFA; --grey-100: #F1F5F4; --grey-300: #C8D6D3;
+      --grey-500: #7A9490; --text: #0D2B24; --white: #fff;
+      --radius: 16px; --danger: #EF4444; --warning: #F59E0B;
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--off-white); color: var(--text); -webkit-font-smoothing: antialiased; }
+    nav { background: var(--deep-teal); padding: 0 20px; }
+    .nav-inner { max-width: 800px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: white; text-decoration: none; }
+    .nav-badge { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); font-size: 0.8rem; padding: 4px 12px; border-radius: 20px; font-weight: 600; }
+    main { max-width: 800px; margin: 0 auto; padding: 40px 20px 80px; }
+    .loading { display: flex; align-items: center; justify-content: center; min-height: 60vh; flex-direction: column; gap: 16px; }
+    .spinner { width: 40px; height: 40px; border: 3px solid var(--grey-300); border-top-color: var(--teal); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #portal { display: none; }
+    .report-header { background: var(--white); border-radius: var(--radius); padding: 28px; border: 1.5px solid var(--grey-300); margin-bottom: 24px; }
+    .report-label { font-size: 0.78rem; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 4px; }
+    .report-patient { font-size: 1.6rem; font-weight: 900; color: var(--deep-teal); letter-spacing: -0.02em; }
+    .report-meta { font-size: 0.9rem; color: var(--grey-500); margin-top: 4px; }
+    .adherence-section { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--white); border-radius: var(--radius); padding: 20px; border: 1.5px solid var(--grey-300); text-align: center; }
+    .stat-big { font-size: 2.8rem; font-weight: 900; }
+    .stat-sub { font-size: 0.82rem; font-weight: 600; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
+    .medicines-section { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--grey-300); overflow: hidden; margin-bottom: 24px; }
+    .section-heading { font-size: 0.9rem; font-weight: 800; color: var(--deep-teal); padding: 16px 20px; border-bottom: 1px solid var(--grey-100); text-transform: uppercase; letter-spacing: 0.5px; }
+    .med-row { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--grey-100); }
+    .med-row:last-child { border-bottom: none; }
+    .med-dot { width: 12px; height: 12px; border-radius: 6px; flex-shrink: 0; }
+    .med-name { font-size: 15px; font-weight: 700; color: var(--deep-teal); }
+    .med-nick { font-size: 12px; color: var(--grey-500); margin-top: 2px; }
+    .med-sched { font-size: 12px; color: var(--teal); font-weight: 600; margin-left: auto; }
+    .disclaimer { background: #FFF8E1; border: 1px solid #F59E0B; border-radius: 12px; padding: 16px; font-size: 0.82rem; color: #92400E; line-height: 1.6; }
+    .disclaimer strong { font-weight: 700; }
+    .error-msg { color: var(--danger); font-weight: 700; text-align: center; }
+    footer { background: var(--deep-teal); color: rgba(255,255,255,0.6); text-align: center; padding: 24px 20px; font-size: 0.82rem; margin-top: 60px; }
+    @media (max-width: 500px) { .adherence-section { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <img src="carely-icon.png" alt="Carely" style="height:32px;width:auto;filter:brightness(10);" />
+      Carely
+    </a>
+    <span class="nav-badge">Doctor Report</span>
+  </div>
+</nav>
+
+<main>
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p style="color:var(--grey-500);">Loading patient report...</p>
+  </div>
+
+  <div id="portal">
+    <div class="report-header" id="report-header"></div>
+    <div class="adherence-section" id="adherence-section"></div>
+    <div class="medicines-section" id="medicines-section"></div>
+    <div class="disclaimer">
+      <strong>Clinical note:</strong> Carely records patient-reported dose responses (Taken, Skipped, Snoozed, Missed). This data is self-reported and not verified by a healthcare professional. It should be used as a supporting reference only, not as a substitute for clinical assessment.
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span>© 2026 Carely · For licensed healthcare providers only</span>
+</footer>
+
+<script>
+  var API = 'https://carely-backend-production.up.railway.app';
+  var token = new URLSearchParams(window.location.search).get('token');
+
+  function adherenceColor(pct) {
+    if (pct === null || pct === undefined) return '#7A9490';
+    if (pct >= 80) return '#02C39A';
+    if (pct >= 50) return '#F59E0B';
+    return '#EF4444';
+  }
+
+  function addText(parent, tag, text, className) {
+    var el = document.createElement(tag);
+    el.textContent = String(text);
+    if (className) el.className = className;
+    parent.appendChild(el);
+    return el;
+  }
+
+  if (!token) {
+    var loading = document.getElementById('loading');
+    loading.textContent = '';
+    var err = document.createElement('p');
+    err.className = 'error-msg';
+    err.textContent = 'No access token. Check the link in your email.';
+    loading.appendChild(err);
+  } else {
+    fetch(API + '/b2b/doctor-portal?token=' + encodeURIComponent(token))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('portal').style.display = 'block';
+
+        var patient = data.patient;
+        var doctor = data.doctor;
+        var adherence = data.adherence;
+        var medicines = data.medicines || [];
+
+        // Report header
+        var header = document.getElementById('report-header');
+        addText(header, 'div', 'Patient Adherence Report', 'report-label');
+        addText(header, 'div', patient.firstName, 'report-patient');
+        var meta = document.createElement('div');
+        meta.className = 'report-meta';
+        meta.textContent = 'Prepared for ' + doctor.name;
+        if (doctor.lastReportSentAt) {
+          meta.textContent += ' · Report generated ' + new Date().toLocaleDateString();
+        }
+        header.appendChild(meta);
+
+        // Adherence cards
+        var section = document.getElementById('adherence-section');
+
+        var card30 = document.createElement('div');
+        card30.className = 'stat-card';
+        var val30 = document.createElement('div');
+        val30.className = 'stat-big';
+        val30.style.color = adherenceColor(adherence.last30Days);
+        val30.textContent = adherence.last30Days !== null ? adherence.last30Days + '%' : '—';
+        addText(card30, 'div', '30-day adherence', 'stat-sub');
+        card30.insertBefore(val30, card30.firstChild);
+        section.appendChild(card30);
+
+        var cardToday = document.createElement('div');
+        cardToday.className = 'stat-card';
+        var valToday = document.createElement('div');
+        valToday.className = 'stat-big';
+        valToday.style.color = adherenceColor(adherence.today);
+        valToday.textContent = adherence.today !== null ? adherence.today + '%' : '—';
+        var subToday = document.createElement('div');
+        subToday.className = 'stat-sub';
+        subToday.textContent = "Today (" + adherence.takenToday + "/" + adherence.totalToday + " doses)";
+        cardToday.appendChild(valToday);
+        cardToday.appendChild(subToday);
+        section.appendChild(cardToday);
+
+        // Medicines
+        var medsSection = document.getElementById('medicines-section');
+        addText(medsSection, 'div', 'Current medicines (' + medicines.length + ')', 'section-heading');
+
+        if (!medicines.length) {
+          var empty = document.createElement('div');
+          empty.style.cssText = 'padding:24px;text-align:center;color:var(--grey-500);';
+          empty.textContent = 'No active medicines recorded.';
+          medsSection.appendChild(empty);
+        } else {
+          medicines.forEach(function(m) {
+            var row = document.createElement('div');
+            row.className = 'med-row';
+
+            var dot = document.createElement('div');
+            dot.className = 'med-dot';
+            dot.style.backgroundColor = m.colourTag || '#028090';
+
+            var info = document.createElement('div');
+            info.style.flex = '1';
+            var nameEl = document.createElement('div');
+            nameEl.className = 'med-name';
+            nameEl.textContent = m.name;
+            info.appendChild(nameEl);
+            if (m.nickname && m.nickname !== m.name) {
+              var nickEl = document.createElement('div');
+              nickEl.className = 'med-nick';
+              nickEl.textContent = '"' + m.nickname + '"';
+              info.appendChild(nickEl);
+            }
+
+            var sched = document.createElement('div');
+            sched.className = 'med-sched';
+            if (m.schedule && m.schedule.times && m.schedule.times.length) {
+              sched.textContent = m.schedule.times.join(', ');
+            } else {
+              sched.textContent = m.schedule ? m.schedule.frequency : '';
+            }
+
+            row.appendChild(dot);
+            row.appendChild(info);
+            row.appendChild(sched);
+            medsSection.appendChild(row);
+          });
+        }
+      })
+      .catch(function(err) {
+        var loading = document.getElementById('loading');
+        loading.textContent = '';
+        var msg = document.createElement('p');
+        msg.className = 'error-msg';
+        msg.textContent = err.message || 'Could not load report.';
+        loading.appendChild(msg);
+      });
+  }
+</script>
+</body>
+</html>
