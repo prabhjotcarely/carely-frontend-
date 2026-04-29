@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact & Support — Carely</title>
+  <meta name="description" content="Get help with Carely. Contact our support team for billing, technical issues, or anything else." />
+  <link rel="icon" type="image/png" href="carely-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #028090; --deep-teal: #0D3347; --mint: #02C39A;
+      --off-white: #F7FBFA; --grey-100: #F1F5F4; --grey-300: #C8D6D3;
+      --grey-500: #7A9490; --text: #0D2B24; --white: #fff;
+      --radius: 16px;
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--off-white); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(247,251,250,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(200,214,211,0.5); padding: 0 20px; }
+    .nav-inner { max-width: 800px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: var(--deep-teal); text-decoration: none; }
+    main { max-width: 800px; margin: 0 auto; padding: 60px 20px 80px; }
+    h1 { font-size: 2.2rem; font-weight: 900; color: var(--deep-teal); margin-bottom: 12px; letter-spacing: -0.03em; }
+    .subtitle { font-size: 1.05rem; color: var(--grey-500); margin-bottom: 48px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 48px; }
+    .card { background: var(--white); border-radius: var(--radius); padding: 24px; border: 1.5px solid var(--grey-300); transition: border-color 0.15s; }
+    .card:hover { border-color: var(--mint); }
+    .card-icon { font-size: 2rem; margin-bottom: 12px; }
+    .card h3 { font-size: 1rem; font-weight: 700; color: var(--deep-teal); margin-bottom: 6px; }
+    .card p { font-size: 0.875rem; color: var(--grey-500); margin-bottom: 14px; line-height: 1.5; }
+    .card a { color: var(--teal); font-weight: 600; font-size: 0.9rem; text-decoration: none; }
+    .card a:hover { text-decoration: underline; }
+    .response-note { font-size: 0.78rem; color: var(--grey-500); margin-top: 6px; }
+    .faq { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--grey-300); overflow: hidden; margin-bottom: 48px; }
+    .faq h2 { font-size: 1.1rem; font-weight: 800; color: var(--deep-teal); padding: 20px 24px; border-bottom: 1px solid var(--grey-300); }
+    .faq-item { padding: 18px 24px; border-bottom: 1px solid var(--grey-100); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q { font-weight: 700; font-size: 0.92rem; color: var(--deep-teal); margin-bottom: 6px; }
+    .faq-a { font-size: 0.87rem; color: var(--grey-500); line-height: 1.6; }
+    .faq-a a { color: var(--teal); }
+    footer { background: var(--deep-teal); color: rgba(255,255,255,0.6); text-align: center; padding: 24px 20px; font-size: 0.82rem; }
+    footer a { color: rgba(255,255,255,0.7); margin: 0 10px; }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <img src="carely-icon.png" alt="Carely" style="height:32px;width:auto;" />
+      Carely
+    </a>
+    <a href="/" style="color:var(--teal);font-weight:600;font-size:0.9rem;text-decoration:none;">← Back to home</a>
+  </div>
+</nav>
+
+<main>
+  <h1>Help & Support</h1>
+  <p class="subtitle">We're a small team based in BC, Canada. We actually read every email.</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-icon">💊</div>
+      <h3>General Support</h3>
+      <p>Questions about the app, reminders not firing, or anything else.</p>
+      <a href="mailto:hello@carely.fit?subject=Carely Support">hello@carely.fit</a>
+      <p class="response-note">⏱ We reply within 24 hours</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">💳</div>
+      <h3>Billing & Subscriptions</h3>
+      <p>Cancel your subscription, request a refund, or ask about your plan.</p>
+      <a href="mailto:hello@carely.fit?subject=Billing Help">hello@carely.fit</a>
+      <p class="response-note">⏱ We reply within 12 hours</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔒</div>
+      <h3>Privacy & Data</h3>
+      <p>Request your data, exercise your right to erasure, or privacy questions.</p>
+      <a href="mailto:hello@carely.fit?subject=Privacy Request">hello@carely.fit</a>
+      <p class="response-note">⏱ GDPR/PIPEDA requests within 30 days</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤝</div>
+      <h3>Partnerships</h3>
+      <p>Pharmacies, care homes, hospitals, or healthcare organizations.</p>
+      <a href="mailto:hello@carely.fit?subject=Partnership">hello@carely.fit</a>
+      <p class="response-note">⏱ We reply within 48 hours</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">How do I cancel my subscription?</div>
+      <div class="faq-a">Email us at <a href="mailto:hello@carely.fit?subject=Cancel Subscription">hello@carely.fit</a> with the subject "Cancel Subscription" and we'll cancel it immediately. You keep access until the end of your billing period. No questions asked.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">I'm not receiving push notifications</div>
+      <div class="faq-a">Go to your phone's Settings → Carely → Notifications and make sure notifications are enabled. If that doesn't work, log out and back in to re-register your device. Still not working? Email us.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How do I delete my account and all my data?</div>
+      <div class="faq-a">In the Carely app, go to Profile → scroll to the bottom → tap "Delete Account". This permanently deletes your account and all health data immediately. You can also email us and we'll do it within 72 hours.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Can I use Carely in my country?</div>
+      <div class="faq-a">Carely works globally. The app is available in English, Spanish, Portuguese, French, Hindi, Japanese, Korean, Chinese, and Arabic. We accept payment in USD and CAD.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Can I get a refund?</div>
+      <div class="faq-a">If you're charged and contact us within 48 hours, we issue a full refund — no questions asked. See our full <a href="terms.html#refunds">Refund Policy</a>.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How do I transfer my Carely account to a new phone?</div>
+      <div class="faq-a">Just download Carely on your new phone and sign in with your email and password. All your medicines, schedules, and dose history sync automatically from the cloud.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Is Carely HIPAA compliant?</div>
+      <div class="faq-a">Carely is a medication reminder app, not a healthcare provider or covered entity under HIPAA. We are PIPEDA (Canada) and CCPA (California) compliant. Your data is never sold. See our <a href="privacy.html">Privacy Policy</a>.</div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span>© 2026 Carely · Made in BC, Canada 🍁</span>
+  <div style="margin-top:8px;">
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="contact.html">Support</a>
+  </div>
+</footer>
+</body>
+</html>
