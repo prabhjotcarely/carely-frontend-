@@ -24,7 +24,7 @@
       { "@type": "Offer", "name": "Monthly", "price": "9.99", "priceCurrency": "USD" },
       { "@type": "Offer", "name": "Annual", "price": "90.00", "priceCurrency": "USD" }
     ],
-    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "12" },
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5.0", "reviewCount": "4" },
     "author": { "@type": "Organization", "name": "Carely", "url": "https://carely.fit", "areaServed": ["US", "CA"] },
     "featureList": ["AI caretaker check-ins", "Missed dose family alerts", "Medication adherence tracking", "Caregiver dashboard", "Doctor report emails", "Push notifications", "Streak tracking"],
     "screenshot": "https://carely.fit/carely-logo-full.png"
@@ -594,8 +594,9 @@
       </div>
       <div class="footer-links-col">
         <h4>Contact</h4>
+        <a href="contact.html">Help & Support</a>
         <a href="mailto:hello@carely.fit">hello@carely.fit</a>
-        <a href="#">@carely</a>
+        <a href="contact.html">contact.html</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -745,6 +746,41 @@
   window.addEventListener('load', () => { setTimeout(() => updateSpots(46), 400); });
 
   let sim = setInterval(() => { if (spotsTaken < 52) updateSpots(spotsTaken + 1); else clearInterval(sim); }, 20000);
+</script>
+
+<!-- Cookie consent banner — shown to EU/UK visitors, hidden after acceptance -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#0D3347;color:#fff;padding:14px 20px;font-family:Inter,sans-serif;font-size:13px;line-height:1.5;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 -4px 24px rgba(0,0,0,0.2);">
+  <span style="flex:1;min-width:240px;">We use Google Fonts to display text. By continuing, you agree to our <a href="privacy.html" style="color:#02C39A;text-decoration:underline;">Privacy Policy</a>. We never sell your data or use ad tracking.</span>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="acceptCookies()" style="background:#02C39A;color:#0D3347;border:none;border-radius:8px;padding:9px 20px;font-weight:700;cursor:pointer;font-size:13px;">Accept</button>
+    <button onclick="declineCookies()" style="background:transparent;color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.3);border-radius:8px;padding:9px 16px;cursor:pointer;font-size:13px;">Decline</button>
+  </div>
+</div>
+
+<script>
+  // Show cookie banner only to EU/UK/AU users (everyone else: auto-accept)
+  (function() {
+    if (localStorage.getItem('carely_cookies')) return;
+    var tz = '';
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e) {}
+    var euZones = ['Europe/', 'Australia/', 'Pacific/Auckland', 'Pacific/Auckland'];
+    var isEU = euZones.some(function(z) { return tz.startsWith(z); });
+    if (isEU) {
+      document.getElementById('cookie-banner').style.display = 'flex';
+    } else {
+      localStorage.setItem('carely_cookies', 'accepted');
+    }
+  })();
+
+  function acceptCookies() {
+    localStorage.setItem('carely_cookies', 'accepted');
+    document.getElementById('cookie-banner').style.display = 'none';
+  }
+
+  function declineCookies() {
+    localStorage.setItem('carely_cookies', 'declined');
+    document.getElementById('cookie-banner').style.display = 'none';
+  }
 </script>
 </body>
 </html>
