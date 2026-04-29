@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Care Portal — Carely</title>
+  <link rel="icon" type="image/png" href="carely-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #028090; --deep-teal: #0D3347; --mint: #02C39A;
+      --off-white: #F7FBFA; --grey-100: #F1F5F4; --grey-300: #C8D6D3;
+      --grey-500: #7A9490; --text: #0D2B24; --white: #fff;
+      --radius: 16px; --danger: #EF4444; --warning: #F59E0B;
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--off-white); color: var(--text); -webkit-font-smoothing: antialiased; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(247,251,250,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(200,214,211,0.5); padding: 0 20px; }
+    .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: var(--deep-teal); text-decoration: none; }
+    main { max-width: 1100px; margin: 0 auto; padding: 40px 20px 80px; }
+    .loading { display: flex; align-items: center; justify-content: center; min-height: 50vh; flex-direction: column; gap: 16px; }
+    .spinner { width: 40px; height: 40px; border: 3px solid var(--grey-300); border-top-color: var(--teal); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #portal { display: none; }
+    .page-title { font-size: 2rem; font-weight: 900; color: var(--deep-teal); margin-bottom: 4px; letter-spacing: -0.03em; }
+    .page-subtitle { font-size: 1rem; color: var(--grey-500); margin-bottom: 32px; }
+    .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .summary-card { background: var(--white); border-radius: var(--radius); padding: 20px; border: 1.5px solid var(--grey-300); }
+    .summary-value { font-size: 2.2rem; font-weight: 900; color: var(--deep-teal); }
+    .summary-value.green { color: var(--mint); }
+    .summary-value.red { color: var(--danger); }
+    .summary-label { font-size: 0.8rem; font-weight: 600; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+    .patients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .patient-card { background: var(--white); border-radius: var(--radius); padding: 20px; border: 1.5px solid var(--grey-300); transition: border-color 0.15s; }
+    .patient-card:hover { border-color: var(--teal); }
+    .patient-card.at-risk { border-color: var(--danger); }
+    .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .avatar { width: 44px; height: 44px; border-radius: 22px; background: var(--grey-100); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; color: var(--teal); flex-shrink: 0; }
+    .patient-name { font-size: 16px; font-weight: 700; color: var(--deep-teal); }
+    .patient-plan { font-size: 12px; color: var(--grey-500); margin-top: 2px; }
+    .adherence-ring { margin-left: auto; text-align: center; }
+    .ring-value { font-size: 22px; font-weight: 900; }
+    .ring-label { font-size: 10px; font-weight: 600; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.3px; }
+    .dose-row { font-size: 13px; color: var(--grey-500); margin-bottom: 10px; }
+    .meds-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .med-chip { background: var(--grey-100); border-radius: 8px; padding: 3px 10px; font-size: 12px; color: var(--grey-500); font-weight: 500; display: flex; align-items: center; gap: 5px; }
+    .med-dot { width: 8px; height: 8px; border-radius: 4px; flex-shrink: 0; }
+    .no-patients { text-align: center; padding: 60px 20px; color: var(--grey-500); grid-column: 1 / -1; }
+    .error-msg { color: var(--danger); font-weight: 700; text-align: center; }
+    footer { background: var(--deep-teal); color: rgba(255,255,255,0.6); text-align: center; padding: 24px 20px; font-size: 0.82rem; margin-top: 60px; }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <img src="carely-icon.png" alt="Carely" style="height:32px;width:auto;" />
+      Care Portal
+    </a>
+    <span id="org-name-nav" style="font-weight:600;font-size:0.9rem;color:var(--teal);"></span>
+  </div>
+</nav>
+
+<main>
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p style="color:var(--grey-500);">Loading care portal...</p>
+  </div>
+
+  <div id="portal">
+    <h1 class="page-title" id="portal-title">Care Dashboard</h1>
+    <p class="page-subtitle" id="portal-subtitle">Today's adherence across all your patients</p>
+
+    <div class="summary-row" id="summary-row"></div>
+    <div class="patients-grid" id="patients-grid"></div>
+  </div>
+</main>
+
+<footer>
+  <span>© 2026 Carely · B2B Care Portal</span>
+</footer>
+
+<script>
+  var API = 'https://carely-backend-production.up.railway.app';
+  var token = new URLSearchParams(window.location.search).get('token');
+
+  function adherenceColor(pct) {
+    if (pct === null || pct === undefined) return '#7A9490';
+    if (pct >= 80) return '#02C39A';
+    if (pct >= 50) return '#F59E0B';
+    return '#EF4444';
+  }
+
+  function makeSummaryCard(value, label, colorClass) {
+    var card = document.createElement('div');
+    card.className = 'summary-card';
+    var v = document.createElement('div');
+    v.className = 'summary-value' + (colorClass ? ' ' + colorClass : '');
+    v.textContent = String(value);
+    var l = document.createElement('div');
+    l.className = 'summary-label';
+    l.textContent = label;
+    card.appendChild(v);
+    card.appendChild(l);
+    return card;
+  }
+
+  function makePatientCard(p) {
+    var card = document.createElement('div');
+    card.className = 'patient-card' + ((p.today.adherencePct !== null && p.today.adherencePct < 50) ? ' at-risk' : '');
+
+    var top = document.createElement('div');
+    top.className = 'card-top';
+
+    var avatar = document.createElement('div');
+    avatar.className = 'avatar';
+    avatar.textContent = (p.firstName || '?').charAt(0).toUpperCase();
+
+    var info = document.createElement('div');
+    var name = document.createElement('div');
+    name.className = 'patient-name';
+    name.textContent = p.firstName || 'Patient';
+    var plan = document.createElement('div');
+    plan.className = 'patient-plan';
+    plan.textContent = p.plan || 'trial';
+    info.appendChild(name);
+    info.appendChild(plan);
+
+    var ring = document.createElement('div');
+    ring.className = 'adherence-ring';
+    var ringVal = document.createElement('div');
+    ringVal.className = 'ring-value';
+    ringVal.style.color = adherenceColor(p.today.adherencePct);
+    ringVal.textContent = p.today.adherencePct !== null ? p.today.adherencePct + '%' : '—';
+    var ringLbl = document.createElement('div');
+    ringLbl.className = 'ring-label';
+    ringLbl.textContent = 'today';
+    ring.appendChild(ringVal);
+    ring.appendChild(ringLbl);
+
+    top.appendChild(avatar);
+    top.appendChild(info);
+    top.appendChild(ring);
+    card.appendChild(top);
+
+    if (p.today.total > 0) {
+      var doseRow = document.createElement('div');
+      doseRow.className = 'dose-row';
+      doseRow.textContent = p.today.taken + ' of ' + p.today.total + ' doses taken today';
+      card.appendChild(doseRow);
+    }
+
+    if (p.medicines && p.medicines.length) {
+      var medsList = document.createElement('div');
+      medsList.className = 'meds-list';
+      var shown = p.medicines.slice(0, 4);
+      shown.forEach(function(m) {
+        var chip = document.createElement('div');
+        chip.className = 'med-chip';
+        var dot = document.createElement('div');
+        dot.className = 'med-dot';
+        dot.style.backgroundColor = m.colourTag || '#028090';
+        var label = document.createElement('span');
+        label.textContent = m.nickname || m.name;
+        chip.appendChild(dot);
+        chip.appendChild(label);
+        medsList.appendChild(chip);
+      });
+      if (p.medicines.length > 4) {
+        var more = document.createElement('div');
+        more.className = 'med-chip';
+        more.textContent = '+' + (p.medicines.length - 4) + ' more';
+        medsList.appendChild(more);
+      }
+      card.appendChild(medsList);
+    }
+
+    return card;
+  }
+
+  if (!token) {
+    var loading = document.getElementById('loading');
+    loading.textContent = '';
+    var err = document.createElement('p');
+    err.className = 'error-msg';
+    err.textContent = 'No access token. Check your portal link.';
+    loading.appendChild(err);
+  } else {
+    fetch(API + '/b2b/portal?token=' + encodeURIComponent(token))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('portal').style.display = 'block';
+
+        var org = data.org;
+        var summary = data.summary;
+        var patients = data.patients || [];
+
+        document.getElementById('portal-title').textContent = org.name + ' — Care Dashboard';
+        document.getElementById('portal-subtitle').textContent = "Today's adherence across all " + summary.totalPatients + " patients";
+        document.getElementById('org-name-nav').textContent = org.name;
+
+        var summaryRow = document.getElementById('summary-row');
+        summaryRow.appendChild(makeSummaryCard(summary.totalPatients, 'Total patients', ''));
+        summaryRow.appendChild(makeSummaryCard(
+          summary.avgAdherence !== null ? summary.avgAdherence + '%' : '—',
+          'Avg adherence today', summary.avgAdherence >= 80 ? 'green' : summary.avgAdherence < 50 ? 'red' : ''
+        ));
+        summaryRow.appendChild(makeSummaryCard(summary.atRisk, 'At risk today (<50%)', summary.atRisk > 0 ? 'red' : 'green'));
+
+        var grid = document.getElementById('patients-grid');
+        if (!patients.length) {
+          var empty = document.createElement('div');
+          empty.className = 'no-patients';
+          empty.textContent = 'No patients connected yet. Share your 8-character org code with your patients so they can link their Carely account.';
+          grid.appendChild(empty);
+        } else {
+          // Sort: at-risk first, then by adherence ascending
+          patients.sort(function(a, b) {
+            var ap = a.today.adherencePct === null ? 50 : a.today.adherencePct;
+            var bp = b.today.adherencePct === null ? 50 : b.today.adherencePct;
+            return ap - bp;
+          });
+          patients.forEach(function(p) {
+            grid.appendChild(makePatientCard(p));
+          });
+        }
+      })
+      .catch(function(err) {
+        var loading = document.getElementById('loading');
+        loading.textContent = '';
+        var msg = document.createElement('p');
+        msg.className = 'error-msg';
+        msg.textContent = err.message || 'Could not load portal.';
+        loading.appendChild(msg);
+      });
+  }
+</script>
+</body>
+</html>
