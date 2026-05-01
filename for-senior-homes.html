@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Carely helps senior living communities reduce medication errors, cut family check-in calls, and give residents daily AI companionship — without adding to staff workload." />
+  <meta name="robots" content="index, follow" />
+  <title>Carely for Senior Living — Better Medication Compliance. Happier Residents.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --deep-teal: #0D3347;
+      --teal: #028090;
+      --mint: #02C39A;
+      --light-mint: #E0FAF4;
+      --offwhite: #F7FBFA;
+      --accent: #6366f1;
+      --accent-teal: #0891b2;
+      --accent-light: #eef2ff;
+      --text-dark: #0D3347;
+      --text-mid: #2d5a6b;
+      --text-muted: #5a8a99;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-dark);
+      background: var(--offwhite);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid #e8f4f0;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      box-shadow: 0 2px 12px rgba(13,51,71,0.07);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo img { height: 36px; width: auto; }
+
+    .nav-logo span {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--deep-teal);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-badge {
+      background: var(--light-mint);
+      color: var(--teal);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid #a8edda;
+      white-space: nowrap;
+    }
+
+    .nav-cta {
+      background: var(--accent);
+      color: var(--white);
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+
+    .nav-cta:hover {
+      background: #4f46e5;
+      transform: translateY(-1px);
+    }
+
+    /* HERO — purple-teal accent */
+    .hero {
+      background: var(--deep-teal);
+      background-image:
+        radial-gradient(ellipse at 70% 35%, rgba(99, 102, 241, 0.2) 0%, transparent 60%),
+        radial-gradient(ellipse at 15% 75%, rgba(8, 145, 178, 0.15) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 85%, rgba(2, 195, 154, 0.1) 0%, transparent 45%);
+      padding: 100px 24px 110px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.04'%3E%3Cpath d='M40 40 L60 20 L80 40 L60 60 Z'/%3E%3Cpath d='M0 40 L20 20 L40 40 L20 60 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #a5b4fc;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.18;
+      letter-spacing: -0.03em;
+      max-width: 820px;
+      margin: 0 auto 24px;
+    }
+
+    .hero h1 em {
+      color: #a5b4fc;
+      font-style: normal;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: rgba(255,255,255,0.78);
+      max-width: 660px;
+      margin: 0 auto 44px;
+      font-weight: 400;
+      line-height: 1.65;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--white);
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 16px 36px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .hero-cta:hover {
+      background: #4f46e5;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(99, 102, 241, 0.5);
+    }
+
+    .hero-sub-note {
+      margin-top: 20px;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.45);
+    }
+
+    section { padding: 80px 24px; }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+      font-weight: 800;
+      color: var(--deep-teal);
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 580px;
+      line-height: 1.65;
+      margin-bottom: 56px;
+    }
+
+    /* PROBLEM */
+    .problem-section { background: var(--white); }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin-top: 48px;
+    }
+
+    .problem-card {
+      background: var(--offwhite);
+      border: 1px solid #d8eee8;
+      border-radius: 16px;
+      padding: 32px 28px;
+      position: relative;
+    }
+
+    .problem-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-teal));
+      border-radius: 16px 16px 0 0;
+    }
+
+    .problem-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
+
+    .problem-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--deep-teal);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .problem-card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* HOW IT WORKS */
+    .how-section { background: var(--offwhite); }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    .step-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 36px 28px;
+      text-align: center;
+      border: 1px solid #e0e8f8;
+    }
+
+    .step-number {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-teal));
+      color: var(--white);
+      font-size: 1.2rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 14px rgba(99,102,241,0.3);
+    }
+
+    .step-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--deep-teal);
+      margin-bottom: 10px;
+    }
+
+    .step-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* BENEFITS */
+    .benefits-section { background: var(--white); }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 24px;
+      background: #f5f3ff;
+      border-radius: 12px;
+      border: 1px solid #c7d2fe;
+    }
+
+    .benefit-emoji { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
+
+    .benefit-item h4 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--deep-teal);
+      margin-bottom: 6px;
+    }
+
+    .benefit-item p {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* STAFF RELIEF CALLOUT */
+    .staff-callout {
+      background: var(--deep-teal);
+      border-radius: 20px;
+      padding: 52px 48px;
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .staff-callout h3 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.25;
+      margin-bottom: 16px;
+      letter-spacing: -0.025em;
+    }
+
+    .staff-callout p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.65;
+    }
+
+    .staff-metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .staff-metric {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .staff-metric-icon { font-size: 1.5rem; }
+
+    .staff-metric-text strong {
+      display: block;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #a5b4fc;
+      margin-bottom: 4px;
+    }
+
+    .staff-metric-text span {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* STATS */
+    .stats-strip {
+      background: var(--deep-teal);
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 50%, rgba(8,145,178,0.1) 0%, transparent 55%);
+      padding: 72px 24px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      color: #a5b4fc;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.45;
+      max-width: 180px;
+      margin: 0 auto;
+    }
+
+    /* TESTIMONIAL */
+    .testimonial-section { background: var(--offwhite); }
+
+    .testimonial-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 52px 48px;
+      max-width: 760px;
+      margin: 0 auto;
+      border: 1px solid #e0e8f8;
+      text-align: center;
+      position: relative;
+    }
+
+    .testimonial-card::before {
+      content: '\201C';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 5rem;
+      color: var(--accent);
+      font-family: Georgia, serif;
+      line-height: 1;
+    }
+
+    .testimonial-card blockquote {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--text-dark);
+      font-style: italic;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .testimonial-attribution {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    /* CONTACT */
+    .contact-section { background: var(--white); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+      margin-top: 48px;
+    }
+
+    .contact-info h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--deep-teal);
+      margin-bottom: 16px;
+    }
+
+    .contact-info p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: var(--text-mid);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+    .form-group label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-mid);
+      letter-spacing: 0.02em;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      color: var(--text-dark);
+      background: var(--offwhite);
+      border: 1.5px solid #cce8e0;
+      border-radius: 8px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 130px; }
+
+    .form-submit {
+      background: var(--accent);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 15px 32px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      width: 100%;
+    }
+
+    .form-submit:hover { background: #4f46e5; transform: translateY(-1px); }
+
+    .form-note {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: -4px;
+    }
+
+    /* COMPLIANCE CALLOUT */
+    .compliance-strip {
+      background: var(--light-mint);
+      border-top: 1px solid #b8e8da;
+      border-bottom: 1px solid #b8e8da;
+      padding: 40px 24px;
+    }
+
+    .compliance-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .compliance-icon { font-size: 2rem; }
+
+    .compliance-text h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--deep-teal);
+      margin-bottom: 4px;
+    }
+
+    .compliance-text p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      max-width: 640px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--deep-teal);
+      padding: 48px 24px 32px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .footer-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+
+    .footer-logo img {
+      height: 30px;
+      filter: brightness(0) invert(1);
+      opacity: 0.8;
+    }
+
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--mint); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 20px;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .staff-callout { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-badge { display: none; }
+      .hero { padding: 72px 20px 80px; }
+      section { padding: 60px 20px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .form-row { grid-template-columns: 1fr; }
+      .testimonial-card { padding: 48px 28px 36px; }
+      .footer-top { flex-direction: column; }
+      .staff-callout { padding: 36px 28px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 1.75rem; }
+      .stats-grid { grid-template-columns: 1fr; gap: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="https://carely.fit" class="nav-logo">
+      <img src="../carely-icon.png" alt="Carely" />
+      <span>Carely</span>
+    </a>
+    <div class="nav-right">
+      <span class="nav-badge">Partner with Carely</span>
+      <a href="mailto:hello@carely.fit?subject=Partnership Enquiry" class="nav-cta">Contact us</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <span class="hero-eyebrow">Carely for Senior Living Communities</span>
+      <h1>Medication errors are the <em>#1 preventable risk</em> in senior care.</h1>
+      <p>Carely gives your residents smart reminders, AI check-ins, and family visibility — reducing missed doses, after-hours calls, and staff burden.</p>
+      <a href="mailto:hello@carely.fit?subject=Partnership Enquiry" class="hero-cta">Book a community partnership call</a>
+      <p class="hero-sub-note">No system integration required. Works on any Android or iPhone. hello@carely.fit</p>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="problem-section">
+    <div class="container">
+      <p class="section-eyebrow">The Problem We Solve</p>
+      <h2 class="section-title">Three gaps in resident care that cost communities every day.</h2>
+      <p class="section-sub">Senior living communities deliver exceptional care — but medication management between scheduled staff visits is one of the hardest gaps to close.</p>
+
+      <div class="problem-grid">
+        <div class="problem-card">
+          <span class="problem-icon">💊</span>
+          <h3>Residents forget doses between staff visits — especially evenings and weekends</h3>
+          <p>Scheduled medication rounds can't cover every dose for every resident. Self-managed evening and weekend medications are the highest-risk window — and also the hardest to monitor without significantly increasing staff hours.</p>
+        </div>
+        <div class="problem-card">
+          <span class="problem-icon">📞</span>
+          <h3>Family members call constantly to check in — pulling staff away from care</h3>
+          <p>Concerned families call the front desk, nursing stations, and care coordinators to check on medication compliance. These calls consume hours of staff time every week — time that belongs at the bedside.</p>
+        </div>
+        <div class="problem-card">
+          <span class="problem-icon">⚠️</span>
+          <h3>Medication non-compliance leads to hospitalisations and liability</h3>
+          <p>A missed dose of a blood thinner, a skipped insulin dose, or a forgotten antihypertensive can have serious consequences — and raise difficult questions about whether your community caught it in time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section">
+    <div class="container">
+      <p class="section-eyebrow">How It Works</p>
+      <h2 class="section-title">Simple to deploy. Immediate impact for staff and families.</h2>
+      <p class="section-sub">Carely requires no integration with your care management system. Residents and their families set it up themselves — your staff simply recommend it.</p>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Residents (or families) set up Carely on move-in</h3>
+          <p>During the move-in process, your team recommends Carely. The resident or a family member downloads the app and enters their medications and scheduled times — guided by Elara AI in plain, simple language.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Carely reminds and checks in at every dose time</h3>
+          <p>At each scheduled dose, the resident receives a gentle notification. Elara follows up with a friendly check-in to confirm they've taken it — and flags any missed dose immediately.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Families are alerted — reducing calls to your staff</h3>
+          <p>When a dose is missed, the resident's designated family caregiver receives an instant notification. They can follow up directly, without calling your staff first — significantly reducing after-hours call volume.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section class="benefits-section">
+    <div class="container">
+      <p class="section-eyebrow">What Your Community Gets</p>
+      <h2 class="section-title">Better outcomes for residents. Less burden on staff.</h2>
+      <p class="section-sub">Carely is a resident-facing tool — but the benefits ripple through your entire community, from staffing to family relations to care quality metrics.</p>
+
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <span class="benefit-emoji">📉</span>
+          <div>
+            <h4>Automated dose reminders reduce staff burden</h4>
+            <p>Self-managed medication reminders mean staff spend less time chasing doses and more time on hands-on care. Carely doesn't replace your care team — it extends their reach.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-emoji">📵</span>
+          <div>
+            <h4>Family alert system cuts check-in calls significantly</h4>
+            <p>When families know they'll be notified if something goes wrong, they stop calling to check. Communities report a meaningful reduction in unsolicited family calls within weeks of recommending Carely.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-emoji">🤖</span>
+          <div>
+            <h4>Elara AI provides daily companionship check-ins</h4>
+            <p>Elara has a friendly, warm conversation with residents every day — asking how they're feeling, noting any concerns, and providing companionship between staff visits. Residents feel less alone.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-emoji">📊</span>
+          <div>
+            <h4>Adherence reports for care coordinators</h4>
+            <p>Care coordinators can receive weekly adherence summaries for residents who consent — giving you early warning of compliance issues before they become clinical events.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-emoji">📱</span>
+          <div>
+            <h4>Works on any Android or iPhone</h4>
+            <p>No special hardware, no tablets to purchase, no IT setup. Carely runs on whatever device the resident or their family already has. If they can make a phone call, they can use Carely.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Staff Relief Callout -->
+      <div class="staff-callout">
+        <div>
+          <h3>The family call problem — solved.</h3>
+          <p>One of the most consistent pieces of feedback from senior living coordinators is the volume of family check-in calls they receive. These calls are driven by anxiety — and anxiety driven by not knowing. Carely gives families a real-time view of their loved one's adherence, which means they call you when there's something to discuss — not just to check if everything is fine.</p>
+        </div>
+        <div class="staff-metrics">
+          <div class="staff-metric">
+            <span class="staff-metric-icon">📞</span>
+            <div class="staff-metric-text">
+              <strong>Avg 2 hrs/day</strong>
+              <span>of staff time consumed by family check-in calls</span>
+            </div>
+          </div>
+          <div class="staff-metric">
+            <span class="staff-metric-icon">📉</span>
+            <div class="staff-metric-text">
+              <strong>Significant call reduction</strong>
+              <span>reported by communities who recommend Carely at move-in</span>
+            </div>
+          </div>
+          <div class="staff-metric">
+            <span class="staff-metric-icon">❤️</span>
+            <div class="staff-metric-text">
+              <strong>Higher family satisfaction</strong>
+              <span>when families feel informed and connected to their loved one's care</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-strip">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">42%</div>
+          <div class="stat-label">of senior living residents experience medication errors annually</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">2 hrs</div>
+          <div class="stat-label">per day of staff time lost to family check-in calls on average</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">30%</div>
+          <div class="stat-label">reduction in hospital readmissions with consistent medication routines</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPLIANCE CALLOUT -->
+  <div class="compliance-strip">
+    <div class="compliance-inner">
+      <span class="compliance-icon">🔒</span>
+      <div class="compliance-text">
+        <h4>Designed for the sensitivity of senior care</h4>
+        <p>All data sharing in Carely requires explicit resident consent. Carely is built to be PIPEDA-compliant and resident-first — meaning your residents' data is never shared without their authorisation. We take privacy in senior care seriously.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIAL -->
+  <section class="testimonial-section">
+    <div class="container">
+      <p class="section-eyebrow" style="text-align:center;">What Communities Are Saying</p>
+      <h2 class="section-title" style="text-align:center; margin-bottom: 40px;">It cut our evening check-in calls significantly.</h2>
+
+      <div class="testimonial-card">
+        <blockquote>
+          "We started recommending Carely to families during move-in — framing it as part of our care support package. Within weeks, our evening check-in call volume dropped noticeably. Families who used Carely weren't calling to ask if everything was fine — they already knew. It gave them confidence, and it gave our staff time back."
+        </blockquote>
+        <div class="testimonial-attribution">— Care Coordinator, Senior Living Community, Alberta</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT FORM -->
+  <section class="contact-section" id="contact">
+    <div class="container">
+      <p class="section-eyebrow">Get in Touch</p>
+      <h2 class="section-title">Partner with Carely for your community.</h2>
+      <p class="section-sub">Whether you're a small independent retirement home or a multi-site senior living group, we'll work with you on a partnership that fits your community's needs.</p>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Let's talk about your community.</h3>
+          <p>Every senior living community is different. We'd love to understand yours — the size, the care model, the resident profile — and show you how Carely could fit into your move-in process or existing care support.</p>
+          <p>There's no cost to recommend Carely to your residents or families. We simply ask for the opportunity to support the people in your care.</p>
+          <div class="contact-detail">
+            <span>📧</span>
+            <a href="mailto:hello@carely.fit" style="color: var(--accent); text-decoration:none;">hello@carely.fit</a>
+          </div>
+          <div class="contact-detail">
+            <span>🌐</span>
+            <a href="https://carely.fit" style="color: var(--accent); text-decoration:none;">carely.fit</a>
+          </div>
+        </div>
+
+        <form class="contact-form" action="mailto:hello@carely.fit" method="post" enctype="text/plain">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" name="name" placeholder="Margaret Williams" required />
+            </div>
+            <div class="form-group">
+              <label for="role">Your Role</label>
+              <input type="text" id="role" name="role" placeholder="Care Coordinator, Director..." />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="org">Community / Organisation Name</label>
+            <input type="text" id="org" name="organisation" placeholder="Sunrise Senior Living, Calgary" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="m.williams@sunrisesenior.ca" required />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Tell us about your community — size, location, and what you're hoping Carely can help with..."></textarea>
+          </div>
+          <a href="mailto:hello@carely.fit?subject=Partnership Enquiry — Senior Living&body=Hi Carely team, I'm reaching out from a senior living community and would like to learn more about a partnership with Carely." class="form-submit">Send Partnership Enquiry</a>
+          <p class="form-note">Or email us directly at hello@carely.fit — we respond within 1 business day.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <a href="https://carely.fit" class="footer-logo">
+          <img src="../carely-logo-full.png" alt="Carely" />
+        </a>
+        <nav class="footer-links">
+          <a href="https://carely.fit">Home</a>
+          <a href="for-pharmacies.html">Pharmacies</a>
+          <a href="for-doctors.html">Doctors</a>
+          <a href="for-caregivers.html">Caregivers</a>
+          <a href="for-senior-homes.html">Senior Living</a>
+          <a href="../privacy.html">Privacy Policy</a>
+          <a href="../terms.html">Terms of Use</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Carely. Built with care for patients and the people who support them. &mdash; <a href="mailto:hello@carely.fit" style="color: var(--mint); text-decoration:none;">hello@carely.fit</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
