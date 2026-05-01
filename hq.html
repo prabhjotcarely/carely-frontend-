@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carely HQ — War Room</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root {
+      --teal:#028090; --deep:#0D3347; --sea:#00A896; --mint:#02C39A;
+      --bg:#f4f7f6; --card:#ffffff; --border:#e2ebe8;
+      --text:#0D2B24; --muted:#7A9490; --light:#E0FAF4;
+      --green:#16a34a; --amber:#d97706; --red:#dc2626; --purple:#7C3AED;
+    }
+    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; -webkit-font-smoothing:antialiased; }
+    nav { height:52px; background:var(--deep); display:flex; align-items:center; padding:0 24px; gap:16px; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,0.15); }
+    .nav-brand { font-size:15px; font-weight:900; color:#fff; letter-spacing:1px; display:flex; align-items:center; gap:8px; }
+    .nav-brand svg { width:22px; height:22px; }
+    .nav-tag { font-size:9px; color:var(--mint); font-weight:700; letter-spacing:3px; background:rgba(2,195,154,0.15); padding:2px 8px; border-radius:20px; }
+    .nav-spacer { flex:1; }
+    .live-dot { width:7px; height:7px; border-radius:50%; background:var(--mint); animation:blink 1.5s infinite; display:inline-block; margin-right:5px; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .refresh-btn { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); border-radius:6px; color:rgba(255,255,255,0.6); font-size:10px; padding:4px 10px; cursor:pointer; font-family:inherit; font-weight:600; transition:all 0.2s; }
+    .refresh-btn:hover { background:rgba(255,255,255,0.15); color:#fff; }
+    .tabs { display:flex; background:var(--deep); padding:0 24px; border-bottom:1px solid rgba(255,255,255,0.08); overflow-x:auto; }
+    .tab { padding:10px 18px; font-size:11px; font-weight:700; letter-spacing:1px; color:rgba(255,255,255,0.4); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; white-space:nowrap; }
+    .tab.active { color:var(--mint); border-bottom-color:var(--mint); }
+    .page { max-width:1400px; margin:0 auto; padding:24px 20px; }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+    .sh { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+    .sh h2 { font-size:11px; font-weight:800; letter-spacing:2.5px; color:var(--muted); text-transform:uppercase; white-space:nowrap; }
+    .sh-line { flex:1; height:1px; background:var(--border); }
+    .metrics { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-bottom:28px; }
+    .metric { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px 18px; position:relative; overflow:hidden; }
+    .metric::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--sea),var(--mint)); }
+    .metric.red::before { background:linear-gradient(90deg,#ef4444,#f97316); }
+    .metric.amber::before { background:linear-gradient(90deg,#f59e0b,#fbbf24); }
+    .metric.purple::before { background:linear-gradient(90deg,#7c3aed,#a78bfa); }
+    .metric-label { font-size:9px; font-weight:700; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
+    .metric-val { font-size:26px; font-weight:900; color:var(--text); line-height:1; }
+    .metric-sub { font-size:10px; color:var(--muted); margin-top:5px; }
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px; }
+    .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:24px; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:16px; }
+    .card-head { padding:12px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; background:#fafcfb; }
+    .card-head h3 { font-size:10px; font-weight:800; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; flex:1; }
+    .badge { font-size:9px; font-weight:700; padding:2px 8px; border-radius:20px; }
+    .badge-green { background:#dcfce7; color:var(--green); }
+    .badge-amber { background:#fef3c7; color:var(--amber); }
+    .badge-red { background:#fee2e2; color:var(--red); }
+    .badge-blue { background:#ede9fe; color:var(--purple); }
+    .badge-teal { background:var(--light); color:var(--teal); }
+    .card-body { padding:14px 16px; }
+    .priority-item { display:flex; align-items:flex-start; gap:10px; padding:10px 12px; border-radius:8px; margin-bottom:6px; border:1px solid var(--border); background:#fafcfb; cursor:pointer; transition:all 0.2s; }
+    .priority-item:hover { background:var(--light); border-color:var(--sea); }
+    .priority-item.done { opacity:0.4; }
+    .priority-item.done .pi-title { text-decoration:line-through; }
+    .pi-num { width:22px; height:22px; border-radius:6px; background:var(--deep); color:#fff; font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .pi-num.urgent { background:var(--red); }
+    .pi-num.done-num { background:var(--green); }
+    .pi-title { font-size:12px; font-weight:600; color:var(--text); line-height:1.3; }
+    .pi-meta { font-size:10px; color:var(--muted); margin-top:2px; }
+    .comp-card { border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:10px; background:#fafcfb; }
+    .comp-name { font-size:13px; font-weight:800; color:var(--text); margin-bottom:4px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .comp-price { font-size:10px; font-weight:700; padding:2px 7px; border-radius:4px; background:#f0fdf4; color:var(--green); }
+    .comp-weakness { font-size:11px; color:var(--red); margin-top:6px; background:#fff5f5; padding:8px 10px; border-radius:6px; border-left:3px solid var(--red); line-height:1.5; }
+    .comp-opportunity { font-size:11px; color:var(--green); margin-top:6px; background:#f0fdf4; padding:8px 10px; border-radius:6px; border-left:3px solid var(--green); line-height:1.5; }
+    .keyword-row { display:flex; align-items:center; gap:10px; padding:8px 12px; border-radius:7px; border:1px solid var(--border); margin-bottom:5px; background:#fafcfb; }
+    .kw-text { flex:1; font-size:12px; font-weight:600; color:var(--text); }
+    .kw-vol { font-size:10px; color:var(--muted); width:80px; text-align:right; }
+    .kw-comp { font-size:9px; font-weight:700; padding:2px 7px; border-radius:4px; width:70px; text-align:center; }
+    .kw-low { background:#dcfce7; color:var(--green); }
+    .kw-vlow { background:#d1fae5; color:#065f46; }
+    .kw-med { background:#fef3c7; color:var(--amber); }
+    .content-block { border:1px solid var(--border); border-radius:10px; margin-bottom:12px; overflow:hidden; }
+    .content-block-head { padding:12px 16px; background:#fafcfb; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+    .content-block-platform { font-size:9px; font-weight:800; letter-spacing:1.5px; flex:1; }
+    .content-block-body { padding:14px 16px; }
+    .content-title { font-size:12px; font-weight:700; color:var(--text); margin-bottom:8px; }
+    .content-text { font-size:12px; color:#374151; line-height:1.8; white-space:pre-line; background:#f8fafb; padding:12px; border-radius:8px; }
+    .copy-btn { font-size:9px; font-weight:700; padding:5px 12px; border-radius:6px; background:var(--light); color:var(--teal); border:1px solid rgba(0,168,150,0.3); cursor:pointer; font-family:inherit; transition:all 0.2s; }
+    .copy-btn:hover { background:var(--sea); color:#fff; }
+    .lead-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border:1px solid var(--border); border-radius:8px; margin-bottom:5px; background:#fafcfb; }
+    .lead-body { flex:1; }
+    .lead-name { font-size:12px; font-weight:700; color:var(--text); }
+    .lead-sub { font-size:10px; color:var(--muted); margin-top:1px; }
+    .lead-size { font-size:10px; font-weight:700; color:var(--teal); white-space:nowrap; }
+    .lead-action { font-size:9px; font-weight:700; padding:3px 9px; border-radius:6px; background:var(--light); color:var(--teal); border:none; cursor:pointer; font-family:inherit; text-decoration:none; }
+    .status-row { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--border); }
+    .status-row:last-child { border-bottom:none; }
+    .sdot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .s-green { background:var(--green); box-shadow:0 0 6px rgba(22,163,74,0.4); }
+    .s-amber { background:var(--amber); }
+    .s-red { background:var(--red); }
+    .s-grey { background:#d1d5db; }
+    .status-name { font-size:11px; font-weight:600; color:var(--text); flex:1; }
+    .status-val { font-size:10px; color:var(--muted); }
+    .rev-target { display:flex; align-items:center; justify-content:space-between; padding:16px; background:linear-gradient(135deg,var(--deep),#1a4a5c); border-radius:10px; margin-bottom:14px; }
+    .rev-t-label { font-size:10px; font-weight:700; letter-spacing:1.5px; color:rgba(255,255,255,0.5); text-transform:uppercase; }
+    .rev-t-val { font-size:28px; font-weight:900; color:#fff; }
+    .rev-t-sub { font-size:10px; color:rgba(255,255,255,0.4); margin-top:2px; }
+    .rev-t-pct { font-size:32px; font-weight:900; color:var(--mint); }
+    .progress-wrap { margin-bottom:12px; }
+    .progress-label { display:flex; justify-content:space-between; font-size:11px; font-weight:600; margin-bottom:5px; }
+    .progress-label span:last-child { color:var(--muted); }
+    .progress-bar { height:8px; background:#e8efed; border-radius:4px; overflow:hidden; }
+    .progress-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,var(--sea),var(--mint)); transition:width 1s ease; }
+    .insight-box { background:linear-gradient(135deg,#f0fdf4,#e0faf4); border:1px solid #bbf7d0; border-radius:10px; padding:14px 16px; margin-bottom:16px; }
+    .insight-label { font-size:9px; font-weight:800; letter-spacing:1.5px; color:var(--green); text-transform:uppercase; margin-bottom:6px; }
+    .insight-text { font-size:12px; color:var(--text); line-height:1.6; font-weight:500; }
+    .action-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+    .action-btn { padding:12px; border-radius:8px; border:1px solid var(--border); background:#fafcfb; cursor:pointer; text-align:left; font-family:inherit; transition:all 0.2s; display:flex; flex-direction:column; gap:4px; }
+    .action-btn:hover { background:var(--light); border-color:var(--sea); }
+    .action-btn-icon { font-size:20px; }
+    .action-btn-label { font-size:11px; font-weight:700; color:var(--text); }
+    .action-btn-sub { font-size:9px; color:var(--muted); }
+    /* 3D OFFICE */
+    #tab-office3d { padding:0; overflow:hidden; }
+    .o3wrap { display:flex; height:calc(100vh - 106px); background:#0d0e18; border-radius:8px; overflow:hidden; }
+    .o3side { width:190px; flex-shrink:0; background:#0d1017; border-right:1px solid rgba(255,255,255,0.07); overflow-y:auto; padding:10px 0; }
+    .o3side-title { font-size:9px; font-weight:800; letter-spacing:2px; color:#718096; padding:0 12px 8px; text-transform:uppercase; }
+    .o3ag { display:flex; align-items:center; gap:7px; padding:7px 12px; border-bottom:1px solid rgba(255,255,255,0.04); }
+    .o3dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+    .o3info { flex:1; min-width:0; }
+    .o3name { font-size:11px; font-weight:700; color:#e2e8f0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .o3role { font-size:9px; color:#718096; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .o3st { font-size:8px; font-weight:700; padding:1px 5px; border-radius:5px; white-space:nowrap; }
+    .o3s0 { background:#22543d; color:#68d391; } .o3s1 { background:#2a4365; color:#90cdf4; }
+    .o3s2 { background:#744210; color:#f6ad55; } .o3s3 { background:#276749; color:#9ae6b4; }
+    .o3s4 { background:#7b341e; color:#fc8181; }
+    .o3hint { font-size:9px; color:rgba(255,255,255,0.25); padding:8px 12px; }
+
+    /* ── VIRTUAL OFFICE ─────────────────────────── */
+    .office-panel { background:#0d0f14; border-radius:12px; padding:0; overflow:hidden; }
+    .off-tabs { display:flex; gap:0; border-bottom:1px solid #2d3748; background:#111827; padding:0 20px; }
+    .off-tab { padding:12px 18px; font-size:12px; font-weight:600; color:#718096; cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; white-space:nowrap; }
+    .off-tab:hover { color:#a0aec0; }
+    .off-tab.active { color:#667eea; border-bottom-color:#667eea; }
+    .off-content { display:none; padding:20px; }
+    .off-content.active { display:block; }
+    .off-floor { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .off-room { background:#1a1f2e; border:1px solid #2d3748; border-radius:10px; padding:16px; }
+    .off-room-head { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+    .off-room-icon { font-size:22px; }
+    .off-room-title { font-size:13px; font-weight:700; color:#e2e8f0; }
+    .off-room-agent { font-size:10px; color:#718096; }
+    .off-tasks { list-style:none; }
+    .off-tasks li { font-size:11px; color:#a0aec0; padding:3px 0; border-bottom:1px solid #2d3748; display:flex; align-items:center; gap:6px; }
+    .off-tasks li:last-child { border-bottom:none; }
+    .tdot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+    .td-done { background:#68d391; } .td-active { background:#667eea; } .td-q { background:#718096; }
+    .off-output { background:#111827; border-radius:6px; padding:7px 9px; margin-top:8px; font-size:10px; color:#68d391; }
+    .off-board { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+    .off-col { background:#111827; border-radius:10px; padding:12px; }
+    .off-col-head { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; }
+    .off-col-cnt { background:#2d3748; color:#a0aec0; padding:1px 7px; border-radius:10px; font-size:10px; }
+    .off-col-shipped .off-col-head { color:#68d391; }
+    .off-col-progress .off-col-head { color:#667eea; }
+    .off-col-next .off-col-head { color:#f6e05e; }
+    .off-col-later .off-col-head { color:#718096; }
+    .off-card { background:#1a1f2e; border:1px solid #2d3748; border-radius:7px; padding:9px 11px; margin-bottom:7px; }
+    .off-card-title { font-size:11px; font-weight:600; color:#e2e8f0; margin-bottom:3px; }
+    .off-card-agent { font-size:10px; color:#718096; }
+    .off-ctag { font-size:9px; padding:2px 6px; border-radius:4px; margin-top:5px; display:inline-block; }
+    .ct-tech { background:#2a2d6e; color:#a3b4f0; } .ct-mkt { background:#2d1a5c; color:#c4a9f0; }
+    .ct-growth { background:#1a3d2e; color:#7de8b0; } .ct-launch { background:#3d1a1a; color:#f0a09a; }
+    .ct-content { background:#2d2a0f; color:#f0e09a; }
+    .off-chat-wrap { display:grid; grid-template-columns:180px 1fr; background:#1a1f2e; border:1px solid #2d3748; border-radius:10px; overflow:hidden; height:560px; }
+    .off-chat-side { background:#111827; border-right:1px solid #2d3748; padding:14px 0; }
+    .off-ch-title { padding:0 14px 10px; font-size:10px; font-weight:800; color:#718096; text-transform:uppercase; letter-spacing:1px; }
+    .off-ch { padding:7px 14px; cursor:pointer; font-size:12px; color:#718096; display:flex; align-items:center; gap:5px; transition:background 0.15s; }
+    .off-ch:hover { background:#1a1f2e; color:#e2e8f0; }
+    .off-ch.active { background:#1a1f2e; color:#fff; font-weight:600; }
+    .off-ch-badge { background:#667eea; color:#fff; font-size:9px; padding:1px 5px; border-radius:8px; margin-left:auto; }
+    .off-chat-main { display:flex; flex-direction:column; }
+    .off-chat-header { padding:12px 18px; border-bottom:1px solid #2d3748; font-size:13px; font-weight:600; color:#e2e8f0; }
+    .off-msgs { flex:1; overflow-y:auto; padding:14px 18px; display:flex; flex-direction:column; gap:10px; }
+    .off-msg { display:flex; gap:9px; }
+    .off-av { width:30px; height:30px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
+    .off-msg-body { flex:1; }
+    .off-msg-meta { display:flex; align-items:baseline; gap:7px; margin-bottom:2px; }
+    .off-msg-name { font-size:12px; font-weight:700; }
+    .off-msg-time { font-size:10px; color:#718096; }
+    .off-msg-text { font-size:12px; color:#a0aec0; line-height:1.5; }
+    .off-msg-text strong { color:#e2e8f0; }
+    .off-chat-input { width:100%; background:#111827; border:1px solid #2d3748; border-radius:7px; padding:9px 12px; color:#718096; font-size:12px; cursor:not-allowed; margin:10px 18px; width:calc(100% - 36px); }
+    .off-ch-content { display:none; flex-direction:column; height:100%; }
+    .off-ch-content.active { display:flex; }
+    .off-org { display:flex; flex-direction:column; align-items:center; gap:0; }
+    .off-org-card { background:#1a1f2e; border:1px solid #2d3748; border-radius:10px; padding:14px 18px; text-align:center; min-width:150px; transition:all 0.2s; }
+    .off-org-card:hover { border-color:#667eea; transform:translateY(-2px); }
+    .off-org-card.founder { border-color:#f6e05e; background:linear-gradient(135deg,#1a1f2e,#2d2a0f); min-width:190px; }
+    .off-org-card.ceo { border-color:#667eea; background:linear-gradient(135deg,#1a1f2e,#1a1a3e); min-width:190px; }
+    .off-av2 { width:44px; height:44px; border-radius:50%; margin:0 auto 7px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+    .off-org-name { font-size:13px; font-weight:700; color:#e2e8f0; }
+    .off-org-role { font-size:10px; color:#718096; margin-top:2px; }
+    .off-org-status { font-size:9px; padding:2px 7px; border-radius:8px; margin-top:5px; display:inline-block; }
+    .os-active { background:#22543d; color:#68d391; }
+    .os-busy { background:#7b341e; color:#fc8181; }
+    .off-vline { width:2px; height:32px; background:#4a5568; margin:0 auto; }
+    .off-agents { display:flex; gap:12px; justify-content:center; position:relative; }
+    .off-agents::before { content:''; position:absolute; top:0; left:60px; right:60px; height:2px; background:#4a5568; }
+    .off-agent-branch { display:flex; flex-direction:column; align-items:center; flex:1; }
+    .off-agent-branch::before { content:''; width:2px; height:28px; background:#4a5568; display:block; }
+    .off-outputs { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+    .off-out-card { background:#1a1f2e; border:1px solid #2d3748; border-radius:10px; padding:16px; }
+    .off-out-head { display:flex; align-items:center; gap:9px; margin-bottom:9px; }
+    .off-out-icon { font-size:20px; }
+    .off-out-title { font-size:13px; font-weight:700; color:#e2e8f0; }
+    .off-out-date { font-size:10px; color:#718096; margin-top:1px; }
+    .off-out-desc { font-size:11px; color:#a0aec0; line-height:1.6; }
+    .off-out-stats { display:flex; gap:12px; margin-top:8px; }
+    .off-stat { font-size:10px; color:#718096; }
+    .off-stat span { color:#68d391; font-weight:700; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#02C39A" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    CARELY
+  </div>
+  <div class="nav-tag">WAR ROOM</div>
+  <div class="nav-spacer"></div>
+  <span style="font-size:10px;color:rgba(255,255,255,0.5);font-weight:600;"><span class="live-dot"></span>LIVE</span>
+  <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+</nav>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('dashboard',this)">📊 DASHBOARD</div>
+  <div class="tab" onclick="showTab('competitors',this)">⚔️ COMPETITORS</div>
+  <div class="tab" onclick="showTab('leads',this)">🎯 LEADS</div>
+  <div class="tab" onclick="showTab('content',this)">✍️ CONTENT</div>
+  <div class="tab" onclick="showTab('seo',this)">🔍 SEO</div>
+  <div class="tab" onclick="showTab('outreach',this)">📧 OUTREACH</div>
+  <div class="tab" onclick="showTab('office',this)">🏢 OFFICE</div>
+  <div class="tab" onclick="showTab('office3d',this);init3D()">🕹️ 3D LIVE</div>
+  <div class="tab" onclick="showTab('apis',this);renderApiCards()">⏱ API KEYS</div>
+</div>
+
+<div class="page">
+
+<!-- DASHBOARD -->
+<div id="tab-dashboard" class="tab-panel active">
+  <div style="background:linear-gradient(135deg,#0D3347,#028090);border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div style="display:flex;align-items:center;gap:10px;"><div class="live-dot"></div><span style="color:#02C39A;font-size:11px;font-weight:800;letter-spacing:2px;">LAUNCH DAY — MAY 5, 2026</span></div>
+    <div style="display:flex;gap:20px;">
+      <div style="text-align:center"><div style="font-size:22px;font-weight:900;color:#fff;" id="hq-days">11</div><div style="font-size:9px;color:rgba(255,255,255,0.5);letter-spacing:1px;">DAYS</div></div>
+      <div style="text-align:center"><div style="font-size:22px;font-weight:900;color:#fff;" id="hq-hours">00</div><div style="font-size:9px;color:rgba(255,255,255,0.5);letter-spacing:1px;">HRS</div></div>
+      <div style="text-align:center"><div style="font-size:22px;font-weight:900;color:#fff;" id="hq-mins">00</div><div style="font-size:9px;color:rgba(255,255,255,0.5);letter-spacing:1px;">MIN</div></div>
+      <div style="text-align:center"><div style="font-size:22px;font-weight:900;color:#fff;" id="hq-secs">00</div><div style="font-size:9px;color:rgba(255,255,255,0.5);letter-spacing:1px;">SEC</div></div>
+    </div>
+    <div style="font-size:10px;color:rgba(255,255,255,0.4);">GA: G-HNNSVW5Q57 ✅ &nbsp;|&nbsp; SEO Pages: 4 live ✅ &nbsp;|&nbsp; Netlify: Auto-deploy ✅</div>
+  </div>
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">MRR</div><div class="metric-val" id="mrr">$0</div><div class="metric-sub">Target: $20,000</div></div>
+    <div class="metric amber"><div class="metric-label">Paying Users</div><div class="metric-val" id="paid-users">0</div><div class="metric-sub">Active subs</div></div>
+    <div class="metric"><div class="metric-label">Trial Users</div><div class="metric-val" id="trial-users">0</div><div class="metric-sub">7-day trial</div></div>
+    <div class="metric purple"><div class="metric-label">Total Signups</div><div class="metric-val" id="total-users">—</div><div class="metric-sub">All accounts</div></div>
+    <div class="metric"><div class="metric-label">Conversion</div><div class="metric-val" id="conversion">—</div><div class="metric-sub">Trial → Paid</div></div>
+    <div class="metric red"><div class="metric-label">Founding Left</div><div class="metric-val" id="founding-left">200</div><div class="metric-sub">of 200 spots</div></div>
+  </div>
+  <!-- LIVE LEADS PIPELINE -->
+  <div id="leads-pipeline" style="margin-bottom:16px;">
+    <div class="sh"><h2>🔥 Live Leads Pipeline</h2><div class="sh-line"></div><button class="refresh-btn" onclick="loadLiveStats()" style="font-size:9px;padding:3px 8px;">↻ Refresh</button></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px;">
+      <div class="metric" style="text-align:center;"><div class="metric-label">Waitlist Leads</div><div class="metric-val" id="live-leads">—</div><div class="metric-sub">Total signups</div></div>
+      <div class="metric amber" style="text-align:center;"><div class="metric-label">Converted</div><div class="metric-val" id="live-converted">—</div><div class="metric-sub" id="live-conv-rate">Paying members</div></div>
+      <div class="metric" style="text-align:center;"><div class="metric-label">Founding Spots Left</div><div class="metric-val" id="live-spots" style="color:#02C39A;">—</div><div class="metric-sub">of 200</div></div>
+      <div class="metric purple" style="text-align:center;"><div class="metric-label">Outreach Sent</div><div class="metric-val" id="live-outreach">—</div><div class="metric-sub" id="live-outreach-sub">of — orgs</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>📧 Email Funnel</h3><span class="badge badge-teal" id="funnel-badge">Live</span></div>
+      <div class="card-body" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+        <div style="text-align:center;padding:12px;background:#f8fafb;border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:20px;font-weight:900;color:var(--teal);" id="f-welcome">—</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px;font-weight:700;">WELCOME SENT</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:#f8fafb;border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:20px;font-weight:900;color:var(--teal);" id="f-day2">—</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px;font-weight:700;">DAY 2 SENT</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:#f8fafb;border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:20px;font-weight:900;color:var(--amber);" id="f-day4">—</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px;font-weight:700;">DAY 4 CLOSE</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;">
+          <div style="font-size:20px;font-weight:900;color:var(--green);" id="f-converted">—</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px;font-weight:700;">CONVERTED 💰</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head"><h3>🎯 30-Day Revenue Target</h3><span class="badge badge-amber">Day <span id="day-num">1</span></span></div>
+      <div class="card-body">
+        <div class="rev-target">
+          <div><div class="rev-t-label">Current MRR</div><div class="rev-t-val" id="mrr-big">$0</div><div class="rev-t-sub">of $20,000 target</div></div>
+          <div class="rev-t-pct" id="mrr-pct">0%</div>
+        </div>
+        <div class="progress-wrap"><div class="progress-label"><span>Revenue Progress</span><span id="rev-label">$0 / $20,000</span></div><div class="progress-bar"><div class="progress-fill" id="rev-bar" style="width:0%"></div></div></div>
+        <div class="progress-wrap"><div class="progress-label"><span>Founding Spots</span><span id="founding-label">0 / 200 sold</span></div><div class="progress-bar"><div class="progress-fill" id="founding-bar" style="width:0%"></div></div></div>
+        <div class="progress-wrap"><div class="progress-label"><span>Time Used</span><span id="days-left-label">30 days left</span></div><div class="progress-bar"><div class="progress-fill" id="time-bar" style="width:3%"></div></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>🔥 Top Priorities — Click to Complete</h3><span class="badge badge-red">Urgent</span></div>
+      <div class="card-body">
+        <div class="priority-item" onclick="toggleDone(this)"><div class="pi-num urgent">1</div><div><div class="pi-title">Run Supabase DB migrations (schema.sql)</div><div class="pi-meta">Backend won't work without this</div></div></div>
+        <div class="priority-item" onclick="toggleDone(this)"><div class="pi-num urgent">2</div><div><div class="pi-title">Test full app flow on Expo Go</div><div class="pi-meta">signup → reminder → AI reply → family alert</div></div></div>
+        <div class="priority-item" onclick="toggleDone(this)"><div class="pi-num urgent">3</div><div><div class="pi-title">Submit to App Store + Google Play</div><div class="pi-meta">1–3 day review — do today</div></div></div>
+        <div class="priority-item" onclick="toggleDone(this)"><div class="pi-num">4</div><div><div class="pi-title">Post on r/AgingParents and r/dementia</div><div class="pi-meta">Scripts ready in CONTENT tab</div></div></div>
+        <div class="priority-item" onclick="toggleDone(this)"><div class="pi-num">5</div><div><div class="pi-title">Email BC Pharmacy Association</div><div class="pi-meta">info@bcpharmacy.ca — template in OUTREACH tab</div></div></div>
+        <div class="priority-item" onclick="toggleDone(this)"><div class="pi-num">6</div><div><div class="pi-title">DM Dementia Careblazers (YouTube, 100k subs)</div><div class="pi-meta">Template in OUTREACH tab</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head"><h3>⚙️ System Status</h3><button class="refresh-btn" onclick="checkHealth()" style="font-size:9px;padding:3px 8px;">Check Now</button></div>
+      <div class="card-body">
+        <div class="status-row"><div class="sdot s-grey" id="s-backend"></div><div class="status-name">Backend (Railway)</div><div class="status-val" id="sv-backend">checking…</div></div>
+        <div class="status-row"><div class="sdot s-grey" id="s-db"></div><div class="status-name">Database (Supabase)</div><div class="status-val" id="sv-db">checking…</div></div>
+        <div class="status-row"><div class="sdot s-grey" id="s-landing"></div><div class="status-name">carely.fit (Netlify)</div><div class="status-val" id="sv-landing">checking…</div></div>
+        <div class="status-row"><div class="sdot s-green"></div><div class="status-name">Google Analytics</div><div class="status-val">✅ G-HNNSVW5Q57 — Live</div></div>
+        <div class="status-row"><div class="sdot s-amber"></div><div class="status-name">iOS App Store</div><div class="status-val">Not submitted yet</div></div>
+        <div class="status-row"><div class="sdot s-amber"></div><div class="status-name">Google Play</div><div class="status-val">Not submitted yet</div></div>
+        <div class="status-row"><div class="sdot s-red"></div><div class="status-name">DB Migrations</div><div class="status-val">⚠️ Not run yet</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>⚡ Quick Links</h3></div>
+      <div class="card-body">
+        <div class="action-grid">
+          <button class="action-btn" onclick="open('https://carely.fit')"><div class="action-btn-icon">🌐</div><div class="action-btn-label">carely.fit</div><div class="action-btn-sub">Live site</div></button>
+          <button class="action-btn" onclick="open('https://dashboard.stripe.com')"><div class="action-btn-icon">💳</div><div class="action-btn-label">Stripe</div><div class="action-btn-sub">Revenue</div></button>
+          <button class="action-btn" onclick="open('https://app.supabase.com')"><div class="action-btn-icon">🗄️</div><div class="action-btn-label">Supabase</div><div class="action-btn-sub">Database</div></button>
+          <button class="action-btn" onclick="open('https://railway.app')"><div class="action-btn-icon">🚂</div><div class="action-btn-label">Railway</div><div class="action-btn-sub">Backend</div></button>
+          <button class="action-btn" onclick="open('https://github.com/prabhjotcarely/carely-backend')"><div class="action-btn-icon">💻</div><div class="action-btn-label">GitHub</div><div class="action-btn-sub">Code</div></button>
+          <button class="action-btn" onclick="open('https://reddit.com/r/AgingParents/submit')"><div class="action-btn-icon">🟠</div><div class="action-btn-label">Post Reddit</div><div class="action-btn-sub">r/AgingParents</div></button>
+          <button class="action-btn" onclick="open('https://www.producthunt.com/posts/new')"><div class="action-btn-icon">🚀</div><div class="action-btn-label">Product Hunt</div><div class="action-btn-sub">Launch post</div></button>
+          <button class="action-btn" onclick="open('https://carely-backend-production.up.railway.app/health')"><div class="action-btn-icon">❤️</div><div class="action-btn-label">API Health</div><div class="action-btn-sub">Check live</div></button>
+          <button class="action-btn" onclick="open('https://analytics.google.com/analytics/web/#/p534418238/reports/intelligenthome')"><div class="action-btn-icon">📈</div><div class="action-btn-label">Google Analytics</div><div class="action-btn-sub">carely.fit traffic</div></button>
+          <button class="action-btn" onclick="open('https://app.netlify.com/projects/timely-crumble-3fc401')"><div class="action-btn-icon">🟩</div><div class="action-btn-label">Netlify</div><div class="action-btn-sub">Deploys</div></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPETITORS -->
+<div id="tab-competitors" class="tab-panel">
+  <div class="insight-box">
+    <div class="insight-label">🔥 Biggest Opportunity Right Now</div>
+    <div class="insight-text"><strong>CareZone was acquired by Amazon in 2020 and abandoned.</strong> Their users are actively searching "CareZone alternative" — that keyword has near-zero competition. Build a page at carely.fit/carezone-alternative and rank #1 within weeks. This is your fastest acquisition channel.</div>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="comp-card">
+        <div class="comp-name">Medisafe <span class="comp-price">Free + $4.99/mo</span> <span style="font-size:10px;color:#d97706;">⭐ 4.7 · 10M+ downloads</span></div>
+        <div class="comp-weakness">❌ No AI. Purely transactional reminders. Cluttered UI bad for elderly. No proactive engagement.</div>
+        <div class="comp-opportunity">✅ Carely wins: AI that talks to grandma. Create "Medisafe alternative" SEO page.</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-name">CareZone <span class="comp-price">Free (abandoned)</span></div>
+        <div class="comp-weakness">❌ Acquired by Amazon, zero development since 2021. Users fleeing, bugs unfixed, no support.</div>
+        <div class="comp-opportunity">🔥 Create carely.fit/carezone-alternative NOW. These users are actively looking for you.</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-name">Hero Health <span class="comp-price">$49.99/mo + hardware</span></div>
+        <div class="comp-weakness">❌ $600/year minimum + hardware required. Not portable. No AI conversational features.</div>
+        <div class="comp-opportunity">✅ Carely is 6x cheaper, no hardware, has AI. "Hero Health alternative" is another SEO win.</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-name">MyTherapy <span class="comp-price">Free</span> <span style="font-size:10px;color:#d97706;">⭐ 4.7</span></div>
+        <div class="comp-weakness">❌ German company. No caregiver features. No family coordination. No AI. No Canada focus.</div>
+        <div class="comp-opportunity">✅ Carely wins on family coordination + AI + North America + Canada-native.</div>
+      </div>
+    </div>
+    <div>
+      <div class="comp-card" style="border:2px solid var(--mint);">
+        <div class="comp-name" style="color:var(--teal);">🇨🇦 Canada — COMPLETELY OPEN</div>
+        <div style="font-size:11px;color:var(--text);margin-top:6px;line-height:1.7;">Pillway, Mednow, Pharmasave — all pharmacy delivery apps. <strong>No dedicated AI medication reminder + caregiver app exists in Canada.</strong><br><br>Partner with BC Pharmacy Association first (info@bcpharmacy.ca). No competitor has this relationship. This creates a moat.</div>
+      </div>
+      <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:10px;padding:16px;margin-top:10px;">
+        <div style="font-size:10px;font-weight:800;color:var(--amber);letter-spacing:1px;margin-bottom:8px;">💡 CARELY'S UNFAIR ADVANTAGE</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.8;"><strong>Only app that combines all 5:</strong><br>① AI caretaker that talks to elderly users<br>② Family caregiver remote monitoring<br>③ Affordable pricing ($5–$10/mo)<br>④ No hardware required<br>⑤ Canada-native with local focus<br><br>No competitor checks all 5 boxes.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LEADS -->
+<div id="tab-leads" class="tab-panel">
+  <div class="three-col">
+    <div>
+      <div class="sh"><h2>🟠 Reddit (Post Today)</h2><div class="sh-line"></div></div>
+      <div class="card"><div class="card-body" style="padding:10px;">
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">r/AgingParents</div><div class="lead-sub">Adult children — highest purchase intent</div></div><div class="lead-size">120k</div><a class="lead-action" href="https://reddit.com/r/AgingParents/submit" target="_blank">Post →</a></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">r/caregivers</div><div class="lead-sub">Primary caregiver community</div></div><div class="lead-size">150k</div><a class="lead-action" href="https://reddit.com/r/caregivers/submit" target="_blank">Post →</a></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">r/dementia</div><div class="lead-sub">#1 pain point: medication management</div></div><div class="lead-size">75k</div><a class="lead-action" href="https://reddit.com/r/dementia/submit" target="_blank">Post →</a></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">r/Alzheimers</div><div class="lead-sub">Emotionally engaged caregivers</div></div><div class="lead-size">55k</div><a class="lead-action" href="https://reddit.com/r/Alzheimers/submit" target="_blank">Post →</a></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">r/eldercare</div><div class="lead-sub">Professionals + family caregivers</div></div><div class="lead-size">65k</div><a class="lead-action" href="https://reddit.com/r/eldercare/submit" target="_blank">Post →</a></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">r/diabetes</div><div class="lead-sub">Medication management is central</div></div><div class="lead-size">280k</div><a class="lead-action" href="https://reddit.com/r/diabetes/submit" target="_blank">Post →</a></div>
+      </div></div>
+    </div>
+    <div>
+      <div class="sh"><h2>🎥 Influencers (DM This Week)</h2><div class="sh-line"></div></div>
+      <div class="card"><div class="card-body" style="padding:10px;">
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">Dementia Careblazers</div><div class="lead-sub">YouTube — exact target demographic. DM template in OUTREACH.</div></div><div class="lead-size">100k</div><a class="lead-action" href="https://youtube.com/@DementiaCareblazers" target="_blank">View →</a></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">Teepa Snow</div><div class="lead-sub">Most trusted dementia care voice</div></div><div class="lead-size">200k</div><a class="lead-action" href="https://youtube.com/@TeepaSnow" target="_blank">View →</a></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">@caregiver.coach (TikTok)</div><div class="lead-sub">Daily caregiver tips</div></div><div class="lead-size">75k</div></div>
+      </div></div>
+
+      <div class="sh" style="margin-top:16px;"><h2>📰 Press (Pitch This Week)</h2><div class="sh-line"></div></div>
+      <div class="card"><div class="card-body" style="padding:10px;">
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">AARP</div><div class="lead-sub">38M members — most impactful placement</div></div></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">MobiHealthNews</div><div class="lead-sub">editorial@mobihealthnews.com</div></div></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">CBC / Globe and Mail</div><div class="lead-sub">BC founders — human interest</div></div></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">iMedicalApps</div><div class="lead-sub">Clinical app reviews → HCP referrals</div></div></div>
+      </div></div>
+    </div>
+    <div>
+      <div class="sh"><h2>🏥 B2B Targets</h2><div class="sh-line"></div></div>
+      <div class="card"><div class="card-body" style="padding:10px;">
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">BC Pharmacy Association 🇨🇦</div><div class="lead-sub">info@bcpharmacy.ca — 5,500 pharmacists. Email today.</div></div></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">A Place for Mom</div><div class="lead-sub">80,000+ senior facilities — partnership pitch</div></div><a class="lead-action" href="https://aplaceformom.com" target="_blank">View →</a></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">Senioropolis (Canada)</div><div class="lead-sub">10,000+ Canadian senior communities</div></div><a class="lead-action" href="https://senioropolis.com" target="_blank">View →</a></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">Independent Pharmacies (NCPA)</div><div class="lead-sub">19,500 indie pharmacies — referral partners</div></div><a class="lead-action" href="https://ncpanet.org" target="_blank">View →</a></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">Facebook Caregiver Groups</div><div class="lead-sub">AARP Caregiver Support (200k), Aging Parents (70k)</div></div></div>
+        <div class="lead-item"><div class="lead-body"><div class="lead-name">AgingCare Forums</div><div class="lead-sub">250k members — accept guest posts</div></div><a class="lead-action" href="https://agingcare.com/caregiver-forum" target="_blank">View →</a></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div id="tab-content" class="tab-panel">
+  <div class="insight-box">
+    <div class="insight-label">📋 Instructions</div>
+    <div class="insight-text">Click Copy on any post, go to the platform, paste and post. Start with Reddit r/AgingParents — highest purchase intent. Then TikTok Script 1 for TJ to record.</div>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="content-block">
+        <div class="content-block-head"><span class="content-block-platform" style="color:#ff4500;">🟠 REDDIT — r/AgingParents + r/caregivers + r/dementia</span><button class="copy-btn" onclick="copyEl('r1')">Copy</button></div>
+        <div class="content-block-body">
+          <div class="content-title">Title: "I built a medication reminder app for my grandma after she was hospitalised"</div>
+          <div class="content-text" id="r1">My grandma missed her insulin three days in a row last year. We only found out when she ended up in hospital.
+
+My wife had the idea — what if there was an AI that could check in on her, remind her gently, and alert us if she missed a dose?
+
+So we spent six months building Carely. It's a medication reminder app with an AI caretaker that talks to your elderly loved one like a caring friend, and sends you an alert if they miss a dose.
+
+We're launching with 200 founding member spots at $5/month locked in forever. After that it's $9.99/month with a 7-day free trial.
+
+Link: https://carely.fit
+
+Happy to answer any questions. Just wanted to help people avoid what our family went through.</div>
+        </div>
+      </div>
+      <div class="content-block">
+        <div class="content-block-head"><span class="content-block-platform" style="color:#ff4500;">🟠 REDDIT — r/dementia (softer angle)</span><button class="copy-btn" onclick="copyEl('r2')">Copy</button></div>
+        <div class="content-block-body">
+          <div class="content-title">Title: "Does anyone struggle getting a parent with dementia to take medications consistently?"</div>
+          <div class="content-text" id="r2">We went through this with my wife's grandmother. The challenge wasn't just forgetting — she needed someone to remind her gently, not in a way that felt like nagging.
+
+We built an AI caretaker called Carely. It checks in with her, reminds her about medications warmly, and sends us an alert if she doesn't respond.
+
+It's not a magic fix but it's helped us a lot. Free 7-day trial at https://carely.fit — happy to share more if anyone's dealing with this.</div>
+        </div>
+      </div>
+      <div class="content-block">
+        <div class="content-block-head"><span class="content-block-platform" style="color:#0a66c2;">💼 LINKEDIN POST</span><button class="copy-btn" onclick="copyEl('li1')">Copy</button></div>
+        <div class="content-block-body">
+          <div class="content-text" id="li1">My wife had an idea that turned into a company.
+
+She watched her grandmother miss her insulin for three days in a row. We only found out when she ended up in hospital.
+
+"There should be an app that checks in on her like a caring friend. Not just a reminder."
+
+So we built it.
+
+Carely is an AI caretaker for elderly patients. It sends medication reminders, has gentle conversations with your loved one, and alerts family if something seems wrong.
+
+We're a small team from BC, Canada. No VC funding. Just a problem we care deeply about.
+
+First 200 founding members: $5/month forever → carely.fit
+
+If you know anyone caring for an aging parent — please share this.
+
+#caregiving #eldercare #healthtech #startup</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="content-block">
+        <div class="content-block-head"><span class="content-block-platform" style="color:#ff0050;">🎵 TIKTOK SCRIPT 1 — Founder Story (60s)</span><button class="copy-btn" onclick="copyEl('tt1')">Copy Script</button></div>
+        <div class="content-block-body">
+          <div class="content-title">Hook: "My wife's idea literally saved my grandma's life"</div>
+          <div class="content-text" id="tt1">HOOK (0-3s):
+Show phone notification: "Grandma hasn't taken her insulin"
+
+BODY:
+"Three years ago my grandma was in hospital. Not because she was sick. Because she forgot her medication.
+
+My wife said — someone needs to fix this.
+
+So we built Carely. An AI that checks on your elderly loved ones, reminds them to take their meds, and tells YOU if something's wrong.
+
+Like having a kind nurse available 24/7."
+
+CLOSE:
+"200 founding spots at $5 a month. Forever. Link in bio."
+
+[Point to bio. Show app notification on phone.]</div>
+        </div>
+      </div>
+      <div class="content-block">
+        <div class="content-block-head"><span class="content-block-platform" style="color:#ff0050;">🎵 TIKTOK SCRIPT 2 — Scary stat hook</span><button class="copy-btn" onclick="copyEl('tt2')">Copy Script</button></div>
+        <div class="content-block-body">
+          <div class="content-title">Hook: "125,000 people die from this every year"</div>
+          <div class="content-text" id="tt2">HOOK (0-2s):
+Text on screen: "125,000 deaths per year"
+
+BODY:
+"125,000 Americans die every year from not taking their medication correctly. Most of them are elderly. Most just forgot.
+
+I built an app to fix this. It's called Carely.
+
+An AI caretaker that checks in on your elderly parents, reminds them gently, and alerts you if they don't respond.
+
+Less than a coffee a week."
+
+CLOSE:
+"Link in bio. First 200 spots are $5/month forever. Don't wait until it's too late."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEO -->
+<div id="tab-seo" class="tab-panel">
+  <div class="insight-box">
+    <div class="insight-label">🔥 Fastest SEO Win — Do This First</div>
+    <div class="insight-text">Create <strong>carely.fit/carezone-alternative</strong> and <strong>carely.fit/medisafe-alternative</strong> pages immediately. Near-zero competition, very high purchase intent. CareZone's abandoned users are actively searching for a replacement right now.</div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head"><h3>🎯 Priority Keywords — Target First</h3></div>
+      <div class="card-body" style="padding:10px;">
+        <div class="keyword-row"><div class="kw-text">CareZone alternative</div><div class="kw-vol">320/mo</div><div class="kw-comp kw-vlow">VERY LOW</div></div>
+        <div class="keyword-row"><div class="kw-text">Medisafe alternative</div><div class="kw-vol">590/mo</div><div class="kw-comp kw-low">LOW</div></div>
+        <div class="keyword-row"><div class="kw-text">AI caretaker app</div><div class="kw-vol">480/mo</div><div class="kw-comp kw-vlow">VERY LOW</div></div>
+        <div class="keyword-row"><div class="kw-text">medication reminder app for elderly parents</div><div class="kw-vol">2,400/mo</div><div class="kw-comp kw-low">LOW</div></div>
+        <div class="keyword-row"><div class="kw-text">best pill reminder app for seniors 2026</div><div class="kw-vol">1,900/mo</div><div class="kw-comp kw-low">LOW</div></div>
+        <div class="keyword-row"><div class="kw-text">caregiver app for aging parents</div><div class="kw-vol">1,600/mo</div><div class="kw-comp kw-low">LOW</div></div>
+        <div class="keyword-row"><div class="kw-text">medication reminder app Canada</div><div class="kw-vol">590/mo</div><div class="kw-comp kw-low">LOW</div></div>
+        <div class="keyword-row"><div class="kw-text">how to remind elderly parent to take medication</div><div class="kw-vol">2,900/mo</div><div class="kw-comp kw-med">MEDIUM</div></div>
+        <div class="keyword-row"><div class="kw-text">pill reminder app for someone else</div><div class="kw-vol">480/mo</div><div class="kw-comp kw-vlow">VERY LOW</div></div>
+        <div class="keyword-row"><div class="kw-text">medication management app for dementia</div><div class="kw-vol">720/mo</div><div class="kw-comp kw-low">LOW</div></div>
+        <div class="keyword-row"><div class="kw-text">family caregiver app medication tracking</div><div class="kw-vol">320/mo</div><div class="kw-comp kw-vlow">VERY LOW</div></div>
+        <div class="keyword-row"><div class="kw-text">medication compliance app Alzheimer's</div><div class="kw-vol">260/mo</div><div class="kw-comp kw-vlow">VERY LOW</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>📝 Blog Posts — Write In This Order</h3></div>
+      <div class="card-body" style="padding:10px;">
+        <div class="priority-item" onclick="toggleDone(this)"><div class="pi-num urgent">1</div><div><div class="pi-title">CareZone Alternative — Best Apps 2026</div><div class="pi-meta">Near-zero competition · highest intent · do first</div></div></div>
+        <div class="priority-item" onclick="toggleDone(this)"><div class="pi-num urgent">2</div><div><div class="pi-title">Medisafe vs Carely — Honest Comparison</div><div class="pi-meta">Captures dissatisfied Medisafe users</div></div></div>
+        <div class="priority-item" onclick="toggleDone(this)"><div class="pi-num">3</div><div><div class="pi-title">Best Medication Reminder Apps for Elderly Parents (2026)</div><div class="pi-meta">2,400 searches/mo — main traffic driver</div></div></div>
+        <div class="priority-item" onclick="toggleDone(this)"><div class="pi-num">4</div><div><div class="pi-title">How to Remind Elderly Parent to Take Medication</div><div class="pi-meta">2,900 searches/mo — informational → Carely CTA</div></div></div>
+        <div class="priority-item" onclick="toggleDone(this)"><div class="pi-num">5</div><div><div class="pi-title">What is an AI Caretaker? Why Your Parent Needs One</div><div class="pi-meta">Own this keyword before it gets competitive</div></div></div>
+        <div class="priority-item" onclick="toggleDone(this)"><div class="pi-num">6</div><div><div class="pi-title">Best Caregiver Apps in Canada (2026)</div><div class="pi-meta">Zero competitors targeting Canadian market</div></div></div>
+        <div class="priority-item" onclick="toggleDone(this)"><div class="pi-num">7</div><div><div class="pi-title">7 Signs Your Elderly Parent Needs a Medication App</div><div class="pi-meta">High shareability — social + SEO combined</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OUTREACH -->
+<div id="tab-outreach" class="tab-panel">
+  <div class="three-col">
+    <div>
+      <div class="content-block">
+        <div class="content-block-head"><span class="content-block-platform" style="color:var(--green);">📧 BC Pharmacy Association — info@bcpharmacy.ca</span><button class="copy-btn" onclick="copyEl('e1')">Copy</button></div>
+        <div class="content-block-body"><div class="content-text" id="e1">Subject: Partnership Opportunity — BC-Built Medication Adherence App
+
+Hi BCPhA Team,
+
+I'm Prabhjot Kaur, co-founder of Carely — a medication reminder and AI caretaker app built right here in BC.
+
+We built Carely after my grandmother was hospitalized from missing her insulin. We wanted an app that reminds elderly patients gently and alerts family members if something's wrong.
+
+We'd love to explore a partnership with BCPhA:
+• Pharmacists recommend Carely to patients to improve adherence
+• Co-branded onboarding for BC pharmacies
+• Referral program for member pharmacists
+
+Free for pharmacies to participate. Patients get a 7-day trial.
+
+Open to a 20-minute call this week?
+
+Prabhjot Kaur, Co-founder
+carely.fit</div></div>
+      </div>
+      <div class="content-block" style="margin-top:8px;">
+        <div class="content-block-head"><span class="content-block-platform" style="color:var(--green);">📧 Senior Living Facility (Director of Nursing)</span><button class="copy-btn" onclick="copyEl('e2')">Copy</button></div>
+        <div class="content-block-body"><div class="content-text" id="e2">Subject: Free 3-month pilot — medication adherence for your residents
+
+Hi [Name],
+
+I'm Prabhjot, co-founder of Carely — a medication reminder app with AI caretaker built for elderly residents.
+
+We're offering a free 3-month pilot for senior living facilities:
+• Gentle AI reminders that talk to residents like a caring friend
+• Family alert system when a dose is missed
+• Staff dashboard for monitoring adherence
+• No hardware · No IT setup · Works on any device
+
+Takes 10 minutes to set up. 15-min demo this week?
+
+Prabhjot Kaur
+carely.fit</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="content-block">
+        <div class="content-block-head"><span class="content-block-platform" style="color:var(--amber);">📧 Follow-Up Email (Day 4 — no reply)</span><button class="copy-btn" onclick="copyEl('e3')">Copy</button></div>
+        <div class="content-block-body"><div class="content-text" id="e3">Subject: Re: Free pilot — quick question
+
+Hi [Name],
+
+Following up on my note from a few days ago.
+
+Quick question: is medication adherence something your team is actively working to improve? Even 1–2 missed doses per week can lead to hospitalisations and increased care costs.
+
+We've made setup really simple — no hardware, 10 minutes. Happy to show you in 15 minutes.
+
+Prabhjot
+carely.fit</div></div>
+      </div>
+      <div class="content-block" style="margin-top:8px;">
+        <div class="content-block-head"><span class="content-block-platform" style="color:#ff0000;">▶️ Influencer DM — Dementia Careblazers (YouTube)</span><button class="copy-btn" onclick="copyEl('e4')">Copy</button></div>
+        <div class="content-block-body"><div class="content-text" id="e4">Hi Natali,
+
+I've followed Dementia Careblazers for a while — your content genuinely helps families through some of the hardest moments of their lives. Thank you.
+
+I'm Prabhjot, co-founder of Carely. We built an AI caretaker app for elderly patients and caregivers — medication reminders, gentle AI conversations, family alerts when something's wrong.
+
+We built it because I watched my grandmother miss her insulin for three days without anyone knowing.
+
+I'd love to offer you a free lifetime account and, if it feels right for your audience, a 20% affiliate partnership.
+
+No pressure — only if you think it could genuinely help your community.
+
+Prabhjot Kaur
+carely.fit</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="content-block">
+        <div class="content-block-head"><span class="content-block-platform" style="color:var(--purple);">📰 Press Pitch — MobiHealthNews</span><button class="copy-btn" onclick="copyEl('e5')">Copy</button></div>
+        <div class="content-block-body"><div class="content-text" id="e5">Subject: BC startup launches AI caretaker app targeting medication adherence gap
+
+Hi,
+
+Flagging a launch that may interest your readers.
+
+Carely (carely.fit) is a medication reminder app with an AI caretaker for elderly patients and family caregivers. It combines conversational AI check-ins with real-time family alerts — addressing a gap that Medisafe and the now-stagnant CareZone have left open.
+
+Key facts:
+• BC, Canada founding team
+• Targets 53M US family caregivers managing elderly medications
+• AI caretaker distinguishes it from purely transactional reminder apps
+• Founding offer: $5/month, 200 spots
+• Bootstrapped — origin story: co-founder conceived the idea after her grandmother was hospitalized from missed insulin
+
+Happy to arrange a demo or interview.
+
+Prabhjot Kaur, Co-founder
+carely.fit</div></div>
+      </div>
+      <div class="content-block" style="margin-top:8px;">
+        <div class="content-block-head"><span class="content-block-platform" style="color:var(--teal);">✍️ Guest Post Pitch — AgingCare.com (2M readers/mo)</span><button class="copy-btn" onclick="copyEl('e6')">Copy</button></div>
+        <div class="content-block-body"><div class="content-text" id="e6">Subject: Guest article — "How to help an elderly parent take medication without nagging"
+
+Hi,
+
+I'd love to contribute a guest article for AgingCare readers.
+
+Proposed title: "How to Help an Elderly Parent Take Their Medication Without Nagging Them — And What AI Can Now Do That We Can't"
+
+Covers: why non-adherence happens, the caregiver guilt cycle, what AI check-ins do differently, practical steps families can take today.
+
+~1,200 words, original, educational (not promotional). Brief author bio linking to carely.fit.
+
+Would this be a good fit?
+
+Prabhjot Kaur
+carely.fit</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIRTUAL OFFICE -->
+<div id="tab-office" class="tab-panel">
+  <div class="office-panel">
+    <div class="off-tabs">
+      <div class="off-tab active" onclick="offTab('org',this)">🏢 Org Chart</div>
+      <div class="off-tab" onclick="offTab('floor',this)">🏠 Office Floor</div>
+      <div class="off-tab" onclick="offTab('chat',this)">💬 Team Chat</div>
+      <div class="off-tab" onclick="offTab('board',this)">📋 Board</div>
+      <div class="off-tab" onclick="offTab('outputs',this)">📦 Outputs</div>
+    </div>
+
+    <!-- ORG -->
+    <div id="off-org" class="off-content active">
+      <div style="text-align:center;margin-bottom:14px;color:#718096;font-size:12px;">Live org — Prabh &amp; TJ lead, Claude executes, agents deliver</div>
+      <div class="off-org">
+        <div style="display:flex;justify-content:center;gap:24px;">
+          <div class="off-org-card founder">
+            <div class="off-av2" style="background:linear-gradient(135deg,#f687b3,#d53f8c)">🌟</div>
+            <div class="off-org-name">Prabh</div>
+            <div class="off-org-role">Co-Founder · Visionary &amp; Strategy</div>
+            <div class="off-org-status os-active">Outreach &amp; Content</div>
+          </div>
+          <div class="off-org-card founder">
+            <div class="off-av2" style="background:linear-gradient(135deg,#f6ad55,#d97706)">⚙️</div>
+            <div class="off-org-name">TJ (Taranjit Singh)</div>
+            <div class="off-org-role">Co-Founder · Backend &amp; Execution</div>
+            <div class="off-org-status os-active">Build &amp; Deploy</div>
+          </div>
+        </div>
+        <div class="off-vline"></div>
+        <div style="display:flex;justify-content:center;">
+          <div class="off-org-card ceo" style="position:relative;">
+            <div style="position:absolute;top:-6px;right:-6px;background:#667eea;color:#fff;font-size:9px;padding:2px 6px;border-radius:8px;font-weight:700;">AI</div>
+            <div class="off-av2" style="background:linear-gradient(135deg,#667eea,#764ba2)">🤖</div>
+            <div class="off-org-name">Claude</div>
+            <div class="off-org-role">CEO · COO · CTO</div>
+            <div class="off-org-status os-active">All Departments</div>
+          </div>
+        </div>
+        <div class="off-vline"></div>
+        <div class="off-agents">
+          <div class="off-agent-branch">
+            <div class="off-org-card" style="min-width:130px;">
+              <div class="off-av2" style="background:#1a3d5c;font-size:15px;">⚙️</div>
+              <div class="off-org-name" style="font-size:12px;">Arjun (OPS)</div>
+              <div class="off-org-role">Infra &amp; Deploy</div>
+              <div style="font-size:8px;color:#4a90d9;margin-top:3px;font-style:italic;">Thinks like Werner Vogels</div>
+              <div class="off-org-status os-active">Active</div>
+            </div>
+          </div>
+          <div class="off-agent-branch">
+            <div class="off-org-card" style="min-width:130px;">
+              <div class="off-av2" style="background:#2d1a5c;font-size:15px;">📣</div>
+              <div class="off-org-name" style="font-size:12px;">Priya (Marketing)</div>
+              <div class="off-org-role">Copy &amp; Campaigns</div>
+              <div style="font-size:8px;color:#a78bfa;margin-top:3px;font-style:italic;">Thinks like Alex Hormozi</div>
+              <div class="off-org-status os-active">Active</div>
+            </div>
+          </div>
+          <div class="off-agent-branch">
+            <div class="off-org-card" style="min-width:130px;">
+              <div class="off-av2" style="background:#1a3d2e;font-size:15px;">📧</div>
+              <div class="off-org-name" style="font-size:12px;">Nisha (Outreach)</div>
+              <div class="off-org-role">B2B &amp; Cold Email</div>
+              <div style="font-size:8px;color:#68d391;margin-top:3px;font-style:italic;">Thinks like Aaron Ross</div>
+              <div class="off-org-status os-busy">Queued</div>
+            </div>
+          </div>
+          <div class="off-agent-branch">
+            <div class="off-org-card" style="min-width:130px;">
+              <div class="off-av2" style="background:#3d2a0f;font-size:15px;">💰</div>
+              <div class="off-org-name" style="font-size:12px;">Vikram (Sales)</div>
+              <div class="off-org-role">Revenue &amp; Funnels</div>
+              <div style="font-size:8px;color:#f6ad55;margin-top:3px;font-style:italic;">Thinks like Hormozi</div>
+              <div class="off-org-status os-busy">Standby</div>
+            </div>
+          </div>
+          <div class="off-agent-branch">
+            <div class="off-org-card" style="min-width:130px;">
+              <div class="off-av2" style="background:#2d2a0f;font-size:15px;">✍️</div>
+              <div class="off-org-name" style="font-size:12px;">Ishaan (Content)</div>
+              <div class="off-org-role">SEO &amp; Blog</div>
+              <div style="font-size:8px;color:#fbd38d;margin-top:3px;font-style:italic;">Thinks like Brian Dean</div>
+              <div class="off-org-status os-active">Active</div>
+            </div>
+          </div>
+          <div class="off-agent-branch">
+            <div class="off-org-card" style="min-width:130px;">
+              <div class="off-av2" style="background:#1a2d3d;font-size:15px;">📊</div>
+              <div class="off-org-name" style="font-size:12px;">Rohan (Analytics)</div>
+              <div class="off-org-role">GA4 &amp; Insights</div>
+              <div style="font-size:8px;color:#81e6d9;margin-top:3px;font-style:italic;">Thinks like Avinash Kaushik</div>
+              <div class="off-org-status os-active">Active</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:24px;background:#111827;border-radius:10px;padding:16px;max-width:720px;margin-left:auto;margin-right:auto;">
+        <div style="font-size:10px;font-weight:800;color:#718096;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">How Tasks Flow</div>
+        <div style="font-size:12px;color:#a0aec0;">
+          <span style="color:#f687b3;font-weight:700;">Prabh</span> &amp; <span style="color:#f6ad55;font-weight:700;">TJ</span> set direction
+          <span style="color:#4a5568;margin:0 6px;">→</span>
+          <span style="color:#667eea;font-weight:700;">Claude</span> breaks it into tasks
+          <span style="color:#4a5568;margin:0 6px;">→</span>
+          assigns to agent
+          <span style="color:#4a5568;margin:0 6px;">→</span>
+          agent executes
+          <span style="color:#4a5568;margin:0 6px;">→</span>
+          Claude reviews &amp; delivers
+        </div>
+        <div style="display:flex;gap:20px;margin-top:10px;">
+          <div style="font-size:11px;color:#718096;">Agents: <strong style="color:#e2e8f0;">7</strong></div>
+          <div style="font-size:11px;color:#718096;">Active: <strong style="color:#68d391;">4</strong></div>
+          <div style="font-size:11px;color:#718096;">Shipped: <strong style="color:#68d391;">9</strong></div>
+          <div style="font-size:11px;color:#718096;">In Progress: <strong style="color:#667eea;">4</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOOR -->
+    <div id="off-floor" class="off-content">
+      <div class="off-floor">
+        <div class="off-room">
+          <div class="off-room-head"><div class="off-room-icon">🏗️</div><div><div class="off-room-title">OPS War Room</div><div class="off-room-agent">Arjun (OPS) · Claude as CTO</div></div></div>
+          <ul class="off-tasks">
+            <li><div class="tdot td-done"></div>Netlify → GitHub auto-deploy live</li>
+            <li><div class="tdot td-done"></div>carely.fit deployed &amp; resolving</li>
+            <li><div class="tdot td-active"></div>Supabase schema.sql migration pending</li>
+            <li><div class="tdot td-q"></div>Railway backend health monitoring</li>
+          </ul>
+          <div class="off-output">✅ Last: Auto-deploy pipeline — push to main = live</div>
+        </div>
+        <div class="off-room">
+          <div class="off-room-head"><div class="off-room-icon">📣</div><div><div class="off-room-title">Marketing Studio</div><div class="off-room-agent">Marketing Agent · Claude as CMO</div></div></div>
+          <ul class="off-tasks">
+            <li><div class="tdot td-done"></div>Landing copy — founding $5/mo (1 yr)</li>
+            <li><div class="tdot td-done"></div>Countdown timer live on carely.fit</li>
+            <li><div class="tdot td-active"></div>TikTok launch script — May 5 reel</li>
+            <li><div class="tdot td-q"></div>Instagram bio + story templates</li>
+          </ul>
+          <div class="off-output">✅ Last: Founding member pitch — scarcity + urgency</div>
+        </div>
+        <div class="off-room">
+          <div class="off-room-head"><div class="off-room-icon">✍️</div><div><div class="off-room-title">Content Lab</div><div class="off-room-agent">Ishaan (Content) · Claude as Content Lead</div></div></div>
+          <ul class="off-tasks">
+            <li><div class="tdot td-done"></div>Blog: CareZone Alternative — live</li>
+            <li><div class="tdot td-done"></div>Blog: Medisafe Alternative — live</li>
+            <li><div class="tdot td-done"></div>Blog: Best medication reminder elderly</li>
+            <li><div class="tdot td-done"></div>Blog: How to remind elderly parent</li>
+          </ul>
+          <div class="off-output">✅ Last: 4 SEO blogs — targeting 5,710 searches/mo</div>
+        </div>
+        <div class="off-room">
+          <div class="off-room-head"><div class="off-room-icon">📊</div><div><div class="off-room-title">Analytics Desk</div><div class="off-room-agent">Analytics Agent · Claude as Data Lead</div></div></div>
+          <ul class="off-tasks">
+            <li><div class="tdot td-done"></div>GA4 G-HNNSVW5Q57 on all 5 pages</li>
+            <li><div class="tdot td-done"></div>Mailchimp waitlist collecting signups</li>
+            <li><div class="tdot td-active"></div>Google Search Console — not submitted</li>
+            <li><div class="tdot td-q"></div>Conversion event tracking (CTA clicks)</li>
+          </ul>
+          <div class="off-output">✅ Last: GA4 live across landing + 4 blog pages</div>
+        </div>
+        <div class="off-room">
+          <div class="off-room-head"><div class="off-room-icon">📧</div><div><div class="off-room-title">Outreach Office</div><div class="off-room-agent">Outreach Agent · Claude as BizDev</div></div></div>
+          <ul class="off-tasks">
+            <li><div class="tdot td-active"></div>BC Pharmacy email (info@bcpharmacy.ca)</li>
+            <li><div class="tdot td-q"></div>10 senior living facilities cold email</li>
+            <li><div class="tdot td-q"></div>GP office outreach sequence</li>
+            <li><div class="tdot td-q"></div>App Store listing copy</li>
+          </ul>
+          <div class="off-output">⏳ Queue: BC Pharmacy email ready to send</div>
+        </div>
+        <div class="off-room">
+          <div class="off-room-head"><div class="off-room-icon">💰</div><div><div class="off-room-title">Sales Room</div><div class="off-room-agent">Sales Agent · Claude as Revenue Lead</div></div></div>
+          <ul class="off-tasks">
+            <li><div class="tdot td-done"></div>Stripe Founding price_id configured</li>
+            <li><div class="tdot td-done"></div>3 pricing tiers set</li>
+            <li><div class="tdot td-active"></div>App Store &amp; Play Store — SUBMIT TODAY</li>
+            <li><div class="tdot td-q"></div>First 10 customers campaign</li>
+          </ul>
+          <div class="off-output">⚠️ Urgent: App stores need submission NOW</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div id="off-chat" class="off-content">
+      <div class="off-chat-wrap">
+        <div class="off-chat-side">
+          <div class="off-ch-title">Channels</div>
+          <div class="off-ch active" onclick="offCh('general',this)"># general <span class="off-ch-badge">5</span></div>
+          <div class="off-ch" onclick="offCh('ops',this)"># ops-deploy</div>
+          <div class="off-ch" onclick="offCh('marketing',this)"># marketing <span class="off-ch-badge">3</span></div>
+          <div class="off-ch" onclick="offCh('launch',this)"># may5-launch <span class="off-ch-badge">7</span></div>
+          <div class="off-ch" onclick="offCh('outreach',this)"># b2b-outreach</div>
+        </div>
+        <div class="off-chat-main">
+          <div id="och-general" class="off-ch-content active">
+            <div class="off-chat-header"># general — All Hands</div>
+            <div class="off-msgs">
+              <div class="off-msg"><div class="off-av" style="background:linear-gradient(135deg,#f6e05e,#d97706)">👑</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#f6e05e">TJ</span><span class="off-msg-time">Today 9:02 AM</span></div><div class="off-msg-text">Morning team. May 5 is 11 days out. What's the status on the app store submissions?</div></div></div>
+              <div class="off-msg"><div class="off-av" style="background:linear-gradient(135deg,#667eea,#764ba2)">🤖</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#667eea">Claude (CEO)</span><span class="off-msg-time">Today 9:03 AM</span></div><div class="off-msg-text">Morning TJ. <strong>App Store = 3–5 day review. Play Store = 3–7 days.</strong> We need to submit TODAY for any chance of being live May 5. Also Supabase migration must run — app is dead without it.</div></div></div>
+              <div class="off-msg"><div class="off-av" style="background:#3d2a0f">💰</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#f6ad55">Sales Agent</span><span class="off-msg-time">Today 9:04 AM</span></div><div class="off-msg-text">Listing copy is ready for both stores. Stripe is wired. Just need TJ to hit submit. I'll guide through each step.</div></div></div>
+              <div class="off-msg"><div class="off-av" style="background:#1a3d5c">⚙️</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#63b3ed">Arjun (OPS)</span><span class="off-msg-time">Today 9:05 AM</span></div><div class="off-msg-text">Netlify auto-deploy is clean. Every git push goes live in ~45 seconds. Backend healthy. Supabase schema is the last infra blocker — one command away.</div></div></div>
+              <div class="off-msg"><div class="off-av" style="background:#1a2d3d">📊</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#68d391">Analytics</span><span class="off-msg-time">Today 9:06 AM</span></div><div class="off-msg-text">GA4 tracking all 5 pages. Once Search Console is connected our 4 SEO blogs start indexing — free organic traffic before launch.</div></div></div>
+            </div>
+            <input class="off-chat-input" type="text" placeholder="Message #general — live chat happens in your Claude session" readonly>
+          </div>
+          <div id="och-ops" class="off-ch-content">
+            <div class="off-chat-header"># ops-deploy — Infrastructure</div>
+            <div class="off-msgs">
+              <div class="off-msg"><div class="off-av" style="background:#1a3d5c">⚙️</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#63b3ed">Arjun (OPS)</span><span class="off-msg-time">Apr 23 11:47 PM</span></div><div class="off-msg-text">✅ Netlify site timely-crumble-3fc401 connected to prabhjotcarely/carely-frontend-. Auto-deploy confirmed on push to main.</div></div></div>
+              <div class="off-msg"><div class="off-av" style="background:linear-gradient(135deg,#667eea,#764ba2)">🤖</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#667eea">Claude</span><span class="off-msg-time">Apr 23 11:48 PM</span></div><div class="off-msg-text">Good. Next blocker: <strong>Supabase migrations.</strong> schema.sql must run before the mobile app can talk to the DB. One psql command and we're clear.</div></div></div>
+              <div class="off-msg"><div class="off-av" style="background:#1a3d5c">⚙️</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#63b3ed">Arjun (OPS)</span><span class="off-msg-time">Today 8:00 AM</span></div><div class="off-msg-text">Railway uptime 99.9%. Redis (Upstash) connected. Firebase FCM present. SendGrid hello@carely.fit verified. All green except Supabase schema pending.</div></div></div>
+            </div>
+            <input class="off-chat-input" type="text" placeholder="Message #ops-deploy" readonly>
+          </div>
+          <div id="och-marketing" class="off-ch-content">
+            <div class="off-chat-header"># marketing — Copy &amp; Campaigns</div>
+            <div class="off-msgs">
+              <div class="off-msg"><div class="off-av" style="background:#2d1a5c">📣</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#b794f4">Marketing</span><span class="off-msg-time">Today 9:00 AM</span></div><div class="off-msg-text">Founding CTA live: <strong>"Lock in $5/month for your first year — 200 spots only."</strong> Countdown timer counting from 11 days. Scarcity + urgency framework active.</div></div></div>
+              <div class="off-msg"><div class="off-av" style="background:linear-gradient(135deg,#667eea,#764ba2)">🤖</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#667eea">Claude</span><span class="off-msg-time">Today 9:01 AM</span></div><div class="off-msg-text">Next: TikTok launch script. Hook must lead with pain: "Your parent missed their medication again — and you found out too late." Then reveal Carely. 30 seconds max.</div></div></div>
+              <div class="off-msg"><div class="off-av" style="background:#2d1a5c">📣</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#b794f4">Marketing</span><span class="off-msg-time">Today 9:02 AM</span></div><div class="off-msg-text">On it. Also drafting Instagram carousel: "5 signs your elderly parent is struggling with medications." Soft sell at end. Great for organic reach pre-launch.</div></div></div>
+            </div>
+            <input class="off-chat-input" type="text" placeholder="Message #marketing" readonly>
+          </div>
+          <div id="och-launch" class="off-ch-content">
+            <div class="off-chat-header"># may5-launch — Launch Command Center</div>
+            <div class="off-msgs">
+              <div class="off-msg"><div class="off-av" style="background:linear-gradient(135deg,#667eea,#764ba2)">🤖</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#667eea">Claude (Launch Lead)</span><span class="off-msg-time">Today 9:00 AM</span></div><div class="off-msg-text">🚀 <strong>May 5 Checklist — T-11 Days</strong><br>✅ Landing page live with countdown<br>✅ Founding member pricing set<br>✅ GA4 tracking all pages<br>✅ Mailchimp waitlist live<br>⚠️ App Store submission — DO TODAY<br>⚠️ Play Store submission — DO TODAY<br>⚠️ Supabase migration — DO TODAY<br>🔲 Google Search Console<br>🔲 Social media accounts<br>🔲 BC Pharmacy email</div></div></div>
+              <div class="off-msg"><div class="off-av" style="background:#2d1a5c">📣</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#b794f4">Marketing</span><span class="off-msg-time">Today 9:03 AM</span></div><div class="off-msg-text">Launch day plan: TikTok 9 AM PT, Instagram noon, LinkedIn 2 PM. All copy drafted. Just need accounts created and TJ to record the TikTok.</div></div></div>
+              <div class="off-msg"><div class="off-av" style="background:linear-gradient(135deg,#f6e05e,#d97706)">👑</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#f6e05e">TJ</span><span class="off-msg-time">Today 9:06 AM</span></div><div class="off-msg-text">Let's go. What do I do first today?</div></div></div>
+              <div class="off-msg"><div class="off-av" style="background:linear-gradient(135deg,#667eea,#764ba2)">🤖</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#667eea">Claude</span><span class="off-msg-time">Today 9:06 AM</span></div><div class="off-msg-text"><strong>Today's priority order:</strong><br>1. Run Supabase migration (5 min)<br>2. Submit App Store Connect (30 min)<br>3. Submit Google Play Console (20 min)<br>4. Create TikTok + Instagram<br>5. Email BC Pharmacy</div></div></div>
+            </div>
+            <input class="off-chat-input" type="text" placeholder="Message #may5-launch" readonly>
+          </div>
+          <div id="och-outreach" class="off-ch-content">
+            <div class="off-chat-header"># b2b-outreach — Pharmacies &amp; Senior Living</div>
+            <div class="off-msgs">
+              <div class="off-msg"><div class="off-av" style="background:#1a3d2e">📧</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#68d391">Outreach</span><span class="off-msg-time">Today 8:30 AM</span></div><div class="off-msg-text">BC Pharmacy Association email drafted. Targeting info@bcpharmacy.ca. Could open B2B at $500–$2K/mo per deal. Holding send until app is in review on both stores.</div></div></div>
+              <div class="off-msg"><div class="off-av" style="background:linear-gradient(135deg,#667eea,#764ba2)">🤖</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#667eea">Claude</span><span class="off-msg-time">Today 8:31 AM</span></div><div class="off-msg-text">Smart hold. We want to say "now available on iOS and Android" in the email. Target: send May 5 or sooner if approved early.</div></div></div>
+              <div class="off-msg"><div class="off-av" style="background:#1a3d2e">📧</div><div class="off-msg-body"><div class="off-msg-meta"><span class="off-msg-name" style="color:#68d391">Outreach</span><span class="off-msg-time">Today 8:32 AM</span></div><div class="off-msg-text">Also have 10 BC senior living facilities. Average 80–150 residents. At $10/resident/mo = $800–$1,500/mo per deal. Sequence ready.</div></div></div>
+            </div>
+            <input class="off-chat-input" type="text" placeholder="Message #b2b-outreach" readonly>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOARD -->
+    <div id="off-board" class="off-content">
+      <div class="off-board">
+        <div class="off-col off-col-shipped">
+          <div class="off-col-head">Shipped <span class="off-col-cnt">9</span></div>
+          <div class="off-card"><div class="off-card-title">carely.fit landing page</div><div class="off-card-agent">OPS + Marketing</div><div class="off-ctag ct-tech">Deploy</div></div>
+          <div class="off-card"><div class="off-card-title">Netlify GitHub auto-deploy</div><div class="off-card-agent">Arjun (OPS)</div><div class="off-ctag ct-tech">Infra</div></div>
+          <div class="off-card"><div class="off-card-title">Founding price copy ($5/mo, 1yr)</div><div class="off-card-agent">Marketing</div><div class="off-ctag ct-mkt">Copy</div></div>
+          <div class="off-card"><div class="off-card-title">May 5 countdown timer</div><div class="off-card-agent">OPS + Marketing</div><div class="off-ctag ct-launch">Launch</div></div>
+          <div class="off-card"><div class="off-card-title">GA4 on all 5 pages</div><div class="off-card-agent">Analytics</div><div class="off-ctag ct-tech">Analytics</div></div>
+          <div class="off-card"><div class="off-card-title">4 SEO blog pages live</div><div class="off-card-agent">Content</div><div class="off-ctag ct-content">SEO</div></div>
+          <div class="off-card"><div class="off-card-title">Mailchimp waitlist</div><div class="off-card-agent">OPS</div><div class="off-ctag ct-growth">Growth</div></div>
+          <div class="off-card"><div class="off-card-title">Stripe pricing configured</div><div class="off-card-agent">Sales</div><div class="off-ctag ct-tech">Revenue</div></div>
+          <div class="off-card"><div class="off-card-title">41 AI skills installed</div><div class="off-card-agent">Claude (CTO)</div><div class="off-ctag ct-tech">AI Ops</div></div>
+        </div>
+        <div class="off-col off-col-progress">
+          <div class="off-col-head">In Progress <span class="off-col-cnt">4</span></div>
+          <div class="off-card" style="border-color:#667eea"><div class="off-card-title">⚠️ App Store submission</div><div class="off-card-agent">Sales — needs TJ action</div><div class="off-ctag ct-launch">URGENT</div></div>
+          <div class="off-card" style="border-color:#667eea"><div class="off-card-title">⚠️ Google Play submission</div><div class="off-card-agent">Sales — needs TJ action</div><div class="off-ctag ct-launch">URGENT</div></div>
+          <div class="off-card" style="border-color:#667eea"><div class="off-card-title">⚠️ Supabase DB migration</div><div class="off-card-agent">OPS — schema.sql pending</div><div class="off-ctag ct-tech">URGENT</div></div>
+          <div class="off-card"><div class="off-card-title">TikTok launch script</div><div class="off-card-agent">Marketing</div><div class="off-ctag ct-content">Content</div></div>
+        </div>
+        <div class="off-col off-col-next">
+          <div class="off-col-head">Up Next <span class="off-col-cnt">6</span></div>
+          <div class="off-card"><div class="off-card-title">Google Search Console</div><div class="off-card-agent">Analytics</div><div class="off-ctag ct-growth">SEO</div></div>
+          <div class="off-card"><div class="off-card-title">TikTok + Instagram accounts</div><div class="off-card-agent">Marketing</div><div class="off-ctag ct-mkt">Social</div></div>
+          <div class="off-card"><div class="off-card-title">BC Pharmacy email</div><div class="off-card-agent">Outreach</div><div class="off-ctag ct-growth">B2B</div></div>
+          <div class="off-card"><div class="off-card-title">App Store listing copy</div><div class="off-card-agent">Marketing</div><div class="off-ctag ct-mkt">ASO</div></div>
+          <div class="off-card"><div class="off-card-title">May 5 launch social posts</div><div class="off-card-agent">Content</div><div class="off-ctag ct-launch">Launch</div></div>
+          <div class="off-card"><div class="off-card-title">GA4 conversion events</div><div class="off-card-agent">Analytics</div><div class="off-ctag ct-tech">Analytics</div></div>
+        </div>
+        <div class="off-col off-col-later">
+          <div class="off-col-head">Post-Launch <span class="off-col-cnt">4</span></div>
+          <div class="off-card"><div class="off-card-title">Senior living outreach</div><div class="off-card-agent">Outreach</div><div class="off-ctag ct-growth">B2B</div></div>
+          <div class="off-card"><div class="off-card-title">Reddit + LinkedIn presence</div><div class="off-card-agent">Marketing</div><div class="off-ctag ct-mkt">Community</div></div>
+          <div class="off-card"><div class="off-card-title">Referral program</div><div class="off-card-agent">Sales</div><div class="off-ctag ct-growth">Growth</div></div>
+          <div class="off-card"><div class="off-card-title">100 customers → $1K MRR</div><div class="off-card-agent">All Agents</div><div class="off-ctag ct-growth">90-day Goal</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OUTPUTS -->
+    <div id="off-outputs" class="off-content">
+      <div style="margin-bottom:14px;color:#718096;font-size:12px;">Everything Carely has shipped — 9 deliverables and counting.</div>
+      <div class="off-outputs">
+        <div class="off-out-card"><div class="off-out-head"><div class="off-out-icon">🌐</div><div><div class="off-out-title">carely.fit Landing Page</div><div class="off-out-date">Shipped Apr 23, 2026</div></div></div><div class="off-out-desc">Full landing page with founding member pricing, countdown timer, waitlist CTA. Auto-deploys via Netlify on every GitHub push.</div><div class="off-out-stats"><div class="off-stat">Deploy: <span>~45s</span></div><div class="off-stat">GA4: <span>Live</span></div></div></div>
+        <div class="off-out-card"><div class="off-out-head"><div class="off-out-icon">✍️</div><div><div class="off-out-title">4 SEO Blog Pages</div><div class="off-out-date">Shipped Apr 23–24, 2026</div></div></div><div class="off-out-desc">CareZone alt, Medisafe alt, best medication reminder elderly, how to remind elderly parent. Targeting 5,710 monthly searches with low competition.</div><div class="off-out-stats"><div class="off-stat">Searches/mo: <span>5,710</span></div><div class="off-stat">Competition: <span>Low</span></div></div></div>
+        <div class="off-out-card"><div class="off-out-head"><div class="off-out-icon">📊</div><div><div class="off-out-title">Google Analytics 4</div><div class="off-out-date">Shipped Apr 24, 2026</div></div></div><div class="off-out-desc">G-HNNSVW5Q57 installed on all 5 pages. Real visitor behavior now tracked. Previously only Netlify server metrics were available.</div><div class="off-out-stats"><div class="off-stat">Pages: <span>5</span></div><div class="off-stat">Property: <span>534418238</span></div></div></div>
+        <div class="off-out-card"><div class="off-out-head"><div class="off-out-icon">⚙️</div><div><div class="off-out-title">Netlify Auto-Deploy</div><div class="off-out-date">Shipped Apr 23, 2026</div></div></div><div class="off-out-desc">GitHub repo connected to Netlify. Every git push to main deploys automatically. No manual uploads ever again.</div><div class="off-out-stats"><div class="off-stat">Trigger: <span>git push</span></div><div class="off-stat">Time to live: <span>~45s</span></div></div></div>
+        <div class="off-out-card"><div class="off-out-head"><div class="off-out-icon">⏱️</div><div><div class="off-out-title">May 5 Countdown Timer</div><div class="off-out-date">Shipped Apr 24, 2026</div></div></div><div class="off-out-desc">Live countdown on carely.fit counting to launch. Updates every second. Creates urgency for founding member sign-ups. Also on HQ dashboard.</div><div class="off-out-stats"><div class="off-stat">Target: <span>May 5 🚀</span></div></div></div>
+        <div class="off-out-card"><div class="off-out-head"><div class="off-out-icon">💰</div><div><div class="off-out-title">Pricing &amp; Stripe Config</div><div class="off-out-date">Shipped Apr 23, 2026</div></div></div><div class="off-out-desc">Three tiers: Founding $5/mo (1yr, 200 spots), Monthly $9.99, Annual $90. Stripe price IDs wired and ready for payment collection.</div><div class="off-out-stats"><div class="off-stat">Spots: <span>200</span></div><div class="off-stat">Stripe: <span>Ready</span></div></div></div>
+        <div class="off-out-card"><div class="off-out-head"><div class="off-out-icon">📧</div><div><div class="off-out-title">Mailchimp Waitlist</div><div class="off-out-date">Shipped Apr 23, 2026</div></div></div><div class="off-out-desc">Signup form connected to Mailchimp audience cc6d996450. Every landing page email goes into nurture list for launch announcement.</div><div class="off-out-stats"><div class="off-stat">Audience: <span>cc6d996450</span></div><div class="off-stat">Server: <span>us22</span></div></div></div>
+        <div class="off-out-card"><div class="off-out-head"><div class="off-out-icon">🧠</div><div><div class="off-out-title">41 AI Skills Installed</div><div class="off-out-date">Shipped Apr 24, 2026</div></div></div><div class="off-out-desc">28 marketing skills + 13 core skills. TJ gives a command — Claude picks the skill and executes. No skill names needed.</div><div class="off-out-stats"><div class="off-stat">Total: <span>41</span></div><div class="off-stat">Marketing: <span>28</span></div></div></div>
+        <div class="off-out-card"><div class="off-out-head"><div class="off-out-icon">🗓️</div><div><div class="off-out-title">CARELY_HQ Dashboard</div><div class="off-out-date">Shipped Apr 24, 2026</div></div></div><div class="off-out-desc">War room + virtual office in one file. GA4 status, countdown, quick links, virtual office with all agents, chat, board and outputs.</div><div class="off-out-stats"><div class="off-stat">Tabs: <span>7</span></div><div class="off-stat">Status: <span>All Green</span></div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 3D LIVE OFFICE -->
+<div id="tab-office3d" class="tab-panel">
+  <div class="o3wrap">
+    <div class="o3side">
+      <div class="o3side-title">Team Status</div>
+      <div id="o3aglist"></div>
+      <div class="o3hint">Drag canvas to pan</div>
+    </div>
+    <div id="three-wrap3d" style="flex:1;position:relative;overflow:hidden;">
+      <div id="o3loading" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#02c39a;font-size:13px;font-weight:700;z-index:10;pointer-events:none;">Loading 3D Office...</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ══ API MAINTAINER ══ -->
+<div id="tab-apis" class="tab-panel">
+  <div class="page">
+    <div class="sh" style="margin-bottom:20px"><h2>API Key Maintainer</h2><div class="sh-line"></div></div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:20px;">All tokens and API keys tracked below. Update the dates in localStorage when you renew. Red = act now. Amber = renew this week.</p>
+    <div id="api-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:32px;"></div>
+
+    <div class="sh" style="margin-bottom:12px"><h2>Renewal Playbook</h2><div class="sh-line"></div></div>
+    <div class="card">
+      <div class="card-body" style="font-size:12px;line-height:1.9;color:var(--text);">
+        <b>LinkedIn Access Token (60 days)</b><br>
+        1. Go to <code>https://carely-backend-production.up.railway.app/linkedin/auth</code><br>
+        2. Approve access — you land on a page showing the new token<br>
+        3. Copy token → Railway env var <code>LINKEDIN_ACCESS_TOKEN</code> → redeploy<br>
+        4. Update expiry date below: open browser console on this page →
+        <code>localStorage.setItem('exp_linkedin','YYYY-MM-DD')</code><br><br>
+
+        <b>OpenAI API Key (no expiry — monitor spend)</b><br>
+        1. platform.openai.com → API Keys → Create new secret key<br>
+        2. Replace <code>OPENAI_API_KEY</code> in Railway → redeploy<br><br>
+
+        <b>SendGrid API Key (no expiry — monitor)</b><br>
+        1. app.sendgrid.com → Settings → API Keys → regenerate<br>
+        2. Replace <code>SENDGRID_API_KEY</code> in Railway → redeploy<br><br>
+
+        <b>Stripe Keys (no expiry — rotate if leaked)</b><br>
+        1. dashboard.stripe.com → Developers → API Keys → Roll key<br>
+        2. Replace <code>STRIPE_SECRET_KEY</code> + <code>STRIPE_WEBHOOK_SECRET</code> in Railway<br><br>
+
+        <b>Supabase Service Role Key (no expiry)</b><br>
+        Rotate only if leaked: Project Settings → API → Regenerate<br><br>
+
+        <b>Upstash Redis Token (no expiry)</b><br>
+        Rotate only if leaked: console.upstash.com → your DB → Details → Reset password
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ── API Key expiry tracker ────────────────────────────────────────────────────
+const API_KEYS = [
+  { id:'linkedin',  name:'LinkedIn Access Token',  service:'LinkedIn OAuth',  expiryDays:60,  startDate:'2026-04-30', renewUrl:'https://carely-backend-production.up.railway.app/linkedin/auth',  notes:'w_member_social scope. Renew every 60 days.' },
+  { id:'openai',    name:'OpenAI API Key',          service:'OpenAI',          expiryDays:null, startDate:null,         renewUrl:'https://platform.openai.com/api-keys',                           notes:'No expiry. Watch monthly spend ($20 limit).' },
+  { id:'sendgrid',  name:'SendGrid API Key',        service:'SendGrid',        expiryDays:null, startDate:null,         renewUrl:'https://app.sendgrid.com/settings/api_keys',                     notes:'No expiry. Rotate if leaked.' },
+  { id:'stripe_sk', name:'Stripe Secret Key',       service:'Stripe',          expiryDays:null, startDate:null,         renewUrl:'https://dashboard.stripe.com/apikeys',                           notes:'No expiry. Roll immediately if leaked.' },
+  { id:'supabase',  name:'Supabase Service Role Key',service:'Supabase',       expiryDays:null, startDate:null,         renewUrl:'https://supabase.com/dashboard',                                 notes:'No expiry. Rotate if leaked.' },
+  { id:'upstash',   name:'Upstash Redis Token',     service:'Upstash',         expiryDays:null, startDate:null,         renewUrl:'https://console.upstash.com',                                    notes:'No expiry. Rotate if leaked.' },
+  { id:'firebase',  name:'Firebase Service Account',service:'Firebase',        expiryDays:null, startDate:null,         renewUrl:'https://console.firebase.google.com',                            notes:'No expiry. Tied to service account key file.' },
+  { id:'github_pat',name:'GitHub PAT',              service:'GitHub',          expiryDays:null, startDate:null,         renewUrl:'https://github.com/settings/tokens',                             notes:'Check if token was set to expire.' },
+  { id:'mailchimp', name:'Mailchimp API Key',       service:'Mailchimp',       expiryDays:null, startDate:null,         renewUrl:'https://mailchimp.com/account/api/',                             notes:'No expiry. Rotate if leaked.' },
+];
+
+function sanitizeDate(val) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(val) ? val : null;
+}
+
+function renderApiCards() {
+  var grid = document.getElementById('api-grid');
+  if (!grid || grid.childElementCount > 0) return;
+
+  API_KEYS.forEach(function(key) {
+    var card = document.createElement('div');
+    card.style.cssText = 'background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;';
+
+    // top bar
+    var bar = document.createElement('div');
+    bar.style.cssText = 'height:4px;background:var(--mint);';
+
+    var body = document.createElement('div');
+    body.style.cssText = 'padding:14px 16px;';
+
+    var title = document.createElement('div');
+    title.style.cssText = 'font-size:13px;font-weight:800;color:var(--text);margin-bottom:3px;';
+    title.textContent = key.name;
+
+    var svc = document.createElement('div');
+    svc.style.cssText = 'font-size:10px;color:var(--muted);margin-bottom:10px;';
+    svc.textContent = key.service;
+
+    var statusEl = document.createElement('div');
+    statusEl.style.cssText = 'font-size:11px;font-weight:700;margin-bottom:8px;';
+
+    if (key.expiryDays) {
+      var storedStart = sanitizeDate(localStorage.getItem('exp_' + key.id));
+      var startDate = storedStart ? new Date(storedStart) : new Date(key.startDate);
+      var expDate = new Date(startDate.getTime() + key.expiryDays * 86400000);
+      var daysLeft = Math.ceil((expDate - Date.now()) / 86400000);
+
+      var color = daysLeft <= 10 ? '#dc2626' : daysLeft <= 30 ? '#d97706' : '#16a34a';
+      bar.style.background = daysLeft <= 10 ? '#dc2626' : daysLeft <= 30 ? '#d97706' : 'var(--mint)';
+      statusEl.style.color = color;
+      statusEl.textContent = daysLeft > 0 ? daysLeft + ' days left — expires ' + expDate.toDateString() : 'EXPIRED — renew now';
+
+      // progress bar
+      var pct = Math.max(0, Math.min(100, (daysLeft / key.expiryDays) * 100));
+      var prog = document.createElement('div');
+      prog.style.cssText = 'height:4px;background:var(--border);border-radius:2px;margin-bottom:10px;overflow:hidden;';
+      var progFill = document.createElement('div');
+      progFill.style.cssText = 'height:100%;border-radius:2px;background:' + color + ';width:' + pct + '%;';
+      prog.appendChild(progFill);
+      body.appendChild(prog);
+    } else {
+      statusEl.style.color = '#16a34a';
+      statusEl.textContent = 'No expiry — rotate only if leaked';
+    }
+
+    var notes = document.createElement('div');
+    notes.style.cssText = 'font-size:10px;color:var(--muted);margin-bottom:12px;line-height:1.5;';
+    notes.textContent = key.notes;
+
+    var renewBtn = document.createElement('a');
+    renewBtn.href = key.renewUrl;
+    renewBtn.target = '_blank';
+    renewBtn.style.cssText = 'display:inline-block;font-size:10px;font-weight:700;color:var(--teal);text-decoration:none;border:1px solid var(--teal);border-radius:6px;padding:4px 10px;';
+    renewBtn.textContent = 'Renew / Manage';
+
+    body.insertBefore(bar, body.firstChild);
+    body.appendChild(title);
+    body.appendChild(svc);
+    body.appendChild(statusEl);
+    body.appendChild(notes);
+    body.appendChild(renewBtn);
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
+const BACKEND='https://carely-backend-production.up.railway.app';
+const SUPABASE_URL='https://iaxcdasluigpwiydcxle.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlheGNkYXNsdWlncHdpeWRjeGxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5NTcxMjQsImV4cCI6MjA5MjUzMzEyNH0.XZe3xlD6PWBEtAoA9gW-N6BzLTDCbdiaOdDRPi0UubM';
+const LAUNCH=new Date('2026-04-24');
+
+function showTab(name,el){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  el.classList.add('active');
+  location.hash = name;
+  if(name==='office3d') setTimeout(init3D,50);
+}
+// Restore tab on load/refresh
+(function(){
+  var hash=(location.hash||'').replace('#','');
+  var valid=['dashboard','competitors','leads','content','seo','outreach','office','office3d'];
+  if(hash && valid.indexOf(hash)>=0){
+    var tab=document.querySelector('.tab[onclick*="\''+hash+'\'"]');
+    if(tab) showTab(hash,tab);
+  }
+})();
+function copyEl(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  navigator.clipboard.writeText(el.textContent.trim()).then(()=>{
+    const btn=event.target;
+    const o=btn.textContent;
+    btn.textContent='✓ Copied!';
+    btn.style.cssText='background:#dcfce7;color:#16a34a;';
+    setTimeout(()=>{btn.textContent=o;btn.style.cssText='';},2000);
+  });
+}
+// ── PRIORITY PERSISTENCE via localStorage ────────────────────
+function toggleDone(el){
+  el.classList.toggle('done');
+  const n=el.querySelector('.pi-num');
+  if(!n)return;
+  if(el.classList.contains('done')){n.classList.add('done-num');n.classList.remove('urgent');n.textContent='✓';}
+  else{n.classList.remove('done-num');if(n.dataset.orig)n.textContent=n.dataset.orig;}
+  // persist all priority states
+  const states={};
+  document.querySelectorAll('.priority-item').forEach((item,i)=>{states[i]=item.classList.contains('done');});
+  localStorage.setItem('hq_priorities',JSON.stringify(states));
+}
+function restorePriorities(){
+  try{
+    const states=JSON.parse(localStorage.getItem('hq_priorities')||'{}');
+    document.querySelectorAll('.priority-item').forEach((item,i)=>{
+      const n=item.querySelector('.pi-num');
+      if(n&&!n.dataset.orig) n.dataset.orig=n.textContent;
+      if(states[i]){item.classList.add('done');if(n){n.classList.add('done-num');n.classList.remove('urgent');n.textContent='✓';}}
+    });
+  }catch{}
+}
+restorePriorities();
+
+// ── STATUS HELPERS ────────────────────────────────────────────
+function setS(k,c,v){
+  const d=document.getElementById('s-'+k),sv=document.getElementById('sv-'+k);
+  if(d)d.className='sdot s-'+c;
+  if(sv)sv.textContent=v;
+}
+function setText(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
+function setBar(id,pct){const el=document.getElementById(id);if(el)el.style.width=Math.min(100,Math.max(0,pct))+'%';}
+function setLabel(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
+
+// ── HEALTH CHECK ──────────────────────────────────────────────
+async function checkHealth(){
+  try{await fetch(BACKEND+'/health',{mode:'cors'});setS('backend','green','✓ Online');}
+  catch{setS('backend','red','✗ Offline');}
+  try{await fetch('https://carely.fit',{mode:'no-cors'});setS('landing','green','✓ Live');}
+  catch{setS('landing','red','✗ Down');}
+  try{
+    const r=await fetch(SUPABASE_URL+'/rest/v1/',{headers:{'apikey':SUPABASE_KEY}});
+    setS('db',r.ok?'green':'amber',r.ok?'✓ Connected':'⚠ Check');
+  }catch{setS('db','red','✗ Unreachable');}
+}
+
+// ── METRICS FROM SUPABASE + DERIVED CALCULATIONS ─────────────
+const MRR_PER_PAID=9.99, FOUNDING_PRICE=5, FOUNDING_TOTAL=200, MRR_TARGET=20000;
+
+async function sbCount(table){
+  try{
+    const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=count`,{
+      headers:{'apikey':SUPABASE_KEY,'Prefer':'count=exact','Range':'0-0'}
+    });
+    if(!r.ok) return null;
+    const raw=r.headers.get('content-range')||'';
+    return parseInt(raw.split('/')[1])||0;
+  }catch{return null;}
+}
+
+async function sbCountWhere(table,filter){
+  try{
+    const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${filter}&select=count`,{
+      headers:{'apikey':SUPABASE_KEY,'Prefer':'count=exact','Range':'0-0'}
+    });
+    if(!r.ok) return null;
+    const raw=r.headers.get('content-range')||'';
+    return parseInt(raw.split('/')[1])||0;
+  }catch{return null;}
+}
+
+async function loadMetrics(){
+  // ── Time-based (always works) ──────────────────────────────
+  const elapsed=Math.max(0,Math.floor((Date.now()-LAUNCH)/86400000));
+  const left=Math.max(0,30-elapsed);
+  setText('day-num', Math.min(elapsed+1,30));
+  setLabel('days-left-label', left+' days left');
+  setBar('time-bar', (elapsed/30)*100);
+
+  // ── Total signups ──────────────────────────────────────────
+  const totalUsers = await sbCount('users');
+  if(totalUsers!==null) setText('total-users', totalUsers.toLocaleString());
+
+  // ── Paid / trial users from subscriptions table ────────────
+  const paidCount  = await sbCountWhere('subscriptions','status=eq.active');
+  const trialCount = await sbCountWhere('subscriptions','status=eq.trialing');
+  const foundingCount = await sbCountWhere('subscriptions','plan=eq.founding');
+
+  const paid  = paidCount  ?? 0;
+  const trial = trialCount ?? 0;
+  const founding = foundingCount ?? 0;
+
+  // ── Derived metrics ────────────────────────────────────────
+  // MRR = (paid - founding) * 9.99 + founding * 5.00
+  const regularPaid = Math.max(0, paid - founding);
+  const mrr = (regularPaid * MRR_PER_PAID) + (founding * FOUNDING_PRICE);
+  const mrrFmt = mrr===0 ? '$0' : '$'+mrr.toLocaleString('en-CA',{minimumFractionDigits:0,maximumFractionDigits:0});
+  const mrrPct = MRR_TARGET>0 ? Math.round((mrr/MRR_TARGET)*100) : 0;
+
+  const foundingLeft = Math.max(0, FOUNDING_TOTAL - founding);
+  const conversion = (trial+paid)>0 ? Math.round((paid/(trial+paid))*100)+'%' : '—';
+
+  // ── Update UI ──────────────────────────────────────────────
+  setText('mrr',     mrrFmt);
+  setText('mrr-big', mrrFmt);
+  setText('mrr-pct', mrrPct+'%');
+  setText('paid-users',  paid>0  ? paid  : '0');
+  setText('trial-users', trial>0 ? trial : '0');
+  setText('conversion',  conversion);
+  setText('founding-left', foundingLeft);
+
+  // Revenue progress bar
+  setBar('rev-bar', mrrPct);
+  const revLabel=document.getElementById('rev-label');
+  if(revLabel) revLabel.textContent=mrrFmt+' / $'+MRR_TARGET.toLocaleString();
+
+  // Founding spots bar
+  const foundingSold=FOUNDING_TOTAL-foundingLeft;
+  setBar('founding-bar', (foundingSold/FOUNDING_TOTAL)*100);
+  const foundingLabel=document.getElementById('founding-label');
+  if(foundingLabel) foundingLabel.textContent=foundingSold+' / '+FOUNDING_TOTAL+' sold';
+}
+
+async function loadLiveStats(){
+  try {
+    const res = await fetch('https://carely-backend-production.up.railway.app/admin/stats',{
+      headers:{'x-carely-secret':'carely-admin-2026'}
+    });
+    if(!res.ok) return;
+    const d = await res.json();
+    // Waitlist funnel
+    const el = id => document.getElementById(id);
+    if(el('live-leads')) el('live-leads').textContent = d.waitlist.total;
+    if(el('live-converted')) el('live-converted').textContent = d.waitlist.converted;
+    if(el('live-conv-rate')) el('live-conv-rate').textContent = d.waitlist.conversionRate + '% conv rate';
+    if(el('live-spots')) el('live-spots').textContent = d.revenue.spotsRemaining;
+    if(el('live-outreach')) el('live-outreach').textContent = d.outreach.sent;
+    if(el('live-outreach-sub')) el('live-outreach-sub').textContent = 'of ' + d.outreach.total + ' orgs';
+    if(el('f-welcome')) el('f-welcome').textContent = d.waitlist.welcomeSent;
+    if(el('f-day2')) el('f-day2').textContent = d.waitlist.day2Sent;
+    if(el('f-day4')) el('f-day4').textContent = d.waitlist.day4Sent;
+    if(el('f-converted')) el('f-converted').textContent = d.waitlist.converted;
+    // Revenue metrics
+    if(el('mrr')) el('mrr').textContent = '$'+d.revenue.mrr.toLocaleString();
+    if(el('mrr-big')) el('mrr-big').textContent = '$'+d.revenue.mrr.toLocaleString();
+    if(el('paid-users')) el('paid-users').textContent = d.users.founding + d.users.paid;
+    if(el('trial-users')) el('trial-users').textContent = d.users.trial;
+    if(el('total-users')) el('total-users').textContent = d.users.total;
+    if(el('founding-left')) el('founding-left').textContent = d.revenue.spotsRemaining;
+    if(el('founding-label')) el('founding-label').textContent = (200 - d.revenue.spotsRemaining) + ' / 200 sold';
+    setBar('founding-bar', ((200 - d.revenue.spotsRemaining)/200)*100);
+    const mrrPct = Math.min(100, Math.round((d.revenue.mrr/20000)*100));
+    if(el('mrr-pct')) el('mrr-pct').textContent = mrrPct+'%';
+    if(el('rev-label')) el('rev-label').textContent = '$'+d.revenue.mrr.toLocaleString()+' / $20,000';
+    setBar('rev-bar', mrrPct);
+  } catch(e){ console.warn('[HQ] Stats fetch failed', e); }
+}
+
+async function loadAll(){await checkHealth();await loadMetrics();await loadLiveStats();}
+loadAll();
+setInterval(loadAll,60000);
+
+function updateHQCountdown(){
+  const launch=new Date('2026-05-05T07:00:00Z');
+  const diff=launch-new Date();
+  if(diff<=0){document.getElementById('hq-days').textContent='00';return;}
+  document.getElementById('hq-days').textContent=String(Math.floor(diff/86400000)).padStart(2,'0');
+  document.getElementById('hq-hours').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('hq-mins').textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  document.getElementById('hq-secs').textContent=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+}
+updateHQCountdown();
+setInterval(updateHQCountdown,1000);
+
+function offTab(name,el){
+  document.querySelectorAll('.off-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.off-content').forEach(function(c){c.classList.remove('active');});
+  if(el) el.classList.add('active');
+  var p=document.getElementById('off-'+name);
+  if(p) p.classList.add('active');
+}
+function offCh(name,el){
+  document.querySelectorAll('.off-ch').forEach(function(c){c.classList.remove('active');});
+  document.querySelectorAll('.off-ch-content').forEach(function(c){c.style.display='none';});
+  if(el) el.classList.add('active');
+  var p=document.getElementById('och-'+name);
+  if(p){ p.style.display='flex'; }
+}
+
+// ══════════════════════════════════════════════════════════
+// THREE.JS 3D OFFICE ENGINE
+// ══════════════════════════════════════════════════════════
+(function(){
+'use strict';
+var _inited = false;
+
+window.init3D = function() {
+  if (_inited || typeof THREE === 'undefined') return;
+  var wrap = document.getElementById('three-wrap3d');
+  if (!wrap) return;
+  _inited = true;
+
+  var W = wrap.offsetWidth, H = wrap.offsetHeight;
+  var VIEW = 22;
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xdde4ec);
+  scene.fog = new THREE.FogExp2(0xdde4ec, 0.008);
+
+  var camera = new THREE.OrthographicCamera(
+    -VIEW*(W/H), VIEW*(W/H), VIEW, -VIEW, 0.1, 500
+  );
+  camera.position.set(35, 35, 35);
+  camera.lookAt(0, 0, 0);
+
+  var renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.1;
+  renderer.domElement.style.display = 'block';
+  renderer.domElement.style.cursor = 'grab';
+  wrap.appendChild(renderer.domElement);
+
+  window.addEventListener('resize', function() {
+    W = wrap.offsetWidth; H = wrap.offsetHeight;
+    camera.left   = -VIEW*(W/H); camera.right  = VIEW*(W/H);
+    camera.top    = VIEW;        camera.bottom = -VIEW;
+    camera.updateProjectionMatrix();
+    renderer.setSize(W, H);
+  });
+
+  // LIGHTING
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  var sun = new THREE.DirectionalLight(0xfff4e0, 1.1);
+  sun.position.set(20, 40, 20);
+  sun.castShadow = true;
+  sun.shadow.camera.near = 0.5; sun.shadow.camera.far = 200;
+  sun.shadow.camera.left = sun.shadow.camera.bottom = -60;
+  sun.shadow.camera.right = sun.shadow.camera.top = 60;
+  sun.shadow.mapSize.width = sun.shadow.mapSize.height = 2048;
+  sun.shadow.bias = -0.001;
+  scene.add(sun);
+  var fill = new THREE.DirectionalLight(0xc8e0ff, 0.3);
+  fill.position.set(-15, 20, -15);
+  scene.add(fill);
+
+  // MATERIALS
+  function mat(color, rough, metal) {
+    return new THREE.MeshStandardMaterial({ color:color, roughness:rough!==undefined?rough:0.8, metalness:metal||0 });
+  }
+  var WALL_MAT = mat(0xfafafa, 0.9);
+  var COR_MAT  = mat(0x8a9aa5, 0.85); // darker so corridors are visually distinct
+  var BASE_MAT = mat(0xc8cdd5, 0.95);
+  var WALL_H = 2.6, WALL_T = 0.22, FLOOR_T = 0.18;
+
+  // GEOMETRY HELPERS
+  function box(w, h, d, material) {
+    var m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), material);
+    m.castShadow = true; m.receiveShadow = true;
+    return m;
+  }
+  function addWall(parent, x, y, z, w, h, d, material) {
+    var m = box(w, h, d, material || WALL_MAT);
+    m.position.set(x, y, z);
+    parent.add(m);
+    return m;
+  }
+
+  // SPRITES
+  function makeSprite(text, bgColor, textColor, scale) {
+    var c = document.createElement('canvas'); c.width=256; c.height=64;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = bgColor||'rgba(0,0,0,0)'; ctx.fillRect(0,0,256,64);
+    ctx.font='bold 22px "Segoe UI",Arial'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle = textColor||'#333'; ctx.fillText(text,128,32);
+    var tex = new THREE.CanvasTexture(c);
+    var sp = new THREE.Sprite(new THREE.SpriteMaterial({map:tex,depthTest:false,transparent:true}));
+    sp.scale.set(scale||4, scale?scale/4:1, 1);
+    return sp;
+  }
+  function makeNameTag(name, color) {
+    var c = document.createElement('canvas'); c.width=192; c.height=52;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle='rgba(10,12,22,0.82)';
+    ctx.beginPath(); ctx.roundRect(4,4,184,44,8); ctx.fill();
+    ctx.fillStyle=color;
+    ctx.beginPath(); ctx.roundRect(4,4,6,44,8); ctx.fill();
+    ctx.font='bold 20px "Segoe UI",Arial'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle='#fff'; ctx.fillText(name,100,26);
+    var tex = new THREE.CanvasTexture(c);
+    var sp = new THREE.Sprite(new THREE.SpriteMaterial({map:tex,depthTest:false,transparent:true}));
+    sp.scale.set(2.2,0.6,1);
+    return sp;
+  }
+  function makeBubble(text) {
+    var c = document.createElement('canvas'); c.width=320; c.height=80;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle='rgba(255,255,255,0.95)';
+    ctx.beginPath(); ctx.roundRect(4,4,312,60,12); ctx.fill();
+    ctx.strokeStyle='rgba(0,0,0,0.12)'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.roundRect(4,4,312,60,12); ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,0.95)';
+    ctx.beginPath(); ctx.moveTo(150,64); ctx.lineTo(170,64); ctx.lineTo(160,76); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#222'; ctx.font='bold 18px "Segoe UI",Arial'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(text,160,34);
+    var tex = new THREE.CanvasTexture(c);
+    var sp = new THREE.Sprite(new THREE.SpriteMaterial({map:tex,depthTest:false,transparent:true}));
+    sp.scale.set(3.5,0.88,1);
+    return sp;
+  }
+
+  // ROOM BUILDER
+  function buildRoom(rx, rz, rw, rd, floorColor, name, openSides) {
+    var g = new THREE.Group();
+    var fl = box(rw, FLOOR_T, rd, mat(floorColor, 0.95));
+    fl.position.set(0, -FLOOR_T/2, 0); g.add(fl);
+    var trimM = mat(0xaaaaaa, 0.9);
+    var trimL = box(rw+WALL_T*2, 0.04, WALL_T*0.5, trimM);
+    trimL.position.set(0, 0, rd/2+WALL_T*0.25); g.add(trimL);
+    var opens = openSides||[], doorW=2.2;
+    if (opens.indexOf('N')<0) { addWall(g,0,WALL_H/2,-rd/2-WALL_T/2,rw,WALL_H,WALL_T); }
+    else { var hw=(rw-doorW)/2; addWall(g,-(rw/2-hw/2),WALL_H/2,-rd/2-WALL_T/2,hw,WALL_H,WALL_T); addWall(g,rw/2-hw/2,WALL_H/2,-rd/2-WALL_T/2,hw,WALL_H,WALL_T); }
+    if (opens.indexOf('S')<0) { addWall(g,0,WALL_H/2,rd/2+WALL_T/2,rw,WALL_H,WALL_T); }
+    else { var hw2=(rw-doorW)/2; addWall(g,-(rw/2-hw2/2),WALL_H/2,rd/2+WALL_T/2,hw2,WALL_H,WALL_T); addWall(g,rw/2-hw2/2,WALL_H/2,rd/2+WALL_T/2,hw2,WALL_H,WALL_T); }
+    if (opens.indexOf('W')<0) { addWall(g,-rw/2-WALL_T/2,WALL_H/2,0,WALL_T,WALL_H,rd+WALL_T*2); }
+    else { var hd=(rd-doorW)/2; addWall(g,-rw/2-WALL_T/2,WALL_H/2,-(rd/2-hd/2),WALL_T,WALL_H,hd); addWall(g,-rw/2-WALL_T/2,WALL_H/2,rd/2-hd/2,WALL_T,WALL_H,hd); }
+    if (opens.indexOf('E')<0) { addWall(g,rw/2+WALL_T/2,WALL_H/2,0,WALL_T,WALL_H,rd+WALL_T*2); }
+    else { var hd2=(rd-doorW)/2; addWall(g,rw/2+WALL_T/2,WALL_H/2,-(rd/2-hd2/2),WALL_T,WALL_H,hd2); addWall(g,rw/2+WALL_T/2,WALL_H/2,rd/2-hd2/2,WALL_T,WALL_H,hd2); }
+    var lbl = makeSprite(name, null, '#333', 4);
+    lbl.position.set(0, 0.05, 0); g.add(lbl);
+    g.position.set(rx, 0, rz); scene.add(g);
+    return g;
+  }
+
+  // GROUND
+  var ground = box(100, 0.1, 100, BASE_MAT);
+  ground.position.set(0,-0.1,0); scene.add(ground);
+
+  function corridor(x, z, w, d) {
+    var c = box(w, 0.05, d, COR_MAT);
+    c.position.set(x, 0.01, z); c.receiveShadow=true; scene.add(c);
+  }
+  corridor(5,-7.5,40,3); corridor(5,7.5,40,3);
+  corridor(-7.5,0,3,35); corridor(6.5,0,3,35); corridor(21,0,3,35);
+
+  buildRoom(-15,-13,8,7,0xdce8fb,'OPS ROOM',['S','E']);
+  buildRoom(0,-13,11,7,0xfffde7,'FOUNDER SUITE',['S','W','E']);
+  buildRoom(15,-13,8,7,0xe8f5e9,'GYM',['S','W']);
+  buildRoom(-15,0,8,7,0xf3e5f5,'MARKETING',['N','S','E']);
+  buildRoom(0,0,11,7,0xe8eaf6,'CLAUDE HQ',['N','S','W','E']);
+  buildRoom(15,0,8,7,0xfff8e1,'MEETING',['N','S','W','E']);
+  buildRoom(24,0,7,7,0xe0f2f1,'ANALYTICS',['N','S','W']);
+  buildRoom(-15,13,8,7,0xfff3e0,'CONTENT LAB',['N','E']);
+  buildRoom(0,13,11,7,0xdcedc8,'CHILL ROOM',['N','W','E']);
+  buildRoom(15,13,8,7,0xe0f7fa,'OUTREACH',['N','W','E']);
+  buildRoom(24,13,7,7,0xfce4ec,'SALES',['N','W']);
+
+  // FURNITURE
+  function desk(x, z, rotation, color) {
+    var g = new THREE.Group();
+    var top = box(2.4,0.1,1.0,mat(color||0xd4a76a,0.7)); top.position.set(0,0.75,0); g.add(top);
+    [[0.9,0.3],[0.9,-0.3],[-0.9,0.3],[-0.9,-0.3]].forEach(function(pos){
+      var l=box(0.1,0.75,0.1,mat(0x777777,0.6)); l.position.set(pos[0],0.375,pos[1]); g.add(l);
+    });
+    var mon=box(0.9,0.65,0.06,mat(0x111111,0.3,0.7)); mon.position.set(0,1.18,-0.3); g.add(mon);
+    var sc=box(0.8,0.5,0.02,mat(0x1a3a5c,0.1)); sc.position.set(0,1.18,-0.27); g.add(sc);
+    var seat=box(1.0,0.1,0.9,mat(0x4a5568,0.8)); seat.position.set(0,0.45,0.8); g.add(seat);
+    var back=box(1.0,0.7,0.08,mat(0x4a5568,0.8)); back.position.set(0,0.9,1.2); g.add(back);
+    g.position.set(x,0,z); if(rotation) g.rotation.y=rotation;
+    g.traverse(function(c){if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); scene.add(g);
+  }
+  function couch(x, z, rotation) {
+    var g = new THREE.Group();
+    var base=box(3.5,0.45,1.4,mat(0x4c7a5f,0.85)); base.position.set(0,0.225,0); g.add(base);
+    var back=box(3.5,0.7,0.2,mat(0x3d6350,0.85)); back.position.set(0,0.725,-0.6); g.add(back);
+    var armL=box(0.2,0.6,1.4,mat(0x3d6350,0.85)); armL.position.set(-1.65,0.475,0); g.add(armL);
+    var armR=armL.clone(); armR.position.set(1.65,0.475,0); g.add(armR);
+    for(var i=-1;i<=1;i++){var cush=box(1.0,0.18,1.1,mat(0x5a8a6f,0.9));cush.position.set(i*1.05,0.54,0.1);g.add(cush);}
+    g.position.set(x,0,z); if(rotation) g.rotation.y=rotation;
+    g.traverse(function(c){if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); scene.add(g);
+  }
+  function tv(x, z, rotation) {
+    var g = new THREE.Group();
+    var back=box(3.0,1.8,0.12,mat(0x111111,0.2,0.5)); back.position.set(0,1.5,0); g.add(back);
+    var sc=box(2.7,1.55,0.05,mat(0x0a1628,0.05)); sc.position.set(0,1.5,0.07); g.add(sc);
+    var stand=box(0.15,0.8,0.15,mat(0x333333,0.4,0.6)); stand.position.set(0,0.4,0); g.add(stand);
+    var base2=box(0.9,0.08,0.4,mat(0x333333,0.4,0.6)); base2.position.set(0,0.05,0); g.add(base2);
+    g.position.set(x,0,z); if(rotation) g.rotation.y=rotation;
+    g.traverse(function(c){if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); scene.add(g);
+  }
+  function meetingTable(x, z) {
+    var g = new THREE.Group();
+    var top2=new THREE.Mesh(new THREE.CylinderGeometry(2.2,2.2,0.12,32),mat(0xb5854a,0.7));
+    top2.position.y=0.8; top2.castShadow=top2.receiveShadow=true; g.add(top2);
+    var leg2=new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.15,0.8,12),mat(0x666666,0.5,0.3));
+    leg2.position.y=0.4; g.add(leg2);
+    for(var i=0;i<8;i++){
+      var angle=(i/8)*Math.PI*2,r=2.8,cg=new THREE.Group();
+      var cs=box(0.8,0.1,0.75,mat(0xeceff1,0.85)); cs.position.set(0,0.45,0); cg.add(cs);
+      var cb=box(0.8,0.6,0.08,mat(0xeceff1,0.85)); cb.position.set(0,0.85,-0.35); cg.add(cb);
+      cg.position.set(Math.sin(angle)*r,0,Math.cos(angle)*r); cg.rotation.y=angle;
+      cg.traverse(function(c){if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); g.add(cg);
+    }
+    g.position.set(x,0,z); g.traverse(function(c){if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); scene.add(g);
+  }
+  function treadmill(x, z) {
+    var g = new THREE.Group();
+    var base3=box(1.8,0.3,0.85,mat(0x2d2d2d,0.5)); base3.position.y=0.15; g.add(base3);
+    var belt=box(1.4,0.06,0.6,mat(0x444444,0.8)); belt.position.set(0,0.33,0.05); g.add(belt);
+    var hL=box(0.05,0.9,0.05,mat(0x888888,0.3,0.5)); hL.position.set(-0.6,0.75,-0.2); g.add(hL);
+    var hR=hL.clone(); hR.position.set(0.6,0.75,-0.2); g.add(hR);
+    var hBar=box(1.2,0.05,0.05,mat(0x888888,0.3,0.5)); hBar.position.set(0,1.15,-0.2); g.add(hBar);
+    var sc2=box(0.5,0.3,0.04,mat(0x111111,0.1)); sc2.position.set(0,1.35,-0.2); g.add(sc2);
+    g.position.set(x,0,z); g.traverse(function(c){if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); scene.add(g);
+  }
+  function serverRack(x, z) {
+    var g = new THREE.Group();
+    var rack=box(0.8,2.0,0.7,mat(0x1a1a2e,0.4,0.3)); rack.position.set(0,1.0,0); g.add(rack);
+    for(var i=0;i<6;i++){
+      var unit=box(0.72,0.22,0.05,mat(0x1e3a5f,0.3)); unit.position.set(0,0.25+i*0.28,-0.33); g.add(unit);
+      var led=box(0.06,0.04,0.02,mat(0x00ff88,0.1)); led.position.set(0.28,0.25+i*0.28,-0.36); g.add(led);
+    }
+    g.position.set(x,0,z); g.traverse(function(c){if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); scene.add(g);
+  }
+  function plant(x, z) {
+    var g = new THREE.Group();
+    var pot=new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.18,0.4,12),mat(0xc4875a,0.9)); pot.position.y=0.2; g.add(pot);
+    var leaves=new THREE.Mesh(new THREE.SphereGeometry(0.45,8,8),mat(0x2d7a2d,0.9)); leaves.position.y=0.85; leaves.scale.set(1,1.2,1); g.add(leaves);
+    pot.castShadow=pot.receiveShadow=leaves.castShadow=leaves.receiveShadow=true;
+    g.position.set(x,0,z); scene.add(g);
+  }
+  function weightRack(x, z) {
+    var g = new THREE.Group();
+    var rack2=box(1.8,0.8,0.5,mat(0x444444,0.6)); rack2.position.y=0.4; g.add(rack2);
+    [[0xe53935,0.3],[0xfb8c00,0.25],[0xfdd835,0.2]].forEach(function(d,i){
+      var wt=new THREE.Mesh(new THREE.CylinderGeometry(d[1],d[1],0.15,16),mat(d[0],0.7));
+      wt.rotation.z=Math.PI/2; wt.position.set(-0.6+i*0.6,0.9,0); wt.castShadow=true; g.add(wt);
+    });
+    g.position.set(x,0,z); g.traverse(function(c){if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); scene.add(g);
+  }
+
+  // PLACE FURNITURE
+  desk(-17,-14.5,0); desk(-13,-13,Math.PI); serverRack(-17,-12); plant(-12.5,-16);
+  desk(-1.5,-14.5,0); desk(1.5,-14.5,0); desk(-1.5,-12,Math.PI); plant(4,-16); plant(-4.5,-16);
+  treadmill(14,-14.5); treadmill(16.5,-14.5); weightRack(13.5,-12);
+  desk(-17,-1.5,0); desk(-13,-1.5,0); desk(-15,1.5,Math.PI);
+  desk(-1.5,-1.5,0); desk(1.5,-1.5,0); desk(-1.5,1.5,Math.PI); desk(1.5,1.5,Math.PI); serverRack(4,-2);
+  meetingTable(15,0);
+  desk(23,-1,0); desk(25,-1,0); desk(23,1.5,Math.PI);
+  desk(-17,11.5,0); desk(-13,11.5,0); desk(-15,14,Math.PI);
+  couch(-1,13.5,0); tv(-1,16.3,0); plant(4.5,10.5); plant(-5.5,10.5);
+  desk(14,11.5,0); desk(16.5,11.5,0); desk(15,14,Math.PI);
+  desk(23,11.5,0); desk(25,11.5,0); desk(23,14,Math.PI);
+
+  // AGENTS
+  var ST = {W:0,MV:1,MT:2,CH:3,GY:4};
+  var ST_LBL = ['Working','Walking...','In Meeting','Chilling','At Gym'];
+  var AGENT_DEFS = [
+    {name:'Prabh',   title:'Co-Founder · Visionary', color:0xf687b3,hexStr:'#f687b3',hx:-1.5,hz:-14.5,room:'founder'},
+    {name:'TJ',      title:'Co-Founder · Backend',   color:0xf6ad55,hexStr:'#f6ad55',hx:1.5, hz:-14.5,room:'founder'},
+    {name:'Claude',  title:'CEO / COO / CTO',         color:0x7c7cf7,hexStr:'#7c7cf7',hx:-1.5,hz:1.5,  room:'claude'},
+    {name:'Arjun',   title:'OPS · Infra & Deploy',    color:0x63b3ed,hexStr:'#63b3ed',hx:-17, hz:-14.5,room:'ops'},
+    {name:'Priya',   title:'Marketing · Campaigns',  color:0xb794f4,hexStr:'#b794f4',hx:-17, hz:-1.5, room:'mktg'},
+    {name:'Ishaan',  title:'Content · SEO & Blog',   color:0xfbd38d,hexStr:'#fbd38d',hx:-17, hz:11.5, room:'content'},
+    {name:'Rohan',   title:'Analytics · GA4',        color:0x81e6d9,hexStr:'#81e6d9',hx:23,  hz:-1,   room:'anlytcs'},
+    {name:'Nisha',   title:'Outreach · B2B & Email', color:0x4fd1c5,hexStr:'#4fd1c5',hx:14,  hz:11.5, room:'outreach'},
+    {name:'Vikram',  title:'Sales · Revenue',        color:0xfc8181,hexStr:'#fc8181',hx:23,  hz:11.5, room:'sales'},
+  ];
+  // Spread meeting/chill/gym seats so agents don't stack
+  var DEST = {
+    meeting:[{x:13,z:-1.5},{x:15,z:0},{x:17,z:1.5},{x:13,z:1.5},{x:17,z:-1.5}],
+    chill:  [{x:-2.5,z:12.5},{x:0,z:12.5},{x:2.5,z:12.5},{x:-1.5,z:14},{x:1.5,z:14}],
+    gym:    [{x:13.5,z:-14.5},{x:15,z:-14.5},{x:16.5,z:-14.5},{x:13.5,z:-12.5},{x:15,z:-12.5}],
+  };
+
+  // Track which destination seats are occupied to prevent stacking
+  var _occupied = {};
+  function claimSeat(key){_occupied[key]=true;}
+  function releaseSeat(key){delete _occupied[key];}
+  function pickSeat(destinations) {
+    for(var i=0;i<destinations.length;i++){
+      var k=destinations[i].x+'_'+destinations[i].z;
+      if(!_occupied[k]) return destinations[i];
+    }
+    // all taken — scatter with jitter
+    var base=destinations[Math.floor(Math.random()*destinations.length)];
+    return {x:base.x+(Math.random()-0.5)*1.5, z:base.z+(Math.random()-0.5)*1.5};
+  }
+
+  // ── CORRIDOR-GRAPH NAVIGATION ──────────────────────────────
+  // Each room: door = wall opening position, ent = first step inside corridor,
+  // col = which vertical corridor to use, row = top/mid/bot
+  var H_TOP=-7.5, H_BOT=7.5; // horizontal corridor Z positions
+  var NAV = {
+    ops:     {dX:-11,  dZ:-13,  cX:-7.5, cZ:-13,  col:-7.5, row:'top'},
+    founder: {dX:0,    dZ:-9.5, cX:0,    cZ:-7.5, col:6.5,  row:'top'},
+    gym:     {dX:11,   dZ:-13,  cX:6.5,  cZ:-13,  col:6.5,  row:'top'},
+    mktg:    {dX:-11,  dZ:0,    cX:-7.5, cZ:0,    col:-7.5, row:'mid'},
+    claude:  {dX:5.5,  dZ:0,    cX:6.5,  cZ:0,    col:6.5,  row:'mid'},
+    meeting: {dX:11,   dZ:0,    cX:6.5,  cZ:0,    col:6.5,  row:'mid'},
+    anlytcs: {dX:20.5, dZ:0,    cX:21,   cZ:0,    col:21,   row:'mid'},
+    content: {dX:-11,  dZ:13,   cX:-7.5, cZ:13,   col:-7.5, row:'bot'},
+    chill:   {dX:0,    dZ:9.5,  cX:0,    cZ:7.5,  col:6.5,  row:'bot'},
+    outreach:{dX:11,   dZ:13,   cX:6.5,  cZ:13,   col:6.5,  row:'bot'},
+    sales:   {dX:20.5, dZ:13,   cX:21,   cZ:13,   col:21,   row:'bot'},
+  };
+
+  function dedupe(pts) {
+    var out=[];
+    pts.forEach(function(p){
+      if(!out.length){out.push(p);return;}
+      var last=out[out.length-1];
+      if(Math.abs(last.x-p.x)>0.1||Math.abs(last.z-p.z)>0.1) out.push(p);
+    });
+    return out;
+  }
+
+  function buildAgentPath(fromRoom, toX, toZ, toRoom) {
+    var f=NAV[fromRoom], t=NAV[toRoom];
+    if(!f||!t) return [{x:toX,z:toZ}];
+    var path=[];
+
+    // 1. Exit current room to corridor
+    path.push({x:f.dX, z:f.dZ});   // doorway
+    path.push({x:f.cX, z:f.cZ});   // corridor entry
+
+    var fc=f.col, tc=t.col, fr=f.row, tr=t.row;
+
+    if(fc===tc) {
+      // Same vertical corridor — travel along it
+      if(fr==='top' && tr==='mid')       { path.push({x:fc,z:H_TOP}); }
+      else if(fr==='top' && tr==='bot')  { path.push({x:fc,z:H_TOP}); path.push({x:fc,z:H_BOT}); }
+      else if(fr==='mid' && tr==='top')  { path.push({x:fc,z:H_TOP}); }
+      else if(fr==='mid' && tr==='bot')  { path.push({x:fc,z:H_BOT}); }
+      else if(fr==='bot' && tr==='mid')  { path.push({x:fc,z:H_BOT}); }
+      else if(fr==='bot' && tr==='top')  { path.push({x:fc,z:H_BOT}); path.push({x:fc,z:H_TOP}); }
+      // same row + same col = no intermediate needed
+    } else {
+      // Different columns: pick horizontal corridor, cross, then descend
+      var useH;
+      if(fr==='top'||tr==='top') useH=H_TOP;
+      else if(fr==='bot'||tr==='bot') useH=H_BOT;
+      else useH=H_TOP; // both mid: go up through top horiz
+
+      // From room to the horizontal corridor
+      if(fr==='top')      path.push({x:fc,z:H_TOP});
+      else if(fr==='bot') path.push({x:fc,z:H_BOT});
+      else                path.push({x:fc,z:useH});
+
+      // Cross horizontal corridor
+      path.push({x:tc,z:useH});
+
+      // From horiz corridor down to target's corridor entry level
+      if(tr==='top'&&useH!==H_TOP)     path.push({x:tc,z:H_TOP});
+      else if(tr==='bot'&&useH!==H_BOT) path.push({x:tc,z:H_BOT});
+      // mid rooms: corridor entry is on the vertical, already reached
+    }
+
+    // 2. Enter target room
+    path.push({x:t.cX, z:t.cZ});   // corridor exit near target
+    path.push({x:t.dX, z:t.dZ});   // doorway
+    path.push({x:toX,  z:toZ});     // destination inside room
+
+    return dedupe(path);
+  }
+
+  function createCharacterMesh(color, name) {
+    var g = new THREE.Group();
+    var legMat = mat(new THREE.Color(color).multiplyScalar(0.65).getHex(), 0.8);
+    var legL=box(0.22,0.7,0.2,legMat); legL.position.set(-0.14,0.35,0); g.add(legL);
+    var legR=box(0.22,0.7,0.2,legMat); legR.position.set(0.14,0.35,0); g.add(legR);
+    var bodyMesh=box(0.55,0.8,0.35,mat(color,0.7)); bodyMesh.position.set(0,1.1,0); g.add(bodyMesh);
+    var headMesh=box(0.48,0.48,0.44,mat(0xf9c8b0,0.8)); headMesh.position.set(0,1.74,0); g.add(headMesh);
+    var eyeMat=mat(0x1a1a2e,0.5);
+    var eyeL=box(0.1,0.1,0.05,eyeMat); eyeL.position.set(-0.13,1.76,-0.22); g.add(eyeL);
+    var eyeR=box(0.1,0.1,0.05,eyeMat); eyeR.position.set(0.13,1.76,-0.22); g.add(eyeR);
+    var hair=box(0.5,0.14,0.46,mat(color,0.6)); hair.position.set(0,2.0,0); g.add(hair);
+    var tag=makeNameTag(name,'#'+new THREE.Color(color).getHexString());
+    tag.position.set(0,2.6,0); g.add(tag);
+    g.traverse(function(c){if(c.isMesh&&c!==tag){c.castShadow=true;c.receiveShadow=true;}});
+    return {group:g,legL:legL,legR:legR,bodyMesh:bodyMesh,tag:tag};
+  }
+
+  var WMSGS = {
+    'Prabh':   ['Mapping the vision 🗺️','Who is our Day 1 customer?','Outreach script v3','Content angles for launch week'],
+    'TJ':      ['Schema migration ready ⚙️','Railway health: green 🚀','API latency < 200ms','Supabase RLS policies — done'],
+    'Claude':  ['Critical path: App Store submit','9 agents, 1 mission — May 5','Bottleneck analysis running 📊','All systems aligned ⚡'],
+    // Arjun thinks like Werner Vogels — "everything fails all the time, build for it"
+    'Arjun':   ['Everything fails — plan for it','Zero-downtime deploy strategy','Railway uptime 99.9% ✅','Supabase schema is the last blocker ⚠️'],
+    // Priya thinks like Hormozi — value stacking, irresistible offers
+    'Priya':   ['Make the offer so good they feel stupid saying no','$5/mo founding — $59 value stack','Hook: what if grandma forgets her meds tonight?','TikTok → landing → waitlist funnel live'],
+    // Ishaan thinks like Brian Dean — skyscraper technique, data-backed content
+    'Ishaan':  ['Skyscraper every competitor post','5,710 monthly searches in our lane 🎯','Keyword intent: caregiver guilt is the hook','SEO compound interest starts now'],
+    // Rohan thinks like Avinash Kaushik — data storytelling, actionable insights
+    'Rohan':   ['Data without action is just trivia','Conversion funnel: landing → CTA → Stripe','GA4 event: app_store_click firing ✅','Bounce rate tells us the hook needs work'],
+    // Nisha thinks like Aaron Ross — predictable revenue, cold email systems
+    'Nisha':   ['Pipeline = predictable revenue','BC Pharmacy: $500–2K/mo per deal 📧','Personalize the first line — everything else is noise','Senior living: 80 residents × $10 = $800/mo'],
+    // Vikram thinks like Hormozi — Grand Slam offers, remove friction
+    'Vikram':  ['Remove every step between want and buy','200 founding spots = scarcity + urgency 💳','Objection: "is it safe?" — show the family side','Free trial removes all risk — close the hesitant'],
+  };
+  var MMSG=['May 5 sync 🚀','Sprint standup','Reviewing metrics','Launch checklist'];
+  var CMSG=['☕ Coffee break','😌 Recharging','📱 Quick scroll'];
+  var GMSG=['💪 Levelling up','🏃 Training hard','⚡ Power mode'];
+  function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+
+  var AGENTS = AGENT_DEFS.map(function(def,i){
+    var mesh=createCharacterMesh(def.color,def.name);
+    mesh.group.position.set(def.hx,0,def.hz);
+    scene.add(mesh.group);
+    claimSeat(def.hx+'_'+def.hz); // reserve home seat on load
+    var bubble=makeBubble('Working...');
+    bubble.position.set(def.hx,3.4,def.hz); bubble.visible=false; scene.add(bubble);
+    return {
+      name:def.name,title:def.title,color:def.color,hexStr:def.hexStr,
+      mesh:mesh,bubble:bubble,
+      x:def.hx,z:def.hz,hx:def.hx,hz:def.hz,hRoom:def.room,curRoom:def.room,
+      state:ST.W,waypoints:[],onArrive:null,seatKey:null,
+      stateTimer:300+i*120+Math.floor(Math.random()*200), // stagger so no one leaves at once
+      bubbleTimer:0,frame:Math.floor(Math.random()*120),
+    };
+  });
+
+  function showBubble(ag, text) {
+    var sc2=ag.bubble.parent; if(sc2) sc2.remove(ag.bubble);
+    ag.bubble=makeBubble(text); ag.bubble.visible=true;
+    scene.add(ag.bubble); ag.bubbleTimer=200;
+  }
+  function sendAgentTo(ag,tx,tz,toRoom,arrState,msg){
+    if(ag.seatKey){releaseSeat(ag.seatKey);ag.seatKey=null;}
+    var newKey=tx+'_'+tz;
+    claimSeat(newKey); ag.seatKey=newKey;
+    ag.waypoints=buildAgentPath(ag.curRoom,tx,tz,toRoom);
+    ag.state=ST.MV; if(msg) showBubble(ag,msg);
+    ag.onArrive=function(){
+      ag.state=arrState; ag.curRoom=toRoom;
+      if(arrState===ST.MT) showBubble(ag,rnd(MMSG));
+      if(arrState===ST.CH) showBubble(ag,rnd(CMSG));
+      if(arrState===ST.GY) showBubble(ag,rnd(GMSG));
+    };
+  }
+  function sendHome(ag){
+    if(ag.seatKey){releaseSeat(ag.seatKey);ag.seatKey=null;}
+    var hKey=ag.hx+'_'+ag.hz;
+    claimSeat(hKey); ag.seatKey=hKey;
+    ag.waypoints=buildAgentPath(ag.curRoom,ag.hx,ag.hz,ag.hRoom);
+    ag.state=ST.MV; showBubble(ag,'→ Back to desk');
+    ag.stateTimer=350+Math.floor(Math.random()*350);
+    ag.onArrive=function(){ag.state=ST.W;ag.curRoom=ag.hRoom;};
+  }
+
+  // PAN CONTROLS
+  var isDragging=false, lastX=0, lastZ=0;
+  var panTarget=new THREE.Vector3(0,0,0);
+  renderer.domElement.addEventListener('mousedown',function(e){isDragging=true;lastX=e.clientX;lastZ=e.clientY;});
+  window.addEventListener('mouseup',function(){isDragging=false;});
+  window.addEventListener('mousemove',function(e){
+    if(!isDragging) return;
+    var dx=(e.clientX-lastX)*0.05, dz=(e.clientY-lastZ)*0.05;
+    panTarget.x-=dx; panTarget.z-=dz; lastX=e.clientX; lastZ=e.clientY;
+  });
+  renderer.domElement.addEventListener('wheel',function(e){
+    VIEW=Math.max(10,Math.min(45,VIEW+e.deltaY*0.02));
+    camera.left=-VIEW*(W/H); camera.right=VIEW*(W/H);
+    camera.top=VIEW; camera.bottom=-VIEW;
+    camera.updateProjectionMatrix();
+  },{passive:true});
+
+  // SIDEBAR UPDATE — uses HQ's o3* CSS classes
+  var ST_CLS=['o3s0','o3s1','o3s2','o3s3','o3s4'];
+  function updateSidebar(){
+    var list=document.getElementById('o3aglist');
+    if(!list) return;
+    while(list.firstChild) list.removeChild(list.firstChild);
+    AGENTS.forEach(function(ag){
+      var row=document.createElement('div'); row.className='o3ag';
+      var dot=document.createElement('div'); dot.className='o3dot'; dot.style.background=ag.hexStr; dot.style.boxShadow='0 0 6px '+ag.hexStr;
+      var info=document.createElement('div'); info.className='o3info';
+      var nm=document.createElement('div'); nm.className='o3name'; nm.textContent=ag.name;
+      var rl=document.createElement('div'); rl.className='o3role'; rl.textContent=ag.title;
+      var st=document.createElement('div'); st.className='o3st '+ST_CLS[ag.state]; st.textContent=ST_LBL[ag.state];
+      info.appendChild(nm); info.appendChild(rl);
+      row.appendChild(dot); row.appendChild(info); row.appendChild(st);
+      list.appendChild(row);
+    });
+  }
+
+  // ANIMATION LOOP
+  var clock=new THREE.Clock(), frameN=0, SPEED=5.5;
+  function animate(){
+    requestAnimationFrame(animate);
+    var dt=clock.getDelta();
+    frameN++;
+    var targetCamX=panTarget.x+35, targetCamZ=panTarget.z+35;
+    camera.position.x+=(targetCamX-camera.position.x)*0.08;
+    camera.position.z+=(targetCamZ-camera.position.z)*0.08;
+    camera.lookAt(panTarget.x,0,panTarget.z);
+    AGENTS.forEach(function(ag){
+      ag.frame++;
+      if(ag.bubbleTimer>0){ag.bubbleTimer--;if(ag.bubbleTimer===0) ag.bubble.visible=false;}
+      if(ag.state!==ST.MV) ag.stateTimer--;
+      if(ag.state===ST.W&&frameN%240===0&&Math.random()<0.4){
+        showBubble(ag,rnd(WMSGS[ag.name]||['Working...']));
+      }
+      if(ag.stateTimer<=0){
+        if(ag.state===ST.W){
+          var roll=Math.random();
+          if(roll<0.28){var ms=pickSeat(DEST.meeting);sendAgentTo(ag,ms.x,ms.z,'meeting',ST.MT,'→ Meeting 🤝');ag.stateTimer=280+Math.floor(Math.random()*240);}
+          else if(roll<0.52){var cs=pickSeat(DEST.chill);sendAgentTo(ag,cs.x,cs.z,'chill',ST.CH,'→ Chill room ☕');ag.stateTimer=160+Math.floor(Math.random()*120);}
+          else if(roll<0.66){var gs=pickSeat(DEST.gym);sendAgentTo(ag,gs.x,gs.z,'gym',ST.GY,'→ Gym 💪');ag.stateTimer=160+Math.floor(Math.random()*120);}
+          else{ag.stateTimer=220+Math.floor(Math.random()*280);}
+        } else if(ag.state!==ST.MV){sendHome(ag);}
+      }
+      if(ag.state===ST.MV&&ag.waypoints.length>0){
+        var tgt=ag.waypoints[0],dx=tgt.x-ag.x,dz=tgt.z-ag.z,dist=Math.sqrt(dx*dx+dz*dz),step=SPEED*dt;
+        if(dist<step*1.5){ag.x=tgt.x;ag.z=tgt.z;ag.waypoints.shift();if(ag.waypoints.length===0&&ag.onArrive){ag.onArrive();ag.onArrive=null;}}
+        else{ag.x+=(dx/dist)*step;ag.z+=(dz/dist)*step;ag.mesh.group.rotation.y=Math.atan2(dx,dz);}
+      }
+      ag.mesh.group.position.set(ag.x,0,ag.z);
+      ag.bubble.position.set(ag.x,3.4,ag.z);
+      var walking=ag.state===ST.MV, bob=walking?Math.sin(ag.frame*0.28)*0.06:0, legSwing=walking?Math.sin(ag.frame*0.28)*0.4:0;
+      ag.mesh.bodyMesh.position.y=1.1+bob;
+      ag.mesh.legL.rotation.x=legSwing; ag.mesh.legR.rotation.x=-legSwing;
+    });
+    if(frameN%45===0) updateSidebar();
+    renderer.render(scene,camera);
+  }
+
+  var ld=document.getElementById('o3loading'); if(ld) ld.style.display='none';
+  updateSidebar();
+  animate();
+}; // end window.init3D
+
+})();
+
+</script>
+</body>
+</html>
