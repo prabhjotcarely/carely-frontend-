@@ -281,6 +281,340 @@
     .cd-sep { opacity: 0.5; font-weight: 700; }
     .prelaunch-live { display:none; background: linear-gradient(90deg, #0D3347 0%, #028090 100%); color: white; text-align: center; padding: 10px 20px; font-size: 0.9rem; font-weight: 700; }
     .prelaunch-live a { color: #02C39A; text-decoration: none; }
+
+    /* ═══════════════════════════════════════════════
+       WARMTH & SOFTNESS LAYER
+    ═══════════════════════════════════════════════ */
+    :root {
+      --warm-glow: rgba(255,200,100,0.07);
+      --elara-mint: #02C39A;
+      --elara-teal: #028090;
+    }
+    .section.white { background: #FAFCFB; }
+    .section.light { background: linear-gradient(160deg, #F0FAF7 0%, #F7FBFA 100%); }
+    .feature-card  { border-top: 3px solid transparent; background: #fff; }
+    .feature-card:hover { border-top-color: var(--elara-mint); }
+
+    /* ═══════════════════════════════════════════════
+       ELARA FULL BODY ROBOT (pure CSS)
+    ═══════════════════════════════════════════════ */
+    @keyframes antennaBlink { 0%,100%{opacity:1;transform:translateX(-50%) scale(1)} 50%{opacity:.5;transform:translateX(-50%) scale(1.5)} }
+    @keyframes eyeBlink     { 0%,88%,100%{transform:scaleY(1)} 91%,96%{transform:scaleY(0.07)} }
+    @keyframes waveArm      { 0%,100%{transform:rotate(14deg) translateY(0)} 40%{transform:rotate(-18deg) translateY(-4px)} }
+    @keyframes heartbeat    { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-50%) scale(1.28)} }
+    @keyframes elaraFloat   { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    @keyframes legBounce    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(2px)} }
+
+    .elara-body {
+      display: flex; flex-direction: column; align-items: center;
+      position: relative; width: 90px; flex-shrink: 0;
+    }
+    /* — Antenna — */
+    .ea-antenna {
+      width: 3px; height: 14px;
+      background: linear-gradient(to top, #028090, #02C39A);
+      border-radius: 2px; margin-bottom: -1px; z-index: 2; position: relative;
+    }
+    .ea-antenna::after {
+      content:''; position:absolute; top:-9px; left:50%; transform:translateX(-50%);
+      width: 11px; height: 11px; border-radius: 50%;
+      background: radial-gradient(circle, #ffffff 25%, #02C39A 100%);
+      box-shadow: 0 0 8px 2px rgba(2,195,154,0.6);
+      animation: antennaBlink 2.2s ease-in-out infinite;
+    }
+    /* — Head — */
+    .ea-head {
+      width: 82px; height: 78px;
+      background: linear-gradient(155deg, #02C39A 0%, #028090 100%);
+      border-radius: 50% 50% 42% 42% / 54% 54% 46% 46%;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(2,195,154,0.4), inset 0 -5px 14px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+    .ea-eyes {
+      position: absolute; top: 46%; left: 50%;
+      transform: translate(-50%,-60%);
+      display: flex; gap: 14px;
+    }
+    .ea-eye {
+      width: 18px; height: 18px; background: white; border-radius: 50%;
+      position: relative; box-shadow: 0 1px 5px rgba(0,0,0,0.18);
+    }
+    .ea-eye::after {
+      content:''; position:absolute; top:4px; left:4px;
+      width: 9px; height: 9px; border-radius: 50%; background: #0D3347;
+      animation: eyeBlink 4.5s ease-in-out infinite;
+    }
+    .ea-eye:first-child::after { animation-delay: 0.2s; }
+    .ea-cheeks {
+      position: absolute; bottom: 18px; left: 50%;
+      transform: translateX(-50%); display: flex; gap: 34px;
+    }
+    .ea-cheek {
+      width: 12px; height: 7px;
+      background: rgba(255,160,160,0.38); border-radius: 50%;
+    }
+    .ea-smile {
+      position: absolute; bottom: 13px; left: 50%; transform: translateX(-50%);
+      width: 28px; height: 14px;
+      border: 2.5px solid rgba(255,255,255,0.88); border-top: none;
+      border-radius: 0 0 22px 22px;
+    }
+    /* — Neck — */
+    .ea-neck {
+      width: 18px; height: 9px;
+      background: linear-gradient(to bottom, #028090, #026e7e);
+      margin-top: -1px; z-index: 1; border-radius: 0 0 4px 4px;
+    }
+    /* — Torso — */
+    .ea-torso {
+      width: 76px; height: 72px;
+      background: linear-gradient(160deg, #028090 0%, #0D3347 100%);
+      border-radius: 16px; position: relative;
+      box-shadow: 0 6px 24px rgba(13,51,71,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+      margin-top: -2px; z-index: 2;
+    }
+    /* Heart on chest */
+    .ea-torso::before {
+      content: '❤️'; position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      font-size: 20px; animation: heartbeat 1.6s ease-in-out infinite;
+      filter: drop-shadow(0 0 6px rgba(255,100,100,0.5));
+    }
+    /* Panel lines on torso */
+    .ea-torso::after {
+      content:''; position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+      width:44px; height:2px;
+      background: rgba(255,255,255,0.12); border-radius:1px;
+      box-shadow: 0 -7px 0 rgba(255,255,255,0.08);
+    }
+    /* — Arms — */
+    .ea-arms {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+    }
+    .ea-arm {
+      position: absolute; top: 6px;
+      width: 14px; height: 52px;
+      background: linear-gradient(to bottom, #02C39A, #028090);
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+    .ea-arm-l { left: -18px; transform: rotate(10deg); transform-origin: top center; }
+    .ea-arm-r { right: -18px; transform-origin: top center;
+      animation: waveArm 2.2s ease-in-out infinite; }
+    /* Hands */
+    .ea-arm::after {
+      content:''; position:absolute; bottom:-10px; left:50%; transform:translateX(-50%);
+      width:18px; height:18px; border-radius:50%;
+      background: linear-gradient(135deg, #02C39A, #028090);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    /* — Waist connector — */
+    .ea-waist {
+      width: 54px; height: 8px;
+      background: linear-gradient(to bottom, #026e7e, #0D3347);
+      border-radius: 0 0 6px 6px; margin-top: -2px; z-index: 1;
+    }
+    /* — Legs — */
+    .ea-legs { display: flex; gap: 10px; margin-top: 0; z-index: 2; }
+    .ea-leg {
+      width: 22px; height: 40px;
+      background: linear-gradient(to bottom, #028090, #0D3347);
+      border-radius: 8px 8px 4px 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      animation: legBounce 3.8s ease-in-out infinite;
+    }
+    .ea-leg:last-child { animation-delay: 0.4s; }
+    /* Feet */
+    .ea-foot {
+      width: 28px; height: 13px;
+      background: linear-gradient(to right, #0D3347, #028090);
+      border-radius: 0 0 10px 10px; margin-top: -1px; margin-left: -3px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    }
+
+    /* — Size variants — */
+    /* Large (Meet Elara section card) */
+    .elara-body.lg { width: 130px; }
+    .elara-body.lg .ea-head  { width:118px; height:112px; }
+    .elara-body.lg .ea-eye   { width:24px; height:24px; }
+    .elara-body.lg .ea-eye::after { width:12px; height:12px; top:5px; left:5px; }
+    .elara-body.lg .ea-eyes  { gap:20px; }
+    .elara-body.lg .ea-smile { width:40px; height:19px; bottom:18px; }
+    .elara-body.lg .ea-cheeks{ gap:50px; bottom:22px; }
+    .elara-body.lg .ea-cheek { width:15px; height:9px; }
+    .elara-body.lg .ea-antenna{ height:20px; }
+    .elara-body.lg .ea-antenna::after{ width:15px; height:15px; top:-12px; }
+    .elara-body.lg .ea-neck  { width:24px; height:12px; }
+    .elara-body.lg .ea-torso { width:108px; height:100px; }
+    .elara-body.lg .ea-torso::before{ font-size:28px; }
+    .elara-body.lg .ea-arm   { width:18px; height:72px; top:8px; }
+    .elara-body.lg .ea-arm::after{ width:24px; height:24px; bottom:-13px; }
+    .elara-body.lg .ea-arm-l { left:-25px; }
+    .elara-body.lg .ea-arm-r { right:-25px; }
+    .elara-body.lg .ea-waist { width:76px; height:11px; }
+    .elara-body.lg .ea-leg   { width:30px; height:56px; }
+    .elara-body.lg .ea-foot  { width:38px; height:17px; margin-left:-4px; }
+    .elara-body.lg .ea-legs  { gap:14px; }
+
+    /* Widget (inside the 58px circle button) */
+    .widget-elara .elara-body { transform: scale(0.48); transform-origin: bottom center; margin-bottom: -52px; }
+
+    /* Floating animation */
+    .elara-float { animation: elaraFloat 3.4s ease-in-out infinite; }
+
+    /* ═══════════════════════════════════════════════
+       MEET ELARA SECTION
+    ═══════════════════════════════════════════════ */
+    .elara-section {
+      padding: 80px 20px;
+      background: linear-gradient(160deg, #0D3347 0%, #028090 60%, #00A896 100%);
+      color: white; overflow: hidden; position: relative;
+    }
+    .elara-section::before {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background: radial-gradient(ellipse 60% 50% at 80% 50%, rgba(2,195,154,0.18) 0%, transparent 70%),
+                  radial-gradient(ellipse 40% 60% at 10% 80%, rgba(0,168,150,0.12) 0%, transparent 70%);
+    }
+    .elara-inner {
+      max-width: 960px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+      position: relative;
+    }
+    @media(max-width:700px){ .elara-inner { grid-template-columns: 1fr; gap: 40px; text-align:center; } }
+    .elara-intro-left { }
+    .elara-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 100px; padding: 5px 16px; font-size: 0.73rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 22px; color: #A8F0E0;
+    }
+    .elara-intro-left h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900;
+      letter-spacing: -0.03em; line-height: 1.12; margin-bottom: 18px;
+    }
+    .elara-intro-left h2 span { color: #02C39A; }
+    .elara-intro-left p {
+      font-size: 1rem; line-height: 1.78; opacity: 0.8; margin-bottom: 28px; max-width: 420px;
+    }
+    .elara-traits { display: flex; flex-direction: column; gap: 12px; }
+    .elara-trait {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 14px 18px;
+    }
+    .et-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+    .et-text strong { display:block; font-size:0.88rem; font-weight:700; margin-bottom:3px; }
+    .et-text span   { font-size:0.8rem; opacity:0.65; line-height:1.5; }
+
+    /* Elara chat card (right side) */
+    .elara-chat-card {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+      backdrop-filter: blur(12px); border-radius: 28px; padding: 32px 28px;
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+    .elara-name-badge { font-size: 1.15rem; font-weight: 800; color: white; margin-top: 4px; }
+    .elara-name-sub   { font-size: 0.78rem; color: rgba(255,255,255,0.55); margin-top: -12px; }
+    .elara-online-row { display:flex; align-items:center; gap:7px; font-size:0.76rem; color:#02C39A; font-weight:600; }
+    .elara-online-dot { width:8px; height:8px; border-radius:50%; background:#02C39A; animation: pulse 2s infinite; }
+    .elara-speech {
+      background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 18px 18px 18px 4px; padding: 18px 20px; font-size: 0.88rem;
+      line-height: 1.75; color: rgba(255,255,255,0.9); width: 100%; position: relative;
+    }
+    .elara-speech .typing-cursor {
+      display: inline-block; width: 2px; height: 1em; background: #02C39A;
+      vertical-align: text-bottom; margin-left: 2px;
+      animation: cursorBlink 0.9s step-end infinite;
+    }
+    @keyframes cursorBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .elara-reply-btn {
+      width: 100%; padding: 14px; border-radius: 14px; border: none; cursor: pointer;
+      background: linear-gradient(135deg, #02C39A, #028090); color: white;
+      font-weight: 700; font-size: 0.9rem; transition: transform 0.15s, box-shadow 0.15s;
+      letter-spacing: 0.01em;
+    }
+    .elara-reply-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(2,195,154,0.45); }
+
+    /* ═══════════════════════════════════════════════
+       FLOATING ELARA WIDGET (bottom right)
+    ═══════════════════════════════════════════════ */
+    #elara-widget {
+      position: fixed; bottom: 24px; right: 24px; z-index: 8888;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+    }
+    #elara-bubble {
+      background: white; border-radius: 18px 18px 4px 18px;
+      padding: 14px 18px; max-width: 230px;
+      box-shadow: 0 8px 40px rgba(13,51,71,0.18);
+      font-size: 0.82rem; line-height: 1.6; color: #1A3A4A;
+      transform: scale(0); transform-origin: bottom right;
+      transition: transform 0.38s cubic-bezier(.34,1.56,.64,1), opacity 0.3s;
+      opacity: 0;
+    }
+    #elara-bubble.show { transform: scale(1); opacity: 1; }
+    #elara-bubble strong { color: #028090; }
+    #elara-bubble .eb-close {
+      float: right; margin-left: 8px; cursor: pointer;
+      color: #aaa; font-size: 13px; line-height: 1;
+    }
+    #elara-toggle {
+      width: 58px; height: 58px; border-radius: 50%; border: none; cursor: pointer;
+      background: linear-gradient(135deg, #02C39A, #028090);
+      box-shadow: 0 4px 24px rgba(2,195,154,0.5);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s;
+    }
+    #elara-toggle:hover { transform: scale(1.08); }
+    .widget-elara { transform: scale(0.72); transform-origin: center; }
+
+    /* ═══════════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════════ */
+    @keyframes phoneFloat {
+      0%,100% { transform: translateY(-20px); }
+      50%      { transform: translateY(-32px); }
+    }
+    .phone.center { animation: phoneFloat 3.8s ease-in-out infinite; }
+    @keyframes phoneSway {
+      0%,100% { transform: translateY(0) rotate(-1deg); }
+      50%      { transform: translateY(-8px) rotate(-1deg); }
+    }
+    .phone:not(.center):first-child { animation: phoneSway 4.4s ease-in-out infinite; }
+    .phone:not(.center):last-child  { animation: phoneSway 4.1s ease-in-out infinite 0.6s; }
+
+    /* Hero orbs */
+    .hero-orb { position:absolute; border-radius:50%; filter:blur(70px); pointer-events:none; opacity:0.15; }
+    .orb1 { width:340px; height:340px; background:#02C39A; top:-80px; right:-60px; animation:orbDrift1 9s ease-in-out infinite; }
+    .orb2 { width:240px; height:240px; background:#00A896; bottom:-50px; left:-40px; animation:orbDrift2 11s ease-in-out infinite 2s; }
+    @keyframes orbDrift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-28px,18px)} }
+    @keyframes orbDrift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(18px,-22px)} }
+
+    /* Scroll bar */
+    #scroll-bar { position:fixed;top:0;left:0;height:3px;z-index:9999;background:linear-gradient(90deg,#00A896,#02C39A);width:0%;transition:width .1s linear; }
+
+    /* Card entrance */
+    .card-anim { opacity:0; transform:translateY(26px) scale(0.97); transition:opacity .5s ease,transform .5s ease; }
+    .card-anim.visible { opacity:1; transform:none; }
+    .card-anim.d1{transition-delay:.07s} .card-anim.d2{transition-delay:.14s} .card-anim.d3{transition-delay:.21s}
+    .card-anim.d4{transition-delay:.28s} .card-anim.d5{transition-delay:.35s} .card-anim.d6{transition-delay:.42s}
+
+    /* Step pop */
+    @keyframes stepPop { 0%{transform:scale(0.4);opacity:0} 70%{transform:scale(1.2)} 100%{transform:scale(1);opacity:1} }
+    .step-num { opacity:0; }
+    .step-num.popped { animation:stepPop .5s cubic-bezier(.34,1.56,.64,1) forwards; }
+
+    /* Ripple */
+    .ripple-wrap { position:relative; overflow:hidden; }
+    .ripple-wave { position:absolute; border-radius:50%; background:rgba(255,255,255,.32); transform:scale(0); animation:rippleAnim .55s linear; pointer-events:none; }
+    @keyframes rippleAnim { to{transform:scale(4);opacity:0} }
+
+    /* Elara section entrance */
+    .elara-anim { opacity:0; transform:translateY(32px); transition:opacity .6s ease, transform .6s ease; }
+    .elara-anim.visible { opacity:1; transform:none; }
+    .elara-anim.from-right { transform:translateX(32px); }
+    .elara-anim.from-right.visible { transform:none; }
   </style>
 </head>
 <body>
@@ -373,6 +707,59 @@
       <div class="trust-item"><span>🤖</span> GPT-4o AI</div>
       <div class="trust-item"><span>📱</span> iOS &amp; Android</div>
       <div class="trust-item"><span>🚫</span> No data sold. Ever.</div>
+    </div>
+  </div>
+</section>
+
+<!-- MEET ELARA -->
+<section class="elara-section">
+  <div class="elara-inner">
+    <div class="elara-intro-left elara-anim">
+      <div class="elara-tag">✨ Your AI Caretaker</div>
+      <h2>Meet <span>Elara</span> —<br>she's here for you.</h2>
+      <p>Elara is more than a reminder. She's a caring companion who checks in on you every day, listens when you need to talk, and makes sure the people who love you never have to worry.</p>
+      <div class="elara-traits">
+        <div class="elara-trait">
+          <div class="et-icon">💬</div>
+          <div class="et-text"><strong>She talks to you, not at you</strong><span>Elara reads your week, notices your patterns, and sends a message that actually feels personal.</span></div>
+        </div>
+        <div class="elara-trait">
+          <div class="et-icon">🤝</div>
+          <div class="et-text"><strong>She keeps your family at ease</strong><span>When you miss a dose, Elara gently alerts your loved ones — so they stop worrying and you stay independent.</span></div>
+        </div>
+        <div class="elara-trait">
+          <div class="et-icon">🔒</div>
+          <div class="et-text"><strong>She never gives medical advice</strong><span>Elara always says "talk to your doctor" — she's a caring friend, not a replacement for your healthcare team.</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="elara-chat-card elara-anim from-right">
+      <div class="elara-body lg elara-float">
+        <div class="ea-antenna"></div>
+        <div class="ea-head">
+          <div class="ea-eyes"><div class="ea-eye"></div><div class="ea-eye"></div></div>
+          <div class="ea-cheeks"><div class="ea-cheek"></div><div class="ea-cheek"></div></div>
+          <div class="ea-smile"></div>
+        </div>
+        <div class="ea-neck"></div>
+        <div class="ea-torso">
+          <div class="ea-arms"><div class="ea-arm ea-arm-l"></div><div class="ea-arm ea-arm-r"></div></div>
+        </div>
+        <div class="ea-waist"></div>
+        <div class="ea-legs">
+          <div><div class="ea-leg"></div><div class="ea-foot"></div></div>
+          <div><div class="ea-leg"></div><div class="ea-foot"></div></div>
+        </div>
+      </div>
+      <div class="elara-name-badge">Elara</div>
+      <div class="elara-name-sub">AI Caretaker · Carely</div>
+      <div class="elara-online-row"><div class="elara-online-dot"></div> Online · Always here for you</div>
+      <div class="elara-speech" id="elaraSpeech">
+        <span id="elaraTyped"></span><span class="typing-cursor"></span>
+      </div>
+      <button class="elara-reply-btn" onclick="document.getElementById('founding').scrollIntoView({behavior:'smooth',block:'center'})">
+        💙 Start my free trial — meet Elara
+      </button>
     </div>
   </div>
 </section>
@@ -752,7 +1139,112 @@
   window.addEventListener('load', () => { setTimeout(() => updateSpots(46), 400); });
 
   let sim = setInterval(() => { if (spotsTaken < 52) updateSpots(spotsTaken + 1); else clearInterval(sim); }, 20000);
+
+  /* ── SCROLL BAR ── */
+  var sb = document.createElement('div'); sb.id='scroll-bar'; document.body.prepend(sb);
+  window.addEventListener('scroll', function(){ sb.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%'; },{passive:true});
+
+  /* ── HERO ORBS ── */
+  var heroEl = document.querySelector('.hero');
+  ['orb1','orb2'].forEach(function(c){ var o=document.createElement('div'); o.className='hero-orb '+c; heroEl.appendChild(o); });
+
+  /* ── PHONE FLOAT (only if not reduced motion) ── */
+  /* already in CSS */
+
+  /* ── STAGGER CARDS ── */
+  document.querySelectorAll('.feature-card').forEach(function(c,i){ c.classList.add('card-anim','d'+(i%6+1)); });
+  document.querySelectorAll('.tcard').forEach(function(c,i){ c.classList.add('card-anim','d'+(i%3+1)); });
+  document.querySelectorAll('.pricing-card').forEach(function(c,i){ c.classList.add('card-anim','d'+(i%3+1)); });
+  var cObs=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){e.target.classList.add('visible');cObs.unobserve(e.target);} }); },{threshold:.1,rootMargin:'0px 0px -20px 0px'});
+  document.querySelectorAll('.card-anim').forEach(function(el){ cObs.observe(el); });
+
+  /* ── ELARA SECTION ENTRANCE ── */
+  var eObs=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){e.target.classList.add('visible');eObs.unobserve(e.target);} }); },{threshold:.12});
+  document.querySelectorAll('.elara-anim').forEach(function(el){ eObs.observe(el); });
+
+  /* ── STEP NUMBERS ── */
+  var sObs=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.querySelectorAll('.step-num').forEach(function(n,i){ setTimeout(function(){ n.classList.add('popped'); },i*110); }); sObs.unobserve(e.target); } }); },{threshold:.3});
+  document.querySelectorAll('.steps').forEach(function(el){ sObs.observe(el); });
+
+  /* ── 3D TILT ── */
+  function addTilt(sel,deg){ document.querySelectorAll(sel).forEach(function(c){ c.addEventListener('mousemove',function(e){ var r=c.getBoundingClientRect(),x=((e.clientX-r.left)/r.width-.5)*2,y=((e.clientY-r.top)/r.height-.5)*2; c.style.transform='perspective(700px) rotateX('+(-y*deg)+'deg) rotateY('+(x*deg)+'deg) translateY(-4px)'; }); c.addEventListener('mouseleave',function(){ c.style.transform=''; }); }); }
+  addTilt('.feature-card',7); addTilt('.tcard',6); addTilt('.pricing-card',5); addTilt('.elara-chat-card',4);
+
+  /* ── MAGNETIC BUTTONS ── */
+  function addMag(sel){ document.querySelectorAll(sel).forEach(function(b){ b.addEventListener('mousemove',function(e){ var r=b.getBoundingClientRect(),dx=(e.clientX-(r.left+r.width/2))*.26,dy=(e.clientY-(r.top+r.height/2))*.26; b.style.transform='translate('+dx+'px,'+dy+'px)'; }); b.addEventListener('mouseleave',function(){ b.style.transform=''; }); }); }
+  addMag('.cta-btn,.final-cta-btn,.nav-pill,.elara-reply-btn');
+
+  /* ── RIPPLE ── */
+  function addRipple(sel){ document.querySelectorAll(sel).forEach(function(b){ b.classList.add('ripple-wrap'); b.addEventListener('click',function(e){ var r=b.getBoundingClientRect(),sz=Math.max(r.width,r.height),w=document.createElement('span'); w.className='ripple-wave'; w.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+(e.clientX-r.left-sz/2)+'px;top:'+(e.clientY-r.top-sz/2)+'px'; b.appendChild(w); setTimeout(function(){ w.remove(); },560); }); }); }
+  addRipple('.cta-btn,.final-cta-btn,.plan-btn,.nav-pill,.elara-reply-btn');
+
+  /* ── HERO PARALLAX ── */
+  var hInner=document.querySelector('.hero-inner');
+  window.addEventListener('scroll',function(){ if(window.scrollY<600&&hInner) hInner.style.transform='translateY('+(window.scrollY*.16)+'px)'; },{passive:true});
+
+  /* ── ELARA TYPING ANIMATION (Meet Elara card) ── */
+  var elaraMessages = [
+    "Hi there 💙 I'm Elara, your AI caretaker from Carely.\n\nI'm here to listen, remind you about your medicines, and check in to make sure you're doing well.\n\nYou don't have to manage your health alone.",
+    "You took all your doses today — that's a really strong day. How are you feeling? 💙",
+    "Good morning! Just a gentle reminder — your Vitamin D is due at 8 AM. You've got a 6-day streak going — let's keep it! 🌟",
+  ];
+  var msgIdx = 0;
+  function typeElara() {
+    var el = document.getElementById('elaraTyped');
+    if (!el) return;
+    var msg = elaraMessages[msgIdx % elaraMessages.length];
+    var i = 0; el.textContent = '';
+    var t = setInterval(function() {
+      el.textContent += msg[i]; i++;
+      if (i >= msg.length) {
+        clearInterval(t);
+        setTimeout(function(){ msgIdx++; typeElara(); }, 3800);
+      }
+    }, 28);
+  }
+  var elaraCardObs = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ typeElara(); elaraCardObs.unobserve(e.target); } }); },{threshold:.4});
+  var elaraCard = document.querySelector('.elara-chat-card');
+  if(elaraCard) elaraCardObs.observe(elaraCard);
+
+  /* ── FLOATING WIDGET ── */
+  var widgetBtn = document.getElementById('elara-toggle');
+  var widgetBubble = document.getElementById('elara-bubble');
+  var widgetShown = false;
+  setTimeout(function(){ widgetBubble.classList.add('show'); widgetShown=true; }, 4500);
+  widgetBtn.addEventListener('click',function(){
+    if(widgetBubble.classList.contains('show')){ widgetBubble.classList.remove('show'); } else { widgetBubble.classList.add('show'); }
+  });
 </script>
+
+<!-- ELARA FLOATING WIDGET -->
+<div id="elara-widget">
+  <div id="elara-bubble">
+    <span class="eb-close" onclick="document.getElementById('elara-bubble').classList.remove('show')">✕</span>
+    <strong>Hi, I'm Elara 💙</strong><br>
+    Your AI caretaker from Carely. I'm here to listen, remind, and take care of you — every single day.
+  </div>
+  <button id="elara-toggle" title="Chat with Elara" style="overflow:visible;position:relative;">
+    <div class="widget-elara">
+      <div class="elara-body">
+        <div class="ea-antenna"></div>
+        <div class="ea-head">
+          <div class="ea-eyes"><div class="ea-eye"></div><div class="ea-eye"></div></div>
+          <div class="ea-cheeks"><div class="ea-cheek"></div><div class="ea-cheek"></div></div>
+          <div class="ea-smile"></div>
+        </div>
+        <div class="ea-neck"></div>
+        <div class="ea-torso">
+          <div class="ea-arms"><div class="ea-arm ea-arm-l"></div><div class="ea-arm ea-arm-r"></div></div>
+        </div>
+        <div class="ea-waist"></div>
+        <div class="ea-legs">
+          <div><div class="ea-leg"></div><div class="ea-foot"></div></div>
+          <div><div class="ea-leg"></div><div class="ea-foot"></div></div>
+        </div>
+      </div>
+    </div>
+  </button>
+</div>
 
 <!-- Cookie consent banner — shown to EU/UK visitors, hidden after acceptance -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#0D3347;color:#fff;padding:14px 20px;font-family:Inter,sans-serif;font-size:13px;line-height:1.5;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 -4px 24px rgba(0,0,0,0.2);">
