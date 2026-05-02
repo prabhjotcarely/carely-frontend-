@@ -215,6 +215,95 @@
     .off-out-stats { display:flex; gap:12px; margin-top:8px; }
     .off-stat { font-size:10px; color:#718096; }
     .off-stat span { color:#68d391; font-weight:700; }
+
+    /* ══════════════════════════════════════
+       MOBILE RESPONSIVE  (≤ 768px)
+    ══════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Nav */
+      nav { padding: 0 14px; gap: 10px; }
+      .nav-tag { display: none; }
+      .refresh-btn { font-size: 9px; padding: 3px 8px; }
+
+      /* Tabs — horizontal scroll */
+      .tabs { padding: 0 10px; }
+      .tab { padding: 10px 12px; font-size: 10px; }
+
+      /* Page */
+      .page { padding: 14px 12px; }
+
+      /* Metric cards: 6-col → 2-col */
+      .metrics { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 16px; }
+      .metric { padding: 12px 14px; }
+      .metric-val { font-size: 22px; }
+
+      /* Grid layouts → single column */
+      .two-col   { grid-template-columns: 1fr; gap: 12px; }
+      .three-col { grid-template-columns: 1fr; gap: 12px; }
+
+      /* Action grid: 4-col → 2-col */
+      .action-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .action-btn { padding: 10px; }
+      .action-btn-icon { font-size: 18px; }
+
+      /* Revenue target — stack it */
+      .rev-target { flex-direction: column; gap: 8px; align-items: flex-start; }
+      .rev-t-val  { font-size: 22px; }
+      .rev-t-pct  { font-size: 26px; }
+
+      /* Section headers */
+      .sh h2 { font-size: 10px; letter-spacing: 1.5px; }
+
+      /* Card body padding */
+      .card-body { padding: 12px; }
+      .card-head { padding: 10px 12px; }
+
+      /* Priority items */
+      .priority-item { padding: 9px 10px; }
+      .pi-title { font-size: 12px; }
+
+      /* Content blocks */
+      .content-text { font-size: 11px; padding: 10px; }
+
+      /* Office virtual floor: 3-col → 1-col */
+      .off-floor { grid-template-columns: 1fr; }
+
+      /* Office board: 4-col → 2-col */
+      .off-board { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+      /* 3D office sidebar hidden on mobile, full width canvas */
+      .o3wrap { flex-direction: column; height: auto; }
+      .o3side { width: 100%; max-height: 140px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; flex-wrap: wrap; padding: 6px; gap: 4px; overflow-x: auto; }
+      .o3ag { padding: 4px 8px; border-bottom: none; background: rgba(255,255,255,0.04); border-radius: 6px; flex-shrink: 0; }
+
+      /* Lead items */
+      .lead-item { flex-wrap: wrap; gap: 6px; }
+      .lead-size { width: 100%; }
+
+      /* Competitor cards */
+      .comp-name { font-size: 12px; }
+
+      /* Keyword rows */
+      .keyword-row { flex-wrap: wrap; gap: 4px; }
+      .kw-vol { width: auto; }
+
+      /* Off-tabs scroll */
+      .off-tabs { overflow-x: auto; padding: 0 10px; }
+      .off-tab { padding: 10px 14px; font-size: 11px; }
+      .off-content { padding: 12px; }
+
+      /* Out-stats wrap */
+      .off-out-stats { flex-wrap: wrap; gap: 8px; }
+    }
+
+    /* Extra small phones */
+    @media (max-width: 420px) {
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .action-grid { grid-template-columns: repeat(2, 1fr); }
+      .off-board { grid-template-columns: 1fr; }
+      .metric-val { font-size: 20px; }
+      .nav-brand span { display: none; }
+    }
   </style>
 </head>
 <body>
