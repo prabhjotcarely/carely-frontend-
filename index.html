@@ -471,6 +471,7 @@
       padding: 80px 20px;
       background: linear-gradient(160deg, #0D3347 0%, #028090 60%, #00A896 100%);
       color: white; overflow: hidden; position: relative;
+      margin-top: -2px;
     }
     .elara-section::before {
       content:''; position:absolute; inset:0; pointer-events:none;
@@ -1178,9 +1179,15 @@
   function addRipple(sel){ document.querySelectorAll(sel).forEach(function(b){ b.classList.add('ripple-wrap'); b.addEventListener('click',function(e){ var r=b.getBoundingClientRect(),sz=Math.max(r.width,r.height),w=document.createElement('span'); w.className='ripple-wave'; w.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+(e.clientX-r.left-sz/2)+'px;top:'+(e.clientY-r.top-sz/2)+'px'; b.appendChild(w); setTimeout(function(){ w.remove(); },560); }); }); }
   addRipple('.cta-btn,.final-cta-btn,.plan-btn,.nav-pill,.elara-reply-btn');
 
-  /* ── HERO PARALLAX ── */
-  var hInner=document.querySelector('.hero-inner');
-  window.addEventListener('scroll',function(){ if(window.scrollY<600&&hInner) hInner.style.transform='translateY('+(window.scrollY*.16)+'px)'; },{passive:true});
+  /* ── HERO PARALLAX (orbs only, not inner — avoids gap at section bottom) ── */
+  var orb1El=document.querySelector('.orb1'), orb2El=document.querySelector('.orb2');
+  window.addEventListener('scroll',function(){
+    var y=window.scrollY;
+    if(y<700){
+      if(orb1El) orb1El.style.transform='translate('+(-y*.06)+'px,'+(y*.04)+'px)';
+      if(orb2El) orb2El.style.transform='translate('+(y*.05)+'px,'+(-y*.03)+'px)';
+    }
+  },{passive:true});
 
   /* ── ELARA TYPING ANIMATION (Meet Elara card) ── */
   var elaraMessages = [
