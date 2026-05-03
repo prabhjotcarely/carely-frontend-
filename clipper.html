@@ -196,6 +196,22 @@ h1{font-size:24px;font-weight:900;margin-bottom:6px;}
 </div>
 
 <script type="module">
+// ─── WORKER CROSS-ORIGIN FIX ─────────────────────────────────────────────────
+// FFmpeg.wasm creates its Worker with new URL('./worker.js', import.meta.url)
+// which points to unpkg.com — browsers block cross-origin module workers.
+// Fix: wrap any cross-origin module worker in a same-origin blob that imports it.
+(function(){
+  const _W=window.Worker;
+  window.Worker=function(url,opts){
+    const u=String(url instanceof URL?url.href:url);
+    if(u.startsWith('http')&&!u.startsWith(location.origin)&&opts&&opts.type==='module'){
+      const b=new Blob(['import "'+u+'";'],{type:'text/javascript'});
+      return new _W(URL.createObjectURL(b),opts);
+    }
+    return new _W(url,opts);
+  };
+})();
+
 // ─── PIN ─────────────────────────────────────────────────────────────────────
 (function(){
   var C='126226',SK='carely_clipper_auth',e='';
@@ -303,12 +319,10 @@ async function loadFFmpeg(onProgress){
   const{toBlobURL}=await import('https://unpkg.com/@ffmpeg/util@0.12.1/dist/esm/index.js');
   const ff=new FFmpeg();
   if(onProgress)ff.on('progress',onProgress);
-  const ffBase='https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/esm';
   const coreBase='https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
   await ff.load({
-    coreURL:  await toBlobURL(coreBase+'/ffmpeg-core.js',   'text/javascript'),
-    wasmURL:  await toBlobURL(coreBase+'/ffmpeg-core.wasm', 'application/wasm'),
-    workerURL:await toBlobURL(ffBase  +'/worker.js',        'text/javascript'),
+    coreURL: await toBlobURL(coreBase+'/ffmpeg-core.js',   'text/javascript'),
+    wasmURL: await toBlobURL(coreBase+'/ffmpeg-core.wasm', 'application/wasm'),
   });
   return ff;
 }
