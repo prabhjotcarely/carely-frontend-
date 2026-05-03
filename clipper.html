@@ -815,10 +815,12 @@ window.startReel=async function(){
 
     // Auto captions via Whisper word-level timestamps
     let assFile=null, whisperTranscript='';
+    let currentFile='assembled.mp4'; // track which file is the current assembled video
     if(useCaptions){
       stg(4,'active','Extracting audio for captions...');prog(54,'Audio extract...');
       await ff.exec(['-i','assembled.mp4','-vn','-c:a','aac','-b:a','64k','-ac','1','aud.m4a']);
       const audData=await ff.readFile('aud.m4a');
+      try{await ff.deleteFile('aud.m4a');}catch(e){}  // free FS memory immediately
       stg(4,'active','Transcribing...');
       const wForm=new FormData();
       wForm.append('file',new Blob([audData.buffer],{type:'audio/mp4'}),'audio.m4a');
@@ -834,11 +836,11 @@ window.startReel=async function(){
           assFile=buildAss(words,capStyle);
           await ff.writeFile('caps.ass',assFile);
           try{
+            // Burn captions: delete input AFTER render to avoid 2x video in FS at peak
             await ff.exec(['-i','assembled.mp4','-vf','subtitles=caps.ass','-c:v','libx264','-preset','ultrafast','-c:a','copy','captioned.mp4']);
             await ff.deleteFile('assembled.mp4');
-            const capData=await ff.readFile('captioned.mp4');
-            await ff.writeFile('assembled.mp4',capData);
-            await ff.deleteFile('captioned.mp4');
+            try{await ff.deleteFile('caps.ass');}catch(e){}
+            currentFile='captioned.mp4'; // use captioned.mp4 directly — no read/write copy
             stg(4,'done',words.length+' words timed');
           }catch(e){stg(4,'done','captions as text (burn skipped)');}
         }else{stg(4,'done','no speech detected');}
@@ -875,22 +877,30 @@ window.startReel=async function(){
     if(useGrain)vf+=',noise=alls=10:allf=t+u';
     if(useWatermark)vf+=',drawtext=text=carely.fit:fontsize=30:fontcolor=white@0.5:x=w-text_w-28:y=h-text_h-55:shadowcolor=black@0.5:shadowx=2:shadowy=2';
 
-    // Build audio filter chain
+    // Build audio filter chain — ultrafast preset uses less WASM memory than fast
     const hasMusicFile=resolvedMusicName.length>0;
     let finalCmd;
     if(hasMusicFile){
       let aChain='[1:a]volume=0.15[mu]';
       aChain+=useNoise?';[0:a]loudnorm=I=-16:TP=-1.5:LRA=11[cl];[cl][mu]amix=inputs=2:duration=first[af]':';[0:a][mu]amix=inputs=2:duration=first[af]';
-      finalCmd=['-i','assembled.mp4','-stream_loop','-1','-i','music.wav',
+      finalCmd=['-i',currentFile,'-stream_loop','-1','-i','music.wav',
         '-filter_complex',`[0:v]${vf}[vf];${aChain}`,
         '-map','[vf]','-map','[af]',
-        '-c:v','libx264','-preset','fast','-crf','17','-c:a','aac','-b:a','192k','final.mp4'];
+        '-c:v','libx264','-preset','ultrafast','-crf','17','-c:a','aac','-b:a','192k','final.mp4'];
     }else{
       const af=useNoise?'loudnorm=I=-16:TP=-1.5:LRA=11':null;
-      finalCmd=['-i','assembled.mp4','-vf',vf,...(af?['-af',af]:[]),
-        '-c:v','libx264','-preset','fast','-crf','17','-c:a','aac','-b:a','192k','final.mp4'];
+      finalCmd=['-i',currentFile,'-vf',vf,...(af?['-af',af]:[]),
+        '-c:v','libx264','-preset','ultrafast','-crf','17','-c:a','aac','-b:a','192k','final.mp4'];
     }
-    await ff.exec(finalCmd);
+    const renderCode=await ff.exec(finalCmd);
+    // Free the assembled/captioned file from FS before reading final
+    try{await ff.deleteFile(currentFile);}catch(e){}
+    if(hasMusicFile){try{await ff.deleteFile('music.wav');}catch(e){}}
+
+    // If render failed, fall back to just copying current file as final
+    if(renderCode!==0){
+      await ff.exec(['-i',currentFile,'-c','copy','final.mp4']);
+    }
     stg(5,'done'); prog(97,'Rendering done');
 
     const finalData=await ff.readFile('final.mp4');
