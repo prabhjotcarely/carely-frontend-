@@ -332,11 +332,19 @@ main{flex:1;padding:28px 24px 80px;max-width:960px;margin:0 auto;width:100%;}
       <!-- MUSIC -->
       <div class="section">
         <div class="section-title">Background Music</div>
-        <div class="music-row" id="music-row" onclick="document.getElementById('music-input').click()">
-          <div class="music-icon">♪</div>
+        <div class="music-row has-file" id="music-auto-row">
+          <div class="music-icon">✨</div>
           <div class="music-info">
-            <div class="music-lbl" id="music-lbl">Upload an MP3</div>
-            <div class="music-sub">Mixed at low volume · try YouTube Audio Library for free tracks</div>
+            <div class="music-lbl" id="music-auto-lbl">Auto-matched to your video's vibe</div>
+            <div class="music-sub" id="music-auto-sub">GPT reads your content · picks the right energy · mixed at low volume</div>
+          </div>
+          <div id="music-auto-toggle" onclick="toggleAutoMusic()" style="flex-shrink:0;padding:5px 14px;border-radius:20px;background:var(--mint);color:var(--deep);font-size:11px;font-weight:900;cursor:pointer;transition:all 0.2s;">ON</div>
+        </div>
+        <div class="music-row" id="music-manual-row" style="margin-top:8px;" onclick="document.getElementById('music-input').click()">
+          <div class="music-icon" style="font-size:16px;opacity:0.5;">↑</div>
+          <div class="music-info">
+            <div class="music-lbl" id="music-lbl" style="color:rgba(255,255,255,0.5);font-size:11px;">Override · Upload your own track</div>
+            <div class="music-sub">Your file takes priority over auto-selection</div>
           </div>
           <input type="file" id="music-input" accept="audio/*" style="display:none"/>
         </div>
@@ -413,7 +421,55 @@ OPENAI_KEY=(OPENAI_KEY||'').trim();
 // ─── STATE ────────────────────────────────────────────────────────────────────
 let currentMode='extract', reelFiles=[];
 const fxState={captions:true,noise:true,vignette:false,grain:false,hook:false,watermark:false};
-let selectedStyle='tiktok', selectedTrans='fade', selectedCapStyle='bold';
+let selectedStyle='tiktok', selectedTrans='fade', selectedCapStyle='bold', autoMusic=true;
+
+// ─── MUSIC LIBRARY (royalty-free, CORS-enabled) ───────────────────────────────
+const MUSIC_LIBRARY={
+  upbeat:    {url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',  name:'Upbeat Energy'},
+  motivational:{url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', name:'Motivational Rise'},
+  chill:     {url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',  name:'Chill Groove'},
+  cinematic: {url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',  name:'Cinematic Tension'},
+  emotional: {url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3', name:'Emotional'},
+};
+const PRESET_MOOD={tiktok:'upbeat',cinematic:'cinematic',warm:'emotional',moody:'chill',raw:'upbeat'};
+
+window.toggleAutoMusic=function(){
+  autoMusic=!autoMusic;
+  const tog=document.getElementById('music-auto-toggle');
+  const row=document.getElementById('music-auto-row');
+  tog.textContent=autoMusic?'ON':'OFF';
+  tog.style.background=autoMusic?'var(--mint)':'rgba(255,255,255,0.12)';
+  tog.style.color=autoMusic?'var(--deep)':'rgba(255,255,255,0.5)';
+  row.classList.toggle('has-file',autoMusic);
+  document.getElementById('music-auto-lbl').style.color=autoMusic?'':'rgba(255,255,255,0.4)';
+};
+
+async function detectMood(transcriptText){
+  if(!OPENAI_KEY)return null;
+  try{
+    const r=await fetch('https://api.openai.com/v1/chat/completions',{
+      method:'POST',headers:{Authorization:'Bearer '+OPENAI_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({model:'gpt-4o-mini',temperature:0,response_format:{type:'json_object'},messages:[{role:'user',
+        content:`Analyze this video transcript and pick the best background music mood.\nTranscript:\n${transcriptText.slice(0,1200)}\n\nChoose ONE from: upbeat, motivational, chill, cinematic, emotional\nReturn JSON: {"tone":"<choice>","reason":"one sentence"}`}]})
+    });
+    const d=await r.json();
+    const t=JSON.parse(d.choices[0].message.content).tone;
+    return Object.keys(MUSIC_LIBRARY).includes(t)?t:null;
+  }catch{return null;}
+}
+
+async function fetchMusicTrack(ff,fetchFile,tone){
+  const track=MUSIC_LIBRARY[tone]||MUSIC_LIBRARY.upbeat;
+  try{
+    const res=await fetch(track.url);
+    if(!res.ok)throw new Error('fetch failed');
+    const buf=await res.arrayBuffer();
+    await ff.writeFile('music.mp3',new Uint8Array(buf));
+    return track.name;
+  }catch{
+    return null;
+  }
+}
 
 // ─── STYLE PRESETS ────────────────────────────────────────────────────────────
 const STYLE_VF={
@@ -491,8 +547,19 @@ window.removeClip=i=>{reelFiles.splice(i,1);if(!reelFiles.length){dz.classList.r
 
 document.getElementById('music-input').addEventListener('change',e=>{
   const f=e.target.files[0];
-  document.getElementById('music-lbl').textContent=f?'♪ '+f.name:'Upload an MP3';
-  document.getElementById('music-row').classList.toggle('has-file',!!f);
+  const lbl=document.getElementById('music-lbl');
+  const row=document.getElementById('music-manual-row');
+  if(f){
+    lbl.textContent='♪ '+f.name;
+    lbl.style.color='var(--mint)';
+    row.classList.add('has-file');
+    row.style.borderColor='rgba(2,195,154,0.4)';
+  }else{
+    lbl.textContent='Override · Upload your own track';
+    lbl.style.color='';
+    row.classList.remove('has-file');
+    row.style.borderColor='';
+  }
 });
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
@@ -695,7 +762,7 @@ window.startReel=async function(){
     stg(3,'done'); prog(52,'Assembled');
 
     // Auto captions via Whisper word-level timestamps
-    let assFile=null;
+    let assFile=null, whisperTranscript='';
     if(useCaptions){
       stg(4,'active','Transcribing for captions...');prog(54,'Whisper...');
       const asmData=await ff.readFile('assembled.mp4');
@@ -707,15 +774,14 @@ window.startReel=async function(){
       const wRes=await fetch('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{Authorization:'Bearer '+OPENAI_KEY},body:wForm});
       if(wRes.ok){
         const wt=await wRes.json();
+        whisperTranscript=wt.text||'';
         const words=(wt.words||[]).filter(w=>w.word&&w.word.trim().length>0);
         if(words.length>0){
           assFile=buildAss(words,capStyle);
           await ff.writeFile('caps.ass',assFile);
-          // Try libass burn — if it fails, captions skip gracefully
           try{
             await ff.exec(['-i','assembled.mp4','-vf','subtitles=caps.ass','-c:v','libx264','-preset','ultrafast','-c:a','copy','captioned.mp4']);
             await ff.deleteFile('assembled.mp4');
-            // rename: read + write + delete
             const capData=await ff.readFile('captioned.mp4');
             await ff.writeFile('assembled.mp4',capData);
             await ff.deleteFile('captioned.mp4');
@@ -726,8 +792,30 @@ window.startReel=async function(){
     }else{stg(4,'skip');}
     prog(70,'Captions done');
 
+    // Auto-music: detect tone from transcript or fall back to color preset mapping
+    let resolvedMusicName='';
+    const useMusic=autoMusic||!!musicFile;
+    if(!musicFile&&autoMusic){
+      stg(5,'active','Matching music to your vibe...');prog(72,'Detecting tone...');
+      let tone=null;
+      if(whisperTranscript.length>30){
+        tone=await detectMood(whisperTranscript);
+      }
+      if(!tone)tone=PRESET_MOOD[selectedStyle]||'upbeat';
+      document.getElementById('music-auto-lbl').textContent='♪ '+MUSIC_LIBRARY[tone].name+' — auto-matched';
+      document.getElementById('music-auto-sub').textContent='Tone: '+tone+' · mixed at low volume · based on your content';
+      resolvedMusicName=await fetchMusicTrack(ff,fetchFile,tone);
+      if(!resolvedMusicName){
+        // fetch failed silently — continue without music
+        document.getElementById('music-auto-sub').textContent='Could not load track · continuing without music';
+      }
+    }else if(musicFile){
+      await ff.writeFile('music.mp3',await fetchFile(musicFile));
+      resolvedMusicName=musicFile.name;
+    }
+
     // Final effects: color grade + vignette + grain + watermark + audio + music
-    stg(5,'active','Applying effects...');prog(72,'Rendering...');
+    stg(5,'active','Applying effects...');prog(74,'Rendering...');
 
     // Build video filter chain
     let vf=styleFx;
@@ -735,10 +823,10 @@ window.startReel=async function(){
     if(useGrain)vf+=',noise=alls=10:allf=t+u';
     if(useWatermark)vf+=',drawtext=text=carely.fit:fontsize=30:fontcolor=white@0.5:x=w-text_w-28:y=h-text_h-55:shadowcolor=black@0.5:shadowx=2:shadowy=2';
 
-    // Build audio filter chain + optional music
-    if(musicFile)await ff.writeFile('music.mp3',await fetchFile(musicFile));
+    // Build audio filter chain
+    const hasMusicFile=resolvedMusicName.length>0;
     let finalCmd;
-    if(musicFile){
+    if(hasMusicFile){
       let aChain='[1:a]volume=0.18[mu]';
       aChain+=useNoise?';[0:a]afftdn=nf=-20,loudnorm[cl];[cl][mu]amix=inputs=2:duration=first[af]':';[0:a][mu]amix=inputs=2:duration=first[af]';
       finalCmd=['-i','assembled.mp4','-i','music.mp3',
@@ -770,7 +858,7 @@ window.startReel=async function(){
       useVignette?'vignette':'',
       useGrain?'film grain':'',
       useHook&&hookText?'hook card':'',
-      musicFile?'music mixed':'',
+      resolvedMusicName?'♪ '+resolvedMusicName:'',
       useWatermark?'watermark':'',
     ].filter(Boolean);
     document.getElementById('res-sub').textContent=appliedTags.join(' · ');
