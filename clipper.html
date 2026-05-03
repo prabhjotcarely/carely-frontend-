@@ -809,9 +809,8 @@ window.startReel=async function(){
       if(!tone)tone=PRESET_MOOD[selectedStyle]||'upbeat';
       document.getElementById('music-auto-lbl').textContent='♪ '+MUSIC_LIBRARY[tone].name+' — auto-matched';
       document.getElementById('music-auto-sub').textContent='Tone: '+tone+' · mixed at low volume · based on your content';
-      resolvedMusicName=await fetchMusicTrack(ff,fetchFile,tone);
+      resolvedMusicName=(await fetchMusicTrack(ff,fetchFile,tone))||'';
       if(!resolvedMusicName){
-        // fetch failed silently — continue without music
         document.getElementById('music-auto-sub').textContent='Could not load track · continuing without music';
       }
     }else if(musicFile){
