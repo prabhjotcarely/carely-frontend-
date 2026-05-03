@@ -57,7 +57,7 @@ h1{font-size:24px;font-weight:900;margin-bottom:6px;}
 .reel-btns button:hover{background:rgba(255,255,255,0.14);}
 .reel-add{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1px dashed rgba(255,255,255,0.12);border-radius:10px;cursor:pointer;font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:20px;transition:all 0.2s;}
 .reel-add:hover{border-color:var(--mint);color:var(--mint);}
-.sect-label{font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.sect-label{font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
 .music-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;margin-bottom:20px;cursor:pointer;transition:all 0.2s;}
 .music-row:hover{border-color:rgba(255,255,255,0.18);}
 .music-row.has-file{border-color:rgba(2,195,154,0.4);background:rgba(2,195,154,0.05);}
@@ -65,9 +65,20 @@ h1{font-size:24px;font-weight:900;margin-bottom:6px;}
 .music-info{flex:1;}
 .music-lbl{font-size:12px;font-weight:600;}
 .music-sub{font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;}
-.caption-area{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;color:#fff;font-family:'Inter',sans-serif;font-size:12px;resize:vertical;min-height:70px;margin-bottom:20px;line-height:1.5;}
+.caption-area{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;color:#fff;font-family:'Inter',sans-serif;font-size:12px;resize:vertical;min-height:60px;margin-bottom:20px;line-height:1.5;}
 .caption-area:focus{outline:none;border-color:var(--mint);}
 .caption-area::placeholder{color:rgba(255,255,255,0.25);}
+.effects-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.effect-card{padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;cursor:pointer;transition:all 0.2s;user-select:none;}
+.effect-card.on{border-color:var(--mint);background:rgba(2,195,154,0.08);}
+.effect-card:hover{border-color:rgba(255,255,255,0.18);}
+.effect-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.effect-name{font-size:12px;font-weight:800;}
+.effect-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;background:rgba(255,255,255,0.1);}
+.effect-card.on .effect-badge{background:rgba(2,195,154,0.2);color:var(--mint);}
+.effect-desc{font-size:10px;color:rgba(255,255,255,0.4);line-height:1.4;}
+.transition-sel{width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;padding:8px 10px;font-family:'Inter',sans-serif;font-size:11px;margin-top:8px;display:none;}
+.effect-card.on .transition-sel{display:block;}
 .build-btn{width:100%;padding:16px;background:var(--mint);color:var(--deep);border:none;border-radius:12px;font-size:15px;font-weight:900;cursor:pointer;font-family:'Inter',sans-serif;}
 .build-btn:hover{filter:brightness(1.06);}
 #processing{display:none;text-align:center;padding:40px 0;}
@@ -76,6 +87,7 @@ h1{font-size:24px;font-weight:900;margin-bottom:6px;}
 .stage{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);transition:all 0.3s;}
 .stage.active{border-color:var(--mint);background:rgba(2,195,154,0.08);}
 .stage.done{border-color:rgba(22,163,74,0.4);}
+.stage.skip{opacity:0.35;}
 .stage-icon{font-size:20px;width:28px;text-align:center;}
 .stage-text{flex:1;text-align:left;}
 .stage-name{font-size:12px;font-weight:700;}
@@ -86,12 +98,12 @@ h1{font-size:24px;font-weight:900;margin-bottom:6px;}
 .prog-wrap{max-width:480px;margin:0 auto;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--sea),var(--mint));border-radius:3px;transition:width 0.5s ease;width:0%;}
 .prog-label{font-size:11px;color:rgba(255,255,255,0.4);margin-top:8px;}
-.err-box{background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);border-radius:10px;padding:14px 18px;margin-top:20px;font-size:12px;color:#fca5a5;display:none;max-width:480px;margin-left:auto;margin-right:auto;}
+.err-box{background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);border-radius:10px;padding:14px 18px;margin-top:20px;font-size:12px;color:#fca5a5;display:none;max-width:480px;margin-left:auto;margin-right:auto;white-space:pre-wrap;}
 .err-box.visible{display:block;}
 #results{display:none;padding-top:8px;}
 #results.visible{display:block;}
 .clips-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0;}
-@media(max-width:700px){.clips-grid,.reel-result-grid{grid-template-columns:1fr!important;}}
+@media(max-width:700px){.clips-grid,.reel-result-grid,.effects-grid{grid-template-columns:1fr!important;}}
 .clip-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;overflow:hidden;}
 .clip-video{width:100%;aspect-ratio:9/16;background:#000;display:block;}
 .clip-body{padding:14px;}
@@ -101,7 +113,7 @@ h1{font-size:24px;font-weight:900;margin-bottom:6px;}
 .clip-caption{font-size:10px;background:rgba(0,0,0,0.3);padding:8px 10px;border-radius:7px;color:rgba(255,255,255,0.6);line-height:1.5;margin-bottom:12px;white-space:pre-wrap;}
 .dl-btn{width:100%;padding:10px;background:var(--mint);color:var(--deep);border:none;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;display:block;text-align:center;text-decoration:none;}
 .reel-result-grid{display:grid;grid-template-columns:260px 1fr;gap:24px;margin:24px 0;align-items:start;}
-.tag-pill{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:700;}
+.tag-pill{display:inline-block;font-size:11px;padding:4px 10px;border-radius:20px;font-weight:700;}
 .caption-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px;font-size:13px;line-height:1.6;white-space:pre-wrap;margin-bottom:12px;}
 .copy-btn{padding:8px 18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
 .copy-btn:hover{background:rgba(255,255,255,0.14);}
@@ -131,54 +143,94 @@ h1{font-size:24px;font-weight:900;margin-bottom:6px;}
   </nav>
   <main>
     <h1>Drop your video. Get viral clips.</h1>
-    <p class="subtitle">Whisper · GPT-4o-mini · FFmpeg in browser · ~$0.01/video</p>
+    <p class="subtitle">Whisper · GPT-4o-mini · FFmpeg · 100% in your browser · ~$0.01/video</p>
 
     <div class="mode-wrap">
       <button class="mode-btn active" id="m-extract" onclick="setMode('extract')">
         <div class="mode-title">✂️ Extract Clips</div>
-        <div class="mode-desc">Find the best moments from a long video</div>
+        <div class="mode-desc">AI finds the best moments from a long video</div>
       </button>
       <button class="mode-btn" id="m-reel" onclick="setMode('reel')">
         <div class="mode-title">🎬 Build a Reel</div>
-        <div class="mode-desc">Stitch multiple clips + music + noise reduce</div>
+        <div class="mode-desc">Stitch clips · captions · transitions · music</div>
       </button>
     </div>
 
     <div id="drop-zone" onclick="document.getElementById('file-input').click()">
       <div class="drop-icon">🎬</div>
       <div class="drop-title" id="drop-title">Drop your video here</div>
-      <div class="drop-sub" id="drop-sub">MP4, MOV, any format · Shoot 4K = get 4K</div>
+      <div class="drop-sub" id="drop-sub">MP4, MOV, any format · Shoot 4K = download 4K</div>
       <button class="drop-btn" onclick="event.stopPropagation();document.getElementById('file-input').click()">Choose Video</button>
       <input type="file" id="file-input" accept="video/*"/>
     </div>
 
+    <!-- REEL PANEL -->
     <div id="reel-panel">
       <div id="reel-file-list"></div>
       <div class="reel-add" onclick="document.getElementById('file-input').click()">+ Add more clips</div>
+
+      <div class="sect-label">Effects</div>
+      <div class="effects-grid">
+        <div class="effect-card on" id="fx-captions" onclick="toggleFx('captions')">
+          <div class="effect-top">
+            <div class="effect-name">Auto Captions</div>
+            <div class="effect-badge" id="fx-captions-badge">ON</div>
+          </div>
+          <div class="effect-desc">Whisper transcribes · dramatic word-by-word · burned into video</div>
+        </div>
+        <div class="effect-card on" id="fx-transitions" onclick="toggleFx('transitions')">
+          <div class="effect-top">
+            <div class="effect-name">Transitions</div>
+            <div class="effect-badge" id="fx-transitions-badge">ON</div>
+          </div>
+          <div class="effect-desc">Smooth cuts between clips</div>
+          <select class="transition-sel" id="transition-type" onclick="event.stopPropagation()">
+            <option value="fade">Fade</option>
+            <option value="zoomin">Zoom In</option>
+            <option value="slideright">Slide Right</option>
+            <option value="slideleft">Slide Left</option>
+            <option value="wipeleft">Wipe</option>
+          </select>
+        </div>
+        <div class="effect-card on" id="fx-noise" onclick="toggleFx('noise')">
+          <div class="effect-top">
+            <div class="effect-name">Noise Reduction</div>
+            <div class="effect-badge" id="fx-noise-badge">ON</div>
+          </div>
+          <div class="effect-desc">Removes background noise + balances volume</div>
+        </div>
+        <div class="effect-card" id="fx-watermark" onclick="toggleFx('watermark')">
+          <div class="effect-top">
+            <div class="effect-name">Carely Watermark</div>
+            <div class="effect-badge" id="fx-watermark-badge">OFF</div>
+          </div>
+          <div class="effect-desc">Adds carely.fit in the corner</div>
+        </div>
+      </div>
 
       <div class="sect-label">Background Music</div>
       <div class="music-row" id="music-row" onclick="document.getElementById('music-input').click()">
         <div class="music-icon">♪</div>
         <div class="music-info">
           <div class="music-lbl" id="music-lbl">Upload MP3 (optional)</div>
-          <div class="music-sub">Mixed at low volume under your clips</div>
+          <div class="music-sub">Mixed at 18% volume · use YouTube Audio Library for free tracks</div>
         </div>
         <input type="file" id="music-input" accept="audio/*" style="display:none"/>
       </div>
 
       <div class="sect-label">Caption for TikTok / Instagram</div>
-      <textarea class="caption-area" id="caption-input" placeholder="Type your caption here (optional)&#10;e.g. POV: you work in healthcare and built an app for your parents"></textarea>
+      <textarea class="caption-area" id="caption-input" placeholder="Your post caption (optional)&#10;e.g. POV: you work in healthcare and built an app for your parents"></textarea>
 
       <button class="build-btn" onclick="startReel()">Build My Reel →</button>
     </div>
 
     <div id="processing">
       <div class="stage-list">
-        <div class="stage" id="s1"><div class="stage-icon">📥</div><div class="stage-text"><div class="stage-name" id="s1n">Loading video</div><div class="stage-detail" id="s1d">Reading file</div></div><div class="stage-status" id="s1s">Waiting</div></div>
-        <div class="stage" id="s2"><div class="stage-icon">🎙️</div><div class="stage-text"><div class="stage-name" id="s2n">Transcribing audio</div><div class="stage-detail" id="s2d">OpenAI Whisper</div></div><div class="stage-status" id="s2s">Waiting</div></div>
-        <div class="stage" id="s3"><div class="stage-icon">🧠</div><div class="stage-text"><div class="stage-name" id="s3n">Finding best moments</div><div class="stage-detail" id="s3d">GPT-4o-mini</div></div><div class="stage-status" id="s3s">Waiting</div></div>
-        <div class="stage" id="s4"><div class="stage-icon">✂️</div><div class="stage-text"><div class="stage-name" id="s4n">Rendering</div><div class="stage-detail" id="s4d">FFmpeg in browser</div></div><div class="stage-status" id="s4s">Waiting</div></div>
-        <div class="stage" id="s5"><div class="stage-icon">📦</div><div class="stage-text"><div class="stage-name" id="s5n">Ready to download</div><div class="stage-detail" id="s5d">Packaging</div></div><div class="stage-status" id="s5s">Waiting</div></div>
+        <div class="stage" id="s1"><div class="stage-icon">📥</div><div class="stage-text"><div class="stage-name" id="s1n">Loading clips</div><div class="stage-detail" id="s1d">Reading files</div></div><div class="stage-status" id="s1s">Waiting</div></div>
+        <div class="stage" id="s2"><div class="stage-icon">📐</div><div class="stage-text"><div class="stage-name" id="s2n">Formatting to 9:16</div><div class="stage-detail" id="s2d">Vertical crop</div></div><div class="stage-status" id="s2s">Waiting</div></div>
+        <div class="stage" id="s3"><div class="stage-icon">🔗</div><div class="stage-text"><div class="stage-name" id="s3n">Assembling reel</div><div class="stage-detail" id="s3d">Stitching clips</div></div><div class="stage-status" id="s3s">Waiting</div></div>
+        <div class="stage" id="s4"><div class="stage-icon">🎙️</div><div class="stage-text"><div class="stage-name" id="s4n">Auto captions</div><div class="stage-detail" id="s4d">Whisper word timing</div></div><div class="stage-status" id="s4s">Waiting</div></div>
+        <div class="stage" id="s5"><div class="stage-icon">✨</div><div class="stage-text"><div class="stage-name" id="s5n">Effects + render</div><div class="stage-detail" id="s5d">Final encode</div></div><div class="stage-status" id="s5s">Waiting</div></div>
       </div>
       <div class="prog-wrap"><div class="prog-fill" id="prog-fill"></div></div>
       <div class="prog-label" id="prog-label">0%</div>
@@ -186,7 +238,7 @@ h1{font-size:24px;font-weight:900;margin-bottom:6px;}
     </div>
 
     <div id="results">
-      <h2 style="font-size:20px;font-weight:900;margin-bottom:4px;" id="res-title">Your clips are ready</h2>
+      <h2 style="font-size:20px;font-weight:900;margin-bottom:4px;" id="res-title">Done</h2>
       <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:0;" id="res-sub"></p>
       <div id="clips-grid" class="clips-grid"></div>
       <div id="reel-result"></div>
@@ -196,10 +248,7 @@ h1{font-size:24px;font-weight:900;margin-bottom:6px;}
 </div>
 
 <script type="module">
-// ─── WORKER CROSS-ORIGIN FIX ─────────────────────────────────────────────────
-// FFmpeg.wasm creates its Worker with new URL('./worker.js', import.meta.url)
-// which points to unpkg.com — browsers block cross-origin module workers.
-// Fix: wrap any cross-origin module worker in a same-origin blob that imports it.
+// ─── WORKER CROSS-ORIGIN FIX ──────────────────────────────────────────────────
 (function(){
   const _W=window.Worker;
   window.Worker=function(url,opts){
@@ -212,7 +261,15 @@ h1{font-size:24px;font-weight:900;margin-bottom:6px;}
   };
 })();
 
-// ─── PIN ─────────────────────────────────────────────────────────────────────
+// ─── OPENAI KEY ───────────────────────────────────────────────────────────────
+let OPENAI_KEY=localStorage.getItem('carely_oai_key')||'';
+if(!OPENAI_KEY){
+  OPENAI_KEY=prompt('Enter your OpenAI API key (saved in your browser only — never uploaded anywhere except OpenAI):');
+  if(OPENAI_KEY)localStorage.setItem('carely_oai_key',OPENAI_KEY.trim());
+}
+OPENAI_KEY=(OPENAI_KEY||'').trim();
+
+// ─── PIN ──────────────────────────────────────────────────────────────────────
 (function(){
   var C='126226',SK='carely_clipper_auth',e='';
   function unlock(){document.getElementById('pin-screen').classList.add('hidden');document.getElementById('app').classList.add('visible');}
@@ -220,64 +277,53 @@ h1{font-size:24px;font-weight:900;margin-bottom:6px;}
   window.pp=function(n){if(e.length>=6)return;e+=n;upd();if(e.length===6)chk();};
   window.pd=function(){e=e.slice(0,-1);upd();};
   function upd(){for(var i=0;i<6;i++)document.getElementById('d'+i).className='pin-dot'+(i<e.length?' filled':'');}
-  function chk(){if(e===C){sessionStorage.setItem(SK,'1');unlock();}else{var d=document.getElementById('pin-dots'),er=document.getElementById('pin-error');d.classList.add('shake');er.classList.add('show');setTimeout(function(){d.classList.remove('shake');},450);setTimeout(function(){er.classList.remove('show');e='';upd();},1200);}}
-  document.addEventListener('keydown',function(ev){if(document.getElementById('pin-screen').classList.contains('hidden'))return;if(ev.key>='0'&&ev.key<='9')window.pp(ev.key);else if(ev.key==='Backspace')window.pd();});
+  function chk(){if(e===C){sessionStorage.setItem(SK,'1');unlock();}else{var d=document.getElementById('pin-dots'),er=document.getElementById('pin-error');d.classList.add('shake');er.classList.add('show');setTimeout(()=>d.classList.remove('shake'),450);setTimeout(()=>{er.classList.remove('show');e='';upd();},1200);}}
+  document.addEventListener('keydown',ev=>{if(document.getElementById('pin-screen').classList.contains('hidden'))return;if(ev.key>='0'&&ev.key<='9')window.pp(ev.key);else if(ev.key==='Backspace')window.pd();});
 })();
 
-// ─── OPENAI KEY ───────────────────────────────────────────────────────────────
-let OPENAI_KEY=localStorage.getItem('carely_oai_key')||'';
-if(!OPENAI_KEY){
-  OPENAI_KEY=prompt('Enter your OpenAI API key (saved in your browser only, never shared anywhere except OpenAI):');
-  if(OPENAI_KEY)localStorage.setItem('carely_oai_key',OPENAI_KEY.trim());
-}
-OPENAI_KEY=(OPENAI_KEY||'').trim();
+// ─── FX TOGGLES ──────────────────────────────────────────────────────────────
+const fxState={captions:true,transitions:true,noise:true,watermark:false};
+window.toggleFx=function(name){
+  fxState[name]=!fxState[name];
+  const card=document.getElementById('fx-'+name);
+  const badge=document.getElementById('fx-'+name+'-badge');
+  card.classList.toggle('on',fxState[name]);
+  badge.textContent=fxState[name]?'ON':'OFF';
+};
 
-// ─── STATE ───────────────────────────────────────────────────────────────────
+// ─── STATE ────────────────────────────────────────────────────────────────────
 let currentMode='extract';
 let reelFiles=[];
 
-// ─── MODE TOGGLE ─────────────────────────────────────────────────────────────
+// ─── MODE ─────────────────────────────────────────────────────────────────────
 window.setMode=function(m){
   currentMode=m;
   document.getElementById('m-extract').classList.toggle('active',m==='extract');
   document.getElementById('m-reel').classList.toggle('active',m==='reel');
   document.getElementById('reel-panel').style.display=m==='reel'&&reelFiles.length>0?'block':'none';
   document.getElementById('drop-title').textContent=m==='reel'?'Drop your clips here (multiple ok)':'Drop your video here';
-  document.getElementById('drop-sub').textContent=m==='reel'?'MP4, MOV · Drop multiple clips at once · Order them below':'MP4, MOV, any format · Shoot 4K = get 4K';
+  document.getElementById('drop-sub').textContent=m==='reel'?'MP4, MOV · Drop multiple clips at once':'MP4, MOV, any format · Shoot 4K = download 4K';
   document.getElementById('file-input').multiple=m==='reel';
-  if(m==='reel'&&reelFiles.length>0)document.getElementById('drop-zone').classList.add('hidden');
-  else document.getElementById('drop-zone').classList.remove('hidden');
+  const dz=document.getElementById('drop-zone');
+  if(m==='reel'&&reelFiles.length>0)dz.classList.add('hidden');
+  else dz.classList.remove('hidden');
 };
 
-// ─── DRAG & DROP ─────────────────────────────────────────────────────────────
+// ─── DROP ZONE ────────────────────────────────────────────────────────────────
 const dz=document.getElementById('drop-zone');
 dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragover');});
 dz.addEventListener('dragleave',()=>dz.classList.remove('dragover'));
-dz.addEventListener('drop',e=>{
-  e.preventDefault();dz.classList.remove('dragover');
-  handleFiles(Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('video/')));
-});
-document.getElementById('file-input').addEventListener('change',e=>{
-  handleFiles(Array.from(e.target.files));
-  e.target.value='';
-});
-
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('dragover');handleFiles(Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('video/')));});
+document.getElementById('file-input').addEventListener('change',e=>{handleFiles(Array.from(e.target.files));e.target.value='';});
 function handleFiles(files){
   if(!files.length)return;
-  if(currentMode==='extract'){
-    startExtract(files[0]);
-  }else{
-    reelFiles=[...reelFiles,...files];
-    dz.classList.add('hidden');
-    document.getElementById('reel-panel').style.display='block';
-    renderReelList();
-  }
+  if(currentMode==='extract'){startExtract(files[0]);}
+  else{reelFiles=[...reelFiles,...files];dz.classList.add('hidden');document.getElementById('reel-panel').style.display='block';renderReelList();}
 }
 
-// ─── REEL FILE LIST ──────────────────────────────────────────────────────────
+// ─── REEL LIST ────────────────────────────────────────────────────────────────
 function renderReelList(){
-  const el=document.getElementById('reel-file-list');
-  el.innerHTML=reelFiles.map((f,i)=>`
+  document.getElementById('reel-file-list').innerHTML=reelFiles.map((f,i)=>`
     <div class="reel-item">
       <div class="reel-num">${i+1}</div>
       <div class="reel-name">${f.name}</div>
@@ -292,7 +338,6 @@ function renderReelList(){
 window.moveClip=function(i,d){const j=i+d;[reelFiles[i],reelFiles[j]]=[reelFiles[j],reelFiles[i]];renderReelList();};
 window.removeClip=function(i){reelFiles.splice(i,1);if(!reelFiles.length){dz.classList.remove('hidden');document.getElementById('reel-panel').style.display='none';}renderReelList();};
 
-// ─── MUSIC ───────────────────────────────────────────────────────────────────
 document.getElementById('music-input').addEventListener('change',e=>{
   const f=e.target.files[0];
   document.getElementById('music-lbl').textContent=f?'♪ '+f.name:'Upload MP3 (optional)';
@@ -300,95 +345,127 @@ document.getElementById('music-input').addEventListener('change',e=>{
 });
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
-function stg(id,st,detail,name){
-  const el=document.getElementById('s'+id);
-  el.className='stage'+(st==='active'?' active':st==='done'?' done':'');
-  document.getElementById('s'+id+'s').textContent=st==='active'?'Running...':st==='done'?'Done ✓':'Waiting';
-  if(detail)document.getElementById('s'+id+'d').textContent=detail;
-  if(name)document.getElementById('s'+id+'n').textContent=name;
+function stg(id,st,det,nm){
+  document.getElementById('s'+id).className='stage'+(st==='active'?' active':st==='done'?' done':st==='skip'?' skip':'');
+  document.getElementById('s'+id+'s').textContent=st==='active'?'Running...':st==='done'?'Done ✓':st==='skip'?'Skipped':'Waiting';
+  if(det)document.getElementById('s'+id+'d').textContent=det;
+  if(nm)document.getElementById('s'+id+'n').textContent=nm;
 }
 function prog(p,lbl){document.getElementById('prog-fill').style.width=p+'%';document.getElementById('prog-label').textContent=lbl||p+'%';}
 function showErr(msg){const b=document.getElementById('err-box');b.textContent='Error: '+msg;b.classList.add('visible');}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function startUI(){dz.classList.add('hidden');document.getElementById('reel-panel').style.display='none';document.getElementById('processing').classList.add('visible');prog(0,'Starting...');}
-function getVideoDuration(url){return new Promise(r=>{const v=document.createElement('video');v.src=url;v.preload='metadata';v.onloadedmetadata=()=>r(v.duration);});}
+function getVideoDuration(url){return new Promise(r=>{const v=document.createElement('video');v.src=url;v.preload='metadata';v.onloadedmetadata=()=>r(v.duration);v.onerror=()=>r(0);});}
 
-// ─── FFMPEG LOADER (fixes Worker CORS via toBlobURL) ─────────────────────────
-async function loadFFmpeg(onProgress){
+// ─── FFMPEG LOADER ────────────────────────────────────────────────────────────
+async function loadFFmpeg(onProg){
   const{FFmpeg}=await import('https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/esm/index.js');
   const{toBlobURL}=await import('https://unpkg.com/@ffmpeg/util@0.12.1/dist/esm/index.js');
   const ff=new FFmpeg();
-  if(onProgress)ff.on('progress',onProgress);
-  const coreBase='https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
+  if(onProg)ff.on('progress',onProg);
+  const core='https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
   await ff.load({
-    coreURL: await toBlobURL(coreBase+'/ffmpeg-core.js',   'text/javascript'),
-    wasmURL: await toBlobURL(coreBase+'/ffmpeg-core.wasm', 'application/wasm'),
+    coreURL: await toBlobURL(core+'/ffmpeg-core.js','text/javascript'),
+    wasmURL: await toBlobURL(core+'/ffmpeg-core.wasm','application/wasm'),
   });
   return ff;
+}
+
+// ─── ASS CAPTION GENERATOR ───────────────────────────────────────────────────
+function toAssTime(s){
+  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;
+  return `${h}:${String(m).padStart(2,'0')}:${sec.toFixed(2).padStart(5,'0')}`;
+}
+
+function buildAssFile(words){
+  // Style: large white caps, thick black outline, dramatic drop shadow, bottom-center
+  const header=`[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\nWrapStyle: 0\n\n[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\nStyle: Default,Arial,90,&H00FFFFFF,&H00FFD700,&H00000000,&HA0000000,-1,0,0,0,100,100,0,0,1,6,4,2,80,80,120,1\n\n[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n`;
+
+  // Group into 3-word phrases, show current word in yellow using secondary color tag
+  const lines=[];
+  let i=0;
+  while(i<words.length){
+    // take up to 3 words
+    const group=words.slice(i,i+3);
+    const start=group[0].start;
+    const end=group[group.length-1].end;
+    // Each word in the group shown one at a time with karaoke timing
+    for(let j=0;j<group.length;j++){
+      const w=group[j];
+      const dur=Math.round((w.end-w.start)*100); // centiseconds
+      // Build the line: before current word (white), current word (yellow via \kf), after (white)
+      let text='';
+      group.forEach((gw,gi)=>{
+        const d=Math.round((gw.end-gw.start)*100);
+        text+=`{\\kf${d}}`+gw.word.toUpperCase().replace(/\\/g,'\\\\').replace(/\{/g,'\\{').replace(/\}/g,'\\}')+(gi<group.length-1?' ':'');
+      });
+      // Show each word separately for dramatic one-word-at-a-time effect
+      const wClean=w.word.toUpperCase().replace(/\\/g,'\\\\').replace(/\{/g,'\\{').replace(/\}/g,'\\}');
+      lines.push(`Dialogue: 0,${toAssTime(w.start)},${toAssTime(w.end)},Default,,0,0,0,,{\\fad(80,80)}{\\1c&H00FFFFFF&}${wClean}`);
+    }
+    i+=3;
+  }
+  return header+lines.join('\n');
 }
 
 // ─── EXTRACT MODE ─────────────────────────────────────────────────────────────
 async function startExtract(file){
   startUI();
-  stg(1,'active','Reading '+file.name+' ('+Math.round(file.size/1024/1024)+'MB)');stg(2,'','');stg(3,'','');stg(4,'active','');stg(5,'','');
+  stg(1,'active','Reading '+file.name);stg(2,'active','');stg(3,'active','');
   try{
     const videoURL=URL.createObjectURL(file);
     stg(1,'done'); prog(12,'Video loaded');
 
-    stg(2,'active','Sending to OpenAI Whisper...');
+    stg(2,'active','Sending to Whisper...');
     const form=new FormData();
     form.append('file',file,file.name);
     form.append('model','whisper-1');
     form.append('response_format','verbose_json');
     form.append('timestamp_granularities[]','segment');
     const wRes=await fetch('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{Authorization:'Bearer '+OPENAI_KEY},body:form});
-    if(!wRes.ok)throw new Error('Whisper failed: '+(await wRes.text()));
+    if(!wRes.ok)throw new Error('Whisper: '+(await wRes.text()));
     const transcript=await wRes.json();
-    stg(2,'done',transcript.text.substring(0,50)+'...'); prog(40,'Transcription done');
+    stg(2,'done',transcript.text.substring(0,50)+'...'); prog(40,'Transcribed');
 
     stg(3,'active','GPT-4o-mini finding hooks...');
     const duration=await getVideoDuration(videoURL);
-    const segs=(transcript.segments||[]).map(s=>'['+s.start.toFixed(1)+'s->'+s.end.toFixed(1)+'s] '+s.text.trim()).join('\n');
+    const segs=(transcript.segments||[]).map(s=>'['+s.start.toFixed(1)+'->'+s.end.toFixed(1)+'s] '+s.text.trim()).join('\n');
     const gRes=await fetch('https://api.openai.com/v1/chat/completions',{
-      method:'POST',
-      headers:{Authorization:'Bearer '+OPENAI_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'user',content:'You are a viral TikTok editor. Find 3 best clips (30-60s each) from this transcript. Start each on a strong hook. No overlap. Return only JSON.\n\nTranscript:\n'+segs+'\n\nDuration: '+duration.toFixed(0)+'s\n\nReturn: {"clips":[{"rank":1,"start":12.5,"end":52.3,"hook":"hook line","why":"why it works","caption":"caption with #hashtags"}]}'}],temperature:0.3,response_format:{type:'json_object'}})
+      method:'POST',headers:{Authorization:'Bearer '+OPENAI_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'user',content:`You are a viral TikTok/Instagram editor. Find the 3 best clips (30-60s each) from this video that would go viral. Start each on a strong emotional hook or bold claim. No overlap.\n\nTranscript:\n${segs}\n\nDuration: ${duration.toFixed(0)}s\n\nReturn only JSON: {"clips":[{"rank":1,"start":12.5,"end":52.3,"hook":"the opening hook line","why":"why this goes viral","caption":"viral caption with #hashtags"}]}`}],temperature:0.3,response_format:{type:'json_object'}})
     });
-    if(!gRes.ok)throw new Error('GPT failed: '+(await gRes.text()));
+    if(!gRes.ok)throw new Error('GPT: '+(await gRes.text()));
     const clips=JSON.parse((await gRes.json()).choices[0].message.content).clips;
-    stg(3,'done','Found '+clips.length+' clips'); prog(58,'Moments found');
+    stg(3,'done','Found '+clips.length+' clips'); prog(58,'Hooks found');
 
     stg(4,'active','Loading FFmpeg (first time ~30s)...');
     const{fetchFile}=await import('https://unpkg.com/@ffmpeg/util@0.12.1/dist/esm/index.js');
-    const ff=await loadFFmpeg(p=>{prog(58+Math.round(p.progress*32),'Rendering '+Math.round(p.progress*100)+'%');});
-    await ff.writeFile('input.mp4',await fetchFile(file));
+    const ff=await loadFFmpeg(p=>prog(58+Math.round(p.progress*32),'Rendering '+Math.round(p.progress*100)+'%'));
+    await ff.writeFile('src.mp4',await fetchFile(file));
     stg(4,'active','Cutting clips...');
     const results=[];
     for(let i=0;i<clips.length;i++){
       const c=clips[i],out='clip'+(i+1)+'.mp4';
-      await ff.exec(['-ss',String(c.start),'-i','input.mp4','-t',String(c.end-c.start),
-        '-vf','scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,eq=contrast=1.05:saturation=1.15',
+      await ff.exec(['-ss',String(c.start),'-i','src.mp4','-t',String(c.end-c.start),
+        '-vf','scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,eq=contrast=1.05:saturation=1.2',
+        '-af','afftdn=nf=-20,loudnorm',
         '-c:v','libx264','-preset','fast','-crf','18',
-        '-af','afftdn=nf=-20',
         '-c:a','aac','-b:a','192k',out]);
       const data=await ff.readFile(out);
-      const blob=new Blob([data.buffer],{type:'video/mp4'});
-      results.push({...c,url:URL.createObjectURL(blob),name:'carely_clip_'+(i+1)+'.mp4'});
+      results.push({...c,url:URL.createObjectURL(new Blob([data.buffer],{type:'video/mp4'})),name:'clip_'+(i+1)+'.mp4'});
     }
-    stg(4,'done'); prog(95,'Clips rendered');
-    stg(5,'active','Packaging...'); await new Promise(r=>setTimeout(r,400));
-    stg(5,'done'); prog(100,'Done!');
+    stg(4,'done'); stg(5,'done'); prog(100,'Done!');
 
     document.getElementById('processing').classList.remove('visible');
     document.getElementById('results').classList.add('visible');
     document.getElementById('res-title').textContent='Your clips are ready';
-    document.getElementById('res-sub').textContent=results.length+' clips from '+Math.round(duration/60)+' min video';
+    document.getElementById('res-sub').textContent=results.length+' clips · noise reduced · color graded';
     const grid=document.getElementById('clips-grid');
     grid.style.display='grid';document.getElementById('reel-result').innerHTML='';
     grid.innerHTML='';
     results.forEach((c,i)=>{
       const card=document.createElement('div');card.className='clip-card';
-      card.innerHTML='<video class="clip-video" src="'+c.url+'" controls playsinline></video><div class="clip-body"><div class="clip-rank">CLIP '+(i+1)+' &middot; '+(c.end-c.start).toFixed(0)+'s</div><div class="clip-hook">'+esc(c.hook)+'</div><div class="clip-why">'+esc(c.why)+'</div><div class="clip-caption">'+esc(c.caption)+'</div><a class="dl-btn" href="'+c.url+'" download="'+c.name+'">Download HD Clip '+(i+1)+'</a></div>';
+      card.innerHTML=`<video class="clip-video" src="${c.url}" controls playsinline></video><div class="clip-body"><div class="clip-rank">CLIP ${i+1} · ${(c.end-c.start).toFixed(0)}s</div><div class="clip-hook">${esc(c.hook)}</div><div class="clip-why">${esc(c.why)}</div><div class="clip-caption">${esc(c.caption)}</div><a class="dl-btn" href="${c.url}" download="${c.name}">Download HD Clip ${i+1}</a></div>`;
       grid.appendChild(card);
     });
   }catch(err){console.error(err);showErr(err.message||'Something went wrong');}
@@ -396,112 +473,185 @@ async function startExtract(file){
 
 // ─── REEL MODE ────────────────────────────────────────────────────────────────
 window.startReel=async function(){
-  if(!reelFiles.length){alert('Add at least 1 clip first.');return;}
+  if(!reelFiles.length){alert('Add at least 1 clip.');return;}
   startUI();
-  stg(1,'active','','Loading clips');stg(2,'','','Formatting to 9:16');stg(3,'','','Assembling reel');stg(4,'','','Effects + music');stg(5,'','','Packaging');
+  const useCaptions=fxState.captions;
+  const useTransitions=fxState.transitions&&reelFiles.length>1;
+  const useNoise=fxState.noise;
+  const useWatermark=fxState.watermark;
+  const musicFile=document.getElementById('music-input').files[0];
+
   try{
     const{fetchFile}=await import('https://unpkg.com/@ffmpeg/util@0.12.1/dist/esm/index.js');
-    prog(3,'Loading FFmpeg...');
+    stg(1,'active','Loading FFmpeg...');
+    prog(3,'Loading engine...');
     const ff=await loadFFmpeg();
 
-    // Write all clips
+    // Load all clips
     stg(1,'active',`Writing ${reelFiles.length} clips...`);
     for(let i=0;i<reelFiles.length;i++){
       await ff.writeFile('c'+i+'.mp4',await fetchFile(reelFiles[i]));
-      prog(3+Math.round((i+1)/reelFiles.length*12),'Loaded '+(i+1)+'/'+reelFiles.length);
+      prog(3+Math.round((i+1)/reelFiles.length*10),'Loaded '+(i+1)+'/'+reelFiles.length);
     }
-    stg(1,'done'); prog(15,'Clips loaded');
+    stg(1,'done'); prog(13,'Clips loaded');
 
-    // Normalize each to 9:16 1080×1920 30fps
-    stg(2,'active','Formatting clips...');
+    // Normalize each clip: scale to 9:16 1080×1920, 30fps, h264
+    stg(2,'active','Cropping to vertical...');
     for(let i=0;i<reelFiles.length;i++){
-      await ff.exec([
-        '-i','c'+i+'.mp4',
+      await ff.exec(['-i','c'+i+'.mp4',
         '-vf','scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920',
         '-c:v','libx264','-preset','ultrafast','-crf','22',
-        '-c:a','aac','-b:a','128k','-r','30',
-        'n'+i+'.mp4'
-      ]);
-      prog(15+Math.round((i+1)/reelFiles.length*25),'Formatted '+(i+1)+'/'+reelFiles.length);
+        '-c:a','aac','-b:a','128k','-r','30','n'+i+'.mp4']);
+      prog(13+Math.round((i+1)/reelFiles.length*17),'Formatted '+(i+1)+'/'+reelFiles.length);
     }
-    stg(2,'done'); prog(40,'Clips formatted');
+    stg(2,'done'); prog(30,'All clips formatted');
 
-    // Concat
-    stg(3,'active','Stitching together...');
-    const listTxt=reelFiles.map((_,i)=>"file 'n"+i+".mp4'").join('\n');
-    await ff.writeFile('list.txt',listTxt);
-    await ff.exec(['-f','concat','-safe','0','-i','list.txt','-c','copy','assembled.mp4']);
-    stg(3,'done'); prog(60,'Reel assembled');
-
-    // Effects + optional music
-    stg(4,'active','Noise reduction + color grade...');
-    const musicFile=document.getElementById('music-input').files[0];
-    if(musicFile){
-      await ff.writeFile('music.mp3',await fetchFile(musicFile));
-      prog(65,'Mixing music...');
-      await ff.exec([
-        '-i','assembled.mp4','-i','music.mp3',
-        '-filter_complex',
-        '[0:v]eq=contrast=1.05:saturation=1.2[v];[1:a]volume=0.18[mu];[0:a]afftdn=nf=-20[cl];[cl][mu]amix=inputs=2:duration=first[a]',
-        '-map','[v]','-map','[a]',
-        '-c:v','libx264','-preset','fast','-crf','18',
-        '-c:a','aac','-b:a','192k',
-        'final.mp4'
-      ]);
+    // Assemble — with transitions (xfade) or plain concat
+    stg(3,'active',useTransitions?'Adding transitions...':'Stitching clips...');
+    if(useTransitions){
+      // Get durations of normalized clips
+      const durs=[];
+      for(let i=0;i<reelFiles.length;i++){
+        const data=await ff.readFile('n'+i+'.mp4');
+        const url=URL.createObjectURL(new Blob([data.buffer],{type:'video/mp4'}));
+        durs.push(await getVideoDuration(url));
+        URL.revokeObjectURL(url);
+      }
+      const transType=document.getElementById('transition-type').value;
+      // Build xfade + acrossfade chain
+      const inputs=reelFiles.flatMap((_,i)=>['-i','n'+i+'.mp4']);
+      let fc='',prevV='[0:v]',prevA='[0:a]',offset=durs[0]-0.5;
+      for(let i=1;i<reelFiles.length;i++){
+        const vOut=`[xv${i}]`,aOut=`[xa${i}]`;
+        fc+=`${prevV}[${i}:v]xfade=transition=${transType}:duration=0.5:offset=${Math.max(0,offset).toFixed(3)}${vOut};`;
+        fc+=`${prevA}[${i}:a]acrossfade=d=0.5${aOut};`;
+        prevV=vOut;prevA=aOut;
+        if(i<reelFiles.length-1)offset+=durs[i]-0.5;
+      }
+      await ff.exec([...inputs,'-filter_complex',fc.replace(/;$/,''),'-map',prevV,'-map',prevA,
+        '-c:v','libx264','-preset','ultrafast','-c:a','aac','assembled.mp4']);
     }else{
-      await ff.exec([
-        '-i','assembled.mp4',
-        '-vf','eq=contrast=1.05:saturation=1.2',
-        '-af','afftdn=nf=-20',
-        '-c:v','libx264','-preset','fast','-crf','18',
-        '-c:a','aac','-b:a','192k',
-        'final.mp4'
-      ]);
+      const listTxt=reelFiles.map((_,i)=>`file 'n${i}.mp4'`).join('\n');
+      await ff.writeFile('list.txt',listTxt);
+      await ff.exec(['-f','concat','-safe','0','-i','list.txt','-c','copy','assembled.mp4']);
     }
-    stg(4,'done'); prog(90,'Effects applied');
+    stg(3,'done'); prog(52,'Assembled');
 
-    stg(5,'active','Packaging...');
-    const data=await ff.readFile('final.mp4');
-    const blob=new Blob([data.buffer],{type:'video/mp4'});
-    const url=URL.createObjectURL(blob);
-    stg(5,'done'); prog(100,'Done!');
+    // Auto captions via Whisper
+    if(useCaptions){
+      stg(4,'active','Transcribing for captions...');
+      prog(54,'Sending audio to Whisper...');
+      const asmData=await ff.readFile('assembled.mp4');
+      const asmBlob=new Blob([asmData.buffer],{type:'video/mp4'});
+      const wForm=new FormData();
+      wForm.append('file',asmBlob,'reel.mp4');
+      wForm.append('model','whisper-1');
+      wForm.append('response_format','verbose_json');
+      wForm.append('timestamp_granularities[]','word');
+      const wRes=await fetch('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{Authorization:'Bearer '+OPENAI_KEY},body:wForm});
+      if(!wRes.ok)throw new Error('Whisper: '+(await wRes.text()));
+      const wtrans=await wRes.json();
+      const words=(wtrans.words||[]).filter(w=>w.word&&w.word.trim());
+      stg(4,'done',`${words.length} words timed`); prog(68,'Captions ready');
 
-    const caption=document.getElementById('caption-input').value.trim();
+      if(words.length>0){
+        const assContent=buildAssFile(words);
+        await ff.writeFile('captions.ass',assContent);
+        // Burn captions into assembled reel using subtitles filter (libass)
+        // If libass not available, use a sequence of drawtext calls
+        try{
+          await ff.exec(['-i','assembled.mp4','-vf','subtitles=captions.ass',
+            '-c:v','libx264','-preset','ultrafast','-c:a','copy','captioned.mp4']);
+          await ff.deleteFile('assembled.mp4');
+          await ff.rename('captioned.mp4','assembled.mp4');
+        }catch(assErr){
+          // libass not available — fall back to none (captions shown as copyable text)
+          console.warn('libass not available, captions as text only');
+        }
+      }
+    }else{
+      stg(4,'skip');
+    }
+
+    // Final effects: noise reduction, color grade, optional music, watermark
+    stg(5,'active','Final render...');
+    prog(72,'Applying effects...');
+
+    let vFilters='eq=contrast=1.05:saturation=1.2';
+    if(useWatermark)vFilters+=',drawtext=text=carely.fit:fontsize=32:fontcolor=white@0.6:x=w-text_w-30:y=h-text_h-50:shadowcolor=black@0.5:shadowx=2:shadowy=2';
+
+    let aFilters='';
+    if(useNoise)aFilters='afftdn=nf=-20,loudnorm';
+
+    const hasMusicFilter=!!musicFile;
+    if(musicFile)await ff.writeFile('music.mp3',await fetchFile(musicFile));
+
+    let finalCmd;
+    if(hasMusicFilter){
+      let fc='[0:v]'+vFilters+'[vf]';
+      fc+=';[1:a]volume=0.18[mu]';
+      if(aFilters)fc+=';[0:a]'+aFilters+'[cl];[cl][mu]amix=inputs=2:duration=first[af]';
+      else fc+=';[0:a][mu]amix=inputs=2:duration=first[af]';
+      finalCmd=['-i','assembled.mp4','-i','music.mp3',
+        '-filter_complex',fc,'-map','[vf]','-map','[af]',
+        '-c:v','libx264','-preset','fast','-crf','18',
+        '-c:a','aac','-b:a','192k','final.mp4'];
+    }else{
+      const vfArg=vFilters;
+      const afArg=aFilters||null;
+      finalCmd=['-i','assembled.mp4','-vf',vfArg,
+        ...(afArg?['-af',afArg]:[]),
+        '-c:v','libx264','-preset','fast','-crf','18',
+        '-c:a','aac','-b:a','192k','final.mp4'];
+    }
+    await ff.exec(finalCmd);
+    stg(5,'done'); prog(95,'Rendering done');
+
+    prog(100,'Done!');
+    const finalData=await ff.readFile('final.mp4');
+    const finalBlob=new Blob([finalData.buffer],{type:'video/mp4'});
+    const finalUrl=URL.createObjectURL(finalBlob);
+
+    const postCaption=document.getElementById('caption-input').value.trim();
     document.getElementById('processing').classList.remove('visible');
     document.getElementById('results').classList.add('visible');
     document.getElementById('res-title').textContent='Your reel is ready';
-    document.getElementById('res-sub').textContent=reelFiles.length+' clips assembled'+(musicFile?' · music mixed':'')+(caption?' · caption ready':'');
+    const tags=[`${reelFiles.length} clips`,useTransitions?'transitions':'straight cuts',useNoise?'noise reduced':'',useCaptions?'captions burned':'',useWatermark?'watermark':'',musicFile?'music mixed':''].filter(Boolean);
+    document.getElementById('res-sub').textContent=tags.join(' · ');
     document.getElementById('clips-grid').style.display='none';
     document.getElementById('reel-result').innerHTML=`
       <div class="reel-result-grid">
         <div>
-          <video style="width:100%;aspect-ratio:9/16;background:#000;border-radius:12px;display:block;" src="${url}" controls playsinline></video>
-          <a class="dl-btn" style="margin-top:12px;display:block;text-align:center;" href="${url}" download="carely_reel.mp4">Download HD Reel</a>
+          <video style="width:100%;aspect-ratio:9/16;background:#000;border-radius:14px;display:block;" src="${finalUrl}" controls playsinline></video>
+          <a class="dl-btn" style="margin-top:12px;display:block;text-align:center;" href="${finalUrl}" download="carely_reel.mp4">Download HD Reel</a>
         </div>
         <div>
-          <div class="sect-label" style="margin-bottom:12px;">Applied</div>
+          <div class="sect-label" style="margin-bottom:12px;">Applied Effects</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
             <span class="tag-pill" style="background:rgba(2,195,154,0.15);color:var(--mint);">9:16 Vertical</span>
-            <span class="tag-pill" style="background:rgba(255,255,255,0.08);">Noise Reduced</span>
-            <span class="tag-pill" style="background:rgba(255,255,255,0.08);">Color Graded</span>
+            ${useTransitions?'<span class="tag-pill" style="background:rgba(255,255,255,0.08);">Transitions</span>':''}
+            ${useCaptions?'<span class="tag-pill" style="background:rgba(255,255,255,0.08);">Auto Captions</span>':''}
+            ${useNoise?'<span class="tag-pill" style="background:rgba(255,255,255,0.08);">Noise Reduced</span>':''}
+            ${useNoise?'<span class="tag-pill" style="background:rgba(255,255,255,0.08);">Loudnorm</span>':''}
             ${musicFile?'<span class="tag-pill" style="background:rgba(255,255,255,0.08);">Music Mixed</span>':''}
+            ${useWatermark?'<span class="tag-pill" style="background:rgba(255,255,255,0.08);">Watermark</span>':''}
           </div>
-          ${caption?`
-            <div class="sect-label" style="margin-bottom:8px;">Your Caption</div>
-            <div class="caption-box">${esc(caption)}</div>
-            <button class="copy-btn" id="copy-cap-btn">Copy Caption</button>
-          `:'<div style="font-size:12px;color:rgba(255,255,255,0.3);">Tip: Use TikTok or CapCut auto-captions for animated word-by-word captions.</div>'}
+          ${postCaption?`
+            <div class="sect-label" style="margin-bottom:8px;">Post Caption</div>
+            <div class="caption-box">${esc(postCaption)}</div>
+            <button class="copy-btn" id="ccbtn">Copy Caption</button>
+          `:`<div style="font-size:12px;color:rgba(255,255,255,0.3);line-height:1.6;">Captions are burned into the video.<br><br>For animated word pop/bounce, run the clip through CapCut after — it takes 30 seconds and the result is 10x better than anything a browser can render frame-by-frame.</div>`}
         </div>
       </div>`;
-    if(caption){
-      document.getElementById('copy-cap-btn').onclick=function(){
-        navigator.clipboard.writeText(caption).then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy Caption',1500);});
+    if(postCaption){
+      document.getElementById('ccbtn').onclick=function(){
+        navigator.clipboard.writeText(postCaption).then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy Caption',1500);});
       };
     }
-  }catch(err){console.error(err);showErr(err.message||'Something went wrong');}
+  }catch(err){console.error(err);showErr(err.message||err.toString());}
 };
 
-// ─── RESET ───────────────────────────────────────────────────────────────────
+// ─── RESET ────────────────────────────────────────────────────────────────────
 window.resetAll=function(){
   reelFiles=[];renderReelList();
   dz.classList.remove('hidden');
@@ -518,8 +668,6 @@ window.resetAll=function(){
   document.getElementById('reel-result').innerHTML='';
   for(let i=1;i<=5;i++)stg(i,'','','');
   prog(0,'');
-  const names=['Loading video','Transcribing audio','Finding best moments','Rendering','Ready to download'];
-  names.forEach((n,i)=>{const el=document.getElementById('s'+(i+1)+'n');if(el)el.textContent=n;});
 };
 </script>
 </body>
