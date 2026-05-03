@@ -734,13 +734,18 @@ window.startReel=async function(){
     // Assemble with transitions (xfade) or concat
     stg(3,'active',trans?'Adding '+trans+' transitions...':'Stitching clips...');
     if(trans&&clipList.length>1){
-      // Get durations
+      // Get durations from original files (avoids reading large normalized files from WASM FS)
+      // Duration is unchanged by crop/scale. Hook card is always 2s.
       const durs=[];
       for(const name of clipList){
-        const data=await ff.readFile(name);
-        const url=URL.createObjectURL(new Blob([data.buffer],{type:'video/mp4'}));
-        durs.push(await getVideoDuration(url));
-        URL.revokeObjectURL(url);
+        if(name==='hook.mp4'){
+          durs.push(2.0);
+        }else{
+          const idx=parseInt(name.replace('n','').replace('.mp4',''));
+          const url=URL.createObjectURL(reelFiles[idx]);
+          durs.push(await getVideoDuration(url));
+          URL.revokeObjectURL(url);
+        }
       }
       const inputs=clipList.flatMap(n=>['-i',n]);
       let fc='',prevV='[0:v]',prevA='[0:a]',offset=durs[0]-0.5;
