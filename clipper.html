@@ -458,17 +458,64 @@ async function detectMood(transcriptText){
   }catch{return null;}
 }
 
-async function fetchMusicTrack(ff,fetchFile,tone){
-  const track=MUSIC_LIBRARY[tone]||MUSIC_LIBRARY.upbeat;
-  try{
-    const res=await fetch(track.url);
-    if(!res.ok)throw new Error('fetch failed');
-    const buf=await res.arrayBuffer();
-    await ff.writeFile('music.mp3',new Uint8Array(buf));
-    return track.name;
-  }catch{
-    return null;
+async function generateBeat(ff,tone){
+  // Procedural beat — no external fetch, no CORS, 100% private
+  const cfgs={
+    upbeat:     {bpm:120,root:220,vol:0.32},
+    motivational:{bpm:108,root:196,vol:0.28},
+    chill:      {bpm:78, root:130.8,vol:0.22},
+    cinematic:  {bpm:62, root:164.8,vol:0.18},
+    emotional:  {bpm:84, root:146.8,vol:0.22},
+  };
+  const cfg=cfgs[tone]||cfgs.upbeat;
+  const {bpm,root,vol}=cfg;
+  const beat=60/bpm, bars=8, totalSec=bars*4*beat, sr=22050;
+  const offCtx=new OfflineAudioContext(1,Math.ceil(sr*totalSec),sr);
+  const master=offCtx.createGain(); master.gain.value=vol; master.connect(offCtx.destination);
+
+  const kick=(t)=>{
+    const buf=offCtx.createBuffer(1,Math.ceil(sr*0.28),sr),d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=Math.sin(2*Math.PI*(80*Math.exp(-i/(sr*0.022)))*i/sr)*Math.exp(-i/(sr*0.065));
+    const s=offCtx.createBufferSource(),g=offCtx.createGain();
+    s.buffer=buf; g.gain.value=1.6; s.connect(g); g.connect(master); s.start(t);
+  };
+  const hat=(t,open=false)=>{
+    const dur=open?0.09:0.025,buf=offCtx.createBuffer(1,Math.ceil(sr*dur),sr),d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.exp(-i/(sr*dur*0.35));
+    const s=offCtx.createBufferSource(),hp=offCtx.createBiquadFilter(),g=offCtx.createGain();
+    s.buffer=buf; hp.type='highpass'; hp.frequency.value=7500; g.gain.value=0.22;
+    s.connect(hp); hp.connect(g); g.connect(master); s.start(t);
+  };
+  const bass=(t,freq,dur)=>{
+    const o=offCtx.createOscillator(),g=offCtx.createGain();
+    o.type='sine'; o.frequency.value=freq;
+    g.gain.setValueAtTime(0.55,t); g.gain.exponentialRampToValueAtTime(0.001,t+dur*0.88);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t+dur*0.88);
+  };
+  const bassSeq=[0,0,7,0,0,5,0,3];
+  const scale=[0,2,4,5,7,9,11];
+  for(let bar=0;bar<bars;bar++){
+    for(let b=0;b<4;b++){
+      const t=(bar*4+b)*beat;
+      if(b===0||b===2) kick(t);
+      hat(t,b===1||b===3); hat(t+beat*0.5);
+      const semi=scale[bassSeq[(bar*4+b)%bassSeq.length]%scale.length]||0;
+      bass(t,root*0.5*Math.pow(2,semi/12),beat*0.82);
+    }
   }
+  const rendered=await offCtx.startRendering();
+  const samps=rendered.getChannelData(0),n=samps.length;
+  const ab=new ArrayBuffer(44+n*2),v=new DataView(ab);
+  const ws=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
+  ws(0,'RIFF'); v.setUint32(4,36+n*2,true);
+  ws(8,'WAVE'); ws(12,'fmt ');
+  v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+  v.setUint32(24,sr,true); v.setUint32(28,sr*2,true);
+  v.setUint16(32,2,true); v.setUint16(34,16,true);
+  ws(36,'data'); v.setUint32(40,n*2,true);
+  for(let i=0;i<n;i++){const s=Math.max(-1,Math.min(1,samps[i]));v.setInt16(44+i*2,s<0?s*0x8000:s*0x7FFF,true);}
+  await ff.writeFile('music.wav',new Uint8Array(ab));
+  return MUSIC_LIBRARY[tone]?.name||'AI Beat';
 }
 
 // ─── STYLE PRESETS ────────────────────────────────────────────────────────────
@@ -654,7 +701,7 @@ async function startExtract(file){
       const c=clips[i],out='out'+(i+1)+'.mp4';
       await ff.exec(['-ss',String(c.start),'-i','src.mp4','-t',String(c.end-c.start),
         '-vf',`scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,${STYLE_VF.tiktok}`,
-        '-af','afftdn=nf=-20,loudnorm',
+        '-af','loudnorm=I=-16:TP=-1.5:LRA=11',
         '-c:v','libx264','-preset','fast','-crf','18','-c:a','aac','-b:a','192k',out]);
       const data=await ff.readFile(out);
       results.push({...c,url:URL.createObjectURL(new Blob([data.buffer],{type:'video/mp4'})),name:'clip_'+(i+1)+'.mp4'});
@@ -769,10 +816,12 @@ window.startReel=async function(){
     // Auto captions via Whisper word-level timestamps
     let assFile=null, whisperTranscript='';
     if(useCaptions){
-      stg(4,'active','Transcribing for captions...');prog(54,'Whisper...');
-      const asmData=await ff.readFile('assembled.mp4');
+      stg(4,'active','Extracting audio for captions...');prog(54,'Audio extract...');
+      await ff.exec(['-i','assembled.mp4','-vn','-c:a','aac','-b:a','64k','-ac','1','aud.m4a']);
+      const audData=await ff.readFile('aud.m4a');
+      stg(4,'active','Transcribing...');
       const wForm=new FormData();
-      wForm.append('file',new Blob([asmData.buffer],{type:'video/mp4'}),'reel.mp4');
+      wForm.append('file',new Blob([audData.buffer],{type:'audio/mp4'}),'audio.m4a');
       wForm.append('model','whisper-1');
       wForm.append('response_format','verbose_json');
       wForm.append('timestamp_granularities[]','word');
@@ -809,12 +858,11 @@ window.startReel=async function(){
       if(!tone)tone=PRESET_MOOD[selectedStyle]||'upbeat';
       document.getElementById('music-auto-lbl').textContent='♪ '+MUSIC_LIBRARY[tone].name+' — auto-matched';
       document.getElementById('music-auto-sub').textContent='Tone: '+tone+' · mixed at low volume · based on your content';
-      resolvedMusicName=(await fetchMusicTrack(ff,fetchFile,tone))||'';
-      if(!resolvedMusicName){
-        document.getElementById('music-auto-sub').textContent='Could not load track · continuing without music';
-      }
+      resolvedMusicName=await generateBeat(ff,tone);
+      document.getElementById('music-auto-lbl').textContent='♪ '+resolvedMusicName+' — AI generated';
+      document.getElementById('music-auto-sub').textContent='Tone: '+tone+' · procedural beat · mixed at low volume';
     }else if(musicFile){
-      await ff.writeFile('music.mp3',await fetchFile(musicFile));
+      await ff.writeFile('music.wav',await fetchFile(musicFile));
       resolvedMusicName=musicFile.name;
     }
 
@@ -831,14 +879,14 @@ window.startReel=async function(){
     const hasMusicFile=resolvedMusicName.length>0;
     let finalCmd;
     if(hasMusicFile){
-      let aChain='[1:a]volume=0.18[mu]';
-      aChain+=useNoise?';[0:a]afftdn=nf=-20,loudnorm[cl];[cl][mu]amix=inputs=2:duration=first[af]':';[0:a][mu]amix=inputs=2:duration=first[af]';
-      finalCmd=['-i','assembled.mp4','-i','music.mp3',
+      let aChain='[1:a]volume=0.15[mu]';
+      aChain+=useNoise?';[0:a]loudnorm=I=-16:TP=-1.5:LRA=11[cl];[cl][mu]amix=inputs=2:duration=first[af]':';[0:a][mu]amix=inputs=2:duration=first[af]';
+      finalCmd=['-i','assembled.mp4','-stream_loop','-1','-i','music.wav',
         '-filter_complex',`[0:v]${vf}[vf];${aChain}`,
         '-map','[vf]','-map','[af]',
         '-c:v','libx264','-preset','fast','-crf','17','-c:a','aac','-b:a','192k','final.mp4'];
     }else{
-      const af=useNoise?'afftdn=nf=-20,loudnorm':null;
+      const af=useNoise?'loudnorm=I=-16:TP=-1.5:LRA=11':null;
       finalCmd=['-i','assembled.mp4','-vf',vf,...(af?['-af',af]:[]),
         '-c:v','libx264','-preset','fast','-crf','17','-c:a','aac','-b:a','192k','final.mp4'];
     }
