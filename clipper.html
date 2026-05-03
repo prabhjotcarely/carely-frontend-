@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Carely Clipper</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--teal:#028090;--deep:#0D3347;--mint:#02C39A;--sea:#00A896;}
+body{font-family:'Inter',sans-serif;background:var(--deep);min-height:100vh;color:#fff;-webkit-font-smoothing:antialiased;}
+#pin-screen{position:fixed;inset:0;background:var(--deep);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+#pin-screen.hidden{display:none;}
+.pin-logo{font-size:18px;font-weight:900;color:#fff;letter-spacing:1px;display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.pin-logo svg{width:28px;height:28px;}
+.pin-sub{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:2px;margin-bottom:32px;}
+.pin-dots{display:flex;gap:14px;margin-bottom:28px;}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);transition:all 0.2s;}
+.pin-dot.filled{background:var(--mint);border-color:var(--mint);}
+.pin-numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:240px;}
+.pin-btn{height:60px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:#fff;font-size:22px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.15s;}
+.pin-btn:active{transform:scale(0.95);}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.pin-dots.shake{animation:shake 0.4s ease;}
+.pin-error{font-size:11px;color:#fc8181;margin-top:14px;opacity:0;transition:opacity 0.3s;}
+.pin-error.show{opacity:1;}
+#app{display:none;flex-direction:column;min-height:100vh;}
+#app.visible{display:flex;}
+nav{height:52px;background:rgba(0,0,0,0.3);display:flex;align-items:center;padding:0 24px;gap:12px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.nav-brand{font-size:14px;font-weight:900;color:#fff;display:flex;align-items:center;gap:8px;}
+.nav-brand svg{width:20px;height:20px;}
+.nav-tag{font-size:9px;color:var(--mint);font-weight:700;letter-spacing:3px;background:rgba(2,195,154,0.15);padding:2px 8px;border-radius:20px;}
+.nav-back{margin-left:auto;font-size:10px;color:rgba(255,255,255,0.5);font-weight:600;text-decoration:none;padding:4px 10px;border:1px solid rgba(255,255,255,0.1);border-radius:6px;}
+main{flex:1;padding:32px 24px;max-width:900px;margin:0 auto;width:100%;}
+h1{font-size:24px;font-weight:900;margin-bottom:6px;}
+.subtitle{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:32px;}
+#drop-zone{border:2px dashed rgba(2,195,154,0.4);border-radius:16px;padding:60px 32px;text-align:center;cursor:pointer;transition:all 0.3s;background:rgba(255,255,255,0.03);}
+#drop-zone:hover,#drop-zone.dragover{border-color:var(--mint);background:rgba(2,195,154,0.08);}
+#drop-zone.hidden{display:none;}
+.drop-icon{font-size:52px;margin-bottom:16px;}
+.drop-title{font-size:18px;font-weight:800;margin-bottom:8px;}
+.drop-sub{font-size:13px;color:rgba(255,255,255,0.4);}
+.drop-btn{margin-top:20px;padding:12px 28px;background:var(--mint);color:var(--deep);border:none;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;}
+#file-input{display:none;}
+#processing{display:none;text-align:center;padding:40px 0;}
+#processing.visible{display:block;}
+.stage-list{display:flex;flex-direction:column;gap:12px;max-width:480px;margin:0 auto 28px;}
+.stage{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);transition:all 0.3s;}
+.stage.active{border-color:var(--mint);background:rgba(2,195,154,0.08);}
+.stage.done{border-color:rgba(22,163,74,0.4);}
+.stage-icon{font-size:20px;width:28px;text-align:center;}
+.stage-text{flex:1;text-align:left;}
+.stage-name{font-size:12px;font-weight:700;}
+.stage-detail{font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;}
+.stage-status{font-size:11px;font-weight:700;color:rgba(255,255,255,0.3);}
+.stage.active .stage-status{color:var(--mint);}
+.stage.done .stage-status{color:#4ade80;}
+.prog-wrap{max-width:480px;margin:0 auto;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--sea),var(--mint));border-radius:3px;transition:width 0.5s ease;width:0%;}
+.prog-label{font-size:11px;color:rgba(255,255,255,0.4);margin-top:8px;}
+.err-box{background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);border-radius:10px;padding:14px 18px;margin-top:20px;font-size:12px;color:#fca5a5;display:none;max-width:480px;margin-left:auto;margin-right:auto;}
+.err-box.visible{display:block;}
+#results{display:none;padding-top:8px;}
+#results.visible{display:block;}
+.clips-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0;}
+@media(max-width:700px){.clips-grid{grid-template-columns:1fr;}}
+.clip-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;overflow:hidden;}
+.clip-video{width:100%;aspect-ratio:9/16;background:#000;display:block;}
+.clip-body{padding:14px;}
+.clip-rank{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--mint);margin-bottom:6px;}
+.clip-hook{font-size:12px;font-weight:700;margin-bottom:6px;line-height:1.4;}
+.clip-why{font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:10px;line-height:1.5;}
+.clip-caption{font-size:10px;background:rgba(0,0,0,0.3);padding:8px 10px;border-radius:7px;color:rgba(255,255,255,0.6);line-height:1.5;margin-bottom:12px;white-space:pre-wrap;}
+.dl-btn{width:100%;padding:10px;background:var(--mint);color:var(--deep);border:none;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;display:block;text-align:center;text-decoration:none;}
+.reset-btn{padding:12px 28px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+</style>
+</head>
+<body>
+
+<div id="pin-screen">
+  <div class="pin-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#02C39A" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>CARELY CLIPPER</div>
+  <div class="pin-sub">PRIVATE ACCESS</div>
+  <div class="pin-dots" id="pin-dots"><div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div><div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div><div class="pin-dot" id="d4"></div><div class="pin-dot" id="d5"></div></div>
+  <div class="pin-numpad">
+    <button class="pin-btn" onclick="pp('1')">1</button><button class="pin-btn" onclick="pp('2')">2</button><button class="pin-btn" onclick="pp('3')">3</button>
+    <button class="pin-btn" onclick="pp('4')">4</button><button class="pin-btn" onclick="pp('5')">5</button><button class="pin-btn" onclick="pp('6')">6</button>
+    <button class="pin-btn" onclick="pp('7')">7</button><button class="pin-btn" onclick="pp('8')">8</button><button class="pin-btn" onclick="pp('9')">9</button>
+    <button class="pin-btn" style="opacity:0.2;cursor:default"></button><button class="pin-btn" onclick="pp('0')">0</button><button class="pin-btn" onclick="pd()">⌫</button>
+  </div>
+  <div class="pin-error" id="pin-error">Wrong PIN.</div>
+</div>
+
+<div id="app">
+  <nav>
+    <div class="nav-brand"><svg viewBox="0 0 24 24" fill="none" stroke="#02C39A" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>CARELY CLIPPER</div>
+    <span class="nav-tag">AI VIDEO ENGINE</span>
+    <a href="hq.html" class="nav-back">← HQ</a>
+  </nav>
+  <main>
+    <h1>Drop your video. Get viral clips.</h1>
+    <p class="subtitle">Whisper transcribes · GPT-4o-mini finds hooks · FFmpeg renders · You download HD · ~$0.01/video</p>
+
+    <div id="drop-zone" onclick="document.getElementById('file-input').click()">
+      <div class="drop-icon">🎬</div>
+      <div class="drop-title">Drop your video here</div>
+      <div class="drop-sub">MP4, MOV, any format · Output matches source quality · Shoot 4K = get 4K</div>
+      <button class="drop-btn" onclick="event.stopPropagation();document.getElementById('file-input').click()">Choose Video</button>
+      <input type="file" id="file-input" accept="video/*"/>
+    </div>
+
+    <div id="processing">
+      <div class="stage-list">
+        <div class="stage" id="s1"><div class="stage-icon">📥</div><div class="stage-text"><div class="stage-name">Loading video</div><div class="stage-detail" id="s1d">Reading file</div></div><div class="stage-status" id="s1s">Waiting</div></div>
+        <div class="stage" id="s2"><div class="stage-icon">🎙️</div><div class="stage-text"><div class="stage-name">Transcribing audio</div><div class="stage-detail" id="s2d">OpenAI Whisper</div></div><div class="stage-status" id="s2s">Waiting</div></div>
+        <div class="stage" id="s3"><div class="stage-icon">🧠</div><div class="stage-text"><div class="stage-name">Finding best moments</div><div class="stage-detail" id="s3d">GPT-4o-mini</div></div><div class="stage-status" id="s3s">Waiting</div></div>
+        <div class="stage" id="s4"><div class="stage-icon">✂️</div><div class="stage-text"><div class="stage-name">Cutting and rendering</div><div class="stage-detail" id="s4d">FFmpeg in browser</div></div><div class="stage-status" id="s4s">Waiting</div></div>
+        <div class="stage" id="s5"><div class="stage-icon">📦</div><div class="stage-text"><div class="stage-name">Ready to download</div><div class="stage-detail" id="s5d">Packaging clips</div></div><div class="stage-status" id="s5s">Waiting</div></div>
+      </div>
+      <div class="prog-wrap"><div class="prog-fill" id="prog-fill"></div></div>
+      <div class="prog-label" id="prog-label">0%</div>
+      <div class="err-box" id="err-box"></div>
+    </div>
+
+    <div id="results">
+      <h2 style="font-size:20px;font-weight:900;margin-bottom:4px;">Your clips are ready</h2>
+      <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:0;" id="res-sub"></p>
+      <div class="clips-grid" id="clips-grid"></div>
+      <button class="reset-btn" onclick="resetAll()">Process Another Video</button>
+    </div>
+  </main>
+</div>
+
+<script type="module">
+// PIN
+(function(){
+  var C='126226',SK='carely_clipper_auth',e='';
+  function unlock(){document.getElementById('pin-screen').classList.add('hidden');document.getElementById('app').classList.add('visible');}
+  if(sessionStorage.getItem(SK)==='1')unlock();
+  window.pp=function(n){if(e.length>=6)return;e+=n;upd();if(e.length===6)chk();};
+  window.pd=function(){e=e.slice(0,-1);upd();};
+  function upd(){for(var i=0;i<6;i++)document.getElementById('d'+i).className='pin-dot'+(i<e.length?' filled':'');}
+  function chk(){if(e===C){sessionStorage.setItem(SK,'1');unlock();}else{var d=document.getElementById('pin-dots'),er=document.getElementById('pin-error');d.classList.add('shake');er.classList.add('show');setTimeout(function(){d.classList.remove('shake');},450);setTimeout(function(){er.classList.remove('show');e='';upd();},1200);}}
+  document.addEventListener('keydown',function(ev){if(document.getElementById('pin-screen').classList.contains('hidden'))return;if(ev.key>='0'&&ev.key<='9')window.pp(ev.key);else if(ev.key==='Backspace')window.pd();});
+})();
+
+let OPENAI_KEY=localStorage.getItem('carely_oai_key')||'';
+if(!OPENAI_KEY){
+  OPENAI_KEY=prompt('Enter your OpenAI API key (saved in your browser only, never shared anywhere except OpenAI):');
+  if(OPENAI_KEY)localStorage.setItem('carely_oai_key',OPENAI_KEY.trim());
+}
+OPENAI_KEY=(OPENAI_KEY||'').trim();
+
+// Drag & drop
+const dz=document.getElementById('drop-zone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragover');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('dragover'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('dragover');if(e.dataTransfer.files[0])startProcessing(e.dataTransfer.files[0]);});
+document.getElementById('file-input').addEventListener('change',e=>{if(e.target.files[0])startProcessing(e.target.files[0]);});
+
+function stage(id,st,detail){
+  const el=document.getElementById('s'+id);
+  el.className='stage '+(st==='active'?'active':st==='done'?'done':'');
+  document.getElementById('s'+id+'s').textContent=st==='active'?'Running...':st==='done'?'Done ✓':'Waiting';
+  if(detail)document.getElementById('s'+id+'d').textContent=detail;
+}
+function prog(pct,label){document.getElementById('prog-fill').style.width=pct+'%';document.getElementById('prog-label').textContent=label||pct+'%';}
+function showErr(msg){const b=document.getElementById('err-box');b.textContent='Error: '+msg;b.classList.add('visible');}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function getVideoDuration(url){return new Promise(r=>{const v=document.createElement('video');v.src=url;v.preload='metadata';v.onloadedmetadata=()=>r(v.duration);});}
+
+async function startProcessing(file){
+  dz.classList.add('hidden');
+  document.getElementById('processing').classList.add('visible');
+  prog(0,'Starting...');
+  try{
+    stage(1,'active','Reading '+file.name+' ('+Math.round(file.size/1024/1024)+'MB)');
+    const videoURL=URL.createObjectURL(file);
+    stage(1,'done'); prog(12,'Video loaded');
+
+    stage(2,'active','Sending to OpenAI Whisper...');
+    const form=new FormData();
+    form.append('file',file,file.name);
+    form.append('model','whisper-1');
+    form.append('response_format','verbose_json');
+    form.append('timestamp_granularities[]','segment');
+    const wRes=await fetch('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{Authorization:'Bearer '+OPENAI_KEY},body:form});
+    if(!wRes.ok)throw new Error('Whisper failed: '+(await wRes.text()));
+    const transcript=await wRes.json();
+    stage(2,'done',transcript.text.substring(0,50)+'...');
+    prog(40,'Transcription done');
+
+    stage(3,'active','GPT-4o-mini finding hooks...');
+    const duration=await getVideoDuration(videoURL);
+    const segments=(transcript.segments||[]).map(s=>'['+s.start.toFixed(1)+'s->'+s.end.toFixed(1)+'s] '+s.text.trim()).join('\n');
+    const gRes=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{Authorization:'Bearer '+OPENAI_KEY,'Content-Type':'application/json'},body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'user',content:'You are a viral TikTok editor. Find 3 best clips (30-60s each) from this transcript. Start on strong hooks. No overlap. Return only JSON.\n\nTranscript:\n'+segments+'\n\nDuration: '+duration.toFixed(0)+'s\n\nReturn: {"clips":[{"rank":1,"start":12.5,"end":52.3,"hook":"hook line","why":"why it works","caption":"caption with #hashtags"}]}'}],temperature:0.3,response_format:{type:'json_object'}})});
+    if(!gRes.ok)throw new Error('GPT failed');
+    const gData=await gRes.json();
+    const clips=JSON.parse(gData.choices[0].message.content).clips;
+    stage(3,'done','Found '+clips.length+' clips'); prog(58,'Moments found');
+
+    stage(4,'active','Loading FFmpeg (first time ~30s)...');
+    const{FFmpeg}=await import('https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/esm/index.js');
+    const{fetchFile,toBlobURL}=await import('https://unpkg.com/@ffmpeg/util@0.12.1/dist/esm/index.js');
+    const ffmpeg=new FFmpeg();
+    ffmpeg.on('progress',p=>{prog(58+Math.round(p.progress*32),'Rendering '+Math.round(p.progress*100)+'%');});
+    const base='https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
+    await ffmpeg.load({coreURL:await toBlobURL(base+'/ffmpeg-core.js','text/javascript'),wasmURL:await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm')});
+    await ffmpeg.writeFile('input.mp4',await fetchFile(file));
+    stage(4,'detail','Cutting clips...');
+    const clipResults=[];
+    for(let i=0;i<clips.length;i++){
+      const c=clips[i],out='clip'+(i+1)+'.mp4';
+      await ffmpeg.exec(['-ss',String(c.start),'-i','input.mp4','-t',String(c.end-c.start),'-vf','scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920','-c:v','libx264','-preset','fast','-crf','18','-c:a','aac','-b:a','192k',out]);
+      const data=await ffmpeg.readFile(out);
+      const blob=new Blob([data.buffer],{type:'video/mp4'});
+      clipResults.push({...c,url:URL.createObjectURL(blob),name:'carely_clip_'+(i+1)+'.mp4'});
+    }
+    stage(4,'done'); prog(95,'Clips rendered');
+
+    stage(5,'active','Packaging...');
+    await new Promise(r=>setTimeout(r,400));
+    stage(5,'done'); prog(100,'Done!');
+
+    // show results
+    document.getElementById('processing').classList.remove('visible');
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('res-sub').textContent=clipResults.length+' clips from '+Math.round(duration/60)+' min video';
+    const grid=document.getElementById('clips-grid');
+    grid.innerHTML='';
+    clipResults.forEach((c,i)=>{
+      const card=document.createElement('div');
+      card.className='clip-card';
+      card.innerHTML='<video class="clip-video" src="'+c.url+'" controls playsinline></video><div class="clip-body"><div class="clip-rank">CLIP '+(i+1)+' &middot; '+(c.end-c.start).toFixed(0)+'s</div><div class="clip-hook">'+esc(c.hook)+'</div><div class="clip-why">'+esc(c.why)+'</div><div class="clip-caption">'+esc(c.caption)+'</div><a class="dl-btn" href="'+c.url+'" download="'+c.name+'">⬇ Download HD Clip '+(i+1)+'</a></div>';
+      grid.appendChild(card);
+    });
+  }catch(err){console.error(err);showErr(err.message||'Something went wrong');}
+}
+
+window.resetAll=function(){
+  dz.classList.remove('hidden');
+  document.getElementById('processing').classList.remove('visible');
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('err-box').classList.remove('visible');
+  document.getElementById('file-input').value='';
+  for(let i=1;i<=5;i++)stage(i,'','');
+  prog(0,'');
+  document.getElementById('clips-grid').innerHTML='';
+};
+</script>
+</body>
+</html>
