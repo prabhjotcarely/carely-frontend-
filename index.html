@@ -482,6 +482,28 @@
     }
 
     /* — Size variants — */
+    /* Real Elara avatar — white/green brand */
+    .elara-avatar-wrap {
+      position: relative; width: 150px; height: 150px;
+      margin: 0 auto 12px; display: flex; align-items: center; justify-content: center;
+    }
+    .elara-avatar-ring {
+      position: absolute; inset: -6px; border-radius: 50%;
+      background: linear-gradient(135deg, #02C39A, #028090, #ffffff);
+      padding: 4px;
+    }
+    .elara-avatar-img {
+      width: 150px; height: 150px; border-radius: 50%;
+      object-fit: cover; object-position: top;
+      border: 4px solid #ffffff;
+      position: relative; z-index: 1;
+    }
+    .elara-avatar-glow {
+      position: absolute; inset: -12px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(2,195,154,0.25) 0%, transparent 70%);
+      z-index: 0;
+    }
+
     /* Large (Meet Elara section card) */
     .elara-body.lg { width: 130px; }
     .elara-body.lg .ea-head  { width:118px; height:112px; }
@@ -782,22 +804,10 @@
       </div>
     </div>
     <div class="elara-chat-card elara-anim from-right">
-      <div class="elara-body lg elara-float">
-        <div class="ea-antenna"></div>
-        <div class="ea-head">
-          <div class="ea-eyes"><div class="ea-eye"></div><div class="ea-eye"></div></div>
-          <div class="ea-cheeks"><div class="ea-cheek"></div><div class="ea-cheek"></div></div>
-          <div class="ea-smile"></div>
-        </div>
-        <div class="ea-neck"></div>
-        <div class="ea-torso">
-          <div class="ea-arms"><div class="ea-arm ea-arm-l"></div><div class="ea-arm ea-arm-r"></div></div>
-        </div>
-        <div class="ea-waist"></div>
-        <div class="ea-legs">
-          <div><div class="ea-leg"></div><div class="ea-foot"></div></div>
-          <div><div class="ea-leg"></div><div class="ea-foot"></div></div>
-        </div>
+      <div class="elara-avatar-wrap elara-float">
+        <div class="elara-avatar-ring"></div>
+        <img src="elara-avatar.jpg" alt="Elara AI Caretaker" class="elara-avatar-img" />
+        <div class="elara-avatar-glow"></div>
       </div>
       <div class="elara-name-badge">Elara</div>
       <div class="elara-name-sub">AI Caretaker · Carely</div>
