@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join the Carely Affiliate Program — Earn 20% Forever</title>
+  <meta name="description" content="Earn 20% of every payment, forever. Share Carely with your audience and get paid every month as long as they stay." />
+  <link rel="icon" type="image/png" href="carely-icon.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #F7FBFA;
+      color: #0D3347;
+      min-height: 100vh;
+    }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px;
+      background: #fff;
+      border-bottom: 1px solid #E5EEF0;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .logo-mark {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, #028090, #02C39A);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-mark svg { width: 20px; height: 20px; }
+    .logo-name { font-size: 20px; font-weight: 800; color: #0D3347; }
+    .nav-link {
+      font-size: 14px; font-weight: 600; color: #028090;
+      text-decoration: none;
+    }
+
+    .hero {
+      max-width: 640px; margin: 0 auto;
+      padding: 64px 24px 40px;
+      text-align: center;
+    }
+    .pill {
+      display: inline-block;
+      background: rgba(2, 195, 154, 0.12);
+      color: #028090;
+      font-size: 13px; font-weight: 700;
+      padding: 6px 14px; border-radius: 20px;
+      margin-bottom: 20px;
+      letter-spacing: 0.4px;
+    }
+    h1 {
+      font-size: clamp(30px, 5vw, 44px);
+      font-weight: 900;
+      line-height: 1.15;
+      color: #0D3347;
+      margin-bottom: 16px;
+    }
+    h1 span { color: #02C39A; }
+    .sub {
+      font-size: 17px; color: #476E7D; line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .stats {
+      display: flex; gap: 16px; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 48px;
+    }
+    .stat {
+      background: #fff; border-radius: 16px;
+      border: 1px solid #DCE9EC;
+      padding: 18px 24px; text-align: center;
+      flex: 1; min-width: 130px;
+    }
+    .stat-value { font-size: 28px; font-weight: 900; color: #02C39A; }
+    .stat-label { font-size: 12px; color: #6B8FA0; margin-top: 2px; font-weight: 600; }
+
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      border: 1px solid #DCE9EC;
+      padding: 36px 32px;
+      max-width: 540px;
+      margin: 0 auto;
+      box-shadow: 0 4px 24px rgba(13,51,71,0.06);
+    }
+
+    .form-group { margin-bottom: 18px; }
+    label {
+      display: block;
+      font-size: 13px; font-weight: 700; color: #0D3347;
+      margin-bottom: 7px; letter-spacing: 0.3px;
+    }
+    input, select {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid #DCE9EC;
+      border-radius: 12px;
+      font-size: 15px; color: #0D3347;
+      background: #F7FBFA;
+      outline: none;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+    }
+    input::placeholder { color: #9BB5BF; }
+    input:focus, select:focus { border-color: #02C39A; background: #fff; }
+    select { color: #0D3347; cursor: pointer; }
+
+    .submit-btn {
+      width: 100%; padding: 16px;
+      background: linear-gradient(135deg, #028090, #02C39A);
+      color: #fff; font-size: 16px; font-weight: 800;
+      border: none; border-radius: 14px;
+      cursor: pointer; margin-top: 8px;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .submit-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .legal {
+      font-size: 12px; color: #9BB5BF; text-align: center;
+      margin-top: 14px; line-height: 1.5;
+    }
+
+    /* Success state */
+    .success-box {
+      display: none;
+      text-align: center;
+      padding: 8px 0;
+    }
+    .success-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(2,195,154,0.12);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 32px;
+    }
+    .success-box h2 { font-size: 22px; font-weight: 900; color: #0D3347; margin-bottom: 10px; }
+    .success-box p { font-size: 15px; color: #476E7D; line-height: 1.6; margin-bottom: 24px; }
+    .your-link-box {
+      background: #F0FBF8;
+      border: 1.5px solid rgba(2,195,154,0.3);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+    }
+    .your-link-label { font-size: 11px; font-weight: 700; color: #028090; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+    .your-link-url {
+      font-size: 15px; font-weight: 700; color: #0D3347;
+      word-break: break-all;
+    }
+    .copy-btn {
+      width: 100%; padding: 13px;
+      border: 1.5px solid #DCE9EC;
+      background: #fff; color: #028090;
+      font-size: 14px; font-weight: 700;
+      border-radius: 12px; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .copy-btn:hover { background: #F0FBF8; }
+    .portal-link {
+      display: block; margin-top: 12px;
+      font-size: 13px; color: #9BB5BF; text-decoration: underline; cursor: pointer;
+    }
+
+    /* How it works */
+    .how {
+      max-width: 640px; margin: 48px auto 0;
+      padding: 0 24px 64px;
+    }
+    .how h2 {
+      font-size: 22px; font-weight: 900; text-align: center;
+      color: #0D3347; margin-bottom: 28px;
+    }
+    .steps { display: flex; flex-direction: column; gap: 16px; }
+    .step {
+      display: flex; align-items: flex-start; gap: 16px;
+      background: #fff; border-radius: 16px;
+      border: 1px solid #DCE9EC;
+      padding: 20px;
+    }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, #028090, #02C39A);
+      color: #fff; font-size: 16px; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-title { font-size: 15px; font-weight: 800; color: #0D3347; margin-bottom: 4px; }
+    .step-desc { font-size: 13px; color: #6B8FA0; line-height: 1.5; }
+
+    .error-msg {
+      font-size: 13px; color: #EF4444;
+      margin-top: 10px; text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 12h3l2-7 4 14 3-10 2 3h4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="logo-name">Carely</span>
+    </a>
+    <a href="/" class="nav-link">Back to home</a>
+  </nav>
+
+  <div class="hero">
+    <div class="pill">Affiliate Program</div>
+    <h1>Earn <span>20% forever</span> for every person you refer</h1>
+    <p class="sub">
+      Share Carely with caregivers, families, or anyone managing medications.
+      Get paid every month, for as long as they stay a member.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">20%</div>
+        <div class="stat-label">Commission rate</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">Forever</div>
+        <div class="stat-label">Recurring monthly</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">$2+</div>
+        <div class="stat-label">Per user / month</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div id="form-area">
+        <div class="form-group">
+          <label for="name">Your name</label>
+          <input type="text" id="name" placeholder="Jane Smith" autocomplete="name" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label for="type">What best describes you?</label>
+          <select id="type">
+            <option value="individual">Content creator / blogger / individual</option>
+            <option value="care_agency">Care agency or senior living community</option>
+            <option value="pharmacy">Pharmacy</option>
+            <option value="clinic">Clinic or healthcare provider</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <button class="submit-btn" id="submit-btn" onclick="submit()">Get my affiliate link</button>
+        <div class="error-msg" id="error-msg"></div>
+        <p class="legal">No fees. No minimums. Commissions paid manually every month via e-transfer or PayPal.</p>
+      </div>
+
+      <div class="success-box" id="success-box">
+        <div class="success-icon">🎉</div>
+        <h2>You're in!</h2>
+        <p>Your unique affiliate link is ready. Share it anywhere — every paying member you bring earns you 20% every month, forever.</p>
+        <div class="your-link-box">
+          <div class="your-link-label">Your referral link</div>
+          <div class="your-link-url" id="result-url"></div>
+        </div>
+        <button class="copy-btn" id="copy-btn" onclick="copyLink()">Copy link</button>
+        <a class="portal-link" id="portal-link" target="_blank">View your dashboard & earnings</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="how">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Get your link</div>
+          <div class="step-desc">Fill in your name and email above. You'll get a unique link instantly — no approval process, no waiting.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Share it anywhere</div>
+          <div class="step-desc">Post it on social media, your blog, a Facebook group, a newsletter — wherever caregivers and families hang out.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Earn every month</div>
+          <div class="step-desc">Every time someone signs up and pays through your link, you earn 20% of their plan — every month, for as long as they stay a Carely member.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Track your earnings</div>
+          <div class="step-desc">Your personal portal shows how many people signed up, who converted to paid, and exactly how much you've earned.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'https://carely-backend-production.up.railway.app';
+    let resultUrl = '';
+    let portalUrl = '';
+
+    async function submit() {
+      const name  = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const type  = document.getElementById('type').value;
+      const err   = document.getElementById('error-msg');
+      const btn   = document.getElementById('submit-btn');
+
+      err.style.display = 'none';
+
+      if (!name) { showError('Please enter your name.'); return; }
+      if (!email || !email.includes('@')) { showError('Please enter a valid email.'); return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Setting up your link...';
+
+      try {
+        const res = await fetch(`${API}/affiliate/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, type }),
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          showError(data.message || 'Something went wrong. Try again.');
+          btn.disabled = false;
+          btn.textContent = 'Get my affiliate link';
+          return;
+        }
+
+        resultUrl = data.referralUrl;
+        portalUrl = data.portalUrl;
+
+        document.getElementById('result-url').textContent = resultUrl;
+        document.getElementById('portal-link').href = portalUrl;
+        document.getElementById('form-area').style.display = 'none';
+        document.getElementById('success-box').style.display = 'block';
+
+      } catch {
+        showError('Could not connect. Check your internet and try again.');
+        btn.disabled = false;
+        btn.textContent = 'Get my affiliate link';
+      }
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('error-msg');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText(resultUrl).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy link'; }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>
