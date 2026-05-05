@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Best Medicine Tracker App (2026) — Log Every Medication & Supplement | Carely</title>
+  <meta name="description" content="Carely is the medicine tracker app that logs every medication and supplement you take — with AI reminders, missed-dose alerts, family dashboard, and auto doctor reports. Try free 7 days." />
+  <meta name="keywords" content="medicine tracker app, medication tracker app, pill tracker app, medicine log app, track medications app, medicine tracking app, prescription tracker app" />
+  <link rel="canonical" href="https://carely.fit/blog/medicine-tracker-app.html" />
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org","@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"What is the best medicine tracker app?","acceptedAnswer":{"@type":"Answer","text":"Carely is the best medicine tracker app because it tracks both medications and supplements with full dose logs, timestamps, and adherence history — plus AI reminders from Elara, family alerts for missed doses, and weekly reports sent to your doctor automatically."}},
+      {"@type":"Question","name":"Can a medicine tracker app track supplements as well as prescriptions?","acceptedAnswer":{"@type":"Answer","text":"Yes. Carely uses free-text medicine names with no drug database restrictions. Track any prescription medication, over-the-counter drug, vitamin, or supplement in the same app, the same log, and the same doctor report."}},
+      {"@type":"Question","name":"Does Carely keep a history of every medicine I have taken?","acceptedAnswer":{"@type":"Answer","text":"Yes. Carely logs every dose with a timestamp — taken, skipped, or missed. You can view the full history for each medicine and see your adherence rate over time. This log is also included in the weekly doctor report."}},
+      {"@type":"Question","name":"Can I share my medicine log with my doctor?","acceptedAnswer":{"@type":"Answer","text":"Yes. Carely automatically generates a weekly medication adherence report and sends it to the connected doctor. The report includes every medicine tracked, dose taken vs missed, and vitals readings — no manual export needed."}},
+      {"@type":"Question","name":"How much does Carely cost?","acceptedAnswer":{"@type":"Answer","text":"Founding member price is $5/month (200 spots only). Monthly is $9.99/month. Annual is $90/year. Medicine tracking, dose logs, AI reminders, family alerts, and doctor reports are all included. 7-day free trial, no credit card required."}}
+    ]
+  }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:#fff;color:#0D2B24;-webkit-font-smoothing:antialiased}
+    nav{background:#fff;border-bottom:1px solid #e8efed;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+    .nav-logo{font-size:16px;font-weight:900;color:#028090;letter-spacing:1px;text-decoration:none}
+    .nav-cta{background:#02C39A;color:#0D3347;font-weight:700;font-size:12px;padding:7px 16px;border-radius:7px;text-decoration:none}
+    .hero{background:linear-gradient(135deg,#0D3347 0%,#028090 100%);color:#fff;padding:80px 24px 60px;text-align:center}
+    .hero-badge{display:inline-block;background:rgba(2,195,154,0.2);border:1px solid rgba(2,195,154,0.4);color:#02C39A;font-size:11px;font-weight:700;letter-spacing:2px;padding:5px 14px;border-radius:20px;margin-bottom:20px}
+    .hero h1{font-size:clamp(28px,5vw,52px);font-weight:900;line-height:1.1;margin-bottom:16px}
+    .hero h1 span{color:#02C39A}
+    .hero p{font-size:clamp(16px,2vw,20px);opacity:0.8;max-width:600px;margin:0 auto 32px;line-height:1.6}
+    .hero-cta{display:inline-block;background:#02C39A;color:#0D3347;font-weight:800;font-size:16px;padding:14px 32px;border-radius:10px;text-decoration:none}
+    .content{max-width:760px;margin:0 auto;padding:60px 24px}
+    h2{font-size:clamp(22px,3vw,32px);font-weight:900;color:#0D3347;margin:48px 0 16px}
+    h3{font-size:18px;font-weight:700;color:#028090;margin:28px 0 10px}
+    p{font-size:17px;line-height:1.8;color:#3a5450;margin-bottom:16px}
+    .log-demo{background:#f8fcfb;border-radius:14px;padding:28px;margin:32px 0}
+    .log-demo h3{color:#0D3347;margin-top:0;font-size:16px;font-weight:800;margin-bottom:16px}
+    .log-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #e8efed;font-size:14px}
+    .log-row:last-child{border-bottom:none}
+    .log-time{color:#5a7470;min-width:70px;font-size:13px}
+    .log-med{flex:1;font-weight:600;color:#0D3347}
+    .log-dose{color:#5a7470;font-size:13px;min-width:90px}
+    .log-status{font-size:13px;font-weight:700;min-width:60px;text-align:right}
+    .log-status.taken{color:#02C39A}
+    .log-status.missed{color:#dc2626}
+    .log-status.skipped{color:#f59e0b}
+    .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:32px 0}
+    .feature-card{background:#f0faf7;border-radius:12px;padding:20px;border-left:4px solid #02C39A}
+    .feature-icon{font-size:26px;margin-bottom:8px}
+    .feature-title{font-size:15px;font-weight:800;color:#0D3347;margin-bottom:6px}
+    .feature-desc{font-size:13px;color:#5a7470;line-height:1.6}
+    .vs-table{width:100%;border-collapse:collapse;margin:32px 0;font-size:15px}
+    .vs-table th{background:#0D3347;color:#fff;padding:12px 16px;text-align:left;font-weight:700}
+    .vs-table td{padding:12px 16px;border-bottom:1px solid #e8efed}
+    .vs-table tr:nth-child(even){background:#f8fcfb}
+    .tick{color:#02C39A;font-weight:900}
+    .cross{color:#dc2626}
+    .faq{background:#f8fcfb;border-radius:16px;padding:40px;margin:48px 0}
+    .faq h2{margin-top:0}
+    .faq-item{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid #e8efed}
+    .faq-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+    .faq-q{font-size:16px;font-weight:700;color:#0D3347;margin-bottom:8px}
+    .faq-a{font-size:15px;color:#5a7470;line-height:1.7}
+    .cta-section{background:linear-gradient(135deg,#0D3347,#028090);color:#fff;padding:64px 24px;text-align:center;margin-top:60px}
+    .cta-section h2{color:#fff;margin-top:0;font-size:32px}
+    .cta-section p{color:rgba(255,255,255,0.75);margin-bottom:28px}
+    .cta-btn{display:inline-block;background:#02C39A;color:#0D3347;font-weight:800;font-size:16px;padding:14px 36px;border-radius:10px;text-decoration:none}
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="https://carely.fit">CARELY</a>
+  <a class="nav-cta" href="https://carely.fit/#pricing">Try Free 7 Days →</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">MEDICINE TRACKER · DOSE LOG · AI REMINDERS</div>
+  <h1>The Medicine Tracker App<br>That <span>Remembers Everything</span></h1>
+  <p>Every medication. Every supplement. Every dose — logged with a timestamp. Elara reminds you. Your family gets alerted if you miss one. Your doctor gets the full log automatically.</p>
+  <a class="hero-cta" href="https://carely.fit/#pricing">Try Free for 7 Days →</a>
+</div>
+
+<div class="content">
+
+  <h2>What a real medicine tracker looks like</h2>
+  <p>A medicine tracker isn't just a list of your pills. It's a live log of what was taken, when, and what was missed. Carely tracks every dose in real time — and makes that log useful for your family, your doctor, and you.</p>
+
+  <div class="log-demo">
+    <h3>Today's medicine log — what you and your family see in real time</h3>
+    <div class="log-row">
+      <div class="log-time">7:00 AM</div>
+      <div class="log-med">Lisinopril 10mg</div>
+      <div class="log-dose">1 tablet</div>
+      <div class="log-status taken">Taken</div>
+    </div>
+    <div class="log-row">
+      <div class="log-time">7:00 AM</div>
+      <div class="log-med">Vitamin D3 5000 IU</div>
+      <div class="log-dose">1 capsule</div>
+      <div class="log-status taken">Taken</div>
+    </div>
+    <div class="log-row">
+      <div class="log-time">8:00 AM</div>
+      <div class="log-med">Metformin 500mg</div>
+      <div class="log-dose">1 tablet</div>
+      <div class="log-status taken">Taken</div>
+    </div>
+    <div class="log-row">
+      <div class="log-time">1:00 PM</div>
+      <div class="log-med">Metformin 500mg</div>
+      <div class="log-dose">1 tablet</div>
+      <div class="log-status missed">Missed</div>
+    </div>
+    <div class="log-row">
+      <div class="log-time">3:00 PM</div>
+      <div class="log-med">Omega-3</div>
+      <div class="log-dose">2 capsules</div>
+      <div class="log-status skipped">Skipped</div>
+    </div>
+    <div class="log-row">
+      <div class="log-time">9:00 PM</div>
+      <div class="log-med">Magnesium Glycinate</div>
+      <div class="log-dose">400mg</div>
+      <div class="log-status taken">Taken</div>
+    </div>
+  </div>
+
+  <p>That full log — taken, missed, skipped — is what Carely tracks for every single day. Your family sees it in real time. Your doctor gets it weekly. You always know exactly what was and wasn't taken.</p>
+
+  <h2>Track any medicine — no database, no restrictions</h2>
+  <p>Carely uses free-text medicine names. Type any prescription, over-the-counter drug, vitamin, supplement, or compound medication — exactly as you know it. No drug database lookup. No rejection. No compromise.</p>
+  <p>Lisinopril, Metformin, Atorvastatin, Sertraline, Vitamin D3, Lion's Mane, Creatine, a custom compound from a compounding pharmacy — it all works the same way.</p>
+
+  <h2>What Carely does as a medicine tracker</h2>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <div class="feature-title">Complete dose log</div>
+      <div class="feature-desc">Every dose logged with exact timestamp — taken, skipped, or missed. Full history available for any medicine at any time.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">Adherence rate per medicine</div>
+      <div class="feature-desc">See your consistency rate for each medicine. Know which ones you take religiously and which you keep skipping — backed by real data.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <div class="feature-title">Elara reminds you</div>
+      <div class="feature-desc">Personalised AI reminders at the right time. Not a generic alarm — a warm message from Elara by name. You confirm with one tap. It logs immediately.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔔</div>
+      <div class="feature-title">Family alert on missed dose</div>
+      <div class="feature-desc">Miss a dose without confirming? Every connected family member gets an instant push notification. No one is left wondering.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🩺</div>
+      <div class="feature-title">Auto doctor report</div>
+      <div class="feature-desc">Weekly adherence report sent to the connected doctor automatically. Full medicine log, dose history, and vitals in one document.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">Vitals alongside</div>
+      <div class="feature-desc">Track blood pressure, blood sugar, and weight in the same app. Doctor sees your medicines AND your readings in the same weekly report.</div>
+    </div>
+  </div>
+
+  <h2>Medicine tracker vs. medication reminder — what's the difference?</h2>
+  <p>A <strong>medication reminder</strong> tells you when to take something. A <strong>medicine tracker</strong> records whether you actually did, keeps a history, and makes that data useful.</p>
+  <p>Carely does both. Elara reminds you. The log records the result. The report shares the data with your doctor. The alert notifies your family. It's a complete system — not just a notification.</p>
+
+  <table class="vs-table">
+    <thead><tr><th>Feature</th><th>Carely</th><th>Basic reminder apps</th><th>Simple log apps</th></tr></thead>
+    <tbody>
+      <tr><td>Medicine log (taken/missed/skipped)</td><td class="tick">✓ Timestamped</td><td class="cross">✗</td><td>✓ Log only</td></tr>
+      <tr><td>Adherence history + rate</td><td class="tick">✓</td><td class="cross">✗</td><td>Sometimes</td></tr>
+      <tr><td>AI reminder (Elara)</td><td class="tick">✓ Personalised</td><td>Generic push</td><td class="cross">✗</td></tr>
+      <tr><td>Family miss-dose alert</td><td class="tick">✓ Real-time</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+      <tr><td>Auto doctor report</td><td class="tick">✓ Weekly PDF</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+      <tr><td>Supplement tracking</td><td class="tick">✓ Free text</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+      <tr><td>Vitals tracking (BP, glucose)</td><td class="tick">✓ Included</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+    </tbody>
+  </table>
+
+  <div class="faq">
+    <h2>Common Questions</h2>
+    <div class="faq-item">
+      <div class="faq-q">Can I track both prescription medications and supplements in one log?</div>
+      <div class="faq-a">Yes. Carely makes no distinction between prescription medications and supplements. They all live in the same schedule, the same dose log, and the same weekly doctor report. One app for everything you take.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How far back does the medicine log go?</div>
+      <div class="faq-a">Carely stores your full dose history from the day you start. There is no rolling 30-day limit. You can reference any dose taken, skipped, or missed since you created your account.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can my family see my medicine log?</div>
+      <div class="faq-a">Yes — only the family members or caregivers you explicitly connect. Each connected person sees the same real-time log. They also receive push notifications if a dose is missed.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Will my doctor see the medicine log?</div>
+      <div class="faq-a">Yes. Carely automatically sends a weekly adherence report to the connected doctor. The report includes every medicine tracked, dose taken vs. missed, and vitals readings — formatted and ready to review.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is Carely available in Canada?</div>
+      <div class="faq-a">Yes. Carely is built for both the USA and Canada. The founding team is based in BC, Canada. Pricing available in USD and CAD.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="cta-section">
+  <h2>Start tracking your medicines properly</h2>
+  <p>7-day free trial. No credit card. Set up in 10 minutes.</p>
+  <a class="cta-btn" href="https://carely.fit/#pricing">Start Free Trial →</a>
+  <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:12px">200 founding member spots at $5/month — limited availability</div>
+</div>
+
+</body>
+</html>
