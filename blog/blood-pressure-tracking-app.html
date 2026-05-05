@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blood Pressure Tracking App for Seniors — With Family Alerts | Carely</title>
+  <meta name="description" content="Carely tracks blood pressure for aging parents and alerts your family instantly if a reading is too high or too low. AI-powered. USA & Canada. Try free 7 days." />
+  <meta name="keywords" content="blood pressure tracking app for seniors, blood pressure app for elderly parents, blood pressure monitoring app family alerts, hypertension tracking app seniors" />
+  <link rel="canonical" href="https://carely.fit/blog/blood-pressure-tracking-app.html" />
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org","@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"What is the best blood pressure tracking app for seniors?","acceptedAnswer":{"@type":"Answer","text":"Carely is the top blood pressure tracking app for seniors because it does more than log readings — it alerts connected family caregivers instantly if a reading is outside normal range, and automatically sends weekly reports to the connected doctor."}},
+      {"@type":"Question","name":"Will my family get an alert if my parent's blood pressure is dangerously high?","acceptedAnswer":{"@type":"Answer","text":"Yes. When your parent logs a blood pressure reading in Carely, the app checks it against clinical thresholds. A reading above 140/90 (hypertension) or below 90/60 (hypotension) triggers an instant push notification to every connected family caregiver."}},
+      {"@type":"Question","name":"Does Carely work with any blood pressure monitor?","acceptedAnswer":{"@type":"Answer","text":"Yes. Your parent reads the number from their monitor (any brand) and types it into Carely. No Bluetooth or hardware pairing required — manual entry takes 10 seconds and works with every blood pressure monitor on the market."}},
+      {"@type":"Question","name":"Can the blood pressure data be shared with my parent's doctor?","acceptedAnswer":{"@type":"Answer","text":"Yes. Carely automatically compiles a weekly vitals and medication adherence report and sends it to the connected doctor. Blood pressure trends are included with exact readings and timestamps."}},
+      {"@type":"Question","name":"Is Carely available in Canada?","acceptedAnswer":{"@type":"Answer","text":"Yes. Carely is built for both the USA and Canada. The founding team is based in BC, Canada."}}
+    ]
+  }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:#fff;color:#0D2B24;-webkit-font-smoothing:antialiased}
+    nav{background:#fff;border-bottom:1px solid #e8efed;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+    .nav-logo{font-size:16px;font-weight:900;color:#028090;letter-spacing:1px;text-decoration:none}
+    .nav-cta{background:#02C39A;color:#0D3347;font-weight:700;font-size:12px;padding:7px 16px;border-radius:7px;text-decoration:none}
+    .hero{background:linear-gradient(135deg,#0D3347 0%,#028090 100%);color:#fff;padding:80px 24px 60px;text-align:center}
+    .hero-badge{display:inline-block;background:rgba(2,195,154,0.2);border:1px solid rgba(2,195,154,0.4);color:#02C39A;font-size:11px;font-weight:700;letter-spacing:2px;padding:5px 14px;border-radius:20px;margin-bottom:20px}
+    .hero h1{font-size:clamp(28px,5vw,52px);font-weight:900;line-height:1.1;margin-bottom:16px}
+    .hero h1 span{color:#02C39A}
+    .hero p{font-size:clamp(16px,2vw,20px);opacity:0.8;max-width:600px;margin:0 auto 32px;line-height:1.6}
+    .hero-cta{display:inline-block;background:#02C39A;color:#0D3347;font-weight:800;font-size:16px;padding:14px 32px;border-radius:10px;text-decoration:none}
+    .content{max-width:760px;margin:0 auto;padding:60px 24px}
+    h2{font-size:clamp(22px,3vw,32px);font-weight:900;color:#0D3347;margin:48px 0 16px}
+    h3{font-size:18px;font-weight:700;color:#028090;margin:28px 0 10px}
+    p{font-size:17px;line-height:1.8;color:#3a5450;margin-bottom:16px}
+    .bp-scale{background:#f8fcfb;border-radius:14px;padding:28px;margin:28px 0}
+    .bp-scale h3{margin-top:0}
+    .bp-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px 14px;border-radius:8px}
+    .bp-row.normal{background:#dcfce7}
+    .bp-row.elevated{background:#fef9c3}
+    .bp-row.high1{background:#fed7aa}
+    .bp-row.high2{background:#fecaca}
+    .bp-row.crisis{background:#fca5a5}
+    .bp-label{font-size:14px;font-weight:700;min-width:80px}
+    .bp-range{font-size:13px;color:#5a7470}
+    .bp-alert{font-size:12px;font-weight:700;margin-left:auto}
+    .bp-row.normal .bp-alert{color:#16a34a}
+    .bp-row.elevated .bp-alert{color:#ca8a04}
+    .bp-row.high1 .bp-alert{color:#ea580c}
+    .bp-row.high2 .bp-alert,.bp-row.crisis .bp-alert{color:#dc2626}
+    .how-it-works{margin:28px 0}
+    .hw-step{display:flex;gap:16px;align-items:flex-start;margin-bottom:18px;padding:16px;background:#f8fcfb;border-radius:10px}
+    .hw-num{background:#02C39A;color:#0D3347;font-weight:900;font-size:14px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+    .hw-title{font-size:15px;font-weight:800;color:#0D3347;margin-bottom:4px}
+    .hw-desc{font-size:14px;color:#5a7470;line-height:1.6}
+    .vs-table{width:100%;border-collapse:collapse;margin:32px 0;font-size:15px}
+    .vs-table th{background:#0D3347;color:#fff;padding:12px 16px;text-align:left;font-weight:700}
+    .vs-table td{padding:12px 16px;border-bottom:1px solid #e8efed}
+    .vs-table tr:nth-child(even){background:#f8fcfb}
+    .tick{color:#02C39A;font-weight:900}
+    .cross{color:#dc2626}
+    .faq{background:#f8fcfb;border-radius:16px;padding:40px;margin:48px 0}
+    .faq h2{margin-top:0}
+    .faq-item{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid #e8efed}
+    .faq-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+    .faq-q{font-size:16px;font-weight:700;color:#0D3347;margin-bottom:8px}
+    .faq-a{font-size:15px;color:#5a7470;line-height:1.7}
+    .cta-section{background:linear-gradient(135deg,#0D3347,#028090);color:#fff;padding:64px 24px;text-align:center;margin-top:60px}
+    .cta-section h2{color:#fff;margin-top:0;font-size:32px}
+    .cta-section p{color:rgba(255,255,255,0.75);margin-bottom:28px}
+    .cta-btn{display:inline-block;background:#02C39A;color:#0D3347;font-weight:800;font-size:16px;padding:14px 36px;border-radius:10px;text-decoration:none}
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="https://carely.fit">CARELY</a>
+  <a class="nav-cta" href="https://carely.fit/#pricing">Try Free 7 Days →</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">BLOOD PRESSURE MONITORING</div>
+  <h1>Blood Pressure Tracking<br>That <span>Alerts Your Family</span></h1>
+  <p>Your parent logs their reading. Carely checks it. If it's too high or too low, every connected family member gets an instant push notification. Know before it becomes an emergency.</p>
+  <a class="hero-cta" href="https://carely.fit/#pricing">Try Free for 7 Days →</a>
+</div>
+
+<div class="content">
+
+  <h2>Why logging alone isn't enough</h2>
+  <p>Most blood pressure apps let your parent log readings. That's it. The reading sits in a database no one looks at until the next doctor's visit — three months later.</p>
+  <p>By then, if your parent's blood pressure has been running at 160/100 for six weeks, the damage is already done. Carely is the first blood pressure tracking app that alerts the people who need to know — in real time.</p>
+
+  <div class="bp-scale">
+    <h3>Blood pressure ranges and when Carely alerts your family</h3>
+    <div class="bp-row normal">
+      <div class="bp-label">Normal</div>
+      <div class="bp-range">Below 120/80</div>
+      <div class="bp-alert">No alert</div>
+    </div>
+    <div class="bp-row elevated">
+      <div class="bp-label">Elevated</div>
+      <div class="bp-range">120-129 / below 80</div>
+      <div class="bp-alert">Logged, visible to family</div>
+    </div>
+    <div class="bp-row high1">
+      <div class="bp-label">High Stage 1</div>
+      <div class="bp-range">130-139 / 80-89</div>
+      <div class="bp-alert">Family notified</div>
+    </div>
+    <div class="bp-row high2">
+      <div class="bp-label">High Stage 2</div>
+      <div class="bp-range">140+ / 90+</div>
+      <div class="bp-alert">Instant family alert</div>
+    </div>
+    <div class="bp-row crisis">
+      <div class="bp-label">Crisis</div>
+      <div class="bp-range">180+ / 120+</div>
+      <div class="bp-alert">Urgent family alert</div>
+    </div>
+    <p style="font-size:13px;color:#5a7470;margin-top:16px;margin-bottom:0">These thresholds follow standard clinical guidelines. Always follow your parent's doctor's specific advice.</p>
+  </div>
+
+  <h2>How it works</h2>
+
+  <div class="how-it-works">
+    <div class="hw-step">
+      <div class="hw-num">1</div>
+      <div>
+        <div class="hw-title">Elara prompts your parent at the right time</div>
+        <div class="hw-desc">You set a schedule — morning, after medication, before bed. Elara sends a warm reminder to log their reading at that time every day.</div>
+      </div>
+    </div>
+    <div class="hw-step">
+      <div class="hw-num">2</div>
+      <div>
+        <div class="hw-title">Your parent reads their monitor and logs it</div>
+        <div class="hw-desc">They check their blood pressure monitor (any brand, no Bluetooth required) and type the systolic and diastolic numbers into Carely. Takes 15 seconds.</div>
+      </div>
+    </div>
+    <div class="hw-step">
+      <div class="hw-num">3</div>
+      <div>
+        <div class="hw-title">Carely checks the reading against clinical ranges</div>
+        <div class="hw-desc">The app immediately compares the reading to standard blood pressure thresholds and determines whether a family alert is needed.</div>
+      </div>
+    </div>
+    <div class="hw-step">
+      <div class="hw-num">4</div>
+      <div>
+        <div class="hw-title">Your family is notified if needed</div>
+        <div class="hw-desc">High or low reading? Every connected family caregiver gets a push notification within seconds — with the exact reading included so you know what you're dealing with.</div>
+      </div>
+    </div>
+    <div class="hw-step">
+      <div class="hw-num">5</div>
+      <div>
+        <div class="hw-title">Doctor receives weekly report</div>
+        <div class="hw-desc">Every week, Carely sends the connected doctor a full blood pressure log with readings, timestamps, and trend data. No printing. No forgetting to mention the numbers.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Carely vs. a basic blood pressure log app</h2>
+  <table class="vs-table">
+    <thead><tr><th>Feature</th><th>Carely</th><th>Basic BP log apps</th></tr></thead>
+    <tbody>
+      <tr><td>Blood pressure logging</td><td class="tick">✓ With trend tracking</td><td>✓ Log only</td></tr>
+      <tr><td>Family alert on high reading</td><td class="tick">✓ Instant push notification</td><td class="cross">✗ Not available</td></tr>
+      <tr><td>Family caregiver dashboard</td><td class="tick">✓ Real-time shared view</td><td class="cross">✗ Not available</td></tr>
+      <tr><td>Doctor report automation</td><td class="tick">✓ Auto-sent weekly</td><td class="cross">✗ Manual export only</td></tr>
+      <tr><td>Medication tracking alongside</td><td class="tick">✓ One app for everything</td><td class="cross">✗ Separate app needed</td></tr>
+      <tr><td>AI companion check-in</td><td class="tick">✓ Elara prompts at right time</td><td class="cross">✗ Not available</td></tr>
+    </tbody>
+  </table>
+
+  <div class="faq">
+    <h2>Common Questions</h2>
+    <div class="faq-item">
+      <div class="faq-q">What blood pressure monitors work with Carely?</div>
+      <div class="faq-a">All of them. Carely uses manual entry — your parent reads the number from any monitor and types it in. No Bluetooth, no brand compatibility issues. Any upper-arm or wrist monitor works.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I see a history of my parent's blood pressure readings?</div>
+      <div class="faq-a">Yes. The caregiver dashboard shows the full reading history with timestamps. You can see trends over days and weeks — not just the most recent number.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Does Carely recommend medications or treatment based on BP readings?</div>
+      <div class="faq-a">Never. Carely flags readings and alerts family. Any high-reading notification includes a recommendation to consult a doctor. Carely is a monitoring tool, not a diagnostic tool.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I track blood pressure for two parents in the same app?</div>
+      <div class="faq-a">Yes. Carely supports multiple patient profiles. If you're managing medications and vitals for both parents, add them both. Each has a separate schedule, log, and alert settings.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is Carely available in Canada?</div>
+      <div class="faq-a">Yes. Carely is built for both the USA and Canada. The founding team is based in BC, Canada.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="cta-section">
+  <h2>Start monitoring your parent's blood pressure today</h2>
+  <p>7-day free trial. No credit card. Set up in 10 minutes.</p>
+  <a class="cta-btn" href="https://carely.fit/#pricing">Start Free Trial →</a>
+  <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:12px">200 founding member spots at $5/month — limited availability</div>
+</div>
+
+</body>
+</html>
