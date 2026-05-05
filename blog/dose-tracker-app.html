@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Best Dose Tracker App (2026) — Track Every Dose Taken | Carely</title>
+  <meta name="description" content="Carely tracks every dose you take — medication and supplements — with timestamps, missed-dose alerts to family, and weekly logs to your doctor. AI-powered. Try free 7 days." />
+  <meta name="keywords" content="dose tracker app, daily dose tracker, medication dose tracker, pill dose tracker, dose tracking app, dose log app, track medication doses, dose history app" />
+  <link rel="canonical" href="https://carely.fit/blog/dose-tracker-app.html" />
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org","@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"What is the best dose tracker app?","acceptedAnswer":{"@type":"Answer","text":"Carely is the best dose tracker app because it records every dose — taken, skipped, or missed — with exact timestamps, alerts connected family if a dose is missed, and sends a full dose history to the connected doctor every week. It also includes AI reminders from Elara so you never forget to take (or log) a dose."}},
+      {"@type":"Question","name":"Does Carely track dose history over time?","acceptedAnswer":{"@type":"Answer","text":"Yes. Carely stores your complete dose history from day one — every medication and supplement, every dose taken or missed, with exact timestamps. There is no rolling limit. You can reference any dose from any date since you created your account."}},
+      {"@type":"Question","name":"Can I track doses for multiple medications at different times?","acceptedAnswer":{"@type":"Answer","text":"Yes. Each medication and supplement has its own independent schedule, dose amount, and dose log. Morning dose at 7am, noon dose at 12pm, evening dose at 9pm — all tracked separately, all timestamped, all visible in the same dashboard."}},
+      {"@type":"Question","name":"Will my doctor see my full dose history?","acceptedAnswer":{"@type":"Answer","text":"Yes. Carely automatically generates a weekly dose adherence report and sends it to the connected doctor. The report includes every medication and supplement tracked, doses taken vs. missed, and any vitals readings — no manual export needed."}},
+      {"@type":"Question","name":"How much does Carely cost?","acceptedAnswer":{"@type":"Answer","text":"Founding member price is $5/month (200 spots only). Monthly is $9.99/month. Annual is $90/year. Dose tracking, AI reminders, family alerts, and doctor reports are all included. 7-day free trial, no credit card required."}}
+    ]
+  }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:#fff;color:#0D2B24;-webkit-font-smoothing:antialiased}
+    nav{background:#fff;border-bottom:1px solid #e8efed;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+    .nav-logo{font-size:16px;font-weight:900;color:#028090;letter-spacing:1px;text-decoration:none}
+    .nav-cta{background:#02C39A;color:#0D3347;font-weight:700;font-size:12px;padding:7px 16px;border-radius:7px;text-decoration:none}
+    .hero{background:linear-gradient(135deg,#0D3347 0%,#028090 100%);color:#fff;padding:80px 24px 60px;text-align:center}
+    .hero-badge{display:inline-block;background:rgba(2,195,154,0.2);border:1px solid rgba(2,195,154,0.4);color:#02C39A;font-size:11px;font-weight:700;letter-spacing:2px;padding:5px 14px;border-radius:20px;margin-bottom:20px}
+    .hero h1{font-size:clamp(28px,5vw,52px);font-weight:900;line-height:1.1;margin-bottom:16px}
+    .hero h1 span{color:#02C39A}
+    .hero p{font-size:clamp(16px,2vw,20px);opacity:0.8;max-width:600px;margin:0 auto 32px;line-height:1.6}
+    .hero-cta{display:inline-block;background:#02C39A;color:#0D3347;font-weight:800;font-size:16px;padding:14px 32px;border-radius:10px;text-decoration:none}
+    .content{max-width:760px;margin:0 auto;padding:60px 24px}
+    h2{font-size:clamp(22px,3vw,32px);font-weight:900;color:#0D3347;margin:48px 0 16px}
+    h3{font-size:18px;font-weight:700;color:#028090;margin:28px 0 10px}
+    p{font-size:17px;line-height:1.8;color:#3a5450;margin-bottom:16px}
+    .dose-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin:32px 0}
+    .dose-stat{background:linear-gradient(135deg,#0D3347,#028090);border-radius:12px;padding:22px;color:#fff;text-align:center}
+    .dose-stat-num{font-size:36px;font-weight:900;color:#02C39A}
+    .dose-stat-label{font-size:13px;opacity:0.75;margin-top:6px;line-height:1.4}
+    .dose-flow{margin:32px 0}
+    .dose-step{display:flex;gap:16px;align-items:flex-start;margin-bottom:16px;padding:16px;background:#f8fcfb;border-radius:10px}
+    .dose-step-icon{font-size:22px;flex-shrink:0}
+    .dose-step-title{font-size:15px;font-weight:800;color:#0D3347;margin-bottom:4px}
+    .dose-step-desc{font-size:14px;color:#5a7470;line-height:1.6}
+    .adherence-box{background:#f0faf7;border-radius:14px;padding:28px;margin:32px 0}
+    .adherence-box h3{margin-top:0;color:#0D3347}
+    .adherence-row{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+    .adherence-label{font-size:14px;font-weight:700;color:#0D3347;min-width:140px}
+    .adherence-bar-bg{flex:1;background:#e8efed;border-radius:20px;height:12px;overflow:hidden}
+    .adherence-bar-fill{height:100%;border-radius:20px;background:#02C39A}
+    .adherence-pct{font-size:14px;font-weight:700;color:#028090;min-width:40px;text-align:right}
+    .dose-types{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}
+    .dose-type{background:#f0faf7;border:1px solid #c3e8de;border-radius:20px;padding:7px 14px;font-size:13px;font-weight:600;color:#028090}
+    .vs-table{width:100%;border-collapse:collapse;margin:32px 0;font-size:15px}
+    .vs-table th{background:#0D3347;color:#fff;padding:12px 16px;text-align:left;font-weight:700}
+    .vs-table td{padding:12px 16px;border-bottom:1px solid #e8efed}
+    .vs-table tr:nth-child(even){background:#f8fcfb}
+    .tick{color:#02C39A;font-weight:900}
+    .cross{color:#dc2626}
+    .faq{background:#f8fcfb;border-radius:16px;padding:40px;margin:48px 0}
+    .faq h2{margin-top:0}
+    .faq-item{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid #e8efed}
+    .faq-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+    .faq-q{font-size:16px;font-weight:700;color:#0D3347;margin-bottom:8px}
+    .faq-a{font-size:15px;color:#5a7470;line-height:1.7}
+    .cta-section{background:linear-gradient(135deg,#0D3347,#028090);color:#fff;padding:64px 24px;text-align:center;margin-top:60px}
+    .cta-section h2{color:#fff;margin-top:0;font-size:32px}
+    .cta-section p{color:rgba(255,255,255,0.75);margin-bottom:28px}
+    .cta-btn{display:inline-block;background:#02C39A;color:#0D3347;font-weight:800;font-size:16px;padding:14px 36px;border-radius:10px;text-decoration:none}
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="https://carely.fit">CARELY</a>
+  <a class="nav-cta" href="https://carely.fit/#pricing">Try Free 7 Days →</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">DOSE TRACKER · DOSE LOG · ADHERENCE HISTORY</div>
+  <h1>Every Dose. <span>Tracked.</span><br>Every Miss. Alerted.</h1>
+  <p>Carely logs every dose you take with a timestamp — taken, skipped, or missed. Your family knows. Your doctor gets the weekly report. You finally have real adherence data.</p>
+  <a class="hero-cta" href="https://carely.fit/#pricing">Try Free for 7 Days →</a>
+</div>
+
+<div class="content">
+
+  <h2>Why dose tracking matters more than reminders</h2>
+  <p>A reminder tells you to take your medication. A dose tracker proves you did — and records when you didn't. That's a fundamentally different level of accountability.</p>
+  <p>Doctors make dosage and prescription decisions based on adherence. "Are you taking it regularly?" If all you have is "yeah, mostly" — that's not data. Carely gives you and your doctor real numbers: 94% adherence on Lisinopril over 30 days. 71% on Metformin noon dose. That's data a doctor can act on.</p>
+
+  <div class="dose-stats">
+    <div class="dose-stat">
+      <div class="dose-stat-num">100%</div>
+      <div class="dose-stat-label">of doses logged with exact timestamp</div>
+    </div>
+    <div class="dose-stat">
+      <div class="dose-stat-num">3</div>
+      <div class="dose-stat-label">dose statuses tracked: taken, skipped, missed</div>
+    </div>
+    <div class="dose-stat">
+      <div class="dose-stat-num">12</div>
+      <div class="dose-stat-label">dose types supported — pills to powders</div>
+    </div>
+  </div>
+
+  <h2>What dose tracking looks like in Carely</h2>
+
+  <div class="dose-flow">
+    <div class="dose-step">
+      <div class="dose-step-icon">⏰</div>
+      <div>
+        <div class="dose-step-title">Elara reminds you at the scheduled time</div>
+        <div class="dose-step-desc">Personalised AI message — not a generic alarm. "Good morning Alex, time for your Lisinopril 10mg." You're more likely to respond because it feels personal.</div>
+      </div>
+    </div>
+    <div class="dose-step">
+      <div class="dose-step-icon">✅</div>
+      <div>
+        <div class="dose-step-title">You confirm with one tap</div>
+        <div class="dose-step-desc">Tap "Taken" — dose logged at that exact timestamp. Tap "Skip" — logged as skipped with time. No response — logged as missed after the alert window closes.</div>
+      </div>
+    </div>
+    <div class="dose-step">
+      <div class="dose-step-icon">📊</div>
+      <div>
+        <div class="dose-step-title">Your dose history builds automatically</div>
+        <div class="dose-step-desc">Every response adds to a permanent log. See your adherence rate per medication per week. See which time slot you keep dropping. See your streak.</div>
+      </div>
+    </div>
+    <div class="dose-step">
+      <div class="dose-step-icon">🔔</div>
+      <div>
+        <div class="dose-step-title">Missed dose? Family gets an instant alert</div>
+        <div class="dose-step-desc">No response within the alert window — push notification to every connected family member or caregiver. They know within minutes, not the next day.</div>
+      </div>
+    </div>
+    <div class="dose-step">
+      <div class="dose-step-icon">🩺</div>
+      <div>
+        <div class="dose-step-title">Doctor gets the weekly dose report</div>
+        <div class="dose-step-desc">Full adherence data sent to the connected doctor every week. Every medication, every dose, taken vs. missed — plus vitals. No manual export. No forgetting.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Your adherence — what it actually looks like</h2>
+
+  <div class="adherence-box">
+    <h3>Sample 30-day adherence report (what your doctor receives)</h3>
+    <div class="adherence-row">
+      <div class="adherence-label">Lisinopril 10mg</div>
+      <div class="adherence-bar-bg"><div class="adherence-bar-fill" style="width:96%"></div></div>
+      <div class="adherence-pct">96%</div>
+    </div>
+    <div class="adherence-row">
+      <div class="adherence-label">Metformin (AM)</div>
+      <div class="adherence-bar-bg"><div class="adherence-bar-fill" style="width:91%"></div></div>
+      <div class="adherence-pct">91%</div>
+    </div>
+    <div class="adherence-row">
+      <div class="adherence-label">Metformin (PM)</div>
+      <div class="adherence-bar-bg"><div class="adherence-bar-fill" style="width:72%"></div></div>
+      <div class="adherence-pct">72%</div>
+    </div>
+    <div class="adherence-row">
+      <div class="adherence-label">Vitamin D3</div>
+      <div class="adherence-bar-bg"><div class="adherence-bar-fill" style="width:88%"></div></div>
+      <div class="adherence-pct">88%</div>
+    </div>
+    <div class="adherence-row">
+      <div class="adherence-label">Omega-3</div>
+      <div class="adherence-bar-bg"><div class="adherence-bar-fill" style="width:63%"></div></div>
+      <div class="adherence-pct">63%</div>
+    </div>
+    <p style="font-size:13px;color:#5a7470;margin-top:16px;margin-bottom:0">Doctor sees exactly where adherence is dropping. Conversation changes. Outcomes change.</p>
+  </div>
+
+  <h2>Every dose type tracked</h2>
+  <div class="dose-types">
+    <span class="dose-type">Pill</span>
+    <span class="dose-type">Capsule</span>
+    <span class="dose-type">Liquid (mL)</span>
+    <span class="dose-type">Injection</span>
+    <span class="dose-type">Patch</span>
+    <span class="dose-type">Drops</span>
+    <span class="dose-type">Inhaler</span>
+    <span class="dose-type">Ointment</span>
+    <span class="dose-type">Spray</span>
+    <span class="dose-type">Powder (scoops)</span>
+    <span class="dose-type">Gummies</span>
+    <span class="dose-type">Other</span>
+  </div>
+
+  <table class="vs-table">
+    <thead><tr><th>Feature</th><th>Carely</th><th>Reminder-only apps</th><th>Manual log apps</th></tr></thead>
+    <tbody>
+      <tr><td>Dose log (taken/skipped/missed)</td><td class="tick">✓ Timestamped</td><td class="cross">✗ Fire-and-forget</td><td>✓ Manual only</td></tr>
+      <tr><td>Adherence rate per medicine</td><td class="tick">✓</td><td class="cross">✗</td><td>Sometimes</td></tr>
+      <tr><td>AI reminder prompts logging</td><td class="tick">✓ Elara by name</td><td>Generic push</td><td class="cross">✗</td></tr>
+      <tr><td>Family miss-dose alert</td><td class="tick">✓ Instant push</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+      <tr><td>Weekly doctor report</td><td class="tick">✓ Auto-sent PDF</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+      <tr><td>Supplements + prescriptions</td><td class="tick">✓ Same log</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+      <tr><td>Vitals in same app</td><td class="tick">✓ BP, glucose, weight</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+    </tbody>
+  </table>
+
+  <div class="faq">
+    <h2>Common Questions</h2>
+    <div class="faq-item">
+      <div class="faq-q">What happens if I forget to confirm a dose?</div>
+      <div class="faq-a">After the alert window passes without a response, Carely marks the dose as missed — automatically. You don't have to manually log a miss. The log stays accurate even when you forget.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I track doses at multiple times per day for the same medicine?</div>
+      <div class="faq-a">Yes. Each time slot is tracked independently. Metformin at 8am and Metformin at 6pm each have their own dose log entry, their own alert, and their own adherence rate. You can see exactly which time slot you're dropping.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How far back does the dose history go?</div>
+      <div class="faq-a">Carely stores your complete dose history from the day you start — no rolling 30-day limit. Reference any dose from any date since you created your account.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I track dose amounts that change over time?</div>
+      <div class="faq-a">Yes. Update the dose amount for any medicine at any time. The log preserves the previous dose amount for entries before the change, and uses the new amount going forward. Accurate historical record throughout.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is Carely available in Canada?</div>
+      <div class="faq-a">Yes. Carely is built for both the USA and Canada. The founding team is based in BC, Canada. Pricing available in USD and CAD.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="cta-section">
+  <h2>Start building your dose history today</h2>
+  <p>7-day free trial. No credit card. Set up in 10 minutes.</p>
+  <a class="cta-btn" href="https://carely.fit/#pricing">Start Free Trial →</a>
+  <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:12px">200 founding member spots at $5/month — limited availability</div>
+</div>
+
+</body>
+</html>
