@@ -313,6 +313,8 @@
 
 <div class="tabs">
   <div class="tab active" onclick="showTab('dashboard',this)">📊 DASHBOARD</div>
+  <div class="tab" onclick="showTab('finance',this);loadFinance()">💰 FINANCE</div>
+  <div class="tab" onclick="showTab('crm',this);loadCRM()">👥 CRM</div>
   <div class="tab" onclick="showTab('competitors',this)">⚔️ COMPETITORS</div>
   <div class="tab" onclick="showTab('leads',this)">🎯 LEADS</div>
   <div class="tab" onclick="showTab('content',this)">✍️ CONTENT</div>
@@ -325,6 +327,99 @@
 </div>
 
 <div class="page">
+
+<!-- FINANCE -->
+<div id="tab-finance" class="tab-panel">
+<div class="page" style="max-width:1200px;">
+
+  <div class="sh"><h2>Revenue</h2><div class="sh-line"></div></div>
+  <div class="metrics" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px;">
+    <div class="metric"><div class="metric-label">MRR</div><div class="metric-val" id="fin-mrr">—</div><div class="metric-sub">Monthly recurring revenue</div></div>
+    <div class="metric"><div class="metric-label">ARR</div><div class="metric-val" id="fin-arr">—</div><div class="metric-sub">Annual run rate</div></div>
+    <div class="metric red"><div class="metric-label">Expenses / mo</div><div class="metric-val" id="fin-exp">—</div><div class="metric-sub">All costs combined</div></div>
+    <div class="metric" style="border-top:3px solid var(--mint)"><div class="metric-label">Net Profit / mo</div><div class="metric-val" id="fin-profit">—</div><div class="metric-sub" id="fin-margin">— margin</div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+    <!-- Revenue by plan -->
+    <div class="card">
+      <div class="card-head"><h3>Revenue by Plan</h3></div>
+      <div class="card-body" id="fin-plan-breakdown">
+        <div style="color:var(--muted);font-size:12px;">Loading...</div>
+      </div>
+    </div>
+    <!-- Expenses breakdown -->
+    <div class="card">
+      <div class="card-head"><h3>Expenses Breakdown</h3></div>
+      <div class="card-body" id="fin-exp-breakdown">
+        <div style="color:var(--muted);font-size:12px;">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sh"><h2>Growth — last 30 days</h2><div class="sh-line"></div></div>
+  <div class="card">
+    <div class="card-head"><h3>Daily Signups + MRR Added</h3></div>
+    <div class="card-body">
+      <div id="fin-chart" style="width:100%;overflow-x:auto;">
+        <canvas id="signupCanvas" width="900" height="160" style="max-width:100%;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="sh" style="margin-top:20px;"><h2>User Breakdown</h2><div class="sh-line"></div></div>
+  <div class="metrics" style="grid-template-columns:repeat(5,1fr);">
+    <div class="metric"><div class="metric-label">Founding</div><div class="metric-val" id="fin-founding">—</div><div class="metric-sub">$5/mo locked forever</div></div>
+    <div class="metric"><div class="metric-label">Monthly</div><div class="metric-val" id="fin-monthly">—</div><div class="metric-sub">$9.99/mo</div></div>
+    <div class="metric"><div class="metric-label">Annual</div><div class="metric-val" id="fin-annual">—</div><div class="metric-sub">$90/yr · $7.50 MRR</div></div>
+    <div class="metric amber"><div class="metric-label">Trial</div><div class="metric-val" id="fin-trial">—</div><div class="metric-sub">Not yet paying</div></div>
+    <div class="metric red"><div class="metric-label">Churned</div><div class="metric-val" id="fin-churned">—</div><div class="metric-sub">Cancelled</div></div>
+  </div>
+
+</div>
+</div>
+
+<!-- CRM -->
+<div id="tab-crm" class="tab-panel">
+<div class="page" style="max-width:1400px;">
+
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+    <div class="sh" style="flex:1;margin-bottom:0;"><h2>All Users</h2><div class="sh-line"></div></div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="loadCRM('all')"   id="crm-btn-all"      style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--deep);color:#fff;cursor:pointer;">ALL</button>
+      <button onclick="loadCRM('trial')" id="crm-btn-trial"    style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;">TRIAL</button>
+      <button onclick="loadCRM('founding')" id="crm-btn-founding" style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;">FOUNDING</button>
+      <button onclick="loadCRM('monthly')" id="crm-btn-monthly"  style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;">MONTHLY</button>
+      <button onclick="loadCRM('annual')"  id="crm-btn-annual"   style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;">ANNUAL</button>
+      <button onclick="loadCRM('cancelled')" id="crm-btn-cancelled" style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--red);cursor:pointer;">CHURNED</button>
+    </div>
+    <div id="crm-count" style="font-size:11px;color:var(--muted);font-weight:600;"></div>
+  </div>
+
+  <div class="card" style="overflow:hidden;">
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead>
+          <tr style="background:#f4f7f6;border-bottom:1px solid var(--border);">
+            <th style="padding:10px 14px;text-align:left;font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;">Name</th>
+            <th style="padding:10px 14px;text-align:left;font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;">Email</th>
+            <th style="padding:10px 14px;text-align:left;font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;">Plan</th>
+            <th style="padding:10px 14px;text-align:left;font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;">Joined</th>
+            <th style="padding:10px 14px;text-align:left;font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;">Trial Ends</th>
+            <th style="padding:10px 14px;text-align:left;font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;">Last Active</th>
+            <th style="padding:10px 14px;text-align:left;font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;">Country</th>
+            <th style="padding:10px 14px;text-align:left;font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;">MRR</th>
+          </tr>
+        </thead>
+        <tbody id="crm-tbody">
+          <tr><td colspan="8" style="padding:24px;text-align:center;color:var(--muted);font-size:12px;">Loading users...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div>
 
 <!-- DASHBOARD -->
 <div id="tab-dashboard" class="tab-panel active">
@@ -1733,6 +1828,208 @@ async function loadLiveStats(){
 async function loadAll(){await checkHealth();await loadMetrics();await loadLiveStats();}
 loadAll();
 setInterval(loadAll,60000);
+
+// Safe escape to prevent XSS when inserting user data into DOM
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+// ── FINANCE TAB ───────────────────────────────────────────────────────────────
+const ADMIN_HEADERS = {'x-carely-secret':'carely-admin-6add43330d2313d8'};
+const API = 'https://carely-backend-production.up.railway.app';
+
+async function loadFinance(){
+  try {
+    const [statsRes, revRes] = await Promise.all([
+      fetch(API+'/admin/stats', {headers: ADMIN_HEADERS}),
+      fetch(API+'/admin/revenue', {headers: ADMIN_HEADERS}),
+    ]);
+    const d = await statsRes.json();
+    const r = await revRes.json();
+
+    const fmt = (n) => '$' + (n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+    // Top metrics
+    document.getElementById('fin-mrr').textContent    = fmt(d.revenue?.mrr);
+    document.getElementById('fin-arr').textContent    = fmt(d.revenue?.arr);
+    document.getElementById('fin-exp').textContent    = fmt(d.expenses?.total);
+    document.getElementById('fin-profit').textContent = fmt(d.profit?.monthly);
+    document.getElementById('fin-margin').textContent = (d.profit?.margin||0)+'% margin';
+
+    // User breakdown
+    document.getElementById('fin-founding').textContent = d.users?.founding||0;
+    document.getElementById('fin-monthly').textContent  = d.users?.monthly||0;
+    document.getElementById('fin-annual').textContent   = d.users?.annual||0;
+    document.getElementById('fin-trial').textContent    = d.users?.trial||0;
+    document.getElementById('fin-churned').textContent  = d.users?.cancelled||0;
+
+    // Revenue by plan — safe static labels (no user data)
+    const bp = d.revenue?.byPlan||{};
+    const planRows = [
+      {label:'Founding members ('+Number(d.users?.founding||0)+' x $5)',        val:bp.founding||0, color:'var(--mint)'},
+      {label:'Monthly subscribers ('+Number(d.users?.monthly||0)+' x $9.99)',   val:bp.monthly||0,  color:'var(--teal)'},
+      {label:'Annual subscribers ('+Number(d.users?.annual||0)+' x $7.50 MRR)', val:bp.annual||0,   color:'var(--sea)'},
+    ];
+    const planEl = document.getElementById('fin-plan-breakdown');
+    planEl.innerHTML = '';
+    planRows.forEach(row => {
+      const div = document.createElement('div');
+      div.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);';
+      const left = document.createElement('div');
+      left.style.cssText = 'display:flex;align-items:center;gap:8px;';
+      const dot = document.createElement('div');
+      dot.style.cssText = 'width:10px;height:10px;border-radius:3px;flex-shrink:0;background:'+row.color;
+      const lbl = document.createElement('span');
+      lbl.style.cssText = 'font-size:12px;color:var(--text);font-weight:500;';
+      lbl.textContent = row.label;
+      left.appendChild(dot); left.appendChild(lbl);
+      const val = document.createElement('span');
+      val.style.cssText = 'font-size:13px;font-weight:800;color:var(--text);';
+      val.textContent = fmt(row.val);
+      div.appendChild(left); div.appendChild(val);
+      planEl.appendChild(div);
+    });
+    const totalDiv = document.createElement('div');
+    totalDiv.style.cssText = 'display:flex;justify-content:space-between;padding:10px 0;margin-top:4px;';
+    totalDiv.innerHTML = '<span style="font-size:12px;font-weight:800;color:var(--text);">Total MRR</span><span style="font-size:14px;font-weight:900;color:var(--mint);">'+fmt(d.revenue?.mrr)+'</span>';
+    planEl.appendChild(totalDiv);
+
+    // Expenses — safe static labels from backend
+    const exp = d.expenses?.breakdown||{};
+    const expEl = document.getElementById('fin-exp-breakdown');
+    expEl.innerHTML = '';
+    Object.entries(exp).forEach(([k,e]) => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);';
+      const lbl = document.createElement('span');
+      lbl.style.cssText = 'font-size:12px;color:var(--text);';
+      lbl.textContent = e.label;
+      const amt = document.createElement('span');
+      amt.style.cssText = 'font-size:12px;font-weight:700;color:'+(e.monthly>0?'var(--red)':'var(--green)')+';';
+      amt.textContent = e.monthly>0 ? fmt(e.monthly) : 'Free';
+      row.appendChild(lbl); row.appendChild(amt);
+      expEl.appendChild(row);
+    });
+    const expTotal = document.createElement('div');
+    expTotal.style.cssText = 'display:flex;justify-content:space-between;padding:10px 0;margin-top:4px;';
+    expTotal.innerHTML = '<span style="font-size:12px;font-weight:800;">Total</span><span style="font-size:14px;font-weight:900;color:var(--red);">'+fmt(d.expenses?.total)+'</span>';
+    expEl.appendChild(expTotal);
+
+    // Signup chart
+    const daily = r.dailySignups||{};
+    const dates = Object.keys(daily).sort();
+    if(dates.length>0){
+      const canvas = document.getElementById('signupCanvas');
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height, PAD = 32;
+      ctx.clearRect(0,0,W,H);
+      const maxVal = Math.max(1,...dates.map(d=>daily[d].signups));
+      const barW = Math.floor((W - PAD*2) / dates.length) - 2;
+      ctx.fillStyle='#f4f7f6';
+      ctx.fillRect(0,0,W,H);
+      dates.forEach((date,i)=>{
+        const x = PAD + i*(barW+2);
+        const val = daily[date].signups;
+        const barH = Math.max(2, Math.round(((H-PAD*2)*val)/maxVal));
+        const y = H - PAD - barH;
+        ctx.fillStyle='#028090';
+        ctx.beginPath();
+        if(ctx.roundRect) ctx.roundRect(x, y, barW, barH, 3); else ctx.rect(x, y, barW, barH);
+        ctx.fill();
+        if(val>0){
+          ctx.fillStyle='#0D3347';
+          ctx.font='bold 10px Inter, sans-serif';
+          ctx.textAlign='center';
+          ctx.fillText(val, x+barW/2, y-4);
+        }
+      });
+      ctx.fillStyle='#7A9490';
+      ctx.font='9px Inter, sans-serif';
+      ctx.textAlign='center';
+      const showIdxs = dates.length<=10
+        ? dates.map((_,i)=>i)
+        : [0, Math.floor(dates.length/2), dates.length-1];
+      showIdxs.forEach(i=>{
+        const x = PAD + i*(barW+2) + barW/2;
+        ctx.fillText(dates[i].slice(5), x, H-4);
+      });
+    }
+  } catch(e){ console.warn('[Finance] load failed', e); }
+}
+
+// ── CRM TAB ───────────────────────────────────────────────────────────────────
+let crmCurrentFilter='all';
+
+async function loadCRM(filter){
+  filter = filter||crmCurrentFilter;
+  crmCurrentFilter = filter;
+
+  ['all','trial','founding','monthly','annual','cancelled'].forEach(f=>{
+    const btn = document.getElementById('crm-btn-'+f);
+    if(!btn) return;
+    btn.style.background = f===filter?'var(--deep)':'#fff';
+    btn.style.color = f===filter?'#fff': f==='cancelled'?'var(--red)':'var(--text)';
+  });
+
+  const tbody = document.getElementById('crm-tbody');
+  tbody.innerHTML = '';
+  const loadingRow = document.createElement('tr');
+  loadingRow.innerHTML = '<td colspan="8" style="padding:24px;text-align:center;color:var(--muted);font-size:12px;">Loading...</td>';
+  tbody.appendChild(loadingRow);
+
+  try {
+    const url = API+'/admin/users?limit=200'+(filter&&filter!=='all'?'&plan='+encodeURIComponent(filter):'');
+    const res = await fetch(url, {headers: ADMIN_HEADERS});
+    const d = await res.json();
+    const users = d.users||[];
+
+    const countEl = document.getElementById('crm-count');
+    if(countEl) countEl.textContent = users.length+' users'+(d.total>users.length?' (showing '+users.length+' of '+d.total+')':'');
+
+    const planColors = {founding:['#dcfce7','#16a34a'],monthly:['#ede9fe','#7c3aed'],annual:['#dbeafe','#1d4ed8'],trial:['#fef3c7','#d97706'],cancelled:['#fee2e2','#dc2626']};
+    const planMrr = {founding:5,monthly:9.99,annual:7.5,trial:0,cancelled:0};
+    const localeFlag = {en:'🇺🇸',ca:'🇨🇦',au:'🇦🇺',gb:'🇬🇧',in:'🇮🇳'};
+
+    tbody.innerHTML = '';
+    if(!users.length){
+      const emptyRow = document.createElement('tr');
+      emptyRow.innerHTML = '<td colspan="8" style="padding:24px;text-align:center;color:var(--muted);font-size:12px;">No users found</td>';
+      tbody.appendChild(emptyRow);
+      return;
+    }
+
+    users.forEach(u => {
+      const [bg,fg] = planColors[u.plan]||['#f4f7f6','#374151'];
+      const joined    = u.created_at    ? new Date(u.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+      const trialEnd  = u.trial_ends_at ? new Date(u.trial_ends_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
+      const lastActive= u.last_active_at? new Date(u.last_active_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
+      const mrr = planMrr[u.plan]||0;
+      const flag = localeFlag[u.locale]||'🌍';
+
+      const tr = document.createElement('tr');
+      tr.style.cssText = 'border-bottom:1px solid var(--border);cursor:default;';
+      tr.onmouseover = ()=>tr.style.background='#f4faf8';
+      tr.onmouseout  = ()=>tr.style.background='';
+
+      const cells = [
+        `<td style="padding:10px 14px;font-weight:600;color:var(--text);">${esc(u.first_name||'—')}</td>`,
+        `<td style="padding:10px 14px;color:var(--muted);font-size:11px;">${esc(u.email)}</td>`,
+        `<td style="padding:10px 14px;"><span style="font-size:9px;font-weight:800;padding:3px 9px;border-radius:20px;background:${bg};color:${fg};">${esc((u.plan||'').toUpperCase())}</span></td>`,
+        `<td style="padding:10px 14px;font-size:11px;color:var(--muted);">${esc(joined)}</td>`,
+        `<td style="padding:10px 14px;font-size:11px;color:var(--muted);">${esc(trialEnd)}</td>`,
+        `<td style="padding:10px 14px;font-size:11px;color:var(--muted);">${esc(lastActive)}</td>`,
+        `<td style="padding:10px 14px;font-size:14px;">${flag}</td>`,
+        `<td style="padding:10px 14px;font-size:12px;font-weight:700;color:${mrr>0?'var(--green)':'var(--muted)'};">${mrr>0?'$'+mrr.toFixed(2):'—'}</td>`,
+      ];
+      tr.innerHTML = cells.join('');
+      tbody.appendChild(tr);
+    });
+  } catch(e){
+    tbody.innerHTML = '';
+    const errRow = document.createElement('tr');
+    errRow.innerHTML = '<td colspan="8" style="padding:24px;text-align:center;color:var(--red);font-size:12px;">Failed to load users</td>';
+    tbody.appendChild(errRow);
+    console.warn('[CRM] load failed', e);
+  }
+}
 
 function updateHQCountdown(){
   const launch=new Date('2026-05-05T07:00:00Z');

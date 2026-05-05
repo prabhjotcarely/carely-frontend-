@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Carely — I can't always be there. Carely is.</title>
-  <meta name="description" content="Carely reminds your loved one to take their meds, checks in on them daily with an AI caretaker, and alerts you if something's missed. Built for families who can't always be there." />
-  <meta property="og:title" content="Carely — I can't always be there. Carely is." />
-  <meta property="og:description" content="The medication app for seniors who want independence and the families who quietly worry about them. AI caretaker, caregiver alerts, doctor reports. 200 founding spots at $5/month." />
+  <title>Carely — Elara AI Caretaker for Aging Parents | Medication & Vitals</title>
+  <meta name="description" content="Meet Elara — the AI caretaker that checks on your aging parents daily, tracks medications, supplements and vitals, and alerts your family instantly if something's wrong. USA & Canada. Try free 7 days." />
+  <meta property="og:title" content="Carely — Elara AI Caretaker for Aging Parents" />
+  <meta property="og:description" content="AI-powered medication reminders. 200 founding spots at $5/month, locked forever." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://carely.fit" />
   <link rel="icon" type="image/png" href="carely-icon.png" />
@@ -39,7 +39,7 @@
       { "@type": "Question", "name": "How much does Carely cost?", "acceptedAnswer": { "@type": "Answer", "text": "Carely offers a 7-day free trial. After that, plans start at $5/month for founding members (200 spots only), $9.99/month standard, or $90/year." } },
       { "@type": "Question", "name": "Does Carely work in Canada?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Carely is built by a Canadian team in BC, Canada and works across all Canadian provinces and the USA. It is PIPEDA compliant." } },
       { "@type": "Question", "name": "What makes Carely different from Medisafe?", "acceptedAnswer": { "@type": "Answer", "text": "Carely adds an AI caretaker (Elara) that actually has a conversation with your loved one to confirm they took their medication. Medisafe only sends notifications. Carely also sends instant alerts to all family members when a dose is missed." } },
-      { "@type": "Question", "name": "Is there a free trial?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — Carely offers a 7-day free trial with full access to all features. Card saved now, charged after 7 days." } }
+      { "@type": "Question", "name": "Is there a free trial?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — Carely offers a 7-day free trial with full access to all features. No credit card required." } }
     ]
   }
   </script>
@@ -173,63 +173,6 @@
     .step-num { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--seafoam), var(--mint)); color: white; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; box-shadow: 0 4px 16px rgba(0,168,150,0.3); }
     .step h3 { font-size: 0.92rem; font-weight: 700; color: var(--deep-teal); margin-bottom: 6px; }
     .step p { font-size: 0.82rem; color: var(--grey-500); line-height: 1.6; }
-
-    /* ── Permissions section ── */
-    .perms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 28px; }
-    .perm-card { display: flex; align-items: flex-start; gap: 18px; background: white; border-radius: 20px; padding: 24px; border: 1.5px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
-    .perm-icon-wrap { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, rgba(2,195,154,0.12), rgba(2,128,144,0.08)); display: flex; align-items: center; justify-content: center; color: var(--seafoam); flex-shrink: 0; }
-    .perm-body { flex: 1; }
-    .perm-body h3 { font-size: 1rem; font-weight: 800; color: var(--deep-teal); margin-bottom: 8px; }
-    .perm-why { font-size: 0.85rem; color: var(--grey-500); line-height: 1.6; margin-bottom: 12px; }
-    .perm-badge { display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--seafoam); background: rgba(2,195,154,0.1); border: 1px solid rgba(2,195,154,0.25); border-radius: 20px; padding: 4px 12px; }
-    .perms-footer { font-size: 0.82rem; color: var(--grey-500); text-align: center; max-width: 500px; margin: 0 auto; line-height: 1.7; }
-
-    /* ── Bundle section ── */
-    .bundle-wrap { display: grid; grid-template-columns: 1fr 320px; gap: 40px; align-items: start; }
-    @media(max-width:860px){ .bundle-wrap { grid-template-columns: 1fr; } }
-
-    .bundle-list { display: flex; flex-direction: column; gap: 6px; }
-    .bundle-item {
-      display: flex; align-items: flex-start; gap: 14px;
-      padding: 14px 16px; border-radius: 14px;
-      transition: background 0.2s;
-    }
-    .bundle-item:hover { background: #f0faf8; }
-    .bk {
-      color: var(--mint); font-size: 1.1rem; font-weight: 900;
-      margin-top: 2px; flex-shrink: 0; width: 20px;
-    }
-    .bundle-item div { display: flex; flex-direction: column; gap: 2px; }
-    .bundle-item strong { font-size: 0.93rem; color: var(--deep-teal); font-weight: 800; }
-    .bundle-item span { font-size: 0.82rem; color: var(--grey-500); line-height: 1.5; }
-
-    .bundle-value-card {
-      background: var(--deep-teal); color: white;
-      border-radius: 24px; padding: 32px 28px;
-      position: sticky; top: 90px;
-      box-shadow: 0 24px 60px rgba(13,51,71,0.3);
-    }
-    .bvc-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 6px; }
-    .bvc-price { font-size: 3rem; font-weight: 900; color: white; line-height: 1; margin-bottom: 20px; }
-    .bvc-price span { font-size: 1.1rem; font-weight: 500; color: rgba(255,255,255,0.6); }
-    .bvc-founding {
-      background: rgba(2,195,154,0.15); border: 1px solid rgba(2,195,154,0.4);
-      border-radius: 16px; padding: 16px; margin-bottom: 20px;
-    }
-    .bvc-founding-badge { font-size: 0.7rem; font-weight: 800; color: var(--mint); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
-    .bvc-founding-price { font-size: 2.2rem; font-weight: 900; color: var(--mint); line-height: 1; }
-    .bvc-founding-price span { font-size: 1rem; font-weight: 500; color: rgba(2,195,154,0.7); }
-    .bvc-founding-note { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 4px; }
-    .bvc-divider { height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 16px; }
-    .bvc-list { list-style: none; padding: 0; margin: 0 0 24px; display: flex; flex-direction: column; gap: 8px; }
-    .bvc-list li { font-size: 0.85rem; color: rgba(255,255,255,0.7); font-weight: 500; }
-    .bvc-cta {
-      display: block; background: var(--mint); color: var(--deep-teal);
-      text-align: center; padding: 16px; border-radius: 14px;
-      font-weight: 900; font-size: 1rem; text-decoration: none;
-      transition: opacity 0.2s; box-shadow: 0 8px 24px rgba(2,195,154,0.4);
-    }
-    .bvc-cta:hover { opacity: 0.9; }
 
     /* ── Pricing ── */
     .pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; max-width: 840px; margin: 0 auto 40px; }
@@ -492,28 +435,6 @@
     }
 
     /* — Size variants — */
-    /* Real Elara avatar — white/green brand */
-    .elara-avatar-wrap {
-      position: relative; width: 150px; height: 150px;
-      margin: 0 auto 12px; display: flex; align-items: center; justify-content: center;
-    }
-    .elara-avatar-ring {
-      position: absolute; inset: -6px; border-radius: 50%;
-      background: linear-gradient(135deg, #02C39A, #028090, #ffffff);
-      padding: 4px;
-    }
-    .elara-avatar-img {
-      width: 150px; height: 150px; border-radius: 50%;
-      object-fit: cover; object-position: top;
-      border: 4px solid #ffffff;
-      position: relative; z-index: 1;
-    }
-    .elara-avatar-glow {
-      position: absolute; inset: -12px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(2,195,154,0.25) 0%, transparent 70%);
-      z-index: 0;
-    }
-
     /* Large (Meet Elara section card) */
     .elara-body.lg { width: 130px; }
     .elara-body.lg .ea-head  { width:118px; height:112px; }
@@ -749,9 +670,9 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="founding-badge"><div class="badge-dot"></div> Launching May 2026 · 200 Founding Spots</div>
-    <h1>I can't always be there.<br><span>Carely is.</span></h1>
-    <p>The medication app built for the people who worry. Elara reminds your loved one, checks in on them every day, and texts you the moment something's missed — so you can breathe easy, even from two hours away.</p>
+    <div class="founding-badge"><div class="badge-dot"></div> Pre-Launch Sale · May 5 · App Launches May 15</div>
+    <h1>Your meds, on time.<br><span>Every single day.</span></h1>
+    <p>Smart medication reminders powered by an AI caretaker that checks in, celebrates your streaks, and alerts your loved ones when it matters.</p>
 
     <div class="signup-box" id="founding">
       <h2>Claim Your Founding Spot</h2>
@@ -777,7 +698,7 @@
       <div class="success-state" id="heroSuccess">
         <div class="success-icon">🎉</div>
         <h3>You're on the list!</h3>
-        <p>App launches <strong>May 2026</strong> on iOS &amp; Android. We'll email you a direct download link the moment it's live.<br>Your founding price of <strong>$5/month</strong> is locked in forever.</p>
+        <p>🚀 Pre-launch sale starts <strong>May 5</strong>. App launches <strong>May 15</strong> on iOS &amp; Android.<br>Your founding price of <strong>$5/month</strong> is locked in forever.</p>
       </div>
     </div>
 
@@ -796,28 +717,40 @@
   <div class="elara-inner">
     <div class="elara-intro-left elara-anim">
       <div class="elara-tag">✨ Your AI Caretaker</div>
-      <h2>Meet <span>Elara</span> —<br>she talks like family.</h2>
-      <p>Elara isn't a chatbot with a scripted response. She reads your week, notices your patterns, and sends messages that feel like they came from someone who actually cares — in your language, in your tone.</p>
+      <h2>Meet <span>Elara</span> —<br>she's here for you.</h2>
+      <p>Elara is more than a reminder. She's a caring companion who checks in on you every day, listens when you need to talk, and makes sure the people who love you never have to worry.</p>
       <div class="elara-traits">
         <div class="elara-trait">
-          <div class="et-icon">🌍</div>
-          <div class="et-text"><strong>She speaks your language</strong><span>English, French, Hindi, Punjabi, Spanish, and 6 more. Elara responds natively — not translated after the fact.</span></div>
+          <div class="et-icon">💬</div>
+          <div class="et-text"><strong>She talks to you, not at you</strong><span>Elara reads your week, notices your patterns, and sends a message that actually feels personal.</span></div>
         </div>
         <div class="elara-trait">
           <div class="et-icon">🤝</div>
-          <div class="et-text"><strong>She keeps your family at ease</strong><span>When a dose is missed, Elara gently alerts your caregiver — so they stop calling to check in, and you keep your independence.</span></div>
+          <div class="et-text"><strong>She keeps your family at ease</strong><span>When you miss a dose, Elara gently alerts your loved ones — so they stop worrying and you stay independent.</span></div>
         </div>
         <div class="elara-trait">
           <div class="et-icon">🔒</div>
-          <div class="et-text"><strong>She never plays doctor</strong><span>Elara celebrates your wins, listens on hard days, and always says "talk to your doctor." A caring friend, not a substitute.</span></div>
+          <div class="et-text"><strong>She never gives medical advice</strong><span>Elara always says "talk to your doctor" — she's a caring friend, not a replacement for your healthcare team.</span></div>
         </div>
       </div>
     </div>
     <div class="elara-chat-card elara-anim from-right">
-      <div class="elara-avatar-wrap elara-float">
-        <div class="elara-avatar-ring"></div>
-        <img src="elara-avatar.jpg" alt="Elara AI Caretaker" class="elara-avatar-img" />
-        <div class="elara-avatar-glow"></div>
+      <div class="elara-body lg elara-float">
+        <div class="ea-antenna"></div>
+        <div class="ea-head">
+          <div class="ea-eyes"><div class="ea-eye"></div><div class="ea-eye"></div></div>
+          <div class="ea-cheeks"><div class="ea-cheek"></div><div class="ea-cheek"></div></div>
+          <div class="ea-smile"></div>
+        </div>
+        <div class="ea-neck"></div>
+        <div class="ea-torso">
+          <div class="ea-arms"><div class="ea-arm ea-arm-l"></div><div class="ea-arm ea-arm-r"></div></div>
+        </div>
+        <div class="ea-waist"></div>
+        <div class="ea-legs">
+          <div><div class="ea-leg"></div><div class="ea-foot"></div></div>
+          <div><div class="ea-leg"></div><div class="ea-foot"></div></div>
+        </div>
       </div>
       <div class="elara-name-badge">Elara</div>
       <div class="elara-name-sub">AI Caretaker · Carely</div>
@@ -886,16 +819,16 @@
   <div class="section-inner">
     <div class="section-head fade-up">
       <div class="section-label">Features</div>
-      <h2>Peace of mind.<br>For you, and everyone who loves you.</h2>
-      <p>Designed for seniors who want to stay independent — and the families who quietly worry about them.</p>
+      <h2>More than just reminders</h2>
+      <p>A complete medication companion that fits in your pocket.</p>
     </div>
     <div class="features-grid">
-      <div class="feature-card fade-up"><div class="feature-icon fi-green">🤖</div><h3>AI that checks in daily</h3><p>Every morning Elara sends a personal message based on your actual week — not a template, not a robot blast. She celebrates streaks and notices when something's off.</p><span class="feature-tag">GPT-4o Powered</span></div>
-      <div class="feature-card fade-up"><div class="feature-icon fi-teal">🔔</div><h3>Reminders that actually work</h3><p>Tap Taken, Snooze, or Skip right from your lock screen. No app to open. The dose is logged the moment you tap — even if the phone is still locked.</p><span class="feature-tag">iOS &amp; Android</span></div>
-      <div class="feature-card fade-up"><div class="feature-icon fi-purple">👨‍👩‍👧</div><h3>Family stays in the loop</h3><p>You share a 6-digit code. Your son or daughter gets a push when you miss a dose. They see adherence, not your health records. You stay independent — they stop worrying.</p><span class="feature-tag">Privacy First</span></div>
-      <div class="feature-card fade-up"><div class="feature-icon fi-orange">🩺</div><h3>Your doctor gets the data</h3><p>Carely emails your clinic a formatted adherence report every week. Your doctor sees your real medication history at your next appointment — without you having to remember anything.</p><span class="feature-tag">Auto-generated</span></div>
-      <div class="feature-card fade-up"><div class="feature-icon fi-blue">📊</div><h3>Streaks that motivate</h3><p>Day 3, Day 7, Day 30 — each milestone gets celebrated by Elara. Not because you need to be managed, but because consistency deserves to be recognised.</p><span class="feature-tag">Dashboard View</span></div>
-      <div class="feature-card fade-up"><div class="feature-icon fi-red">🔒</div><h3>Your health is yours</h3><p>We never sell your data. The AI only sees anonymised adherence stats — not your diagnoses, doses, or doctor notes. PIPEDA and CCPA compliant. Biometric lock included.</p><span class="feature-tag">Zero Data Selling</span></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-green">🤖</div><h3>AI Caretaker</h3><p>Checks in daily, celebrates streaks, asks how you're feeling — warm and personal, never robotic.</p><span class="feature-tag">GPT-4o Powered</span></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-teal">🔔</div><h3>Smart Reminders</h3><p>Rich push notifications with one-tap Taken, Snooze, or Skip — respond from your lock screen.</p><span class="feature-tag">iOS &amp; Android</span></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-purple">👨‍👩‍👧</div><h3>Caregiver Mode</h3><p>Family members get instant alerts for missed doses — without seeing your personal details.</p><span class="feature-tag">Privacy First</span></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-orange">🩺</div><h3>Doctor Reports</h3><p>Automated weekly adherence reports sent directly to your clinic. Zero effort on your part.</p><span class="feature-tag">Auto-generated</span></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-blue">📊</div><h3>Adherence Streaks</h3><p>Visual streaks and adherence scores keep you motivated — day by day, week by week.</p><span class="feature-tag">Dashboard View</span></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-red">🔒</div><h3>Privacy by Design</h3><p>Your health data is never sold. PIPEDA &amp; CCPA compliant. The AI only sees anonymised data.</p><span class="feature-tag">Zero Data Selling</span></div>
     </div>
   </div>
 </section>
@@ -905,96 +838,14 @@
   <div class="section-inner">
     <div class="section-head fade-up">
       <div class="section-label">How It Works</div>
-      <h2>5 minutes to set up.<br>A lifetime of fewer worries.</h2>
-      <p>Takes less time to configure than a prescription label takes to read.</p>
+      <h2>Up and running in 3 minutes</h2>
+      <p>No complicated setup. Just your meds, your schedule, your AI.</p>
     </div>
     <div class="steps fade-up">
-      <div class="step"><div class="step-num">1</div><h3>Add your medicines</h3><p>Type the name, pick the time. Carely works with any medicine — brand, generic, supplement, or compound. No database lookups, no errors.</p></div>
-      <div class="step"><div class="step-num">2</div><h3>Reminders hit at the right time</h3><p>A warm notification arrives — tap Taken or Snooze from the lock screen. The dose is logged before the screen even unlocks.</p></div>
-      <div class="step"><div class="step-num">3</div><h3>Elara checks in every morning</h3><p>She reads your week and sends one personal message — in your language, in your tone. Not a form letter. A real conversation.</p></div>
-      <div class="step"><div class="step-num">4</div><h3>Your family knows you're okay</h3><p>Share a code with your daughter, your son, your carer. They get an alert if something's missed. And they don't get one if you're fine. Peace flows both ways.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- PERMISSIONS / TRUST -->
-<section class="section light">
-  <div class="section-inner">
-    <div class="section-head fade-up">
-      <div class="section-label">Transparency</div>
-      <h2>We only ask for what we need</h2>
-      <p>Two permissions. Nothing hidden. Here's exactly why we ask.</p>
-    </div>
-    <div class="perms-grid fade-up">
-      <div class="perm-card">
-        <div class="perm-icon-wrap">
-          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-        </div>
-        <div class="perm-body">
-          <h3>Dose Reminders</h3>
-          <p class="perm-why"><strong>Why we ask:</strong> To send you a notification at the exact time your medicine is due — with one-tap <em>Taken</em> and <em>Skip</em> buttons. No app to open.</p>
-          <div class="perm-badge">Notifications</div>
-        </div>
-      </div>
-      <div class="perm-card">
-        <div class="perm-icon-wrap">
-          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        </div>
-        <div class="perm-body">
-          <h3>Medicine Photos</h3>
-          <p class="perm-why"><strong>Why we ask:</strong> Attach a photo of each pill or bottle so you never confuse medicines again. The image is stored securely and shown only to you.</p>
-          <div class="perm-badge">Camera &amp; Photos</div>
-        </div>
-      </div>
-    </div>
-    <p class="perms-footer fade-up">That's it. No contacts. No location. No microphone. You can revoke either permission any time in your phone's Settings.</p>
-  </div>
-</section>
-
-<!-- BUNDLE / EVERYTHING INCLUDED -->
-<section class="section white" id="bundle">
-  <div class="section-inner">
-    <div class="section-head fade-up">
-      <div class="section-label">What You Get</div>
-      <h2>Everything. In one app. One price.</h2>
-      <p>No add-ons. No upsells. Everything Carely has is unlocked the moment you start your trial.</p>
-    </div>
-
-    <div class="bundle-wrap fade-up">
-      <!-- Left: feature list -->
-      <div class="bundle-list">
-        <div class="bundle-item"><span class="bk">✦</span><div><strong>Elara — AI Caretaker</strong><span>Daily check-ins, motivational messages, and a GPT-4o AI that actually knows your meds</span></div></div>
-        <div class="bundle-item"><span class="bk">✦</span><div><strong>Smart Dose Reminders</strong><span>Full-screen takeover or small banner — you choose. Fires at exactly the right time, every time</span></div></div>
-        <div class="bundle-item"><span class="bk">✦</span><div><strong>One-tap Taken / Skip</strong><span>Log your dose straight from the lock screen — no unlocking, no searching for the app</span></div></div>
-        <div class="bundle-item"><span class="bk">✦</span><div><strong>Streak System</strong><span>Day 3 🔥 Day 7 🔥🔥 Day 30 🏆 — milestones that celebrate you, not shame you</span></div></div>
-        <div class="bundle-item"><span class="bk">✦</span><div><strong>Weekly Progress Report</strong><span>"You're 23% better than last week" — real improvement data, not just raw numbers</span></div></div>
-        <div class="bundle-item"><span class="bk">✦</span><div><strong>Caregiver Connect</strong><span>Share a 6-digit code with family. They get missed-dose alerts — nothing more, nothing less</span></div></div>
-        <div class="bundle-item"><span class="bk">✦</span><div><strong>Doctor Reports</strong><span>Automated weekly adherence PDF sent to your clinic. Your doctor stays in the loop with zero effort</span></div></div>
-        <div class="bundle-item"><span class="bk">✦</span><div><strong>Daily Mood Journal</strong><span>Log how you're feeling. Elara reads it and adjusts her check-ins to match your day</span></div></div>
-        <div class="bundle-item"><span class="bk">✦</span><div><strong>Face ID / Fingerprint Lock</strong><span>Your health data stays private — biometric lock on every open, with auto-lock after 30 seconds</span></div></div>
-        <div class="bundle-item"><span class="bk">✦</span><div><strong>Unlimited Medicines</strong><span>Pills, liquids, injections, patches, drops, gummies, sprays — all types, any number</span></div></div>
-        <div class="bundle-item"><span class="bk">✦</span><div><strong>iOS &amp; Android</strong><span>One subscription works on both. Switch phones anytime, your data comes with you</span></div></div>
-        <div class="bundle-item"><span class="bk">✦</span><div><strong>7-Day Free Trial</strong><span>Every feature. Card saved now, charged after trial ends — we make it easy, not hard</span></div></div>
-      </div>
-
-      <!-- Right: value card -->
-      <div class="bundle-value-card">
-        <div class="bvc-label">All of this</div>
-        <div class="bvc-price"><span id="bvc-price-monthly">$9.99</span><span>/mo</span></div>
-        <div class="bvc-founding">
-          <div class="bvc-founding-badge">Founding Member</div>
-          <div class="bvc-founding-price"><span id="bvc-price-founding">$5</span><span>/mo</span></div>
-          <div class="bvc-founding-note">Lock it in forever — only 200 spots</div>
-        </div>
-        <div class="bvc-divider"></div>
-        <ul class="bvc-list">
-          <li>✓ 7-day free trial</li>
-          <li>✓ Card required — charged after 7-day trial</li>
-          <li>✓ Cancel anytime</li>
-          <li>✓ iOS + Android included</li>
-        </ul>
-        <a href="#pricing" class="bvc-cta">Start Free Trial →</a>
-      </div>
+      <div class="step"><div class="step-num">1</div><h3>Add Your Medicines</h3><p>Type the name, choose a colour, pick your schedule. Carely remembers everything.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Get Reminded</h3><p>At the right time, every day. Tap Taken right from the notification — no app needed.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>AI Checks In</h3><p>Every morning your AI caretaker reviews your week and sends you a personal message.</p></div>
+      <div class="step"><div class="step-num">4</div><h3>Share with Care</h3><p>Invite a caregiver or connect your doctor. Automated reports, zero effort.</p></div>
     </div>
   </div>
 </section>
@@ -1005,14 +856,10 @@
     <div class="section-head fade-up">
       <div class="section-label">Pricing</div>
       <h2>Simple, honest pricing</h2>
-      <p>7-day free trial. Card saved now, charged after 7 days. Founding members lock in half price forever.</p>
-      <div id="currency-switcher" style="display:flex;align-items:center;justify-content:center;gap:0;margin-top:20px;background:rgba(255,255,255,0.1);border-radius:100px;padding:4px;width:fit-content;margin-left:auto;margin-right:auto;flex-wrap:wrap;">
-        <button id="btnUSD" onclick="setCurrency('usd')" style="background:#02C39A;color:#0D3347;border:none;padding:7px 18px;border-radius:100px;font-weight:700;font-size:12px;cursor:pointer;transition:all 0.2s;">🇺🇸 USD</button>
-        <button id="btnCAD" onclick="setCurrency('cad')" style="background:transparent;color:rgba(255,255,255,0.7);border:none;padding:7px 18px;border-radius:100px;font-weight:700;font-size:12px;cursor:pointer;transition:all 0.2s;">🇨🇦 CAD</button>
-        <button id="btnGBP" onclick="setCurrency('gbp')" style="background:transparent;color:rgba(255,255,255,0.7);border:none;padding:7px 18px;border-radius:100px;font-weight:700;font-size:12px;cursor:pointer;transition:all 0.2s;">🇬🇧 GBP</button>
-        <button id="btnAUD" onclick="setCurrency('aud')" style="background:transparent;color:rgba(255,255,255,0.7);border:none;padding:7px 18px;border-radius:100px;font-weight:700;font-size:12px;cursor:pointer;transition:all 0.2s;">🇦🇺 AUD</button>
-        <button id="btnEUR" onclick="setCurrency('eur')" style="background:transparent;color:rgba(255,255,255,0.7);border:none;padding:7px 18px;border-radius:100px;font-weight:700;font-size:12px;cursor:pointer;transition:all 0.2s;">🇪🇺 EUR</button>
-        <button id="btnINR" onclick="setCurrency('inr')" style="background:transparent;color:rgba(255,255,255,0.7);border:none;padding:7px 18px;border-radius:100px;font-weight:700;font-size:12px;cursor:pointer;transition:all 0.2s;">🇮🇳 INR</button>
+      <p>7-day free trial. No credit card required. Founding members lock in half price forever.</p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:0;margin-top:20px;background:rgba(255,255,255,0.1);border-radius:100px;padding:4px;width:fit-content;margin-left:auto;margin-right:auto;">
+        <button id="btnUSD" onclick="setCurrency('usd')" style="background:#02C39A;color:#0D3347;border:none;padding:7px 22px;border-radius:100px;font-weight:700;font-size:13px;cursor:pointer;">🇺🇸 USD</button>
+        <button id="btnCAD" onclick="setCurrency('cad')" style="background:transparent;color:rgba(255,255,255,0.7);border:none;padding:7px 22px;border-radius:100px;font-weight:700;font-size:13px;cursor:pointer;">🇨🇦 CAD</button>
       </div>
     </div>
     <div class="pricing-cards fade-up">
@@ -1072,11 +919,11 @@
 <!-- TESTIMONIALS -->
 <section class="section light">
   <div class="section-inner fade-up">
-    <div class="section-head"><h2>From the people who needed this most</h2></div>
+    <div class="section-head"><h2>What beta testers are saying</h2></div>
     <div class="testimonials">
-      <div class="tcard"><div class="stars">★★★★★</div><p>"My dad is 74 and lives alone in Punjab. I set up Carely for him before I flew back to Toronto. Now Elara checks in with him every day — in Punjabi. He calls it 'my morning friend.' I haven't felt this calm about him in years."</p><div class="author"><div class="author-av" style="background:#E0FAF4">👩</div><div><div class="author-name">Harpreet S.</div><div class="author-detail">Toronto, ON · Daughter, long-distance caregiver</div></div></div></div>
-      <div class="tcard"><div class="stars">★★★★★</div><p>"Mum has early dementia. The caregiver alert is the thing that sold me — I get a push if she misses a dose, but she has no idea I'm watching. She feels independent. I feel less guilty. That balance matters."</p><div class="author"><div class="author-av" style="background:#F0EAFF">🧑</div><div><div class="author-name">David K.</div><div class="author-detail">Vancouver, BC · Son, primary caregiver</div></div></div></div>
-      <div class="tcard"><div class="stars">★★★★★</div><p>"I sent my first doctor report after 3 weeks. My doctor brought it up at my appointment without me saying anything — she said she wished every patient used something like this. I didn't have to explain a thing."</p><div class="author"><div class="author-av" style="background:#FFF0E0">👨</div><div><div class="author-name">James R.</div><div class="author-detail">Seattle, WA · Type 2 Diabetes, managing 4 meds</div></div></div></div>
+      <div class="tcard"><div class="stars">★★★★★</div><p>"I've tried three other medication apps and they all felt cold. Carely's AI actually feels like it knows me. When it said 'great week, you crushed it' I genuinely smiled."</p><div class="author"><div class="author-av" style="background:#E0FAF4">👩</div><div><div class="author-name">Margaret T.</div><div class="author-detail">Vancouver, BC · Managing 5 meds daily</div></div></div></div>
+      <div class="tcard"><div class="stars">★★★★★</div><p>"My mom has early-stage dementia and the caregiver alerts are a game changer. I get pinged if she misses a dose — without her feeling watched. The privacy piece was important to us."</p><div class="author"><div class="author-av" style="background:#F0EAFF">🧑</div><div><div class="author-name">David K.</div><div class="author-detail">Toronto, ON · Caregiver for parent</div></div></div></div>
+      <div class="tcard"><div class="stars">★★★★★</div><p>"I sent my first doctor report after 3 weeks and my doctor commented on it during our appointment. She said she wished all patients used something like this."</p><div class="author"><div class="author-av" style="background:#FFF0E0">👨</div><div><div class="author-name">James R.</div><div class="author-detail">Seattle, WA · Type 2 Diabetes</div></div></div></div>
     </div>
   </div>
 </section>
@@ -1086,12 +933,12 @@
   <div class="section-inner fade-up">
     <div class="section-head"><h2>Questions? Good.</h2></div>
     <div class="faq-list">
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">When does Carely launch? <span class="faq-arrow">▾</span></div><div class="faq-a">Carely is launching May 2026 on iOS and Android. Founding members get early access — we'll send you a direct download link the moment it's live.</div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Does Elara speak languages other than English? <span class="faq-arrow">▾</span></div><div class="faq-a">Yes. Elara speaks 10 languages natively: English, French, Hindi, Punjabi, Spanish, Portuguese, Japanese, Korean, Mandarin, and Arabic. She responds in your language automatically based on your phone's settings — not a translation, a native response.</div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What does the AI Caretaker actually do? <span class="faq-arrow">▾</span></div><div class="faq-a">Every morning, Elara reviews your last 7 days and sends a short personal message — celebrating streaks, gently checking in on missed doses, or asking how you're feeling. You can also chat with her directly about anything. She never gives medical advice and always refers you to your doctor when it matters.</div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is my health data safe? What does the AI see? <span class="faq-arrow">▾</span></div><div class="faq-a">Your health data is never sold. Elara only sees your first name, medicine nicknames (never real drug names), and anonymised adherence stats. No diagnoses, no dose amounts, no PII. PIPEDA (Canada) and CCPA (California) compliant.</div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I set this up for a parent or loved one? <span class="faq-arrow">▾</span></div><div class="faq-a">Yes — this is exactly what Carely is built for. Set it up on your parent's phone. Share a code with your own account. You'll get a push notification if they miss a dose. You see their schedule and adherence — never their medical notes, dose amounts, or health records. They feel independent. You feel at ease.</div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Do I pay now to get the founding price? <span class="faq-arrow">▾</span></div><div class="faq-a">No. Sign up with your email today to reserve your spot. You're not charged until the app launches and your 7-day free trial begins. The $5/month price is locked from your very first payment — we'll never quietly change it.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">When does Carely launch? <span class="faq-arrow">▾</span></div><div class="faq-a">Carely is launching Q2 2026 on both iOS and Android. Founding members get early access before the public launch — we'll email you a direct TestFlight / Play Store link the moment it's ready.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What does the AI Caretaker actually do? <span class="faq-arrow">▾</span></div><div class="faq-a">Every morning, the AI reviews your last 7 days and sends a short personal message — celebrating streaks, gently checking in on missed doses, or asking how you're feeling. You can also chat with it directly. It never gives medical advice.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is my health data safe? What does the AI see? <span class="faq-arrow">▾</span></div><div class="faq-a">Your health data is never sold. The AI only sees your first name, medicine nicknames (not real drug names), and anonymised adherence stats. No diagnosis, no dose amounts, no PII. PIPEDA (Canada) and CCPA (California) compliant.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What happens after my founding year is up? <span class="faq-arrow">▾</span></div><div class="faq-a">After 12 months, your plan rolls to the standard $9.99/month. You'll get a 30-day notice email. You can cancel any time — we'll never silently change your rate.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I use this for a family member? <span class="faq-arrow">▾</span></div><div class="faq-a">Yes. Caregiver Mode links your account to a patient's. You'll receive missed dose alerts via push notification and can see their schedule and adherence — but never dose amounts or doctor notes.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Do I pay now to get the founding price? <span class="faq-arrow">▾</span></div><div class="faq-a">No. Sign up with your email today to reserve your spot. You're not charged until launch day when your 7-day free trial starts. The $5/month price is locked from your first payment.</div></div>
     </div>
   </div>
 </section>
@@ -1099,14 +946,14 @@
 <!-- FINAL CTA -->
 <section class="final-cta">
   <div class="inner fade-up">
-    <h2>Someone you love is taking their meds alone today.</h2>
-    <p>Join <span id="finalCount">46</span> founding members who decided that wasn't good enough. $5/month, locked forever.</p>
+    <h2>Don't miss another dose.</h2>
+    <p>Join <span id="finalCount">46</span> founding members already on the list. $5/month, locked. Forever.</p>
     <div class="final-form">
       <input type="text" placeholder="Your first name" id="finalName" />
       <input type="email" placeholder="Your email address" id="finalEmail" />
       <button class="final-cta-btn" onclick="submitSignup('final')">🔒 Reserve My Founding Spot</button>
     </div>
-    <p style="opacity:.55;font-size:.78rem;margin-top:14px">By joining, you confirm you are <strong>16 years of age or older</strong>.<br>Card required · 7-day free trial · Cancel anytime</p>
+    <p style="opacity:.55;font-size:.78rem;margin-top:14px">By joining, you confirm you are <strong>16 years of age or older</strong>.<br>No credit card · 7-day free trial · Cancel anytime</p>
   </div>
 </section>
 
@@ -1119,7 +966,7 @@
           <img src="carely-icon.png" alt="Carely" style="height:36px;width:auto;margin-right:8px;" />
           Carely
         </a>
-        <p>The medication app for people who can't always be there — and the loved ones counting on them. Built in BC, Canada.</p>
+        <p>Smart medication reminders with an AI caretaker that actually cares. Built in British Columbia, Canada.</p>
       </div>
       <div class="footer-links-col">
         <h4>Product</h4>
@@ -1159,61 +1006,35 @@
 
 <script>
   var PRICES = {
-    usd: { monthly:'$9.99',    founding:'$5',     annual:'$90',    noteMonthly:'After 7-day free trial', noteFounding:'Locked for life · 200 spots only', noteAnnual:'Save $30/yr vs monthly' },
-    cad: { monthly:'CA$13.99', founding:'CA$7',   annual:'CA$119', noteMonthly:'After 7-day free trial', noteFounding:'Locked for life · 200 spots only', noteAnnual:'Save ~CA$49/yr vs monthly' },
-    gbp: { monthly:'£7.99',    founding:'£4',     annual:'£72',    noteMonthly:'After 7-day free trial', noteFounding:'Locked for life · 200 spots only', noteAnnual:'Save £24/yr vs monthly' },
-    aud: { monthly:'A$15.99',  founding:'A$8',    annual:'A$144',  noteMonthly:'After 7-day free trial', noteFounding:'Locked for life · 200 spots only', noteAnnual:'Save ~A$48/yr vs monthly' },
-    eur: { monthly:'€9.99',    founding:'€5',     annual:'€89',    noteMonthly:'After 7-day free trial', noteFounding:'Locked for life · 200 spots only', noteAnnual:'Save ~€31/yr vs monthly' },
-    inr: { monthly:'₹499',     founding:'₹249',   annual:'₹4,490', noteMonthly:'After 7-day free trial', noteFounding:'Locked for life · 200 spots only', noteAnnual:'Save ₹1,498/yr vs monthly' }
+    usd: { monthly:'$9.99', founding:'$5', annual:'$90', noteMonthly:'After 7-day free trial', noteFounding:'Locked for 1 full year · 200 spots only', noteAnnual:'Save $30 vs monthly · ~2 months free' },
+    cad: { monthly:'CA$13.99', founding:'CA$7', annual:'CA$119', noteMonthly:'After 7-day free trial', noteFounding:'Locked for 1 full year · 200 spots only', noteAnnual:'Save ~CA$49 vs monthly · ~2 months free' }
   };
   var currentCurrency = 'usd';
-  var CURRENCY_BTNS = ['USD','CAD','GBP','AUD','EUR','INR'];
 
-  // Country code → currency
-  var COUNTRY_TO_CURRENCY = {
-    US:'usd', CA:'cad', GB:'gbp', AU:'aud', NZ:'aud',
-    DE:'eur', FR:'eur', ES:'eur', IT:'eur', NL:'eur', BE:'eur', AT:'eur', PT:'eur', IE:'eur', FI:'eur', GR:'eur', LU:'eur', SK:'eur', SI:'eur', EE:'eur', LV:'eur', LT:'eur', CY:'eur', MT:'eur',
-    IN:'inr', PK:'inr', BD:'inr', LK:'inr', NP:'inr'
-  };
+  // Auto-detect Canadian users by timezone
+  (function(){
+    try {
+      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      if(tz.startsWith('America/') && ['Vancouver','Edmonton','Calgary','Winnipeg','Toronto','Ottawa','Montreal','Halifax','St_Johns','Regina','Whitehorse','Yellowknife','Iqaluit','Moncton','Fredericton'].some(function(c){ return tz.includes(c); })) {
+        setCurrency('cad');
+      }
+    } catch(e){}
+  })();
 
   function setCurrency(c) {
-    if (!PRICES[c]) c = 'usd';
     currentCurrency = c;
     var p = PRICES[c];
-    document.getElementById('price-monthly').textContent    = p.monthly;
-    document.getElementById('price-founding').textContent   = p.founding;
-    document.getElementById('price-annual').textContent     = p.annual;
-    document.getElementById('note-monthly').textContent     = p.noteMonthly;
-    document.getElementById('note-founding').textContent    = p.noteFounding;
-    document.getElementById('note-annual').textContent      = p.noteAnnual;
-    document.getElementById('bvc-price-monthly').textContent = p.monthly;
-    document.getElementById('bvc-price-founding').textContent = p.founding;
-    CURRENCY_BTNS.forEach(function(k) {
-      var btn = document.getElementById('btn' + k);
-      if (!btn) return;
-      var active = k.toLowerCase() === c;
-      btn.style.background = active ? '#02C39A' : 'transparent';
-      btn.style.color = active ? '#0D3347' : 'rgba(255,255,255,0.7)';
-    });
+    document.getElementById('price-monthly').textContent = p.monthly;
+    document.getElementById('price-founding').textContent = p.founding;
+    document.getElementById('price-annual').textContent = p.annual;
+    document.getElementById('note-monthly').textContent = p.noteMonthly;
+    document.getElementById('note-founding').textContent = p.noteFounding;
+    document.getElementById('note-annual').textContent = p.noteAnnual;
+    document.getElementById('btnUSD').style.background = c==='usd' ? '#02C39A' : 'transparent';
+    document.getElementById('btnUSD').style.color = c==='usd' ? '#0D3347' : 'rgba(255,255,255,0.7)';
+    document.getElementById('btnCAD').style.background = c==='cad' ? '#02C39A' : 'transparent';
+    document.getElementById('btnCAD').style.color = c==='cad' ? '#0D3347' : 'rgba(255,255,255,0.7)';
   }
-
-  // Auto-detect via IP geolocation
-  (function(){
-    fetch('https://ipapi.co/json/')
-      .then(function(r){ return r.json(); })
-      .then(function(d){
-        var currency = COUNTRY_TO_CURRENCY[d.country_code] || 'usd';
-        setCurrency(currency);
-      })
-      .catch(function(){
-        // Fallback: timezone-based Canadian detection
-        try {
-          var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-          var caTZ = ['Vancouver','Edmonton','Calgary','Winnipeg','Toronto','Ottawa','Montreal','Halifax','St_Johns','Regina','Whitehorse','Yellowknife','Iqaluit','Moncton','Fredericton'];
-          if (tz.startsWith('America/') && caTZ.some(function(c){ return tz.includes(c); })) setCurrency('cad');
-        } catch(e){}
-      });
-  })();
 
   let spotsTaken = 46;
   const totalSpots = 200;

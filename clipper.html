@@ -753,13 +753,14 @@ window.startReel=async function(){
     }
     stg(1,'done'); prog(12,'Clips loaded');
 
-    // Normalize to 9:16 1080×1920 30fps
+    // Normalize to 9:16 1080×1920 30fps — delete originals immediately to free WASM heap
     stg(2,'active','Cropping to vertical...');
     for(let i=0;i<reelFiles.length;i++){
       await ff.exec(['-i','c'+i+'.mp4',
         '-vf','scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920',
         '-c:v','libx264','-preset','ultrafast','-crf','21',
         '-c:a','aac','-b:a','128k','-r','30','n'+i+'.mp4']);
+      try{await ff.deleteFile('c'+i+'.mp4');}catch(e){}
       prog(12+Math.round((i+1)/reelFiles.length*16),'Formatted '+(i+1)+'/'+reelFiles.length);
     }
     stg(2,'done'); prog(28,'Formatted');
@@ -810,7 +811,11 @@ window.startReel=async function(){
       const listTxt=clipList.map(n=>`file '${n}'`).join('\n');
       await ff.writeFile('list.txt',listTxt);
       await ff.exec(['-f','concat','-safe','0','-i','list.txt','-c','copy','assembled.mp4']);
+      try{await ff.deleteFile('list.txt');}catch(e){}
     }
+    // Free normalized clips + hook card from WASM heap
+    for(let i=0;i<reelFiles.length;i++){try{await ff.deleteFile('n'+i+'.mp4');}catch(e){}}
+    try{await ff.deleteFile('hook.mp4');}catch(e){}
     stg(3,'done'); prog(52,'Assembled');
 
     // Auto captions via Whisper word-level timestamps
@@ -893,14 +898,15 @@ window.startReel=async function(){
         '-c:v','libx264','-preset','ultrafast','-crf','17','-c:a','aac','-b:a','192k','final.mp4'];
     }
     const renderCode=await ff.exec(finalCmd);
-    // Free the assembled/captioned file from FS before reading final
-    try{await ff.deleteFile(currentFile);}catch(e){}
-    if(hasMusicFile){try{await ff.deleteFile('music.wav');}catch(e){}}
 
-    // If render failed, fall back to just copying current file as final
+    // If render failed, fall back to copying current file before we delete it
     if(renderCode!==0){
       await ff.exec(['-i',currentFile,'-c','copy','final.mp4']);
     }
+
+    // Free source files from WASM heap now that final.mp4 is written
+    try{await ff.deleteFile(currentFile);}catch(e){}
+    if(hasMusicFile){try{await ff.deleteFile('music.wav');}catch(e){}}
     stg(5,'done'); prog(97,'Rendering done');
 
     const finalData=await ff.readFile('final.mp4');
