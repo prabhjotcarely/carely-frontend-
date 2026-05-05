@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medication Tracker for Chronic Illness (2026) | Carely</title>
+  <meta name="description" content="Carely tracks the complex medication routines of chronic illness — multiple conditions, multiple medications, family alerts, and automatic doctor reports. Try free 7 days." />
+  <meta name="keywords" content="chronic illness medication tracker, medication app chronic disease, chronic condition medication reminder, multiple medication tracker, complex medication schedule app, medication management chronic illness" />
+  <link rel="canonical" href="https://carely.fit/blog/chronic-illness-medication-tracker.html" />
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org","@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"What is the best medication tracker for chronic illness?","acceptedAnswer":{"@type":"Answer","text":"Carely is designed for the complexity of chronic illness medication management — multiple medications, multiple conditions, multiple caregivers. Elara tracks every dose, logs adherence over time, alerts connected family if a dose is missed, and sends automatic weekly reports to the doctor."}},
+      {"@type":"Question","name":"Can Carely handle multiple medications for multiple conditions?","acceptedAnswer":{"@type":"Answer","text":"Yes. Carely supports unlimited medications with individual schedules. Each medication has its own reminder time, dose type, and adherence tracking. Whether you manage 2 medications or 15, Carely logs them all independently."}},
+      {"@type":"Question","name":"How does Carely help family caregivers of someone with chronic illness?","acceptedAnswer":{"@type":"Answer","text":"Connected family members receive instant alerts if a dose is missed. They see a real-time dashboard of which medications were taken, skipped, or missed today. Multiple family members can connect — every sibling, spouse, or caregiver sees the same data simultaneously."}},
+      {"@type":"Question","name":"Does Carely send medication logs to the doctor automatically?","acceptedAnswer":{"@type":"Answer","text":"Yes. Carely sends a weekly medication adherence report to the connected doctor. The doctor receives a full log of every medication taken or missed — no manual tracking needed for appointments."}},
+      {"@type":"Question","name":"Is Carely available in Canada?","acceptedAnswer":{"@type":"Answer","text":"Yes. Built for both USA and Canada. The founding team is based in BC, Canada."}}
+    ]
+  }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:#fff;color:#0D2B24;-webkit-font-smoothing:antialiased}
+    nav{background:#fff;border-bottom:1px solid #e8efed;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+    .nav-logo{font-size:16px;font-weight:900;color:#028090;letter-spacing:1px;text-decoration:none}
+    .nav-cta{background:#02C39A;color:#0D3347;font-weight:700;font-size:12px;padding:7px 16px;border-radius:7px;text-decoration:none}
+    .hero{background:linear-gradient(135deg,#0D3347 0%,#028090 100%);color:#fff;padding:80px 24px 60px;text-align:center}
+    .hero-badge{display:inline-block;background:rgba(2,195,154,0.2);border:1px solid rgba(2,195,154,0.4);color:#02C39A;font-size:11px;font-weight:700;letter-spacing:2px;padding:5px 14px;border-radius:20px;margin-bottom:20px}
+    .hero h1{font-size:clamp(28px,5vw,52px);font-weight:900;line-height:1.1;margin-bottom:16px}
+    .hero h1 span{color:#02C39A}
+    .hero p{font-size:clamp(16px,2vw,20px);opacity:0.8;max-width:620px;margin:0 auto 32px;line-height:1.6}
+    .hero-cta{display:inline-block;background:#02C39A;color:#0D3347;font-weight:800;font-size:16px;padding:14px 32px;border-radius:10px;text-decoration:none}
+    .content{max-width:760px;margin:0 auto;padding:60px 24px}
+    h2{font-size:clamp(22px,3vw,32px);font-weight:900;color:#0D3347;margin:48px 0 16px}
+    h3{font-size:18px;font-weight:700;color:#028090;margin:28px 0 10px}
+    p{font-size:17px;line-height:1.8;color:#3a5450;margin-bottom:16px}
+    .condition-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:28px 0}
+    .condition-card{background:#f8fcfb;border-radius:12px;padding:18px;border-top:3px solid #02C39A}
+    .condition-name{font-size:14px;font-weight:800;color:#0D3347;margin-bottom:8px}
+    .condition-meds{font-size:12px;color:#5a7470;line-height:1.6}
+    .complexity-box{background:#f0faf7;border-left:4px solid #02C39A;border-radius:0 12px 12px 0;padding:22px 28px;margin:28px 0}
+    .complexity-box strong{color:#028090}
+    .feature-list{margin:24px 0}
+    .feature-item{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding:16px;background:#f8fcfb;border-radius:10px}
+    .feature-icon{font-size:22px;flex-shrink:0}
+    .feature-title{font-size:15px;font-weight:800;color:#0D3347;margin-bottom:4px}
+    .feature-desc{font-size:14px;color:#5a7470;line-height:1.6}
+    .schedule-demo{background:#0D3347;border-radius:16px;padding:28px;margin:28px 0;color:#fff}
+    .schedule-title{font-size:13px;font-weight:700;color:#02C39A;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+    .schedule-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:14px}
+    .schedule-row:last-child{border-bottom:none}
+    .schedule-med{color:#fff;font-weight:600}
+    .schedule-time{color:rgba(255,255,255,0.5);font-size:12px}
+    .schedule-status{font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px}
+    .s-taken{background:rgba(2,195,154,0.2);color:#02C39A}
+    .s-missed{background:rgba(220,38,38,0.2);color:#ef4444}
+    .s-upcoming{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5)}
+    .disclaimer{background:#fef9c3;border:1px solid #f59e0b;border-radius:12px;padding:18px 22px;margin:28px 0;font-size:14px;color:#78350f;line-height:1.7}
+    .faq{background:#f8fcfb;border-radius:16px;padding:40px;margin:48px 0}
+    .faq h2{margin-top:0}
+    .faq-item{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid #e8efed}
+    .faq-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+    .faq-q{font-size:16px;font-weight:700;color:#0D3347;margin-bottom:8px}
+    .faq-a{font-size:15px;color:#5a7470;line-height:1.7}
+    .cta-section{background:linear-gradient(135deg,#0D3347,#028090);color:#fff;padding:64px 24px;text-align:center;margin-top:60px}
+    .cta-section h2{color:#fff;margin-top:0;font-size:32px}
+    .cta-section p{color:rgba(255,255,255,0.75);margin-bottom:28px}
+    .cta-btn{display:inline-block;background:#02C39A;color:#0D3347;font-weight:800;font-size:16px;padding:14px 36px;border-radius:10px;text-decoration:none}
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="https://carely.fit">CARELY</a>
+  <a class="nav-cta" href="https://carely.fit/#pricing">Try Free 7 Days →</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">CHRONIC ILLNESS MEDICATION TRACKER</div>
+  <h1>Managing Multiple Medications<br>for <span>Multiple Conditions</span></h1>
+  <p>Chronic illness means a complex, daily medication routine — often for conditions that interact. Carely tracks every dose, alerts family on misses, and reports to every doctor automatically.</p>
+  <a class="hero-cta" href="https://carely.fit/#pricing">Try Free for 7 Days →</a>
+</div>
+
+<div class="content">
+
+  <div class="complexity-box">
+    <strong>The chronic illness reality:</strong> The average person managing a chronic condition takes 4–7 medications daily — often for multiple overlapping conditions. Each has its own timing, food restrictions, and interaction risks. No single-medication reminder app was designed for this.
+  </div>
+
+  <h2>Conditions Carely supports</h2>
+  <div class="condition-grid">
+    <div class="condition-card">
+      <div class="condition-name">Type 2 Diabetes</div>
+      <div class="condition-meds">Metformin, Ozempic, Januvia, Jardiance + glucose tracking</div>
+    </div>
+    <div class="condition-card">
+      <div class="condition-name">Hypertension</div>
+      <div class="condition-meds">Lisinopril, Amlodipine, Losartan + blood pressure tracking</div>
+    </div>
+    <div class="condition-card">
+      <div class="condition-name">Heart Disease</div>
+      <div class="condition-meds">Atorvastatin, Metoprolol, Warfarin, Aspirin, Clopidogrel</div>
+    </div>
+    <div class="condition-card">
+      <div class="condition-name">Thyroid</div>
+      <div class="condition-meds">Levothyroxine, Synthroid, Liothyronine</div>
+    </div>
+    <div class="condition-card">
+      <div class="condition-name">Arthritis / RA</div>
+      <div class="condition-meds">Methotrexate, Humira, Enbrel, Plaquenil, Prednisone</div>
+    </div>
+    <div class="condition-card">
+      <div class="condition-name">COPD / Asthma</div>
+      <div class="condition-meds">Spiriva, Advair, Symbicort, Ventolin, Montelukast</div>
+    </div>
+    <div class="condition-card">
+      <div class="condition-name">Depression / Anxiety</div>
+      <div class="condition-meds">Sertraline, Lexapro, Wellbutrin, Buspirone, Clonazepam</div>
+    </div>
+    <div class="condition-card">
+      <div class="condition-name">Kidney Disease</div>
+      <div class="condition-meds">Phosphate binders, Erythropoietin, Calcitriol, Furosemide</div>
+    </div>
+  </div>
+
+  <h2>A typical chronic illness medication day</h2>
+
+  <div class="schedule-demo">
+    <div class="schedule-title">Today's medication log — 4 conditions</div>
+    <div class="schedule-row">
+      <div>
+        <div class="schedule-med">Levothyroxine 50mcg</div>
+        <div class="schedule-time">6:00 AM — 30 min before food</div>
+      </div>
+      <span class="schedule-status s-taken">Taken</span>
+    </div>
+    <div class="schedule-row">
+      <div>
+        <div class="schedule-med">Metformin 500mg</div>
+        <div class="schedule-time">8:00 AM — with breakfast</div>
+      </div>
+      <span class="schedule-status s-taken">Taken</span>
+    </div>
+    <div class="schedule-row">
+      <div>
+        <div class="schedule-med">Lisinopril 10mg</div>
+        <div class="schedule-time">9:00 AM</div>
+      </div>
+      <span class="schedule-status s-taken">Taken</span>
+    </div>
+    <div class="schedule-row">
+      <div>
+        <div class="schedule-med">Atorvastatin 20mg</div>
+        <div class="schedule-time">12:00 PM</div>
+      </div>
+      <span class="schedule-status s-missed">Missed — family alerted</span>
+    </div>
+    <div class="schedule-row">
+      <div>
+        <div class="schedule-med">Metformin 500mg</div>
+        <div class="schedule-time">6:00 PM — with dinner</div>
+      </div>
+      <span class="schedule-status s-upcoming">Upcoming</span>
+    </div>
+    <div class="schedule-row">
+      <div>
+        <div class="schedule-med">Metoprolol 25mg</div>
+        <div class="schedule-time">9:00 PM</div>
+      </div>
+      <span class="schedule-status s-upcoming">Upcoming</span>
+    </div>
+  </div>
+
+  <h2>What Carely does for chronic illness patients</h2>
+
+  <div class="feature-list">
+    <div class="feature-item">
+      <div class="feature-icon">📋</div>
+      <div>
+        <div class="feature-title">Unlimited medications, each tracked independently</div>
+        <div class="feature-desc">Add every medication across all conditions. Each has its own schedule, dose type, and adherence log. No limit on medications per account.</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">⏰</div>
+      <div>
+        <div class="feature-title">Precise timing — before food, with food, windows</div>
+        <div class="feature-desc">Set medication-specific timing requirements in the notes. Elara reminds at the exact time with context. Levothyroxine at 6am before eating. Metformin with meals. Statins at night.</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🔔</div>
+      <div>
+        <div class="feature-title">Family alert on missed dose — any medication</div>
+        <div class="feature-desc">Any missed dose triggers an instant push notification to connected family. Doesn't matter if it's the blood thinner or the vitamin — every miss is caught.</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">📊</div>
+      <div>
+        <div class="feature-title">Vitals tracked alongside medications</div>
+        <div class="feature-desc">Blood pressure, blood sugar, and weight tracked in the same app. Family alerts if readings are off. Weekly vitals report included alongside medication adherence report to the doctor.</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🩺</div>
+      <div>
+        <div class="feature-title">Automatic weekly report to every doctor</div>
+        <div class="feature-desc">Connect multiple doctors — specialist, GP, cardiologist, endocrinologist. Each receives the same weekly adherence and vitals report. Every provider stays informed automatically.</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">👨‍👩‍👧</div>
+      <div>
+        <div class="feature-title">Multiple family caregivers connected</div>
+        <div class="feature-desc">Add every family member. Everyone sees the same real-time dashboard. No one family member carries the weight of monitoring alone.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    Carely is a medication adherence support tool. It does not replace your medical care team, specialist, or pharmacist. Always consult your doctor before making any changes to your medication regimen. Use Carely as a support layer alongside professional medical care.
+  </div>
+
+  <div class="faq">
+    <h2>Common Questions</h2>
+    <div class="faq-item">
+      <div class="faq-q">I take 8 medications across 3 conditions. Can Carely handle this?</div>
+      <div class="faq-a">Yes. Carely supports unlimited medications per account. Each has its own name, schedule, dose type, and independent adherence tracking. You can add all 8 medications, set their individual schedules, and Carely tracks every dose across all of them simultaneously.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Some of my medications must be taken with food and others without. Can I track this?</div>
+      <div class="faq-a">Yes. Each medication has a notes field where you can add timing instructions — "30 min before food," "with breakfast," "at bedtime." Elara sends the reminder at the scheduled time and you can include that context in the reminder message.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I connect multiple specialists — cardiologist, endocrinologist, and GP?</div>
+      <div class="faq-a">Yes. Carely supports multiple doctor connections. Add each specialist. Each connected doctor receives the same weekly adherence and vitals report automatically. You don't have to send different reports to different providers.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Does Carely track vitals like blood pressure and blood sugar too?</div>
+      <div class="faq-a">Yes. Blood pressure (systolic/diastolic/pulse), blood sugar (glucose), and weight are all tracked in the same app. Family gets alerts if readings fall outside normal ranges. These are included at no extra cost — not a separate subscription.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is Carely available in Canada?</div>
+      <div class="faq-a">Yes. Built for both USA and Canada. The founding team is based in BC, Canada.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="cta-section">
+  <h2>Every condition. Every medication. Every dose tracked.</h2>
+  <p>7-day free trial. No credit card. Set up in 10 minutes.</p>
+  <a class="cta-btn" href="https://carely.fit/#pricing">Start Free Trial →</a>
+  <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:12px">200 founding member spots at $5/month — limited availability</div>
+</div>
+
+</body>
+</html>
