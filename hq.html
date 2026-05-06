@@ -268,7 +268,7 @@
   <!-- PostHog Analytics -->
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
-    posthog.init('phc_REPLACE_WITH_YOUR_KEY',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
+    posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
     document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="carely.fit/#"],a.nav-cta,a.hero-cta,a.cta-btn').forEach(function(el){el.addEventListener('click',function(){posthog.capture('cta_clicked',{text:el.textContent.trim(),href:el.getAttribute('href'),page:location.pathname});});});});
   </script>
 </head>
@@ -1565,7 +1565,7 @@ carely.fit</div></div>
       <div style="font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:14px;">Go to <a href="https://us.posthog.com/settings/project" target="_blank" style="color:var(--teal);font-weight:700;">PostHog → Settings → Project Settings</a> · Copy the <strong>Project API Key</strong> starting with <code style="background:#f0f9ff;padding:1px 5px;border-radius:3px;font-size:11px;">phc_</code></div>
       <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">Step 2 — Run this in Terminal (replace YOUR_KEY with the real key)</div>
       <div style="background:#0d3347;border-radius:8px;padding:14px 16px;margin:8px 0;position:relative;">
-        <span style="font-family:monospace;font-size:11px;color:#02C39A;" id="ph-cmd">find /Users/taran27/carely-frontend -name "*.html" | xargs sed -i '' 's/phc_REPLACE_WITH_YOUR_KEY/YOUR_KEY/g'</span>
+        <span style="font-family:monospace;font-size:11px;color:#02C39A;" id="ph-cmd">find /Users/taran27/carely-frontend -name "*.html" | xargs sed -i '' 's/phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP/YOUR_KEY/g'</span>
         <button class="copy-btn" style="position:absolute;right:10px;top:10px;" onclick="copyEl('ph-cmd')">Copy</button>
       </div>
       <div style="font-size:11px;color:var(--muted);margin-top:8px;">Then: <code style="font-size:11px;">cd /Users/taran27/carely-frontend && git add -A && git commit -m "feat: activate PostHog analytics" && git push</code></div>
