@@ -264,7 +264,31 @@
       .pin-numpad { width:210px; gap:8px; }
       .pin-btn { height:56px; font-size:20px; }
     }
+    .filter-btn { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:5px 12px; font-size:10px; font-weight:700; cursor:pointer; font-family:inherit; color:var(--muted); transition:all 0.15s; }
+    .filter-btn.active { background:var(--deep); color:#fff; border-color:var(--deep); }
+    .inbox-item { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px 16px; display:flex; gap:12px; align-items:flex-start; transition:all 0.15s; cursor:pointer; }
+    .inbox-item.unread { border-left:3px solid var(--sea); }
+    .inbox-item.critical { border-left:3px solid var(--red); }
+    .inbox-icon { width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+    .icon-draft { background:#ede9fe; }
+    .icon-alert-critical { background:#fee2e2; }
+    .icon-alert { background:#fef3c7; }
+    .icon-metric { background:#dcfce7; }
+    .icon-agent { background:var(--light); }
+    .inbox-content { flex:1; min-width:0; }
+    .inbox-title { font-size:12px; font-weight:700; color:var(--text); margin-bottom:3px; }
+    .inbox-body { font-size:11px; color:var(--muted); line-height:1.5; }
+    .inbox-meta { font-size:9px; color:var(--muted); margin-top:5px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .ia-approve { background:#16a34a; color:#fff; border:none; border-radius:5px; padding:4px 12px; font-size:10px; font-weight:700; cursor:pointer; font-family:inherit; }
+    .ia-skip { background:#f3f4f6; color:var(--text); border:1px solid var(--border); border-radius:5px; padding:4px 12px; font-size:10px; font-weight:700; cursor:pointer; font-family:inherit; }
+    .ia-dismiss { background:none; border:none; color:var(--muted); font-size:10px; cursor:pointer; font-family:inherit; padding:4px 8px; }
   </style>
+  <!-- PostHog Analytics -->
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
+    posthog.init('phc_REPLACE_WITH_YOUR_KEY',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
+    document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="carely.fit/#"],a.nav-cta,a.hero-cta,a.cta-btn').forEach(function(el){el.addEventListener('click',function(){posthog.capture('cta_clicked',{text:el.textContent.trim(),href:el.getAttribute('href'),page:location.pathname});});});});
+  </script>
 </head>
 <body>
 
@@ -324,6 +348,8 @@
   <div class="tab" onclick="showTab('office3d',this);init3D()">🕹️ 3D LIVE</div>
   <div class="tab" onclick="showTab('apis',this);renderApiCards()">⏱ API KEYS</div>
   <div class="tab" onclick="showTab('clipper',this)">🎬 CLIPPER</div>
+  <div class="tab" onclick="showTab('analytics',this)">📈 ANALYTICS</div>
+  <div class="tab" onclick="showTab('inbox',this);loadInbox()">📥 INBOX <span id="inbox-badge" style="display:none;background:#dc2626;color:#fff;font-size:8px;font-weight:900;padding:1px 5px;border-radius:10px;margin-left:4px;"></span></div>
 </div>
 
 <div class="page">
@@ -1542,6 +1568,133 @@ carely.fit</div></div>
   </div>
 </div>
 
+<!-- ANALYTICS -->
+<div id="tab-analytics" class="tab-panel">
+<div class="page" style="max-width:1200px;">
+
+  <div class="insight-box">
+    <div class="insight-label">📈 PostHog Analytics — Project 411380</div>
+    <div class="insight-text">PostHog is wired into all 46 carely.fit pages. Tracking: page views, CTA clicks, bounce rate, top pages. One step left: paste your API key below to activate live data.</div>
+  </div>
+
+  <!-- Setup card -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-head"><h3>🔑 Activate PostHog — 2 Minutes</h3><span class="badge badge-amber">KEY NEEDED</span></div>
+    <div class="card-body">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;">Step 1 — Get your API key</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:16px;">
+        Go to <a href="https://us.posthog.com/settings/project" target="_blank" style="color:var(--teal);font-weight:700;">PostHog → Settings → Project Settings</a><br>
+        Copy the <strong>Project API Key</strong> — it starts with <code style="background:#f0f9ff;padding:1px 5px;border-radius:3px;font-size:11px;">phc_</code>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">Step 2 — Replace the placeholder in your landing pages</div>
+      <div style="background:#0d3347;border-radius:8px;padding:14px 16px;margin:8px 0;position:relative;">
+        <span style="font-family:monospace;font-size:11px;color:#02C39A;" id="ph-cmd">grep -rl "phc_REPLACE_WITH_YOUR_KEY" "/Users/taran27/carely /outputs/carely_final/landing" | xargs sed -i '' 's/phc_REPLACE_WITH_YOUR_KEY/phc_PASTE_YOUR_KEY_HERE/g'</span>
+        <button class="copy-btn" style="position:absolute;right:10px;top:10px;" onclick="copyEl('ph-cmd')">Copy</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px;">Run this in Terminal after replacing <code style="font-size:11px;">phc_PASTE_YOUR_KEY_HERE</code> with your real key. Swaps it across all 46 pages at once.</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+
+    <!-- PostHog links -->
+    <div class="card">
+      <div class="card-head"><h3>🔗 PostHog Dashboards</h3><span class="badge badge-teal">US Cloud</span></div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:8px;">
+        <a href="https://us.posthog.com/project/411380" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;text-decoration:none;background:#fafcfb;">
+          <span style="font-size:20px;">📊</span>
+          <div><div style="font-size:12px;font-weight:700;color:var(--text);">Main Dashboard</div><div style="font-size:10px;color:var(--muted);">All events, sessions, users</div></div>
+        </a>
+        <a href="https://us.posthog.com/project/411380/insights" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;text-decoration:none;background:#fafcfb;">
+          <span style="font-size:20px;">💡</span>
+          <div><div style="font-size:12px;font-weight:700;color:var(--text);">Insights</div><div style="font-size:10px;color:var(--muted);">Trends, funnels, retention</div></div>
+        </a>
+        <a href="https://us.posthog.com/project/411380/web-analytics" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;text-decoration:none;background:#fafcfb;">
+          <span style="font-size:20px;">🌐</span>
+          <div><div style="font-size:12px;font-weight:700;color:var(--text);">Web Analytics</div><div style="font-size:10px;color:var(--muted);">Top pages, referrers, countries</div></div>
+        </a>
+        <a href="https://us.posthog.com/project/411380/recordings" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;text-decoration:none;background:#fafcfb;">
+          <span style="font-size:20px;">🎥</span>
+          <div><div style="font-size:12px;font-weight:700;color:var(--text);">Session Recordings</div><div style="font-size:10px;color:var(--muted);">Watch exactly what visitors do</div></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- What's being tracked -->
+    <div class="card">
+      <div class="card-head"><h3>✅ What's Being Tracked</h3><span class="badge badge-green">46 Pages Live</span></div>
+      <div class="card-body">
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">AUTO-CAPTURED ON EVERY PAGE</div>
+          <div class="status-row"><div class="sdot s-green"></div><div class="status-name">Page view</div><div class="status-val">$pageview event</div></div>
+          <div class="status-row"><div class="sdot s-green"></div><div class="status-name">Page leave + time on page</div><div class="status-val">$pageleave event</div></div>
+          <div class="status-row"><div class="sdot s-green"></div><div class="status-name">Scroll depth</div><div class="status-val">auto by PostHog</div></div>
+          <div class="status-row"><div class="sdot s-green"></div><div class="status-name">Referrer source</div><div class="status-val">$referrer</div></div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">CUSTOM EVENTS</div>
+          <div class="status-row"><div class="sdot s-green"></div><div class="status-name">CTA button click</div><div class="status-val">cta_clicked</div></div>
+          <div class="status-row"><div class="sdot s-green"></div><div class="status-name">Pricing section click</div><div class="status-val">href includes #pricing</div></div>
+          <div class="status-row"><div class="sdot s-amber"></div><div class="status-name">Trial signup (mobile app)</div><div class="status-val">coming soon</div></div>
+          <div class="status-row"><div class="sdot s-amber"></div><div class="status-name">Paywall conversion</div><div class="status-val">coming soon</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- KPI targets -->
+  <div class="card">
+    <div class="card-head"><h3>🎯 Key Metrics To Watch</h3><span class="badge badge-blue">Check Weekly</span></div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+        <div style="background:#f8fcfb;border-radius:10px;padding:14px;border-left:3px solid var(--mint);">
+          <div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">VISITORS / WEEK</div>
+          <div style="font-size:22px;font-weight:900;color:var(--text);">—</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px;">Target: 500+ by May 31</div>
+        </div>
+        <div style="background:#f8fcfb;border-radius:10px;padding:14px;border-left:3px solid #028090;">
+          <div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">CTA CLICK RATE</div>
+          <div style="font-size:22px;font-weight:900;color:var(--text);">—</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px;">Target: >3% of page views</div>
+        </div>
+        <div style="background:#f8fcfb;border-radius:10px;padding:14px;border-left:3px solid #7c3aed;">
+          <div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">TOP BLOG PAGE</div>
+          <div style="font-size:22px;font-weight:900;color:var(--text);">—</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px;">Double down → more content</div>
+        </div>
+        <div style="background:#f8fcfb;border-radius:10px;padding:14px;border-left:3px solid var(--green);">
+          <div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">TRIAL SIGNUPS</div>
+          <div style="font-size:22px;font-weight:900;color:var(--text);">—</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px;">Goal: 10 in first 30 days</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:12px 14px;background:#fff8e1;border-radius:8px;border-left:3px solid var(--amber);font-size:11px;color:#7a5c00;line-height:1.6;">
+        <strong>How to use this:</strong> Each week, open PostHog Web Analytics. Find the top blog page. Post 1 Reddit comment on that topic with a Carely link. That's your growth loop — traffic tells you where to double down.
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- INBOX -->
+<div id="tab-inbox" class="tab-panel">
+  <div class="page">
+    <div class="sh" style="margin-bottom:8px"><h2>HQ Inbox</h2><div class="sh-line"></div><span id="inbox-unread-label" style="font-size:10px;color:var(--muted);font-weight:700;"></span></div>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:18px;">All agent drafts, alerts, and events in one place. Telegram only fires for paying customers, churn, and security alerts.</p>
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+      <button onclick="filterInbox('all')" id="filter-all" class="filter-btn active">All</button>
+      <button onclick="filterInbox('draft')" id="filter-draft" class="filter-btn">Drafts (approve/skip)</button>
+      <button onclick="filterInbox('alert')" id="filter-alert" class="filter-btn">Alerts</button>
+      <button onclick="filterInbox('metric')" id="filter-metric" class="filter-btn">Metrics</button>
+      <button onclick="loadInbox()" style="margin-left:auto;background:var(--teal);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;">↻ Refresh</button>
+    </div>
+    <div id="inbox-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+    <div id="inbox-empty" style="display:none;text-align:center;padding:60px 20px;color:var(--muted);font-size:13px;">All clear. No items in inbox.</div>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -1825,9 +1978,149 @@ async function loadLiveStats(){
   } catch(e){ console.warn('[HQ] Stats fetch failed', e); }
 }
 
-async function loadAll(){await checkHealth();await loadMetrics();await loadLiveStats();}
+async function loadAll(){await checkHealth();await loadMetrics();await loadLiveStats();await loadInboxBadge();}
 loadAll();
 setInterval(loadAll,60000);
+
+// ── INBOX ─────────────────────────────────────────────────────────────────────
+let _allInboxItems=[], _inboxFilter='all';
+
+function clearEl(el){while(el.firstChild)el.removeChild(el.firstChild);}
+
+function filterInbox(type){
+  _inboxFilter=type;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  const btn=document.getElementById('filter-'+type);
+  if(btn)btn.classList.add('active');
+  renderInboxItems();
+}
+
+async function loadInboxBadge(){
+  try{
+    const r=await fetch(API+'/admin/inbox',{headers:ADMIN_HEADERS});
+    if(!r.ok)return;
+    const d=await r.json();
+    const badge=document.getElementById('inbox-badge');
+    if(badge){if(d.unread>0){badge.textContent=String(d.unread);badge.style.display='inline';}else badge.style.display='none';}
+    _allInboxItems=d.items||[];
+  }catch{}
+}
+
+async function loadInbox(){
+  const list=document.getElementById('inbox-list');
+  const empty=document.getElementById('inbox-empty');
+  if(!list)return;
+  clearEl(list);
+  const loading=document.createElement('div');
+  loading.style.cssText='padding:20px;text-align:center;color:var(--muted);font-size:11px;';
+  loading.textContent='Loading...';
+  list.appendChild(loading);
+  try{
+    const r=await fetch(API+'/admin/inbox',{headers:ADMIN_HEADERS});
+    clearEl(list);
+    if(!r.ok){const err=document.createElement('div');err.style.cssText='padding:20px;color:var(--red);font-size:11px;';err.textContent='Failed to load inbox.';list.appendChild(err);return;}
+    const d=await r.json();
+    _allInboxItems=d.items||[];
+    const badge=document.getElementById('inbox-badge');
+    const label=document.getElementById('inbox-unread-label');
+    if(badge){if(d.unread>0){badge.textContent=String(d.unread);badge.style.display='inline';}else badge.style.display='none';}
+    if(label)label.textContent=d.unread>0?d.unread+' unread':'All read';
+    renderInboxItems();
+  }catch(e){clearEl(list);const err=document.createElement('div');err.style.cssText='padding:20px;color:var(--red);font-size:11px;';err.textContent='Error: '+e.message;list.appendChild(err);}
+}
+
+function buildInboxCard(item){
+  const iconMap={draft:'✏️',alert:item.priority==='critical'?'🔴':'⚠️',metric:'📈',agent:'🤖'};
+  const iconClass='icon-'+(item.type==='alert'&&item.priority==='critical'?'alert-critical':item.type);
+  const card=document.createElement('div');
+  card.id='inbox-'+item.id;
+  card.className='inbox-item'+(item.read?'':' unread')+(item.priority==='critical'?' critical':'');
+  card.onclick=()=>markItemRead(item.id);
+  const icon=document.createElement('div');
+  icon.className='inbox-icon '+iconClass;
+  icon.textContent=iconMap[item.type]||'📌';
+  const content=document.createElement('div');
+  content.className='inbox-content';
+  const title=document.createElement('div');
+  title.className='inbox-title';
+  title.textContent=item.title;
+  const body=document.createElement('div');
+  body.className='inbox-body';
+  body.textContent=item.body;
+  const meta=document.createElement('div');
+  meta.className='inbox-meta';
+  const agentSpan=document.createElement('span');agentSpan.textContent=item.agentName;
+  const timeSpan=document.createElement('span');timeSpan.textContent=formatTimeAgo(item.createdAt);
+  meta.appendChild(agentSpan);meta.appendChild(timeSpan);
+  if(item.priority==='critical'){const c=document.createElement('span');c.style.cssText='color:var(--red);font-weight:700;';c.textContent='CRITICAL';meta.appendChild(c);}
+  const actions=document.createElement('div');
+  actions.style.cssText='display:flex;gap:6px;margin-top:8px;';
+  if(item.actionRequired&&item.type==='draft'){
+    const ab=document.createElement('button');ab.className='ia-approve';ab.textContent='Approve';ab.onclick=(e)=>{e.stopPropagation();approveDraft(item.id);};
+    const sb=document.createElement('button');sb.className='ia-skip';sb.textContent='Skip';sb.onclick=(e)=>{e.stopPropagation();skipDraft(item.id);};
+    actions.appendChild(ab);actions.appendChild(sb);
+  }
+  const db=document.createElement('button');db.className='ia-dismiss';db.textContent='Dismiss';db.onclick=(e)=>{e.stopPropagation();dismissInboxItem(item.id);};
+  actions.appendChild(db);
+  content.appendChild(title);content.appendChild(body);content.appendChild(meta);content.appendChild(actions);
+  card.appendChild(icon);card.appendChild(content);
+  return card;
+}
+
+function renderInboxItems(){
+  const list=document.getElementById('inbox-list');
+  const empty=document.getElementById('inbox-empty');
+  if(!list)return;
+  clearEl(list);
+  const items=_inboxFilter==='all'?_allInboxItems:_allInboxItems.filter(i=>i.type===_inboxFilter);
+  if(!items.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  items.forEach(item=>list.appendChild(buildInboxCard(item)));
+}
+
+async function markItemRead(id){
+  const el=document.getElementById('inbox-'+id);
+  if(el)el.classList.remove('unread');
+  await fetch(API+'/admin/inbox/'+id+'/read',{method:'POST',headers:ADMIN_HEADERS});
+  const item=_allInboxItems.find(i=>i.id===id);
+  if(item)item.read=true;
+  loadInboxBadge();
+}
+
+async function dismissInboxItem(id){
+  const el=document.getElementById('inbox-'+id);
+  if(el)el.style.opacity='0.3';
+  await fetch(API+'/admin/inbox/'+id+'/dismiss',{method:'POST',headers:ADMIN_HEADERS});
+  _allInboxItems=_allInboxItems.filter(i=>i.id!==id);
+  renderInboxItems();loadInboxBadge();
+}
+
+async function approveDraft(itemId){
+  const item=_allInboxItems.find(i=>i.id===itemId);
+  if(!item||!item.metadata)return;
+  const draftIndex=item.metadata.draftIndex;
+  if(!draftIndex){alert('Use /approve N in Telegram.');return;}
+  const r=await fetch(API+'/admin/drafts/'+draftIndex+'/approve',{method:'POST',headers:{...ADMIN_HEADERS,'Content-Type':'application/json'},body:'{}'});
+  if(r.ok)setTimeout(()=>dismissInboxItem(itemId),1200);
+  else alert('Failed. Use /approve '+draftIndex+' in Telegram.');
+}
+
+async function skipDraft(itemId){
+  const item=_allInboxItems.find(i=>i.id===itemId);
+  if(!item||!item.metadata)return;
+  const draftIndex=item.metadata.draftIndex;
+  if(!draftIndex){alert('Use /skip N in Telegram.');return;}
+  const r=await fetch(API+'/admin/drafts/'+draftIndex+'/skip',{method:'POST',headers:{...ADMIN_HEADERS,'Content-Type':'application/json'},body:'{}'});
+  if(r.ok)setTimeout(()=>dismissInboxItem(itemId),1200);
+}
+
+function formatTimeAgo(iso){
+  const diff=Math.floor((Date.now()-new Date(iso))/1000);
+  if(diff<60)return 'just now';
+  if(diff<3600)return Math.floor(diff/60)+'m ago';
+  if(diff<86400)return Math.floor(diff/3600)+'h ago';
+  return Math.floor(diff/86400)+'d ago';
+}
 
 // Safe escape to prevent XSS when inserting user data into DOM
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
