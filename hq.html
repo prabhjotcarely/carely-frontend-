@@ -265,6 +265,12 @@
       .pin-btn { height:56px; font-size:20px; }
     }
   </style>
+  <!-- PostHog Analytics -->
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
+    posthog.init('phc_REPLACE_WITH_YOUR_KEY',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
+    document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="carely.fit/#"],a.nav-cta,a.hero-cta,a.cta-btn').forEach(function(el){el.addEventListener('click',function(){posthog.capture('cta_clicked',{text:el.textContent.trim(),href:el.getAttribute('href'),page:location.pathname});});});});
+  </script>
 </head>
 <body>
 
@@ -324,6 +330,7 @@
   <div class="tab" onclick="showTab('office3d',this);init3D()">🕹️ 3D LIVE</div>
   <div class="tab" onclick="showTab('apis',this);renderApiCards()">⏱ API KEYS</div>
   <div class="tab" onclick="showTab('clipper',this)">🎬 CLIPPER</div>
+  <div class="tab" onclick="showTab('analytics',this)">📈 ANALYTICS</div>
 </div>
 
 <div class="page">
@@ -1540,6 +1547,73 @@ carely.fit</div></div>
       </div>
     </div>
   </div>
+</div>
+
+<!-- ANALYTICS -->
+<div id="tab-analytics" class="tab-panel">
+<div class="page" style="max-width:1200px;">
+
+  <div class="insight-box">
+    <div class="insight-label">📈 PostHog Analytics — Project 411380</div>
+    <div class="insight-text">PostHog is wired into all carely.fit pages. Tracking: page views, CTA clicks, top pages. One step left: paste your API key to activate live data on the site.</div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-head"><h3>🔑 Activate PostHog — 2 Minutes</h3><span class="badge badge-amber">KEY NEEDED</span></div>
+    <div class="card-body">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">Step 1 — Get your key</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:14px;">Go to <a href="https://us.posthog.com/settings/project" target="_blank" style="color:var(--teal);font-weight:700;">PostHog → Settings → Project Settings</a> · Copy the <strong>Project API Key</strong> starting with <code style="background:#f0f9ff;padding:1px 5px;border-radius:3px;font-size:11px;">phc_</code></div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">Step 2 — Run this in Terminal (replace YOUR_KEY with the real key)</div>
+      <div style="background:#0d3347;border-radius:8px;padding:14px 16px;margin:8px 0;position:relative;">
+        <span style="font-family:monospace;font-size:11px;color:#02C39A;" id="ph-cmd">find /Users/taran27/carely-frontend -name "*.html" | xargs sed -i '' 's/phc_REPLACE_WITH_YOUR_KEY/YOUR_KEY/g'</span>
+        <button class="copy-btn" style="position:absolute;right:10px;top:10px;" onclick="copyEl('ph-cmd')">Copy</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px;">Then: <code style="font-size:11px;">cd /Users/taran27/carely-frontend && git add -A && git commit -m "feat: activate PostHog analytics" && git push</code></div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head"><h3>🔗 PostHog Dashboards</h3><span class="badge badge-teal">US Cloud</span></div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:8px;">
+        <a href="https://us.posthog.com/project/411380" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;text-decoration:none;background:#fafcfb;"><span style="font-size:20px;">📊</span><div><div style="font-size:12px;font-weight:700;color:var(--text);">Main Dashboard</div><div style="font-size:10px;color:var(--muted);">All events, sessions, users</div></div></a>
+        <a href="https://us.posthog.com/project/411380/web-analytics" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;text-decoration:none;background:#fafcfb;"><span style="font-size:20px;">🌐</span><div><div style="font-size:12px;font-weight:700;color:var(--text);">Web Analytics</div><div style="font-size:10px;color:var(--muted);">Top pages, referrers, countries</div></div></a>
+        <a href="https://us.posthog.com/project/411380/insights" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;text-decoration:none;background:#fafcfb;"><span style="font-size:20px;">💡</span><div><div style="font-size:12px;font-weight:700;color:var(--text);">Insights</div><div style="font-size:10px;color:var(--muted);">Trends, funnels, CTA conversion</div></div></a>
+        <a href="https://us.posthog.com/project/411380/recordings" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;text-decoration:none;background:#fafcfb;"><span style="font-size:20px;">🎥</span><div><div style="font-size:12px;font-weight:700;color:var(--text);">Session Recordings</div><div style="font-size:10px;color:var(--muted);">Watch exactly what visitors do</div></div></a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>✅ What's Being Tracked</h3><span class="badge badge-green">All Pages Live</span></div>
+      <div class="card-body">
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">AUTO ON EVERY PAGE</div>
+          <div class="status-row"><div class="sdot s-green"></div><div class="status-name">Page view</div><div class="status-val">$pageview</div></div>
+          <div class="status-row"><div class="sdot s-green"></div><div class="status-name">Time on page + page leave</div><div class="status-val">$pageleave</div></div>
+          <div class="status-row"><div class="sdot s-green"></div><div class="status-name">Referrer / UTM source</div><div class="status-val">$referrer</div></div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">CUSTOM EVENTS</div>
+          <div class="status-row"><div class="sdot s-green"></div><div class="status-name">CTA click (pricing / trial)</div><div class="status-val">cta_clicked</div></div>
+          <div class="status-row"><div class="sdot s-amber"></div><div class="status-name">Trial signup (mobile app)</div><div class="status-val">coming soon</div></div>
+          <div class="status-row"><div class="sdot s-amber"></div><div class="status-name">Paywall conversion</div><div class="status-val">coming soon</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h3>🎯 Weekly Growth Loop</h3><span class="badge badge-blue">Every Monday</span></div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;">
+        <div style="background:#f8fcfb;border-radius:10px;padding:14px;border-left:3px solid var(--mint);"><div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">VISITORS / WEEK</div><div style="font-size:22px;font-weight:900;color:var(--text);">—</div><div style="font-size:10px;color:var(--muted);margin-top:4px;">Target: 500+ by May 31</div></div>
+        <div style="background:#f8fcfb;border-radius:10px;padding:14px;border-left:3px solid #028090;"><div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">CTA CLICK RATE</div><div style="font-size:22px;font-weight:900;color:var(--text);">—</div><div style="font-size:10px;color:var(--muted);margin-top:4px;">Target: >3% of page views</div></div>
+        <div style="background:#f8fcfb;border-radius:10px;padding:14px;border-left:3px solid var(--green);"><div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">TOP BLOG PAGE</div><div style="font-size:22px;font-weight:900;color:var(--text);">—</div><div style="font-size:10px;color:var(--muted);margin-top:4px;">Double down → more content</div></div>
+      </div>
+      <div style="padding:12px 14px;background:#fff8e1;border-radius:8px;border-left:3px solid var(--amber);font-size:11px;color:#7a5c00;line-height:1.6;"><strong>Growth loop:</strong> Open Web Analytics every Monday. Find the top blog page. Post 1 Reddit comment on that topic with a Carely link. Traffic tells you where to double down.</div>
+    </div>
+  </div>
+
+</div>
 </div>
 
 </div>
