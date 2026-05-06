@@ -209,6 +209,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="sb-sec-title">Command</div>
     <div class="sb-item" onclick="nav(this,'hq-command')"><span class="ic">💬</span> HQ Command</div>
     <div class="sb-item" onclick="nav(this,'my-inbox')"><span class="ic">📥</span> My Inbox <span class="dot-r"></span></div>
+    <div class="sb-item" onclick="nav(this,'team-chat')"><span class="ic">👥</span> Team Chat <span class="dot-g"></span></div>
   </div>
 
   <div class="sb-sec">
@@ -216,11 +217,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="sb-item" onclick="nav(this,'content-hub')"><span class="ic">🎬</span> Content Hub <span class="dot-g"></span></div>
     <div class="sb-item" onclick="nav(this,'approvals')"><span class="ic">✅</span> Approvals <span class="dot-a"></span></div>
     <div class="sb-item" onclick="nav(this,'platforms')"><span class="ic">🌐</span> Platforms</div>
+    <div class="sb-item" onclick="nav(this,'clipper')"><span class="ic">✂️</span> Clipper</div>
   </div>
 
   <div class="sb-sec">
     <div class="sb-sec-title">Intelligence</div>
     <div class="sb-item" onclick="nav(this,'intel-pool')"><span class="ic">🎯</span> Intel Pool <span class="dot-a"></span></div>
+    <div class="sb-item" onclick="nav(this,'seo')"><span class="ic">🔍</span> SEO</div>
     <div class="sb-item" onclick="nav(this,'agent-chat')"><span class="ic">🤖</span> Agent Activity</div>
   </div>
 
@@ -228,6 +231,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="sb-sec-title">Analytics</div>
     <div class="sb-item" onclick="nav(this,'app-metrics')"><span class="ic">📊</span> App Metrics</div>
     <div class="sb-item" onclick="nav(this,'revenue')"><span class="ic">💰</span> Revenue &amp; Growth</div>
+    <div class="sb-item" onclick="nav(this,'crm')"><span class="ic">👤</span> CRM</div>
     <div class="sb-item" onclick="nav(this,'reporting')"><span class="ic">📈</span> Reporting</div>
   </div>
 
@@ -290,14 +294,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <table class="tbl">
         <thead><tr><th>Agent</th><th>Role</th><th>Schedule</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td><strong>Frank</strong></td><td>Dose reminders (FCM)</td><td>Every minute</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Maya</strong></td><td>Missed dose tracker</td><td>Every 30 min</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Grace</strong></td><td>AI daily check-ins</td><td>9 AM UTC</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Elara</strong></td><td>AI caretaker chat</td><td>On-demand</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Nina</strong></td><td>Email nurture sequence</td><td>Daily 10 AM UTC</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Blaze</strong></td><td>Launch blast</td><td>May 5 morning</td><td><span class="pill green">Fired ✓</span></td></tr>
-          <tr><td><strong>LinkedIn Agent</strong></td><td>Posts 6x/week</td><td>Wed 8AM PST</td><td><span class="pill green">Posted ✓</span></td></tr>
-          <tr><td><strong>Reddit Monitor</strong></td><td>Monitor + draft replies</td><td>Every 6 hours</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Rohan</strong></td><td>Dose reminders (FCM)</td><td>Every minute</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Meera</strong></td><td>Missed dose tracker</td><td>Every 30 min</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Ananya</strong></td><td>AI daily check-ins</td><td>9 AM UTC</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Priya</strong></td><td>AI caretaker chat</td><td>On-demand</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Naina</strong></td><td>Email nurture sequence</td><td>Daily 10 AM UTC</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Tej</strong></td><td>Launch blast</td><td>May 5 morning</td><td><span class="pill green">Fired ✓</span></td></tr>
+          <tr><td><strong>Arjun</strong></td><td>LinkedIn posts 6x/week</td><td>Wed 8AM PST</td><td><span class="pill green">Posted ✓</span></td></tr>
+          <tr><td><strong>Aarav</strong></td><td>Reddit monitor + draft replies</td><td>Every 6 hours</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Aryan</strong></td><td>Proactive alerts (signups, churn, MRR)</td><td>Every hour</td><td><span class="pill green">Running</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -371,7 +376,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="page" id="page-hq-command">
     <div class="ph"><h1>💬 HQ Command</h1><p>Direct line to the agent network · Notes, directives, decisions</p></div>
     <div class="card">
-      <div class="card-title">🤖 Elara — Mission Control</div>
+      <div class="card-title">🤖 Priya — Mission Control</div>
       <div class="chat-area" id="hq-chat"></div>
       <div class="chat-input-row">
         <input class="chat-input" id="hq-input" type="text" placeholder="Type a directive or note..." />
@@ -659,6 +664,99 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
     </div>
   </div>
 
+  <!-- ══ TEAM CHAT ══ -->
+  <div class="page" id="page-team-chat">
+    <div class="ph"><h1>👥 Team Chat</h1><p>Real-time agent collaboration feed — what the team is doing right now</p></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="feed-status">Loading...</div>
+      <button onclick="loadTeamFeed()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+    </div>
+    <div id="team-feed-container" style="display:flex;flex-direction:column;gap:8px"></div>
+  </div>
+
+  <!-- ══ SEO ══ -->
+  <div class="page" id="page-seo">
+    <div class="ph"><h1>🔍 SEO</h1><p>Content hierarchy · Keyword targets · Page status · Drishti coverage</p></div>
+    <div class="metric-row">
+      <div class="metric"><div class="metric-label">Blog Pages Live</div><div class="metric-val teal">7</div><div class="metric-sub">All indexed via IndexNow</div></div>
+      <div class="metric"><div class="metric-label">Target Keywords</div><div class="metric-val teal">12</div><div class="metric-sub">Long-tail focused</div></div>
+      <div class="metric"><div class="metric-label">Domain</div><div class="metric-val" style="font-size:1rem">carely.fit</div><div class="metric-sub">Cloudflare Pages</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🗂️ Content Hierarchy</div>
+      <table class="tbl">
+        <thead><tr><th>Pillar</th><th>Page</th><th>Target Keyword</th><th>Status</th><th>Drishti</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Medication Reminders</strong></td><td>best-medication-reminder-app-elderly.html</td><td>"best medication reminder app for elderly"</td><td><span class="pill green">Live</span></td><td><span class="pill green">Indexed</span></td></tr>
+          <tr><td><strong>Competitor Alt</strong></td><td>medisafe-alternative.html</td><td>"medisafe alternative"</td><td><span class="pill green">Live</span></td><td><span class="pill green">Indexed</span></td></tr>
+          <tr><td><strong>Competitor Alt</strong></td><td>carezone-alternative.html</td><td>"carezone alternative"</td><td><span class="pill green">Live</span></td><td><span class="pill green">Indexed</span></td></tr>
+          <tr><td><strong>AI Caregiving</strong></td><td>ai-caregiver-app.html</td><td>"ai caregiver app"</td><td><span class="pill green">Live</span></td><td><span class="pill green">Indexed</span></td></tr>
+          <tr><td><strong>Reminder Tips</strong></td><td>how-to-remind-elderly-parent-medication.html</td><td>"how to remind elderly parent to take medication"</td><td><span class="pill green">Live</span></td><td><span class="pill green">Indexed</span></td></tr>
+          <tr><td><strong>Geo: Canada</strong></td><td>medication-reminder-app-canada.html</td><td>"medication reminder app Canada"</td><td><span class="pill green">Live</span></td><td><span class="pill green">Indexed</span></td></tr>
+          <tr><td><strong>Use Case</strong></td><td>medication-reminder-busy-professionals.html</td><td>"medication reminder for busy professionals"</td><td><span class="pill green">Live</span></td><td><span class="pill green">Indexed</span></td></tr>
+          <tr><td><strong>Core</strong></td><td>index.html</td><td>"medication reminder app"</td><td><span class="pill green">Live</span></td><td><span class="pill green">Homepage</span></td></tr>
+          <tr><td><strong>Caregiver</strong></td><td>for-caregivers.html</td><td>"caregiver medication tracking app"</td><td><span class="pill green">Live</span></td><td><span class="pill amber">Pending</span></td></tr>
+          <tr><td><strong>Healthcare</strong></td><td>for-doctors.html</td><td>"medication adherence app for doctors"</td><td><span class="pill green">Live</span></td><td><span class="pill amber">Pending</span></td></tr>
+          <tr><td><strong>B2B</strong></td><td>for-pharmacies.html</td><td>"pharmacy medication reminder app"</td><td><span class="pill green">Live</span></td><td><span class="pill amber">Pending</span></td></tr>
+          <tr><td><strong>Content Gap</strong></td><td>—</td><td>"medication reminder app seniors USA"</td><td><span class="pill red">Missing</span></td><td><span class="pill red">Not indexed</span></td></tr>
+          <tr><td><strong>Content Gap</strong></td><td>—</td><td>"family caregiver app"</td><td><span class="pill red">Missing</span></td><td><span class="pill red">Not indexed</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Drishti Actions</div>
+      <div class="list-item"><span>✅</span><div class="name">Google IndexNow — all 7 blog URLs pinged on each deploy</div><span class="pill green">Active</span></div>
+      <div class="list-item"><span>✅</span><div class="name">sitemap.xml — serving as application/xml at /sitemap.xml</div><span class="pill green">Live</span></div>
+      <div class="list-item"><span>✅</span><div class="name">robots.txt — allows all bots, links to sitemap</div><span class="pill green">Live</span></div>
+      <div class="list-item"><span>🟡</span><div class="name">Google Search Console — submit sitemap manually if not indexed in 7 days</div><span class="pill amber">Monitor</span></div>
+      <div class="list-item"><span>🔴</span><div class="name">2 content gaps — "seniors USA" + "family caregiver" pages not yet written</div><span class="pill red">Gap</span></div>
+    </div>
+  </div>
+
+  <!-- ══ CLIPPER ══ -->
+  <div class="page" id="page-clipper">
+    <div class="ph"><h1>✂️ Clipper</h1><p>AI video editor — extract viral clips from long videos for TikTok & Reels</p></div>
+    <div class="alert teal" style="background:rgba(2,195,154,0.08);border:1px solid rgba(2,195,154,0.3);border-radius:12px;padding:14px 16px;margin-bottom:20px;font-size:0.84rem">
+      Clipper runs locally in your browser — your videos never leave your device. No upload, no cloud storage.
+    </div>
+    <div class="card" style="text-align:center;padding:40px 20px">
+      <div style="font-size:3rem;margin-bottom:16px">✂️</div>
+      <div style="font-size:1.1rem;font-weight:800;color:var(--deep);margin-bottom:8px">Carely Clipper — Creative Studio</div>
+      <div style="font-size:0.84rem;color:var(--g500);margin-bottom:24px;max-width:360px;margin-left:auto;margin-right:auto">Drop a long video. AI finds the 3 best viral clips (30-60s each). Export ready for TikTok or Instagram Reels.</div>
+      <a href="/clipper.html" target="_blank" style="display:inline-block;background:var(--teal);color:white;font-size:0.88rem;font-weight:700;padding:12px 28px;border-radius:10px;text-decoration:none">Open Clipper</a>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 How to use</div>
+      <div class="list-item"><span>1.</span><div class="name">Open Clipper and drop your raw video (any length, any format)</div></div>
+      <div class="list-item"><span>2.</span><div class="name">Choose mode: Reel (extract clips) or Full Edit (one video)</div></div>
+      <div class="list-item"><span>3.</span><div class="name">AI analyzes the transcript and finds the top 3 viral moments</div></div>
+      <div class="list-item"><span>4.</span><div class="name">Preview each clip, pick the one you want, download</div></div>
+      <div class="list-item"><span>5.</span><div class="name">Post on TikTok at 7-9 PM for max reach. Reply to every comment in first hour.</div></div>
+    </div>
+  </div>
+
+  <!-- ══ CRM ══ -->
+  <div class="page" id="page-crm">
+    <div class="ph"><h1>👤 CRM</h1><p>All users · Plans · Activity · Trial status — live from Supabase</p></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <select id="crm-filter" onchange="loadCRM()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
+        <option value="">All users</option>
+        <option value="founding">Founding</option>
+        <option value="monthly">Monthly</option>
+        <option value="annual">Annual</option>
+        <option value="trial">Trial</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+      <div style="font-size:0.8rem;color:var(--g500)" id="crm-count">Loading...</div>
+      <button onclick="loadCRM()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+    </div>
+    <div class="card" style="overflow-x:auto">
+      <div id="crm-table-wrap">
+        <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading users...</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ══ AGENT ACTIVITY ══ -->
   <div class="page" id="page-agent-chat">
     <div class="ph"><h1>🤖 Agent Activity</h1><p>What agents are doing right now · Live feed · Execution log</p></div>
@@ -875,37 +973,37 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
     <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px">Retention Team (6) — keeps users engaged, doses logged, caregivers informed</div>
     <div class="agent-grid">
       <div class="agent-card purple">
-        <div class="agent-name">Elara</div>
-        <div class="agent-role">AI Caretaker Chat · GPT-4o · Redis memory (7-day TTL)</div>
+        <div class="agent-name">Priya</div>
+        <div class="agent-role">AI Caretaker Chat · Claude Sonnet · Redis memory (7-day TTL)</div>
         <div class="agent-status"><span class="dot-on"></span> On-demand · Always ready</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">"Your medication buddy. Remembers your history."</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">"Your medication companion. Remembers your history."</div>
       </div>
       <div class="agent-card">
-        <div class="agent-name">Frank</div>
+        <div class="agent-name">Rohan</div>
         <div class="agent-role">Dose Reminder Agent · FCM push · Every minute check</div>
         <div class="agent-status"><span class="dot-on"></span> Running · Fires 5min before dose time</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">GPT-4o mini generates funny, personalized reminder messages</div>
       </div>
       <div class="agent-card amber">
-        <div class="agent-name">Maya</div>
-        <div class="agent-role">Missed Dose Tracker · Every 30 minutes · Triggers Carla</div>
+        <div class="agent-name">Meera</div>
+        <div class="agent-role">Missed Dose Tracker · Every 30 minutes · Triggers Kavya</div>
         <div class="agent-status"><span class="dot-on"></span> Running</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Detects skipped doses and escalates to caregiver via Carla</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Detects skipped doses and escalates to caregiver via Kavya</div>
       </div>
       <div class="agent-card red">
-        <div class="agent-name">Carla</div>
+        <div class="agent-name">Kavya</div>
         <div class="agent-role">Caregiver Alert · FCM push to family member</div>
-        <div class="agent-status"><span class="dot-on"></span> Triggered by Maya on missed dose</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Instant push to caregiver when parent misses a dose</div>
+        <div class="agent-status"><span class="dot-on"></span> Triggered by Meera on missed dose</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Instant push to caregiver when patient misses a dose</div>
       </div>
       <div class="agent-card blue">
-        <div class="agent-name">Dr. Bridge</div>
+        <div class="agent-name">Dhruv</div>
         <div class="agent-role">Doctor Report Agent · Hourly check + weekly email</div>
         <div class="agent-status"><span class="dot-on"></span> Running</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Weekly adherence PDF emailed to doctor via SendGrid</div>
       </div>
       <div class="agent-card">
-        <div class="agent-name">Grace</div>
+        <div class="agent-name">Ananya</div>
         <div class="agent-role">AI Daily Check-in · 9 AM UTC · GPT-4o mini</div>
         <div class="agent-status"><span class="dot-on"></span> Running</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Wellbeing check-in — adapts to user condition context (9 conditions)</div>
@@ -915,31 +1013,31 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
     <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;margin-top:4px">Acquisition Team (5) — brings users in, converts trials, re-engages churned</div>
     <div class="agent-grid">
       <div class="agent-card">
-        <div class="agent-name">Nina</div>
+        <div class="agent-name">Naina</div>
         <div class="agent-role">Email Nurture · Daily 10 AM UTC · 3-email sequence</div>
         <div class="agent-status"><span class="dot-on"></span> Running</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Welcome → Feature highlight → Trial reminder (auto via SendGrid)</div>
       </div>
       <div class="agent-card">
-        <div class="agent-name">Scout</div>
+        <div class="agent-name">Drishti</div>
         <div class="agent-role">SEO Agent · Google IndexNow · On every deploy</div>
         <div class="agent-status"><span class="dot-on"></span> Running</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">POST /seo/page auto-updates sitemap + pings Google on deploy</div>
       </div>
       <div class="agent-card red">
-        <div class="agent-name">Blaze</div>
+        <div class="agent-name">Tej</div>
         <div class="agent-role">Launch Email Blast · One-time · May 5, 2026</div>
-        <div class="agent-status"><span class="dot-on"></span> Fired today — mission complete</div>
+        <div class="agent-status"><span class="dot-on"></span> Fired — mission complete</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Launch email to full Mailchimp waitlist announcing founding price</div>
       </div>
       <div class="agent-card purple">
-        <div class="agent-name">Lena</div>
+        <div class="agent-name">Leela</div>
         <div class="agent-role">Trial Win-Back · Daily · Checks trials expiring in 24h</div>
         <div class="agent-status"><span class="dot-on"></span> Running</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Win-back email sent to users whose 7-day trial is about to end</div>
       </div>
       <div class="agent-card amber">
-        <div class="agent-name">Rex</div>
+        <div class="agent-name">Rahul</div>
         <div class="agent-role">Referral Blast · Manual trigger · TJ activates</div>
         <div class="agent-status"><span class="dot-warn"></span> Standby — manual only</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Activate when referral program is ready to launch</div>
@@ -1139,10 +1237,10 @@ setInterval(tick, 1000);
   row.className = 'chat-row';
   var sender = document.createElement('div');
   sender.className = 'chat-sender';
-  sender.textContent = 'ELARA · AI Caretaker';
+  sender.textContent = 'PRIYA · AI Caretaker';
   var bubble = document.createElement('div');
   bubble.className = 'chat-bubble chat-agent';
-  bubble.textContent = 'Good morning TJ. Day 2 post-launch. All 11 agents running on Railway. Jarvis is monitoring every hour — new signups, churn, MRR milestones. Check HQ Inbox for any alerts. What do you need?';
+  bubble.textContent = 'Good morning TJ. All 11 agents running on Railway. Aryan is monitoring every hour — new signups, churn, MRR milestones. Rohan firing dose reminders. Ananya did morning check-ins. Check HQ Inbox for alerts. What do you need?';
   row.appendChild(sender);
   row.appendChild(bubble);
   chat.appendChild(row);
@@ -1173,7 +1271,7 @@ function sendHQ() {
     respRow.className = 'chat-row';
     var respSender = document.createElement('div');
     respSender.className = 'chat-sender';
-    respSender.textContent = 'ELARA · AI Caretaker';
+    respSender.textContent = 'PRIYA · AI Caretaker';
     var respBubble = document.createElement('div');
     respBubble.className = 'chat-bubble chat-agent';
     var t = text.toLowerCase();
@@ -1375,6 +1473,168 @@ document.addEventListener('keydown', function(e) {
     var lu = $('live-updated');
     if (lu) lu.textContent = '· Updated ' + (s < 5 ? 'just now' : s + 's ago');
   }, 5000);
+})();
+
+// ═══ TEAM CHAT (live) ════════════════════════════════════════════════════════
+(function() {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+
+  var AGENT_COLORS = {
+    aryan:'#7C3AED',priya:'#02C39A',rohan:'#2563EB',ananya:'#D97706',
+    meera:'#DC2626',naina:'#059669',tej:'#F97316',leela:'#EC4899',
+    drishti:'#0891B2',aarav:'#B91C1C',arjun:'#1D4ED8',kavya:'#9333EA',dhruv:'#065F46',rahul:'#92400E'
+  };
+
+  var TYPE_LABELS = { action:'ACTION', alert:'ALERT', success:'SUCCESS', info:'INFO', metric:'METRIC' };
+  var TYPE_COLORS = {
+    action:'#1D4ED8',alert:'#DC2626',success:'#16A34A',info:'#6B7280',metric:'#7C3AED'
+  };
+
+  function timeAgo(iso) {
+    var s = Math.round((Date.now()-new Date(iso))/1000);
+    if(s<60) return s+'s ago';
+    if(s<3600) return Math.floor(s/60)+'m ago';
+    if(s<86400) return Math.floor(s/3600)+'h ago';
+    return Math.floor(s/86400)+'d ago';
+  }
+
+  function clearEl(el) { while(el.firstChild) el.removeChild(el.firstChild); }
+
+  window.loadTeamFeed = function() {
+    fetch(BACKEND+'/admin/agent-feed', { headers:{'x-carely-secret':SECRET} })
+      .then(function(r){ return r.json(); })
+      .then(function(data) {
+        var events = data.events || [];
+        var container = document.getElementById('team-feed-container');
+        var status = document.getElementById('feed-status');
+        if(status) status.textContent = events.length+' events — live';
+        if(!container) return;
+        clearEl(container);
+        if(!events.length) {
+          var empty = document.createElement('div');
+          empty.className='card';
+          empty.style.cssText='text-align:center;padding:40px;color:var(--g500);font-size:0.84rem';
+          empty.textContent='No team activity yet — agents will post here as they work.';
+          container.appendChild(empty);
+          return;
+        }
+        events.forEach(function(ev) {
+          var color = AGENT_COLORS[(ev.agentName||'').toLowerCase()] || '#6B7280';
+          var row = document.createElement('div');
+          row.style.cssText='display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:white;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.04)';
+
+          var avatar = document.createElement('div');
+          avatar.style.cssText='width:32px;height:32px;border-radius:50%;background:'+color+';display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;color:white;flex-shrink:0;letter-spacing:-0.02em';
+          avatar.textContent=(ev.agentName||'?').slice(0,2).toUpperCase();
+
+          var body = document.createElement('div');
+          body.style.cssText='flex:1;min-width:0';
+
+          var header = document.createElement('div');
+          header.style.cssText='display:flex;align-items:center;gap:6px;margin-bottom:3px';
+          var nameEl = document.createElement('span');
+          nameEl.style.cssText='font-size:0.8rem;font-weight:800;color:var(--deep)';
+          nameEl.textContent=ev.agentName||'Unknown';
+          var typeEl = document.createElement('span');
+          typeEl.style.cssText='font-size:0.62rem;font-weight:700;padding:1px 6px;border-radius:4px;background:'+((TYPE_COLORS[ev.type]||'#6B7280')+'22')+';color:'+(TYPE_COLORS[ev.type]||'#6B7280');
+          typeEl.textContent=TYPE_LABELS[ev.type]||ev.type;
+          var timeEl = document.createElement('span');
+          timeEl.style.cssText='font-size:0.68rem;color:var(--g500);margin-left:auto;flex-shrink:0';
+          timeEl.textContent=timeAgo(ev.timestamp);
+          header.appendChild(nameEl);header.appendChild(typeEl);header.appendChild(timeEl);
+
+          var msg = document.createElement('div');
+          msg.style.cssText='font-size:0.82rem;color:var(--text);line-height:1.4';
+          msg.textContent=ev.message;
+
+          body.appendChild(header);body.appendChild(msg);
+          row.appendChild(avatar);row.appendChild(body);
+          container.appendChild(row);
+        });
+      })
+      .catch(function() {
+        var status=document.getElementById('feed-status');
+        if(status) status.textContent='Team feed offline';
+      });
+  };
+
+  window.loadTeamFeed();
+  setInterval(window.loadTeamFeed, 8000);
+})();
+
+// ═══ CRM (live) ══════════════════════════════════════════════════════════════
+(function() {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+
+  function clearEl(el) { while(el.firstChild) el.removeChild(el.firstChild); }
+
+  var PLAN_COLORS = {founding:'green',monthly:'teal',annual:'blue',trial:'amber',cancelled:'red'};
+
+  window.loadCRM = function() {
+    var plan = document.getElementById('crm-filter') ? document.getElementById('crm-filter').value : '';
+    var url = BACKEND+'/admin/users?limit=100'+(plan?'&plan='+plan:'');
+    fetch(url, { headers:{'x-carely-secret':SECRET} })
+      .then(function(r){ return r.json(); })
+      .then(function(data) {
+        var users = data.users || [];
+        var total = data.total || 0;
+        var wrap = document.getElementById('crm-table-wrap');
+        var count = document.getElementById('crm-count');
+        if(count) count.textContent=total+' total users';
+        if(!wrap) return;
+        clearEl(wrap);
+        if(!users.length) {
+          var msg = document.createElement('div');
+          msg.style.cssText='text-align:center;padding:28px;color:var(--g500);font-size:0.82rem';
+          msg.textContent='No users found.';
+          wrap.appendChild(msg);
+          return;
+        }
+        var tbl = document.createElement('table');
+        tbl.className='tbl';
+        var thead = document.createElement('thead');
+        var hrow = document.createElement('tr');
+        ['Name','Email','Plan','Joined','Last Active','Trial Ends'].forEach(function(h){
+          var th=document.createElement('th');th.textContent=h;hrow.appendChild(th);
+        });
+        thead.appendChild(hrow);tbl.appendChild(thead);
+        var tbody = document.createElement('tbody');
+        users.forEach(function(u) {
+          var tr=document.createElement('tr');
+          var cells=[
+            u.first_name||'—',
+            u.email,
+            u.plan,
+            u.created_at?u.created_at.slice(0,10):'—',
+            u.last_active_at?u.last_active_at.slice(0,10):'—',
+            u.trial_ends_at?u.trial_ends_at.slice(0,10):'—'
+          ];
+          cells.forEach(function(v,i){
+            var td=document.createElement('td');
+            if(i===2){
+              var pill=document.createElement('span');
+              pill.className='pill '+(PLAN_COLORS[v]||'grey');
+              pill.textContent=v;
+              td.appendChild(pill);
+            } else {
+              td.textContent=v;
+            }
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        tbl.appendChild(tbody);
+        wrap.appendChild(tbl);
+      })
+      .catch(function(){
+        var count=document.getElementById('crm-count');
+        if(count) count.textContent='CRM offline';
+      });
+  };
+
+  window.loadCRM();
 })();
 
 // ═══ HQ INBOX (live) ════════════════════════════════════════════════════════
