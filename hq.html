@@ -237,7 +237,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="sb-sec">
     <div class="sb-sec-title">System</div>
-    <div class="sb-item" onclick="nav(this,'all-agents')"><span class="ic">🧠</span> All 11 Agents</div>
+    <div class="sb-item" onclick="nav(this,'all-agents')"><span class="ic">🧠</span> All 14 Agents</div>
+    <div class="sb-item" onclick="nav(this,'org-chart')"><span class="ic">🏗️</span> Org Chart</div>
     <div class="sb-item" onclick="nav(this,'health')"><span class="ic">❤️</span> Health &amp; Timeline</div>
     <div class="sb-item" onclick="nav(this,'api-keys')"><span class="ic">⏱</span> API Keys <span class="dot-a"></span></div>
   </div>
@@ -264,7 +265,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- ══ DAILY BRIEF ══ -->
   <div class="page active" id="page-daily-brief">
     <div class="ph"><h1>📋 Daily Brief</h1><p>What the business needs today · Agent network status · Open issues</p></div>
-    <div class="alert green">✅ <div><strong>May 6, 2026 — Day 2 Post-Launch.</strong> All 11 agents running on Railway. Jarvis monitoring signups, churn, and MRR milestones every hour. Check HQ Inbox for alerts.</div></div>
+    <div class="alert green">✅ <div><strong>May 6, 2026 — Day 2 Post-Launch.</strong> All 14 agents running on Railway. Ace monitoring signups, churn, and MRR milestones every hour. Check HQ Inbox for alerts.</div></div>
     <div class="metric-row">
       <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber">0</div><div class="metric-sub">Launch day — first sale pending</div></div>
       <div class="metric"><div class="metric-label">Beta Testers</div><div class="metric-val teal">12</div><div class="metric-sub">Active on closed testing</div></div>
@@ -294,15 +295,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <table class="tbl">
         <thead><tr><th>Agent</th><th>Role</th><th>Schedule</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td><strong>Rohan</strong></td><td>Dose reminders (FCM)</td><td>Every minute</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Meera</strong></td><td>Missed dose tracker</td><td>Every 30 min</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Ananya</strong></td><td>AI daily check-ins</td><td>9 AM UTC</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Priya</strong></td><td>AI caretaker chat</td><td>On-demand</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Naina</strong></td><td>Email nurture sequence</td><td>Daily 10 AM UTC</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Tej</strong></td><td>Launch blast</td><td>May 5 morning</td><td><span class="pill green">Fired ✓</span></td></tr>
-          <tr><td><strong>Arjun</strong></td><td>LinkedIn posts 6x/week</td><td>Wed 8AM PST</td><td><span class="pill green">Posted ✓</span></td></tr>
-          <tr><td><strong>Aarav</strong></td><td>Reddit monitor + draft replies</td><td>Every 6 hours</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Aryan</strong></td><td>Proactive alerts (signups, churn, MRR)</td><td>Every hour</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Frank</strong></td><td>Dose reminders via FCM</td><td>Every minute</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Maya</strong></td><td>Missed dose detector</td><td>Every 30 min</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Cara</strong></td><td>Caregiver missed-dose alert</td><td>Triggered by Maya</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Grace</strong></td><td>Daily "are you okay?" push</td><td>10 AM UTC</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Elara</strong></td><td>AI caretaker — core product chat</td><td>On-demand</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Dr. Bridge</strong></td><td>Doctor + caregiver PDF reports</td><td>Hourly check / weekly email</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Nina</strong></td><td>Email nurture + support triage</td><td>10 AM UTC daily</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Blaze</strong></td><td>Launch email blast</td><td>May 5 — one-time</td><td><span class="pill green">Fired ✓</span></td></tr>
+          <tr><td><strong>Lena</strong></td><td>Win-back + retention closer</td><td>11 AM UTC daily</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Leo</strong></td><td>LinkedIn posts 6x/week as Prabh</td><td>Mon/Wed/Fri 8AM + Tue/Thu/Sat 5PM PST</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Rex</strong></td><td>Reddit monitor 18 subreddits</td><td>Every 6 hours</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Cole</strong></td><td>B2B outreach — orgs, clinics</td><td>2 PM UTC daily</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Ace</strong></td><td>Business intelligence + daily brief</td><td>8 AM PST daily</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Scout</strong></td><td>SEO + Google IndexNow</td><td>On every deploy</td><td><span class="pill green">Running</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -325,7 +331,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber">0</div><div class="metric-sub">Active subscriptions</div></div>
       <div class="metric"><div class="metric-label">Founding Spots</div><div class="metric-val teal">200</div><div class="metric-sub">Left at $5/mo founding price</div></div>
       <div class="metric"><div class="metric-label">Monthly Burn</div><div class="metric-val">~$22</div><div class="metric-sub">All infrastructure</div></div>
-      <div class="metric"><div class="metric-label">Agents Running</div><div class="metric-val green">11</div><div class="metric-sub">All green on Railway</div></div>
+      <div class="metric"><div class="metric-label">Agents Running</div><div class="metric-val green">14</div><div class="metric-sub">All green on Railway</div></div>
     </div>
     <div class="cols">
       <div class="card">
@@ -376,7 +382,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="page" id="page-hq-command">
     <div class="ph"><h1>💬 HQ Command</h1><p>Direct line to the agent network · Notes, directives, decisions</p></div>
     <div class="card">
-      <div class="card-title">🤖 Priya — Mission Control</div>
+      <div class="card-title">🤖 JARVIS — Mission Control <span class="card-sub" id="jarvis-status">connecting...</span></div>
       <div class="chat-area" id="hq-chat"></div>
       <div class="chat-input-row">
         <input class="chat-input" id="hq-input" type="text" placeholder="Type a directive or note..." />
@@ -414,6 +420,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="tab active" onclick="switchTab(this,'ch-tiktok')">TikTok Scripts</div>
       <div class="tab" onclick="switchTab(this,'ch-linkedin')">LinkedIn Queue</div>
       <div class="tab" onclick="switchTab(this,'ch-reddit')">Reddit Drafts</div>
+      <div class="tab" onclick="switchTab(this,'ch-platform-intel')">Platform Intel</div>
       <div class="tab" onclick="switchTab(this,'ch-rules')">Posting Rules</div>
     </div>
 
@@ -578,6 +585,120 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
       </div>
     </div>
 
+    <div class="tab-panel" id="ch-platform-intel">
+      <div class="alert blue">Platform algorithms change constantly. These rules are based on verified 2025–2026 data from creator studies and platform reports. Rex and Leo use this to choose format + timing.</div>
+
+      <div class="card">
+        <div class="card-title">🎵 TikTok Algorithm (2026)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px">
+          <div style="background:var(--g100);border-radius:10px;padding:12px">
+            <div style="font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Best Times PST</div>
+            <div id="tiktok-best-time" style="font-size:1rem;font-weight:900;color:var(--deep)">—</div>
+            <div style="font-size:0.72rem;color:var(--g500);margin-top:3px">Updates based on today</div>
+          </div>
+          <div style="background:var(--g100);border-radius:10px;padding:12px">
+            <div style="font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Hook Window</div>
+            <div style="font-size:1rem;font-weight:900;color:var(--deep)">0–3 sec</div>
+            <div style="font-size:0.72rem;color:var(--g500);margin-top:3px">Must hook before 3s or scroll-by</div>
+          </div>
+          <div style="background:var(--g100);border-radius:10px;padding:12px">
+            <div style="font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Ideal Length</div>
+            <div style="font-size:1rem;font-weight:900;color:var(--deep)">25–35s</div>
+            <div style="font-size:0.72rem;color:var(--g500);margin-top:3px">Completion rate drives distribution</div>
+          </div>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Signal</th><th>How to trigger it</th><th>Carely angle</th></tr></thead>
+          <tbody>
+            <tr><td>Watch time / completion</td><td>Keep under 35s. End on unresolved emotion.</td><td>"Did she take it?" — don't answer until end</td></tr>
+            <tr><td>Comments</td><td>Ask a real question. "What do you do when this happens?"</td><td>"What worries you most about your parent?"</td></tr>
+            <tr><td>Saves</td><td>Give one practical thing they'll want to save.</td><td>Share the 3-tap setup flow. Make it useful.</td></tr>
+            <tr><td>Shares</td><td>Say something their network will relate to.</td><td>"If your parent takes medication and lives alone"</td></tr>
+            <tr><td>Follows</td><td>End with: "Follow if you're a long-distance caregiver"</td><td>Own that niche explicitly</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;font-size:0.78rem;color:var(--g500)">Content NOT to repost from LinkedIn: TikTok needs raw face-cam or screen demos — not graphics, carousels, or text walls.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">💼 LinkedIn Algorithm (2026)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px">
+          <div style="background:var(--g100);border-radius:10px;padding:12px">
+            <div style="font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Best Days</div>
+            <div id="linkedin-best-day" style="font-size:1rem;font-weight:900;color:var(--deep)">—</div>
+            <div style="font-size:0.72rem;color:var(--g500);margin-top:3px">Updates based on today</div>
+          </div>
+          <div style="background:var(--g100);border-radius:10px;padding:12px">
+            <div style="font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Sweet Spot</div>
+            <div style="font-size:1rem;font-weight:900;color:var(--deep)">800–1200 chars</div>
+            <div style="font-size:0.72rem;color:var(--g500);margin-top:3px">Short enough to read standing up</div>
+          </div>
+          <div style="background:var(--g100);border-radius:10px;padding:12px">
+            <div style="font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Links</div>
+            <div style="font-size:1rem;font-weight:900;color:var(--deep)">First comment</div>
+            <div style="font-size:0.72rem;color:var(--g500);margin-top:3px">Links in post body kill reach</div>
+          </div>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Signal</th><th>How to trigger it</th><th>Carely angle</th></tr></thead>
+          <tbody>
+            <tr><td>Dwell time</td><td>"See more" click = hook must force the expand</td><td>First line must be a surprising stat or raw moment</td></tr>
+            <tr><td>Comments (most powerful)</td><td>End with a genuine question about their experience</td><td>"What's the hardest part of caring for a parent from far away?"</td></tr>
+            <tr><td>Reactions vs. likes</td><td>Emotional posts (love, care, wow) outperform likes</td><td>Personal stories of fear, relief, guilt perform best</td></tr>
+            <tr><td>No external links</td><td>Put carely.fit in first comment, not the post</td><td>Leo does this automatically</td></tr>
+            <tr><td>Posting frequency</td><td>Leo posts Mon/Wed/Fri 8AM + Tue/Thu/Sat 5PM PST</td><td>6x/week is the ceiling before reach degrades</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;font-size:0.78rem;color:var(--g500)">Content NOT to repost from TikTok: LinkedIn professionals want insight, data, or a real story — not a vertical video script with "wait for it" hooks.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔴 Reddit Algorithm (2026)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+          <div style="background:var(--g100);border-radius:10px;padding:12px">
+            <div style="font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Subreddit Timing</div>
+            <div style="font-size:0.82rem;font-weight:700;color:var(--deep)">r/caregivers: 10AM–1PM ET</div>
+            <div style="font-size:0.78rem;color:var(--g500)">r/eldercare: 9AM–12PM ET</div>
+            <div style="font-size:0.78rem;color:var(--g500)">r/AgingParents: 8AM–11AM ET</div>
+          </div>
+          <div style="background:var(--g100);border-radius:10px;padding:12px">
+            <div style="font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Karma Rule</div>
+            <div style="font-size:0.82rem;font-weight:700;color:var(--deep)">Never pitch first</div>
+            <div style="font-size:0.78rem;color:var(--g500)">5+ community replies before any mention</div>
+            <div style="font-size:0.78rem;color:var(--g500)">Rex tracks reply count per username</div>
+          </div>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Rule</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Lead with empathy, end with question</td><td>Upvotes come from feeling heard, not advice</td></tr>
+            <tr><td>Share personal story first</td><td>Prabh's healthcare + family story = instant credibility</td></tr>
+            <tr><td>Mention Carely only if directly relevant</td><td>One spammy comment = account shadowban</td></tr>
+            <tr><td>Title formula: specific pain + relatable frame</td><td>High CTR titles drive front page reach</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📷 Instagram Reels (2026) <span class="pill amber" style="margin-left:6px">Not yet active</span></div>
+        <table class="tbl">
+          <thead><tr><th>Factor</th><th>Rule</th></tr></thead>
+          <tbody>
+            <tr><td>Best post time</td><td>Mon–Fri 6–9 AM + 7–9 PM (audience's local time)</td></tr>
+            <tr><td>Length</td><td>7–15s for max completion; 30s for story content</td></tr>
+            <tr><td>Audio</td><td>Trending audio = 2–3x reach. Rex monitors trending sounds weekly.</td></tr>
+            <tr><td>Repurpose TikTok?</td><td>Yes, but remove TikTok watermark. Use CapCut clean export.</td></tr>
+            <tr><td>Caption</td><td>3 sentences max. CTA in first line. Hashtags in first comment.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📅 Today's Optimal Schedule</div>
+        <div id="todays-schedule" style="font-size:0.82rem;color:var(--text);line-height:2"></div>
+      </div>
+    </div>
+
     <div class="tab-panel" id="ch-rules">
       <div class="card">
         <div class="card-title">📌 Content Rules</div>
@@ -615,8 +736,8 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
       <table class="tbl">
         <thead><tr><th>Platform</th><th>Account</th><th>Agent</th><th>Status</th><th>Posts Today</th></tr></thead>
         <tbody>
-          <tr><td><strong>LinkedIn</strong></td><td>Prabh + Carely Company</td><td>LinkedIn Agent</td><td><span class="pill green">Agent posting</span></td><td>1</td></tr>
-          <tr><td><strong>Reddit</strong></td><td>u/carely_medcaretaker</td><td>Reddit Monitor</td><td><span class="pill green">Monitoring</span></td><td>Manual only</td></tr>
+          <tr><td><strong>LinkedIn</strong></td><td>Prabh + Carely Company</td><td>Leo</td><td><span class="pill green">Agent posting</span></td><td>1</td></tr>
+          <tr><td><strong>Reddit</strong></td><td>u/carely_medcaretaker</td><td>Rex</td><td><span class="pill green">Monitoring</span></td><td>Manual only</td></tr>
           <tr><td><strong>Instagram</strong></td><td>@carely_medcaretaker</td><td>None yet</td><td><span class="pill amber">Created, not posting</span></td><td>0</td></tr>
           <tr><td><strong>TikTok</strong></td><td>—</td><td>None yet</td><td><span class="pill red">Not set up</span></td><td>0</td></tr>
           <tr><td><strong>Email</strong></td><td>hello@carely.fit (SendGrid)</td><td>Nina + Blaze</td><td><span class="pill green">Active</span></td><td>—</td></tr>
@@ -676,7 +797,7 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
 
   <!-- ══ SEO ══ -->
   <div class="page" id="page-seo">
-    <div class="ph"><h1>🔍 SEO</h1><p>Content hierarchy · Keyword targets · Page status · Drishti coverage</p></div>
+    <div class="ph"><h1>🔍 SEO</h1><p>Content hierarchy · Keyword targets · Page status · Scout coverage</p></div>
     <div class="metric-row">
       <div class="metric"><div class="metric-label">Blog Pages Live</div><div class="metric-val teal">7</div><div class="metric-sub">All indexed via IndexNow</div></div>
       <div class="metric"><div class="metric-label">Target Keywords</div><div class="metric-val teal">12</div><div class="metric-sub">Long-tail focused</div></div>
@@ -685,7 +806,7 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
     <div class="card">
       <div class="card-title">🗂️ Content Hierarchy</div>
       <table class="tbl">
-        <thead><tr><th>Pillar</th><th>Page</th><th>Target Keyword</th><th>Status</th><th>Drishti</th></tr></thead>
+        <thead><tr><th>Pillar</th><th>Page</th><th>Target Keyword</th><th>Status</th><th>Scout</th></tr></thead>
         <tbody>
           <tr><td><strong>Medication Reminders</strong></td><td>best-medication-reminder-app-elderly.html</td><td>"best medication reminder app for elderly"</td><td><span class="pill green">Live</span></td><td><span class="pill green">Indexed</span></td></tr>
           <tr><td><strong>Competitor Alt</strong></td><td>medisafe-alternative.html</td><td>"medisafe alternative"</td><td><span class="pill green">Live</span></td><td><span class="pill green">Indexed</span></td></tr>
@@ -704,7 +825,7 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
       </table>
     </div>
     <div class="card">
-      <div class="card-title">⚡ Drishti Actions</div>
+      <div class="card-title">⚡ Scout Actions</div>
       <div class="list-item"><span>✅</span><div class="name">Google IndexNow — all 7 blog URLs pinged on each deploy</div><span class="pill green">Active</span></div>
       <div class="list-item"><span>✅</span><div class="name">sitemap.xml — serving as application/xml at /sitemap.xml</div><span class="pill green">Live</span></div>
       <div class="list-item"><span>✅</span><div class="name">robots.txt — allows all bots, links to sitemap</div><span class="pill green">Live</span></div>
@@ -761,19 +882,21 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
   <div class="page" id="page-agent-chat">
     <div class="ph"><h1>🤖 Agent Activity</h1><p>What agents are doing right now · Live feed · Execution log</p></div>
     <div class="metric-row">
-      <div class="metric"><div class="metric-label">Active Agents</div><div class="metric-val teal">11</div><div class="metric-sub">All online on Railway</div></div>
+      <div class="metric"><div class="metric-label">Active Agents</div><div class="metric-val teal">14</div><div class="metric-sub">All online on Railway</div></div>
       <div class="metric"><div class="metric-label">Errors Today</div><div class="metric-val green">0</div><div class="metric-sub">All green</div></div>
       <div class="metric"><div class="metric-label">Pending Approvals</div><div class="metric-val amber" id="agent-pending-count">—</div><div class="metric-sub">Drafts in queue</div></div>
     </div>
     <div class="card">
       <div class="card-title">⚡ Live Feed</div>
-      <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#991B1B">BLAZE</span><div class="tl-msg">Launch email blast fired to Mailchimp waitlist</div><span class="tl-time">8AM today</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#DBEAFE;color:#1E40AF">LINKEDIN</span><div class="tl-msg">Wednesday post published — Carely company + Prabh personal</div><span class="tl-time">8AM today</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#EDE9FE;color:#5B21B6">GRACE</span><div class="tl-msg">AI check-in messages sent to 12 beta users via FCM</div><span class="tl-time">9AM UTC</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#DBEAFE;color:#1D4ED8">NINA</span><div class="tl-msg">Email nurture sequence triggered for new signups (Email #1)</div><span class="tl-time">10AM UTC</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#B91C1C">REDDIT</span><div class="tl-msg">Monitor cycle — 3 drafts sent to Prabh via Telegram</div><span class="tl-time">Every 6h</span></div>
+      <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#991B1B">BLAZE</span><div class="tl-msg">Launch email blast fired to Mailchimp waitlist — mission complete</div><span class="tl-time">8AM May 5</span></div>
+      <div class="tl-item"><span class="tl-badge" style="background:#1D4ED8;color:white">LEO</span><div class="tl-msg">LinkedIn post published — Carely company page + Prabh personal</div><span class="tl-time">8AM today</span></div>
+      <div class="tl-item"><span class="tl-badge" style="background:#FEF3C7;color:#92400E">FRANK</span><div class="tl-msg">Dose reminders firing continuously — FCM push 5 min before each scheduled dose</div><span class="tl-time">Continuous</span></div>
+      <div class="tl-item"><span class="tl-badge" style="background:#EDE9FE;color:#5B21B6">GRACE</span><div class="tl-msg">Daily "are you okay?" push sent to all active patients (appears as Elara)</div><span class="tl-time">10AM UTC</span></div>
+      <div class="tl-item"><span class="tl-badge" style="background:#DBEAFE;color:#1D4ED8">NINA</span><div class="tl-msg">Email nurture sequence triggered for new signups (Email #1 from Prabhjot)</div><span class="tl-time">10AM UTC</span></div>
+      <div class="tl-item"><span class="tl-badge" style="background:#EC4899;color:white">LENA</span><div class="tl-msg">Win-back check — trials expiring in 48h · conversion engine running</div><span class="tl-time">11AM UTC</span></div>
+      <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#B91C1C">REX</span><div class="tl-msg">Reddit monitor cycle — 18 subreddits · 3 drafts sent to Prabh via Telegram</div><span class="tl-time">Every 6h</span></div>
       <div class="tl-item"><span class="tl-badge" style="background:#D1FAE5;color:#065F46">SCOUT</span><div class="tl-msg">Google IndexNow: all 7 blog URLs submitted</div><span class="tl-time">Last deploy</span></div>
-      <div class="tl-item" style="border:none"><span class="tl-badge" style="background:#FEF3C7;color:#92400E">FRANK</span><div class="tl-msg">Dose reminders firing continuously — FCM push for scheduled medications</div><span class="tl-time">Continuous</span></div>
+      <div class="tl-item" style="border:none"><span class="tl-badge" style="background:#7C3AED;color:white">ACE</span><div class="tl-msg">Daily brief fired at 8 AM PST · Proactive alerts running every hour to TJ's Telegram</div><span class="tl-time">8AM PST</span></div>
     </div>
   </div>
 
@@ -887,11 +1010,13 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
       <div class="card">
         <div class="card-title">⚡ Execution Log <span class="card-sub">May 5, 2026</span></div>
         <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#991B1B">BLAZE</span><div class="tl-msg">Launch email blast → Mailchimp waitlist · Sent</div><span class="tl-time">8:00 AM</span></div>
-        <div class="tl-item"><span class="tl-badge" style="background:#DBEAFE;color:#1E40AF">LINKEDIN</span><div class="tl-msg">Wednesday post → Company + Prabh personal · Published</div><span class="tl-time">8:00 AM</span></div>
-        <div class="tl-item"><span class="tl-badge" style="background:#EDE9FE;color:#5B21B6">GRACE</span><div class="tl-msg">Daily check-in → 12 beta users · Sent via FCM</div><span class="tl-time">9:00 AM UTC</span></div>
-        <div class="tl-item"><span class="tl-badge" style="background:#DBEAFE;color:#1D4ED8">NINA</span><div class="tl-msg">Email nurture #1 → new signups · Running</div><span class="tl-time">10:00 AM UTC</span></div>
+        <div class="tl-item"><span class="tl-badge" style="background:#1D4ED8;color:white">LEO</span><div class="tl-msg">LinkedIn post → Company + Prabh personal · Published</div><span class="tl-time">8:00 AM</span></div>
         <div class="tl-item"><span class="tl-badge" style="background:#FEF3C7;color:#92400E">FRANK</span><div class="tl-msg">Dose reminders → active medications · Continuous FCM</div><span class="tl-time">Continuous</span></div>
-        <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#B91C1C">REDDIT</span><div class="tl-msg">Monitor cycle → 18 subreddits · 3 drafts → Telegram</div><span class="tl-time">Every 6h</span></div>
+        <div class="tl-item"><span class="tl-badge" style="background:#EDE9FE;color:#5B21B6">GRACE</span><div class="tl-msg">Daily check-in push → active patients · Sent via FCM (appears as Elara)</div><span class="tl-time">10:00 AM UTC</span></div>
+        <div class="tl-item"><span class="tl-badge" style="background:#DBEAFE;color:#1D4ED8">NINA</span><div class="tl-msg">Email nurture #1 → new signups · Running from Prabhjot</div><span class="tl-time">10:00 AM UTC</span></div>
+        <div class="tl-item"><span class="tl-badge" style="background:#EC4899;color:white">LENA</span><div class="tl-msg">Win-back engine → trials expiring · Conversion engine running</div><span class="tl-time">11:00 AM UTC</span></div>
+        <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#B91C1C">REX</span><div class="tl-msg">Monitor cycle → 18 subreddits · 3 reply drafts → Prabh's Telegram</div><span class="tl-time">Every 6h</span></div>
+        <div class="tl-item"><span class="tl-badge" style="background:#7C3AED;color:white">ACE</span><div class="tl-msg">Daily brief → TJ Telegram · Proactive alerts every hour</div><span class="tl-time">8:00 AM PST</span></div>
         <div class="tl-item" style="border:none"><span class="tl-badge" style="background:#D1FAE5;color:#065F46">SCOUT</span><div class="tl-msg">IndexNow → 7 blog URLs · Pinged Google</div><span class="tl-time">Last deploy</span></div>
       </div>
     </div>
@@ -903,15 +1028,19 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
           <tbody>
             <tr><td><strong>Frank</strong></td><td>Continuous (FCM)</td><td><span class="pill green">Running</span></td><td>None</td></tr>
             <tr><td><strong>Maya</strong></td><td>Every 30 min</td><td><span class="pill green">Running</span></td><td>None</td></tr>
-            <tr><td><strong>Grace</strong></td><td>1 (9AM UTC)</td><td><span class="pill green">Running</span></td><td>None</td></tr>
-            <tr><td><strong>Elara</strong></td><td>On-demand</td><td><span class="pill green">Running</span></td><td>None</td></tr>
+            <tr><td><strong>Grace</strong></td><td>1 (10AM UTC)</td><td><span class="pill green">Running</span></td><td>Appears as Elara to users</td></tr>
+            <tr><td><strong>Elara</strong></td><td>On-demand</td><td><span class="pill green">Running</span></td><td>Core product AI caretaker</td></tr>
+            <tr><td><strong>Maya</strong></td><td>Every 30 min</td><td><span class="pill green">Running</span></td><td>None</td></tr>
+            <tr><td><strong>Cara</strong></td><td>Triggered by Maya</td><td><span class="pill green">Running</span></td><td>Fires FCM to caregiver</td></tr>
+            <tr><td><strong>Dr. Bridge</strong></td><td>Hourly check</td><td><span class="pill green">Running</span></td><td>None</td></tr>
             <tr><td><strong>Nina</strong></td><td>1 (10AM UTC)</td><td><span class="pill green">Running</span></td><td>None</td></tr>
-            <tr><td><strong>Blaze</strong></td><td>1 (fired today)</td><td><span class="pill green">Done ✓</span></td><td>None</td></tr>
-            <tr><td><strong>LinkedIn</strong></td><td>1 (8AM PST)</td><td><span class="pill green">Posted ✓</span></td><td>None</td></tr>
-            <tr><td><strong>Reddit</strong></td><td>4 cycles (every 6h)</td><td><span class="pill green">Running</span></td><td>TJ chat ID missing</td></tr>
+            <tr><td><strong>Lena</strong></td><td>1 (11AM UTC)</td><td><span class="pill green">Running</span></td><td>None</td></tr>
+            <tr><td><strong>Blaze</strong></td><td>1 (fired May 5)</td><td><span class="pill green">Done ✓</span></td><td>Standby for next blast</td></tr>
+            <tr><td><strong>Leo</strong></td><td>1 (8AM PST)</td><td><span class="pill green">Posted ✓</span></td><td>Token expires June 29</td></tr>
+            <tr><td><strong>Rex</strong></td><td>4 cycles (every 6h)</td><td><span class="pill green">Running</span></td><td>Drafts to Prabh on Telegram</td></tr>
+            <tr><td><strong>Cole</strong></td><td>5 targets (2PM UTC)</td><td><span class="pill green">Running</span></td><td>TJ approval required before send</td></tr>
             <tr><td><strong>Scout</strong></td><td>On deploy</td><td><span class="pill green">Running</span></td><td>None</td></tr>
-            <tr><td><strong>Lena</strong></td><td>1 daily check</td><td><span class="pill green">Running</span></td><td>None</td></tr>
-            <tr><td><strong>Rex</strong></td><td>0 (manual trigger)</td><td><span class="pill grey">Standby</span></td><td>Activate when referral program ready</td></tr>
+            <tr><td><strong>Ace</strong></td><td>Brief 8AM + hourly alerts</td><td><span class="pill green">Running</span></td><td>None</td></tr>
           </tbody>
         </table>
       </div>
@@ -961,111 +1090,113 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
     </div>
   </div>
 
-  <!-- ══ ALL 11 AGENTS ══ -->
+  <!-- ══ ALL 14 AGENTS ══ -->
   <div class="page" id="page-all-agents">
-    <div class="ph"><h1>🧠 All 11 Agents</h1><p>2 teams + 4 growth agents · Full roster · Schedules · Status</p></div>
+    <div class="ph"><h1>🧠 All 14 Agents</h1><p>3 departments · Patient Care · Growth · Intelligence · Running 24/7 on Railway</p></div>
     <div style="background:linear-gradient(135deg,var(--deep),#0D4D6B);border-radius:14px;padding:20px;margin-bottom:20px;color:white">
       <div style="font-size:0.72rem;font-weight:700;opacity:0.45;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px">Founders</div>
-      <div style="font-size:1.05rem;font-weight:900">TJ + Prabh · Carely</div>
-      <div style="font-size:0.8rem;opacity:0.55;margin-top:4px">Building the app that keeps families connected to their parents' health · Launched May 5, 2026</div>
+      <div style="font-size:1.05rem;font-weight:900">TJ + Prabh · Carely · BC, Canada</div>
+      <div style="font-size:0.8rem;opacity:0.55;margin-top:4px">$1M ARR by Oct 31, 2026 · Zero ad spend · 100% organic · TJ + Prabh + AI only</div>
     </div>
 
-    <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px">Retention Team (6) — keeps users engaged, doses logged, caregivers informed</div>
+    <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px">Patient Care Team (6) — product agents · every user action goes through these</div>
     <div class="agent-grid">
       <div class="agent-card purple">
-        <div class="agent-name">Priya</div>
-        <div class="agent-role">AI Caretaker Chat · Claude Sonnet · Redis memory (7-day TTL)</div>
-        <div class="agent-status"><span class="dot-on"></span> On-demand · Always ready</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">"Your medication companion. Remembers your history."</div>
+        <div class="agent-name">Elara</div>
+        <div class="agent-role">AI Caretaker — Core Product · Claude Sonnet · Redis memory 7d</div>
+        <div class="agent-status"><span class="dot-on"></span> On-demand · Users see her name everywhere</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">The heart of Carely. All in-app check-ins, crisis detection, empathetic conversations. Never gives medical advice.</div>
       </div>
       <div class="agent-card">
-        <div class="agent-name">Rohan</div>
-        <div class="agent-role">Dose Reminder Agent · FCM push · Every minute check</div>
-        <div class="agent-status"><span class="dot-on"></span> Running · Fires 5min before dose time</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">GPT-4o mini generates funny, personalized reminder messages</div>
+        <div class="agent-name">Frank</div>
+        <div class="agent-role">Dose Reminders · FCM push · Every minute check</div>
+        <div class="agent-status"><span class="dot-on"></span> Running continuously · Fires 5 min before dose time</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">GPT-4o mini generates a unique funny, warm message each reminder. Patients see Elara's name on the push.</div>
       </div>
       <div class="agent-card amber">
-        <div class="agent-name">Meera</div>
-        <div class="agent-role">Missed Dose Tracker · Every 30 minutes · Triggers Kavya</div>
+        <div class="agent-name">Maya</div>
+        <div class="agent-role">Missed Dose Detector · Every 30 min · Triggers Cara</div>
         <div class="agent-status"><span class="dot-on"></span> Running</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Detects skipped doses and escalates to caregiver via Kavya</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Detects overdue doses. Marks as missed in Supabase. Escalates to Cara who alerts the caregiver.</div>
       </div>
       <div class="agent-card red">
-        <div class="agent-name">Kavya</div>
-        <div class="agent-role">Caregiver Alert · FCM push to family member</div>
-        <div class="agent-status"><span class="dot-on"></span> Triggered by Meera on missed dose</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Instant push to caregiver when patient misses a dose</div>
-      </div>
-      <div class="agent-card blue">
-        <div class="agent-name">Dhruv</div>
-        <div class="agent-role">Doctor Report Agent · Hourly check + weekly email</div>
-        <div class="agent-status"><span class="dot-on"></span> Running</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Weekly adherence PDF emailed to doctor via SendGrid</div>
+        <div class="agent-name">Cara</div>
+        <div class="agent-role">Caregiver Alert · FCM push to connected family member</div>
+        <div class="agent-status"><span class="dot-on"></span> Triggered by Maya on missed dose</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Instant FCM to the caregiver account: "Mum missed her 9AM blood pressure dose."</div>
       </div>
       <div class="agent-card">
-        <div class="agent-name">Ananya</div>
-        <div class="agent-role">AI Daily Check-in · 9 AM UTC · GPT-4o mini</div>
+        <div class="agent-name">Grace</div>
+        <div class="agent-role">Daily Check-in Push · 10 AM UTC · GPT-4o mini</div>
         <div class="agent-status"><span class="dot-on"></span> Running</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Wellbeing check-in — adapts to user condition context (9 conditions)</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">"Are you okay?" push to all active patients. Adapts tone per condition. Patients see it as Elara.</div>
+      </div>
+      <div class="agent-card blue">
+        <div class="agent-name">Dr. Bridge</div>
+        <div class="agent-role">Doctor + Caregiver Reports · Hourly check · Weekly PDF email</div>
+        <div class="agent-status"><span class="dot-on"></span> Running</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Weekly adherence PDF to doctor via SendGrid. 24h appointment follow-up email. Handles appointment requests.</div>
       </div>
     </div>
 
-    <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;margin-top:4px">Acquisition Team (5) — brings users in, converts trials, re-engages churned</div>
+    <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;margin-top:20px">Growth Team (7) — acquisition, retention, content, community, outreach</div>
     <div class="agent-grid">
       <div class="agent-card">
-        <div class="agent-name">Naina</div>
-        <div class="agent-role">Email Nurture · Daily 10 AM UTC · 3-email sequence</div>
+        <div class="agent-name">Nina</div>
+        <div class="agent-role">Email Nurture + Support Triage · 10 AM UTC daily</div>
         <div class="agent-status"><span class="dot-on"></span> Running</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Welcome → Feature highlight → Trial reminder (auto via SendGrid)</div>
-      </div>
-      <div class="agent-card">
-        <div class="agent-name">Drishti</div>
-        <div class="agent-role">SEO Agent · Google IndexNow · On every deploy</div>
-        <div class="agent-status"><span class="dot-on"></span> Running</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">POST /seo/page auto-updates sitemap + pings Google on deploy</div>
-      </div>
-      <div class="agent-card red">
-        <div class="agent-name">Tej</div>
-        <div class="agent-role">Launch Email Blast · One-time · May 5, 2026</div>
-        <div class="agent-status"><span class="dot-on"></span> Fired — mission complete</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Launch email to full Mailchimp waitlist announcing founding price</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Day-0 welcome → Day-3 feature → Day-7 trial close. Emails from Prabhjot. Inbound support auto-triage via /support/inbound.</div>
       </div>
       <div class="agent-card purple">
-        <div class="agent-name">Leela</div>
-        <div class="agent-role">Trial Win-Back · Daily · Checks trials expiring in 24h</div>
-        <div class="agent-status"><span class="dot-on"></span> Running</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Win-back email sent to users whose 7-day trial is about to end</div>
+        <div class="agent-name">Lena</div>
+        <div class="agent-role">Retention · Win-back (3-touch) + High-adherence closer</div>
+        <div class="agent-status"><span class="dot-on"></span> Running · 11 AM UTC daily</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Expiring trial win-back. Behavioural conversion triggers. Warm lead closer. Uses adherence data to personalise.</div>
       </div>
-      <div class="agent-card amber">
-        <div class="agent-name">Rahul</div>
-        <div class="agent-role">Referral Blast · Manual trigger · TJ activates</div>
-        <div class="agent-status"><span class="dot-warn"></span> Standby — manual only</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Activate when referral program is ready to launch</div>
-      </div>
-    </div>
-
-    <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;margin-top:4px">Growth Automation (4) — organic social, content, community, outreach</div>
-    <div class="agent-grid">
       <div class="agent-card blue">
-        <div class="agent-name">LinkedIn Agent</div>
-        <div class="agent-role">Posts 6x/week · Mon/Wed/Fri 8AM + Tue/Thu/Sat 5PM PST</div>
+        <div class="agent-name">Leo</div>
+        <div class="agent-role">LinkedIn · 6 posts/week as Prabh · Company page</div>
         <div class="agent-status"><span class="dot-on"></span> Running · Token expires June 29, 2026</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Mon/Wed/Fri 8AM + Tue/Thu/Sat 5PM PST. 6 post types rotating. Daily 3 connection targets → Telegram at noon.</div>
       </div>
       <div class="agent-card red">
-        <div class="agent-name">Reddit Monitor</div>
-        <div class="agent-role">18 subreddits · Every 6 hours · Drafts to Telegram</div>
-        <div class="agent-status"><span class="dot-on"></span> Running · Prabh approves manually</div>
-      </div>
-      <div class="agent-card">
-        <div class="agent-name">Community Agent</div>
-        <div class="agent-role">Drafts community posts → Telegram for Prabh approval</div>
-        <div class="agent-status"><span class="dot-on"></span> Running</div>
+        <div class="agent-name">Rex</div>
+        <div class="agent-role">Reddit + Community · 18 subreddits · Every 6 hours</div>
+        <div class="agent-status"><span class="dot-on"></span> Running · Prabh approves before posting</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Monitors caregiver threads. Drafts empathetic replies as Prabh. 3x/week original posts. Never pitches cold.</div>
       </div>
       <div class="agent-card amber">
-        <div class="agent-name">Outreach Agent</div>
-        <div class="agent-role">Pharmacy + caregiver org emails · 5/day · TJ approves</div>
-        <div class="agent-status"><span class="dot-warn"></span> Running · TJ approval setup pending</div>
+        <div class="agent-name">Cole</div>
+        <div class="agent-role">B2B Outreach · 5 orgs/day · TJ approval required</div>
+        <div class="agent-status"><span class="dot-on"></span> Running · TJ approves before send</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Senior living, pharmacies, family medicine clinics. Personalised email per org. 3-touch follow-up sequence. Signs as TJ.</div>
       </div>
+      <div class="agent-card red">
+        <div class="agent-name">Blaze</div>
+        <div class="agent-role">Launch Blast · One-time May 5 fire</div>
+        <div class="agent-status"><span class="dot-off"></span> Mission complete · Standby for next blast</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Launch email to full Mailchimp waitlist. Will fire again for major milestones (100 customers, App Store launch).</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-name">Scout</div>
+        <div class="agent-role">SEO · Google IndexNow · On every deploy</div>
+        <div class="agent-status"><span class="dot-on"></span> Running · 7 pages indexed</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">POST /seo/page pings Google IndexNow. Sitemap.xml live. 2 content gaps identified (seniors USA + family caregiver).</div>
+      </div>
+    </div>
+
+    <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;margin-top:20px">Intelligence (1) — Ace sees the whole board and reports to TJ</div>
+    <div class="agent-grid">
+      <div class="agent-card" style="border-left-color:var(--purple)">
+        <div class="agent-name">Ace</div>
+        <div class="agent-role">Business Intelligence · Daily Brief · Proactive Alerts · Sunday Reflection</div>
+        <div class="agent-status"><span class="dot-on"></span> 8 AM PST daily brief · Hourly proactive alerts · Sunday 9 AM reflection</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">MRR gap, at-risk trials, agent errors, conversion rate — all via Telegram to TJ. Never says "all good" unless it's true.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;padding:16px 20px;background:var(--light);border-radius:12px;font-size:0.82rem;color:var(--deep)">
+      <strong>How they connect:</strong> Frank fires → patient taps → Maya checks 30m later → if missed, Cara alerts caregiver → Grace checks in next morning as Elara. Meanwhile: Ace watches the MRR gap and fires TJ an alert if a trial expires unconverted. Lena follows up. Nina nurtures. The whole loop is automated.
     </div>
   </div>
 
@@ -1101,10 +1232,11 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
     <div class="card">
       <div class="card-title">📜 Live Activity Timeline</div>
       <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#991B1B">BLAZE</span><div class="tl-msg">Launch email blast fired to Mailchimp waitlist</div><span class="tl-time">8:00 AM today</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#DBEAFE;color:#1E40AF">LINKEDIN</span><div class="tl-msg">Wednesday post published — Carely company + Prabh personal</div><span class="tl-time">8:00 AM today</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#EDE9FE;color:#5B21B6">GRACE</span><div class="tl-msg">Daily check-ins sent to 12 beta users via FCM</div><span class="tl-time">9:00 AM UTC</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#DBEAFE;color:#1D4ED8">NINA</span><div class="tl-msg">Email nurture sequence triggered for new signups</div><span class="tl-time">10:00 AM UTC</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#B91C1C">REDDIT</span><div class="tl-msg">Monitor cycle — 3 drafts sent to Prabh via Telegram</div><span class="tl-time">Every 6h</span></div>
+      <div class="tl-item"><span class="tl-badge" style="background:#1D4ED8;color:white">LEO</span><div class="tl-msg">LinkedIn post published — Carely company page + Prabh personal</div><span class="tl-time">8:00 AM today</span></div>
+      <div class="tl-item"><span class="tl-badge" style="background:#EDE9FE;color:#5B21B6">GRACE</span><div class="tl-msg">Daily "are you okay?" push sent to active patients (appears as Elara)</div><span class="tl-time">10:00 AM UTC</span></div>
+      <div class="tl-item"><span class="tl-badge" style="background:#DBEAFE;color:#1D4ED8">NINA</span><div class="tl-msg">Email nurture sequence triggered for new signups (from Prabhjot)</div><span class="tl-time">10:00 AM UTC</span></div>
+      <div class="tl-item"><span class="tl-badge" style="background:#EC4899;color:white">LENA</span><div class="tl-msg">Win-back check — trials expiring in 48h reviewed</div><span class="tl-time">11:00 AM UTC</span></div>
+      <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#B91C1C">REX</span><div class="tl-msg">Reddit monitor cycle — 18 subreddits · 3 drafts → Prabh's Telegram</div><span class="tl-time">Every 6h</span></div>
       <div class="tl-item"><span class="tl-badge" style="background:#D1FAE5;color:#065F46">SCOUT</span><div class="tl-msg">SEO: sitemap + 7 blog URLs pinged to Google IndexNow</div><span class="tl-time">Last deploy</span></div>
       <div class="tl-item"><span class="tl-badge" style="background:#D1FAE5;color:#065F46">DEPLOY</span><div class="tl-msg">TypeScript build fixed — referrals.ts + scheduler weekOfYear plugin — Backend green on Railway</div><span class="tl-time">May 5</span></div>
       <div class="tl-item" style="border:none"><span class="tl-badge" style="background:#D1FAE5;color:#065F46">DEPLOY</span><div class="tl-msg">sitemap.xml + robots.txt live on carely.fit — all 7 blog pages submitted to Google Search Console</div><span class="tl-time">May 5</span></div>
@@ -1201,6 +1333,136 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
     </div>
   </div>
 
+  <!-- ══ ORG CHART ══ -->
+  <div class="page" id="page-org-chart">
+    <div class="ph"><h1>🏗️ Org Chart</h1><p>Who owns what · How agents connect · Real-time signal flow</p></div>
+
+    <div style="background:linear-gradient(135deg,var(--deep),#1a4a5e);border-radius:14px;padding:20px 24px;margin-bottom:20px;color:white;text-align:center">
+      <div style="font-size:0.68rem;opacity:0.45;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px">Founders</div>
+      <div style="display:flex;justify-content:center;gap:32px">
+        <div>
+          <div style="font-size:1rem;font-weight:900">TJ</div>
+          <div style="font-size:0.7rem;opacity:0.6;margin-top:2px">CEO · Engineering · Strategy</div>
+        </div>
+        <div style="width:1px;background:rgba(255,255,255,0.15)"></div>
+        <div>
+          <div style="font-size:1rem;font-weight:900">Prabh</div>
+          <div style="font-size:0.7rem;opacity:0.6;margin-top:2px">COO · CMO · Content · Ops</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px">
+      <div style="background:white;border-radius:14px;padding:16px;box-shadow:0 1px 8px rgba(0,0,0,0.05);border-top:3px solid var(--purple)">
+        <div style="font-size:0.7rem;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px">Patient Care · Prabh owns</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="background:#F9F5FF;border-radius:8px;padding:8px 12px">
+            <div style="font-size:0.82rem;font-weight:800;color:var(--deep)">Elara</div>
+            <div style="font-size:0.7rem;color:var(--g500)">AI caretaker · core product · always on</div>
+          </div>
+          <div style="background:var(--g100);border-radius:8px;padding:8px 12px">
+            <div style="font-size:0.82rem;font-weight:800;color:var(--deep)">Frank → Maya → Cara</div>
+            <div style="font-size:0.7rem;color:var(--g500)">Remind → detect miss → alert caregiver</div>
+          </div>
+          <div style="background:var(--g100);border-radius:8px;padding:8px 12px">
+            <div style="font-size:0.82rem;font-weight:800;color:var(--deep)">Grace</div>
+            <div style="font-size:0.7rem;color:var(--g500)">Daily wellness push (appears as Elara)</div>
+          </div>
+          <div style="background:var(--g100);border-radius:8px;padding:8px 12px">
+            <div style="font-size:0.82rem;font-weight:800;color:var(--deep)">Dr. Bridge</div>
+            <div style="font-size:0.7rem;color:var(--g500)">Doctor reports + appointment follow-ups</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:white;border-radius:14px;padding:16px;box-shadow:0 1px 8px rgba(0,0,0,0.05);border-top:3px solid var(--teal)">
+        <div style="font-size:0.7rem;font-weight:800;color:var(--teal);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px">Growth · TJ owns tech · Prabh owns content</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="background:var(--light);border-radius:8px;padding:8px 12px">
+            <div style="font-size:0.82rem;font-weight:800;color:var(--deep)">Nina</div>
+            <div style="font-size:0.7rem;color:var(--g500)">Trial nurture → Lena if expiring</div>
+          </div>
+          <div style="background:var(--light);border-radius:8px;padding:8px 12px">
+            <div style="font-size:0.82rem;font-weight:800;color:var(--deep)">Lena</div>
+            <div style="font-size:0.7rem;color:var(--g500)">Win-back 3-touch → conversion close</div>
+          </div>
+          <div style="background:var(--light);border-radius:8px;padding:8px 12px">
+            <div style="font-size:0.82rem;font-weight:800;color:var(--deep)">Leo</div>
+            <div style="font-size:0.7rem;color:var(--g500)">LinkedIn 6x/week → Telegram for Prabh</div>
+          </div>
+          <div style="background:var(--light);border-radius:8px;padding:8px 12px">
+            <div style="font-size:0.82rem;font-weight:800;color:var(--deep)">Rex</div>
+            <div style="font-size:0.7rem;color:var(--g500)">Reddit 18 subreddits → drafts to Prabh</div>
+          </div>
+          <div style="background:var(--light);border-radius:8px;padding:8px 12px">
+            <div style="font-size:0.82rem;font-weight:800;color:var(--deep)">Cole</div>
+            <div style="font-size:0.7rem;color:var(--g500)">B2B outreach → TJ approves before send</div>
+          </div>
+          <div style="background:var(--light);border-radius:8px;padding:8px 12px">
+            <div style="font-size:0.82rem;font-weight:800;color:var(--deep)">Scout + Blaze</div>
+            <div style="font-size:0.7rem;color:var(--g500)">SEO always on · Blaze for big moments</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:white;border-radius:14px;padding:16px;box-shadow:0 1px 8px rgba(0,0,0,0.05);border-top:3px solid var(--amber)">
+        <div style="font-size:0.7rem;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px">Intelligence · TJ owns</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="background:#FFFBEB;border-radius:8px;padding:8px 12px">
+            <div style="font-size:0.82rem;font-weight:800;color:var(--deep)">Ace</div>
+            <div style="font-size:0.7rem;color:var(--g500)">Sees everything. Reports to TJ.</div>
+          </div>
+          <div style="background:var(--g100);border-radius:8px;padding:8px 12px;font-size:0.78rem;color:var(--text);line-height:1.7">
+            8 AM PST — Daily brief to TJ via Telegram<br>
+            Every hour — Proactive alerts (new paid, churn, milestone)<br>
+            Sunday 9 AM — Full agent reflection
+          </div>
+          <div style="background:#FFFBEB;border-radius:8px;padding:8px 12px;font-size:0.75rem;color:var(--amber);font-weight:600">
+            Ace fires immediately when:<br>
+            · New paid signup<br>
+            · Trial expired without converting<br>
+            · MRR milestone hit<br>
+            · Any agent errors 3x in a row<br>
+            · 0 signups for 48h
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚡ Signal Flow — How agents trigger each other</div>
+      <div style="font-size:0.82rem;line-height:2.2;color:var(--text)">
+        <div><strong>Frank</strong> fires FCM push → patient responds (taken/skip/snooze)</div>
+        <div style="margin-left:20px;color:var(--g500)">↓ if no response after window</div>
+        <div><strong>Maya</strong> detects overdue → marks missed in Supabase → triggers Cara</div>
+        <div style="margin-left:20px;color:var(--g500)">↓ Cara fires FCM to caregiver · Ace logs the missed dose event</div>
+        <div><strong>Grace</strong> sends morning check-in (as Elara) → user replies → Elara responds via AI chat</div>
+        <div style="margin-left:20px;color:var(--g500)">↓ if crisis language detected → Elara escalates to Cara immediately</div>
+        <div><strong>Nina</strong> sends day-7 trial close → if no convert, passes to Lena (win-back sequence)</div>
+        <div style="margin-left:20px;color:var(--g500)">↓ Lena 3-touch: day-0 missed, day-3 value-add, day-7 final close</div>
+        <div><strong>Rex</strong> drafts Reddit reply → pushes to team feed → Prabh approves in Telegram</div>
+        <div style="margin-left:20px;color:var(--g500)">↓ Leo monitors what's working on Reddit to adjust LinkedIn angle</div>
+        <div><strong>Cole</strong> drafts outreach email → queues in HQ Approvals → TJ approves → sends</div>
+        <div><strong>Ace</strong> monitors all agents → fires alert if any agent errors 3x → daily brief every 8 AM PST</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 Approval Gates — Nothing sends without human sign-off</div>
+      <table class="tbl">
+        <thead><tr><th>Agent</th><th>Action</th><th>Who approves</th><th>Where</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Cole</strong></td><td>B2B outreach emails</td><td>TJ</td><td>HQ Approvals</td></tr>
+          <tr><td><strong>Rex</strong></td><td>Reddit replies + posts</td><td>Prabh</td><td>Telegram</td></tr>
+          <tr><td><strong>Leo</strong></td><td>LinkedIn connection notes</td><td>Prabh</td><td>Telegram (noon daily)</td></tr>
+          <tr><td><strong>Blaze</strong></td><td>Mass email blasts</td><td>TJ</td><td>Manual trigger only</td></tr>
+          <tr><td><strong>Nina/Lena</strong></td><td>Individual email sequences</td><td>Auto (pre-approved templates)</td><td>—</td></tr>
+          <tr><td><strong>Frank/Grace/Cara</strong></td><td>Push notifications</td><td>Auto (no approval)</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div><!-- end page-area -->
 
 <script>
@@ -1237,103 +1499,118 @@ setInterval(tick, 1000);
   row.className = 'chat-row';
   var sender = document.createElement('div');
   sender.className = 'chat-sender';
-  sender.textContent = 'PRIYA · AI Caretaker';
+  sender.textContent = 'JARVIS · Mission Control';
   var bubble = document.createElement('div');
   bubble.className = 'chat-bubble chat-agent';
-  bubble.textContent = 'Good morning TJ. All 11 agents running on Railway. Aryan is monitoring every hour — new signups, churn, MRR milestones. Rohan firing dose reminders. Ananya did morning check-ins. Check HQ Inbox for alerts. What do you need?';
+  bubble.textContent = 'Good morning TJ. 14 agents running on Railway. Ace is watching every hour — signups, churn, MRR milestones. Frank firing dose reminders continuously. Grace did morning check-ins at 10 AM UTC. Check HQ Inbox for alerts. What do you need?';
   row.appendChild(sender);
   row.appendChild(bubble);
   chat.appendChild(row);
 })();
 
+function appendChatMsg(sender, text, isUser) {
+  var chat = document.getElementById('hq-chat');
+  var row = document.createElement('div');
+  row.className = 'chat-row' + (isUser ? ' right' : '');
+  var s = document.createElement('div');
+  s.className = 'chat-sender';
+  s.textContent = sender;
+  var b = document.createElement('div');
+  b.className = 'chat-bubble ' + (isUser ? 'chat-user' : 'chat-agent');
+  b.textContent = text;
+  row.appendChild(s);
+  row.appendChild(b);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+  return b;
+}
+
 function sendHQ() {
   var input = document.getElementById('hq-input');
   var text = input.value.trim();
   if (!text) return;
-  var chat = document.getElementById('hq-chat');
-
-  var userRow = document.createElement('div');
-  userRow.className = 'chat-row right';
-  var userSender = document.createElement('div');
-  userSender.className = 'chat-sender';
-  userSender.textContent = 'TJ · CEO';
-  var userBubble = document.createElement('div');
-  userBubble.className = 'chat-bubble chat-user';
-  userBubble.textContent = text;
-  userRow.appendChild(userSender);
-  userRow.appendChild(userBubble);
-  chat.appendChild(userRow);
   input.value = '';
+
+  appendChatMsg('TJ · CEO', text, true);
+
+  var thinkingBubble = appendChatMsg('JARVIS · Mission Control', '...', false);
   chat.scrollTop = chat.scrollHeight;
 
-  setTimeout(function() {
-    var respRow = document.createElement('div');
-    respRow.className = 'chat-row';
-    var respSender = document.createElement('div');
-    respSender.className = 'chat-sender';
-    respSender.textContent = 'PRIYA · AI Caretaker';
-    var respBubble = document.createElement('div');
-    respBubble.className = 'chat-bubble chat-agent';
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var statusEl = document.getElementById('jarvis-status');
+
+  fetch(BACKEND + '/jarvis/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-carely-secret': 'carely-admin-6add43330d2313d8' },
+    body: JSON.stringify({ message: text, userId: 'tj-hq', context: 'hq-command' })
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error('status ' + r.status);
+    return r.json();
+  })
+  .then(function(data) {
+    var reply = data.reply || data.message || data.response || JSON.stringify(data);
+    thinkingBubble.textContent = reply;
+    if (statusEl) statusEl.textContent = 'live';
+    var chat2 = document.getElementById('hq-chat');
+    chat2.scrollTop = chat2.scrollHeight;
+  })
+  .catch(function() {
+    if (statusEl) statusEl.textContent = 'offline — local mode';
     var t = text.toLowerCase();
+    var ld = window._carelyLive;
     var reply = '';
     if (t.match(/linkedin/)) {
-      reply = 'LinkedIn posted today at 8AM PST. Token expires June 29 — 55 days left. Next posts: Thursday 5PM, Friday 8AM. All on schedule.';
+      reply = 'Leo (LinkedIn) posted today at 8AM PST. Token expires June 29. Next posts: Thursday 5PM, Friday 8AM. All on schedule.';
     } else if (t.match(/reddit/)) {
-      reply = 'Reddit monitor ran 4 cycles today. Drafts go to HQ Inbox Approvals queue for your review before posting. Head to Approvals to approve or skip.';
+      reply = 'Rex (Reddit) ran 4 monitor cycles today. Drafts pushed to Approvals queue for Prabh to review before posting.';
     } else if (t.match(/railway|backend|server/)) {
-      reply = 'Backend is green on Railway. All 11 agents confirmed running. Last deploy fixed the TypeScript build — referrals.ts + weekOfYear plugin. No errors in logs.';
-    } else if (t.match(/telegram|chat.?id/)) {
-      reply = 'Telegram is live for both TJ and Prabh. Critical-only alerts fire there: new paying customers, churn, security. Everything else goes to HQ Inbox to keep Telegram clean.';
+      reply = 'Backend is green on Railway. All 14 agents confirmed running. No errors in logs.';
     } else if (t.match(/blaze|launch|email blast/)) {
-      reply = 'Blaze fired this morning — launch email sent to the full Mailchimp waitlist. Mission complete. Blaze is one-time only, it won\'t fire again.';
+      reply = 'Blaze fired May 5 — launch email to full Mailchimp waitlist. Mission complete. Will fire again for 100-customer milestone.';
     } else if (t.match(/ios|apple|duns/)) {
-      reply = 'iOS build waiting on Apple D-U-N-S for Lumina Path. Submitted — typically 1-5 business days. No action needed yet unless it\'s been over 5 days.';
-    } else if (t.match(/google play|android|play store/)) {
-      reply = 'Google Play: closed testing alpha, in review. Upload key reset pending Google approval (submitted May 5). Nothing to do until Google responds.';
-    } else if (t.match(/inbox|alert|draft|approval|approve/)) {
-      reply = 'Inbox and Approvals are wired live to the backend. Head to HQ Inbox to read agent alerts, or Approvals to review and approve outreach drafts before they send.';
+      reply = 'iOS waiting on Apple D-U-N-S for Lumina Path. 1–5 business days. No action needed yet.';
+    } else if (t.match(/google play|android/)) {
+      reply = 'Google Play: closed testing alpha. Upload key reset pending Google approval. Nothing to do until Google responds.';
     } else if (t.match(/sale|customer|paid|revenue|mrr/)) {
-      var ld = window._carelyLive;
       if (ld) {
         var pc = (ld.users.founding||0)+(ld.users.monthly||0)+(ld.users.annual||0);
-        reply = pc + ' paid customer'+(pc!==1?'s':'')+' live right now. MRR: $'+ld.revenue.mrr.toFixed(2)+'. '+ld.revenue.spotsRemaining+' founding spots remaining. Live from Railway.';
+        reply = pc + ' paid customer'+(pc!==1?'s':'')+'. MRR: $'+ld.revenue.mrr.toFixed(2)+'. '+ld.revenue.spotsRemaining+' founding spots left.';
       } else {
-        reply = '0 paid customers so far — launch day. 200 founding spots at $5/mo still available. Blaze sent the blast this morning. Watch carely.fit signups and Stripe dashboard.';
+        reply = 'Revenue data loading from Railway. Check Business Pulse for live numbers.';
       }
-    } else if (t.match(/burn|cost|spend|money|expensive/)) {
-      var ld2 = window._carelyLive;
-      if (ld2) {
-        reply = 'Monthly burn: $'+ld2.expenses.total.toFixed(2)+'. Net: '+(ld2.profit.monthly>=0?'+':'−')+'$'+Math.abs(ld2.profit.monthly).toFixed(2)+'/mo ('+ld2.profit.margin+'% margin). Live from Railway.';
+    } else if (t.match(/burn|cost|spend/)) {
+      if (ld) {
+        reply = 'Monthly burn: $'+ld.expenses.total.toFixed(2)+'. Net: '+(ld.profit.monthly>=0?'+':'−')+'$'+Math.abs(ld.profit.monthly).toFixed(2)+'/mo.';
       } else {
-        reply = 'Monthly burn: ~$21.50. Railway ~$10, OpenAI ~$10, Domain ~$1.50. Supabase, Upstash, Cloudflare, Firebase all free. Very lean.';
+        reply = 'Burn: ~$21.50/mo. Railway ~$10, OpenAI ~$10, domain ~$1.50. Everything else free.';
       }
     } else if (t.match(/grace|check.?in/)) {
-      reply = 'Grace sent daily check-ins to 12 beta users at 9AM UTC today. GPT-4o mini, condition-aware messages. All FCM pushes confirmed.';
+      reply = 'Grace fired 10 AM UTC today. GPT-4o mini, condition-aware messages via FCM. Appears as Elara to users.';
     } else if (t.match(/frank|reminder/)) {
-      reply = 'Frank is running continuously — fires 5 minutes before every scheduled dose. GPT-4o mini generates a unique funny reminder each time. No errors today.';
-    } else if (t.match(/elara|ai|chat/)) {
-      reply = 'I\'m running on-demand via Railway. GPT-4o with Redis memory — I remember each user\'s last 20 messages for 7 days. Response latency is typically under 2 seconds.';
+      reply = 'Frank running continuously — fires 5 min before every dose. Unique message each time. No errors today.';
+    } else if (t.match(/elara|ai caretaker/)) {
+      reply = 'Elara is the core product. On-demand GPT-4o with Redis memory. Users see her name on everything.';
+    } else if (t.match(/ace|brief|report/)) {
+      reply = 'Ace sends daily brief 8 AM PST to your Telegram. Proactive alerts fire every hour. Sunday reflection at 9 AM PST.';
+    } else if (t.match(/nina|nurture|email/)) {
+      reply = 'Nina running 10 AM UTC daily. Trial day 0→7 nurture sequence. Support inbound at /support/inbound auto-triaged.';
+    } else if (t.match(/lena|win.?back|retention/)) {
+      reply = 'Lena checks for expiring trials daily at 11 AM UTC. 3-touch win-back sequence. Also fires behavioral conversion triggers.';
+    } else if (t.match(/cole|b2b|outreach/)) {
+      reply = 'Cole queues 5 B2B targets daily. All emails go to HQ Approvals — TJ approves before any send.';
     } else if (t.match(/tiktok/)) {
-      reply = 'TikTok account not set up yet. 3 scripts are written and approved in Content Hub. Prabh needs to film Script 1 first — "The Story". Raw, face to camera, 45 seconds.';
-    } else if (t.match(/sitemap|seo|google search|indexnow/)) {
-      reply = 'Scout pinged all 7 blog URLs to Google IndexNow on last deploy. sitemap.xml is live and serving as application/xml. Check Google Search Console to see indexing status.';
-    } else if (t.match(/supabase|database|db/)) {
-      reply = 'Supabase PostgreSQL is live. Free tier. Upgrade to Pro ($25/mo) planned for May 15 when real customers start logging in — 7-day backup protection.';
+      reply = 'TikTok not yet set up. 3 scripts in Content Hub. Prabh films Script 1 first — raw, 45s, face to camera.';
+    } else if (t.match(/seo|scout|sitemap|indexnow/)) {
+      reply = 'Scout pinged all 7 blog URLs to Google IndexNow on last deploy. 2 content gaps remain: "seniors USA" and "family caregiver".';
     } else {
-      var defaults = [
-        'Got it. I\'ll flag this in tomorrow\'s brief.',
-        'Noted. Anything else you need me to track?',
-        'Logged. The system is running — what else do you need?',
-        'On it. All 11 agents are green right now.'
-      ];
-      reply = defaults[Math.floor(Math.random() * defaults.length)];
+      var defaults = ['Got it. Check the relevant page in HQ for live data.','Logged. All 14 agents are green right now.','Noted. Ace will include this in tomorrow\'s brief.'];
+      reply = defaults[Math.floor(Math.random()*defaults.length)];
     }
-    respBubble.textContent = reply;
-    respRow.appendChild(respSender);
-    respRow.appendChild(respBubble);
-    chat.appendChild(respRow);
-    chat.scrollTop = chat.scrollHeight;
-  }, 700);
+    thinkingBubble.textContent = reply;
+    var chat3 = document.getElementById('hq-chat');
+    chat3.scrollTop = chat3.scrollHeight;
+  });
 }
 
 document.getElementById('hq-input').addEventListener('keydown', function(e) {
@@ -1481,9 +1758,10 @@ document.addEventListener('keydown', function(e) {
   var SECRET  = 'carely-admin-6add43330d2313d8';
 
   var AGENT_COLORS = {
-    aryan:'#7C3AED',priya:'#02C39A',rohan:'#2563EB',ananya:'#D97706',
-    meera:'#DC2626',naina:'#059669',tej:'#F97316',leela:'#EC4899',
-    drishti:'#0891B2',aarav:'#B91C1C',arjun:'#1D4ED8',kavya:'#9333EA',dhruv:'#065F46',rahul:'#92400E'
+    ace:'#7C3AED',elara:'#02C39A',frank:'#2563EB',grace:'#D97706',
+    maya:'#DC2626',nina:'#059669',blaze:'#F97316',lena:'#EC4899',
+    scout:'#0891B2',rex:'#B91C1C',leo:'#1D4ED8',cara:'#9333EA',
+    'dr. bridge':'#065F46','dr.bridge':'#065F46',cole:'#92400E',jarvis:'#028090'
   };
 
   var TYPE_LABELS = { action:'ACTION', alert:'ALERT', success:'SUCCESS', info:'INFO', metric:'METRIC' };
@@ -1851,6 +2129,58 @@ document.addEventListener('keydown', function(e) {
   window.loadDrafts();
   setInterval(window.loadInbox, 60000);
   setInterval(window.loadDrafts, 60000);
+})();
+
+// ═══ PLATFORM INTEL — dynamic scheduling ════════════════════════════════════
+(function() {
+  var now = new Date();
+  var day = now.getDay();
+  var hour = now.getHours();
+  var DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+  var tiktokBest = (day === 0 || day === 6)
+    ? '9 AM & 8 PM PST'
+    : (hour < 12 ? '6–9 AM PST (post now)' : hour < 19 ? '7–10 PM PST tonight' : '7–10 PM PST (post now)');
+  var ttEl = document.getElementById('tiktok-best-time');
+  if (ttEl) ttEl.textContent = tiktokBest;
+
+  var liMap = {0:'Low — avoid posting',1:'Good — 8 AM PST slot',2:'Best — 10 AM–noon PST',3:'Best — 8 AM PST slot',4:'Best — 10 AM–noon PST',5:'Good — 8 AM PST slot',6:'Low — avoid posting'};
+  var ldEl = document.getElementById('linkedin-best-day');
+  if (ldEl) ldEl.textContent = DAYS[day] + ': ' + (liMap[day]||'—');
+
+  var sched = document.getElementById('todays-schedule');
+  if (!sched) return;
+  var lines = [];
+  if (day === 1 || day === 3 || day === 5) lines.push('LinkedIn (Leo): Post at 8 AM PST — caregiver story or healthcare insight.');
+  if (day === 2 || day === 4 || day === 6) lines.push('LinkedIn (Leo): Post at 5 PM PST — stat, behind-the-scenes, or community story.');
+  if (day >= 1 && day <= 5) lines.push('TikTok / Reels (Prabh): Film and post at 7–9 PM tonight. Best completion rate window.');
+  lines.push('Reddit (Rex): Best reply window is 10 AM–1 PM ET. Rex monitors every 6 hours — check Approvals.');
+  if (day === 0) lines.push('Ace: Weekly agent reflection fires 9 AM PST today — check Telegram for the full report.');
+  lines.push('LinkedIn connections (Leo → Prabh): 3 personalised notes at noon PST — send manually from Telegram.');
+
+  var frag = document.createDocumentFragment();
+  lines.forEach(function(line, i) {
+    var el = document.createElement('div');
+    el.style.padding = '4px 0';
+    var split = line.indexOf(':');
+    if (split > -1) {
+      var b = document.createElement('strong');
+      b.textContent = line.slice(0, split + 1);
+      el.appendChild(b);
+      el.appendChild(document.createTextNode(line.slice(split + 1)));
+    } else {
+      el.textContent = line;
+    }
+    if (i < lines.length - 1) {
+      var divider = document.createElement('div');
+      divider.style.cssText = 'border-bottom:1px solid var(--g100);margin:2px 0';
+      frag.appendChild(el);
+      frag.appendChild(divider);
+    } else {
+      frag.appendChild(el);
+    }
+  });
+  sched.appendChild(frag);
 })();
 
 // LinkedIn token countdown
