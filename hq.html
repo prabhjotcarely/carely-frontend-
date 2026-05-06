@@ -307,8 +307,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <tr><td><strong>Leo</strong></td><td>LinkedIn posts 6x/week as Prabh</td><td>Mon/Wed/Fri 8AM + Tue/Thu/Sat 5PM PST</td><td><span class="pill green">Running</span></td></tr>
           <tr><td><strong>Rex</strong></td><td>Reddit monitor 18 subreddits</td><td>Every 6 hours</td><td><span class="pill green">Running</span></td></tr>
           <tr><td><strong>Cole</strong></td><td>B2B outreach — orgs, clinics</td><td>2 PM UTC daily</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Ace</strong></td><td>Business intelligence + daily brief</td><td>8 AM PST daily</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Scout</strong></td><td>SEO + Google IndexNow</td><td>On every deploy</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Ace</strong></td><td>Morning brief + EOD strategic scan + per-agent directives</td><td>8 AM + 8 PM PST</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Scout</strong></td><td>ASO weekly report + SEO + Google IndexNow</td><td>On deploy + Sundays 7 AM PST</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Oracle</strong></td><td>World intel — Reddit ICP signals + iTunes ratings synthesis</td><td>Every 30 min</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Signals</strong></td><td>Customer pain scan — 7 ICP subreddits for content angles</td><td>Every 2 hours</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Comp Intel</strong></td><td>Competitor App Store snapshot — rating deltas, version changes</td><td>Every 6 hours</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Vance</strong></td><td>Daily TikTok/Reels/Shorts script for Prabh to film</td><td>9 AM PST daily</td><td><span class="pill green">Running</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -1039,8 +1043,12 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
             <tr><td><strong>Leo</strong></td><td>1 (8AM PST)</td><td><span class="pill green">Posted ✓</span></td><td>Token expires June 29</td></tr>
             <tr><td><strong>Rex</strong></td><td>4 cycles (every 6h)</td><td><span class="pill green">Running</span></td><td>Drafts to Prabh on Telegram</td></tr>
             <tr><td><strong>Cole</strong></td><td>5 targets (2PM UTC)</td><td><span class="pill green">Running</span></td><td>TJ approval required before send</td></tr>
-            <tr><td><strong>Scout</strong></td><td>On deploy</td><td><span class="pill green">Running</span></td><td>None</td></tr>
-            <tr><td><strong>Ace</strong></td><td>Brief 8AM + hourly alerts</td><td><span class="pill green">Running</span></td><td>None</td></tr>
+            <tr><td><strong>Scout</strong></td><td>On deploy + ASO Sunday</td><td><span class="pill green">Running</span></td><td>ASO report sent to TJ Telegram</td></tr>
+            <tr><td><strong>Ace</strong></td><td>Brief 8AM + EOD 8PM + reactive</td><td><span class="pill green">Running</span></td><td>Writes per-agent directives after EOD scan</td></tr>
+            <tr><td><strong>Oracle</strong></td><td>48 cycles (every 30min)</td><td><span class="pill green">Running</span></td><td>Reddit ICP + iTunes synthesis → world intel</td></tr>
+            <tr><td><strong>Signals</strong></td><td>12 cycles (every 2hr)</td><td><span class="pill green">Running</span></td><td>Customer pain angles → agent directives</td></tr>
+            <tr><td><strong>Comp Intel</strong></td><td>4 cycles (every 6hr)</td><td><span class="pill green">Running</span></td><td>Alerts Cole + Leo + Scout on competitor moves</td></tr>
+            <tr><td><strong>Vance</strong></td><td>1 (9AM PST)</td><td><span class="pill green">Running</span></td><td>Script sent to Prabh on Telegram</td></tr>
           </tbody>
         </table>
       </div>
@@ -1564,7 +1572,7 @@ function sendHQ() {
     } else if (t.match(/reddit/)) {
       reply = 'Rex (Reddit) ran 4 monitor cycles today. Drafts pushed to Approvals queue for Prabh to review before posting.';
     } else if (t.match(/railway|backend|server/)) {
-      reply = 'Backend is green on Railway. All 14 agents confirmed running. No errors in logs.';
+      reply = 'Backend is green on Railway. 20 agents confirmed running — 14 product/marketing agents + Oracle (30min world intel), Signals (2hr ICP scan), Comp Intel (6hr App Store), Vance (daily video scripts), Ace EOD (8PM strategic scan). No errors in logs.';
     } else if (t.match(/blaze|launch|email blast/)) {
       reply = 'Blaze fired May 5 — launch email to full Mailchimp waitlist. Mission complete. Will fire again for 100-customer milestone.';
     } else if (t.match(/ios|apple|duns/)) {
