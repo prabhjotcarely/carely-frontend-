@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JARVIS — Carely Operating Intelligence</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#040d16;
+  --panel:#080f1a;
+  --border:rgba(0,200,255,0.12);
+  --cyan:#00e5ff;
+  --mint:#00ffa3;
+  --amber:#ffb300;
+  --red:#ff4560;
+  --text:#c8e8f5;
+  --dim:#4a7a90;
+  --glow-c:0 0 24px rgba(0,229,255,0.3);
+  --glow-m:0 0 24px rgba(0,255,163,0.25);
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+
+/* ── PIN SCREEN ─────────────────────────────────────────────────── */
+#pin{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+#pin.hide{display:none}
+.pin-orb{width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 40% 35%,rgba(0,229,255,0.9),rgba(0,100,160,0.4) 60%,transparent);box-shadow:0 0 40px rgba(0,229,255,0.4),0 0 80px rgba(0,229,255,0.15);animation:orbBreath 3s ease-in-out infinite;margin-bottom:20px}
+@keyframes orbBreath{0%,100%{transform:scale(1);box-shadow:0 0 40px rgba(0,229,255,0.4),0 0 80px rgba(0,229,255,0.15)}50%{transform:scale(1.06);box-shadow:0 0 60px rgba(0,229,255,0.6),0 0 120px rgba(0,229,255,0.2)}}
+.pin-title{font-size:1.2rem;font-weight:800;color:var(--cyan);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px}
+.pin-sub{font-size:0.72rem;color:var(--dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:28px}
+.pin-dots{display:flex;gap:10px;margin-bottom:22px}
+.pin-dot{width:11px;height:11px;border-radius:50%;background:rgba(0,229,255,0.12);border:1px solid rgba(0,229,255,0.25);transition:all 0.15s}
+.pin-dot.on{background:var(--cyan);box-shadow:0 0 10px rgba(0,229,255,0.6);border-color:var(--cyan)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,64px);gap:8px}
+.pin-btn{width:64px;height:64px;border-radius:50%;background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.15);color:var(--text);font-size:1.1rem;font-weight:600;cursor:pointer;transition:all 0.12s;letter-spacing:0}
+.pin-btn:hover{background:rgba(0,229,255,0.1);border-color:rgba(0,229,255,0.4)}
+.pin-btn:active{background:rgba(0,229,255,0.2);color:var(--cyan)}
+.pin-err{font-size:0.72rem;color:var(--red);margin-top:14px;height:16px;text-align:center;letter-spacing:0.06em}
+
+/* ── MAIN LAYOUT ────────────────────────────────────────────────── */
+#app{height:100vh;display:flex;flex-direction:column}
+
+/* ── HUD TOP BAR ─────────────────────────────────────────────────── */
+#hud{height:52px;flex-shrink:0;background:rgba(4,13,22,0.95);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:20px;backdrop-filter:blur(8px)}
+.hud-logo{font-size:0.72rem;font-weight:800;color:var(--cyan);letter-spacing:0.25em;text-transform:uppercase;flex-shrink:0}
+.hud-sep{width:1px;height:24px;background:var(--border);flex-shrink:0}
+.hud-metric{display:flex;flex-direction:column;align-items:flex-start;gap:1px;flex-shrink:0}
+.hud-label{font-size:0.54rem;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
+.hud-val{font-size:0.82rem;font-weight:800;color:var(--cyan);font-variant-numeric:tabular-nums}
+.hud-val.green{color:var(--mint)}
+.hud-val.amber{color:var(--amber)}
+.hud-spacer{flex:1}
+.hud-status{font-size:0.62rem;font-weight:700;color:var(--mint);letter-spacing:0.1em;display:flex;align-items:center;gap:5px}
+.hud-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px rgba(0,255,163,0.8);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hud-clock{font-size:0.75rem;font-weight:600;color:var(--dim);font-variant-numeric:tabular-nums;flex-shrink:0}
+.hud-badges{display:flex;gap:6px;flex-shrink:0}
+.hud-badge{font-size:0.6rem;font-weight:700;padding:3px 9px;border-radius:100px;border:1px solid;letter-spacing:0.08em;cursor:pointer;transition:all 0.15s}
+.hud-badge.inbox{color:var(--amber);border-color:rgba(255,179,0,0.3);background:rgba(255,179,0,0.06)}
+.hud-badge.inbox:hover{background:rgba(255,179,0,0.12)}
+.hud-badge.drafts{color:var(--cyan);border-color:rgba(0,229,255,0.3);background:rgba(0,229,255,0.06)}
+.hud-badge.drafts:hover{background:rgba(0,229,255,0.12)}
+
+/* ── BODY ────────────────────────────────────────────────────────── */
+#body{flex:1;display:flex;overflow:hidden}
+
+/* ── ORB PANEL ───────────────────────────────────────────────────── */
+#orb-panel{width:280px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:32px 20px 20px;border-right:1px solid var(--border);background:rgba(4,13,22,0.6)}
+@media(max-width:900px){#orb-panel{display:none}}
+
+.orb-wrap{position:relative;width:160px;height:160px;margin-bottom:24px}
+.orb-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(0,229,255,0.15)}
+.orb-ring.r1{animation:spin 12s linear infinite}
+.orb-ring.r2{inset:12px;border-color:rgba(0,229,255,0.1);animation:spin 8s linear infinite reverse}
+.orb-ring.r3{inset:24px;border-color:rgba(0,255,163,0.08);animation:spin 5s linear infinite}
+.orb-ring.r1::after{content:'';position:absolute;width:6px;height:6px;background:var(--cyan);border-radius:50%;box-shadow:0 0 10px var(--cyan);top:-3px;left:calc(50% - 3px)}
+.orb-ring.r2::after{content:'';position:absolute;width:5px;height:5px;background:rgba(0,229,255,0.6);border-radius:50%;box-shadow:0 0 8px var(--cyan);bottom:-2.5px;right:calc(50% - 2.5px)}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.orb-core{position:absolute;inset:36px;border-radius:50%;background:radial-gradient(circle at 38% 34%,rgba(0,229,255,0.95),rgba(0,120,180,0.6) 45%,rgba(0,40,80,0.8) 75%,transparent);box-shadow:0 0 30px rgba(0,229,255,0.35),0 0 60px rgba(0,229,255,0.12),inset 0 0 20px rgba(0,229,255,0.08);animation:coreBreath 4s ease-in-out infinite}
+@keyframes coreBreath{0%,100%{transform:scale(1);opacity:0.9}50%{transform:scale(1.04);opacity:1}}
+.orb-radar{position:absolute;inset:36px;border-radius:50%;overflow:hidden;opacity:0.25}
+.orb-radar::after{content:'';position:absolute;inset:0;background:conic-gradient(from 0deg,transparent 0%,rgba(0,229,255,0.4) 10%,transparent 20%);animation:spin 3s linear infinite}
+
+.orb-cmd{width:100%;display:flex;flex-direction:column;gap:5px;margin-top:4px}
+.orb-cmd-title{font-size:0.58rem;font-weight:700;color:var(--dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px}
+.cmd-btn{width:100%;background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.1);color:rgba(0,229,255,0.7);font-size:0.7rem;font-weight:600;padding:7px 10px;border-radius:6px;cursor:pointer;text-align:left;transition:all 0.12s;letter-spacing:0.04em;font-family:inherit}
+.cmd-btn:hover{background:rgba(0,229,255,0.1);border-color:rgba(0,229,255,0.3);color:var(--cyan)}
+
+.orb-telemetry{margin-top:20px;width:100%;font-size:0.64rem;color:var(--dim);line-height:1.7;font-variant-numeric:tabular-nums;max-height:140px;overflow:hidden}
+.tele-line{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:fadeSlide 0.4s ease}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CHAT PANEL ──────────────────────────────────────────────────── */
+#chat-panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+#messages{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth}
+#messages::-webkit-scrollbar{width:4px}
+#messages::-webkit-scrollbar-track{background:transparent}
+#messages::-webkit-scrollbar-thumb{background:rgba(0,229,255,0.15);border-radius:2px}
+
+.msg{display:flex;gap:10px;animation:msgIn 0.25s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{flex-direction:row-reverse}
+.msg-avatar{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800}
+.msg-avatar.jarvis{background:radial-gradient(circle at 35% 30%,rgba(0,229,255,0.9),rgba(0,80,140,0.7));box-shadow:0 0 12px rgba(0,229,255,0.3);color:var(--bg);letter-spacing:-0.05em}
+.msg-avatar.tj{background:rgba(255,179,0,0.12);border:1px solid rgba(255,179,0,0.3);color:var(--amber)}
+.msg-bubble{max-width:78%;padding:12px 16px;border-radius:14px;font-size:0.84rem;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.msg.jarvis .msg-bubble{background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.12);color:var(--text);border-bottom-left-radius:4px}
+.msg.user .msg-bubble{background:rgba(255,179,0,0.06);border:1px solid rgba(255,179,0,0.18);color:var(--text);border-bottom-right-radius:4px}
+.msg-name{font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px}
+.msg.jarvis .msg-name{color:rgba(0,229,255,0.5)}
+.msg.user .msg-name{color:rgba(255,179,0,0.5);text-align:right}
+.msg-meta{font-size:0.62rem;color:var(--dim);margin-top:4px}
+
+.typing-indicator{display:flex;align-items:center;gap:5px;padding:12px 16px;background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.12);border-radius:14px;border-bottom-left-radius:4px;width:fit-content}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:rgba(0,229,255,0.5);animation:typingBounce 1.2s infinite}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typingBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+
+/* ── INPUT BAR ───────────────────────────────────────────────────── */
+#input-bar{padding:16px 24px;border-top:1px solid var(--border);background:rgba(4,13,22,0.9);display:flex;gap:10px;align-items:flex-end}
+#msg-input{flex:1;background:rgba(0,229,255,0.03);border:1px solid rgba(0,229,255,0.15);border-radius:10px;padding:11px 16px;color:var(--text);font-size:0.86rem;font-family:inherit;resize:none;max-height:120px;outline:none;line-height:1.5;transition:border-color 0.15s}
+#msg-input:focus{border-color:rgba(0,229,255,0.4);box-shadow:0 0 12px rgba(0,229,255,0.06)}
+#msg-input::placeholder{color:var(--dim)}
+#send-btn{width:42px;height:42px;border-radius:10px;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.25);color:var(--cyan);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;flex-shrink:0}
+#send-btn:hover{background:rgba(0,229,255,0.16);border-color:rgba(0,229,255,0.5);box-shadow:var(--glow-c)}
+#send-btn:disabled{opacity:0.3;cursor:not-allowed}
+#send-btn svg{width:18px;height:18px}
+</style>
+</head>
+<body>
+
+<!-- ── PIN SCREEN ── -->
+<div id="pin">
+  <div class="pin-orb"></div>
+  <div class="pin-title">JARVIS</div>
+  <div class="pin-sub">Carely Operating Intelligence</div>
+  <div class="pin-dots">
+    <div class="pin-dot" id="pd0"></div>
+    <div class="pin-dot" id="pd1"></div>
+    <div class="pin-dot" id="pd2"></div>
+    <div class="pin-dot" id="pd3"></div>
+    <div class="pin-dot" id="pd4"></div>
+    <div class="pin-dot" id="pd5"></div>
+  </div>
+  <div class="pin-pad">
+    <button class="pin-btn" onclick="pk('1')">1</button>
+    <button class="pin-btn" onclick="pk('2')">2</button>
+    <button class="pin-btn" onclick="pk('3')">3</button>
+    <button class="pin-btn" onclick="pk('4')">4</button>
+    <button class="pin-btn" onclick="pk('5')">5</button>
+    <button class="pin-btn" onclick="pk('6')">6</button>
+    <button class="pin-btn" onclick="pk('7')">7</button>
+    <button class="pin-btn" onclick="pk('8')">8</button>
+    <button class="pin-btn" onclick="pk('9')">9</button>
+    <button class="pin-btn" style="font-size:0.8rem" onclick="pinClear()">CLR</button>
+    <button class="pin-btn" onclick="pk('0')">0</button>
+    <button class="pin-btn" onclick="pinBack()">⌫</button>
+  </div>
+  <div class="pin-err" id="pin-err"></div>
+</div>
+
+<!-- ── MAIN APP ── -->
+<div id="app">
+
+  <!-- HUD -->
+  <div id="hud">
+    <div class="hud-logo">JARVIS</div>
+    <div class="hud-sep"></div>
+    <div class="hud-metric">
+      <div class="hud-label">MRR</div>
+      <div class="hud-val green" id="h-mrr">—</div>
+    </div>
+    <div class="hud-sep"></div>
+    <div class="hud-metric">
+      <div class="hud-label">Paid</div>
+      <div class="hud-val" id="h-paid">—</div>
+    </div>
+    <div class="hud-sep"></div>
+    <div class="hud-metric">
+      <div class="hud-label">Trials</div>
+      <div class="hud-val amber" id="h-trials">—</div>
+    </div>
+    <div class="hud-sep"></div>
+    <div class="hud-metric">
+      <div class="hud-label">Gap to $1M</div>
+      <div class="hud-val" id="h-gap">—</div>
+    </div>
+    <div class="hud-spacer"></div>
+    <div class="hud-badges">
+      <div class="hud-badge inbox" id="h-inbox" onclick="sendCmd('/inbox')">INBOX <span id="inbox-n">—</span></div>
+      <div class="hud-badge drafts" id="h-drafts" onclick="sendCmd('/drafts')">DRAFTS <span id="drafts-n">—</span></div>
+    </div>
+    <div class="hud-sep"></div>
+    <div class="hud-status">ONLINE</div>
+    <div class="hud-clock" id="hud-clock">--:--:--</div>
+  </div>
+
+  <!-- BODY -->
+  <div id="body">
+
+    <!-- ORB PANEL -->
+    <div id="orb-panel">
+      <div class="orb-wrap">
+        <div class="orb-ring r1"></div>
+        <div class="orb-ring r2"></div>
+        <div class="orb-ring r3"></div>
+        <div class="orb-radar"></div>
+        <div class="orb-core"></div>
+      </div>
+
+      <div class="orb-cmd">
+        <div class="orb-cmd-title">Quick commands</div>
+        <button class="cmd-btn" onclick="sendCmd('/status')">⚡ /status</button>
+        <button class="cmd-btn" onclick="sendCmd('/inbox')">📥 /inbox</button>
+        <button class="cmd-btn" onclick="sendCmd('/drafts')">✅ /drafts</button>
+        <button class="cmd-btn" onclick="sendCmd('/agents')">🧠 /agents</button>
+        <button class="cmd-btn" onclick="sendCmd('/reddit')">🔴 /reddit</button>
+        <button class="cmd-btn" onclick="sendCmd('/brief')">☀️ /brief</button>
+        <button class="cmd-btn" onclick="sendCmd('/clear')" style="color:rgba(255,69,96,0.6);border-color:rgba(255,69,96,0.15)">🗑 /clear</button>
+      </div>
+
+      <div class="orb-telemetry" id="telemetry"></div>
+    </div>
+
+    <!-- CHAT PANEL -->
+    <div id="chat-panel">
+      <div id="messages"></div>
+      <div id="input-bar">
+        <textarea id="msg-input" placeholder="Talk to JARVIS..." rows="1"></textarea>
+        <button id="send-btn" onclick="send()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const BACKEND = 'https://carely-backend-production.up.railway.app';
+const SECRET  = 'carely-admin-6add43330d2313d8';
+const PIN     = '126226';
+let pinEntry  = '';
+let busy      = false;
+
+// ── PIN LOGIC ──────────────────────────────────────────────────────
+function pk(d) {
+  if (pinEntry.length >= 6) return;
+  pinEntry += d;
+  document.getElementById('pd' + (pinEntry.length - 1)).classList.add('on');
+  if (pinEntry.length === 6) {
+    if (pinEntry === PIN) {
+      document.getElementById('pin').classList.add('hide');
+      onUnlock();
+    } else {
+      document.getElementById('pin-err').textContent = 'Incorrect PIN';
+      setTimeout(() => { pinEntry = ''; for (var i=0;i<6;i++) document.getElementById('pd'+i).classList.remove('on'); document.getElementById('pin-err').textContent=''; }, 800);
+    }
+  }
+}
+function pinBack() {
+  if (!pinEntry.length) return;
+  document.getElementById('pd' + (pinEntry.length - 1)).classList.remove('on');
+  pinEntry = pinEntry.slice(0,-1);
+}
+function pinClear() {
+  pinEntry = '';
+  for (var i=0;i<6;i++) document.getElementById('pd'+i).classList.remove('on');
+  document.getElementById('pin-err').textContent = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (document.getElementById('pin').classList.contains('hide')) return;
+  if (e.key >= '0' && e.key <= '9') pk(e.key);
+  else if (e.key === 'Backspace') pinBack();
+  else if (e.key === 'Escape') pinClear();
+});
+
+// ── ON UNLOCK ──────────────────────────────────────────────────────
+function onUnlock() {
+  loadHUD();
+  setInterval(loadHUD, 60000);
+  tickClock();
+  setInterval(tickClock, 1000);
+  addMsg('jarvis', 'JARVIS', 'Good ' + greeting() + ', TJ. I\'m online.\n\nAll 14 agents running. Type anything or use a command on the left. I\'ll pull live data on every answer.\n\nTry: "how are we doing?" or "/status"');
+  startTelemetry();
+}
+
+function greeting() {
+  var h = new Date().getHours();
+  return h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
+}
+
+// ── CLOCK ──────────────────────────────────────────────────────────
+function tickClock() {
+  document.getElementById('hud-clock').textContent = new Date().toLocaleTimeString('en-CA', {hour12:false});
+}
+
+// ── HUD METRICS ────────────────────────────────────────────────────
+function loadHUD() {
+  fetch(BACKEND + '/jarvis/state', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+      if (!d.state) return;
+      document.getElementById('h-mrr').textContent    = '$' + d.state.mrr.toFixed(0);
+      document.getElementById('h-paid').textContent   = d.state.paidUsers;
+      document.getElementById('h-trials').textContent = d.state.activeTrials;
+      document.getElementById('h-gap').textContent    = '$' + (d.state.gapToMillion/1000).toFixed(0) + 'k';
+      document.getElementById('inbox-n').textContent  = d.unreadInbox || '0';
+      document.getElementById('drafts-n').textContent = d.pendingDrafts || '0';
+      if (d.unreadInbox > 0) document.getElementById('h-inbox').style.borderColor = 'rgba(255,179,0,0.5)';
+      if (d.pendingDrafts > 0) document.getElementById('h-drafts').style.borderColor = 'rgba(0,229,255,0.5)';
+    })
+    .catch(function(){});
+}
+
+// ── TELEMETRY FEED ─────────────────────────────────────────────────
+var telemLines = [
+  'SYSTEM: all agents nominal',
+  'ROHAN: dose reminders active',
+  'MEERA: missed dose scan every 30m',
+  'AARAV: monitoring 18 subreddits',
+  'ARJUN: LinkedIn scheduled',
+  'NAINA: support inbox watching',
+  'LEELA: win-back sequences live',
+  'ARYAN: alert scan every hour',
+];
+var telemIdx = 0;
+function startTelemetry() {
+  var el = document.getElementById('telemetry');
+  setInterval(function() {
+    var line = document.createElement('div');
+    line.className = 'tele-line';
+    var ts = new Date().toLocaleTimeString('en-CA', {hour12:false});
+    line.textContent = ts + ' · ' + telemLines[telemIdx % telemLines.length];
+    line.style.color = 'rgba(0,229,255,0.35)';
+    el.insertBefore(line, el.firstChild);
+    if (el.children.length > 8) el.removeChild(el.lastChild);
+    telemIdx++;
+  }, 4000);
+
+  // Also pull live agent feed
+  setInterval(function() {
+    fetch(BACKEND + '/admin/agent-feed?limit=5', { headers: { 'x-carely-secret': SECRET } })
+      .then(function(r){ return r.json(); })
+      .then(function(d) {
+        if (!d.events || !d.events.length) return;
+        d.events.slice(0,3).forEach(function(ev) {
+          telemLines.push(ev.agentName.toUpperCase() + ': ' + ev.message.slice(0,55));
+        });
+      })
+      .catch(function(){});
+  }, 30000);
+}
+
+// ── MESSAGES ───────────────────────────────────────────────────────
+var msgFeed = document.getElementById('messages');
+
+function addMsg(role, name, text) {
+  var wrap = document.createElement('div');
+  wrap.className = 'msg ' + role;
+
+  var avatar = document.createElement('div');
+  avatar.className = 'msg-avatar ' + role;
+  avatar.textContent = role === 'jarvis' ? 'AI' : 'TJ';
+
+  var inner = document.createElement('div');
+  inner.style.cssText = 'display:flex;flex-direction:column;max-width:78%';
+
+  var nameEl = document.createElement('div');
+  nameEl.className = 'msg-name';
+  nameEl.textContent = name;
+
+  var bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.textContent = text;
+
+  inner.appendChild(nameEl);
+  inner.appendChild(bubble);
+  wrap.appendChild(avatar);
+  wrap.appendChild(inner);
+  msgFeed.appendChild(wrap);
+  msgFeed.scrollTop = msgFeed.scrollHeight;
+  return bubble;
+}
+
+function showTyping() {
+  var wrap = document.createElement('div');
+  wrap.className = 'msg jarvis';
+  wrap.id = 'typing-msg';
+  var avatar = document.createElement('div');
+  avatar.className = 'msg-avatar jarvis';
+  avatar.textContent = 'AI';
+  var ind = document.createElement('div');
+  ind.className = 'typing-indicator';
+  for (var i=0;i<3;i++) { var d=document.createElement('div'); d.className='typing-dot'; ind.appendChild(d); }
+  wrap.appendChild(avatar);
+  wrap.appendChild(ind);
+  msgFeed.appendChild(wrap);
+  msgFeed.scrollTop = msgFeed.scrollHeight;
+}
+
+function removeTyping() {
+  var t = document.getElementById('typing-msg');
+  if (t) t.remove();
+}
+
+// ── SEND ───────────────────────────────────────────────────────────
+async function send() {
+  if (busy) return;
+  var inp = document.getElementById('msg-input');
+  var text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  inp.style.height = '';
+  sendMsg(text);
+}
+
+async function sendCmd(cmd) {
+  if (busy) return;
+  sendMsg(cmd);
+}
+
+async function sendMsg(text) {
+  if (busy) return;
+  busy = true;
+  document.getElementById('send-btn').disabled = true;
+
+  addMsg('user', 'TJ', text);
+
+  if (text === '/clear') {
+    await fetch(BACKEND + '/jarvis/chat', {
+      method: 'POST',
+      headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clearHistory: true }),
+    });
+    addMsg('jarvis', 'JARVIS', 'Cleared. Fresh start, TJ.');
+    busy = false;
+    document.getElementById('send-btn').disabled = false;
+    return;
+  }
+
+  showTyping();
+
+  try {
+    var r = await fetch(BACKEND + '/jarvis/chat', {
+      method: 'POST',
+      headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text }),
+    });
+    var d = await r.json();
+    removeTyping();
+    addMsg('jarvis', 'JARVIS', d.reply || d.error || 'No response.');
+    if (d.reply) {
+      var shortLine = d.reply.split('\n')[0].slice(0, 60);
+      telemLines.push('JARVIS: ' + shortLine);
+    }
+  } catch(err) {
+    removeTyping();
+    addMsg('jarvis', 'JARVIS', 'Connection error. Check backend status.');
+  }
+
+  busy = false;
+  document.getElementById('send-btn').disabled = false;
+}
+
+// ── INPUT AUTO-RESIZE + ENTER TO SEND ─────────────────────────────
+var inp = document.getElementById('msg-input');
+inp.addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+inp.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+});
+</script>
+</body>
+</html>
