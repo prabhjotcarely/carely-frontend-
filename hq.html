@@ -62,7 +62,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .card-sub{font-size:0.7rem;color:var(--g500);margin-left:auto;font-weight:500}
 
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-@media(max-width:720px){.cols{grid-template-columns:1fr}}
+/* ── Mobile responsive ───────────────────────────────────────────────────── */
+@media(max-width:720px){
+  .cols{grid-template-columns:1fr}
+  body{overflow:auto}
+  .sidebar{position:fixed;left:-220px;top:0;z-index:100;transition:left 0.25s ease;height:100%;overflow-y:auto}
+  .sidebar.open{left:0}
+  .page-area{height:auto;overflow:visible}
+  .topbar{padding:0 14px;position:sticky;top:0}
+  .page{padding:14px 14px 60px}
+  .hamburger{display:flex!important;align-items:center;justify-content:center;width:34px;height:34px;border:none;background:transparent;cursor:pointer;padding:0;flex-shrink:0;gap:0;flex-direction:column}
+  .hamburger span{display:block;width:20px;height:2px;background:var(--deep);margin:2.5px 0;border-radius:2px}
+  .metric-row{grid-template-columns:repeat(2,1fr)}
+  .metric-val{font-size:1.4rem}
+  .agent-grid{grid-template-columns:1fr}
+  .tbl{font-size:0.74rem}
+  .tbl th,.tbl td{padding:6px 7px}
+  .chat-area{max-height:220px}
+  .sidebar-overlay{display:block!important;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:99;opacity:0;pointer-events:none;transition:opacity 0.25s}
+  .sidebar-overlay.visible{opacity:1;pointer-events:auto}
+}
+@media(min-width:721px){
+  .hamburger{display:none!important}
+  .sidebar-overlay{display:none!important}
+}
 
 .tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
 .tab{font-size:0.76rem;font-weight:600;padding:6px 14px;border-radius:8px;cursor:pointer;border:1.5px solid var(--g200);color:var(--g500);transition:all 0.15s;background:white}
@@ -191,8 +214,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <body>
 
+<!-- Mobile overlay -->
+<div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
 <!-- ══ SIDEBAR ══ -->
-<nav class="sidebar">
+<nav class="sidebar" id="sidebar">
   <div class="sb-logo">
     <div style="font-size:1.5rem;margin-bottom:6px">💊</div>
     <div class="wordmark">Carely</div>
@@ -237,7 +263,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="sb-sec">
     <div class="sb-sec-title">System</div>
-    <div class="sb-item" onclick="nav(this,'all-agents')"><span class="ic">🧠</span> All 14 Agents</div>
+    <div class="sb-item" onclick="nav(this,'all-agents')"><span class="ic">🧠</span> All 20 Agents</div>
     <div class="sb-item" onclick="nav(this,'org-chart')"><span class="ic">🏗️</span> Org Chart</div>
     <div class="sb-item" onclick="nav(this,'health')"><span class="ic">❤️</span> Health &amp; Timeline</div>
     <div class="sb-item" onclick="nav(this,'api-keys')"><span class="ic">⏱</span> API Keys <span class="dot-a"></span></div>
@@ -252,6 +278,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- ══ MAIN ══ -->
 <div class="page-area">
   <div class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu"><span></span><span></span><span></span></button>
     <div class="topbar-left" id="topbar-title">Daily Brief</div>
     <div class="topbar-right">
       <span class="badge-live">LIVE</span>
@@ -265,7 +292,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- ══ DAILY BRIEF ══ -->
   <div class="page active" id="page-daily-brief">
     <div class="ph"><h1>📋 Daily Brief</h1><p>What the business needs today · Agent network status · Open issues</p></div>
-    <div class="alert green">✅ <div><strong>May 6, 2026 — Day 2 Post-Launch.</strong> All 14 agents running on Railway. Ace monitoring signups, churn, and MRR milestones every hour. Check HQ Inbox for alerts.</div></div>
+    <div class="alert green">✅ <div><strong>May 6, 2026 — Day 2 Post-Launch.</strong> All 20 agents running on Railway. Ace monitoring signups, churn, and MRR milestones every hour. Check HQ Inbox for alerts.</div></div>
     <div class="metric-row">
       <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber">0</div><div class="metric-sub">Launch day — first sale pending</div></div>
       <div class="metric"><div class="metric-label">Beta Testers</div><div class="metric-val teal">12</div><div class="metric-sub">Active on closed testing</div></div>
@@ -313,6 +340,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <tr><td><strong>Signals</strong></td><td>Customer pain scan — 7 ICP subreddits for content angles</td><td>Every 2 hours</td><td><span class="pill green">Running</span></td></tr>
           <tr><td><strong>Comp Intel</strong></td><td>Competitor App Store snapshot — rating deltas, version changes</td><td>Every 6 hours</td><td><span class="pill green">Running</span></td></tr>
           <tr><td><strong>Vance</strong></td><td>Daily TikTok/Reels/Shorts script for Prabh to film</td><td>9 AM PST daily</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Refer</strong></td><td>Referral engine — viral loop, reward tracking</td><td>Triggered on high adherence</td><td><span class="pill green">Running</span></td></tr>
+          <tr><td><strong>Hermes</strong></td><td>CEO — reads all metrics, commands all agents, responds to TJ via Telegram</td><td>8 AM + 8 PM PST + on-demand</td><td><span class="pill teal">Active</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -335,7 +364,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber">0</div><div class="metric-sub">Active subscriptions</div></div>
       <div class="metric"><div class="metric-label">Founding Spots</div><div class="metric-val teal">200</div><div class="metric-sub">Left at $5/mo founding price</div></div>
       <div class="metric"><div class="metric-label">Monthly Burn</div><div class="metric-val">~$22</div><div class="metric-sub">All infrastructure</div></div>
-      <div class="metric"><div class="metric-label">Agents Running</div><div class="metric-val green">14</div><div class="metric-sub">All green on Railway</div></div>
+      <div class="metric"><div class="metric-label">Agents Running</div><div class="metric-val green">20</div><div class="metric-sub">All green on Railway</div></div>
     </div>
     <div class="cols">
       <div class="card">
@@ -386,7 +415,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="page" id="page-hq-command">
     <div class="ph"><h1>💬 HQ Command</h1><p>Direct line to the agent network · Notes, directives, decisions</p></div>
     <div class="card">
-      <div class="card-title">🤖 JARVIS — Mission Control <span class="card-sub" id="jarvis-status">connecting...</span></div>
+      <div class="card-title">🧠 Ace — CEO <span class="card-sub" id="jarvis-status">connecting...</span></div>
       <div class="chat-area" id="hq-chat"></div>
       <div class="chat-input-row">
         <input class="chat-input" id="hq-input" type="text" placeholder="Type a directive or note..." />
@@ -1100,7 +1129,7 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
 
   <!-- ══ ALL 14 AGENTS ══ -->
   <div class="page" id="page-all-agents">
-    <div class="ph"><h1>🧠 All 14 Agents</h1><p>3 departments · Patient Care · Growth · Intelligence · Running 24/7 on Railway</p></div>
+    <div class="ph"><h1>🧠 All 20 Agents</h1><p>4 departments · Patient Care · Growth · Intelligence · CEO · Running 24/7 on Railway</p></div>
     <div style="background:linear-gradient(135deg,var(--deep),#0D4D6B);border-radius:14px;padding:20px;margin-bottom:20px;color:white">
       <div style="font-size:0.72rem;font-weight:700;opacity:0.45;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px">Founders</div>
       <div style="font-size:1.05rem;font-weight:900">TJ + Prabh · Carely · BC, Canada</div>
@@ -1147,7 +1176,7 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
       </div>
     </div>
 
-    <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;margin-top:20px">Growth Team (7) — acquisition, retention, content, community, outreach</div>
+    <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;margin-top:20px">Growth Team (8) — acquisition, retention, content, community, outreach</div>
     <div class="agent-grid">
       <div class="agent-card">
         <div class="agent-name">Nina</div>
@@ -1187,24 +1216,64 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
       </div>
       <div class="agent-card">
         <div class="agent-name">Scout</div>
-        <div class="agent-role">SEO · Google IndexNow · On every deploy</div>
+        <div class="agent-role">SEO + ASO · Google IndexNow · Weekly App Store keyword scan</div>
         <div class="agent-status"><span class="dot-on"></span> Running · 7 pages indexed</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">POST /seo/page pings Google IndexNow. Sitemap.xml live. 2 content gaps identified (seniors USA + family caregiver).</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">POST /seo/page pings Google IndexNow on every deploy. Sitemap.xml live. ASO keyword gap report Sundays 7 AM PST.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-name">Vance</div>
+        <div class="agent-role">TikTok / Reels / Shorts Scripts · 9 AM PST daily</div>
+        <div class="agent-status"><span class="dot-on"></span> Running · Scripts → Prabh's Telegram</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">7 daily content themes rotating. 150-word scripts written for Prabh to film. Emotional hooks, caregiver angle.</div>
       </div>
     </div>
 
-    <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;margin-top:20px">Intelligence (1) — Ace sees the whole board and reports to TJ</div>
+    <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;margin-top:20px">Intelligence (5) — world signals, competitor tracking, business alerts</div>
     <div class="agent-grid">
       <div class="agent-card" style="border-left-color:var(--purple)">
-        <div class="agent-name">Ace</div>
+        <div class="agent-name">Ace Director</div>
         <div class="agent-role">Business Intelligence · Daily Brief · Proactive Alerts · Sunday Reflection</div>
-        <div class="agent-status"><span class="dot-on"></span> 8 AM PST daily brief · Hourly proactive alerts · Sunday 9 AM reflection</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">MRR gap, at-risk trials, agent errors, conversion rate — all via Telegram to TJ. Never says "all good" unless it's true.</div>
+        <div class="agent-status"><span class="dot-on"></span> 8 AM PST brief · Hourly proactive alerts · Sunday 9 AM reflection</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">MRR gap, at-risk trials, agent errors, conversion rate — Telegram to TJ. Writes real directives to every agent. Never says "all good" unless true.</div>
+      </div>
+      <div class="agent-card blue">
+        <div class="agent-name">Oracle</div>
+        <div class="agent-role">World Intelligence · News + Reddit ICP signals · Every 30 min</div>
+        <div class="agent-status"><span class="dot-on"></span> Running continuously</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Monitors caregiving, eldercare, medication news. Scans for signals that change strategy. Feeds Ace Director.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-name">Signals</div>
+        <div class="agent-role">Customer Pain Scan · 7 ICP subreddits · Every 2 hours</div>
+        <div class="agent-status"><span class="dot-on"></span> Running</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Finds caregivers posting about exactly the problems Carely solves. Surfaces content angles and acquisition triggers.</div>
+      </div>
+      <div class="agent-card amber">
+        <div class="agent-name">Comp Intel</div>
+        <div class="agent-role">Competitor Tracking · App Store snapshots · Every 6 hours</div>
+        <div class="agent-status"><span class="dot-on"></span> Running</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Tracks rating deltas + version changes for top 5 medication reminder apps. Alerts TJ to threats + openings.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-name">Refer</div>
+        <div class="agent-role">Referral Engine · Viral loop · Reward tracking</div>
+        <div class="agent-status"><span class="dot-on"></span> Running</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Detects high-adherence users for referral asks. Tracks share codes. Rewards successful referrers. Low-CAC acquisition flywheel.</div>
+      </div>
+    </div>
+
+    <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;margin-top:20px">CEO Layer (1) — the brain that commands all 19 agents</div>
+    <div class="agent-grid">
+      <div class="agent-card" style="border-left-color:var(--deep);background:linear-gradient(135deg,var(--deep) 0%,#0D4D6B 100%)">
+        <div class="agent-name" style="color:white">Hermes · CEO</div>
+        <div class="agent-role" style="color:rgba(255,255,255,0.6)">NousResearch · Telegram + Dashboard · 8AM / 8PM + on-demand</div>
+        <div class="agent-status" style="color:rgba(255,255,255,0.8)"><span class="dot-on"></span> Running on Mac → Railway</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:8px">Reads all metrics. Reads inbox. Fires agents. Decides what changes. Morning brief + EOD review + responds to TJ's Telegram messages in real time. This is the CEO.</div>
       </div>
     </div>
 
     <div style="margin-top:20px;padding:16px 20px;background:var(--light);border-radius:12px;font-size:0.82rem;color:var(--deep)">
-      <strong>How they connect:</strong> Frank fires → patient taps → Maya checks 30m later → if missed, Cara alerts caregiver → Grace checks in next morning as Elara. Meanwhile: Ace watches the MRR gap and fires TJ an alert if a trial expires unconverted. Lena follows up. Nina nurtures. The whole loop is automated.
+      <strong>How they connect:</strong> Frank fires → patient taps → Maya checks 30m later → if missed, Cara alerts caregiver → Grace checks in next morning as Elara. Meanwhile: Ace Director watches MRR gap and fires TJ an alert if a trial expires unconverted. Lena follows up. Nina nurtures. Hermes reads all of it every morning and tells TJ exactly what needs to change today.
     </div>
   </div>
 
@@ -1474,6 +1543,21 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
 </div><!-- end page-area -->
 
 <script>
+// Sidebar toggle (mobile)
+function toggleSidebar() {
+  var sb = document.getElementById('sidebar');
+  var ov = document.getElementById('sb-overlay');
+  if (!sb) return;
+  sb.classList.toggle('open');
+  if (ov) ov.classList.toggle('visible', sb.classList.contains('open'));
+}
+function closeSidebar() {
+  var sb = document.getElementById('sidebar');
+  var ov = document.getElementById('sb-overlay');
+  if (sb) sb.classList.remove('open');
+  if (ov) ov.classList.remove('visible');
+}
+
 function nav(el, id) {
   document.querySelectorAll('.sb-item').forEach(function(i){ i.classList.remove('active'); });
   el.classList.add('active');
@@ -1482,6 +1566,7 @@ function nav(el, id) {
   var label = el.querySelector('.ic') ? el.textContent.trim() : el.textContent.trim();
   document.getElementById('topbar-title').textContent = label.replace(/[●▸]/g,'').trim();
   document.querySelector('.page-area').scrollTo({ top: 0, behavior: 'smooth' });
+  closeSidebar();
 }
 
 function switchTab(el, id) {
@@ -1507,10 +1592,10 @@ setInterval(tick, 1000);
   row.className = 'chat-row';
   var sender = document.createElement('div');
   sender.className = 'chat-sender';
-  sender.textContent = 'JARVIS · Mission Control';
+  sender.textContent = 'Ace · CEO';
   var bubble = document.createElement('div');
   bubble.className = 'chat-bubble chat-agent';
-  bubble.textContent = 'Good morning TJ. 14 agents running on Railway. Ace is watching every hour — signups, churn, MRR milestones. Frank firing dose reminders continuously. Grace did morning check-ins at 10 AM UTC. Check HQ Inbox for alerts. What do you need?';
+  bubble.textContent = 'Good morning TJ. 20 agents running on Railway. I\'m watching signups, churn, and MRR milestones every hour. Frank firing dose reminders continuously. Grace ran morning check-ins at 10 AM UTC. Check HQ Inbox for alerts. What do you need?';
   row.appendChild(sender);
   row.appendChild(bubble);
   chat.appendChild(row);
@@ -1541,7 +1626,7 @@ function sendHQ() {
 
   appendChatMsg('TJ · CEO', text, true);
 
-  var thinkingBubble = appendChatMsg('JARVIS · Mission Control', '...', false);
+  var thinkingBubble = appendChatMsg('Ace · CEO', '...', false);
 
   var BACKEND = 'https://carely-backend-production.up.railway.app';
   var statusEl = document.getElementById('jarvis-status');
@@ -1572,7 +1657,7 @@ function sendHQ() {
     } else if (t.match(/reddit/)) {
       reply = 'Rex (Reddit) ran 4 monitor cycles today. Drafts pushed to Approvals queue for Prabh to review before posting.';
     } else if (t.match(/railway|backend|server/)) {
-      reply = 'Backend is green on Railway. 20 agents confirmed running — 14 product/marketing agents + Oracle (30min world intel), Signals (2hr ICP scan), Comp Intel (6hr App Store), Vance (daily video scripts), Ace EOD (8PM strategic scan). No errors in logs.';
+      reply = 'Backend is green on Railway. All 20 agents confirmed running — 8 patient care + 6 growth + 4 intelligence + Ace director + Hermes CEO. No errors in logs.';
     } else if (t.match(/blaze|launch|email blast/)) {
       reply = 'Blaze fired May 5 — launch email to full Mailchimp waitlist. Mission complete. Will fire again for 100-customer milestone.';
     } else if (t.match(/ios|apple|duns/)) {
@@ -1611,7 +1696,7 @@ function sendHQ() {
     } else if (t.match(/seo|scout|sitemap|indexnow/)) {
       reply = 'Scout pinged all 7 blog URLs to Google IndexNow on last deploy. 2 content gaps remain: "seniors USA" and "family caregiver".';
     } else {
-      var defaults = ['Got it. Check the relevant page in HQ for live data.','Logged. All 14 agents are green right now.','Noted. Ace will include this in tomorrow\'s brief.'];
+      var defaults = ['Got it. Check the relevant page in HQ for live data.','Logged. All 20 agents are green right now.','Noted. I\'ll include this in tomorrow\'s brief.'];
       reply = defaults[Math.floor(Math.random()*defaults.length)];
     }
     thinkingBubble.textContent = reply;
@@ -1768,7 +1853,9 @@ document.addEventListener('keydown', function(e) {
     ace:'#7C3AED',elara:'#02C39A',frank:'#2563EB',grace:'#D97706',
     maya:'#DC2626',nina:'#059669',blaze:'#F97316',lena:'#EC4899',
     scout:'#0891B2',rex:'#B91C1C',leo:'#1D4ED8',cara:'#9333EA',
-    'dr. bridge':'#065F46','dr.bridge':'#065F46',cole:'#92400E',jarvis:'#028090'
+    'dr. bridge':'#065F46','dr.bridge':'#065F46',cole:'#92400E',
+    oracle:'#0D4D6B',signals:'#059669',vance:'#9333EA',refer:'#D97706',
+    hermes:'#0B2D3D','comp intel':'#DC2626'
   };
 
   var TYPE_LABELS = { action:'ACTION', alert:'ALERT', success:'SUCCESS', info:'INFO', metric:'METRIC' };
@@ -1881,7 +1968,7 @@ document.addEventListener('keydown', function(e) {
         tbl.className='tbl';
         var thead = document.createElement('thead');
         var hrow = document.createElement('tr');
-        ['Name','Email','Plan','Joined','Last Active','Trial Ends'].forEach(function(h){
+        ['Name','Email','Plan','Joined','Trial Ends'].forEach(function(h){
           var th=document.createElement('th');th.textContent=h;hrow.appendChild(th);
         });
         thead.appendChild(hrow);tbl.appendChild(thead);
@@ -1893,7 +1980,6 @@ document.addEventListener('keydown', function(e) {
             u.email,
             u.plan,
             u.created_at?u.created_at.slice(0,10):'—',
-            u.last_active_at?u.last_active_at.slice(0,10):'—',
             u.trial_ends_at?u.trial_ends_at.slice(0,10):'—'
           ];
           cells.forEach(function(v,i){
