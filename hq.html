@@ -415,7 +415,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="page" id="page-hq-command">
     <div class="ph"><h1>💬 HQ Command</h1><p>Direct line to the agent network · Notes, directives, decisions</p></div>
     <div class="card">
-      <div class="card-title">🧠 Ace — CEO <span class="card-sub" id="jarvis-status">connecting...</span></div>
+      <div class="card-title">🧠 Ace — CEO <span class="card-sub" id="ace-status">connecting...</span></div>
       <div class="chat-area" id="hq-chat"></div>
       <div class="chat-input-row">
         <input class="chat-input" id="hq-input" type="text" placeholder="Type a directive or note..." />
@@ -1629,9 +1629,9 @@ function sendHQ() {
   var thinkingBubble = appendChatMsg('Ace · CEO', '...', false);
 
   var BACKEND = 'https://carely-backend-production.up.railway.app';
-  var statusEl = document.getElementById('jarvis-status');
+  var statusEl = document.getElementById('ace-status');
 
-  fetch(BACKEND + '/jarvis/chat', {
+  fetch(BACKEND + '/ace/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-carely-secret': 'carely-admin-6add43330d2313d8' },
     body: JSON.stringify({ message: text, userId: 'tj-hq', context: 'hq-command' })
