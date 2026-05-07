@@ -579,36 +579,62 @@ function stripMarkdown(text) {
     .trim();
 }
 
-function jarvisSpeak(text) {
-  if (voiceMuted || !window.speechSynthesis) return;
+var currentAudio = null;
+
+function browserSpeakFallback(text) {
+  if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   var clean = stripMarkdown(text);
   if (clean.length > 600) clean = clean.slice(0, 600) + '...';
   var utt = new SpeechSynthesisUtterance(clean);
-  utt.lang   = 'en-GB';
-  utt.pitch  = 0.78;
-  utt.rate   = 0.92;
-  utt.volume = 1;
+  utt.lang = 'en-GB'; utt.pitch = 0.78; utt.rate = 0.92; utt.volume = 1;
   function pickVoice() {
     var voices = window.speechSynthesis.getVoices();
     var preferred = ['Daniel', 'Google UK English Male', 'Microsoft George', 'Microsoft David'];
     for (var i = 0; i < preferred.length; i++) {
-      var match = null;
       for (var j = 0; j < voices.length; j++) {
-        if (voices[j].name.indexOf(preferred[i]) !== -1) { match = voices[j]; break; }
+        if (voices[j].name.indexOf(preferred[i]) !== -1) { utt.voice = voices[j]; break; }
       }
-      if (match) { utt.voice = match; break; }
+      if (utt.voice) break;
     }
   }
-  if (window.speechSynthesis.getVoices().length) {
-    pickVoice();
-  } else {
-    window.speechSynthesis.onvoiceschanged = pickVoice;
-  }
+  if (window.speechSynthesis.getVoices().length) pickVoice();
+  else window.speechSynthesis.onvoiceschanged = pickVoice;
   utt.onstart = function() { setOrbState('speaking'); };
   utt.onend   = function() { setOrbState(null); };
   utt.onerror = function() { setOrbState(null); };
   window.speechSynthesis.speak(utt);
+}
+
+async function jarvisSpeak(text) {
+  if (voiceMuted) return;
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+
+  setOrbState('speaking');
+
+  try {
+    var r = await fetch(BACKEND + '/jarvis/speak', {
+      method: 'POST',
+      headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text }),
+    });
+
+    if (!r.ok) throw new Error('ElevenLabs proxy failed: ' + r.status);
+
+    var blob = await r.blob();
+    var url  = URL.createObjectURL(blob);
+    var audio = new Audio(url);
+    currentAudio = audio;
+
+    audio.onended = function() { setOrbState(null); URL.revokeObjectURL(url); currentAudio = null; };
+    audio.onerror = function() { setOrbState(null); URL.revokeObjectURL(url); currentAudio = null; };
+
+    await audio.play();
+  } catch (err) {
+    console.warn('[JARVIS voice] ElevenLabs failed, falling back to browser TTS:', err);
+    browserSpeakFallback(text);
+  }
 }
 
 function toggleMute() {
@@ -635,6 +661,7 @@ function initRecognition() {
     document.getElementById('listen-status').classList.add('show');
     setOrbState('listening');
     if (window.speechSynthesis) window.speechSynthesis.cancel();
+    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
   };
   r.onresult = function(e) {
     var transcript = '';
