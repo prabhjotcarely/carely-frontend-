@@ -168,22 +168,21 @@
     }
     .elara-ring {
       width: 290px; height: 290px; border-radius: 50%;
-      background: radial-gradient(circle at 38% 32%, rgba(0,255,210,0.18) 0%, rgba(2,128,144,0.22) 50%, rgba(13,51,71,0.55) 100%);
-      border: 4px solid;
-      border-color: #02C39A;
+      background: linear-gradient(160deg, #e4fff8 0%, #f5fffe 45%, #ffffff 100%);
+      border: 3px solid #02C39A;
       box-shadow:
-        0 0 0 8px rgba(2,195,154,0.12),
-        0 0 0 18px rgba(2,195,154,0.06),
-        0 24px 64px rgba(0,201,167,0.38);
+        0 0 0 7px rgba(2,195,154,0.12),
+        0 0 0 16px rgba(2,195,154,0.06),
+        0 28px 72px rgba(0,201,167,0.4);
       display: flex; align-items: flex-end; justify-content: center;
       overflow: hidden;
       animation: ringPulse 3.8s ease-in-out infinite;
     }
     @keyframes ringPulse {
-      0%,100% { box-shadow: 0 0 0 8px rgba(2,195,154,0.12), 0 0 0 18px rgba(2,195,154,0.06), 0 24px 64px rgba(0,201,167,0.38); }
-      50%      { box-shadow: 0 0 0 12px rgba(2,195,154,0.18), 0 0 0 26px rgba(2,195,154,0.09), 0 24px 80px rgba(0,201,167,0.55); }
+      0%,100% { box-shadow: 0 0 0 7px rgba(2,195,154,0.12), 0 0 0 16px rgba(2,195,154,0.06), 0 28px 72px rgba(0,201,167,0.4); }
+      50%      { box-shadow: 0 0 0 11px rgba(2,195,154,0.18), 0 0 0 24px rgba(2,195,154,0.09), 0 28px 90px rgba(0,201,167,0.56); }
     }
-    .elara-ring img { width: 86%; display: block; margin-bottom: -4px; }
+    .elara-ring img { width: 90%; display: block; margin-bottom: -4px; }
     .speech-bubble {
       position: absolute; left: -110px; bottom: 68px; z-index: 3;
       background: rgba(255,255,255,0.97); color: var(--ink);
@@ -512,6 +511,60 @@
     }
     .snum.popped { animation: numPop 620ms cubic-bezier(.34,1.4,.64,1) both; }
 
+    /* APP SCREENSHOTS */
+    .screens-row { display: flex; gap: 28px; justify-content: center; align-items: flex-start; flex-wrap: wrap; }
+    .phone-frame {
+      width: 220px; flex-shrink: 0;
+      background: #1a1a2e; border-radius: 34px;
+      padding: 10px; box-shadow: 0 28px 60px rgba(0,0,0,0.22), 0 4px 16px rgba(0,0,0,0.12);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      transition: transform 260ms cubic-bezier(.22,1,.36,1);
+    }
+    .phone-frame:hover { transform: translateY(-8px); }
+    .phone-frame:nth-child(2) { margin-top: 28px; }
+    .pf-notch { width: 60px; height: 18px; background: #1a1a2e; border-radius: 0 0 12px 12px; margin: 0 auto 6px; }
+    .pf-screen { background: #f4f9f8; border-radius: 24px; overflow: hidden; min-height: 360px; }
+    .pf-bar { background: #fff; padding: 12px 13px; border-bottom: 1px solid #e8f0ef; display: flex; align-items: center; justify-content: space-between; }
+    .pf-bar-left { display: flex; align-items: center; gap: 9px; }
+    .pf-av { width: 32px; height: 32px; border-radius: 50%; background: rgba(0,201,167,0.1); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .pf-title { font-size: 0.78rem; font-weight: 800; color: #0a1f2e; }
+    .pf-sub { font-size: 0.62rem; color: #5a8090; margin-top: 1px; }
+    .pf-streak { padding: 3px 9px; border-radius: 999px; background: rgba(0,201,167,0.1); color: #007a72; font-size: 0.65rem; font-weight: 800; }
+    .pf-body { padding: 10px; display: flex; flex-direction: column; gap: 7px; }
+    .pf-med { display: flex; align-items: center; gap: 9px; padding: 9px 10px; background: #fff; border-radius: 10px; border: 1px solid #e8f0ef; }
+    .pf-med.taken { border-left: 3px solid #02C39A; }
+    .pf-med.due { border-left: 3px solid #FFB830; }
+    .pf-med.upcoming { border-left: 3px solid #e4eeed; }
+    .pf-time { font-size: 0.6rem; font-weight: 800; color: #5a8090; width: 26px; flex-shrink: 0; text-align: center; }
+    .pf-med-info { flex: 1; min-width: 0; }
+    .pf-med-name { font-size: 0.72rem; font-weight: 700; color: #0a1f2e; }
+    .pf-med-note { font-size: 0.6rem; color: #5a8090; margin-top: 1px; }
+    .pf-tick { font-size: 0.75rem; color: #02C39A; font-weight: 900; }
+    .pf-due-dot { width: 8px; height: 8px; border-radius: 50%; background: #FFB830; flex-shrink: 0; }
+    .pf-elara-msg { display: flex; align-items: flex-start; gap: 7px; padding: 9px 10px; background: rgba(0,201,167,0.07); border-radius: 10px; border: 1px solid rgba(0,201,167,0.15); font-size: 0.65rem; color: #0a1f2e; line-height: 1.55; }
+    .pf-elara-msg strong { color: #007a72; }
+    /* vitals */
+    .pf-vital-card { background: #fff; border-radius: 10px; padding: 10px; border: 1px solid #e8f0ef; }
+    .pf-vital-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.67rem; font-weight: 700; color: #0a1f2e; }
+    .pf-vital-val { font-weight: 900; font-size: 0.72rem; }
+    .pf-vital-val.good { color: #02C39A; }
+    .pf-vital-val.warn { color: #e6a000; }
+    .pf-vital-note { font-size: 0.6rem; color: #5a8090; margin-top: 5px; }
+    .pf-sparkline { height: 28px; margin: 4px 0; }
+    .pf-bar-chart { display: flex; align-items: flex-end; gap: 2px; height: 100%; }
+    .pf-bar-chart > div { flex: 1; background: #d4eee9; border-radius: 2px 2px 0 0; }
+    /* report */
+    .pf-report-stat-row { display: flex; gap: 4px; margin-bottom: 8px; }
+    .pf-report-stat { flex: 1; background: #fff; border-radius: 9px; padding: 8px 6px; text-align: center; border: 1px solid #e8f0ef; }
+    .pf-report-num { font-size: 1rem; font-weight: 900; color: #02C39A; line-height: 1; }
+    .pf-report-lbl { font-size: 0.56rem; color: #5a8090; margin-top: 2px; }
+    .pf-report-row { display: flex; align-items: center; gap: 6px; font-size: 0.6rem; color: #0a1f2e; font-weight: 600; padding: 5px 0; }
+    .pf-report-bar { flex: 1; height: 5px; background: #e4eeed; border-radius: 999px; overflow: hidden; }
+    .pf-report-bar > div { height: 100%; background: linear-gradient(90deg, #02C39A, #00A896); border-radius: 999px; }
+    .pf-report-pct { font-size: 0.6rem; font-weight: 800; color: #02C39A; width: 26px; text-align: right; }
+    .pf-send-btn { width: 100%; margin-top: 8px; padding: 9px; background: linear-gradient(135deg, #02C39A, #028090); color: #fff; font-size: 0.68rem; font-weight: 800; border-radius: 8px; border: none; cursor: pointer; }
+    .pf-label { text-align: center; margin-top: 12px; font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.45); letter-spacing: 0.03em; }
+
     /* RESPONSIVE */
     @media (max-width:1024px) {
       .nav-links { display: none; }
@@ -789,6 +842,97 @@
         <p>Weekly adherence reports, vitals trends, streak tracking, and doctor-ready summaries — all generated automatically.</p>
         <div class="step-tag"><span class="live-dot"></span> Doctor-ready on demand</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- APP SCREENSHOTS -->
+<section class="s" id="appscreens" style="background:#f5fafa;" data-state="presenting" data-title="See the app" data-msg="This is exactly what your family will see. Clean, simple, warm.">
+  <div class="s-inner">
+    <div class="r0" style="text-align:center;max-width:600px;margin:0 auto 52px;">
+      <div class="label" style="background:rgba(0,168,150,0.07);border-color:rgba(0,168,150,0.22);margin:0 auto 14px;">Inside the app</div>
+      <h2 class="sh" style="color:#0d1f2a;">A glimpse of what<br><em>your family will use.</em></h2>
+      <p style="color:#5a7a88;font-size:1rem;line-height:1.75;margin-top:10px;">No clutter. No confusion. Just Elara, doing her job quietly every single day.</p>
+    </div>
+    <div class="screens-row r0">
+
+      <!-- SCREEN 1: Today's meds -->
+      <div class="phone-frame">
+        <div class="pf-notch"></div>
+        <div class="pf-screen">
+          <div class="pf-bar">
+            <div class="pf-bar-left">
+              <div class="pf-av"><img src="elara-3d.png" alt="E" style="width:28px;height:28px;object-fit:contain;"></div>
+              <div><div class="pf-title">Today</div><div class="pf-sub">May 7 · 3 meds</div></div>
+            </div>
+            <div class="pf-streak">🔥 6</div>
+          </div>
+          <div class="pf-body">
+            <div class="pf-med taken"><div class="pf-time">8 AM</div><div class="pf-med-info"><div class="pf-med-name">Lisinopril 10mg</div><div class="pf-med-note">Morning · Blood pressure</div></div><div class="pf-tick">✓</div></div>
+            <div class="pf-med due"><div class="pf-time">2 PM</div><div class="pf-med-info"><div class="pf-med-name">Vitamin D3</div><div class="pf-med-note">Afternoon · Due soon</div></div><div class="pf-due-dot"></div></div>
+            <div class="pf-med upcoming"><div class="pf-time">6 PM</div><div class="pf-med-info"><div class="pf-med-name">Metformin 500mg</div><div class="pf-med-note">With dinner</div></div></div>
+            <div class="pf-elara-msg"><img src="elara-3d.png" alt="E" style="width:22px;height:22px;object-fit:contain;flex-shrink:0;"><span><strong>Elara —</strong> Great morning! 1 of 3 done. BP logged, looking normal.</span></div>
+          </div>
+        </div>
+        <div class="pf-label">Today's schedule</div>
+      </div>
+
+      <!-- SCREEN 2: Vitals -->
+      <div class="phone-frame">
+        <div class="pf-notch"></div>
+        <div class="pf-screen">
+          <div class="pf-bar">
+            <div class="pf-bar-left">
+              <div style="font-size:1.3rem;">❤️</div>
+              <div><div class="pf-title">Vitals</div><div class="pf-sub">Last 7 days</div></div>
+            </div>
+            <div class="pf-streak" style="background:#fff0f0;color:#e05555;">Log</div>
+          </div>
+          <div class="pf-body">
+            <div class="pf-vital-card">
+              <div class="pf-vital-hd"><span>Blood Pressure</span><span class="pf-vital-val good">118/76</span></div>
+              <div class="pf-sparkline"><div class="pf-bar-chart"><div style="height:55%"></div><div style="height:62%"></div><div style="height:58%"></div><div style="height:70%"></div><div style="height:65%"></div><div style="height:72%"></div><div style="height:68%;background:#02C39A;"></div></div></div>
+              <div class="pf-vital-note">Avg 120/78 this week · Normal range</div>
+            </div>
+            <div class="pf-vital-card">
+              <div class="pf-vital-hd"><span>Blood Sugar</span><span class="pf-vital-val warn">6.4 mmol/L</span></div>
+              <div class="pf-sparkline"><div class="pf-bar-chart"><div style="height:60%"></div><div style="height:68%"></div><div style="height:72%"></div><div style="height:65%"></div><div style="height:70%"></div><div style="height:64%"></div><div style="height:63%;background:#e6a000;"></div></div></div>
+              <div class="pf-vital-note">Post-meal · Slightly elevated</div>
+            </div>
+            <div class="pf-vital-card">
+              <div class="pf-vital-hd"><span>Weight</span><span class="pf-vital-val good">71.2 kg</span></div>
+              <div class="pf-vital-note">Stable · Down 0.4kg from last week</div>
+            </div>
+          </div>
+        </div>
+        <div class="pf-label">Vitals tracker</div>
+      </div>
+
+      <!-- SCREEN 3: Weekly report -->
+      <div class="phone-frame">
+        <div class="pf-notch"></div>
+        <div class="pf-screen">
+          <div class="pf-bar">
+            <div class="pf-bar-left">
+              <div style="font-size:1.3rem;">📋</div>
+              <div><div class="pf-title">Weekly Report</div><div class="pf-sub">Apr 30 – May 7</div></div>
+            </div>
+          </div>
+          <div class="pf-body">
+            <div class="pf-report-stat-row">
+              <div class="pf-report-stat"><div class="pf-report-num">87%</div><div class="pf-report-lbl">Adherence</div></div>
+              <div class="pf-report-stat"><div class="pf-report-num">6</div><div class="pf-report-lbl">Day streak</div></div>
+              <div class="pf-report-stat"><div class="pf-report-num">2</div><div class="pf-report-lbl">Missed doses</div></div>
+            </div>
+            <div class="pf-report-row"><span>Lisinopril 10mg</span><div class="pf-report-bar"><div style="width:93%"></div></div><span class="pf-report-pct">93%</span></div>
+            <div class="pf-report-row"><span>Metformin 500mg</span><div class="pf-report-bar"><div style="width:86%"></div></div><span class="pf-report-pct">86%</span></div>
+            <div class="pf-report-row"><span>Vitamin D3</span><div class="pf-report-bar"><div style="width:79%"></div></div><span class="pf-report-pct">79%</span></div>
+            <button class="pf-send-btn">Send to Dr. Mehta →</button>
+          </div>
+        </div>
+        <div class="pf-label">Doctor-ready report</div>
+      </div>
+
     </div>
   </div>
 </section>
