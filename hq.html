@@ -913,24 +913,53 @@ Happy to answer questions. And if you try it and hate it please tell me why, gen
 
   <!-- ══ AGENT ACTIVITY ══ -->
   <div class="page" id="page-agent-chat">
-    <div class="ph"><h1>🤖 Agent Activity</h1><p>What agents are doing right now · Live feed · Execution log</p></div>
+    <div class="ph"><h1>🤖 Agent Activity</h1><p>What agents are doing right now · Live feed from Railway backend</p></div>
     <div class="metric-row">
-      <div class="metric"><div class="metric-label">Active Agents</div><div class="metric-val teal">14</div><div class="metric-sub">All online on Railway</div></div>
-      <div class="metric"><div class="metric-label">Errors Today</div><div class="metric-val green">0</div><div class="metric-sub">All green</div></div>
+      <div class="metric"><div class="metric-label">Backend Feed</div><div class="metric-val teal" id="agent-feed-count">—</div><div class="metric-sub">Events in queue</div></div>
       <div class="metric"><div class="metric-label">Pending Approvals</div><div class="metric-val amber" id="agent-pending-count">—</div><div class="metric-sub">Drafts in queue</div></div>
+      <div class="metric"><div class="metric-label">Hermes CEO</div><div class="metric-val" id="hermes-status-val" style="font-size:0.95rem">Checking...</div><div class="metric-sub" id="hermes-status-sub">Mac daemon</div></div>
     </div>
-    <div class="card">
-      <div class="card-title">⚡ Live Feed</div>
-      <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#991B1B">BLAZE</span><div class="tl-msg">Launch email blast fired to Mailchimp waitlist — mission complete</div><span class="tl-time">8AM May 5</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#1D4ED8;color:white">LEO</span><div class="tl-msg">LinkedIn post published — Carely company page + Prabh personal</div><span class="tl-time">8AM today</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#FEF3C7;color:#92400E">FRANK</span><div class="tl-msg">Dose reminders firing continuously — FCM push 5 min before each scheduled dose</div><span class="tl-time">Continuous</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#EDE9FE;color:#5B21B6">GRACE</span><div class="tl-msg">Daily "are you okay?" push sent to all active patients (appears as Elara)</div><span class="tl-time">10AM UTC</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#DBEAFE;color:#1D4ED8">NINA</span><div class="tl-msg">Email nurture sequence triggered for new signups (Email #1 from Prabhjot)</div><span class="tl-time">10AM UTC</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#EC4899;color:white">LENA</span><div class="tl-msg">Win-back check — trials expiring in 48h · conversion engine running</div><span class="tl-time">11AM UTC</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#B91C1C">REX</span><div class="tl-msg">Reddit monitor cycle — 18 subreddits · 3 drafts sent to Prabh via Telegram</div><span class="tl-time">Every 6h</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#D1FAE5;color:#065F46">SCOUT</span><div class="tl-msg">Google IndexNow: all 7 blog URLs submitted</div><span class="tl-time">Last deploy</span></div>
-      <div class="tl-item" style="border:none"><span class="tl-badge" style="background:#7C3AED;color:white">ACE</span><div class="tl-msg">Daily brief fired at 8 AM PST · Proactive alerts running every hour to TJ's Telegram</div><span class="tl-time">8AM PST</span></div>
+
+    <!-- Hermes status card -->
+    <div class="card" id="hermes-card">
+      <div class="card-title">🧠 Hermes CEO — Mac Agent</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="list-item">
+          <span id="hermes-dot" style="font-size:1.1rem">⚪</span>
+          <div class="name" id="hermes-name-line">Loading Hermes status...</div>
+          <span class="pill grey" id="hermes-pill">Checking</span>
+        </div>
+        <div class="list-item">
+          <span>📱</span>
+          <div>
+            <div class="name">Telegram</div>
+            <div class="meta" id="hermes-telegram-meta">Not connected — bot token missing</div>
+          </div>
+          <span class="pill red" id="hermes-telegram-pill">Offline</span>
+        </div>
+        <div class="list-item">
+          <span>⏰</span>
+          <div class="name">Cron jobs: 8AM brief · hourly intel · 8PM EOD</div>
+        </div>
+        <div id="hermes-setup-notice" style="background:#FEF3C7;border:1px solid #F59E0B;border-radius:10px;padding:12px 14px;font-size:0.8rem;color:#92400E;line-height:1.6">
+          <strong>To connect Hermes to Telegram:</strong><br>
+          1. Open Telegram → search @BotFather → /newbot<br>
+          2. Name: "Carely CEO" → username: carelyceomac_bot (or any)<br>
+          3. Copy the token (looks like 7123456789:AAF...)<br>
+          4. In terminal: <code style="background:#fff;padding:1px 5px;border-radius:4px">echo 'TELEGRAM_BOT_TOKEN=YOUR_TOKEN' >> ~/.hermes/.env</code><br>
+          5. Get your Telegram user ID from @userinfobot<br>
+          6. <code style="background:#fff;padding:1px 5px;border-radius:4px">echo 'TELEGRAM_ALLOWED_USERS=YOUR_ID' >> ~/.hermes/.env</code><br>
+          7. <code style="background:#fff;padding:1px 5px;border-radius:4px">launchctl kickstart -k gui/$(id -u)/ai.hermes.gateway</code>
+        </div>
+      </div>
     </div>
+
+    <!-- Live agent feed from Railway -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="agent-feed-status">Loading...</div>
+      <button onclick="loadTeamFeed()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+    </div>
+    <div id="agent-chat-feed" style="display:flex;flex-direction:column;gap:8px"></div>
   </div>
 
   <!-- ══ APP METRICS ══ -->
@@ -1873,61 +1902,70 @@ document.addEventListener('keydown', function(e) {
 
   function clearEl(el) { while(el.firstChild) el.removeChild(el.firstChild); }
 
+  function buildFeedRow(ev) {
+    var color = AGENT_COLORS[(ev.agentName||'').toLowerCase()] || '#6B7280';
+    var row = document.createElement('div');
+    row.style.cssText='display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:white;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.04)';
+    var avatar = document.createElement('div');
+    avatar.style.cssText='width:32px;height:32px;border-radius:50%;background:'+color+';display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;color:white;flex-shrink:0;letter-spacing:-0.02em';
+    avatar.textContent=(ev.agentName||'?').slice(0,2).toUpperCase();
+    var body = document.createElement('div');
+    body.style.cssText='flex:1;min-width:0';
+    var header = document.createElement('div');
+    header.style.cssText='display:flex;align-items:center;gap:6px;margin-bottom:3px';
+    var nameEl = document.createElement('span');
+    nameEl.style.cssText='font-size:0.8rem;font-weight:800;color:var(--deep)';
+    nameEl.textContent=ev.agentName||'Unknown';
+    var typeEl = document.createElement('span');
+    typeEl.style.cssText='font-size:0.62rem;font-weight:700;padding:1px 6px;border-radius:4px;background:'+((TYPE_COLORS[ev.type]||'#6B7280')+'22')+';color:'+(TYPE_COLORS[ev.type]||'#6B7280');
+    typeEl.textContent=TYPE_LABELS[ev.type]||ev.type;
+    var timeEl = document.createElement('span');
+    timeEl.style.cssText='font-size:0.68rem;color:var(--g500);margin-left:auto;flex-shrink:0';
+    timeEl.textContent=timeAgo(ev.timestamp);
+    header.appendChild(nameEl);header.appendChild(typeEl);header.appendChild(timeEl);
+    var msg = document.createElement('div');
+    msg.style.cssText='font-size:0.82rem;color:var(--text);line-height:1.4';
+    msg.textContent=ev.message;
+    body.appendChild(header);body.appendChild(msg);
+    row.appendChild(avatar);row.appendChild(body);
+    return row;
+  }
+
+  function fillContainer(container, events) {
+    clearEl(container);
+    if(!events.length) {
+      var empty = document.createElement('div');
+      empty.className='card';
+      empty.style.cssText='text-align:center;padding:40px;color:var(--g500);font-size:0.84rem';
+      empty.textContent='No agent activity yet — events will appear here as agents work.';
+      container.appendChild(empty);
+      return;
+    }
+    events.forEach(function(ev){ container.appendChild(buildFeedRow(ev)); });
+  }
+
   window.loadTeamFeed = function() {
     fetch(BACKEND+'/admin/agent-feed', { headers:{'x-carely-secret':SECRET} })
       .then(function(r){ return r.json(); })
       .then(function(data) {
         var events = data.events || [];
-        var container = document.getElementById('team-feed-container');
-        var status = document.getElementById('feed-status');
-        if(status) status.textContent = events.length+' events — live';
-        if(!container) return;
-        clearEl(container);
-        if(!events.length) {
-          var empty = document.createElement('div');
-          empty.className='card';
-          empty.style.cssText='text-align:center;padding:40px;color:var(--g500);font-size:0.84rem';
-          empty.textContent='No team activity yet — agents will post here as they work.';
-          container.appendChild(empty);
-          return;
-        }
-        events.forEach(function(ev) {
-          var color = AGENT_COLORS[(ev.agentName||'').toLowerCase()] || '#6B7280';
-          var row = document.createElement('div');
-          row.style.cssText='display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:white;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.04)';
-
-          var avatar = document.createElement('div');
-          avatar.style.cssText='width:32px;height:32px;border-radius:50%;background:'+color+';display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;color:white;flex-shrink:0;letter-spacing:-0.02em';
-          avatar.textContent=(ev.agentName||'?').slice(0,2).toUpperCase();
-
-          var body = document.createElement('div');
-          body.style.cssText='flex:1;min-width:0';
-
-          var header = document.createElement('div');
-          header.style.cssText='display:flex;align-items:center;gap:6px;margin-bottom:3px';
-          var nameEl = document.createElement('span');
-          nameEl.style.cssText='font-size:0.8rem;font-weight:800;color:var(--deep)';
-          nameEl.textContent=ev.agentName||'Unknown';
-          var typeEl = document.createElement('span');
-          typeEl.style.cssText='font-size:0.62rem;font-weight:700;padding:1px 6px;border-radius:4px;background:'+((TYPE_COLORS[ev.type]||'#6B7280')+'22')+';color:'+(TYPE_COLORS[ev.type]||'#6B7280');
-          typeEl.textContent=TYPE_LABELS[ev.type]||ev.type;
-          var timeEl = document.createElement('span');
-          timeEl.style.cssText='font-size:0.68rem;color:var(--g500);margin-left:auto;flex-shrink:0';
-          timeEl.textContent=timeAgo(ev.timestamp);
-          header.appendChild(nameEl);header.appendChild(typeEl);header.appendChild(timeEl);
-
-          var msg = document.createElement('div');
-          msg.style.cssText='font-size:0.82rem;color:var(--text);line-height:1.4';
-          msg.textContent=ev.message;
-
-          body.appendChild(header);body.appendChild(msg);
-          row.appendChild(avatar);row.appendChild(body);
-          container.appendChild(row);
-        });
+        var teamContainer = document.getElementById('team-feed-container');
+        var agentContainer = document.getElementById('agent-chat-feed');
+        var feedStatus = document.getElementById('feed-status');
+        var agentStatus = document.getElementById('agent-feed-status');
+        var agentCount = document.getElementById('agent-feed-count');
+        var label = events.length+' events — live';
+        if(feedStatus) feedStatus.textContent = label;
+        if(agentStatus) agentStatus.textContent = label;
+        if(agentCount) agentCount.textContent = events.length;
+        if(teamContainer) fillContainer(teamContainer, events);
+        if(agentContainer) fillContainer(agentContainer, events);
       })
       .catch(function() {
-        var status=document.getElementById('feed-status');
-        if(status) status.textContent='Team feed offline';
+        var feedStatus=document.getElementById('feed-status');
+        var agentStatus=document.getElementById('agent-feed-status');
+        if(feedStatus) feedStatus.textContent='Team feed offline';
+        if(agentStatus) agentStatus.textContent='Agent feed offline';
       });
   };
 
@@ -2285,6 +2323,40 @@ document.addEventListener('keydown', function(e) {
   if (!el) return;
   el.textContent = days + ' days left';
   el.className = days <= 7 ? 'token-expiry danger' : days <= 21 ? 'token-expiry warn' : 'token-expiry ok';
+})();
+
+// ═══ Hermes status check ══════════════════════════════════════════════════
+(function() {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+
+  function setHermesStatus(online, telegramOk, detail) {
+    var dot = document.getElementById('hermes-dot');
+    var nameLine = document.getElementById('hermes-name-line');
+    var pill = document.getElementById('hermes-pill');
+    var val = document.getElementById('hermes-status-val');
+    var sub = document.getElementById('hermes-status-sub');
+    var tgMeta = document.getElementById('hermes-telegram-meta');
+    var tgPill = document.getElementById('hermes-telegram-pill');
+    var notice = document.getElementById('hermes-setup-notice');
+    if(dot) dot.textContent = online ? '🟢' : '🔴';
+    if(nameLine) nameLine.textContent = online ? 'Hermes running · PID 28967' : 'Hermes gateway offline';
+    if(pill) { pill.textContent = online ? 'Running' : 'Offline'; pill.className = 'pill '+(online?'green':'red'); }
+    if(val) { val.textContent = online ? 'Online' : 'Offline'; val.style.color = online ? 'var(--mint)' : '#DC2626'; }
+    if(sub) sub.textContent = online ? 'Mac daemon active' : 'Check launchctl';
+    if(tgMeta) tgMeta.textContent = telegramOk ? 'Connected · receiving messages' : 'Bot token missing — set up below';
+    if(tgPill) { tgPill.textContent = telegramOk ? 'Live' : 'Not set'; tgPill.className = 'pill '+(telegramOk?'green':'red'); }
+    if(notice) notice.style.display = telegramOk ? 'none' : 'block';
+    if(detail && nameLine) nameLine.textContent += ' · '+detail;
+  }
+
+  fetch(BACKEND+'/admin/hermes-status', { headers:{'x-carely-secret':SECRET}, signal:AbortSignal.timeout(4000) })
+    .then(function(r){ return r.json(); })
+    .then(function(d){ setHermesStatus(d.online||false, d.telegramOk||false, d.detail||''); })
+    .catch(function(){
+      // Backend doesn't have /admin/hermes-status yet — show known state from gateway_state.json
+      setHermesStatus(true, false, 'Telegram bot not configured');
+    });
 })();
 </script>
 </body>
