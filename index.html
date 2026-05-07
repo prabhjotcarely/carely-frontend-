@@ -15,29 +15,32 @@
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
   <script>
-  // Remove grey checkerboard background from Elara images — flood fill from edges
-  function elaraBg(img) {
-    try {
-      var c = document.createElement('canvas'), ctx = c.getContext('2d');
-      c.width = img.naturalWidth; c.height = img.naturalHeight;
-      if (!c.width) return;
-      ctx.drawImage(img, 0, 0);
-      var id = ctx.getImageData(0, 0, c.width, c.height), d = id.data, w = c.width, h = c.height;
-      var vis = new Uint8Array(w * h), q = [];
-      function bg(i) { var r=d[i],g=d[i+1],b=d[i+2]; return Math.abs(r-g)<30&&Math.abs(g-b)<30&&(r+g+b)/3>110; }
-      function push(x,y) { if(x<0||x>=w||y<0||y>=h) return; var p=y*w+x; if(vis[p]) return; vis[p]=1; if(bg(p*4)) q.push(p); }
+  var _eC=null;
+  function elaraBg(img){
+    if(_eC){img.src=_eC;_revealRing(img);return;}
+    try{
+      var c=document.createElement('canvas'),ctx=c.getContext('2d');
+      c.width=img.naturalWidth;c.height=img.naturalHeight;
+      if(!c.width)return;
+      ctx.drawImage(img,0,0);
+      var id=ctx.getImageData(0,0,c.width,c.height),d=id.data,w=c.width,h=c.height;
+      var vis=new Uint8Array(w*h),q=[];
+      function bg(i){var r=d[i],g=d[i+1],b=d[i+2];return Math.abs(r-g)<30&&Math.abs(g-b)<30&&(r+g+b)/3>110;}
+      function push(x,y){if(x<0||x>=w||y<0||y>=h)return;var p=y*w+x;if(vis[p])return;vis[p]=1;if(bg(p*4))q.push(p);}
       for(var x=0;x<w;x++){push(x,0);push(x,h-1);}
       for(var y=1;y<h-1;y++){push(0,y);push(w-1,y);}
       while(q.length){var p=q.pop();d[p*4+3]=0;var px=p%w,py=(p/w)|0;push(px-1,py);push(px+1,py);push(px,py-1);push(px,py+1);}
-      ctx.putImageData(id, 0, 0);
-      var dataUrl = c.toDataURL('image/png');
-      img.src = dataUrl;
-      // After new src loads, show the container
-      img.addEventListener('load', function() {
-        var ring = img.closest('.elara-ring');
-        if (ring) { ring.style.opacity = '1'; ring.style.transition = 'opacity 0.3s ease'; }
-      }, {once:true});
-    } catch(e) {}
+      ctx.putImageData(id,0,0);
+      _eC=c.toDataURL('image/png');
+      img.src=_eC;
+    }catch(e){}
+    _revealRing(img);
+  }
+  function _revealRing(img){
+    img.addEventListener('load',function(){
+      var r=img.closest('.elara-ring');
+      if(r){r.style.opacity='1';r.style.transition='opacity 0.35s ease';}
+    },{once:true});
   }
   </script>
 
@@ -678,7 +681,7 @@
       <div class="hero-glow"></div>
       <div class="hero-elara" id="heroWrap">
         <div class="elara-ring">
-          <img src="elara-3d.png" alt="Elara" onload="elaraBg(this)">
+          <img src="elara.webp" alt="Elara" onload="elaraBg(this)">
         </div>
       </div>
       <div class="speech-bubble">
@@ -797,7 +800,7 @@
         <div class="vitals-phone">
           <div class="vscreen">
             <div class="vbar">
-              <img src="elara-3d.png" alt="Elara">
+              <img src="elara.webp" alt="Elara">
               <div><div class="vbar-title">Elara</div><div class="vbar-sub">Daily vitals + meds</div></div>
               <div class="vbar-online">Online</div>
             </div>
@@ -890,7 +893,7 @@
         <div class="pf-screen">
           <div class="pf-bar">
             <div class="pf-bar-left">
-              <div class="pf-av"><img src="elara-3d.png" alt="E" style="width:28px;height:28px;object-fit:contain;"></div>
+              <div class="pf-av"><img src="elara.webp" alt="E" style="width:28px;height:28px;object-fit:contain;"></div>
               <div><div class="pf-title">Today</div><div class="pf-sub">May 7 · 3 meds</div></div>
             </div>
             <div class="pf-streak">🔥 6</div>
@@ -899,7 +902,7 @@
             <div class="pf-med taken"><div class="pf-time">8 AM</div><div class="pf-med-info"><div class="pf-med-name">Lisinopril 10mg</div><div class="pf-med-note">Morning · Blood pressure</div></div><div class="pf-tick">✓</div></div>
             <div class="pf-med due"><div class="pf-time">2 PM</div><div class="pf-med-info"><div class="pf-med-name">Vitamin D3</div><div class="pf-med-note">Afternoon · Due soon</div></div><div class="pf-due-dot"></div></div>
             <div class="pf-med upcoming"><div class="pf-time">6 PM</div><div class="pf-med-info"><div class="pf-med-name">Metformin 500mg</div><div class="pf-med-note">With dinner</div></div></div>
-            <div class="pf-elara-msg"><img src="elara-3d.png" alt="E" style="width:22px;height:22px;object-fit:contain;flex-shrink:0;"><span><strong>Elara —</strong> Great morning! 1 of 3 done. BP logged, looking normal.</span></div>
+            <div class="pf-elara-msg"><img src="elara.webp" alt="E" style="width:22px;height:22px;object-fit:contain;flex-shrink:0;"><span><strong>Elara —</strong> Great morning! 1 of 3 done. BP logged, looking normal.</span></div>
           </div>
         </div>
         <div class="pf-label">Today's schedule</div>
@@ -983,30 +986,30 @@
           <button class="dtab" data-tab="streak">Streak win</button>
         </div>
         <div class="dpanel on" data-panel="remind">
-          <div class="dmsg r0"><div class="dmsg-hd"><img class="dmsg-av" src="elara-3d.png" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>Good morning! It is 8:00 AM and your Lisinopril 10mg is scheduled for right now. How are you feeling today? I am right here if you need me.</p></div>
+          <div class="dmsg r0"><div class="dmsg-hd"><img class="dmsg-av" src="elara.webp" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>Good morning! It is 8:00 AM and your Lisinopril 10mg is scheduled for right now. How are you feeling today? I am right here if you need me.</p></div>
           <div class="dbtns r0"><button class="dbtn p">✓ I took it</button><button class="dbtn">⏰ Remind me in 30 min</button><button class="dbtn">✗ Skipping today</button></div>
         </div>
         <div class="dpanel" data-panel="missed">
-          <div class="dmsg"><div class="dmsg-hd"><img class="dmsg-av" src="elara-3d.png" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>No worries at all — missing a dose happens. Your evening Metformin was due 2 hours ago. Would you like me to notify Sarah, or would you prefer to handle it yourself?</p></div>
+          <div class="dmsg"><div class="dmsg-hd"><img class="dmsg-av" src="elara.webp" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>No worries at all — missing a dose happens. Your evening Metformin was due 2 hours ago. Would you like me to notify Sarah, or would you prefer to handle it yourself?</p></div>
           <div class="dbtns"><button class="dbtn p">Notify Sarah</button><button class="dbtn">I will handle it</button><button class="dbtn">Mark as skipped</button></div>
         </div>
         <div class="dpanel" data-panel="report">
-          <div class="dmsg"><div class="dmsg-hd"><img class="dmsg-av" src="elara-3d.png" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>Your weekly report is ready. This week: 87% adherence, 2 missed doses, a 6-day streak. BP averaged 120/78 — within normal range. Your appointment with Dr. Mehta is Tuesday — want me to send this over?</p></div>
+          <div class="dmsg"><div class="dmsg-hd"><img class="dmsg-av" src="elara.webp" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>Your weekly report is ready. This week: 87% adherence, 2 missed doses, a 6-day streak. BP averaged 120/78 — within normal range. Your appointment with Dr. Mehta is Tuesday — want me to send this over?</p></div>
           <div class="dbtns"><button class="dbtn p">Send to Dr. Mehta</button><button class="dbtn">Download PDF</button><button class="dbtn">Share with family</button></div>
         </div>
         <div class="dpanel" data-panel="vitals">
-          <div class="dmsg"><div class="dmsg-hd"><img class="dmsg-av" src="elara-3d.png" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>Good morning! Time for your daily vitals. Your BP yesterday was 118/76 — really good. Want to log today's reading? I will add it to your chart and flag anything that looks unusual.</p></div>
+          <div class="dmsg"><div class="dmsg-hd"><img class="dmsg-av" src="elara.webp" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>Good morning! Time for your daily vitals. Your BP yesterday was 118/76 — really good. Want to log today's reading? I will add it to your chart and flag anything that looks unusual.</p></div>
           <div class="dbtns"><button class="dbtn p">Log BP now</button><button class="dbtn">Log blood sugar</button><button class="dbtn">Log weight</button></div>
         </div>
         <div class="dpanel" data-panel="streak">
-          <div class="dmsg"><div class="dmsg-hd"><img class="dmsg-av" src="elara-3d.png" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>14 days in a row — every single dose on time. That is genuinely impressive. Your body is noticing, even if the lab results take a few weeks to show it. I am proud of you. Keep going.</p></div>
+          <div class="dmsg"><div class="dmsg-hd"><img class="dmsg-av" src="elara.webp" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>14 days in a row — every single dose on time. That is genuinely impressive. Your body is noticing, even if the lab results take a few weeks to show it. I am proud of you. Keep going.</p></div>
           <div class="dbtns"><button class="dbtn p">Share with family 🎉</button><button class="dbtn">Keep going 💪</button></div>
         </div>
       </div>
 
       <div class="demo-phone rr">
         <div class="dscreen">
-          <div class="dbar"><img src="elara-3d.png" alt="Elara" loading="lazy"><div><div class="dbar-t">Elara</div><div class="dbar-s">Today's care</div></div><div class="dbar-st">Online</div></div>
+          <div class="dbar"><img src="elara.webp" alt="Elara" loading="lazy"><div><div class="dbar-t">Elara</div><div class="dbar-s">Today's care</div></div><div class="dbar-st">Online</div></div>
           <div class="dbody">
             <div class="drow"><div class="dtime">8A</div><div><div class="dname">Lisinopril 10mg</div><div class="dsub">Morning dose</div></div><div class="dbadge b-tk">Taken</div></div>
             <div class="drow"><div class="dtime">2P</div><div><div class="dname">Vitamin D3</div><div class="dsub">Afternoon</div></div><div class="dbadge b-du">Due soon</div></div>
@@ -1148,7 +1151,7 @@
 <section class="s cta-bg" id="founding" data-state="excited" data-title="I am ready" data-msg="Let us take care of the people you love. I am here every single day.">
   <div class="s-inner" style="max-width:640px;text-align:center;">
     <div class="cta-elara-wrap r0">
-      <img src="elara-3d.png" alt="Elara" id="elaraCta" onload="elaraBg(this)" style="width:155px;display:block;margin:0 auto;background:#fff;border-radius:50%;">
+      <img src="elara.webp" alt="Elara" id="elaraCta" onload="elaraBg(this)" style="width:155px;display:block;margin:0 auto;background:#fff;border-radius:50%;">
     </div>
     <div class="label r0" style="margin:0 auto 14px;background:rgba(255,107,107,0.1);border-color:rgba(255,107,107,0.3);color:#e05555;">Only <span id="spotsLeftCta"></span> founding spots left</div>
     <h2 class="r0">Stop worrying.<br><em>Start knowing.</em></h2>
@@ -1168,7 +1171,7 @@
 <footer class="footer">
   <div class="footer-inner">
     <div class="flogo">
-      <img src="elara-3d.png" alt="Elara">
+      <img src="elara.webp" alt="Elara">
       <span>Carely</span>
     </div>
     <div class="flinks">
@@ -1184,7 +1187,7 @@
 <!-- COMPANION -->
 <div class="companion" id="companion">
   <div class="comp-elara">
-    <img src="elara-3d.png" alt="Elara" onload="elaraBg(this)" style="width:80px;display:block;margin-left:auto;background:#fff;border-radius:50%;filter:drop-shadow(0 6px 18px rgba(0,201,167,0.28));">
+    <img src="elara.webp" alt="Elara" onload="elaraBg(this)" style="width:80px;display:block;margin-left:auto;background:#fff;border-radius:50%;filter:drop-shadow(0 6px 18px rgba(0,201,167,0.28));">
   </div>
   <div class="comp-bubble">
     <strong id="compTitle">Elara is here</strong>
