@@ -97,16 +97,6 @@
     }
     .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 24px rgba(0,201,167,0.45); }
 
-    /* Eye overlays — calibrated to 3307×2768 Elara PNG */
-    .e-wrap { position: relative; display: inline-block; }
-    .e-wrap img { display: block; width: 100%; height: auto; }
-    .e-eye-l, .e-eye-r {
-      position: absolute; border-radius: 50%; background: #09202d;
-      pointer-events: none; transition: transform 80ms linear;
-    }
-    .e-eye-l { width: 8.4%; height: 10.2%; top: 44.5%; left: 27.5%; }
-    .e-eye-r { width: 8.1%; height: 6.1%; top: 46.4%; left: 44.8%; border-radius: 50% 50% 40% 40%; }
-
     /* HERO */
     .hero {
       position: relative; overflow: hidden; min-height: 100svh;
@@ -198,15 +188,8 @@
     .chip-a { top: 36px; right: -14px; animation-delay: 0s; }
     .chip-b { bottom: 110px; right: -22px; animation-delay: -2.2s; }
     @keyframes chipFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
-    .scroll-hint {
-      position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 5px;
-      color: rgba(255,255,255,0.3); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
-      animation: fadeIn 2s ease 2.5s both;
-    }
-    .scroll-arrow { width: 18px; height: 18px; border-right: 2px solid; border-bottom: 2px solid; transform: rotate(45deg); animation: arrowBounce 1.4s ease-in-out infinite; }
-    @keyframes arrowBounce { 0%,100%{transform:rotate(45deg) translateY(0)} 50%{transform:rotate(45deg) translateY(5px)} }
     @keyframes fadeIn { 0%{opacity:0} 100%{opacity:1} }
+    #elaraCanvas { display:block; width:100%; height:auto; }
 
     /* SECTION BASE */
     .s { padding: clamp(32px,4vw,56px) clamp(18px,5vw,60px); position: relative; overflow: hidden; }
@@ -594,11 +577,7 @@
     <div class="hero-stage">
       <div class="hero-glow"></div>
       <div class="hero-elara" id="heroWrap">
-        <div class="e-wrap">
-          <img src="elara-3d.png" alt="Elara — AI caretaker">
-          <div class="e-eye-l" id="eyeL"></div>
-          <div class="e-eye-r" id="eyeR"></div>
-        </div>
+        <canvas id="elaraCanvas"></canvas>
       </div>
       <div class="speech-bubble">
         <strong>Hi! I am Elara.</strong>
@@ -608,7 +587,6 @@
       <div class="float-chip chip-b">6-day streak<span>most common win</span></div>
     </div>
   </div>
-  <div class="scroll-hint">SCROLL<div class="scroll-arrow"></div></div>
 </section>
 
 <!-- PROBLEM / SOLUTION -->
@@ -1120,46 +1098,6 @@
   }, { threshold: 0.08 });
   document.querySelectorAll('.s').forEach(s => so2.observe(s));
 
-  // ── ELARA PNG ANIMATION ──────────────────────────────────────
-  const heroWrap = document.getElementById('heroWrap');
-  const eyeL = document.getElementById('eyeL');
-  const eyeR = document.getElementById('eyeR');
-  let floatTimer;
-
-  function organicFloat() {
-    const y = -(8 + Math.random() * 14);
-    const r = (Math.random() - 0.5) * 3;
-    const dur = 2000 + Math.random() * 2200;
-    heroWrap.style.transition = `transform ${dur}ms cubic-bezier(.45,.05,.55,.95)`;
-    heroWrap.style.transform  = `translateY(${y}px) rotate(${r}deg)`;
-    floatTimer = setTimeout(() => {
-      const back = 1800 + Math.random() * 1800;
-      heroWrap.style.transition = `transform ${back}ms cubic-bezier(.45,.05,.55,.95)`;
-      heroWrap.style.transform  = 'translateY(0) rotate(0deg)';
-      floatTimer = setTimeout(organicFloat, back + 80 + Math.random() * 400);
-    }, dur);
-  }
-
-  if (heroWrap) {
-    heroWrap.style.willChange = 'transform';
-    setTimeout(organicFloat, 600);
-  }
-
-  // Eye tracking
-  document.addEventListener('mousemove', e => {
-    if (!eyeL || !eyeR) return;
-    const wrap = heroWrap?.querySelector('.e-wrap');
-    if (!wrap) return;
-    const rect = wrap.getBoundingClientRect();
-    if (!rect.width) return;
-    const cx = rect.left + rect.width * 0.5;
-    const cy = rect.top  + rect.height * 0.45;
-    const dx = (e.clientX - cx) / window.innerWidth;
-    const dy = (e.clientY - cy) / window.innerHeight;
-    const px = dx * 22, py = dy * 14;
-    eyeL.style.transform = `translate(${px}px,${py}px)`;
-    eyeR.style.transform = `translate(${px * 0.75}px,${py * 0.75}px)`;
-  }, { passive: true });
 
   // Section companion
   const companion = document.getElementById('companion');
@@ -1238,5 +1176,7 @@
     }
   }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+<script src="elara.js"></script>
 </body>
 </html>
