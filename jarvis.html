@@ -142,6 +142,35 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 #send-btn:hover{background:rgba(0,229,255,0.16);border-color:rgba(0,229,255,0.5);box-shadow:var(--glow-c)}
 #send-btn:disabled{opacity:0.3;cursor:not-allowed}
 #send-btn svg{width:18px;height:18px}
+
+/* ── MIC BUTTON ──────────────────────────────────────────────────── */
+#mic-btn{width:42px;height:42px;border-radius:50%;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.2);color:rgba(0,229,255,0.6);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;flex-shrink:0;position:relative}
+#mic-btn:hover{background:rgba(0,229,255,0.12);border-color:rgba(0,229,255,0.4);color:var(--cyan)}
+#mic-btn.listening{background:rgba(0,255,163,0.12);border-color:var(--mint);color:var(--mint);box-shadow:0 0 20px rgba(0,255,163,0.3),0 0 40px rgba(0,255,163,0.1);animation:micPulse 1s ease-in-out infinite}
+#mic-btn.listening svg{animation:micBreath 1s ease-in-out infinite}
+@keyframes micPulse{0%,100%{box-shadow:0 0 20px rgba(0,255,163,0.3),0 0 40px rgba(0,255,163,0.1)}50%{box-shadow:0 0 30px rgba(0,255,163,0.5),0 0 60px rgba(0,255,163,0.2)}}
+@keyframes micBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+#mic-btn svg{width:18px;height:18px}
+
+/* ── MUTE TOGGLE ─────────────────────────────────────────────────── */
+#mute-btn{width:34px;height:34px;border-radius:8px;background:transparent;border:1px solid rgba(0,229,255,0.1);color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;flex-shrink:0}
+#mute-btn:hover{border-color:rgba(0,229,255,0.3);color:var(--cyan)}
+#mute-btn.muted{color:var(--red);border-color:rgba(255,69,96,0.25)}
+#mute-btn svg{width:14px;height:14px}
+
+/* ── LISTEN STATUS LABEL ─────────────────────────────────────────── */
+#listen-status{position:absolute;bottom:86px;left:50%;transform:translateX(-50%);background:rgba(0,255,163,0.08);border:1px solid rgba(0,255,163,0.2);border-radius:100px;padding:5px 16px;font-size:0.7rem;font-weight:700;color:var(--mint);letter-spacing:0.12em;text-transform:uppercase;pointer-events:none;opacity:0;transition:opacity 0.2s}
+#listen-status.show{opacity:1}
+
+/* ── ORB VOICE STATES ────────────────────────────────────────────── */
+.orb-wrap.listening .orb-core{animation:coreListening 0.6s ease-in-out infinite!important;background:radial-gradient(circle at 38% 34%,rgba(0,255,163,0.98),rgba(0,180,100,0.65) 40%,rgba(0,50,30,0.85) 70%,transparent)!important;box-shadow:0 0 50px rgba(0,255,163,0.5),0 0 100px rgba(0,255,163,0.2)!important}
+.orb-wrap.listening .orb-ring{animation-duration:2s!important}
+@keyframes coreListening{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.orb-wrap.speaking .orb-core{animation:coreSpeaking 0.35s ease-in-out infinite!important;box-shadow:0 0 45px rgba(0,229,255,0.55),0 0 90px rgba(0,229,255,0.2)!important}
+@keyframes coreSpeaking{0%,100%{transform:scale(1) translateY(0)}25%{transform:scale(1.05) translateY(-1px)}75%{transform:scale(0.97) translateY(1px)}}
+.orb-wrap.speaking .orb-ring.r0,.orb-wrap.speaking .orb-ring.r1{animation-duration:4s!important}
+.orb-wrap.thinking .orb-core{opacity:0.7;animation:coreThink 1.5s ease-in-out infinite!important}
+@keyframes coreThink{0%,100%{opacity:0.7}50%{opacity:1}}
 </style>
 </head>
 <body>
@@ -242,10 +271,26 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
     </div>
 
     <!-- CHAT PANEL -->
-    <div id="chat-panel">
+    <div id="chat-panel" style="position:relative">
       <div id="messages"></div>
+      <div id="listen-status">Listening...</div>
       <div id="input-bar">
-        <textarea id="msg-input" placeholder="Talk to JARVIS..." rows="1"></textarea>
+        <button id="mic-btn" onclick="toggleMic()" title="Hold to speak">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <textarea id="msg-input" placeholder="Speak or type to JARVIS..." rows="1"></textarea>
+        <button id="mute-btn" onclick="toggleMute()" title="Toggle JARVIS voice">
+          <!-- sound-on icon -->
+          <svg class="icon-sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+          <!-- sound-off icon (hidden by default) -->
+          <svg class="icon-sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;display:none">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
+          </svg>
+        </button>
         <button id="send-btn" onclick="send()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
@@ -510,6 +555,151 @@ inp.addEventListener('input', function() {
 inp.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
 });
+
+// ── VOICE ENGINE ───────────────────────────────────────────────────
+var voiceMuted   = false;
+var micListening = false;
+var recognition  = null;
+var orbWrap      = document.querySelector('.orb-wrap');
+
+function setOrbState(state) {
+  if (!orbWrap) return;
+  orbWrap.classList.remove('listening', 'speaking', 'thinking');
+  if (state) orbWrap.classList.add(state);
+}
+
+function stripMarkdown(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/#+\s/g, '')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\n{2,}/g, '. ')
+    .replace(/\n/g, ' ')
+    .trim();
+}
+
+function jarvisSpeak(text) {
+  if (voiceMuted || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  var clean = stripMarkdown(text);
+  if (clean.length > 600) clean = clean.slice(0, 600) + '...';
+  var utt = new SpeechSynthesisUtterance(clean);
+  utt.lang   = 'en-GB';
+  utt.pitch  = 0.78;
+  utt.rate   = 0.92;
+  utt.volume = 1;
+  function pickVoice() {
+    var voices = window.speechSynthesis.getVoices();
+    var preferred = ['Daniel', 'Google UK English Male', 'Microsoft George', 'Microsoft David'];
+    for (var i = 0; i < preferred.length; i++) {
+      var match = null;
+      for (var j = 0; j < voices.length; j++) {
+        if (voices[j].name.indexOf(preferred[i]) !== -1) { match = voices[j]; break; }
+      }
+      if (match) { utt.voice = match; break; }
+    }
+  }
+  if (window.speechSynthesis.getVoices().length) {
+    pickVoice();
+  } else {
+    window.speechSynthesis.onvoiceschanged = pickVoice;
+  }
+  utt.onstart = function() { setOrbState('speaking'); };
+  utt.onend   = function() { setOrbState(null); };
+  utt.onerror = function() { setOrbState(null); };
+  window.speechSynthesis.speak(utt);
+}
+
+function toggleMute() {
+  voiceMuted = !voiceMuted;
+  var btn = document.getElementById('mute-btn');
+  btn.classList.toggle('muted', voiceMuted);
+  var onIcon  = btn.querySelector('.icon-sound-on');
+  var offIcon = btn.querySelector('.icon-sound-off');
+  if (onIcon)  onIcon.style.display  = voiceMuted ? 'none' : '';
+  if (offIcon) offIcon.style.display = voiceMuted ? ''     : 'none';
+  if (voiceMuted) window.speechSynthesis && window.speechSynthesis.cancel();
+}
+
+function initRecognition() {
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  var r = new SR();
+  r.lang = 'en-US';
+  r.continuous = false;
+  r.interimResults = true;
+  r.onstart = function() {
+    micListening = true;
+    document.getElementById('mic-btn').classList.add('listening');
+    document.getElementById('listen-status').classList.add('show');
+    setOrbState('listening');
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+  };
+  r.onresult = function(e) {
+    var transcript = '';
+    for (var i = e.resultIndex; i < e.results.length; i++) {
+      transcript += e.results[i][0].transcript;
+    }
+    document.getElementById('msg-input').value = transcript;
+  };
+  r.onend = function() {
+    micListening = false;
+    document.getElementById('mic-btn').classList.remove('listening');
+    document.getElementById('listen-status').classList.remove('show');
+    setOrbState(null);
+    var text = document.getElementById('msg-input').value.trim();
+    if (text) {
+      var captured = text;
+      document.getElementById('msg-input').value = '';
+      setTimeout(function() { sendMsg(captured); }, 120);
+    }
+  };
+  r.onerror = function(e) {
+    micListening = false;
+    document.getElementById('mic-btn').classList.remove('listening');
+    document.getElementById('listen-status').classList.remove('show');
+    setOrbState(null);
+    if (e.error !== 'no-speech' && e.error !== 'aborted') {
+      addMsg('jarvis', 'JARVIS', 'Mic error: ' + e.error + '. Allow microphone access in your browser to use voice.');
+    }
+  };
+  return r;
+}
+
+function toggleMic() {
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    addMsg('jarvis', 'JARVIS', 'Voice input requires Chrome, Edge, or Safari. Firefox does not support the Web Speech API.');
+    return;
+  }
+  if (micListening) {
+    if (recognition) recognition.stop();
+    return;
+  }
+  recognition = initRecognition();
+  if (recognition) recognition.start();
+}
+
+// Patch addMsg to auto-speak JARVIS replies
+var _addMsgOrig = addMsg;
+addMsg = function(role, name, text) {
+  var result = _addMsgOrig(role, name, text);
+  if (role === 'jarvis') jarvisSpeak(text);
+  return result;
+};
+
+// Patch typing indicator to show thinking orb state
+var _showTypingOrig = showTyping;
+showTyping = function() {
+  _showTypingOrig();
+  setOrbState('thinking');
+};
+var _removeTypingOrig = removeTyping;
+removeTyping = function() {
+  _removeTypingOrig();
+  setOrbState(null);
+};
 </script>
 </body>
 </html>
