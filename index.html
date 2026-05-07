@@ -1043,18 +1043,15 @@
       <h2 class="sh">Lock in <em>$5/month</em> forever.<br>200 spots. Price goes up May 15.</h2>
       <p class="ss" style="margin:0 auto;">Every plan includes everything — reminders, vitals tracking, caregiver alerts, doctor reports. No tiers. No paywalls. All in.</p>
     </div>
-    <div class="r0" style="display:flex;justify-content:center;margin-bottom:32px;">
-      <div style="display:flex;align-items:center;gap:8px;padding:6px 16px;background:rgba(0,201,167,0.07);border:1px solid rgba(0,201,167,0.2);border-radius:999px;font-size:0.8rem;font-weight:700;color:var(--teal);">
-        <span class="live-dot"></span>
-        Prices shown in <span id="currLabel" style="margin-left:3px;">USD</span> — auto-detected for your country
-      </div>
+    <div class="r0" style="text-align:center;margin-bottom:28px;">
+      <div style="display:inline-block;font-size:0.73rem;color:rgba(255,255,255,0.38);letter-spacing:0.02em;">Prices shown in <span id="currLabel">USD</span> · change currency in the top-right</div>
     </div>
     <div class="pricing-cards r0">
       <div class="pc featured" style="order:-1;">
         <div class="pc-ribbon">🔥 Founding — closes May 15</div>
         <div class="pc-plan">Founding Member</div>
         <div class="pc-price"><sup class="curr-sym curr-dark">$</sup><span class="curr-founding">5</span><sub>/month</sub></div>
-        <div class="pc-sub" style="color:#5a8090;">Locked for 1 full year. Never goes up.</div>
+        <div class="pc-sub" style="color:#5a8090;">Locked in forever. Never goes up.</div>
         <div style="margin:-4px 0 18px;padding:8px 12px;background:rgba(255,107,107,0.07);border:1px solid rgba(255,107,107,0.18);border-radius:8px;font-size:0.78rem;font-weight:700;color:#cc4444;">
           Only <strong id="spotsLeftPricing">154</strong> of 200 spots remain
         </div>
@@ -1071,7 +1068,7 @@
       <div class="pc">
         <div class="pc-plan">Monthly</div>
         <div class="pc-price"><sup class="curr-sym">$</sup><span class="curr-monthly">9.99</span><sub>/month</sub></div>
-        <div class="pc-sub curr-note-founding">After 7-day free trial</div>
+        <div class="pc-sub">After 7-day free trial</div>
         <ul class="pc-features">
           <li><span class="ck">✓</span> All medication reminders</li>
           <li><span class="ck">✓</span> Caregiver alerts (up to 5)</li>
@@ -1194,14 +1191,14 @@
 <script>
   // Multi-currency config
   const PRICES = {
-    usd: { sym:'$',    label:'USD', founding:'5',   monthly:'9.99',  annual:'90',   noteFounding:'Locked for 1 full year · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    cad: { sym:'CA$',  label:'CAD', founding:'7',   monthly:'13.99', annual:'119',  noteFounding:'Locked for 1 full year · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    eur: { sym:'€',    label:'EUR', founding:'5',   monthly:'9.99',  annual:'89',   noteFounding:'Locked for 1 full year · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    gbp: { sym:'£',    label:'GBP', founding:'4',   monthly:'7.99',  annual:'72',   noteFounding:'Locked for 1 full year · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    inr: { sym:'₹',    label:'INR', founding:'399', monthly:'799',   annual:'6,999',noteFounding:'Locked for 1 full year · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    aed: { sym:'AED ', label:'AED', founding:'19',  monthly:'37',    annual:'329',  noteFounding:'Locked for 1 full year · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    brl: { sym:'R$',   label:'BRL', founding:'25',  monthly:'49',    annual:'449',  noteFounding:'Locked for 1 full year · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    aud: { sym:'A$',   label:'AUD', founding:'8',   monthly:'14.99', annual:'134',  noteFounding:'Locked for 1 full year · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
+    usd: { sym:'$',    label:'USD', founding:'5',   monthly:'9.99',  annual:'90',   noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
+    cad: { sym:'CA$',  label:'CAD', founding:'7',   monthly:'13.99', annual:'119',  noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
+    eur: { sym:'€',    label:'EUR', founding:'5',   monthly:'9.99',  annual:'89',   noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
+    gbp: { sym:'£',    label:'GBP', founding:'4',   monthly:'7.99',  annual:'72',   noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
+    inr: { sym:'₹',    label:'INR', founding:'399', monthly:'799',   annual:'6,999',noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
+    aed: { sym:'AED ', label:'AED', founding:'19',  monthly:'37',    annual:'329',  noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
+    brl: { sym:'R$',   label:'BRL', founding:'25',  monthly:'49',    annual:'449',  noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
+    aud: { sym:'A$',   label:'AUD', founding:'8',   monthly:'14.99', annual:'134',  noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
   };
   const COUNTRY_CURR = {
     CA:'cad',
