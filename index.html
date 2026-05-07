@@ -11,8 +11,9 @@
   <meta property="og:url" content="https://carely.fit">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script>!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});</script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -978,7 +979,7 @@
 
       <div class="demo-phone rr">
         <div class="dscreen">
-          <div class="dbar"><img src="elara-3d.png" alt="Elara"><div><div class="dbar-t">Elara</div><div class="dbar-s">Today's care</div></div><div class="dbar-st">Online</div></div>
+          <div class="dbar"><img src="elara-3d.png" alt="Elara" loading="lazy"><div><div class="dbar-t">Elara</div><div class="dbar-s">Today's care</div></div><div class="dbar-st">Online</div></div>
           <div class="dbody">
             <div class="drow"><div class="dtime">8A</div><div><div class="dname">Lisinopril 10mg</div><div class="dsub">Morning dose</div></div><div class="dbadge b-tk">Taken</div></div>
             <div class="drow"><div class="dtime">2P</div><div><div class="dname">Vitamin D3</div><div class="dsub">Afternoon</div></div><div class="dbadge b-du">Due soon</div></div>
@@ -1312,6 +1313,54 @@
     document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
   }, {passive:true});
 
+  // Remove grey/checkerboard background from Elara PNG via canvas flood-fill
+  function removeElaraBg(img) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const w = img.naturalWidth, h = img.naturalHeight;
+    if (!w || !h) return;
+    canvas.width = w; canvas.height = h;
+    ctx.drawImage(img, 0, 0);
+    const imageData = ctx.getImageData(0, 0, w, h);
+    const d = imageData.data;
+
+    // Mark a pixel as background if it's greyscale (R≈G≈B) and light
+    function isBg(i) {
+      const r = d[i], g = d[i+1], b = d[i+2];
+      return Math.abs(r-g) < 22 && Math.abs(g-b) < 22 && Math.abs(r-b) < 22 && (r+g+b)/3 > 140;
+    }
+
+    // BFS flood fill from all 4 edges
+    const vis = new Uint8Array(w * h);
+    const queue = [];
+    function push(x, y) {
+      if (x < 0 || x >= w || y < 0 || y >= h) return;
+      const p = y * w + x;
+      if (vis[p]) return;
+      vis[p] = 1;
+      if (isBg(p * 4)) queue.push(p);
+    }
+    for (let x = 0; x < w; x++) { push(x, 0); push(x, h-1); }
+    for (let y = 1; y < h-1; y++) { push(0, y); push(w-1, y); }
+    while (queue.length) {
+      const p = queue.pop();
+      d[p*4+3] = 0;
+      const x = p % w, y = (p/w)|0;
+      push(x-1, y); push(x+1, y); push(x, y-1); push(x, y+1);
+    }
+    ctx.putImageData(imageData, 0, 0);
+    img.src = canvas.toDataURL('image/png');
+  }
+
+  // Process all Elara images after page loads
+  window.addEventListener('load', () => {
+    document.querySelectorAll('img[src="elara-3d.png"]').forEach(img => {
+      const run = () => { try { removeElaraBg(img); } catch(e) {} };
+      if (img.complete && img.naturalWidth > 0) run();
+      else img.addEventListener('load', run, { once: true });
+    });
+  });
+
   // Checkout
   async function claimSpot() {
     const email = document.getElementById('ctaEmail').value.trim();
@@ -1341,5 +1390,6 @@
     }
   }
 </script>
+<script defer>!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});</script>
 </body>
 </html>
