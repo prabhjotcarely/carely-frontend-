@@ -105,7 +105,7 @@
     }
     .nav.scrolled { box-shadow: 0 8px 40px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.07); }
     .logo { display: flex; align-items: center; gap: 9px; }
-    .logo-mark { width: 34px; height: 34px; flex-shrink: 0; }
+    .logo-mark { width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #fff; object-fit: contain; border: 2px solid rgba(2,195,154,0.25); }
     .logo-name { font-size: 1.1rem; font-weight: 900; background: linear-gradient(135deg,#028090,var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
     .nav-links { display: flex; gap: 26px; font-size: 0.86rem; font-weight: 600; color: rgba(13,31,42,0.48); }
     .nav-links a:hover { color: #028090; }
@@ -632,11 +632,7 @@
 <div class="nav-wrap">
 <nav class="nav" id="mainNav">
   <a class="logo" href="#">
-    <svg class="logo-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="36" height="36" rx="10" fill="url(#navGrad)"/>
-      <path d="M5 19 L9 19 L12 11 L15 27 L18 7 L21 23 L24 19 L31 19" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      <defs><linearGradient id="navGrad" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#00C9A7"/><stop offset="1" stop-color="#028090"/></linearGradient></defs>
-    </svg>
+    <img src="elara.webp" alt="Elara" class="logo-mark" onload="elaraBg(this)" style="border-radius:50%;background:#fff;object-fit:contain;">
     <span class="logo-name">Carely</span>
   </a>
   <div class="nav-links">
