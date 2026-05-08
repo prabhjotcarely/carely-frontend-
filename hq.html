@@ -458,8 +458,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
 
     <div class="tab-panel active" id="ch-tiktok">
-      <div class="alert green">✅ <strong>3 scripts approved by TJ — April 26, 2026.</strong> Post at 7–9 PM. Reply to every comment in first hour.</div>
-      <div class="card">
+      <div class="alert green">✅ <strong>3 scripts ready for review.</strong> Approve to lock in, Reject to remove, Edit to suggest changes.</div>
+      <div class="card" id="tt-script-1">
         <div class="card-title">🎥 Script 1 — "The Story" <span class="pill green" style="margin-left:6px">FILM THIS FIRST</span></div>
         <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Hook — face to camera, no music</div>
         <div class="script-hook">"I'm a healthcare worker. And I almost let my own parents miss their medications for months."</div>
@@ -468,20 +468,38 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;margin-top:10px">CTA — show phone screen</div>
         <div class="script-hook">"Link in bio. Founding member price is $5 a month — only 200 spots. We're almost out."</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><span class="pill teal">~45 seconds</span><span class="pill teal">Face to camera, raw</span><span class="pill teal">No fancy editing</span></div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="contentAction('tt-script-1','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
+          <button onclick="contentAction('tt-script-1','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
+          <button onclick="contentEdit('tt-script-1')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
+        </div>
+        <div id="tt-script-1-edit" style="display:none;margin-top:10px"><textarea rows="3" placeholder="What should change? Agent will rewrite based on your note..." style="width:100%;border:1.5px solid var(--g300);border-radius:8px;padding:10px;font-size:0.82rem;font-family:inherit;resize:vertical"></textarea><button onclick="submitEdit('tt-script-1')" style="margin-top:6px;padding:6px 16px;border-radius:8px;border:none;background:var(--deep);color:white;font-size:0.78rem;font-weight:700;cursor:pointer">Send to Agent</button></div>
       </div>
-      <div class="card">
+      <div class="card" id="tt-script-2">
         <div class="card-title">🎥 Script 2 — "The Problem" <span class="pill amber" style="margin-left:6px">POST DAY 2–3</span></div>
         <div class="script-hook">"If your parent takes medication and lives alone — watch this."</div>
         <div class="script-body" style="margin-top:8px">"Did you know that 50% of seniors don't take their medications correctly?<br><br>Not because they don't care. Because they forget. Because no one's there to remind them.<br><br>And the scary part? One missed dose can mean a hospital visit.<br><br>I know this because I work in healthcare. I see it happen.<br><br>That's why we built Carely — an AI caretaker that reminds your parent to take their meds, tracks if they did it, and texts you if they didn't."</div>
         <div class="script-hook" style="margin-top:8px">"Comment 'MOM' and I'll send you the link."</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><span class="pill teal">~40 seconds</span><span class="pill teal">Scrubs or work clothes</span><span class="pill teal">Show app notification mid-video</span></div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="contentAction('tt-script-2','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
+          <button onclick="contentAction('tt-script-2','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
+          <button onclick="contentEdit('tt-script-2')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
+        </div>
+        <div id="tt-script-2-edit" style="display:none;margin-top:10px"><textarea rows="3" placeholder="What should change? Agent will rewrite based on your note..." style="width:100%;border:1.5px solid var(--g300);border-radius:8px;padding:10px;font-size:0.82rem;font-family:inherit;resize:vertical"></textarea><button onclick="submitEdit('tt-script-2')" style="margin-top:6px;padding:6px 16px;border-radius:8px;border:none;background:var(--deep);color:white;font-size:0.78rem;font-weight:700;cursor:pointer">Send to Agent</button></div>
       </div>
-      <div class="card">
+      <div class="card" id="tt-script-3">
         <div class="card-title">🎥 Script 3 — "The Demo" <span class="pill amber" style="margin-left:6px">POST DAY 4–5</span></div>
         <div class="script-hook">"This notification just saved my mom from missing her blood pressure medication. Let me show you."</div>
         <div class="script-body" style="margin-top:8px">"So this is Carely — the app we built for our parents.<br><br>Every day at the time my mom takes her medication — she gets a reminder. Not a boring beep. A message from Elara, our AI caretaker.<br><br>[show phone — Elara notification]<br><br>And here's the best part — I can see on my phone whether she took it or not.<br><br>[show caregiver view]<br><br>If she misses it — I get an alert immediately."</div>
         <div class="script-hook" style="margin-top:8px">"It's $5 a month right now during launch. 200 spots only. Link in bio."</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><span class="pill teal">~50 seconds</span><span class="pill teal">Screen recording + face split</span><span class="pill teal">Show Elara notification</span></div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="contentAction('tt-script-3','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
+          <button onclick="contentAction('tt-script-3','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
+          <button onclick="contentEdit('tt-script-3')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
+        </div>
+        <div id="tt-script-3-edit" style="display:none;margin-top:10px"><textarea rows="3" placeholder="What should change? Agent will rewrite based on your note..." style="width:100%;border:1.5px solid var(--g300);border-radius:8px;padding:10px;font-size:0.82rem;font-family:inherit;resize:vertical"></textarea><button onclick="submitEdit('tt-script-3')" style="margin-top:6px;padding:6px 16px;border-radius:8px;border:none;background:var(--deep);color:white;font-size:0.78rem;font-weight:700;cursor:pointer">Send to Agent</button></div>
       </div>
     </div>
 
@@ -491,12 +509,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <table class="tbl">
           <thead><tr><th>Day</th><th>Slot</th><th>Theme</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td><strong>Monday</strong></td><td>8AM PST</td><td>Caregiver story / emotional hook</td><td><span class="pill grey">Scheduled</span></td></tr>
-            <tr><td><strong>Tuesday</strong></td><td>5PM PST</td><td>Healthcare worker perspective</td><td><span class="pill grey">Scheduled</span></td></tr>
-            <tr><td><strong>Wednesday</strong></td><td>8AM PST</td><td>Launch / product feature</td><td><span class="pill green">Posted ✓</span></td></tr>
-            <tr><td><strong>Thursday</strong></td><td>5PM PST</td><td>Stat or data post</td><td><span class="pill grey">Scheduled</span></td></tr>
-            <tr><td><strong>Friday</strong></td><td>8AM PST</td><td>Behind the scenes / build story</td><td><span class="pill grey">Scheduled</span></td></tr>
-            <tr><td><strong>Saturday</strong></td><td>5PM PST</td><td>Community / user story</td><td><span class="pill grey">Scheduled</span></td></tr>
+            <tr><td><strong>Monday</strong></td><td>8AM PST</td><td>Caregiver story / emotional hook</td><td><span class="pill grey">Scheduled</span></td><td><div style="display:flex;gap:4px"><button onclick="contentAction('li-mon','approve')" style="padding:4px 10px;border-radius:6px;border:none;background:var(--mint);color:white;font-size:0.7rem;font-weight:700;cursor:pointer">✓</button><button onclick="contentAction('li-mon','reject')" style="padding:4px 10px;border-radius:6px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-size:0.7rem;font-weight:700;cursor:pointer">✗</button><button onclick="contentEdit('li-mon')" style="padding:4px 10px;border-radius:6px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-size:0.7rem;font-weight:700;cursor:pointer">✏</button></div></td></tr>
+            <tr><td><strong>Tuesday</strong></td><td>5PM PST</td><td>Healthcare worker perspective</td><td><span class="pill grey">Scheduled</span></td><td><div style="display:flex;gap:4px"><button onclick="contentAction('li-tue','approve')" style="padding:4px 10px;border-radius:6px;border:none;background:var(--mint);color:white;font-size:0.7rem;font-weight:700;cursor:pointer">✓</button><button onclick="contentAction('li-tue','reject')" style="padding:4px 10px;border-radius:6px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-size:0.7rem;font-weight:700;cursor:pointer">✗</button><button onclick="contentEdit('li-tue')" style="padding:4px 10px;border-radius:6px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-size:0.7rem;font-weight:700;cursor:pointer">✏</button></div></td></tr>
+            <tr><td><strong>Wednesday</strong></td><td>8AM PST</td><td>Launch / product feature</td><td><span class="pill green">Posted ✓</span></td><td>—</td></tr>
+            <tr><td><strong>Thursday</strong></td><td>5PM PST</td><td>Stat or data post</td><td><span class="pill grey">Scheduled</span></td><td><div style="display:flex;gap:4px"><button onclick="contentAction('li-thu','approve')" style="padding:4px 10px;border-radius:6px;border:none;background:var(--mint);color:white;font-size:0.7rem;font-weight:700;cursor:pointer">✓</button><button onclick="contentAction('li-thu','reject')" style="padding:4px 10px;border-radius:6px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-size:0.7rem;font-weight:700;cursor:pointer">✗</button><button onclick="contentEdit('li-thu')" style="padding:4px 10px;border-radius:6px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-size:0.7rem;font-weight:700;cursor:pointer">✏</button></div></td></tr>
+            <tr><td><strong>Friday</strong></td><td>8AM PST</td><td>Behind the scenes / build story</td><td><span class="pill grey">Scheduled</span></td><td><div style="display:flex;gap:4px"><button onclick="contentAction('li-fri','approve')" style="padding:4px 10px;border-radius:6px;border:none;background:var(--mint);color:white;font-size:0.7rem;font-weight:700;cursor:pointer">✓</button><button onclick="contentAction('li-fri','reject')" style="padding:4px 10px;border-radius:6px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-size:0.7rem;font-weight:700;cursor:pointer">✗</button><button onclick="contentEdit('li-fri')" style="padding:4px 10px;border-radius:6px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-size:0.7rem;font-weight:700;cursor:pointer">✏</button></div></td></tr>
+            <tr><td><strong>Saturday</strong></td><td>5PM PST</td><td>Community / user story</td><td><span class="pill grey">Scheduled</span></td><td><div style="display:flex;gap:4px"><button onclick="contentAction('li-sat','approve')" style="padding:4px 10px;border-radius:6px;border:none;background:var(--mint);color:white;font-size:0.7rem;font-weight:700;cursor:pointer">✓</button><button onclick="contentAction('li-sat','reject')" style="padding:4px 10px;border-radius:6px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-size:0.7rem;font-weight:700;cursor:pointer">✗</button><button onclick="contentEdit('li-sat')" style="padding:4px 10px;border-radius:6px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-size:0.7rem;font-weight:700;cursor:pointer">✏</button></div></td></tr>
           </tbody>
         </table>
       </div>
@@ -513,87 +531,150 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
       <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Type 1 — Reply Drafts (paste into existing threads)</div>
 
-      <div class="card">
+      <div class="card" id="rd-reply-1">
         <div class="card-title">💬 Reply — r/caregivers: "My mom keeps forgetting her blood pressure meds" <span class="pill amber" style="margin-left:6px">Ready to post</span></div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit">This was exactly us for two years. My mom lives three hours away and every night I'd call just to check if she'd taken her metformin.
+        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-reply-1-body">This was exactly us for two years. My mom lives three hours away and every night I'd call just to check if she'd taken her metformin.
 
 What helped honestly wasn't a complicated system. We started a little routine where she sends me a thumbs up after each dose. It became our daily hello.
 
 Have you tried making it a two-way check-in? Sometimes when they feel like someone genuinely cares rather than just policing them it changes everything. What does your mom respond to?</div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="contentAction('rd-reply-1','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
+          <button onclick="contentAction('rd-reply-1','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
+          <button onclick="contentEdit('rd-reply-1')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
+        </div>
+        <div id="rd-reply-1-edit" style="display:none;margin-top:10px">
+          <textarea id="rd-reply-1-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
+          <button onclick="submitEdit('rd-reply-1')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
+        </div>
       </div>
 
-      <div class="card">
+      <div class="card" id="rd-reply-2">
         <div class="card-title">💬 Reply — r/eldercare: "Best apps for tracking senior medications?" <span class="pill amber" style="margin-left:6px">Ready to post</span></div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit">I went through about six apps before something actually clicked for our family.
+        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-reply-2-body">I went through about six apps before something actually clicked for our family.
 
 The thing I noticed was that reminders alone weren't enough because my dad would dismiss them and then forget he'd dismissed them. What made the difference was being able to see on my end whether he'd actually confirmed it, not just been reminded.
 
 What's your dad's comfort level with his phone? That changed everything for us in terms of what would realistically work day to day.</div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="contentAction('rd-reply-2','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
+          <button onclick="contentAction('rd-reply-2','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
+          <button onclick="contentEdit('rd-reply-2')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
+        </div>
+        <div id="rd-reply-2-edit" style="display:none;margin-top:10px">
+          <textarea id="rd-reply-2-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
+          <button onclick="submitEdit('rd-reply-2')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
+        </div>
       </div>
 
-      <div class="card">
+      <div class="card" id="rd-reply-3">
         <div class="card-title">💬 Reply — r/AgingParents: "I feel so guilty I can't be there" <span class="pill amber" style="margin-left:6px">Ready to post</span></div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit">I know this feeling so well. I work in healthcare and I still couldn't be at ease about my own parents' medications when I wasn't there.
+        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-reply-3-body">I know this feeling so well. I work in healthcare and I still couldn't be at ease about my own parents' medications when I wasn't there.
 
 The guilt doesn't fully go away but what helped me was shifting from "I need to be there" to "I need to know they're okay." Once I could actually see their daily routine even from a distance the anxiety dropped a lot.
 
 Have you found anything that gives you even a little peace of mind on the days you can't call? Sometimes hearing what other people do helps more than any advice.</div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="contentAction('rd-reply-3','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
+          <button onclick="contentAction('rd-reply-3','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
+          <button onclick="contentEdit('rd-reply-3')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
+        </div>
+        <div id="rd-reply-3-edit" style="display:none;margin-top:10px">
+          <textarea id="rd-reply-3-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
+          <button onclick="submitEdit('rd-reply-3')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
+        </div>
       </div>
 
-      <div class="card">
+      <div class="card" id="rd-reply-4">
         <div class="card-title">💬 Reply — r/dementia: "Dad keeps taking double doses by accident" <span class="pill amber" style="margin-left:6px">Ready to post</span></div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit">This is one of the scariest parts of medication management with dementia and you're right to take it seriously.
+        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-reply-4-body">This is one of the scariest parts of medication management with dementia and you're right to take it seriously.
 
 What helped our family was separating the physical availability of the medication from the reminder. So instead of having the whole bottle accessible we moved to a system where the dose was pre-set for the day, separate, somewhere visible.
 
 Is someone able to help set up the doses each morning even if they can't be there all day? That one change made a huge difference for us.</div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="contentAction('rd-reply-4','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
+          <button onclick="contentAction('rd-reply-4','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
+          <button onclick="contentEdit('rd-reply-4')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
+        </div>
+        <div id="rd-reply-4-edit" style="display:none;margin-top:10px">
+          <textarea id="rd-reply-4-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
+          <button onclick="submitEdit('rd-reply-4')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
+        </div>
       </div>
 
       <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;margin-top:6px">Type 2 — Community Posts (build Prabh's own audience, post as Prabh)</div>
 
-      <div class="card">
+      <div class="card" id="rd-post-1">
         <div class="card-title">📝 Post — r/caregivers <span class="pill teal" style="margin-left:6px">Community builder</span></div>
         <div style="font-size:0.72rem;font-weight:700;color:var(--g500);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em">Title</div>
         <div style="background:var(--light);border-radius:6px;padding:8px 12px;font-size:0.82rem;font-weight:700;color:var(--deep);margin-bottom:10px">How do you actually know if your parent took their medication today?</div>
         <div style="font-size:0.72rem;font-weight:700;color:var(--g500);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em">Body</div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit">Not asking for a product recommendation. Genuinely curious what other families have figured out.
+        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-post-1-body">Not asking for a product recommendation. Genuinely curious what other families have figured out.
 
 My parents live in a different city. My mom takes three medications daily and I worry about it more than I let on. I've tried calling every day, pill organizers, sticky notes on the mirror.
 
 Some days I feel like I'm doing everything right and other days I have no idea if any of it is landing.
 
 What has actually worked for your family, especially if you're also not living with them?</div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="contentAction('rd-post-1','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
+          <button onclick="contentAction('rd-post-1','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
+          <button onclick="contentEdit('rd-post-1')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
+        </div>
+        <div id="rd-post-1-edit" style="display:none;margin-top:10px">
+          <textarea id="rd-post-1-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
+          <button onclick="submitEdit('rd-post-1')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
+        </div>
       </div>
 
-      <div class="card">
+      <div class="card" id="rd-post-2">
         <div class="card-title">📝 Post — r/eldercare <span class="pill teal" style="margin-left:6px">Community builder</span></div>
         <div style="font-size:0.72rem;font-weight:700;color:var(--g500);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em">Title</div>
         <div style="background:var(--light);border-radius:6px;padding:8px 12px;font-size:0.82rem;font-weight:700;color:var(--deep);margin-bottom:10px">Anyone else feel like managing an aging parent's medications is a full-time second job?</div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit">I work in healthcare. I know better than most how dangerous a missed dose can be. And yet when it comes to my own parents I still feel constantly behind.
+        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-post-2-body">I work in healthcare. I know better than most how dangerous a missed dose can be. And yet when it comes to my own parents I still feel constantly behind.
 
 It's not that they're irresponsible. It's that life gets busy, the routine slips, and there's no one there to notice.
 
 What's been your biggest challenge with this? I'm curious whether it's the reminding itself or the follow-through after.</div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="contentAction('rd-post-2','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
+          <button onclick="contentAction('rd-post-2','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
+          <button onclick="contentEdit('rd-post-2')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
+        </div>
+        <div id="rd-post-2-edit" style="display:none;margin-top:10px">
+          <textarea id="rd-post-2-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
+          <button onclick="submitEdit('rd-post-2')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
+        </div>
       </div>
 
-      <div class="card">
+      <div class="card" id="rd-post-3">
         <div class="card-title">📝 Post — r/AgingParents <span class="pill teal" style="margin-left:6px">Community builder</span></div>
         <div style="font-size:0.72rem;font-weight:700;color:var(--g500);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em">Title</div>
         <div style="background:var(--light);border-radius:6px;padding:8px 12px;font-size:0.82rem;font-weight:700;color:var(--deep);margin-bottom:10px">What's the hardest part of being a long-distance caregiver? I'll go first.</div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit">For me it's the not knowing. My parents are healthy and mostly independent but they're getting older and I live far away.
+        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-post-3-body">For me it's the not knowing. My parents are healthy and mostly independent but they're getting older and I live far away.
 
 It's not any one thing that worries me. It's the accumulation of small things I can't see from a distance. Did they eat today. Are they sleeping. Did they take their medications.
 
 I've been thinking about what actually helps versus what just makes me feel like I'm doing something. They're not always the same thing.
 
 What's your hardest part? Would love to hear from others dealing with this.</div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="contentAction('rd-post-3','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
+          <button onclick="contentAction('rd-post-3','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
+          <button onclick="contentEdit('rd-post-3')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
+        </div>
+        <div id="rd-post-3-edit" style="display:none;margin-top:10px">
+          <textarea id="rd-post-3-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
+          <button onclick="submitEdit('rd-post-3')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
+        </div>
       </div>
 
-      <div class="card">
+      <div class="card" id="rd-post-4">
         <div class="card-title">📝 Post — Prabh's own community (intro post when she starts her own subreddit or Facebook group) <span class="pill purple" style="margin-left:6px">Community launch</span></div>
         <div style="font-size:0.72rem;font-weight:700;color:var(--g500);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em">Title</div>
         <div style="background:var(--light);border-radius:6px;padding:8px 12px;font-size:0.82rem;font-weight:700;color:var(--deep);margin-bottom:10px">I'm a healthcare worker and a long-distance daughter. I started this community because I couldn't find one like it.</div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit">My parents are in their 60s. Still independent. Still sharp. But they're getting older and I'm hours away and some days that gap feels enormous.
+        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-post-4-body">My parents are in their 60s. Still independent. Still sharp. But they're getting older and I'm hours away and some days that gap feels enormous.
 
 I work in healthcare and I still couldn't find a good place to talk honestly about what long-distance caregiving actually feels like. The worry. The guilt. The little systems you build so you can sleep at night.
 
@@ -602,11 +683,20 @@ This community is for people like me. Adult children, caregivers, healthcare wor
 No advice columns. No sales pitches. Just people figuring it out together.
 
 What brought you here?</div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="contentAction('rd-post-4','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
+          <button onclick="contentAction('rd-post-4','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
+          <button onclick="contentEdit('rd-post-4')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
+        </div>
+        <div id="rd-post-4-edit" style="display:none;margin-top:10px">
+          <textarea id="rd-post-4-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
+          <button onclick="submitEdit('rd-post-4')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
+        </div>
       </div>
 
-      <div class="card">
+      <div class="card" id="rd-post-5">
         <div class="card-title">📝 Post — Carely soft mention (use only after 5+ posts of pure community value) <span class="pill red" style="margin-left:6px">Only after credibility</span></div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit">A few months ago my husband and I got tired of the problem and decided to build something ourselves.
+        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-post-5-body">A few months ago my husband and I got tired of the problem and decided to build something ourselves.
 
 We're both in healthcare. We'd tried every app. None of them let me actually see from my phone whether my parents had taken their medications. They'd just remind and hope.
 
@@ -615,6 +705,15 @@ So we built Carely. It reminds them, they confirm, I can see it. If they miss so
 We launched this week. $5 a month for the first 200 families, then it goes up. If you want to try it, link is in my profile.
 
 Happy to answer questions. And if you try it and hate it please tell me why, genuinely.</div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="contentAction('rd-post-5','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
+          <button onclick="contentAction('rd-post-5','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
+          <button onclick="contentEdit('rd-post-5')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
+        </div>
+        <div id="rd-post-5-edit" style="display:none;margin-top:10px">
+          <textarea id="rd-post-5-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
+          <button onclick="submitEdit('rd-post-5')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
+        </div>
       </div>
     </div>
 
@@ -1737,6 +1836,48 @@ function sendHQ() {
 document.getElementById('hq-input').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') sendHQ();
 });
+
+// ═══ CONTENT ACTIONS (Approve / Reject / Suggest Edit) ══════════════════════
+function contentAction(id, action) {
+  var card = document.getElementById(id);
+  if (!card) return;
+  var btns = card.querySelectorAll('button');
+  btns.forEach(function(b) { b.disabled = true; b.style.opacity = '0.4'; });
+  var editBox = document.getElementById(id + '-edit');
+  if (editBox) editBox.style.display = 'none';
+  var pill = document.createElement('span');
+  pill.style.cssText = 'display:inline-block;padding:5px 14px;border-radius:100px;font-size:0.75rem;font-weight:700;margin-top:10px';
+  if (action === 'approve') {
+    pill.style.background = '#D1FAE5'; pill.style.color = '#065F46';
+    pill.textContent = '✓ Approved — ready to post';
+  } else {
+    pill.style.background = '#FEE2E2'; pill.style.color = '#B91C1C';
+    pill.textContent = '✗ Rejected — agent will rewrite';
+  }
+  card.appendChild(pill);
+}
+
+function contentEdit(id) {
+  var editBox = document.getElementById(id + '-edit');
+  if (!editBox) return;
+  var ta = document.getElementById(id + '-ta');
+  var body = document.getElementById(id + '-body');
+  if (ta && body && !ta.value) ta.value = body.textContent.trim();
+  editBox.style.display = editBox.style.display === 'none' ? 'block' : 'none';
+}
+
+function submitEdit(id) {
+  var ta = document.getElementById(id + '-ta');
+  if (!ta || !ta.value.trim()) return;
+  var editBox = document.getElementById(id + '-edit');
+  if (editBox) editBox.style.display = 'none';
+  var card = document.getElementById(id);
+  if (!card) return;
+  var pill = document.createElement('span');
+  pill.style.cssText = 'display:inline-block;padding:5px 14px;border-radius:100px;font-size:0.75rem;font-weight:700;margin-top:10px;background:#FEF3C7;color:#92400E';
+  pill.textContent = '✏ Edit sent — agent queued for rewrite';
+  card.appendChild(pill);
+}
 
 // PIN lock
 var PIN_HASH = '126226'; // change this to your 6-digit PIN
