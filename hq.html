@@ -164,6 +164,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .chat-input:focus{border-color:var(--teal)}
 .chat-send{background:var(--deep);color:white;border:none;border-radius:8px;padding:9px 16px;font-size:0.82rem;font-weight:600;cursor:pointer}
 .chat-send:hover{opacity:0.85}
+.ch-acc-bar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.ch-acc-label{font-size:0.68rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;white-space:nowrap}
+.ch-acc-btn{padding:6px 14px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);font-size:0.75rem;font-weight:700;cursor:pointer;transition:all 0.15s}
+.ch-acc-btn.active{background:var(--deep);color:white;border-color:var(--deep)}
+.ch-tag{display:inline-block;padding:2px 10px;border-radius:100px;font-size:0.66rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase}
+.ch-tag-brand{background:#DBEAFE;color:#1D4ED8}
+.ch-tag-personal{background:#F3E8FF;color:#7C3AED}
+.ch-tag-tiktok{background:#FEE2E2;color:#B91C1C}
+.ch-tag-linkedin{background:#DBEAFE;color:#1E40AF}
+.ch-tag-reddit{background:#FEF3C7;color:#92400E}
+.ch-body{background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.85;color:var(--text);white-space:pre-wrap;font-family:inherit;margin-bottom:14px}
+.ch-action-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.ch-btn-approve{padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer}
+.ch-btn-reject{padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer}
+.ch-btn-edit{padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer}
+.ch-edit-box{display:none;margin-top:12px}
+.ch-edit-box textarea{width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.82rem;font-family:inherit;resize:vertical}
+.ch-send-btn{margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer}
+.ch-status-pill{display:inline-block;padding:5px 14px;border-radius:100px;font-size:0.74rem;font-weight:700;margin-top:8px}
+.ch-queue-note{text-align:center;padding:18px;font-size:0.82rem;color:var(--g500);font-weight:600;border:2px dashed var(--g200);border-radius:10px;margin-top:6px}
+.ch-approved-row{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid var(--g200)}
+.ch-approved-row:last-child{border-bottom:none}
 </style>
 </head>
 <style>
@@ -448,276 +470,66 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ CONTENT HUB ══ -->
   <div class="page" id="page-content-hub">
-    <div class="ph"><h1>🎬 Content Hub</h1><p>Approved scripts · LinkedIn queue · Reddit drafts · Posting rules</p></div>
+    <div class="ph"><h1>🎬 Content Hub</h1><p>Brand @carely · Personal Prabh · 3 at a time · Approved archive</p></div>
     <div class="tabs">
-      <div class="tab active" onclick="switchTab(this,'ch-tiktok')">TikTok Scripts</div>
-      <div class="tab" onclick="switchTab(this,'ch-linkedin')">LinkedIn Queue</div>
-      <div class="tab" onclick="switchTab(this,'ch-reddit')">Reddit Drafts</div>
+      <div class="tab active" onclick="switchTab(this,'ch-tiktok');chRender('tiktok')">TikTok</div>
+      <div class="tab" onclick="switchTab(this,'ch-linkedin');chRender('linkedin')">LinkedIn</div>
+      <div class="tab" onclick="switchTab(this,'ch-reddit');chRender('reddit')">Reddit</div>
+      <div class="tab" style="color:var(--mint);font-weight:800" onclick="switchTab(this,'ch-approved');chRenderApproved('all')">✓ Approved</div>
       <div class="tab" onclick="switchTab(this,'ch-platform-intel')">Platform Intel</div>
-      <div class="tab" onclick="switchTab(this,'ch-rules')">Posting Rules</div>
+      <div class="tab" onclick="switchTab(this,'ch-rules')">Rules</div>
     </div>
 
     <div class="tab-panel active" id="ch-tiktok">
-      <div class="alert green">✅ <strong>3 scripts ready for review.</strong> Approve to lock in, Reject to remove, Edit to suggest changes.</div>
-      <div class="card" id="tt-script-1">
-        <div class="card-title">🎥 Script 1 — "The Story" <span class="pill green" style="margin-left:6px">FILM THIS FIRST</span></div>
-        <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Hook — face to camera, no music</div>
-        <div class="script-hook">"I'm a healthcare worker. And I almost let my own parents miss their medications for months."</div>
-        <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;margin-top:10px">Body</div>
-        <div class="script-body">"I work in healthcare. I know how dangerous missed medications are. But my parents live far away — different city — and I had no way to know if they were actually taking their meds every day.<br><br>I'd call them. They'd say yes. But I never really knew.<br><br>So my husband and I built an app. It sends them funny reminders. It tells me when they take their meds. And if they miss one — I get an alert.<br><br>It's called Carely. And we're launching May 5th."</div>
-        <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;margin-top:10px">CTA — show phone screen</div>
-        <div class="script-hook">"Link in bio. Founding member price is $5 a month — only 200 spots. We're almost out."</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><span class="pill teal">~45 seconds</span><span class="pill teal">Face to camera, raw</span><span class="pill teal">No fancy editing</span></div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button onclick="contentAction('tt-script-1','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
-          <button onclick="contentAction('tt-script-1','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
-          <button onclick="contentEdit('tt-script-1')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
-        </div>
-        <div id="tt-script-1-edit" style="display:none;margin-top:10px"><textarea rows="3" placeholder="What should change? Agent will rewrite based on your note..." style="width:100%;border:1.5px solid var(--g300);border-radius:8px;padding:10px;font-size:0.82rem;font-family:inherit;resize:vertical"></textarea><button onclick="submitEdit('tt-script-1')" style="margin-top:6px;padding:6px 16px;border-radius:8px;border:none;background:var(--deep);color:white;font-size:0.78rem;font-weight:700;cursor:pointer">Send to Agent</button></div>
+      <div class="ch-acc-bar">
+        <span class="ch-acc-label">Post from:</span>
+        <button class="ch-acc-btn active" id="tt-btn-brand" onclick="chSwitchAcc('tiktok','brand')">🎯 Brand @carely</button>
+        <button class="ch-acc-btn" id="tt-btn-personal" onclick="chSwitchAcc('tiktok','personal')">👤 Personal — Prabh</button>
+        <span id="tt-qlabel" style="margin-left:auto;font-size:0.72rem;color:var(--g500);font-weight:600"></span>
       </div>
-      <div class="card" id="tt-script-2">
-        <div class="card-title">🎥 Script 2 — "The Problem" <span class="pill amber" style="margin-left:6px">POST DAY 2–3</span></div>
-        <div class="script-hook">"If your parent takes medication and lives alone — watch this."</div>
-        <div class="script-body" style="margin-top:8px">"Did you know that 50% of seniors don't take their medications correctly?<br><br>Not because they don't care. Because they forget. Because no one's there to remind them.<br><br>And the scary part? One missed dose can mean a hospital visit.<br><br>I know this because I work in healthcare. I see it happen.<br><br>That's why we built Carely — an AI caretaker that reminds your parent to take their meds, tracks if they did it, and texts you if they didn't."</div>
-        <div class="script-hook" style="margin-top:8px">"Comment 'MOM' and I'll send you the link."</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><span class="pill teal">~40 seconds</span><span class="pill teal">Scrubs or work clothes</span><span class="pill teal">Show app notification mid-video</span></div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button onclick="contentAction('tt-script-2','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
-          <button onclick="contentAction('tt-script-2','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
-          <button onclick="contentEdit('tt-script-2')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
-        </div>
-        <div id="tt-script-2-edit" style="display:none;margin-top:10px"><textarea rows="3" placeholder="What should change? Agent will rewrite based on your note..." style="width:100%;border:1.5px solid var(--g300);border-radius:8px;padding:10px;font-size:0.82rem;font-family:inherit;resize:vertical"></textarea><button onclick="submitEdit('tt-script-2')" style="margin-top:6px;padding:6px 16px;border-radius:8px;border:none;background:var(--deep);color:white;font-size:0.78rem;font-weight:700;cursor:pointer">Send to Agent</button></div>
-      </div>
-      <div class="card" id="tt-script-3">
-        <div class="card-title">🎥 Script 3 — "The Demo" <span class="pill amber" style="margin-left:6px">POST DAY 4–5</span></div>
-        <div class="script-hook">"This notification just saved my mom from missing her blood pressure medication. Let me show you."</div>
-        <div class="script-body" style="margin-top:8px">"So this is Carely — the app we built for our parents.<br><br>Every day at the time my mom takes her medication — she gets a reminder. Not a boring beep. A message from Elara, our AI caretaker.<br><br>[show phone — Elara notification]<br><br>And here's the best part — I can see on my phone whether she took it or not.<br><br>[show caregiver view]<br><br>If she misses it — I get an alert immediately."</div>
-        <div class="script-hook" style="margin-top:8px">"It's $5 a month right now during launch. 200 spots only. Link in bio."</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><span class="pill teal">~50 seconds</span><span class="pill teal">Screen recording + face split</span><span class="pill teal">Show Elara notification</span></div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button onclick="contentAction('tt-script-3','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
-          <button onclick="contentAction('tt-script-3','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
-          <button onclick="contentEdit('tt-script-3')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
-        </div>
-        <div id="tt-script-3-edit" style="display:none;margin-top:10px"><textarea rows="3" placeholder="What should change? Agent will rewrite based on your note..." style="width:100%;border:1.5px solid var(--g300);border-radius:8px;padding:10px;font-size:0.82rem;font-family:inherit;resize:vertical"></textarea><button onclick="submitEdit('tt-script-3')" style="margin-top:6px;padding:6px 16px;border-radius:8px;border:none;background:var(--deep);color:white;font-size:0.78rem;font-weight:700;cursor:pointer">Send to Agent</button></div>
-      </div>
+      <div id="ch-tiktok-feed"></div>
     </div>
 
     <div class="tab-panel" id="ch-linkedin">
-      <div class="card">
-        <div class="card-title">📅 LinkedIn Posting Schedule</div>
-        <table class="tbl">
-          <thead><tr><th>Day</th><th>Slot</th><th>Theme</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Monday</strong></td><td>8AM PST</td><td>Caregiver story / emotional hook</td><td><span class="pill grey">Scheduled</span></td><td><div style="display:flex;gap:4px"><button onclick="contentAction('li-mon','approve')" style="padding:4px 10px;border-radius:6px;border:none;background:var(--mint);color:white;font-size:0.7rem;font-weight:700;cursor:pointer">✓</button><button onclick="contentAction('li-mon','reject')" style="padding:4px 10px;border-radius:6px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-size:0.7rem;font-weight:700;cursor:pointer">✗</button><button onclick="contentEdit('li-mon')" style="padding:4px 10px;border-radius:6px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-size:0.7rem;font-weight:700;cursor:pointer">✏</button></div></td></tr>
-            <tr><td><strong>Tuesday</strong></td><td>5PM PST</td><td>Healthcare worker perspective</td><td><span class="pill grey">Scheduled</span></td><td><div style="display:flex;gap:4px"><button onclick="contentAction('li-tue','approve')" style="padding:4px 10px;border-radius:6px;border:none;background:var(--mint);color:white;font-size:0.7rem;font-weight:700;cursor:pointer">✓</button><button onclick="contentAction('li-tue','reject')" style="padding:4px 10px;border-radius:6px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-size:0.7rem;font-weight:700;cursor:pointer">✗</button><button onclick="contentEdit('li-tue')" style="padding:4px 10px;border-radius:6px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-size:0.7rem;font-weight:700;cursor:pointer">✏</button></div></td></tr>
-            <tr><td><strong>Wednesday</strong></td><td>8AM PST</td><td>Launch / product feature</td><td><span class="pill green">Posted ✓</span></td><td>—</td></tr>
-            <tr><td><strong>Thursday</strong></td><td>5PM PST</td><td>Stat or data post</td><td><span class="pill grey">Scheduled</span></td><td><div style="display:flex;gap:4px"><button onclick="contentAction('li-thu','approve')" style="padding:4px 10px;border-radius:6px;border:none;background:var(--mint);color:white;font-size:0.7rem;font-weight:700;cursor:pointer">✓</button><button onclick="contentAction('li-thu','reject')" style="padding:4px 10px;border-radius:6px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-size:0.7rem;font-weight:700;cursor:pointer">✗</button><button onclick="contentEdit('li-thu')" style="padding:4px 10px;border-radius:6px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-size:0.7rem;font-weight:700;cursor:pointer">✏</button></div></td></tr>
-            <tr><td><strong>Friday</strong></td><td>8AM PST</td><td>Behind the scenes / build story</td><td><span class="pill grey">Scheduled</span></td><td><div style="display:flex;gap:4px"><button onclick="contentAction('li-fri','approve')" style="padding:4px 10px;border-radius:6px;border:none;background:var(--mint);color:white;font-size:0.7rem;font-weight:700;cursor:pointer">✓</button><button onclick="contentAction('li-fri','reject')" style="padding:4px 10px;border-radius:6px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-size:0.7rem;font-weight:700;cursor:pointer">✗</button><button onclick="contentEdit('li-fri')" style="padding:4px 10px;border-radius:6px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-size:0.7rem;font-weight:700;cursor:pointer">✏</button></div></td></tr>
-            <tr><td><strong>Saturday</strong></td><td>5PM PST</td><td>Community / user story</td><td><span class="pill grey">Scheduled</span></td><td><div style="display:flex;gap:4px"><button onclick="contentAction('li-sat','approve')" style="padding:4px 10px;border-radius:6px;border:none;background:var(--mint);color:white;font-size:0.7rem;font-weight:700;cursor:pointer">✓</button><button onclick="contentAction('li-sat','reject')" style="padding:4px 10px;border-radius:6px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-size:0.7rem;font-weight:700;cursor:pointer">✗</button><button onclick="contentEdit('li-sat')" style="padding:4px 10px;border-radius:6px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-size:0.7rem;font-weight:700;cursor:pointer">✏</button></div></td></tr>
-          </tbody>
-        </table>
+      <div class="ch-acc-bar">
+        <span class="ch-acc-label">Post from:</span>
+        <button class="ch-acc-btn active" id="li-btn-brand" onclick="chSwitchAcc('linkedin','brand')">🎯 Brand @carely</button>
+        <button class="ch-acc-btn" id="li-btn-personal" onclick="chSwitchAcc('linkedin','personal')">👤 Personal — Prabh</button>
+        <span id="li-qlabel" style="margin-left:auto;font-size:0.72rem;color:var(--g500);font-weight:600"></span>
       </div>
-      <div class="card">
-        <div class="card-title">🤝 Daily LinkedIn Connections</div>
-        <div class="list-item"><span>🎯</span><div class="name">7 connection notes/day sent to Prabh via Telegram at noon PST</div></div>
-        <div class="list-item"><span>🔄</span><div class="name">16 profile types rotating: buyers, referral partners, journalists</div></div>
-        <div class="list-item"><span>📩</span><div class="name">Prabh sends manually — 49/week (safe for 1yr-old account)</div><span class="pill amber">Manual send</span></div>
-      </div>
+      <div id="ch-linkedin-feed"></div>
     </div>
 
     <div class="tab-panel" id="ch-reddit">
-      <div class="alert blue">Two types below: <strong>Type 1</strong> = reply to an existing thread (warm, no pitch, end with a question). <strong>Type 2</strong> = standalone post to build Prabh's own community. Copy and paste as-is. Never mention Carely unless in Type 2 after trust is built.</div>
-
-      <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Type 1 — Reply Drafts (paste into existing threads)</div>
-
-      <div class="card" id="rd-reply-1">
-        <div class="card-title">💬 Reply — r/caregivers: "My mom keeps forgetting her blood pressure meds" <span class="pill amber" style="margin-left:6px">Ready to post</span></div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-reply-1-body">This was exactly us for two years. My mom lives three hours away and every night I'd call just to check if she'd taken her metformin.
-
-What helped honestly wasn't a complicated system. We started a little routine where she sends me a thumbs up after each dose. It became our daily hello.
-
-Have you tried making it a two-way check-in? Sometimes when they feel like someone genuinely cares rather than just policing them it changes everything. What does your mom respond to?</div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button onclick="contentAction('rd-reply-1','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
-          <button onclick="contentAction('rd-reply-1','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
-          <button onclick="contentEdit('rd-reply-1')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
-        </div>
-        <div id="rd-reply-1-edit" style="display:none;margin-top:10px">
-          <textarea id="rd-reply-1-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
-          <button onclick="submitEdit('rd-reply-1')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
-        </div>
+      <div class="ch-acc-bar">
+        <span class="ch-acc-label">Account:</span>
+        <span style="font-size:0.78rem;font-weight:700;color:var(--deep)">👤 Personal — Prabh only</span>
+        <span style="font-size:0.72rem;color:var(--g500);margin-left:6px">(brand Reddit = inauthentic, never do it)</span>
+        <span id="rd-qlabel" style="margin-left:auto;font-size:0.72rem;color:var(--g500);font-weight:600"></span>
       </div>
-
-      <div class="card" id="rd-reply-2">
-        <div class="card-title">💬 Reply — r/eldercare: "Best apps for tracking senior medications?" <span class="pill amber" style="margin-left:6px">Ready to post</span></div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-reply-2-body">I went through about six apps before something actually clicked for our family.
-
-The thing I noticed was that reminders alone weren't enough because my dad would dismiss them and then forget he'd dismissed them. What made the difference was being able to see on my end whether he'd actually confirmed it, not just been reminded.
-
-What's your dad's comfort level with his phone? That changed everything for us in terms of what would realistically work day to day.</div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button onclick="contentAction('rd-reply-2','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
-          <button onclick="contentAction('rd-reply-2','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
-          <button onclick="contentEdit('rd-reply-2')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
-        </div>
-        <div id="rd-reply-2-edit" style="display:none;margin-top:10px">
-          <textarea id="rd-reply-2-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
-          <button onclick="submitEdit('rd-reply-2')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
-        </div>
+      <div class="ch-acc-bar" style="margin-top:-6px">
+        <button class="ch-acc-btn active" id="rd-btn-reply" onclick="chSwitchRedditType('reply')">💬 Replies</button>
+        <button class="ch-acc-btn" id="rd-btn-post" onclick="chSwitchRedditType('post')">📝 Posts</button>
       </div>
+      <div id="ch-reddit-feed"></div>
+    </div>
 
-      <div class="card" id="rd-reply-3">
-        <div class="card-title">💬 Reply — r/AgingParents: "I feel so guilty I can't be there" <span class="pill amber" style="margin-left:6px">Ready to post</span></div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-reply-3-body">I know this feeling so well. I work in healthcare and I still couldn't be at ease about my own parents' medications when I wasn't there.
-
-The guilt doesn't fully go away but what helped me was shifting from "I need to be there" to "I need to know they're okay." Once I could actually see their daily routine even from a distance the anxiety dropped a lot.
-
-Have you found anything that gives you even a little peace of mind on the days you can't call? Sometimes hearing what other people do helps more than any advice.</div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button onclick="contentAction('rd-reply-3','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
-          <button onclick="contentAction('rd-reply-3','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
-          <button onclick="contentEdit('rd-reply-3')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
-        </div>
-        <div id="rd-reply-3-edit" style="display:none;margin-top:10px">
-          <textarea id="rd-reply-3-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
-          <button onclick="submitEdit('rd-reply-3')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
-        </div>
+    <div class="tab-panel" id="ch-approved">
+      <div class="ch-acc-bar">
+        <span class="ch-acc-label">Filter:</span>
+        <button class="ch-acc-btn active" id="ap-btn-all" onclick="chRenderApproved('all');chApvBtn(this)">All</button>
+        <button class="ch-acc-btn" onclick="chRenderApproved('brand');chApvBtn(this)">Brand</button>
+        <button class="ch-acc-btn" onclick="chRenderApproved('personal');chApvBtn(this)">Personal</button>
+        <button class="ch-acc-btn" onclick="chRenderApproved('tiktok');chApvBtn(this)">TikTok</button>
+        <button class="ch-acc-btn" onclick="chRenderApproved('linkedin');chApvBtn(this)">LinkedIn</button>
+        <button class="ch-acc-btn" onclick="chRenderApproved('reddit');chApvBtn(this)">Reddit</button>
       </div>
-
-      <div class="card" id="rd-reply-4">
-        <div class="card-title">💬 Reply — r/dementia: "Dad keeps taking double doses by accident" <span class="pill amber" style="margin-left:6px">Ready to post</span></div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-reply-4-body">This is one of the scariest parts of medication management with dementia and you're right to take it seriously.
-
-What helped our family was separating the physical availability of the medication from the reminder. So instead of having the whole bottle accessible we moved to a system where the dose was pre-set for the day, separate, somewhere visible.
-
-Is someone able to help set up the doses each morning even if they can't be there all day? That one change made a huge difference for us.</div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button onclick="contentAction('rd-reply-4','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
-          <button onclick="contentAction('rd-reply-4','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
-          <button onclick="contentEdit('rd-reply-4')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
-        </div>
-        <div id="rd-reply-4-edit" style="display:none;margin-top:10px">
-          <textarea id="rd-reply-4-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
-          <button onclick="submitEdit('rd-reply-4')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
-        </div>
-      </div>
-
-      <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;margin-top:6px">Type 2 — Community Posts (build Prabh's own audience, post as Prabh)</div>
-
-      <div class="card" id="rd-post-1">
-        <div class="card-title">📝 Post — r/caregivers <span class="pill teal" style="margin-left:6px">Community builder</span></div>
-        <div style="font-size:0.72rem;font-weight:700;color:var(--g500);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em">Title</div>
-        <div style="background:var(--light);border-radius:6px;padding:8px 12px;font-size:0.82rem;font-weight:700;color:var(--deep);margin-bottom:10px">How do you actually know if your parent took their medication today?</div>
-        <div style="font-size:0.72rem;font-weight:700;color:var(--g500);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em">Body</div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-post-1-body">Not asking for a product recommendation. Genuinely curious what other families have figured out.
-
-My parents live in a different city. My mom takes three medications daily and I worry about it more than I let on. I've tried calling every day, pill organizers, sticky notes on the mirror.
-
-Some days I feel like I'm doing everything right and other days I have no idea if any of it is landing.
-
-What has actually worked for your family, especially if you're also not living with them?</div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button onclick="contentAction('rd-post-1','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
-          <button onclick="contentAction('rd-post-1','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
-          <button onclick="contentEdit('rd-post-1')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
-        </div>
-        <div id="rd-post-1-edit" style="display:none;margin-top:10px">
-          <textarea id="rd-post-1-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
-          <button onclick="submitEdit('rd-post-1')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
-        </div>
-      </div>
-
-      <div class="card" id="rd-post-2">
-        <div class="card-title">📝 Post — r/eldercare <span class="pill teal" style="margin-left:6px">Community builder</span></div>
-        <div style="font-size:0.72rem;font-weight:700;color:var(--g500);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em">Title</div>
-        <div style="background:var(--light);border-radius:6px;padding:8px 12px;font-size:0.82rem;font-weight:700;color:var(--deep);margin-bottom:10px">Anyone else feel like managing an aging parent's medications is a full-time second job?</div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-post-2-body">I work in healthcare. I know better than most how dangerous a missed dose can be. And yet when it comes to my own parents I still feel constantly behind.
-
-It's not that they're irresponsible. It's that life gets busy, the routine slips, and there's no one there to notice.
-
-What's been your biggest challenge with this? I'm curious whether it's the reminding itself or the follow-through after.</div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button onclick="contentAction('rd-post-2','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
-          <button onclick="contentAction('rd-post-2','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
-          <button onclick="contentEdit('rd-post-2')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
-        </div>
-        <div id="rd-post-2-edit" style="display:none;margin-top:10px">
-          <textarea id="rd-post-2-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
-          <button onclick="submitEdit('rd-post-2')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
-        </div>
-      </div>
-
-      <div class="card" id="rd-post-3">
-        <div class="card-title">📝 Post — r/AgingParents <span class="pill teal" style="margin-left:6px">Community builder</span></div>
-        <div style="font-size:0.72rem;font-weight:700;color:var(--g500);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em">Title</div>
-        <div style="background:var(--light);border-radius:6px;padding:8px 12px;font-size:0.82rem;font-weight:700;color:var(--deep);margin-bottom:10px">What's the hardest part of being a long-distance caregiver? I'll go first.</div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-post-3-body">For me it's the not knowing. My parents are healthy and mostly independent but they're getting older and I live far away.
-
-It's not any one thing that worries me. It's the accumulation of small things I can't see from a distance. Did they eat today. Are they sleeping. Did they take their medications.
-
-I've been thinking about what actually helps versus what just makes me feel like I'm doing something. They're not always the same thing.
-
-What's your hardest part? Would love to hear from others dealing with this.</div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button onclick="contentAction('rd-post-3','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
-          <button onclick="contentAction('rd-post-3','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
-          <button onclick="contentEdit('rd-post-3')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
-        </div>
-        <div id="rd-post-3-edit" style="display:none;margin-top:10px">
-          <textarea id="rd-post-3-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
-          <button onclick="submitEdit('rd-post-3')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
-        </div>
-      </div>
-
-      <div class="card" id="rd-post-4">
-        <div class="card-title">📝 Post — Prabh's own community (intro post when she starts her own subreddit or Facebook group) <span class="pill purple" style="margin-left:6px">Community launch</span></div>
-        <div style="font-size:0.72rem;font-weight:700;color:var(--g500);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em">Title</div>
-        <div style="background:var(--light);border-radius:6px;padding:8px 12px;font-size:0.82rem;font-weight:700;color:var(--deep);margin-bottom:10px">I'm a healthcare worker and a long-distance daughter. I started this community because I couldn't find one like it.</div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-post-4-body">My parents are in their 60s. Still independent. Still sharp. But they're getting older and I'm hours away and some days that gap feels enormous.
-
-I work in healthcare and I still couldn't find a good place to talk honestly about what long-distance caregiving actually feels like. The worry. The guilt. The little systems you build so you can sleep at night.
-
-This community is for people like me. Adult children, caregivers, healthcare workers, anyone who looks after someone from a distance and wants to talk about it honestly.
-
-No advice columns. No sales pitches. Just people figuring it out together.
-
-What brought you here?</div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button onclick="contentAction('rd-post-4','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
-          <button onclick="contentAction('rd-post-4','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
-          <button onclick="contentEdit('rd-post-4')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
-        </div>
-        <div id="rd-post-4-edit" style="display:none;margin-top:10px">
-          <textarea id="rd-post-4-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
-          <button onclick="submitEdit('rd-post-4')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
-        </div>
-      </div>
-
-      <div class="card" id="rd-post-5">
-        <div class="card-title">📝 Post — Carely soft mention (use only after 5+ posts of pure community value) <span class="pill red" style="margin-left:6px">Only after credibility</span></div>
-        <div style="background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:inherit" id="rd-post-5-body">A few months ago my husband and I got tired of the problem and decided to build something ourselves.
-
-We're both in healthcare. We'd tried every app. None of them let me actually see from my phone whether my parents had taken their medications. They'd just remind and hope.
-
-So we built Carely. It reminds them, they confirm, I can see it. If they miss something I get an alert. Elara, the AI inside the app, even checks in on them every morning.
-
-We launched this week. $5 a month for the first 200 families, then it goes up. If you want to try it, link is in my profile.
-
-Happy to answer questions. And if you try it and hate it please tell me why, genuinely.</div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button onclick="contentAction('rd-post-5','approve')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--mint);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">✓ Approve</button>
-          <button onclick="contentAction('rd-post-5','reject')" style="padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;background:white;color:#ef4444;font-weight:700;font-size:0.78rem;cursor:pointer">✗ Reject</button>
-          <button onclick="contentEdit('rd-post-5')" style="padding:7px 18px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--deep);font-weight:700;font-size:0.78rem;cursor:pointer">✏ Suggest Edit</button>
-        </div>
-        <div id="rd-post-5-edit" style="display:none;margin-top:10px">
-          <textarea id="rd-post-5-ta" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--g300);font-size:0.83rem;font-family:inherit;resize:vertical"></textarea>
-          <button onclick="submitEdit('rd-post-5')" style="margin-top:6px;padding:7px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.78rem;cursor:pointer">Send to Agent</button>
-        </div>
+      <div id="ch-approved-feed">
+        <div style="text-align:center;padding:60px;color:var(--g500);font-size:0.84rem">No approved posts yet. Approve content from TikTok, LinkedIn, or Reddit tabs.</div>
       </div>
     </div>
 
-    <div class="tab-panel" id="ch-platform-intel">
+        <div class="tab-panel" id="ch-platform-intel">
       <div class="alert blue">Platform algorithms change constantly. These rules are based on verified 2025–2026 data from creator studies and platform reports. Rex and Leo use this to choose format + timing.</div>
 
       <div class="card">
@@ -1837,9 +1649,361 @@ document.getElementById('hq-input').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') sendHQ();
 });
 
-// ═══ CONTENT ACTIONS (Approve / Reject / Suggest Edit) ══════════════════════
+// ═══ CONTENT HUB — DATA + QUEUE SYSTEM ══════════════════════════════════════
 var _BACKEND = 'https://carely-backend-production.up.railway.app';
 var _SECRET  = 'carely-admin-6add43330d2313d8';
+
+var CH_ITEMS = [
+  // ── TIKTOK BRAND (@carely) ──────────────────────────────────────────────────
+  { id:'tt-br-1', platform:'tiktok', account:'brand', rdtype:null, accountLabel:'@carely', type:'TikTok Script',
+    title:'"Elara\'s Morning" — Show Elara AI sending morning check-in', badge:'FILM THIS',
+    content:'HOOK (face to camera, 3 sec):\n"This AI just checked in on my mom before I even woke up."\n\nBODY:\nEvery morning at 9am, Elara — the AI inside Carely — sends a warm personal message to your parent.\n\nNot a push notification. An actual check-in.\n\n[show phone — Elara message]\n\n"Good morning Margaret. Time for your metformin. How are you feeling today?"\n\nAnd I can see on my phone that she responded.\n\n[show caregiver dashboard — green checkmark]\n\nThat\'s Carely.\n\nCTA:\n"$5/month founding price. 200 spots. Link in bio."' },
+  { id:'tt-br-2', platform:'tiktok', account:'brand', rdtype:null, accountLabel:'@carely', type:'TikTok Script',
+    title:'"The Miss Alert" — What Carely does when a dose is missed', badge:'POST DAY 2',
+    content:'HOOK:\n"Your parent just missed their medication. Here\'s what Carely does next."\n\nBODY:\nStep one — Elara sends a follow-up. Warm, not alarming.\n\n[show second Elara message]\n\nStep two — if no response in 30 minutes, the caregiver gets an alert.\n\n[show alert on caregiver phone]\n\nStep three — caregiver calls. Dose gets taken.\n\nNo hospital visit. No crisis. Just a quiet system working in the background.\n\nCTA:\n"Try free for 7 days. Link in bio."' },
+  { id:'tt-br-3', platform:'tiktok', account:'brand', rdtype:null, accountLabel:'@carely', type:'TikTok Script',
+    title:'"How It Works" — Setup in 5 minutes, full product demo', badge:'POST DAY 4',
+    content:'HOOK:\n"Set it up once. Never worry about a missed dose again."\n\nBODY:\n[screen recording]\n\nStep 1: Add your parent\'s medications and schedule.\n\nStep 2: They get personalized reminders from Elara — our AI caretaker.\n\nStep 3: They tap to confirm.\n\nStep 4: You see it in real time.\n\nStep 5: If they miss it — you get an immediate alert.\n\nFive steps. Under 5 minutes to set up.\n\nCTA:\n"Download Carely. First 7 days free. Link in bio."' },
+
+  // ── TIKTOK PERSONAL (Prabh) ─────────────────────────────────────────────────
+  { id:'tt-pr-1', platform:'tiktok', account:'personal', rdtype:null, accountLabel:'Prabh personal', type:'TikTok Script',
+    title:'"The Story" — Healthcare worker, parents far away, built Carely', badge:'FILM FIRST',
+    content:'HOOK (face to camera, raw):\n"I\'m a healthcare worker. And I almost let my own parents miss their medications for months."\n\nBODY:\nI work in healthcare. I know how dangerous missed medications are. But my parents live far away and I had no way to know if they were actually taking their meds every day.\n\nI\'d call them. They\'d say yes. But I never really knew.\n\nSo my husband and I built an app. It reminds them. It tells me when they take their meds. If they miss one — I get an alert immediately.\n\nIt\'s called Carely.\n\nCTA:\n"Link in bio. Founding member price is $5 a month — only 200 spots. We\'re almost out."' },
+  { id:'tt-pr-2', platform:'tiktok', account:'personal', rdtype:null, accountLabel:'Prabh personal', type:'TikTok Script',
+    title:'"The Problem" — 50% stat, lived experience, why it matters', badge:'POST DAY 2',
+    content:'HOOK:\n"If your parent takes medication and lives alone — watch this."\n\nBODY:\n50% of seniors don\'t take their medications correctly.\n\nNot because they don\'t care. Because they forget. Because no one\'s there to notice.\n\nAnd one missed dose can mean a hospital visit. I know this because I work in healthcare.\n\nThat\'s why I built Carely — an AI caretaker that reminds your parent, tracks if they did it, and alerts you if they didn\'t.\n\nCTA:\n"Comment \'MOM\' and I\'ll send you the link."' },
+  { id:'tt-pr-3', platform:'tiktok', account:'personal', rdtype:null, accountLabel:'Prabh personal', type:'TikTok Script',
+    title:'"The Demo" — Shows app working in real time, caregiver view', badge:'POST DAY 4',
+    content:'HOOK:\n"This notification just saved my mom from missing her blood pressure medication."\n\nBODY:\nSo this is Carely — the app I built with my husband.\n\nEvery day, my mom gets a reminder from Elara, our AI caretaker.\n\n[show phone — Elara notification]\n\nShe taps confirm. And here — I can see it on my phone in real time.\n\n[show caregiver view — green checkmark]\n\nIf she misses it — I get an alert. Not the next day. Right then.\n\nCTA:\n"$5 a month right now during launch. 200 spots only. Link in bio."' },
+
+  // ── LINKEDIN BRAND (@carely company page) ───────────────────────────────────
+  { id:'li-br-1', platform:'linkedin', account:'brand', rdtype:null, accountLabel:'@carely company page', type:'LinkedIn Post',
+    title:'Launch Announcement — "Carely is officially live"', badge:'POST NOW',
+    content:'Carely is officially live.\n\nWe built this for the 53 million family caregivers in North America who lie awake wondering: did my parent take their medication today?\n\nCarely gives you the answer — in real time.\n\n→ Personalized AI reminders (not generic push notifications)\n→ Confirmation visible to the caregiver the moment it happens\n→ Instant alert if a dose is missed\n→ Elara, an AI caretaker who checks in every morning\n\nWe\'re not a reminder app. We\'re the peace of mind between a caregiver and the person they love most.\n\nFounding member pricing: $5/month for the first 200 families. After that, $9.99.\n\nLink in comments.' },
+  { id:'li-br-2', platform:'linkedin', account:'brand', rdtype:null, accountLabel:'@carely company page', type:'LinkedIn Post',
+    title:'Meet Elara — The AI caretaker inside Carely', badge:'POST DAY 3',
+    content:'Meet Elara — Carely\'s AI caretaker.\n\nElara isn\'t a notification. She\'s a presence.\n\nEvery morning she sends a personal message to your parent. Not "Take your medication." Something warm. Something that feels like someone cares.\n\nShe remembers what medications they take. She adjusts to their condition. She checks in — and reports back to the family.\n\nIf your parent misses a dose, Elara follows up. If still no response, she alerts the caregiver.\n\nThis is what AI should do in healthcare: not replace the caregiver, but extend their reach.\n\nElara is live inside Carely. First 7 days free.' },
+  { id:'li-br-3', platform:'linkedin', account:'brand', rdtype:null, accountLabel:'@carely company page', type:'LinkedIn Post',
+    title:'The Statistics — Medication non-adherence is a $300B problem', badge:'POST DAY 5',
+    content:'50% of seniors don\'t take their medications correctly.\n\nThe result:\n→ 125,000 preventable deaths per year in the US alone\n→ $300 billion in avoidable healthcare costs annually\n→ 1 in 4 hospital readmissions linked to medication non-adherence\n\nThe problem isn\'t that patients don\'t care. It\'s that the system assumes someone is watching.\n\nOften, no one is.\n\nCarely is built for the gap between clinic visits — the 23 hours a day when a patient is home, alone, and responsible for remembering.\n\nA reminder that no one follows up on isn\'t a reminder. It\'s noise.\n\nWe do the follow-up. That\'s the difference.' },
+
+  // ── LINKEDIN PERSONAL (Prabh profile) ────────────────────────────────────────
+  { id:'li-pr-1', platform:'linkedin', account:'personal', rdtype:null, accountLabel:'Prabh personal profile', type:'LinkedIn Post',
+    title:'"Why I Built This" — 8 years in healthcare, still couldn\'t track parents', badge:'POST NOW',
+    content:'I have spent 8 years in healthcare telling patients to take their medications.\n\nThen I\'d go home and have no idea if my own parents were taking theirs.\n\nThey live in a different city. I call them every day. They always say yes. But I know what medication non-adherence actually looks like. And I know how easy it is to say yes when someone asks.\n\nSo my husband and I built Carely.\n\nNot because it was a business opportunity. Because I needed it. Because I was tired of the guilt that lives in the gap between knowing the risk and being able to do anything about it.\n\nWe launched this week. It\'s the thing I wish had existed three years ago.\n\nIf you\'re in a similar situation — I\'d love to hear your story.' },
+  { id:'li-pr-2', platform:'linkedin', account:'personal', rdtype:null, accountLabel:'Prabh personal profile', type:'LinkedIn Post',
+    title:'"The 2am Call" — Mom scared to take second dose, hospital risk', badge:'POST DAY 3',
+    content:'Two years ago I got a call from my mom at 2am.\n\nShe wasn\'t sure if she had taken her heart medication or not. She was scared to take a second dose. Scared not to.\n\nI spent 45 minutes on the phone with her, talking her through it.\n\nI work in healthcare. I know what double-dosing certain medications can do. I knew the risk was real.\n\nThat night I realized the system I trusted to keep patients safe had no answer for the hours between clinic visits.\n\nCarely is my answer to that night. Real-time confirmation. Immediate alerts. An AI that checks in so neither of us has to live in that uncertainty.\n\nWe launched this week. I\'m proud of what we built — and more proud of why we built it.' },
+  { id:'li-pr-3', platform:'linkedin', account:'personal', rdtype:null, accountLabel:'Prabh personal profile', type:'LinkedIn Post',
+    title:'"What Healthcare Taught Me" — Outcomes happen outside the clinic', badge:'POST DAY 6',
+    content:'Eight years in healthcare taught me one thing that no one talks about:\n\nPatient outcomes are mostly determined by what happens outside the clinic.\n\nWe spend billions on hospital infrastructure and minutes on follow-through after discharge. We hand someone a prescription and trust them to manage it — alone, confused, scared.\n\nMedication adherence is a dignity issue, not a compliance issue. People don\'t want to fail their own health. They need a system that supports them without making them feel policed.\n\nThat\'s the design principle behind Carely. Reminders that feel like care, not surveillance. An AI that feels like a kind nurse, not an alarm.\n\nI built the product I wish existed for my patients. And for my parents.\n\nHealthcare workers — what do you see in your own practice around this?' },
+
+  // ── REDDIT REPLIES (Prabh personal) ─────────────────────────────────────────
+  { id:'rd-re-1', platform:'reddit', account:'personal', rdtype:'reply', accountLabel:'Prabh personal', type:'Reddit Reply',
+    title:'r/caregivers — "My mom keeps forgetting her blood pressure meds"', badge:'REPLY',
+    content:'This was exactly us for two years. My mom lives three hours away and every night I\'d call just to check if she\'d taken her metformin.\n\nWhat helped honestly wasn\'t a complicated system. We started a little routine where she sends me a thumbs up after each dose. It became our daily hello.\n\nHave you tried making it a two-way check-in? Sometimes when they feel like someone genuinely cares rather than just policing them it changes everything. What does your mom respond to?' },
+  { id:'rd-re-2', platform:'reddit', account:'personal', rdtype:'reply', accountLabel:'Prabh personal', type:'Reddit Reply',
+    title:'r/eldercare — "Best apps for tracking senior medications?"', badge:'REPLY',
+    content:'I went through about six apps before something actually clicked for our family.\n\nThe thing I noticed was that reminders alone weren\'t enough because my dad would dismiss them and then forget he\'d dismissed them. What made the difference was being able to see on my end whether he\'d actually confirmed it, not just been reminded.\n\nWhat\'s your dad\'s comfort level with his phone? That changed everything for us in terms of what would realistically work day to day.' },
+  { id:'rd-re-3', platform:'reddit', account:'personal', rdtype:'reply', accountLabel:'Prabh personal', type:'Reddit Reply',
+    title:'r/AgingParents — "I feel so guilty I can\'t be there"', badge:'REPLY',
+    content:'I know this feeling so well. I work in healthcare and I still couldn\'t be at ease about my own parents\' medications when I wasn\'t there.\n\nThe guilt doesn\'t fully go away but what helped me was shifting from "I need to be there" to "I need to know they\'re okay." Once I could actually see their daily routine even from a distance the anxiety dropped a lot.\n\nHave you found anything that gives you even a little peace of mind on the days you can\'t call? Sometimes hearing what other people do helps more than any advice.' },
+  { id:'rd-re-4', platform:'reddit', account:'personal', rdtype:'reply', accountLabel:'Prabh personal', type:'Reddit Reply',
+    title:'r/dementia — "Dad keeps taking double doses by accident"', badge:'REPLY',
+    content:'This is one of the scariest parts of medication management with dementia and you\'re right to take it seriously.\n\nWhat helped our family was separating the physical availability of the medication from the reminder. So instead of having the whole bottle accessible we moved to a system where the dose was pre-set for the day, separate, somewhere visible.\n\nIs someone able to help set up the doses each morning even if they can\'t be there all day? That one change made a huge difference for us.' },
+
+  // ── REDDIT POSTS (Prabh personal) ────────────────────────────────────────────
+  { id:'rd-po-1', platform:'reddit', account:'personal', rdtype:'post', accountLabel:'Prabh personal', type:'Reddit Post',
+    title:'r/caregivers — "How do you actually know if your parent took their meds today?"', badge:'POST',
+    content:'TITLE: How do you actually know if your parent took their medication today?\n\nNot asking for a product recommendation. Genuinely curious what other families have figured out.\n\nMy parents live in a different city. My mom takes three medications daily and I worry about it more than I let on. I\'ve tried calling every day, pill organizers, sticky notes on the mirror.\n\nSome days I feel like I\'m doing everything right and other days I have no idea if any of it is landing.\n\nWhat has actually worked for your family, especially if you\'re not living with them?' },
+  { id:'rd-po-2', platform:'reddit', account:'personal', rdtype:'post', accountLabel:'Prabh personal', type:'Reddit Post',
+    title:'r/eldercare — "Anyone else feel like managing parent meds is a second job?"', badge:'POST',
+    content:'TITLE: Anyone else feel like managing an aging parent\'s medications is a full-time second job?\n\nI work in healthcare. I know better than most how dangerous a missed dose can be. And yet when it comes to my own parents I still feel constantly behind.\n\nIt\'s not that they\'re irresponsible. It\'s that life gets busy, the routine slips, and there\'s no one there to notice.\n\nWhat\'s been your biggest challenge with this? I\'m curious whether it\'s the reminding itself or the follow-through after.' },
+  { id:'rd-po-3', platform:'reddit', account:'personal', rdtype:'post', accountLabel:'Prabh personal', type:'Reddit Post',
+    title:'r/AgingParents — "Hardest part of long-distance caregiving? I\'ll go first."', badge:'POST',
+    content:'TITLE: What\'s the hardest part of being a long-distance caregiver? I\'ll go first.\n\nFor me it\'s the not knowing. My parents are healthy and mostly independent but they\'re getting older and I live far away.\n\nIt\'s not any one thing that worries me. It\'s the accumulation of small things I can\'t see from a distance. Did they eat today. Are they sleeping. Did they take their medications.\n\nI\'ve been thinking about what actually helps versus what just makes me feel like I\'m doing something. They\'re not always the same thing.\n\nWhat\'s your hardest part? Would love to hear from others dealing with this.' },
+  { id:'rd-po-4', platform:'reddit', account:'personal', rdtype:'post', accountLabel:'Prabh personal', type:'Reddit Post',
+    title:'Community intro post — for Prabh\'s own group (save until group is created)', badge:'SAVE FOR LATER',
+    content:'TITLE: I\'m a healthcare worker and a long-distance daughter. I started this community because I couldn\'t find one like it.\n\nMy parents are in their 60s. Still independent. Still sharp. But they\'re getting older and I\'m hours away and some days that gap feels enormous.\n\nI work in healthcare and I still couldn\'t find a good place to talk honestly about what long-distance caregiving actually feels like. The worry. The guilt. The little systems you build so you can sleep at night.\n\nThis community is for people like me. Adult children, caregivers, healthcare workers — anyone who looks after someone from a distance and wants to talk about it honestly.\n\nNo advice columns. No sales pitches. Just people figuring it out together.\n\nWhat brought you here?' },
+  { id:'rd-po-5', platform:'reddit', account:'personal', rdtype:'post', accountLabel:'Prabh personal', type:'Reddit Post',
+    title:'Carely soft mention — ONLY after 5+ community posts first', badge:'AFTER CREDIBILITY',
+    content:'A few months ago my husband and I got tired of the problem and decided to build something ourselves.\n\nWe\'re both in healthcare. We\'d tried every app. None of them let me actually see from my phone whether my parents had taken their medications. They\'d just remind and hope.\n\nSo we built Carely. It reminds them, they confirm, I can see it. If they miss something I get an alert. Elara, the AI inside the app, even checks in on them every morning.\n\nWe launched this week. $5 a month for the first 200 families, then it goes up. If you want to try it, link is in my profile.\n\nHappy to answer questions. And if you try it and hate it please tell me why, genuinely.' },
+];
+
+// ── State ─────────────────────────────────────────────────────────────────────
+var _chS = {};
+var _chRedditType = 'reply';
+var _chAccounts = { tiktok:'brand', linkedin:'brand' };
+
+function _chLoad() { try { _chS = JSON.parse(localStorage.getItem('carely-ch') || '{}'); } catch(e) { _chS = {}; } }
+function _chSave() { localStorage.setItem('carely-ch', JSON.stringify(_chS)); }
+function _chGet(id) { return _chS[id] || { status:'pending' }; }
+function _chSet(id, patch) { _chS[id] = Object.assign({}, _chGet(id), patch); _chSave(); }
+function _chContent(item) { return (_chS[item.id] && _chS[item.id].content) ? _chS[item.id].content : item.content; }
+
+var STATUS_BG = { 'FILM FIRST':'#D1FAE5','FILM THIS':'#D1FAE5','POST NOW':'#D1FAE5','REPLY':'#DBEAFE','POST':'#DBEAFE','POST DAY 2':'#FEF3C7','POST DAY 3':'#FEF3C7','POST DAY 4':'#FEF3C7','POST DAY 5':'#FEF3C7','POST DAY 6':'#FEF3C7','SAVE FOR LATER':'#EDE9FE','AFTER CREDIBILITY':'#FEE2E2' };
+var STATUS_FG = { 'FILM FIRST':'#065F46','FILM THIS':'#065F46','POST NOW':'#065F46','REPLY':'#1D4ED8','POST':'#1D4ED8','POST DAY 2':'#92400E','POST DAY 3':'#92400E','POST DAY 4':'#92400E','POST DAY 5':'#92400E','POST DAY 6':'#92400E','SAVE FOR LATER':'#5B21B6','AFTER CREDIBILITY':'#B91C1C' };
+
+function _chCard(item) {
+  var content = _chContent(item);
+  var sBg = STATUS_BG[item.badge] || '#F3F4F6';
+  var sFg = STATUS_FG[item.badge] || '#374151';
+  var card = document.createElement('div');
+  card.className = 'card';
+  card.setAttribute('data-ch-id', item.id);
+
+  var hdr = document.createElement('div');
+  hdr.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap';
+  hdr.innerHTML = '<span class="ch-tag ch-tag-' + item.account + '">' + item.accountLabel + '</span>' +
+    '<span class="ch-tag ch-tag-' + item.platform + '">' + item.type + '</span>' +
+    '<span style="display:inline-block;padding:2px 10px;border-radius:100px;font-size:0.66rem;font-weight:800;background:' + sBg + ';color:' + sFg + '">' + item.badge + '</span>';
+  card.appendChild(hdr);
+
+  var title = document.createElement('div');
+  title.className = 'card-title';
+  title.style.marginBottom = '10px';
+  title.textContent = item.title;
+  card.appendChild(title);
+
+  var body = document.createElement('div');
+  body.className = 'ch-body';
+  body.setAttribute('data-body','1');
+  body.textContent = content;
+  card.appendChild(body);
+
+  var actions = document.createElement('div');
+  actions.className = 'ch-action-row';
+
+  var apBtn = document.createElement('button');
+  apBtn.className = 'ch-btn-approve';
+  apBtn.textContent = '✓ Approve & Posted';
+  apBtn.onclick = (function(i){ return function(){ chAction(i.id,'approve'); }; })(item);
+
+  var rjBtn = document.createElement('button');
+  rjBtn.className = 'ch-btn-reject';
+  rjBtn.textContent = '✗ Reject';
+  rjBtn.onclick = (function(i){ return function(){ chAction(i.id,'reject'); }; })(item);
+
+  var edBtn = document.createElement('button');
+  edBtn.className = 'ch-btn-edit';
+  edBtn.textContent = '✏ Edit';
+  edBtn.onclick = (function(i){ return function(){ chToggleEdit(i.id); }; })(item);
+
+  actions.appendChild(apBtn); actions.appendChild(rjBtn); actions.appendChild(edBtn);
+  card.appendChild(actions);
+
+  var editBox = document.createElement('div');
+  editBox.className = 'ch-edit-box';
+  editBox.setAttribute('data-edit','1');
+  var ta = document.createElement('textarea');
+  ta.rows = 4;
+  ta.placeholder = 'Tell the agent what to change — voice, tone, length, angle. It rewrites keeping Prabh\'s authentic voice...';
+  var sendBtn = document.createElement('button');
+  sendBtn.className = 'ch-send-btn';
+  sendBtn.textContent = 'Send to Agent';
+  sendBtn.onclick = (function(i){ return function(){ chSubmitEdit(i.id); }; })(item);
+  editBox.appendChild(ta);
+  editBox.appendChild(sendBtn);
+  card.appendChild(editBox);
+
+  return card;
+}
+
+function chRender(platform) {
+  _chLoad();
+  var account = _chAccounts[platform] || 'brand';
+  var rdtype = (platform === 'reddit') ? _chRedditType : null;
+  var feed = document.getElementById('ch-' + platform + '-feed');
+  if (!feed) return;
+
+  var items = CH_ITEMS.filter(function(it) {
+    if (it.platform !== platform) return false;
+    if (it.account !== account) return false;
+    if (rdtype && it.rdtype !== rdtype) return false;
+    return _chGet(it.id).status === 'pending';
+  });
+
+  var qlabelId = platform === 'tiktok' ? 'tt-qlabel' : platform === 'linkedin' ? 'li-qlabel' : 'rd-qlabel';
+  var label = document.getElementById(qlabelId);
+  if (label) label.textContent = items.length === 0 ? 'Queue empty' : items.length + ' in queue' + (items.length > 3 ? ' · showing 3' : '');
+
+  while (feed.firstChild) feed.removeChild(feed.firstChild);
+
+  var visible = items.slice(0, 3);
+  if (visible.length === 0) {
+    var note = document.createElement('div');
+    note.className = 'ch-queue-note';
+    note.textContent = 'Queue empty for this filter. Agents generate fresh drafts each cycle.';
+    feed.appendChild(note);
+    return;
+  }
+  visible.forEach(function(item) { feed.appendChild(_chCard(item)); });
+  if (items.length > 3) {
+    var more = document.createElement('div');
+    more.className = 'ch-queue-note';
+    more.textContent = (items.length - 3) + ' more waiting — approve or reject above to see next batch.';
+    feed.appendChild(more);
+  }
+}
+
+function chSwitchAcc(platform, account) {
+  _chAccounts[platform] = account;
+  var prefix = platform.slice(0,2);
+  ['brand','personal'].forEach(function(a) {
+    var btn = document.getElementById(prefix + '-btn-' + a);
+    if (btn) btn.classList.toggle('active', a === account);
+  });
+  chRender(platform);
+}
+
+function chSwitchRedditType(rdtype) {
+  _chRedditType = rdtype;
+  ['reply','post'].forEach(function(t) {
+    var btn = document.getElementById('rd-btn-' + t);
+    if (btn) btn.classList.toggle('active', t === rdtype);
+  });
+  chRender('reddit');
+}
+
+function chAction(id, action) {
+  _chLoad();
+  var item = CH_ITEMS.find(function(i){ return i.id === id; });
+  if (!item) return;
+
+  if (action === 'approve') {
+    _chSet(id, { status:'approved', approvedAt: new Date().toISOString() });
+    var card = document.querySelector('[data-ch-id="' + id + '"]');
+    if (card) {
+      card.style.cssText = 'opacity:0;transition:opacity 0.3s;pointer-events:none';
+      setTimeout(function(){ chRender(item.platform); }, 350);
+    }
+    _updateApvCount();
+  } else {
+    _chSet(id, { status:'rejected' });
+    var card2 = document.querySelector('[data-ch-id="' + id + '"]');
+    if (card2) {
+      var box = card2.querySelector('[data-edit]');
+      if (box) box.style.display = 'block';
+      var p = document.createElement('span');
+      p.className = 'ch-status-pill';
+      p.style.cssText = 'background:#FEE2E2;color:#B91C1C';
+      p.textContent = '✗ Rejected — add your notes above and send to agent for rewrite';
+      card2.appendChild(p);
+    }
+  }
+}
+
+function chToggleEdit(id) {
+  var card = document.querySelector('[data-ch-id="' + id + '"]');
+  if (!card) return;
+  var box = card.querySelector('[data-edit]');
+  if (!box) return;
+  box.style.display = box.style.display === 'block' ? 'none' : 'block';
+}
+
+function chSubmitEdit(id) {
+  _chLoad();
+  var item = CH_ITEMS.find(function(i){ return i.id === id; });
+  var card = document.querySelector('[data-ch-id="' + id + '"]');
+  if (!item || !card) return;
+  var ta = card.querySelector('[data-edit] textarea');
+  if (!ta || !ta.value.trim()) { ta.focus(); return; }
+
+  var feedback = ta.value.trim();
+  var originalContent = _chContent(item);
+  var sendBtn = card.querySelector('.ch-send-btn');
+  if (sendBtn) { sendBtn.textContent = 'Rewriting...'; sendBtn.disabled = true; }
+
+  fetch(_BACKEND + '/admin/content/rewrite', {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json', 'x-carely-secret':_SECRET },
+    body: JSON.stringify({ contentId:id, originalContent:originalContent, editFeedback:feedback }),
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if (!data.ok) throw new Error(data.message || 'failed');
+    _chSet(id, { status:'pending', content:data.rewritten });
+    var newCard = _chCard(item);
+    card.parentNode.replaceChild(newCard, card);
+    var p = document.createElement('span');
+    p.className = 'ch-status-pill';
+    p.style.cssText = 'background:#D1FAE5;color:#065F46';
+    p.textContent = '✓ Rewritten — review and approve or edit again';
+    newCard.appendChild(p);
+  })
+  .catch(function(){
+    if (sendBtn) { sendBtn.textContent = 'Send to Agent'; sendBtn.disabled = false; }
+    var p = document.createElement('span');
+    p.className = 'ch-status-pill';
+    p.style.cssText = 'background:#FEE2E2;color:#B91C1C';
+    p.textContent = '✗ Rewrite failed — check connection and try again';
+    card.appendChild(p);
+  });
+}
+
+// ── Approved section ──────────────────────────────────────────────────────────
+function chApvBtn(btn) {
+  document.querySelectorAll('#ch-approved .ch-acc-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function chRenderApproved(filter) {
+  _chLoad();
+  var feed = document.getElementById('ch-approved-feed');
+  if (!feed) return;
+  var approved = CH_ITEMS.filter(function(it){
+    if (_chGet(it.id).status !== 'approved') return false;
+    if (!filter || filter === 'all') return true;
+    return it.platform === filter || it.account === filter;
+  }).sort(function(a,b){
+    return (_chGet(b.id).approvedAt||'').localeCompare(_chGet(a.id).approvedAt||'');
+  });
+
+  while (feed.firstChild) feed.removeChild(feed.firstChild);
+
+  if (approved.length === 0) {
+    var empty = document.createElement('div');
+    empty.style.cssText = 'text-align:center;padding:60px;color:var(--g500);font-size:0.84rem';
+    empty.textContent = (!filter||filter==='all') ? 'No approved posts yet. Approve content from TikTok, LinkedIn, or Reddit tabs.' : 'No approved posts for this filter.';
+    feed.appendChild(empty);
+    return;
+  }
+
+  var wrap = document.createElement('div');
+  wrap.className = 'card';
+  approved.forEach(function(item){
+    var row = document.createElement('div');
+    row.className = 'ch-approved-row';
+    var dt = _chGet(item.id).approvedAt ? new Date(_chGet(item.id).approvedAt) : null;
+    var meta = document.createElement('div');
+    meta.style.cssText = 'flex-shrink:0;display:flex;flex-direction:column;gap:4px;min-width:120px';
+    meta.innerHTML = '<span class="ch-tag ch-tag-'+item.platform+'" style="font-size:0.62rem">'+item.type+'</span>' +
+      '<span class="ch-tag ch-tag-'+item.account+'" style="font-size:0.62rem;margin-top:2px">'+item.accountLabel+'</span>' +
+      (dt?'<span style="font-size:0.66rem;color:var(--g500);margin-top:4px">'+dt.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+dt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})+'</span>':'');
+    var body = document.createElement('div');
+    body.style.cssText = 'flex:1;min-width:0';
+    var titleEl = document.createElement('div');
+    titleEl.style.cssText = 'font-size:0.82rem;font-weight:700;color:var(--deep);margin-bottom:5px';
+    titleEl.textContent = item.title;
+    var snippet = document.createElement('div');
+    snippet.style.cssText = 'font-size:0.78rem;color:var(--g500);line-height:1.6';
+    snippet.textContent = _chContent(item).slice(0,180) + '…';
+    body.appendChild(titleEl); body.appendChild(snippet);
+    row.appendChild(meta); row.appendChild(body);
+    wrap.appendChild(row);
+  });
+  feed.appendChild(wrap);
+}
+
+function _updateApvCount() {
+  _chLoad();
+  var count = CH_ITEMS.filter(function(it){ return _chGet(it.id).status === 'approved'; }).length;
+  document.querySelectorAll('.tabs .tab').forEach(function(t){
+    if (t.textContent.indexOf('Approved') >= 0) t.textContent = '✓ Approved' + (count > 0 ? ' (' + count + ')' : '');
+  });
+}
+
+(function(){ _chLoad(); setTimeout(function(){ chRender('tiktok'); _updateApvCount(); }, 150); })();
 
 function contentAction(id, action) {
   var card = document.getElementById(id);
