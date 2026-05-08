@@ -1733,7 +1733,7 @@ var CH_ITEMS = [
 // ── State ─────────────────────────────────────────────────────────────────────
 var _chS = {};
 var _chRedditType = 'reply';
-var _chAccounts = { tiktok:'brand', linkedin:'brand' };
+var _chAccounts = { tiktok:'brand', linkedin:'brand', reddit:'personal' };
 
 function _chLoad() { try { _chS = JSON.parse(localStorage.getItem('carely-ch') || '{}'); } catch(e) { _chS = {}; } }
 function _chSave() { localStorage.setItem('carely-ch', JSON.stringify(_chS)); }
