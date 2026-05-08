@@ -1838,6 +1838,9 @@ document.getElementById('hq-input').addEventListener('keydown', function(e) {
 });
 
 // ═══ CONTENT ACTIONS (Approve / Reject / Suggest Edit) ══════════════════════
+var _BACKEND = 'https://carely-backend-production.up.railway.app';
+var _SECRET  = 'carely-admin-6add43330d2313d8';
+
 function contentAction(id, action) {
   var card = document.getElementById(id);
   if (!card) return;
@@ -1852,7 +1855,16 @@ function contentAction(id, action) {
     pill.textContent = '✓ Approved — ready to post';
   } else {
     pill.style.background = '#FEE2E2'; pill.style.color = '#B91C1C';
-    pill.textContent = '✗ Rejected — agent will rewrite';
+    pill.textContent = '✗ Rejected — send edit feedback to rewrite';
+    // Open edit box on reject so they can explain what's wrong
+    var editBox2 = document.getElementById(id + '-edit');
+    if (editBox2) {
+      var ta = document.getElementById(id + '-ta');
+      var body = document.getElementById(id + '-body');
+      if (ta && body && !ta.value) ta.value = body.textContent.trim();
+      editBox2.style.display = 'block';
+      btns.forEach(function(b) { b.disabled = false; b.style.opacity = '1'; });
+    }
   }
   card.appendChild(pill);
 }
@@ -1869,14 +1881,46 @@ function contentEdit(id) {
 function submitEdit(id) {
   var ta = document.getElementById(id + '-ta');
   if (!ta || !ta.value.trim()) return;
-  var editBox = document.getElementById(id + '-edit');
-  if (editBox) editBox.style.display = 'none';
+  var body = document.getElementById(id + '-body');
+  var originalContent = body ? body.textContent.trim() : '';
+  var editFeedback = ta.value.trim();
   var card = document.getElementById(id);
   if (!card) return;
-  var pill = document.createElement('span');
-  pill.style.cssText = 'display:inline-block;padding:5px 14px;border-radius:100px;font-size:0.75rem;font-weight:700;margin-top:10px;background:#FEF3C7;color:#92400E';
-  pill.textContent = '✏ Edit sent — agent queued for rewrite';
-  card.appendChild(pill);
+
+  // Show loading state
+  var submitBtn = ta.parentElement ? ta.parentElement.querySelector('button') : null;
+  if (submitBtn) { submitBtn.textContent = 'Rewriting...'; submitBtn.disabled = true; }
+
+  fetch(_BACKEND + '/admin/content/rewrite', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-carely-secret': _SECRET },
+    body: JSON.stringify({ contentId: id, originalContent: originalContent, editFeedback: editFeedback }),
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.ok) throw new Error(data.message || 'Failed');
+    // Replace the body content with the rewritten version
+    if (body) body.textContent = data.rewritten;
+    // Update textarea with rewritten version
+    ta.value = data.rewritten;
+    if (submitBtn) { submitBtn.textContent = 'Send to Agent'; submitBtn.disabled = false; }
+    // Show success pill
+    var pill = document.createElement('span');
+    pill.style.cssText = 'display:inline-block;padding:5px 14px;border-radius:100px;font-size:0.75rem;font-weight:700;margin-top:10px;background:#D1FAE5;color:#065F46';
+    pill.textContent = '✓ Rewritten (draft #' + data.draftIndex + ') — approve or edit again';
+    // Remove old pills first
+    card.querySelectorAll('span[style*="border-radius:100px"]').forEach(function(el) { el.remove(); });
+    card.appendChild(pill);
+  })
+  .catch(function(err) {
+    if (submitBtn) { submitBtn.textContent = 'Send to Agent'; submitBtn.disabled = false; }
+    var pill = document.createElement('span');
+    pill.style.cssText = 'display:inline-block;padding:5px 14px;border-radius:100px;font-size:0.75rem;font-weight:700;margin-top:10px;background:#FEE2E2;color:#B91C1C';
+    pill.textContent = '✗ Rewrite failed — try again';
+    card.querySelectorAll('span[style*="border-radius:100px"]').forEach(function(el) { el.remove(); });
+    card.appendChild(pill);
+    console.error('[Rewrite]', err);
+  });
 }
 
 // PIN lock
