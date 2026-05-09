@@ -1069,7 +1069,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ ALL 14 AGENTS ══ -->
   <div class="page" id="page-all-agents">
-    <div class="ph"><h1>🧠 All 20 Agents</h1><p>4 departments · Patient Care · Growth · Intelligence · CEO · Running 24/7 on Railway</p></div>
+    <div class="ph"><h1>🧠 All 18 Agents</h1><p>4 departments · Patient Care · Growth · Intelligence · CEO · Running 24/7 on Railway</p></div>
     <div style="background:linear-gradient(135deg,var(--deep),#0D4D6B);border-radius:14px;padding:20px;margin-bottom:20px;color:white">
       <div style="font-size:0.72rem;font-weight:700;opacity:0.45;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px">Founders</div>
       <div style="font-size:1.05rem;font-weight:900">TJ + Prabh · Carely · BC, Canada</div>
@@ -1081,37 +1081,37 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="agent-card purple">
         <div class="agent-name">Elara</div>
         <div class="agent-role">AI Caretaker — Core Product · Claude Sonnet · Redis memory 7d</div>
-        <div class="agent-status"><span class="dot-on"></span> On-demand · Users see her name everywhere</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-elara"></span> On-demand · Users see her name everywhere</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">The heart of Carely. All in-app check-ins, crisis detection, empathetic conversations. Never gives medical advice.</div>
       </div>
       <div class="agent-card">
         <div class="agent-name">Frank</div>
         <div class="agent-role">Dose Reminders · FCM push · Every minute check</div>
-        <div class="agent-status"><span class="dot-on"></span> Running continuously · Fires 5 min before dose time</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-frank"></span> Running continuously · Fires 5 min before dose time</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">GPT-4o mini generates a unique funny, warm message each reminder. Patients see Elara's name on the push.</div>
       </div>
       <div class="agent-card amber">
         <div class="agent-name">Maya</div>
         <div class="agent-role">Missed Dose Detector · Every 30 min · Triggers Cara</div>
-        <div class="agent-status"><span class="dot-on"></span> Running</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-maya"></span> Running</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Detects overdue doses. Marks as missed in Supabase. Escalates to Cara who alerts the caregiver.</div>
       </div>
       <div class="agent-card red">
         <div class="agent-name">Cara</div>
         <div class="agent-role">Caregiver Alert · FCM push to connected family member</div>
-        <div class="agent-status"><span class="dot-on"></span> Triggered by Maya on missed dose</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-cara"></span> Triggered by Maya on missed dose</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Instant FCM to the caregiver account: "Mum missed her 9AM blood pressure dose."</div>
       </div>
       <div class="agent-card">
         <div class="agent-name">Grace</div>
         <div class="agent-role">Daily Check-in Push · 10 AM UTC · GPT-4o mini</div>
-        <div class="agent-status"><span class="dot-on"></span> Running</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-grace"></span> Running</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">"Are you okay?" push to all active patients. Adapts tone per condition. Patients see it as Elara.</div>
       </div>
       <div class="agent-card blue">
         <div class="agent-name">Dr. Bridge</div>
         <div class="agent-role">Doctor + Caregiver Reports · Hourly check · Weekly PDF email</div>
-        <div class="agent-status"><span class="dot-on"></span> Running</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-dr-bridge"></span> Running</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Weekly adherence PDF to doctor via SendGrid. 24h appointment follow-up email. Handles appointment requests.</div>
       </div>
     </div>
@@ -1121,31 +1121,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="agent-card">
         <div class="agent-name">Nina</div>
         <div class="agent-role">Email Nurture + Support Triage · 10 AM UTC daily</div>
-        <div class="agent-status"><span class="dot-on"></span> Running</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-nina"></span> Running</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Day-0 welcome → Day-3 feature → Day-7 trial close. Emails from Prabhjot. Inbound support auto-triage via /support/inbound.</div>
       </div>
       <div class="agent-card purple">
         <div class="agent-name">Lena</div>
         <div class="agent-role">Retention · Win-back (3-touch) + High-adherence closer</div>
-        <div class="agent-status"><span class="dot-on"></span> Running · 11 AM UTC daily</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-lena"></span> Running · 11 AM UTC daily</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Expiring trial win-back. Behavioural conversion triggers. Warm lead closer. Uses adherence data to personalise.</div>
       </div>
       <div class="agent-card blue">
         <div class="agent-name">Leo</div>
         <div class="agent-role">LinkedIn · 6 posts/week as Prabh · Company page</div>
-        <div class="agent-status"><span class="dot-on"></span> Running · Token expires June 29, 2026</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-leo"></span> Running · Token expires June 29, 2026</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Mon/Wed/Fri 8AM + Tue/Thu/Sat 5PM PST. 6 post types rotating. Daily 3 connection targets → Telegram at noon.</div>
       </div>
       <div class="agent-card red">
         <div class="agent-name">Rex</div>
         <div class="agent-role">Reddit + Community · 18 subreddits · Every 6 hours</div>
-        <div class="agent-status"><span class="dot-on"></span> Running · Prabh approves before posting</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-rex"></span> Running · Prabh approves before posting</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Monitors caregiver threads. Drafts empathetic replies as Prabh. 3x/week original posts. Never pitches cold.</div>
       </div>
       <div class="agent-card amber">
         <div class="agent-name">Cole</div>
         <div class="agent-role">B2B Outreach · 5 orgs/day · TJ approval required</div>
-        <div class="agent-status"><span class="dot-on"></span> Running · TJ approves before send</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-cole"></span> Running · TJ approves before send</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Senior living, pharmacies, family medicine clinics. Personalised email per org. 3-touch follow-up sequence. Signs as TJ.</div>
       </div>
       <div class="agent-card red">
@@ -1157,13 +1157,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="agent-card">
         <div class="agent-name">Scout</div>
         <div class="agent-role">SEO + ASO · Google IndexNow · Weekly App Store keyword scan</div>
-        <div class="agent-status"><span class="dot-on"></span> Running · 7 pages indexed</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-scout"></span> Running · 7 pages indexed</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">POST /seo/page pings Google IndexNow on every deploy. Sitemap.xml live. ASO keyword gap report Sundays 7 AM PST.</div>
       </div>
       <div class="agent-card">
         <div class="agent-name">Vance</div>
         <div class="agent-role">TikTok / Reels / Shorts Scripts · 9 AM PST daily</div>
-        <div class="agent-status"><span class="dot-on"></span> Running · Scripts → Prabh's Telegram</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-vance"></span> Running · Scripts → Prabh's Telegram</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">7 daily content themes rotating. 150-word scripts written for Prabh to film. Emotional hooks, caregiver angle.</div>
       </div>
     </div>
@@ -1173,25 +1173,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="agent-card" style="border-left-color:var(--purple)">
         <div class="agent-name">Ace Director</div>
         <div class="agent-role">Business Intelligence · Daily Brief · Proactive Alerts · Sunday Reflection</div>
-        <div class="agent-status"><span class="dot-on"></span> 8 AM PST brief · Hourly proactive alerts · Sunday 9 AM reflection</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-ace"></span> 8 AM PST brief · Hourly proactive alerts · Sunday 9 AM reflection</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">MRR gap, at-risk trials, agent errors, conversion rate — Telegram to TJ. Writes real directives to every agent. Never says "all good" unless true.</div>
       </div>
       <div class="agent-card blue">
         <div class="agent-name">Oracle</div>
         <div class="agent-role">World Intelligence · News + Reddit ICP signals · Every 30 min</div>
-        <div class="agent-status"><span class="dot-on"></span> Running continuously</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-oracle"></span> Running continuously</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Monitors caregiving, eldercare, medication news. Scans for signals that change strategy. Feeds Ace Director.</div>
       </div>
       <div class="agent-card">
         <div class="agent-name">Signals</div>
         <div class="agent-role">Customer Pain Scan · 7 ICP subreddits · Every 2 hours</div>
-        <div class="agent-status"><span class="dot-on"></span> Running</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-signals"></span> Running</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Finds caregivers posting about exactly the problems Carely solves. Surfaces content angles and acquisition triggers.</div>
       </div>
       <div class="agent-card amber">
         <div class="agent-name">Comp Intel</div>
         <div class="agent-role">Competitor Tracking · App Store snapshots · Every 6 hours</div>
-        <div class="agent-status"><span class="dot-on"></span> Running</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-comp-intel"></span> Running</div>
         <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Tracks rating deltas + version changes for top 5 medication reminder apps. Alerts TJ to threats + openings.</div>
       </div>
       <div class="agent-card">
@@ -1202,18 +1202,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
     </div>
 
-    <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;margin-top:20px">CEO Layer (1) — the brain that commands all 19 agents</div>
+    <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;margin-top:20px">CEO Layer (1) — the brain that commands all 18 agents</div>
     <div class="agent-grid">
       <div class="agent-card" style="border-left-color:var(--deep);background:linear-gradient(135deg,var(--deep) 0%,#0D4D6B 100%)">
         <div class="agent-name" style="color:white">Hermes · CEO</div>
         <div class="agent-role" style="color:rgba(255,255,255,0.6)">NousResearch · Telegram + Dashboard · 8AM / 8PM + on-demand</div>
-        <div class="agent-status" style="color:rgba(255,255,255,0.8)"><span class="dot-on"></span> Running on Mac → Railway</div>
+        <div class="agent-status" style="color:rgba(255,255,255,0.8)"><span class="dot-on" id="agent-dot-hermes"></span> Running on Railway · Live 24/7</div>
         <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:8px">Reads all metrics. Reads inbox. Fires agents. Decides what changes. Morning brief + EOD review + responds to TJ's Telegram messages in real time. This is the CEO.</div>
       </div>
     </div>
 
     <div style="margin-top:20px;padding:16px 20px;background:var(--light);border-radius:12px;font-size:0.82rem;color:var(--deep)">
       <strong>How they connect:</strong> Frank fires → patient taps → Maya checks 30m later → if missed, Cara alerts caregiver → Grace checks in next morning as Elara. Meanwhile: Ace Director watches MRR gap and fires TJ an alert if a trial expires unconverted. Lena follows up. Nina nurtures. Hermes reads all of it every morning and tells TJ exactly what needs to change today.
+    </div>
+
+    <div style="margin-top:24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em">Agent Activity — what the team is doing right now</div>
+        <button onclick="loadAgentActivity()" style="font-size:0.72rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      </div>
+      <div id="agent-activity-feed" style="display:flex;flex-direction:column;gap:8px">
+        <div style="color:var(--g400);font-size:0.82rem;padding:12px">Loading agent activity...</div>
+      </div>
     </div>
   </div>
 
@@ -2639,6 +2649,91 @@ document.addEventListener('keydown', function(e) {
   setInterval(window.loadDrafts, 60000);
 })();
 
+// ═══ Agent Activity Feed ═════════════════════════════════════════════════════
+(function() {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var TYPE_COLORS = { action:'#028090', alert:'#DC2626', success:'#02C39A', info:'#6B7280', metric:'#7C3AED' };
+  var TYPE_LABELS = { action:'→', alert:'⚠', success:'✓', info:'·', metric:'#' };
+
+  function timeAgo(ts) {
+    var s = Math.round((Date.now() - new Date(ts).getTime()) / 1000);
+    if (s < 60) return s + 's ago';
+    if (s < 3600) return Math.round(s/60) + 'm ago';
+    if (s < 86400) return Math.round(s/3600) + 'h ago';
+    return Math.round(s/86400) + 'd ago';
+  }
+
+  function makeEventEl(e) {
+    var col = TYPE_COLORS[e.type] || '#6B7280';
+    var sym = TYPE_LABELS[e.type] || '·';
+
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:white;border-radius:10px;border-left:3px solid ' + col;
+
+    var symEl = document.createElement('span');
+    symEl.style.cssText = 'font-size:0.75rem;font-weight:800;color:' + col + ';min-width:14px;margin-top:1px';
+    symEl.textContent = sym;
+
+    var body = document.createElement('div');
+    body.style.cssText = 'flex:1;min-width:0';
+
+    var meta = document.createElement('div');
+    meta.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:2px';
+
+    var name = document.createElement('span');
+    name.style.cssText = 'font-size:0.72rem;font-weight:700;color:#0D3347;text-transform:uppercase';
+    name.textContent = e.agentName;
+
+    var age = document.createElement('span');
+    age.style.cssText = 'font-size:0.68rem;color:#9CA3AF';
+    age.textContent = timeAgo(e.timestamp);
+
+    var msg = document.createElement('div');
+    msg.style.cssText = 'font-size:0.8rem;color:#374151;line-height:1.4';
+    msg.textContent = e.message;
+
+    meta.appendChild(name);
+    meta.appendChild(age);
+    body.appendChild(meta);
+    body.appendChild(msg);
+    row.appendChild(symEl);
+    row.appendChild(body);
+    return row;
+  }
+
+  window.loadAgentActivity = function() {
+    fetch(BACKEND + '/admin/agent-feed?limit=40', { headers: { 'x-carely-secret': SECRET } })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        var el = document.getElementById('agent-activity-feed');
+        if (!el) return;
+        while (el.firstChild) el.removeChild(el.firstChild);
+        var events = d.events || [];
+        if (!events.length) {
+          var empty = document.createElement('div');
+          empty.style.cssText = 'color:#9CA3AF;font-size:0.82rem;padding:12px';
+          empty.textContent = 'No activity yet — agents will appear here as they run.';
+          el.appendChild(empty);
+          return;
+        }
+        events.forEach(function(e) { el.appendChild(makeEventEl(e)); });
+      })
+      .catch(function() {
+        var el = document.getElementById('agent-activity-feed');
+        if (!el) return;
+        while (el.firstChild) el.removeChild(el.firstChild);
+        var err = document.createElement('div');
+        err.style.cssText = 'color:#9CA3AF;font-size:0.82rem;padding:12px';
+        err.textContent = 'Could not load activity.';
+        el.appendChild(err);
+      });
+  };
+
+  window.loadAgentActivity();
+  setInterval(window.loadAgentActivity, 30000);
+})();
+
 // ═══ PLATFORM INTEL — dynamic scheduling ════════════════════════════════════
 (function() {
   var now = new Date();
@@ -2700,6 +2795,31 @@ document.addEventListener('keydown', function(e) {
   if (!el) return;
   el.textContent = days + ' days left';
   el.className = days <= 7 ? 'token-expiry danger' : days <= 21 ? 'token-expiry warn' : 'token-expiry ok';
+})();
+
+// ═══ Live agent status dots ═══════════════════════════════════════════════
+(function() {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+
+  function updateDots(status) {
+    Object.keys(status).forEach(function(agent) {
+      var id = 'agent-dot-' + agent.toLowerCase().replace(/\s/g,'-').replace(/\./g,'');
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.className = status[agent].alive ? 'dot-on' : 'dot-off';
+    });
+  }
+
+  function loadAgentStatus() {
+    fetch(BACKEND + '/admin/agent-status', { headers: { 'x-carely-secret': SECRET } })
+      .then(function(r) { return r.json(); })
+      .then(function(d) { if (d.status) updateDots(d.status); })
+      .catch(function() {});
+  }
+
+  loadAgentStatus();
+  setInterval(loadAgentStatus, 120000);
 })();
 
 // ═══ Hermes status check ══════════════════════════════════════════════════
