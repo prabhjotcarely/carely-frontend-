@@ -647,7 +647,7 @@
       <button class="curr-btn on" id="btnUSD" onclick="setCurr('usd')">🇺🇸 USD</button>
       <button class="curr-btn" id="btnCAD" onclick="setCurr('cad')">🇨🇦 CAD</button>
     </div>
-    <button class="nav-cta" onclick="scrollTo('founding')">Get Founding Access</button>
+    <button class="nav-cta" onclick="scrollToSection('founding')">Get Founding Access</button>
   </div>
 </nav>
 </div>
@@ -661,8 +661,8 @@
       <p class="hero-tag r0">AI Caretaker · Timely Medicine · Better You.</p>
       <p class="hero-sub r0">Carely reminds your loved one to take their meds, checks in warmly every day, tracks their vitals, and alerts you the moment something important is missed.</p>
       <div class="hero-btns r0">
-        <button class="btn-main" onclick="scrollTo('founding')">Claim Founding Access — <span class="curr-val" data-usd="$5/mo" data-cad="CA$7/mo">$5/mo</span></button>
-        <button class="btn-line" onclick="scrollTo('demo')">See Elara in action</button>
+        <button class="btn-main" onclick="scrollToSection('founding')">Claim Founding Access — <span class="curr-val" data-usd="$5/mo" data-cad="CA$7/mo">$5/mo</span></button>
+        <button class="btn-line" onclick="scrollToSection('demo')">See Elara in action</button>
       </div>
       <div class="trust-row r0">
         <span class="trust-pill"><span class="ck">✓</span> 7-day free trial</span>
@@ -1063,7 +1063,7 @@
           <li><span class="ck">✓</span> Streak tracking &amp; Elara check-ins</li>
           <li><span class="ck">✓</span> 7-day free trial — no charge until day 8</li>
         </ul>
-        <button class="pc-btn" onclick="scrollTo('founding')">Claim My Founding Spot →</button>
+        <button class="pc-btn" onclick="scrollToSection('founding')">Claim My Founding Spot →</button>
       </div>
       <div class="pc">
         <div class="pc-plan">Monthly</div>
@@ -1077,7 +1077,7 @@
           <li><span class="ck">✓</span> Streak tracking &amp; Elara check-ins</li>
           <li><span class="ck">✓</span> 7-day free trial</li>
         </ul>
-        <button class="pc-btn" onclick="scrollTo('founding')">Start Free Trial</button>
+        <button class="pc-btn" onclick="scrollToSection('founding')">Start Free Trial</button>
       </div>
       <div class="pc">
         <div class="pc-plan">Annual</div>
@@ -1091,7 +1091,7 @@
           <li><span class="ck">✓</span> Streak tracking &amp; Elara check-ins</li>
           <li><span class="ck">✓</span> 7-day free trial</li>
         </ul>
-        <button class="pc-btn" onclick="scrollTo('founding')">Start Free Trial</button>
+        <button class="pc-btn" onclick="scrollToSection('founding')">Start Free Trial</button>
       </div>
     </div>
   </div>
@@ -1251,7 +1251,7 @@
     .catch(() => {});
 
   // Scroll helper
-  function scrollTo(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth', block:'start'}); }
+  function scrollToSection(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth', block:'start'}); }
 
   // Reveal observer
   // Reveal observer — add stagger to grid children
