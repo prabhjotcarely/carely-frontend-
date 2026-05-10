@@ -1837,6 +1837,29 @@ function _chCard(item) {
   edBtn.onclick = (function(i){ return function(){ chToggleEdit(i.id); }; })(item);
 
   actions.appendChild(apBtn); actions.appendChild(rjBtn); actions.appendChild(edBtn);
+
+  // Copy button — always visible on Reddit (manual posting only), also on all cards as handy shortcut
+  var cpBtn = document.createElement('button');
+  cpBtn.className = 'ch-btn-edit';
+  cpBtn.style.cssText = 'background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE';
+  cpBtn.textContent = '⎘ Copy';
+  cpBtn.onclick = (function(i, btn){ return function(){
+    var text = _chContent(i);
+    navigator.clipboard.writeText(text).then(function(){
+      btn.textContent = '✓ Copied!';
+      btn.style.background = '#D1FAE5';
+      btn.style.color = '#065F46';
+      setTimeout(function(){ btn.textContent = '⎘ Copy'; btn.style.background = '#EFF6FF'; btn.style.color = '#1D4ED8'; }, 2000);
+    }).catch(function(){
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta);
+      btn.textContent = '✓ Copied!';
+      setTimeout(function(){ btn.textContent = '⎘ Copy'; }, 2000);
+    });
+  }; })(item, cpBtn);
+  actions.appendChild(cpBtn);
   card.appendChild(actions);
 
   var editBox = document.createElement('div');
