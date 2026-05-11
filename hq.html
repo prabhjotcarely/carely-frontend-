@@ -1590,7 +1590,7 @@ function sendHQ() {
   var BACKEND = 'https://carely-backend-production.up.railway.app';
   var statusEl = document.getElementById('ace-status');
 
-  fetch(BACKEND + '/hermes/chat', {
+  fetch(BACKEND + '/admin/hermes-chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-carely-secret': 'carely-admin-6add43330d2313d8' },
     body: JSON.stringify({ message: text, user: user })
@@ -2617,7 +2617,7 @@ document.addEventListener('keydown', function(e) {
           agentBadge.style.marginRight = '6px';
           agentBadge.textContent = (draft.agentName||'AGENT').toUpperCase();
           var titleSpan = document.createElement('span');
-          titleSpan.textContent = draft.subject || draft.type || 'Draft #' + draft.index;
+          titleSpan.textContent = draft.subject || draft.contentType || draft.type || 'Draft #' + draft.index;
           var timeSpan = document.createElement('span');
           timeSpan.className = 'card-sub';
           timeSpan.textContent = timeAgo(draft.timestamp);
@@ -2635,7 +2635,7 @@ document.addEventListener('keydown', function(e) {
 
           var preview = document.createElement('div');
           preview.style.cssText = 'background:var(--g100);border-radius:8px;padding:12px 14px;font-size:0.82rem;line-height:1.7;color:var(--text);white-space:pre-wrap;max-height:180px;overflow:auto;margin-bottom:12px';
-          preview.textContent = draft.body || draft.content || '(no preview)';
+          preview.textContent = draft.contentSnippet || draft.fullContent || draft.body || draft.content || '(no preview)';
           card.appendChild(preview);
 
           var btnRow = document.createElement('div');
