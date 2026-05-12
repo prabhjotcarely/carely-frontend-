@@ -45,9 +45,10 @@
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-thumb { background: var(--t2); border-radius: 2px; }
 
-    /* ── Scroll reveal — GSAP handles animation, CSS is no-JS fallback ── */
-    .reveal { } /* GSAP sets initial states at runtime */
-    .reveal.in-view { opacity: 1; transform: none; } /* no-JS fallback */
+    /* ── Scroll reveal — pre-hidden in CSS so GSAP never causes flash ── */
+    .reveal { opacity: 0; transform: translateY(28px); }
+    .reveal.in-view { opacity: 1; transform: none; }
+    .pain-grid, .feat-grid, .persona-grid, .testi-grid, .plans-wrap, .hiw-steps, .lang-flags { opacity: 1 !important; transform: none !important; }
 
     /* ── HAMBURGER ── */
     .nav-burger { display: none; flex-direction: column; gap: 5px; width: 42px; height: 42px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
@@ -1190,9 +1191,7 @@ document.fonts.ready.then(() => ScrollTrigger.refresh());
 // Grid container selectors (these must stay visible — their CHILDREN animate)
 const GRID_CONTAINERS = '.pain-grid, .feat-grid, .persona-grid, .testi-grid, .plans-wrap, .hiw-steps, .lang-flags';
 
-// Set all .reveal hidden, then immediately un-hide grid containers
-gsap.set('.reveal', { opacity: 0, y: 28 });
-gsap.set(GRID_CONTAINERS, { clearProps: 'opacity,y,transform' });
+// CSS pre-hides .reveal — GSAP only needs to set grid children
 
 // Grid children
 const GRIDS = [
