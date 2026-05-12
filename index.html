@@ -1237,9 +1237,9 @@
   </div>
 </footer>
 
-<!-- GSAP + ScrollTrigger -->
-<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<!-- GSAP + ScrollTrigger — defer so they never block initial render -->
+<script defer src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script defer src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
 <script>
 /* ── Nav scroll ── */
@@ -1258,13 +1258,15 @@ const revealObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal, .pain-grid, .feat-grid, .persona-grid, .testi-grid, .plans-wrap, .hiw-steps, .stats-bar, .lang-flags, .fin-cta').forEach(el => revealObserver.observe(el));
 
-// GSAP kept only for parallax — no blocking, degrades gracefully if CDN slow
-if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-  document.fonts.ready.then(() => ScrollTrigger.refresh());
-  gsap.to('#elaraCanvas', { y: -48, ease: 'none', scrollTrigger: { trigger: '.hero-wrap', start: 'top top', end: 'bottom top', scrub: 1.8 } });
-  gsap.to('.pain::before', { yPercent: -18, ease: 'none', scrollTrigger: { trigger: '.pain', start: 'top bottom', end: 'bottom top', scrub: 2 } });
-}
+// GSAP parallax — runs after deferred scripts load (DOMContentLoaded fires after defer scripts)
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+    document.fonts.ready.then(() => ScrollTrigger.refresh());
+    gsap.to('#elaraCanvas', { y: -48, ease: 'none', scrollTrigger: { trigger: '.hero-wrap', start: 'top top', end: 'bottom top', scrub: 1.8 } });
+    gsap.to('.pain::before', { yPercent: -18, ease: 'none', scrollTrigger: { trigger: '.pain', start: 'top bottom', end: 'bottom top', scrub: 2 } });
+  }
+});
 
 /* ── Hamburger ── */
 const navBurger = document.getElementById('navBurger');
