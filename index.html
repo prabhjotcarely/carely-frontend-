@@ -3,1147 +3,1430 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Carely — AI Caretaker for Your Family's Health</title>
-  <meta name="description" content="Meet Elara — your AI caretaker. Medication reminders, daily check-ins, and family alerts. Launching soon. Founding spots at $5/month.">
-  <meta property="og:title" content="Carely — AI Caretaker for Your Family's Health">
-  <meta property="og:description" content="Elara remembers every dose, checks in daily, and alerts your family when something's off. Get early access — founding spots at $5/month.">
+  <title>Carely — The AI Caretaker for Your Family's Health</title>
+  <meta name="description" content="Meet Elara — your AI caretaker. Medication reminders, daily check-ins, family alerts, doctor reports. Launching May 2026. Founding spots at $5/month.">
+  <meta property="og:title" content="Carely — The AI Caretaker for Your Family's Health">
+  <meta property="og:description" content="Elara remembers every dose, checks in daily, and alerts your family when something's off. Founding spots at $5/month.">
   <meta property="og:image" content="https://carely.fit/elara-3d.png">
   <meta property="og:url" content="https://carely.fit">
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --canvas:    #05101A;
-      --s1:        #0A1D2C;
-      --s2:        #0F2638;
-      --s3:        #163041;
-      --s4:        #1D3D50;
-      --teal:      #02C39A;
-      --teal-2:    #01A882;
-      --teal-dim:  rgba(2,195,154,0.12);
-      --teal-glow: rgba(2,195,154,0.25);
-      --amber:     #F5A623;
-      --coral:     #FF6B6B;
-      --ink:       #EFF8FF;
-      --ink-m:     #7BAFC4;
-      --ink-s:     #3D6070;
-      --line:      rgba(255,255,255,0.07);
-      --line-2:    rgba(255,255,255,0.12);
-      --r-sm:      8px;
-      --r:         14px;
-      --r-lg:      20px;
-      --r-xl:      28px;
-      font-size: 16px;
+      --w:      #ffffff;
+      --off:    #f2fafb;
+      --t1:     #44abad;
+      --t2:     #2d8899;
+      --t3:     #1e6070;
+      --t4:     #175060;
+      --t5:     #0d2b38;
+      --tglow:  rgba(68,171,173,0.32);
+      --tdim:   rgba(68,171,173,0.12);
+      --tbor:   rgba(68,171,173,0.25);
+      --bor:    #cfe5ea;
+      --ink:    #0d2b38;
+      --inkm:   #2d5a6a;
+      --inks:   #7aaabb;
+      --amber:  #f5a623;
+      --pink:   #ff6b9d;
+      --bright: #2ee8a0;
+      --app-grad: linear-gradient(140deg, #44abad 0%, #2d8899 38%, #1e6070 72%, #175060 100%);
+      --dark-grad: linear-gradient(135deg, #0d2b38 0%, #175060 55%, #1e6070 100%);
     }
-
     html { scroll-behavior: smooth; }
-    body {
-      font-family: 'DM Sans', -apple-system, sans-serif;
-      background: var(--canvas);
-      color: var(--ink);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--w); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
     a { color: inherit; text-decoration: none; }
     button { font: inherit; cursor: pointer; border: none; outline: none; }
-    h1,h2,h3,h4 { font-family: 'Bricolage Grotesque', sans-serif; line-height: 1.05; }
-    p { margin: 0; }
-    img { display: block; max-width: 100%; }
-
-    /* ─── SCROLLBAR ──────────────────────────────────────────────── */
     ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--canvas); }
-    ::-webkit-scrollbar-thumb { background: var(--teal-2); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb { background: var(--t2); border-radius: 2px; }
 
-    /* ─── TOPBAR ─────────────────────────────────────────────────── */
-    .topbar {
-      height: 40px; display: flex; align-items: center; justify-content: center; gap: 8px;
-      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em; text-align: center;
-      background: linear-gradient(90deg, var(--teal-2), var(--teal), var(--teal-2));
-      background-size: 200%; animation: shimmer 6s ease infinite;
-      color: #021A12;
-    }
-    .topbar strong { font-weight: 800; }
-    .topbar .sep { opacity: 0.4; }
-    @keyframes shimmer { 0%,100%{background-position:0%} 50%{background-position:100%} }
+    /* ── Scroll reveal — GSAP handles animation, CSS is no-JS fallback ── */
+    .reveal { } /* GSAP sets initial states at runtime */
+    .reveal.in-view { opacity: 1; transform: none; } /* no-JS fallback */
 
-    /* ─── NAV ────────────────────────────────────────────────────── */
-    .nav-wrap {
-      position: sticky; top: 8px; z-index: 200;
-      display: flex; justify-content: center;
-      padding: 0 16px; pointer-events: none;
-    }
-    .nav {
-      width: 100%; max-width: 1120px; pointer-events: auto;
-      display: flex; align-items: center; justify-content: space-between; gap: 16px;
-      padding: 0 20px; height: 56px;
-      background: rgba(5,16,26,0.7);
-      backdrop-filter: blur(20px) saturate(140%);
-      border: 1px solid var(--line-2);
-      border-radius: 100px;
-      transition: background 200ms, border-color 200ms;
-    }
-    .nav.scrolled { background: rgba(5,16,26,0.92); border-color: var(--line-2); }
-    .nav-logo { display: flex; align-items: center; }
-    .nav-logo img { height: 32px; width: auto; object-fit: contain; }
-    .nav-links { display: flex; align-items: center; gap: 4px; }
-    .nav-link {
-      padding: 6px 14px; border-radius: 100px; font-size: 0.875rem; font-weight: 500;
-      color: var(--ink-m); transition: color 150ms, background 150ms;
-    }
-    .nav-link:hover { color: var(--ink); background: rgba(255,255,255,0.06); }
-    .nav-cta {
-      padding: 8px 20px; border-radius: 100px;
-      background: var(--teal); color: #021A12;
-      font-size: 0.875rem; font-weight: 700;
-      transition: transform 150ms, box-shadow 150ms, background 150ms;
-      box-shadow: 0 0 0 0 var(--teal-glow);
-    }
-    .nav-cta:hover { background: #03D9A9; transform: translateY(-1px); box-shadow: 0 0 24px var(--teal-glow); }
-    @media(max-width:640px) { .nav-links { display:none; } }
+    /* ── HAMBURGER ── */
+    .nav-burger { display: none; flex-direction: column; gap: 5px; width: 42px; height: 42px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+    .nav-burger span { display: block; width: 18px; height: 2px; background: #fff; border-radius: 1px; transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), opacity 0.2s; }
+    .nav-burger.open { background: rgba(68,171,173,0.2); }
+    .nav-burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+    @media(max-width:640px) { .nav-links { display: none; } .nav-cta { display: none; } .nav-burger { display: flex; } }
 
-    /* ─── HERO ───────────────────────────────────────────────────── */
-    .hero {
-      position: relative; overflow: hidden;
-      min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 120px 24px 80px;
-      text-align: center;
-    }
-    .hero-glow {
-      position: absolute; top: -20%; left: 50%; transform: translateX(-50%);
-      width: 900px; height: 600px; pointer-events: none; z-index: 0;
-      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(2,195,154,0.18) 0%, transparent 70%);
-    }
-    .hero-grid {
-      position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0.04;
-      background-image:
-        linear-gradient(rgba(2,195,154,0.5) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(2,195,154,0.5) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(ellipse 80% 80% at 50% 30%, black 0%, transparent 70%);
-    }
-    .hero-content { position: relative; z-index: 1; max-width: 780px; }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 14px 6px 8px; border-radius: 100px;
-      background: rgba(2,195,154,0.1); border: 1px solid rgba(2,195,154,0.25);
-      font-size: 0.8rem; font-weight: 600; color: var(--teal);
-      margin-bottom: 28px; letter-spacing: 0.02em;
-    }
-    .hero-badge-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--teal);
-      animation: pulse-dot 2s ease-in-out infinite;
-    }
-    @keyframes pulse-dot {
-      0%,100% { box-shadow: 0 0 0 0 rgba(2,195,154,0.4); }
-      50% { box-shadow: 0 0 0 6px rgba(2,195,154,0); }
-    }
-    .hero h1 {
-      font-size: clamp(2.8rem, 7vw, 5.5rem);
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      line-height: 1.0;
-      margin-bottom: 22px;
-      color: var(--ink);
-    }
-    .hero h1 em {
-      font-style: normal;
-      background: linear-gradient(135deg, var(--teal), #6EE7D8);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero-sub {
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      color: var(--ink-m);
-      max-width: 540px;
-      margin: 0 auto 40px;
-      line-height: 1.7;
-      font-weight: 400;
-    }
+    /* ── MOBILE NAV OVERLAY ── */
+    .nav-mob { position: fixed; top: 0; left: 0; right: 0; background: rgba(13,43,56,0.98); backdrop-filter: blur(24px); z-index: 250; padding: 80px 24px 36px; display: flex; flex-direction: column; gap: 2px; transform: translateY(-110%); transition: transform 0.38s cubic-bezier(0.16,1,0.3,1); border-bottom: 1px solid rgba(68,171,173,0.2); box-shadow: 0 24px 56px rgba(0,0,0,0.5); }
+    .nav-mob.open { transform: translateY(0); }
+    .nav-mob a { font-size: 1.15rem; font-weight: 700; color: rgba(255,255,255,0.72); padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.06); display: block; transition: color 0.15s; }
+    .nav-mob a:last-of-type { border-bottom: none; }
+    .nav-mob a:hover { color: var(--t1); }
+    .nav-mob .mob-cta { margin-top: 16px; padding: 15px 24px; border-radius: 100px; background: var(--t1); color: #fff; font-weight: 900; text-align: center; letter-spacing: 0.01em; border-bottom: none !important; }
+    .nav-mob .mob-cta:hover { background: var(--t2); }
 
-    /* Email form */
-    .hero-form {
-      display: flex; gap: 10px; max-width: 440px; margin: 0 auto 14px;
-      flex-wrap: wrap; justify-content: center;
-    }
-    .hero-input {
-      flex: 1; min-width: 220px;
-      padding: 14px 18px; border-radius: 100px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--line-2);
-      color: var(--ink); font-size: 0.95rem; font-family: 'DM Sans', sans-serif;
-      transition: border-color 200ms, background 200ms;
-      outline: none;
-    }
-    .hero-input::placeholder { color: var(--ink-s); }
-    .hero-input:focus { border-color: rgba(2,195,154,0.5); background: rgba(2,195,154,0.06); }
-    .hero-btn {
-      padding: 14px 26px; border-radius: 100px;
-      background: var(--teal); color: #021A12;
-      font-size: 0.95rem; font-weight: 700;
-      transition: transform 150ms, box-shadow 150ms, background 150ms;
-      white-space: nowrap;
-    }
-    .hero-btn:hover { background: #03D9A9; transform: translateY(-2px); box-shadow: 0 0 40px var(--teal-glow); }
-    .hero-trust {
-      font-size: 0.78rem; color: var(--ink-s); margin-bottom: 52px;
-      display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
-    }
-    .hero-trust span { display: flex; align-items: center; gap: 5px; }
-    .hero-trust-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-s); }
+    /* ── COOKIE BANNER ── */
+    .cookie-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--t5); border-top: 1px solid rgba(68,171,173,0.22); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; z-index: 9000; flex-wrap: wrap; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .cookie-bar.show { transform: translateY(0); }
+    .cookie-txt { font-size: 0.78rem; color: rgba(255,255,255,0.65); line-height: 1.55; flex: 1; min-width: 200px; }
+    .cookie-txt a { color: var(--t1); text-decoration: underline; }
+    .cookie-btns { display: flex; gap: 10px; flex-shrink: 0; }
+    .cookie-accept { padding: 9px 20px; border-radius: 100px; background: var(--t1); color: #fff; font-size: 0.82rem; font-weight: 800; border: none; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+    .cookie-accept:hover { background: var(--t2); }
+    .cookie-decline { padding: 9px 16px; border-radius: 100px; background: transparent; color: rgba(255,255,255,0.45); font-size: 0.82rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.12); cursor: pointer; font-family: inherit; transition: border-color 0.15s, color 0.15s; }
+    .cookie-decline:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); }
 
-    /* Social proof count */
-    .hero-social {
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      margin-bottom: 52px; font-size: 0.85rem; color: var(--ink-m);
-    }
-    .hero-avatars { display: flex; }
-    .hero-avatars span {
-      width: 30px; height: 30px; border-radius: 50%;
-      border: 2px solid var(--canvas);
-      background: var(--s3);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.7rem; font-weight: 700;
-      margin-left: -8px; color: var(--teal);
-    }
-    .hero-avatars span:first-child { margin-left: 0; }
-
-    /* Bot hero visual */
-    .hero-visual {
-      position: relative; margin: 0 auto;
-      width: 280px; height: 280px;
-    }
-    .hero-bot-wrap {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-      animation: float-hero 3.5s ease-in-out infinite;
-    }
-    @keyframes float-hero {
-      0%,100% { transform: translate(-50%,-50%) translateY(0); }
-      50% { transform: translate(-50%,-50%) translateY(-14px); }
-    }
-    .hero-ring {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-      width: 240px; height: 240px; border-radius: 50%;
-      border: 1px solid rgba(2,195,154,0.15);
-      animation: ring-spin 20s linear infinite;
-    }
-    .hero-ring-2 {
-      width: 300px; height: 300px;
-      border: 1px solid rgba(2,195,154,0.07);
-      animation-duration: 32s; animation-direction: reverse;
-    }
-    @keyframes ring-spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
-    .hero-ring::before {
-      content: ''; position: absolute; top: -4px; left: 50%; transform: translateX(-50%);
-      width: 8px; height: 8px; border-radius: 50%; background: var(--teal);
-      box-shadow: 0 0 12px var(--teal);
-    }
-    .hero-bot-img {
-      width: 140px; height: 140px; object-fit: contain;
-      filter: drop-shadow(0 8px 32px rgba(2,195,154,0.4));
-    }
-
-    /* ─── STATS ──────────────────────────────────────────────────── */
-    .stats {
-      display: flex; align-items: stretch; justify-content: center;
-      gap: 0; max-width: 700px; margin: 0 auto;
-      background: var(--s1); border: 1px solid var(--line);
-      border-radius: var(--r-lg); overflow: hidden;
-    }
-    .stat {
-      flex: 1; padding: 24px 16px; text-align: center;
-      border-right: 1px solid var(--line);
-    }
-    .stat:last-child { border-right: none; }
-    .stat-num {
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: 2rem; font-weight: 800; color: var(--ink);
-      letter-spacing: -0.04em; line-height: 1; display: block; margin-bottom: 4px;
-    }
-    .stat-num em { color: var(--teal); font-style: normal; }
-    .stat-label { font-size: 0.78rem; color: var(--ink-s); font-weight: 500; }
-
-    /* ─── SECTION COMMONS ────────────────────────────────────────── */
-    section { padding: 96px 24px; }
-    .section-inner { max-width: 1080px; margin: 0 auto; }
-    .section-tag {
-      display: inline-block; font-size: 0.72rem; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal);
-      margin-bottom: 14px;
-    }
-    .section-h {
-      font-size: clamp(2rem, 4.5vw, 3.4rem); font-weight: 800;
-      letter-spacing: -0.035em; color: var(--ink);
-      margin-bottom: 14px; line-height: 1.08;
-    }
-    .section-sub {
-      font-size: 1.05rem; color: var(--ink-m); max-width: 520px;
-      line-height: 1.7; margin-bottom: 56px;
-    }
-    .centered { text-align: center; }
-    .centered .section-sub { margin-left: auto; margin-right: auto; }
-
-    /* ─── COUNTDOWN ──────────────────────────────────────────────── */
-    .countdown-section {
-      padding: 56px 24px;
-      background: linear-gradient(180deg, var(--canvas) 0%, var(--s1) 50%, var(--canvas) 100%);
-    }
-    .countdown-inner {
-      max-width: 640px; margin: 0 auto; text-align: center;
-    }
-    .countdown-label { font-size: 0.8rem; font-weight: 600; color: var(--ink-s); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px; }
-    .countdown-blocks { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
-    .cd-block { text-align: center; min-width: 72px; }
-    .cd-num {
-      display: block;
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: clamp(2.4rem, 6vw, 3.6rem); font-weight: 800;
-      letter-spacing: -0.04em; line-height: 1;
-      background: linear-gradient(135deg, var(--ink) 0%, var(--teal) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-      background: var(--s2); border: 1px solid var(--line-2); border-radius: var(--r);
-      padding: 16px 20px;
-      color: var(--ink); -webkit-text-fill-color: var(--ink);
-      min-width: 80px;
-    }
-    .cd-unit { font-size: 0.72rem; font-weight: 600; color: var(--ink-s); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 8px; display: block; }
-    .cd-sep {
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: 2.4rem; font-weight: 300; color: var(--ink-s);
-      margin-top: -8px; line-height: 1;
-    }
-
-    /* ─── HOW IT WORKS ───────────────────────────────────────────── */
-    .steps-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-    }
-    .step-card {
-      background: var(--s1); border: 1px solid var(--line);
-      border-radius: var(--r-lg); padding: 32px 28px;
-      position: relative; overflow: hidden;
-      transition: border-color 200ms, transform 200ms;
-    }
-    .step-card:hover { border-color: rgba(2,195,154,0.3); transform: translateY(-3px); }
-    .step-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--teal), transparent);
-      opacity: 0; transition: opacity 200ms;
-    }
-    .step-card:hover::before { opacity: 1; }
-    .step-num {
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: 3.5rem; font-weight: 800; letter-spacing: -0.06em;
-      color: rgba(2,195,154,0.1); line-height: 1; margin-bottom: 12px;
-    }
-    .step-icon {
-      width: 44px; height: 44px; border-radius: 12px;
-      background: var(--teal-dim); border: 1px solid rgba(2,195,154,0.2);
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 18px;
-      font-size: 1.3rem;
-    }
-    .step-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em; }
-    .step-card p { font-size: 0.9rem; color: var(--ink-m); line-height: 1.65; }
-
-    /* ─── FEATURES ───────────────────────────────────────────────── */
-    .feat-section { background: var(--s1); }
-    .feat-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
-    }
-    .feat-card {
-      background: var(--canvas); border: 1px solid var(--line);
-      border-radius: var(--r-lg); padding: 28px;
-      transition: border-color 200ms, transform 200ms;
-    }
-    .feat-card:hover { border-color: rgba(2,195,154,0.25); transform: translateY(-2px); }
-    .feat-card.featured {
-      grid-column: span 2;
-      background: linear-gradient(135deg, var(--s2) 0%, rgba(2,195,154,0.06) 100%);
-      border-color: rgba(2,195,154,0.2);
-      display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center;
-    }
-    .feat-tag {
-      display: inline-block; padding: 3px 10px; border-radius: 100px;
-      background: rgba(2,195,154,0.1); border: 1px solid rgba(2,195,154,0.2);
-      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-      color: var(--teal); margin-bottom: 14px;
-    }
-    .feat-card h3 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
-    .feat-card p { font-size: 0.9rem; color: var(--ink-m); line-height: 1.65; }
-
-    /* Elara chat mockup */
-    .chat-mock {
-      background: var(--s3); border-radius: var(--r); overflow: hidden;
-      border: 1px solid var(--line-2);
-    }
-    .chat-mock-header {
-      background: var(--s4); padding: 12px 16px;
-      display: flex; align-items: center; gap: 10px;
-      border-bottom: 1px solid var(--line);
-    }
-    .chat-mock-avatar {
-      width: 32px; height: 32px; border-radius: 50%; overflow: hidden;
-      background: var(--teal-dim); flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .chat-mock-avatar img { width: 32px; height: 32px; object-fit: contain; }
-    .chat-mock-name { font-size: 0.85rem; font-weight: 600; }
-    .chat-mock-status { font-size: 0.7rem; color: var(--teal); }
-    .chat-mock-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-    .chat-bubble {
-      max-width: 85%; padding: 10px 14px; border-radius: 14px;
-      font-size: 0.82rem; line-height: 1.5;
-    }
-    .chat-bubble.elara {
-      background: rgba(2,195,154,0.1); border: 1px solid rgba(2,195,154,0.15);
-      border-bottom-left-radius: 4px; align-self: flex-start;
-    }
-    .chat-bubble.user {
-      background: var(--teal); color: #021A12; font-weight: 500;
-      border-bottom-right-radius: 4px; align-self: flex-end;
-    }
-
-    /* ─── TESTIMONIALS ───────────────────────────────────────────── */
-    .testi-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
-    }
-    .testi-card {
-      background: var(--s1); border: 1px solid var(--line);
-      border-radius: var(--r-lg); padding: 28px;
-    }
-    .testi-stars { color: var(--amber); font-size: 0.85rem; margin-bottom: 14px; letter-spacing: 2px; }
-    .testi-text { font-size: 0.9rem; color: var(--ink); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
-    .testi-author { display: flex; align-items: center; gap: 12px; }
-    .testi-avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--s3); display: flex; align-items: center;
-      justify-content: center; font-weight: 700; font-size: 0.85rem; color: var(--teal);
-      flex-shrink: 0;
-    }
-    .testi-name { font-size: 0.85rem; font-weight: 600; }
-    .testi-role { font-size: 0.75rem; color: var(--ink-s); }
-
-    /* ─── FOUNDING / CTA SECTION ─────────────────────────────────── */
-    .founding-section {
-      position: relative; overflow: hidden;
-      background: var(--s1); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-    }
-    .founding-glow {
-      position: absolute; top: -40%; right: -10%; pointer-events: none;
-      width: 600px; height: 600px;
-      background: radial-gradient(ellipse, rgba(2,195,154,0.1) 0%, transparent 65%);
-    }
-    .founding-inner {
-      position: relative; z-index: 1;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
-      max-width: 1080px; margin: 0 auto;
-    }
-    .founding-spots-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 14px; border-radius: 100px;
-      background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.25);
-      font-size: 0.78rem; font-weight: 700; color: var(--amber);
-      margin-bottom: 20px; letter-spacing: 0.03em;
-    }
-    .founding-spots-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); animation: pulse-dot 1.5s ease-in-out infinite; }
-    .founding-h {
-      font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
-      letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 16px;
-    }
-    .founding-sub { font-size: 1rem; color: var(--ink-m); line-height: 1.7; margin-bottom: 32px; }
-    .founding-perks { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
-    .founding-perk {
-      display: flex; align-items: center; gap: 10px; font-size: 0.9rem;
-    }
-    .perk-check {
-      width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
-      background: var(--teal-dim); border: 1px solid rgba(2,195,154,0.25);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.65rem; color: var(--teal);
-    }
-
-    /* Founding form */
-    .founding-form { display: flex; flex-direction: column; gap: 12px; }
-    .founding-input {
-      padding: 15px 20px; border-radius: 100px;
-      background: rgba(255,255,255,0.05); border: 1px solid var(--line-2);
-      color: var(--ink); font-size: 0.95rem; font-family: 'DM Sans', sans-serif;
-      transition: border-color 200ms; outline: none;
-    }
-    .founding-input::placeholder { color: var(--ink-s); }
-    .founding-input:focus { border-color: rgba(2,195,154,0.5); }
-    .founding-btn {
-      padding: 16px 28px; border-radius: 100px;
-      background: linear-gradient(135deg, var(--teal), var(--teal-2));
-      color: #021A12; font-size: 1rem; font-weight: 700;
-      transition: transform 150ms, box-shadow 200ms;
-      box-shadow: 0 0 0 0 var(--teal-glow);
-    }
-    .founding-btn:hover { transform: translateY(-2px); box-shadow: 0 0 40px var(--teal-glow); }
-    .founding-note { font-size: 0.75rem; color: var(--ink-s); text-align: center; }
-    .founding-price-card {
-      background: var(--s2); border: 1px solid rgba(2,195,154,0.2);
-      border-radius: var(--r-xl); padding: 36px;
-      text-align: center; position: relative; overflow: hidden;
-    }
-    .founding-price-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, var(--teal), #6EE7D8, var(--teal));
-    }
-    .price-ribbon {
-      display: inline-block; padding: 4px 14px; border-radius: 100px;
-      background: rgba(2,195,154,0.12); border: 1px solid rgba(2,195,154,0.2);
-      font-size: 0.7rem; font-weight: 700; color: var(--teal);
-      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 20px;
-    }
-    .price-main {
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: 4.5rem; font-weight: 800; letter-spacing: -0.06em; line-height: 1;
-      color: var(--ink); margin-bottom: 4px;
-    }
-    .price-main sup { font-size: 1.8rem; vertical-align: super; letter-spacing: 0; }
-    .price-main sub { font-size: 1.2rem; font-weight: 400; color: var(--ink-m); vertical-align: baseline; }
-    .price-was { font-size: 0.85rem; color: var(--ink-s); margin-bottom: 24px; }
-    .price-was s { color: var(--coral); }
-    .price-list { display: flex; flex-direction: column; gap: 10px; text-align: left; margin-bottom: 28px; }
-    .price-item { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; }
-    .price-check { color: var(--teal); font-size: 0.8rem; }
-    .spots-bar-wrap { margin-bottom: 8px; }
-    .spots-bar-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--ink-s); margin-bottom: 6px; }
-    .spots-bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); overflow: hidden; }
-    .spots-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--teal), #6EE7D8); transition: width 1.5s cubic-bezier(.22,1,.36,1); width: 0; }
-    .spots-note { font-size: 0.75rem; color: var(--ink-s); }
-    .curr-toggle { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; }
-    .curr-btn {
-      padding: 5px 14px; border-radius: 100px; font-size: 0.75rem; font-weight: 600;
-      background: transparent; border: 1px solid var(--line-2); color: var(--ink-s);
-      transition: all 150ms;
-    }
-    .curr-btn.on { background: rgba(2,195,154,0.1); border-color: rgba(2,195,154,0.3); color: var(--teal); }
-
-    /* ─── FAQ ────────────────────────────────────────────────────── */
-    .faq-list { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 0; }
-    .faq-item { border-bottom: 1px solid var(--line); }
-    .faq-q {
-      width: 100%; display: flex; justify-content: space-between; align-items: center;
-      padding: 20px 0; font-size: 0.95rem; font-weight: 600; text-align: left;
-      background: transparent; color: var(--ink); gap: 16px;
-      transition: color 150ms;
-    }
-    .faq-q:hover { color: var(--teal); }
-    .faq-icon { width: 22px; height: 22px; flex-shrink: 0; color: var(--ink-s); transition: transform 200ms, color 150ms; }
-    .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--teal); }
-    .faq-a { max-height: 0; overflow: hidden; transition: max-height 350ms cubic-bezier(.22,1,.36,1), padding 200ms; }
-    .faq-item.open .faq-a { max-height: 300px; padding-bottom: 20px; }
-    .faq-a p { font-size: 0.9rem; color: var(--ink-m); line-height: 1.7; }
-
-    /* ─── FOOTER ─────────────────────────────────────────────────── */
-    .footer {
-      padding: 56px 24px 32px; border-top: 1px solid var(--line);
-    }
-    .footer-inner {
-      max-width: 1080px; margin: 0 auto;
-      display: flex; justify-content: space-between; align-items: flex-start; gap: 32px; flex-wrap: wrap;
-    }
-    .flogo { display: flex; align-items: center; gap: 10px; }
-    .flogo img { height: 32px; width: auto; object-fit: contain; }
-    .footer-tagline { font-size: 0.82rem; color: var(--ink-s); margin-top: 8px; max-width: 200px; }
-    .footer-links { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
-    .footer-links a { font-size: 0.82rem; color: var(--ink-s); transition: color 150ms; }
-    .footer-links a:hover { color: var(--teal); }
-    .footer-copy { font-size: 0.75rem; color: var(--ink-s); margin-top: 40px; text-align: center; }
-
-    /* ─── ANIMATIONS ─────────────────────────────────────────────── */
-    .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 650ms cubic-bezier(.22,1,.36,1), transform 650ms cubic-bezier(.22,1,.36,1); }
-    .fade-up.in { opacity: 1; transform: translateY(0); }
-    .fade-up-d1 { transition-delay: 80ms; }
-    .fade-up-d2 { transition-delay: 160ms; }
-    .fade-up-d3 { transition-delay: 240ms; }
-    .fade-up-d4 { transition-delay: 320ms; }
-
-    /* ─── RESPONSIVE ─────────────────────────────────────────────── */
-    @media(max-width:860px) {
-      .steps-grid { grid-template-columns: 1fr; }
-      .feat-grid { grid-template-columns: 1fr; }
-      .feat-card.featured { grid-column: 1; grid-template-columns: 1fr; }
-      .testi-grid { grid-template-columns: 1fr; }
-      .founding-inner { grid-template-columns: 1fr; }
-    }
+    /* ── MOBILE PADDING TIGHTENING ── */
     @media(max-width:640px) {
-      section { padding: 64px 20px; }
-      .hero { padding: 100px 20px 64px; }
-      .stats { flex-direction: column; }
-      .stat { border-right: none; border-bottom: 1px solid var(--line); }
-      .stat:last-child { border-bottom: none; }
+      .pain { padding: 56px 16px 40px; }
+      .features { padding: 60px 16px; }
+      .wifor { padding: 60px 16px; }
+      .compare { padding: 60px 16px; }
+      .founding { padding: 60px 16px; }
+      .faq-sec { padding: 56px 16px; }
+      .fin-cta { padding: 72px 16px; }
+      .demo { padding: 60px 16px; }
+      .midcta { padding: 24px 16px; }
+      .midcta-inner { flex-direction: column; align-items: flex-start; }
+      .pain-stat { padding: 18px 18px; gap: 16px; }
+      .pain-stat-num { font-size: 2.8rem; }
     }
+    @media(max-width:480px) {
+      .feat { white-space: normal; }
+      .tb-extra { display: none; }
+      .hero { padding: 44px 16px 36px; }
+      .hero h1 { font-size: clamp(2.2rem, 8vw, 3rem); }
+      .hero-trust { gap: 10px; font-size: 0.74rem; }
+      .cdown-unit { padding: 12px 14px; min-width: 62px; }
+      .cdown-n { font-size: 2rem; }
+    }
+    @media(max-width:360px) {
+      .elara-badge { display: none; }
+      .elara-bubble { display: none; }
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      height: 44px; display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: var(--t5); color: #fff; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em;
+    }
+    .topbar .sep { opacity: 0.35; }
+    .topbar strong { color: var(--t1); }
+    .tpulse { width: 7px; height: 7px; border-radius: 50%; background: var(--bright); display: inline-block; animation: tpulse 2s ease-in-out infinite; }
+    @keyframes tpulse { 0%,100%{box-shadow:0 0 0 0 rgba(46,232,160,0.5)} 50%{box-shadow:0 0 0 7px rgba(46,232,160,0)} }
+
+    /* ── NAV ── */
+    .nav-wrap { position: sticky; top: 0; z-index: 300; background: rgba(13,43,56,0.95); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid rgba(68,171,173,0.18); transition: box-shadow 0.3s; }
+    .nav-wrap.up { box-shadow: 0 2px 32px rgba(0,0,0,0.3); }
+    .nav { max-width: 1160px; margin: 0 auto; padding: 0 24px; height: 66px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-a { padding: 7px 14px; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: rgba(255,255,255,0.7); transition: color 0.15s, background 0.15s; }
+    .nav-a:hover { color: #fff; background: rgba(68,171,173,0.15); }
+    .nav-cta { padding: 10px 24px; border-radius: 100px; background: var(--t1); color: #fff; font-size: 0.875rem; font-weight: 800; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; }
+    .nav-cta:hover { background: var(--t2); transform: translateY(-1px); box-shadow: 0 5px 20px var(--tglow); }
+    @media(max-width:640px){ .nav-links{display:none} }
+
+    /* ── HERO ── */
+    .hero-wrap { background: var(--dark-grad); position: relative; overflow: hidden; }
+    .hero-wrap::before {
+      content: ''; position: absolute; top: -30%; right: -15%; width: 700px; height: 700px;
+      border-radius: 50%; background: radial-gradient(circle, rgba(68,171,173,0.12) 0%, transparent 65%); pointer-events: none;
+    }
+    .hero-wrap::after {
+      content: ''; position: absolute; bottom: -20%; left: -10%; width: 500px; height: 500px;
+      border-radius: 50%; background: radial-gradient(circle, rgba(46,232,160,0.06) 0%, transparent 65%); pointer-events: none;
+    }
+    .hero { max-width: 1160px; margin: 0 auto; padding: 80px 24px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; position: relative; z-index: 1; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px 6px 10px; border-radius: 100px;
+      background: rgba(68,171,173,0.15); border: 1px solid rgba(68,171,173,0.35);
+      font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t1); margin-bottom: 22px;
+    }
+    .eye-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bright); animation: tpulse 2s ease-in-out infinite; }
+    .hero h1 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(2.8rem, 5.5vw, 5.2rem); line-height: 1.02;
+      letter-spacing: -0.025em; color: #fff; margin-bottom: 20px;
+    }
+    .hero h1 em { font-style: italic; color: var(--t1); }
+    .hero-sub { font-size: clamp(1rem, 1.6vw, 1.1rem); color: rgba(255,255,255,0.78); line-height: 1.78; margin-bottom: 34px; max-width: 460px; }
+    .hero-form { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+    .hero-inp { flex: 1; min-width: 200px; padding: 14px 20px; border-radius: 100px; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.95rem; font-family: inherit; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .hero-inp::placeholder { color: rgba(255,255,255,0.45); }
+    .hero-inp:focus { border-color: var(--t1); box-shadow: 0 0 0 3px rgba(68,171,173,0.2); }
+    .hero-cta { padding: 14px 30px; border-radius: 100px; background: var(--t1); color: #fff; font-size: 0.95rem; font-weight: 800; white-space: nowrap; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; }
+    .hero-cta:hover { background: var(--t2); transform: translateY(-2px); box-shadow: 0 8px 28px var(--tglow); }
+    .consent-label { display: flex; align-items: flex-start; gap: 8px; font-size: 0.72rem; color: rgba(255,255,255,0.45); line-height: 1.5; margin-bottom: 20px; cursor: pointer; max-width: 480px; }
+    .consent-label input { margin-top: 2px; }
+    .hero-trust { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.8rem; color: rgba(255,255,255,0.6); font-weight: 600; margin-bottom: 28px; }
+    .hero-trust span { display: flex; align-items: center; gap: 5px; }
+    .tc { color: var(--bright); }
+    .hero-social { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.65); font-weight: 600; }
+    .avs { display: flex; }
+    .avs span { width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); background: rgba(68,171,173,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800; margin-left: -8px; color: #fff; }
+    .avs span:first-child { margin-left: 0; }
+    /* Elara column */
+    .elara-col { display: flex; align-items: center; justify-content: center; position: relative; }
+    .elara-bg-ring { position: absolute; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(68,171,173,0.18) 0%, transparent 70%); animation: ring-breathe 4s ease-in-out infinite; }
+    @keyframes ring-breathe { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.08);opacity:0.6} }
+    .elara-ring2 { position: absolute; width: 500px; height: 500px; border-radius: 50%; border: 1px solid rgba(68,171,173,0.1); animation: ring-breathe 6s ease-in-out infinite reverse; }
+    .elara-wrap { width: 100%; max-width: 420px; position: relative; z-index: 1; min-height: 340px; }
+    #elaraCanvas { display: block; border-radius: 20px; max-width: 100%; height: auto; }
+    /* Elara speech bubble */
+    .elara-bubble {
+      position: absolute; bottom: -2%; right: -16px; z-index: 10;
+      background: #fff; border-radius: 16px 16px 4px 16px;
+      padding: 11px 15px; box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      max-width: 190px; animation: bubble-pop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+      animation-delay: 1.4s; opacity: 0; animation-fill-mode: forwards;
+    }
+    @keyframes bubble-pop { from{opacity:0;transform:scale(0.7) translateY(10px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    .elara-bubble-name { font-size: 0.6rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t2); margin-bottom: 3px; }
+    .elara-bubble p { font-size: 0.75rem; color: var(--ink); line-height: 1.45; }
+    .elara-badge {
+      position: absolute; top: 72%; left: -18px; z-index: 10;
+      background: var(--t5); border: 1px solid rgba(68,171,173,0.3); border-radius: 12px;
+      padding: 10px 14px; display: flex; align-items: center; gap: 9px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+      animation: badge-slide 0.5s cubic-bezier(0.34,1.56,0.64,1) both; animation-delay: 1.8s; opacity: 0; animation-fill-mode: forwards;
+    }
+    @keyframes badge-slide { from{opacity:0;transform:translateX(-20px)} to{opacity:1;transform:translateX(0)} }
+    .elara-badge-icon { font-size: 1.3rem; }
+    .elara-badge-text { font-size: 0.7rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    .elara-badge-text span { color: var(--t1); display: block; font-size: 0.65rem; font-weight: 500; }
+    @media(max-width:840px){
+      .hero { grid-template-columns: 1fr; padding: 50px 20px 40px; text-align: center; }
+      .hero-sub { margin: 0 auto 28px; }
+      .hero-form { justify-content: center; }
+      .hero-trust,.hero-social { justify-content: center; }
+      .elara-col { order: -1; }
+      .elara-wrap { max-width: 300px; }
+      .elara-bg-ring { width: 280px; height: 280px; }
+      .elara-ring2 { width: 360px; height: 360px; }
+      .elara-badge { left: 0; top: 10%; }
+      .elara-bubble { right: 0; }
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar { background: var(--t5); border-top: 1px solid rgba(68,171,173,0.2); }
+    .stats-row { max-width: 1160px; margin: 0 auto; padding: 0 24px; display: flex; }
+    .stt { flex: 1; padding: 28px 16px; text-align: center; border-right: 1px solid rgba(68,171,173,0.15); }
+    .stt:last-child { border-right: none; }
+    .stt-n { font-family: 'DM Serif Display', serif; font-size: 2.4rem; color: #fff; letter-spacing: -0.04em; display: block; line-height: 1; margin-bottom: 5px; }
+    .stt-n em { color: var(--t1); font-style: normal; }
+    .stt-l { font-size: 0.72rem; color: rgba(255,255,255,0.55); font-weight: 600; line-height: 1.4; }
+    @media(max-width:600px){ .stt-n{font-size:1.6rem} .stt{padding:18px 8px} .stats-row{flex-wrap:wrap} .stt{flex-basis:50%;border-bottom:1px solid rgba(68,171,173,0.15)} }
+
+    /* ── PAIN ── */
+    .pain { background: var(--app-grad); padding: 72px 24px 56px; position: relative; overflow: hidden; }
+    .pain::before { content:''; position:absolute; top:-30%;right:-8%;width:600px;height:600px;border-radius:50%;background:rgba(255,255,255,0.03);pointer-events:none; }
+    .pain-inner { max-width: 1160px; margin: 0 auto; }
+    .sec-tag-light { font-size: 0.7rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 14px; display: block; }
+    .pain h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2.2rem, 4.5vw, 3.8rem); color: #fff; letter-spacing: -0.025em; margin-bottom: 14px; line-height: 1.06; }
+    .pain-sub { font-size: 1.06rem; color: rgba(255,255,255,0.72); line-height: 1.75; margin-bottom: 52px; max-width: 560px; }
+    .pain-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-bottom: 32px; }
+    .pain-card {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 20px; padding: 30px 24px; backdrop-filter: blur(8px);
+      transition: background 0.25s, transform 0.25s, box-shadow 0.25s; cursor: default;
+    }
+    .pain-card:hover { background: rgba(255,255,255,0.14); transform: translateY(-6px); box-shadow: 0 20px 48px rgba(0,0,0,0.2); }
+    .pain-icon { font-size: 2.2rem; margin-bottom: 18px; display: block; }
+    .pain-card h3 { font-size: 1.05rem; font-weight: 800; color: #fff; margin-bottom: 10px; line-height: 1.35; }
+    .pain-card p { font-size: 0.875rem; color: rgba(255,255,255,0.68); line-height: 1.72; }
+    .pain-stat {
+      margin-top: 14px; padding: 24px 30px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 20px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+    }
+    .pain-stat-num { font-family: 'DM Serif Display', serif; font-size: 4rem; color: var(--bright); letter-spacing: -0.04em; line-height: 1; flex-shrink: 0; }
+    .pain-stat-text { font-size: 1rem; color: rgba(255,255,255,0.8); line-height: 1.68; }
+    .pain-stat-text strong { color: #fff; font-weight: 800; }
+    @media(max-width:720px){ .pain-grid{grid-template-columns:1fr} }
+
+    /* ── MID CTA ── */
+    .midcta { background: var(--t5); border-top: 1px solid rgba(68,171,173,0.18); border-bottom: 1px solid rgba(68,171,173,0.18); padding: 30px 24px; }
+    .midcta-inner { max-width: 1160px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .midcta-copy { flex: 1; }
+    .midcta-tag { font-size: 0.7rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t1); display: block; margin-bottom: 5px; }
+    .midcta-copy p { font-size: 1rem; color: rgba(255,255,255,0.85); font-weight: 600; }
+    .midcta-right { display: flex; align-items: center; gap: 18px; flex-shrink: 0; flex-wrap: wrap; }
+    .midcta-price { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: #fff; white-space: nowrap; }
+    .midcta-price span { font-size: 0.85rem; color: rgba(255,255,255,0.5); }
+    .midcta-btn { background: var(--t1); color: #fff; font-size: 0.9rem; font-weight: 800; padding: 12px 24px; border-radius: 100px; white-space: nowrap; transition: transform 0.18s, box-shadow 0.18s, background 0.18s; }
+    .midcta-btn:hover { background: var(--t2); transform: translateY(-2px); box-shadow: 0 8px 24px var(--tglow); }
+    .midcta-light { background: var(--off); border-top: 1px solid var(--bor); border-bottom: 1px solid var(--bor); }
+    .midcta-light .midcta-copy p { color: var(--ink); }
+    .midcta-light .midcta-tag { color: var(--t3); }
+    .midcta-light .midcta-btn { background: var(--t3); }
+    .midcta-light .midcta-btn:hover { background: var(--t4); }
+
+    /* ── DEMO ── */
+    .demo { padding: 88px 24px; background: var(--w); }
+    .demo-inner { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+    .sec-tag { font-size: 0.7rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: var(--t2); display: block; margin-bottom: 12px; }
+    .demo-copy h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 3.5vw, 3rem); letter-spacing: -0.025em; color: var(--ink); margin-bottom: 16px; line-height: 1.08; }
+    .demo-copy p { font-size: 1rem; color: var(--inkm); line-height: 1.78; margin-bottom: 24px; }
+    .demo-bullets { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
+    .demo-b { display: flex; align-items: center; gap: 10px; font-size: 0.92rem; color: var(--inkm); }
+    .demo-b-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--t2); flex-shrink: 0; }
+    /* Demo Phone */
+    .demo-screens { position: relative; display: flex; justify-content: center; align-items: flex-start; }
+    .demo-phone { width: 240px; background: #0a1a22; border-radius: 40px; padding: 12px; box-shadow: 0 40px 80px rgba(13,43,56,0.35), 0 0 0 1.5px rgba(68,171,173,0.15), inset 0 1px 0 rgba(255,255,255,0.08); flex-shrink: 0; }
+    .phone-notch-bar { width: 60px; height: 5px; background: #1a2e38; border-radius: 3px; margin: 0 auto 8px; }
+    .demo-phone-screen { border-radius: 26px; overflow: hidden; background: var(--off); }
+    .s-dash-header { background: var(--dark-grad); padding: 14px 14px 18px; }
+    .s-dash-time { font-size: 0.6rem; color: rgba(255,255,255,0.65); margin-bottom: 3px; }
+    .s-dash-greet { font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: #fff; }
+    .s-dash-body { padding: 12px; }
+    .s-med-card { background: #fff; border-radius: 10px; padding: 9px 11px; margin-bottom: 7px; display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 6px rgba(13,43,56,0.07); border: 1px solid var(--bor); }
+    .s-med-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .s-med-dot.green { background: var(--t1); } .s-med-dot.amber { background: var(--amber); } .s-med-dot.red { background: #e55; }
+    .s-med-name { font-size: 0.67rem; font-weight: 700; color: var(--ink); }
+    .s-med-time { font-size: 0.57rem; color: var(--inks); }
+    .s-med-status { margin-left: auto; font-size: 0.58rem; font-weight: 700; white-space: nowrap; }
+    .s-med-status.green { color: var(--t1); } .s-med-status.amber { color: var(--amber); } .s-med-status.red { color: #e55; }
+    .s-elara-bubble { background: rgba(30,96,112,0.07); border: 1px solid rgba(68,171,173,0.2); border-radius: 10px 10px 10px 3px; padding: 8px 10px; }
+    .s-elara-from { font-size: 0.52rem; font-weight: 900; letter-spacing: 0.07em; text-transform: uppercase; color: var(--t2); margin-bottom: 2px; }
+    .s-elara-text { font-size: 0.64rem; color: var(--inkm); line-height: 1.5; }
+    /* Floating chat */
+    .demo-chat-float { position: absolute; right: -20px; bottom: 30px; width: 210px; background: #fff; border: 1.5px solid var(--bor); border-radius: 16px; overflow: hidden; box-shadow: 0 16px 48px rgba(13,43,56,0.18); }
+    @media(max-width:840px){ .demo-inner{grid-template-columns:1fr} .demo-chat-float{position:static;width:100%;margin-top:16px;border-radius:16px} }
+    /* Chat Preview */
+    .elara-chat-preview { background: #fff; border: 1.5px solid var(--bor); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(13,43,56,0.12); }
+    .ecp-header { background: var(--dark-grad); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+    .ecp-av { width: 36px; height: 36px; border-radius: 50%; background: var(--t2); color: #fff; font-weight: 900; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ecp-name { font-size: 0.9rem; font-weight: 700; color: #fff; }
+    .ecp-status { font-size: 0.65rem; color: rgba(255,255,255,0.65); }
+    .ecp-badge { margin-left: auto; font-size: 0.58rem; font-weight: 900; letter-spacing: 0.08em; color: var(--t1); background: rgba(68,171,173,0.15); border: 1px solid rgba(68,171,173,0.3); border-radius: 100px; padding: 3px 8px; }
+    .ecp-msgs { padding: 20px; display: flex; flex-direction: column; gap: 6px; background: var(--off); }
+    .ecp-msg { padding: 10px 14px; border-radius: 14px; font-size: 0.85rem; line-height: 1.55; max-width: 88%; }
+    .ecp-msg.bot { background: #fff; color: var(--ink); border: 1px solid var(--bor); border-bottom-left-radius: 4px; align-self: flex-start; box-shadow: 0 1px 4px rgba(13,43,56,0.06); }
+    .ecp-msg.usr { background: var(--t3); color: #fff; border-bottom-right-radius: 4px; align-self: flex-end; }
+    .ecp-ts { font-size: 0.65rem; color: var(--inks); }
+    .ecp-alert-row { display: flex; flex-direction: column; gap: 6px; padding: 14px 20px; background: #fff; border-top: 1px solid var(--bor); }
+    .ecp-alert { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; font-weight: 600; padding: 7px 12px; border-radius: 8px; }
+    .ecp-alert.red { background: rgba(229,85,85,0.07); color: #c44; }
+    .ecp-alert.green { background: rgba(68,171,173,0.08); color: var(--t2); }
+    @media(max-width:840px){ .demo-inner{grid-template-columns:1fr} }
+
+    /* ── FEATURES ── */
+    .features { background: var(--dark-grad); padding: 88px 24px; position: relative; overflow: hidden; }
+    .features::before { content:''; position:absolute;bottom:-20%;left:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(46,232,160,0.05) 0%,transparent 65%);pointer-events:none; }
+    .features-inner { max-width: 1160px; margin: 0 auto; position: relative; z-index: 1; }
+    .sec-h-light { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: -0.025em; color: #fff; margin-bottom: 12px; line-height: 1.08; }
+    .sec-sub-light { font-size: 1.05rem; color: rgba(255,255,255,0.65); line-height: 1.72; max-width: 520px; }
+    .sec-header-light { margin-bottom: 52px; }
+    .sec-header-light.center { text-align: center; }
+    .sec-header-light.center .sec-sub-light { margin: 0 auto; }
+    .feat-grid { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 860px; margin: 0 auto; }
+    .feat {
+      display: flex; align-items: center; gap: 9px;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 40px; padding: 10px 18px 10px 12px;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      cursor: default; white-space: nowrap;
+    }
+    .feat:hover { background: rgba(68,171,173,0.18); border-color: rgba(68,171,173,0.45); transform: translateY(-2px); }
+    .feat-ico { font-size: 1.1rem; line-height: 1; flex-shrink: 0; }
+    .feat h3 { font-size: 0.88rem; font-weight: 700; color: #fff; margin: 0; }
+    .feat p { display: none; }
+
+    /* ── WHO IT'S FOR ── */
+    .wifor { padding: 88px 24px; background: var(--w); }
+    .wifor-inner { max-width: 1160px; margin: 0 auto; }
+    .sec-header { margin-bottom: 52px; }
+    .sec-header.center { text-align: center; }
+    .sec-h { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 3.8vw, 3rem); letter-spacing: -0.025em; color: var(--ink); margin-bottom: 12px; line-height: 1.08; }
+    .sec-sub { font-size: 1.05rem; color: var(--inkm); line-height: 1.72; max-width: 520px; }
+    .sec-header.center .sec-sub { margin: 0 auto; }
+    .persona-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 22px; }
+    @media(min-width:1100px){ .persona-grid { grid-template-columns: repeat(5,1fr); } }
+    .persona {
+      border-radius: 22px; padding: 36px 28px; position: relative; overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s; cursor: default;
+    }
+    .persona:hover { transform: translateY(-6px); box-shadow: 0 20px 56px rgba(13,43,56,0.18); }
+    .persona-1 { background: var(--dark-grad); }
+    .persona-2 { background: linear-gradient(135deg, #1e5040 0%, #0d3828 100%); }
+    .persona-3 { background: linear-gradient(135deg, #2d3060 0%, #1a1e50 100%); }
+    .persona-emoji { font-size: 2.8rem; margin-bottom: 20px; display: block; }
+    .persona-who { font-size: 0.68rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+    .persona h3 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #fff; line-height: 1.15; margin-bottom: 14px; letter-spacing: -0.01em; }
+    .persona p { font-size: 0.875rem; color: rgba(255,255,255,0.7); line-height: 1.72; margin-bottom: 22px; }
+    .persona-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .ptag { padding: 4px 10px; border-radius: 100px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); font-size: 0.68rem; font-weight: 700; color: rgba(255,255,255,0.8); }
+    @media(max-width:840px){ .persona-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto} }
+
+    /* ── COMPARISON ── */
+    .compare { padding: 88px 24px; background: var(--off); }
+    .compare-inner { max-width: 1000px; margin: 0 auto; }
+    .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 56px rgba(13,43,56,0.12); }
+    .compare-table th { padding: 18px 22px; font-size: 0.85rem; font-weight: 900; text-align: center; letter-spacing: 0.02em; }
+    .compare-table th:first-child { text-align: left; background: var(--w); color: var(--inkm); font-weight: 700; font-size: 0.78rem; }
+    .th-carely { background: var(--t3); color: #fff; }
+    .th-app { background: #e8e8ec; color: #555; }
+    .th-human { background: #f0ebe4; color: #7a6a55; }
+    .compare-table td { padding: 16px 22px; font-size: 0.875rem; text-align: center; border-top: 1px solid var(--bor); background: var(--w); color: var(--inkm); }
+    .compare-table td:first-child { text-align: left; font-weight: 700; color: var(--ink); background: var(--w); }
+    .compare-table tr:last-child td { padding-bottom: 22px; }
+    .chk { color: var(--bright); font-size: 1.1rem; font-weight: 900; }
+    .chk-partial { color: var(--amber); font-size: 0.85rem; font-weight: 700; }
+    .chk-no { color: #ccc; font-size: 1rem; }
+    .td-carely { background: rgba(30,96,112,0.05) !important; color: var(--t3) !important; font-weight: 700; }
+    @media(max-width:640px){ .compare-table th,.compare-table td{padding:12px 10px;font-size:0.78rem} .compare-table td:first-child{font-size:0.78rem} }
+
+    /* ── HOW IT WORKS ── */
+    .hiw { padding: 88px 24px; background: var(--w); }
+    .hiw-inner { max-width: 1160px; margin: 0 auto; }
+    .hiw-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 52px; position: relative; }
+    .hiw-steps::before { content:''; position:absolute;top:30px;left:calc(16.5% + 14px);right:calc(16.5% + 14px);height:1.5px;background:linear-gradient(90deg,transparent,var(--tbor),var(--t1),var(--tbor),transparent); }
+    .hiw-step { text-align: center; padding: 0 12px; }
+    .hiw-num { width: 56px; height: 56px; border-radius: 50%; background: var(--t3); display: flex; align-items: center; justify-content: center; margin: 0 auto 22px; font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #fff; box-shadow: 0 8px 24px rgba(30,96,112,0.4); position: relative; z-index: 2; }
+    .hiw-step h3 { font-size: 1.05rem; font-weight: 800; color: var(--ink); margin-bottom: 10px; }
+    .hiw-step p { font-size: 0.875rem; color: var(--inkm); line-height: 1.72; }
+    @media(max-width:680px){ .hiw-steps{grid-template-columns:1fr} .hiw-steps::before{display:none} }
+
+    /* ── TESTIMONIALS ── */
+    .testi { background: var(--t5); padding: 88px 24px; }
+    .testi-inner { max-width: 1160px; margin: 0 auto; }
+    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .tcard {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px; padding: 28px 24px; display: flex; flex-direction: column; gap: 18px;
+      transition: background 0.25s, transform 0.25s; cursor: default;
+    }
+    .tcard:hover { background: rgba(255,255,255,0.12); transform: translateY(-4px); }
+    .tstars { color: var(--amber); letter-spacing: 2px; font-size: 0.85rem; }
+    .tquote { font-size: 0.9rem; color: rgba(255,255,255,0.72); line-height: 1.75; font-style: italic; flex: 1; }
+    .tquote strong { color: #fff; font-style: normal; font-weight: 800; }
+    .tauth { display: flex; align-items: center; gap: 10px; }
+    .tav { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; color: #fff; flex-shrink: 0; }
+    .tname { font-size: 0.85rem; font-weight: 700; color: #fff; }
+    .trole { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 1px; }
+    @media(max-width:900px){ .testi-grid{grid-template-columns:1fr;max-width:460px;margin:0 auto} }
+
+    /* ── COUNTDOWN ── */
+    .cdown { background: var(--app-grad); padding: 60px 24px; text-align: center; }
+    .cdown-lbl { font-size: 0.75rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 22px; display: block; }
+    .cdown-blocks { display: flex; justify-content: center; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .cdown-unit { background: rgba(0,0,0,0.22); border-radius: 14px; padding: 16px 22px; min-width: 76px; text-align: center; border: 1px solid rgba(255,255,255,0.12); }
+    .cdown-n { font-family: 'DM Serif Display', serif; font-size: 2.6rem; color: #fff; line-height: 1; letter-spacing: -0.04em; display: block; }
+    .cdown-l { font-size: 0.58rem; font-weight: 900; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; display: block; }
+    .cdown-sep { font-family: 'DM Serif Display', serif; font-size: 2rem; color: rgba(255,255,255,0.4); }
+    .cdown-note { margin-top: 18px; font-size: 0.82rem; color: rgba(255,255,255,0.65); }
+
+    /* ── FOUNDING ── */
+    .founding { padding: 88px 24px; background: var(--w); }
+    .founding-inner { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+    .sbadge { display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px 5px 10px; border-radius: 100px; background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.3); font-size: 0.72rem; font-weight: 800; color: var(--amber); margin-bottom: 20px; }
+    .sdot { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); animation: tpulse 1.6s ease-in-out infinite; }
+    .founding-copy h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 3.5vw, 2.9rem); letter-spacing: -0.025em; color: var(--ink); margin-bottom: 14px; line-height: 1.08; }
+    .founding-copy p { font-size: 1rem; color: var(--inkm); line-height: 1.78; margin-bottom: 26px; }
+    .perks { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .perk { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; color: var(--inkm); font-weight: 500; }
+    .ptick { width: 22px; height: 22px; border-radius: 50%; background: rgba(30,96,112,0.1); border: 1px solid rgba(30,96,112,0.2); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: var(--t3); font-weight: 900; flex-shrink: 0; }
+    .ff { display: flex; flex-direction: column; gap: 11px; }
+    .finp { padding: 14px 20px; border-radius: 100px; background: var(--w); border: 1.5px solid var(--bor); color: var(--ink); font-size: 0.95rem; font-family: inherit; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .finp:focus { border-color: var(--t2); box-shadow: 0 0 0 3px rgba(30,96,112,0.1); }
+    .founding-btn { padding: 15px 30px; border-radius: 100px; background: var(--t3); color: #fff; font-size: 0.975rem; font-weight: 800; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; }
+    .founding-btn:hover { background: var(--t4); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(30,96,112,0.35); }
+    .fnote { font-size: 0.75rem; color: var(--inks); text-align: center; }
+    .price-card { background: var(--dark-grad); border-radius: 24px; padding: 40px 36px; box-shadow: 0 20px 64px rgba(13,43,56,0.3); position: relative; overflow: hidden; }
+    .price-card::after { content:''; position:absolute;top:0;left:0;right:0;height:3px;background:var(--t1); }
+    .pc-badge { display: inline-block; padding: 4px 13px; border-radius: 100px; background: rgba(68,171,173,0.2); border: 1px solid rgba(68,171,173,0.35); font-size: 0.7rem; font-weight: 900; color: var(--t1); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 22px; }
+    .pc-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 6px; }
+    .pc-price sup { font-size: 1.4rem; color: #fff; font-weight: 700; align-self: flex-start; margin-top: 12px; }
+    .pc-price .big { font-family: 'DM Serif Display', serif; font-size: 5rem; color: #fff; letter-spacing: -0.05em; line-height: 1; }
+    .pc-price sub { font-size: 1rem; color: rgba(255,255,255,0.55); font-weight: 500; }
+    .pc-note { font-size: 0.82rem; color: rgba(255,255,255,0.55); margin-bottom: 22px; }
+    .pc-note strong { color: var(--t1); }
+    .spots-row { display: flex; justify-content: space-between; margin-bottom: 7px; font-size: 0.78rem; font-weight: 700; }
+    .spots-row span { color: rgba(255,255,255,0.6); }
+    .spots-row span:last-child { color: var(--amber); }
+    .spots-track { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-bottom: 24px; }
+    .spots-fill { height: 100%; background: linear-gradient(90deg, var(--t1), var(--bright)); border-radius: 4px; width: 0; transition: width 1.2s cubic-bezier(0.16,1,0.3,1); }
+    .pc-feats { display: flex; flex-direction: column; gap: 9px; margin-bottom: 24px; }
+    .pc-feat { display: flex; align-items: center; gap: 9px; font-size: 0.875rem; color: rgba(255,255,255,0.75); }
+    .pc-feat .c { color: var(--t1); flex-shrink: 0; font-weight: 900; }
+    .curr-row { display: flex; gap: 7px; margin-bottom: 14px; }
+    .cbtn { flex: 1; padding: 7px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.55); transition: all 0.15s; font-family: inherit; }
+    .cbtn.on { background: rgba(68,171,173,0.25); border-color: var(--t1); color: #fff; }
+    @media(max-width:840px){ .founding-inner{grid-template-columns:1fr} }
+
+    /* ── MARQUEE TRUST BAR ── */
+    .trust-marquee { background: var(--w); border-top: 1px solid var(--bor); border-bottom: 1px solid var(--bor); padding: 14px 0; overflow: hidden; position: relative; }
+    .trust-marquee::before, .trust-marquee::after { content:''; position:absolute; top:0; bottom:0; width:80px; z-index:2; pointer-events:none; }
+    .trust-marquee::before { left:0; background:linear-gradient(90deg, var(--w), transparent); }
+    .trust-marquee::after  { right:0; background:linear-gradient(-90deg, var(--w), transparent); }
+    .trust-track { display: flex; gap: 0; animation: marquee-scroll 28s linear infinite; width: max-content; }
+    .trust-track:hover { animation-play-state: paused; }
+    @keyframes marquee-scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .trust-item { display: inline-flex; align-items: center; gap: 7px; padding: 0 28px; font-size: 0.78rem; font-weight: 700; color: var(--inkm); white-space: nowrap; border-right: 1px solid var(--bor); }
+    .trust-item:last-child { border-right: none; }
+    .trust-item em { color: var(--t2); font-style: normal; }
+
+    /* ── 3-TIER PRICING (light bg) ── */
+    .plans-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .plan-card {
+      border-radius: 24px; padding: 36px 28px; position: relative; overflow: hidden;
+      border: 1.5px solid var(--bor);
+      background: var(--w);
+      box-shadow: 0 4px 24px rgba(13,43,56,0.07);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .plan-card:hover { transform: translateY(-6px); box-shadow: 0 24px 64px rgba(13,43,56,0.15); }
+    .plan-card.featured {
+      background: var(--dark-grad); border-color: var(--t1);
+      transform: scale(1.03);
+    }
+    .plan-card.featured:hover { transform: scale(1.03) translateY(-6px); }
+    .plan-popular { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: var(--t1); color: #fff; font-size: 0.62rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 16px; border-radius: 0 0 10px 10px; }
+    .plan-name { font-size: 0.7rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: var(--inks); margin-bottom: 10px; display: block; margin-top: 8px; }
+    .plan-card.featured .plan-name { color: rgba(255,255,255,0.55); }
+    .plan-desc { font-size: 0.82rem; color: var(--inkm); margin-bottom: 20px; line-height: 1.5; }
+    .plan-card.featured .plan-desc { color: rgba(255,255,255,0.6); }
+    .plan-price { display: flex; align-items: baseline; gap: 3px; margin-bottom: 4px; }
+    .plan-price sup { font-size: 1.1rem; color: var(--ink); font-weight: 700; align-self: flex-start; margin-top: 9px; }
+    .plan-card.featured .plan-price sup { color: #fff; }
+    .plan-price .plan-amt { font-family: 'DM Serif Display', serif; font-size: 3.6rem; color: var(--ink); letter-spacing: -0.04em; line-height: 1; }
+    .plan-card.featured .plan-price .plan-amt { color: #fff; }
+    .plan-price sub { font-size: 0.85rem; color: var(--inks); }
+    .plan-card.featured .plan-price sub { color: rgba(255,255,255,0.5); }
+    .plan-was { font-size: 0.78rem; color: var(--inks); margin-bottom: 20px; text-decoration: line-through; }
+    .plan-card.featured .plan-was { color: rgba(255,255,255,0.35); }
+    .plan-feats { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    .plan-feat { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--inkm); }
+    .plan-card.featured .plan-feat { color: rgba(255,255,255,0.78); }
+    .plan-feat .c { color: var(--t2); flex-shrink: 0; font-weight: 900; font-size: 0.9rem; }
+    .plan-card.featured .plan-feat .c { color: var(--bright); }
+    .plan-feat .x { color: var(--bor); flex-shrink: 0; }
+    .plan-btn { width: 100%; padding: 13px; border-radius: 100px; font-size: 0.9rem; font-weight: 800; font-family: inherit; cursor: pointer; border: none; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; }
+    .plan-btn-primary { background: var(--t1); color: #fff; }
+    .plan-btn-primary:hover { background: var(--t2); transform: translateY(-2px); box-shadow: 0 8px 24px var(--tglow); }
+    .plan-btn-outline { background: var(--t3); color: #fff; }
+    .plan-btn-outline:hover { background: var(--t4); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(30,96,112,0.3); }
+    /* Light-mode currency buttons */
+    .cbtn-light { flex: 1; padding: 7px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; background: var(--off); border: 1.5px solid var(--bor); color: var(--inkm); transition: all 0.15s; font-family: inherit; }
+    .cbtn-light.on { background: var(--t3); border-color: var(--t3); color: #fff; }
+    .cbtn-light:hover { border-color: var(--t2); }
+    @media(max-width:860px){ .plans-wrap{grid-template-columns:1fr;max-width:400px;margin:0 auto} .plan-card.featured{transform:scale(1)} .plan-card.featured:hover{transform:translateY(-6px)} }
+
+    /* ── LANG SECTION ── */
+    .langs { padding: 64px 24px; background: var(--off); border-top: 1px solid var(--bor); border-bottom: 1px solid var(--bor); }
+    .langs-inner { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .lang-flags { display: flex; flex-wrap: wrap; gap: 10px; }
+    .lang-flag { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 100px; background: var(--w); border: 1.5px solid var(--bor); font-size: 0.8rem; font-weight: 700; color: var(--ink); transition: border-color 0.2s, box-shadow 0.2s; }
+    .lang-flag:hover { border-color: var(--t1); box-shadow: 0 4px 16px rgba(68,171,173,0.15); }
+    .lang-flag span { font-size: 1.1rem; }
+    @media(max-width:720px){ .langs-inner{grid-template-columns:1fr} }
+
+    /* ── FAQ ── */
+    .faq-sec { background: var(--off); border-top: 1px solid var(--bor); padding: 80px 24px; }
+    .faq-list { max-width: 720px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid var(--bor); }
+    .faq-q { width: 100%; text-align: left; padding: 19px 0; display: flex; justify-content: space-between; align-items: center; gap: 16px; background: none; color: var(--ink); font-size: 0.95rem; font-weight: 700; font-family: inherit; cursor: pointer; }
+    .faq-arr { color: var(--t2); transition: transform 0.25s; flex-shrink: 0; font-size: 1.2rem; }
+    .faq-item.open .faq-arr { transform: rotate(45deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+    .faq-item.open .faq-a { max-height: 300px; }
+    .faq-a p { padding: 0 0 18px; font-size: 0.88rem; color: var(--inkm); line-height: 1.78; }
+
+    /* ── FINAL CTA ── */
+    .fin-cta { background: var(--dark-grad); padding: 100px 24px; text-align: center; position: relative; overflow: hidden; }
+    .fin-cta::before { content:''; position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(68,171,173,0.15) 0%,transparent 65%);pointer-events:none; }
+    .fin-cta h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2.2rem, 5vw, 4rem); letter-spacing: -0.025em; color: #fff; margin-bottom: 16px; position: relative; z-index: 1; }
+    .fin-cta p { font-size: 1.1rem; color: rgba(255,255,255,0.7); margin-bottom: 36px; position: relative; z-index: 1; }
+    .fin-cta-btn { display: inline-block; padding: 17px 48px; border-radius: 100px; background: var(--t1); color: #fff; font-size: 1.05rem; font-weight: 900; cursor: pointer; border: none; font-family: inherit; transition: transform 0.18s, box-shadow 0.18s, background 0.18s; position: relative; z-index: 1; }
+    .fin-cta-btn:hover { background: var(--t2); transform: translateY(-3px); box-shadow: 0 12px 36px var(--tglow); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--t5); border-top: 1px solid rgba(68,171,173,0.12); padding: 64px 24px 32px; }
+    .footer-grid { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand p { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.72; max-width: 260px; margin-top: 16px; }
+    .footer-brand .foot-socials { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+    .foot-social-btn { font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.12); border-radius: 100px; padding: 5px 12px; transition: all 0.15s; }
+    .foot-social-btn:hover { color: var(--t1); border-color: rgba(68,171,173,0.4); }
+    .footer-col h4 { font-size: 0.68rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t2); margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 0.84rem; color: rgba(255,255,255,0.45); font-weight: 500; margin-bottom: 10px; transition: color 0.15s; }
+    .footer-col a:hover { color: var(--t1); }
+    .footer-bottom { max-width: 1160px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-copy { font-size: 0.74rem; color: rgba(255,255,255,0.25); }
+    .footer-copy-links { display: flex; gap: 20px; }
+    .footer-copy-links a { font-size: 0.74rem; color: rgba(255,255,255,0.3); font-weight: 500; transition: color 0.15s; }
+    .footer-copy-links a:hover { color: var(--t1); }
+    @media(max-width:860px){ .footer-grid{grid-template-columns:1fr 1fr;gap:32px} }
+    @media(max-width:540px){ .footer-grid{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
 
 <!-- TOPBAR -->
 <div class="topbar">
-  <strong>Founding spots available</strong>
-  <span class="sep">·</span>
-  Lock in $5/month — price rises at launch
-  <span class="sep">·</span>
-  <strong>Only <span id="topbarSpots">46</span> left ↓</strong>
+  <span class="tpulse"></span>
+  <strong>Only <span id="topbarSpots">46</span> founding spots left</strong>
+  <span class="tb-extra"><span class="sep">·</span> Launching May 30, 2026</span>
+  <span class="tb-extra"><span class="sep">·</span> Lock in <strong><span class="curr-sym">$</span><span class="curr-founding">5</span>/mo for year 1</strong></span>
 </div>
 
 <!-- NAV -->
-<div class="nav-wrap">
-  <nav class="nav" id="mainNav">
-    <a class="nav-logo" href="#">
-      <img src="elara-bot-logo.png" alt="Carely">
-    </a>
+<div class="nav-wrap" id="navWrap">
+  <nav class="nav">
+    <a href="#"><img src="elara-bot-logo.png" alt="Carely" style="height:58px;"></a>
     <div class="nav-links">
-      <a class="nav-link" href="#how-it-works">How it works</a>
-      <a class="nav-link" href="#features">Features</a>
-      <a class="nav-link" href="#faq">FAQ</a>
+      <a class="nav-a" href="#demo">Product</a>
+      <a class="nav-a" href="#features">Features</a>
+      <a class="nav-a" href="#compare">Compare</a>
+      <a class="nav-a" href="#founding">Pricing</a>
+      <a class="nav-a" href="#faq">FAQ</a>
     </div>
-    <button class="nav-cta" onclick="scrollTo('founding')">Get Early Access</button>
+    <button class="nav-cta" onclick="goto('founding')">Get Early Access</button>
+    <button class="nav-burger" id="navBurger" aria-label="Open menu"><span></span><span></span><span></span></button>
   </nav>
 </div>
 
-<!-- HERO -->
-<section class="hero" id="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-grid"></div>
+<!-- MOBILE NAV -->
+<div class="nav-mob" id="navMob">
+  <a href="#demo" onclick="closeMobNav()">Product</a>
+  <a href="#features" onclick="closeMobNav()">Features</a>
+  <a href="#compare" onclick="closeMobNav()">Compare</a>
+  <a href="#founding" onclick="closeMobNav()">Pricing</a>
+  <a href="#faq" onclick="closeMobNav()">FAQ</a>
+  <a href="#founding" class="mob-cta" onclick="closeMobNav()">Get Early Access →</a>
+</div>
 
-  <div class="hero-content">
-    <div class="hero-badge fade-up">
-      <span class="hero-badge-dot"></span>
-      Launching May 2026 · Pre-launch waitlist open
-    </div>
-
-    <h1 class="fade-up fade-up-d1">
-      Your family's health,<br>
-      <em>looked after.</em>
-    </h1>
-
-    <p class="hero-sub fade-up fade-up-d2">
-      Elara is an AI caretaker that sends medication reminders, checks in daily, and alerts you the moment something's off — so you can stop worrying from a distance.
-    </p>
-
-    <form class="hero-form fade-up fade-up-d3" onsubmit="joinWaitlist(event)">
-      <input class="hero-input" id="heroEmail" type="email" placeholder="Enter your email" autocomplete="email" required>
-      <button class="hero-btn" type="submit">Get Early Access</button>
-    </form>
-
-    <div class="hero-trust fade-up fade-up-d3">
-      <span>✓ Free during beta</span>
-      <span class="hero-trust-dot"></span>
-      <span>✓ No credit card needed</span>
-      <span class="hero-trust-dot"></span>
-      <span>✓ Unsubscribe anytime</span>
-    </div>
-
-    <div class="hero-social fade-up fade-up-d4">
-      <div class="hero-avatars">
-        <span>S</span><span>M</span><span>K</span><span>R</span><span>+</span>
-      </div>
-      <span><strong id="waitlistCount">847</strong> families already on the list</span>
-    </div>
+<!-- COOKIE CONSENT BANNER -->
+<div class="cookie-bar" id="cookieBar">
+  <p class="cookie-txt">We use cookies to improve your experience and analyse site usage. By clicking Accept, you agree to our <a href="/privacy">Privacy Policy</a>. You can change your preferences at any time.</p>
+  <div class="cookie-btns">
+    <button class="cookie-decline" onclick="cookieChoice(false)">Decline</button>
+    <button class="cookie-accept" onclick="cookieChoice(true)">Accept All</button>
   </div>
+</div>
 
-  <div class="hero-visual fade-up fade-up-d4">
-    <div class="hero-ring"></div>
-    <div class="hero-ring hero-ring-2"></div>
-    <div class="hero-bot-wrap">
-      <img class="hero-bot-img" src="elara-bot.png" alt="Elara AI Caretaker">
-    </div>
-  </div>
-
-  <!-- Stats -->
-  <div class="stats fade-up" style="margin-top: 56px; width:100%; max-width:640px; position:relative; z-index:1;">
-    <div class="stat">
-      <span class="stat-num" data-count="12000" data-suf="+">0+</span>
-      <span class="stat-label">Doses tracked in beta</span>
-    </div>
-    <div class="stat">
-      <span class="stat-num" data-count="98" data-suf="%">0%</span>
-      <span class="stat-label">On-time reminder rate</span>
-    </div>
-    <div class="stat">
-      <span class="stat-num" data-count="847" data-suf="">0</span>
-      <span class="stat-label">Families on waitlist</span>
-    </div>
-  </div>
-</section>
-
-<!-- COUNTDOWN -->
-<div class="countdown-section" id="countdown-section">
-  <div class="countdown-inner">
-    <p class="countdown-label">Launch countdown</p>
-    <div class="countdown-blocks">
-      <div class="cd-block">
-        <span class="cd-num" id="cd-d">00</span>
-        <span class="cd-unit">Days</span>
+<!-- ═══ HERO ═══ -->
+<div class="hero-wrap">
+  <div class="hero" id="hero">
+    <div class="hero-copy" id="heroCopy">
+      <div class="hero-eyebrow"><span class="eye-dot"></span>World's First AI Caretaker · Founding Spots Open</div>
+      <h1>Your family's health,<br><em>finally safe.</em></h1>
+      <p class="hero-sub">Hundreds of thousands die every year from missing a medication. Elara ends that — with daily AI check-ins, instant family alerts, and automatic doctor reports. The first AI that truly cares for the people you love.</p>
+      <form class="hero-form" onsubmit="joinWaitlist(event)">
+        <input class="hero-inp" id="heroEmail" type="email" placeholder="Enter your email" autocomplete="email" required>
+        <button class="hero-cta" type="submit">Get Early Access</button>
+      </form>
+      <label class="consent-label">
+        <input type="checkbox" id="heroConsent" required style="accent-color:var(--t1);width:14px;height:14px;flex-shrink:0;">
+        <span>I agree to receive product updates from Carely. No spam. Unsubscribe anytime.</span>
+      </label>
+      <div class="hero-trust">
+        <span><span class="tc">✓</span> Founding rate <span class="curr-sym">$</span><span class="curr-founding">5</span>/mo</span>
+        <span><span class="tc">✓</span> Launches May 30</span>
+        <span><span class="tc">✓</span> Global launch</span>
       </div>
-      <span class="cd-sep">:</span>
-      <div class="cd-block">
-        <span class="cd-num" id="cd-h">00</span>
-        <span class="cd-unit">Hours</span>
+      <div class="hero-social">
+        <div class="avs"><span>S</span><span>M</span><span>K</span><span>R</span><span>+</span></div>
+        <span><strong id="waitlistCount" style="color:#fff">847</strong> families already on the list</span>
       </div>
-      <span class="cd-sep">:</span>
-      <div class="cd-block">
-        <span class="cd-num" id="cd-m">00</span>
-        <span class="cd-unit">Minutes</span>
-      </div>
-      <span class="cd-sep">:</span>
-      <div class="cd-block">
-        <span class="cd-num" id="cd-s">00</span>
-        <span class="cd-unit">Seconds</span>
+    </div>
+    <div class="elara-col" id="elaraCol">
+      <div class="elara-ring2"></div>
+      <div class="elara-bg-ring"></div>
+      <div class="elara-wrap">
+        <img src="elara-3d-new.png" alt="Elara" id="elaraCanvas" style="display:block;width:100%;max-width:340px;height:auto;border-radius:24px;filter:drop-shadow(0 24px 48px rgba(46,232,160,0.35));">
+        <div class="elara-bubble">
+          <div class="elara-bubble-name">Elara</div>
+          <p>Good morning! Time for your Lisinopril 💊 I'll let Sarah know once you confirm.</p>
+        </div>
+        <div class="elara-badge">
+          <div class="elara-badge-icon">🔔</div>
+          <div class="elara-badge-text">Missed dose detected<span>Sarah notified · 3 min ago</span></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- HOW IT WORKS -->
-<section id="how-it-works">
-  <div class="section-inner">
-    <div class="centered">
-      <span class="section-tag fade-up">How it works</span>
-      <h2 class="section-h fade-up fade-up-d1">Set up in 3 minutes.<br>Elara handles the rest.</h2>
-      <p class="section-sub fade-up fade-up-d2">No complex setup. Just add your family member's medications and Elara gets to work.</p>
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-row">
+    <div class="stt"><span class="stt-n"><em data-count="700" data-suf="K+">0</em></span><span class="stt-l">Global deaths/year from<br>medication non-adherence</span></div>
+    <div class="stt"><span class="stt-n"><em data-count="50" data-suf="%">0%</em></span><span class="stt-l">Patients don't take<br>meds as prescribed</span></div>
+    <div class="stt"><span class="stt-n" style="color:var(--bright);font-size:3.2rem"><span class="curr-sym" style="font-size:0.5em;vertical-align:0.55em;font-weight:900">$</span><span class="curr-founding">5</span><span style="font-size:0.32em;vertical-align:0.35em;color:rgba(255,255,255,0.5)">/mo</span></span><span class="stt-l">Founding member<br>rate (locked for year 1)</span></div>
+    <div class="stt"><span class="stt-n" id="spotsStat" style="color:var(--amber)">46</span><span class="stt-l">Founding spots<br>remaining of 200</span></div>
+  </div>
+</div>
+
+<!-- ═══ TRUST MARQUEE ═══ -->
+<div class="trust-marquee">
+  <div class="trust-track" id="trustTrack">
+    <div class="trust-item">🔒 End-to-end encrypted</div>
+    <div class="trust-item">🌐 <em>10 languages</em> supported</div>
+    <div class="trust-item">📱 iOS &amp; Android</div>
+    <div class="trust-item">⚡ Real-time family alerts</div>
+    <div class="trust-item">🏥 Auto doctor reports</div>
+    <div class="trust-item">💊 Drug interaction detection</div>
+    <div class="trust-item">🌍 Launching globally May 30</div>
+    <div class="trust-item">🛡️ PIPEDA · GDPR ready</div>
+    <div class="trust-item">👨‍👩‍👧 Unlimited family members</div>
+    <div class="trust-item">⏰ 24/7 AI caretaker</div>
+    <!-- duplicate for seamless loop -->
+    <div class="trust-item">🔒 End-to-end encrypted</div>
+    <div class="trust-item">🌐 <em>10 languages</em> supported</div>
+    <div class="trust-item">📱 iOS &amp; Android</div>
+    <div class="trust-item">⚡ Real-time family alerts</div>
+    <div class="trust-item">🏥 Auto doctor reports</div>
+    <div class="trust-item">💊 Drug interaction detection</div>
+    <div class="trust-item">🌍 Launching globally May 30</div>
+    <div class="trust-item">🛡️ PIPEDA · GDPR ready</div>
+    <div class="trust-item">👨‍👩‍👧 Unlimited family members</div>
+    <div class="trust-item">⏰ 24/7 AI caretaker</div>
+  </div>
+</div>
+
+<!-- ═══ PAIN POINTS ═══ -->
+<section class="pain" id="pain">
+  <div class="pain-inner">
+    <span class="sec-tag-light reveal">The problem</span>
+    <h2 class="reveal" style="transition-delay:0.08s">Most families are<br>flying blind.</h2>
+    <p class="pain-sub reveal" style="transition-delay:0.16s">When your parent or loved one lives alone, you're left guessing. Did they take it? Are they okay? You call — they say yes — but you can never really know.</p>
+    <div class="pain-grid">
+      <div class="pain-card reveal" style="transition-delay:0.1s">
+        <span class="pain-icon">😰</span>
+        <h3>"Is Dad taking his blood pressure meds?"</h3>
+        <p>You call every night. He says yes every time. But his BP still spikes. You have no way to verify — until something goes wrong.</p>
+      </div>
+      <div class="pain-card reveal" style="transition-delay:0.2s">
+        <span class="pain-icon">💊</span>
+        <h3>"Did she skip her insulin again?"</h3>
+        <p>Your mom manages diabetes alone. One missed dose becomes two. By the time you find out, she's in the ER. The reminder app didn't help.</p>
+      </div>
+      <div class="pain-card reveal" style="transition-delay:0.3s">
+        <span class="pain-icon">📍</span>
+        <h3>"I live 3 hours away and I'm terrified."</h3>
+        <p>Distance makes everything harder. You can't pop in to check. You don't want to smother them with calls. But the worry never stops.</p>
+      </div>
     </div>
-    <div class="steps-grid">
-      <div class="step-card fade-up">
-        <div class="step-icon">💊</div>
-        <h3>Add medications</h3>
-        <p>Enter your loved one's medicines, dosages, and schedule. Elara understands all medication types and remembers every detail.</p>
-      </div>
-      <div class="step-card fade-up fade-up-d1">
-        <div class="step-icon">🤖</div>
-        <h3>Elara checks in daily</h3>
-        <p>Every day, Elara sends a warm check-in — asking how they're feeling, confirming doses were taken, and noting any concerns.</p>
-      </div>
-      <div class="step-card fade-up fade-up-d2">
-        <div class="step-icon">🔔</div>
-        <h3>You get alerted instantly</h3>
-        <p>If a dose is missed, something seems off, or your loved one flags a concern — you're notified immediately, wherever you are.</p>
+    <div class="pain-stat reveal" style="transition-delay:0.1s">
+      <div class="pain-stat-num">700K+</div>
+      <div class="pain-stat-text">
+        <strong>People die every year globally from preventable medication non-adherence.</strong><br>
+        That's one person every minute — not from their illness, but from missing the medication that would have helped. Most families have no idea until it's too late.
+        <span style="font-size:0.78rem;opacity:0.55;margin-top:6px;display:block;">— Annals of Internal Medicine</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="feat-section" id="features">
-  <div class="section-inner">
-    <div class="centered">
-      <span class="section-tag fade-up">Features</span>
-      <h2 class="section-h fade-up fade-up-d1">Everything a caretaker does,<br>available 24/7.</h2>
-      <p class="section-sub fade-up fade-up-d2">Elara is not a reminder app. She's a full AI caretaker — proactive, caring, and always available.</p>
+<!-- MID CTA #1 -->
+<div class="midcta reveal">
+  <div class="midcta-inner">
+    <div class="midcta-copy">
+      <span class="midcta-tag">Stop guessing. Start knowing.</span>
+      <p>Elara checks in every day so you never have to wonder if they're okay.</p>
+    </div>
+    <div class="midcta-right">
+      <div class="midcta-price">From <sup class="curr-sym">$</sup><span class="curr-founding">5</span><span>/mo</span></div>
+      <button class="midcta-btn" onclick="goto('founding')">Get Early Access →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRODUCT DEMO ═══ -->
+<section class="demo" id="demo">
+  <div class="demo-inner">
+    <div class="demo-copy reveal">
+      <span class="sec-tag">See it in action</span>
+      <h2 class="sec-h">Your family's health,<br>visible every day.</h2>
+      <p>Elara checks in every morning, logs doses, spots patterns, and keeps your whole family informed — automatically.</p>
+      <div class="demo-bullets">
+        <div class="demo-b"><span class="demo-b-dot"></span>Daily medication dashboard for your loved one</div>
+        <div class="demo-b"><span class="demo-b-dot"></span>Elara messages — real conversations, not just pings</div>
+        <div class="demo-b"><span class="demo-b-dot"></span>Missed dose? Whole family gets alerted instantly</div>
+        <div class="demo-b"><span class="demo-b-dot"></span>Weekly reports sent to connected doctors</div>
+      </div>
+      <button class="hero-cta" onclick="goto('founding')" style="margin-top:28px">Get Early Access →</button>
+    </div>
+    <div class="demo-screens reveal" style="transition-delay:0.15s">
+      <!-- Phone with dashboard -->
+      <div class="demo-phone">
+        <div class="phone-notch-bar"></div>
+        <div class="demo-phone-screen">
+          <div class="s-dash-header">
+            <div class="s-dash-time">Monday, May 30 · 9:41 AM</div>
+            <div class="s-dash-greet">Good morning, Margaret 👋</div>
+          </div>
+          <div class="s-dash-body">
+            <div style="font-size:0.6rem;font-weight:900;letter-spacing:0.07em;text-transform:uppercase;color:var(--inks);margin-bottom:8px;">Today's Medications</div>
+            <div class="s-med-card"><div class="s-med-dot green"></div><div><div class="s-med-name">Blood Pressure Med</div><div class="s-med-time">8:00 AM · Confirmed ✓</div></div><span class="s-med-status green">Taken</span></div>
+            <div class="s-med-card"><div class="s-med-dot amber"></div><div><div class="s-med-name">Diabetes Med</div><div class="s-med-time">12:00 PM · Upcoming</div></div><span class="s-med-status amber">Due soon</span></div>
+            <div class="s-med-card"><div class="s-med-dot red"></div><div><div class="s-med-name">Cholesterol Med</div><div class="s-med-time">Yesterday 9:00 PM</div></div><span class="s-med-status red">Missed</span></div>
+            <div class="s-elara-bubble" style="margin-top:8px"><div class="s-elara-from">Elara</div><div class="s-elara-text">Good morning! I noticed a missed dose last night — Sarah has been notified. How are you feeling today?</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Floating chat preview -->
+      <div class="demo-chat-float">
+        <div class="ecp-header" style="padding:12px 16px;border-radius:16px 16px 0 0;">
+          <div class="ecp-av" style="width:28px;height:28px;font-size:0.8rem;">E</div>
+          <div><div class="ecp-name" style="font-size:0.82rem;">Elara</div><div class="ecp-status">● Active</div></div>
+          <div class="ecp-badge">CHAT</div>
+        </div>
+        <div class="ecp-msgs" style="padding:12px;gap:5px;">
+          <div class="ecp-msg bot" style="font-size:0.78rem;padding:8px 11px;">Good morning 🌅 Your Blood Pressure Med is due. How are you feeling?</div>
+          <div class="ecp-msg usr" style="font-size:0.78rem;padding:8px 11px;">A bit dizzy today</div>
+          <div class="ecp-msg bot" style="font-size:0.78rem;padding:8px 11px;">I've logged this and notified Sarah. Please sit if unsteady. 💙</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section class="features" id="features">
+  <div class="features-inner">
+    <div class="sec-header-light center">
+      <span class="sec-tag-light reveal">Everything Elara does</span>
+      <h2 class="sec-h-light reveal" style="transition-delay:0.1s">Not a reminder app.<br>A full AI caretaker.</h2>
+      <p class="sec-sub-light reveal" style="transition-delay:0.2s">Elara doesn't just ping — she observes, converses, tracks, alerts, and reports. Available 24/7, without burning out.</p>
     </div>
     <div class="feat-grid">
-      <!-- Featured: AI chat mockup -->
-      <div class="feat-card featured fade-up">
-        <div>
-          <span class="feat-tag">AI Caretaker</span>
-          <h3>Elara talks to your family — the way a real caretaker would.</h3>
-          <p>Not generic notifications. Real, warm conversations. Elara knows your loved one's name, medications, schedule, and health history. Every message feels personal.</p>
-        </div>
-        <div class="chat-mock">
-          <div class="chat-mock-header">
-            <div class="chat-mock-avatar">
-              <img src="elara-bot.png" alt="Elara">
-            </div>
-            <div>
-              <div class="chat-mock-name">Elara</div>
-              <div class="chat-mock-status">● Online · AI Caretaker</div>
-            </div>
-          </div>
-          <div class="chat-mock-body">
-            <div class="chat-bubble elara">Good morning! It's 8 AM — your Lisinopril 10mg is due now. How are you feeling today? 💙</div>
-            <div class="chat-bubble user">Feeling good! Just took it.</div>
-            <div class="chat-bubble elara">That's great to hear! I've logged it. Your streak is now 14 days in a row — keep it up! I'll check in again this evening. 🌟</div>
-          </div>
-        </div>
-      </div>
+      <div class="feat reveal" style="transition-delay:0.05s"><div class="feat-ico">💊</div><h3>Smart Medication Reminders</h3></div>
+      <div class="feat reveal" style="transition-delay:0.08s"><div class="feat-ico">💬</div><h3>Daily AI Check-ins</h3></div>
+      <div class="feat reveal" style="transition-delay:0.11s"><div class="feat-ico">🔔</div><h3>Real-Time Family Alerts</h3></div>
+      <div class="feat reveal" style="transition-delay:0.14s"><div class="feat-ico">📊</div><h3>Health Trend Tracking</h3></div>
+      <div class="feat reveal" style="transition-delay:0.17s"><div class="feat-ico">📄</div><h3>Auto Doctor Reports</h3></div>
+      <div class="feat reveal" style="transition-delay:0.2s"><div class="feat-ico">📋</div><h3>Weekly Health Summary</h3></div>
+      <div class="feat reveal" style="transition-delay:0.23s"><div class="feat-ico">🌐</div><h3>10 Languages</h3></div>
+      <div class="feat reveal" style="transition-delay:0.26s"><div class="feat-ico">🔒</div><h3>End-to-End Encrypted</h3></div>
+      <div class="feat reveal" style="transition-delay:0.32s"><div class="feat-ico">👨‍👩‍👧</div><h3>Multi-Family Member Access</h3></div>
+      <div class="feat reveal" style="transition-delay:0.35s"><div class="feat-ico">🩺</div><h3>Doctor Report Sharing</h3></div>
+      <div class="feat reveal" style="transition-delay:0.38s"><div class="feat-ico">🌍</div><h3>Works Anywhere in the World</h3></div>
+    </div>
+  </div>
+</section>
 
-      <div class="feat-card fade-up">
-        <span class="feat-tag">Smart Reminders</span>
-        <h3>Reminders that actually work</h3>
-        <p>Push notifications, SMS, and in-app alerts — timed to when your family member actually responds. Elara learns and adapts.</p>
+<!-- ═══ WHO IT'S FOR ═══ -->
+<section class="wifor" id="who">
+  <div class="wifor-inner">
+    <div class="sec-header center">
+      <span class="sec-tag reveal">Who Carely is for</span>
+      <h2 class="sec-h reveal" style="transition-delay:0.1s">Built for every family<br>managing health from afar.</h2>
+      <p class="sec-sub reveal" style="transition-delay:0.2s">Whether you're the one managing medications or the one watching from a distance — Elara adapts to your situation.</p>
+    </div>
+    <div class="persona-grid">
+      <div class="persona persona-1 reveal" style="transition-delay:0.1s">
+        <span class="persona-emoji">👵</span>
+        <div class="persona-who">For elderly parents</div>
+        <h3>Living independently, staying safe.</h3>
+        <p>Elara checks in every morning, reminds about every medication, and quietly alerts your family the moment anything looks off. Freedom without the risk.</p>
+        <div class="persona-tags"><span class="ptag">Medication reminders</span><span class="ptag">Daily check-ins</span><span class="ptag">Family alerts</span></div>
       </div>
-
-      <div class="feat-card fade-up fade-up-d1">
-        <span class="feat-tag">Family Alerts</span>
-        <h3>You're notified before it becomes a problem</h3>
-        <p>Missed doses, unusual answers, health concerns — your family gets alerted immediately so you can act fast.</p>
+      <div class="persona persona-2 reveal" style="transition-delay:0.2s">
+        <span class="persona-emoji">👨‍👧</span>
+        <div class="persona-who">For adult caregivers</div>
+        <h3>Stop worrying. Start knowing.</h3>
+        <p>You can't be there every day. Elara is. She monitors, reports, and alerts so you have full visibility into a parent's health — without being overbearing.</p>
+        <div class="persona-tags"><span class="ptag">Real-time visibility</span><span class="ptag">Doctor reports</span><span class="ptag">Peace of mind</span></div>
       </div>
-
-      <div class="feat-card fade-up fade-up-d2">
-        <span class="feat-tag">Health Tracking</span>
-        <h3>BP, blood sugar, weight — all in one place</h3>
-        <p>Log vitals from any device. Elara watches for patterns and flags anything unusual for you or the doctor.</p>
+      <div class="persona persona-3 reveal" style="transition-delay:0.3s">
+        <span class="persona-emoji">🩺</span>
+        <div class="persona-who">For chronic conditions</div>
+        <h3>Managing your own health, smarter.</h3>
+        <p>Diabetes, hypertension, heart conditions — Elara tracks it all. She notices when your BP is trending up before you do, and prepares your doctor visits for you.</p>
+        <div class="persona-tags"><span class="ptag">Health tracking</span><span class="ptag">Trend analysis</span><span class="ptag">Doctor reports</span></div>
       </div>
-
-      <div class="feat-card fade-up fade-up-d3">
-        <span class="feat-tag">Doctor Bridge</span>
-        <h3>Share reports with doctors in one tap</h3>
-        <p>Auto-generated health summaries ready for every appointment. No more trying to remember what happened last week.</p>
+      <div class="persona persona-1 reveal" style="transition-delay:0.4s">
+        <span class="persona-emoji">💼</span>
+        <div class="persona-who">For busy professionals</div>
+        <h3>Your family's health, handled.</h3>
+        <p>You're juggling work, travel, and life. Elara handles the daily check-ins with your parents so you don't have to. You stay informed without being on-call.</p>
+        <div class="persona-tags"><span class="ptag">Daily summaries</span><span class="ptag">Instant alerts</span><span class="ptag">No micromanaging</span></div>
+      </div>
+      <div class="persona persona-2 reveal" style="transition-delay:0.5s">
+        <span class="persona-emoji">💊</span>
+        <div class="persona-who">For supplement tracking</div>
+        <h3>Your stack, tracked automatically.</h3>
+        <p>Managing vitamins, omega-3s, protein, and prescriptions? Elara tracks them all — not just medications. Never second-guess whether you took your morning stack.</p>
+        <div class="persona-tags"><span class="ptag">Supplement logging</span><span class="ptag">Streak tracking</span><span class="ptag">Daily check-ins</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-  <div class="section-inner">
-    <div class="centered">
-      <span class="section-tag fade-up">What beta testers say</span>
-      <h2 class="section-h fade-up fade-up-d1">Real families. Real relief.</h2>
+<!-- ═══ COMPARISON ═══ -->
+<section class="compare" id="compare">
+  <div class="compare-inner">
+    <div class="sec-header center" style="margin-bottom:44px">
+      <span class="sec-tag reveal">Why Carely</span>
+      <h2 class="sec-h reveal" style="transition-delay:0.1s">Not just another reminder app.</h2>
+      <p class="sec-sub reveal" style="transition-delay:0.2s">Every other option leaves critical gaps. Carely fills them all.</p>
     </div>
-    <div class="testi-grid">
-      <div class="testi-card fade-up">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"My mom has 5 different medications and always forgot which ones she'd taken. Since Elara, I haven't had a single panic call at midnight. It's like having a nurse in her pocket."</p>
-        <div class="testi-author">
-          <div class="testi-avatar">S</div>
-          <div>
-            <div class="testi-name">Sarah M.</div>
-            <div class="testi-role">Long-distance caregiver, Vancouver</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card fade-up fade-up-d1">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"My dad lives alone and didn't want to be a burden. Elara checks in on him every morning so I don't have to call every day. He actually likes talking to her — says she listens."</p>
-        <div class="testi-author">
-          <div class="testi-avatar">R</div>
-          <div>
-            <div class="testi-name">Raj P.</div>
-            <div class="testi-role">Beta tester, Toronto</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card fade-up fade-up-d2">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"I work night shifts. Knowing Elara is watching over my grandmother's medications while I sleep is something I can't put a price on. This product is genuinely needed."</p>
-        <div class="testi-author">
-          <div class="testi-avatar">K</div>
-          <div>
-            <div class="testi-name">Kiran A.</div>
-            <div class="testi-role">Beta tester, Calgary</div>
-          </div>
-        </div>
-      </div>
+    <div class="reveal" style="overflow-x:auto;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="th-carely">Carely + Elara</th>
+            <th class="th-app">Reminder App</th>
+            <th class="th-human">Hiring Help</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Medication reminders</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk">✓</span></td><td><span class="chk-partial">Sometimes</span></td></tr>
+          <tr><td>Daily conversational check-ins</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-partial">If available</span></td></tr>
+          <tr><td>Instant family alerts</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-partial">Manually</span></td></tr>
+          <tr><td>Health trend tracking</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-no">✗</span></td></tr>
+          <tr><td>Drug interaction alerts</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-no">✗</span></td></tr>
+          <tr><td>Auto doctor reports</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-no">✗</span></td></tr>
+          <tr><td>Available 24/7</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td></tr>
+          <tr><td>Monthly cost</td><td class="td-carely" style="font-weight:900;color:var(--t2) !important">from $5/mo</td><td>$0–20/mo</td><td>$1,500–4,000/mo</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
 
-<!-- FOUNDING MEMBER / CTA -->
-<section class="founding-section" id="founding">
-  <div class="founding-glow"></div>
-  <div class="section-inner">
-    <div class="founding-inner">
-      <!-- Left: form -->
-      <div>
-        <div class="founding-spots-badge fade-up">
-          <span class="founding-spots-dot"></span>
-          Only <span id="spotsLeft">46</span> founding spots remaining
-        </div>
-        <h2 class="founding-h fade-up fade-up-d1">Be a founding member.<br>Lock in your rate forever.</h2>
-        <p class="founding-sub fade-up fade-up-d2">Founding members get $5/month for their entire first year — even after we raise prices. This offer disappears the moment we launch.</p>
-        <div class="founding-perks fade-up fade-up-d2">
-          <div class="founding-perk"><span class="perk-check">✓</span> Full Elara AI caretaker access</div>
-          <div class="founding-perk"><span class="perk-check">✓</span> Unlimited medications & schedules</div>
-          <div class="founding-perk"><span class="perk-check">✓</span> Family caregiver alerts</div>
-          <div class="founding-perk"><span class="perk-check">✓</span> Health tracking (BP, glucose, weight)</div>
-          <div class="founding-perk"><span class="perk-check">✓</span> $5/month locked for your first year</div>
-        </div>
-        <div class="founding-form fade-up fade-up-d3">
-          <input class="founding-input" id="foundingEmail" type="email" placeholder="Your email address" autocomplete="email">
-          <button class="founding-btn" onclick="claimSpot()">
-            Claim My Founding Spot — <span class="curr-val" data-usd="$5/month">$5/month</span>
-          </button>
-          <p class="founding-note">🔒 Secure checkout · Cancel anytime · No hidden fees</p>
-        </div>
-      </div>
-
-      <!-- Right: price card -->
-      <div class="founding-price-card fade-up fade-up-d1">
-        <div class="curr-toggle">
-          <button class="curr-btn on" data-curr="usd" id="btnUSD" onclick="setCurr('usd')">USD</button>
-          <button class="curr-btn" data-curr="cad" id="btnCAD" onclick="setCurr('cad')">CAD</button>
-          <button class="curr-btn" data-curr="gbp" onclick="setCurr('gbp')">GBP</button>
-          <button class="curr-btn" data-curr="eur" onclick="setCurr('eur')">EUR</button>
-        </div>
-        <div class="price-ribbon">Founding Member Rate</div>
-        <div class="price-main"><sup class="curr-sym">$</sup><span class="curr-founding">5</span><sub>/mo</sub></div>
-        <p class="price-was">Launches at <s class="curr-val" data-usd="$9.99/month">$9.99/month</s></p>
-        <div class="price-list">
-          <div class="price-item"><span class="price-check">✓</span> Elara AI caretaker</div>
-          <div class="price-item"><span class="price-check">✓</span> All medications & reminders</div>
-          <div class="price-item"><span class="price-check">✓</span> Family alert system</div>
-          <div class="price-item"><span class="price-check">✓</span> Health log & reports</div>
-          <div class="price-item"><span class="price-check">✓</span> Doctor bridge sharing</div>
-          <div class="price-item"><span class="price-check">✓</span> Rate locked for first year</div>
-        </div>
-        <div class="spots-bar-wrap">
-          <div class="spots-bar-label">
-            <span>Spots claimed</span>
-            <span><span id="spotsClaimed">154</span>/200</span>
-          </div>
-          <div class="spots-bar">
-            <div class="spots-bar-fill" id="spotsBarFill"></div>
-          </div>
-        </div>
-        <p class="spots-note"><span id="spotsLeftCard">46</span> spots left at this price</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section id="faq">
-  <div class="section-inner centered">
-    <span class="section-tag fade-up">Questions</span>
-    <h2 class="section-h fade-up fade-up-d1">Everything you need to know</h2>
-    <div class="faq-list" style="margin-top:40px; text-align:left;">
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          What is Elara exactly?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-a"><p>Elara is an AI caretaker built into the Carely app. She handles medication reminders, daily check-ins, health logging, and caregiver alerts — all through natural conversation. She's not a generic chatbot; she knows your loved one's full health context and responds accordingly.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Who is Carely for?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-a"><p>Carely is built for two people: the person taking medications (typically an older adult), and their family caregiver (often a son, daughter, or spouse who lives nearby or far away). Both get the app. Both benefit. Elara bridges the gap between them.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          What does the founding member rate include?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-a"><p>Founding members get $5/month (USD) for their entire first year — full access to Elara, all medications, family alerts, health tracking, and doctor reports. After your first year, you move to the standard plan. This rate is locked and will not change during your founding year.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          When does the app launch?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-a"><p>Carely is launching in May 2026 on iOS and Android. Founding members will be first to get access and will be notified by email. Beta testers are already using the app — the countdown is live above.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Can I cancel anytime?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-a"><p>Yes. No contracts, no lock-ins, no cancellation fees. Cancel from inside the app or by emailing hello@carely.fit. If you cancel your founding membership and resubscribe later, the founding rate may not be available again.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FINAL CTA -->
-<section style="padding:80px 24px; text-align:center; background:var(--s1); border-top:1px solid var(--line);">
-  <div style="max-width:560px; margin:0 auto;">
-    <img src="elara-bot.png" alt="Elara" style="width:80px; height:80px; object-fit:contain; margin:0 auto 24px; filter:drop-shadow(0 4px 20px rgba(2,195,154,0.4));">
-    <h2 class="section-h fade-up" style="margin-bottom:14px;">Your family deserves this.</h2>
-    <p class="fade-up fade-up-d1" style="color:var(--ink-m); font-size:1rem; margin-bottom:32px; line-height:1.7;">Stop worrying from a distance. Let Elara handle the daily care — so you can just be family again.</p>
-    <button class="founding-btn fade-up fade-up-d2" onclick="scrollTo('founding')" style="padding:16px 36px; font-size:1rem;">
-      Get Early Access — <span class="curr-val" data-usd="$5/month">$5/month</span>
-    </button>
-    <p class="fade-up fade-up-d3" style="font-size:0.78rem; color:var(--ink-s); margin-top:12px;">Free during beta · No credit card · Cancel anytime</p>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-inner">
+<!-- ═══ LANGUAGES ═══ -->
+<div class="langs">
+  <div class="langs-inner">
     <div>
-      <div class="flogo">
-        <img src="elara-bot-logo.png" alt="Carely">
-      </div>
-      <p class="footer-tagline">AI caretaker for families who care.</p>
+      <span class="sec-tag reveal">Multi-language</span>
+      <h2 class="sec-h reveal" style="transition-delay:0.1s">Elara speaks<br>your family's language.</h2>
+      <p class="sec-sub reveal" style="transition-delay:0.2s">Health is deeply personal. Elara communicates in the language your loved one is most comfortable in — so nothing gets lost in translation when it matters most.</p>
     </div>
-    <div class="footer-links">
-      <a href="/privacy.html">Privacy</a>
-      <a href="/terms.html">Terms</a>
-      <a href="/for-caregivers.html">Caregivers</a>
-      <a href="/for-doctors.html">Doctors</a>
-      <a href="/contact.html">Contact</a>
-      <a href="mailto:hello@carely.fit">hello@carely.fit</a>
+    <div class="lang-flags reveal" style="transition-delay:0.15s">
+      <div class="lang-flag"><span>🇺🇸</span>English</div>
+      <div class="lang-flag"><span>🇫🇷</span>French</div>
+      <div class="lang-flag"><span>🇪🇸</span>Spanish</div>
+      <div class="lang-flag"><span>🇮🇳</span>Hindi</div>
+      <div class="lang-flag"><span>🇮🇳</span>Punjabi</div>
+      <div class="lang-flag"><span>🇸🇦</span>Arabic</div>
+      <div class="lang-flag"><span>🇨🇳</span>Mandarin</div>
+      <div class="lang-flag"><span>🇧🇷</span>Portuguese</div>
+      <div class="lang-flag"><span>🇩🇪</span>German</div>
+      <div class="lang-flag"><span>🇧🇩</span>Bengali</div>
     </div>
-  </div>
-  <p class="footer-copy">© 2026 Carely · Made with care in Canada 🍁</p>
-</footer>
-
-<!-- COOKIE BANNER -->
-<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#0A1D2C;color:#b0c8d4;padding:14px 24px;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:'DM Sans',sans-serif;font-size:13px;border-top:1px solid rgba(255,255,255,0.08);">
-  <span>We use cookies to improve your experience. See our <a href="/privacy.html" style="color:#02C39A;">Privacy Policy</a>.</span>
-  <div style="display:flex;gap:8px;flex-shrink:0;">
-    <button onclick="cookieDecline()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#7BAFC4;padding:7px 16px;border-radius:100px;cursor:pointer;font-size:12px;">Decline</button>
-    <button onclick="cookieAccept()" style="background:#02C39A;border:none;color:#021A12;padding:7px 16px;border-radius:100px;cursor:pointer;font-size:12px;font-weight:700;">Accept</button>
   </div>
 </div>
 
+<!-- MID CTA #2 -->
+<div class="midcta midcta-light reveal">
+  <div class="midcta-inner">
+    <div class="midcta-copy">
+      <span class="midcta-tag">Founding spots closing fast</span>
+      <p><strong id="spotsLeftFinal">46</strong> of 200 founding spots remaining — lock in <sup class="curr-sym">$</sup><span class="curr-founding">5</span>/month for your first year.</p>
+    </div>
+    <div class="midcta-right">
+      <button class="midcta-btn" onclick="goto('founding')">Claim My Founding Spot →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="hiw" id="how-it-works">
+  <div class="hiw-inner">
+    <div class="sec-header center">
+      <span class="sec-tag reveal">How it works</span>
+      <h2 class="sec-h reveal" style="transition-delay:0.1s">Set up in 3 minutes.<br>Elara handles the rest.</h2>
+    </div>
+    <div class="hiw-steps">
+      <div class="hiw-step reveal" style="transition-delay:0.1s"><div class="hiw-num">1</div><h3>Add medications</h3><p>Enter your loved one's medicines, dosages, and schedule. Takes about 3 minutes. Elara takes over from there, immediately.</p></div>
+      <div class="hiw-step reveal" style="transition-delay:0.2s"><div class="hiw-num">2</div><h3>Elara takes over</h3><p>Reminders, daily check-ins, health tracking, family alerts, drug interaction checks — all automatic, every single day, without lifting a finger.</p></div>
+      <div class="hiw-step reveal" style="transition-delay:0.3s"><div class="hiw-num">3</div><h3>You stay in the loop</h3><p>Real-time alerts when it matters. Weekly summaries. Doctor reports ready when you need them. True peace of mind, always.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section class="testi" id="testimonials">
+  <div class="testi-inner">
+    <div class="sec-header-light center" style="margin-bottom:48px">
+      <span class="sec-tag-light reveal">Early testers</span>
+      <h2 class="sec-h-light reveal" style="transition-delay:0.1s">What families are saying.</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="tcard reveal" style="transition-delay:0.1s">
+        <div class="tstars">★★★★★</div>
+        <p class="tquote">My mom takes 8 medications. For three years I'd panic wondering if she'd taken them all. <strong>Last month Elara flagged that she'd skipped her blood thinner three days in a row. We got to the ER in time.</strong> I believe Elara saved her life.</p>
+        <div class="tauth"><div class="tav" style="background:var(--t2)">SM</div><div><div class="tname">Sheila M., 48</div><div class="trole">Caregiver daughter · Nashville, TN</div></div></div>
+      </div>
+      <div class="tcard reveal" style="transition-delay:0.2s">
+        <div class="tstars">★★★★★</div>
+        <p class="tquote">I live alone and manage blood pressure and diabetes myself. Elara checks in every day but <strong>never makes me feel like a burden.</strong> She noticed my BP trending up and helped me put together a full summary for my cardiologist. He was impressed.</p>
+        <div class="tauth"><div class="tav" style="background:var(--amber)">RK</div><div><div class="tname">Robert K., 71</div><div class="trole">Retired teacher · Ontario, Canada</div></div></div>
+      </div>
+      <div class="tcard reveal" style="transition-delay:0.3s">
+        <div class="tstars">★★★★★</div>
+        <p class="tquote">I recommended Elara to three patients with complex regimens. <strong>Two of them cut their ER visits this year.</strong> As a nurse, I trust tools that are clinically thoughtful. Elara doesn't just remind — she observes. That's the real difference.</p>
+        <div class="tauth"><div class="tav" style="background:var(--pink)">AJ</div><div><div class="tname">Amara J., 34</div><div class="trole">Registered Nurse · Chicago, IL</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COUNTDOWN ═══ -->
+<div class="cdown">
+  <span class="cdown-lbl reveal">Launching in</span>
+  <div class="cdown-blocks reveal" style="transition-delay:0.1s">
+    <div class="cdown-unit"><span class="cdown-n" id="cd-d">00</span><span class="cdown-l">Days</span></div>
+    <span class="cdown-sep">:</span>
+    <div class="cdown-unit"><span class="cdown-n" id="cd-h">00</span><span class="cdown-l">Hours</span></div>
+    <span class="cdown-sep">:</span>
+    <div class="cdown-unit"><span class="cdown-n" id="cd-m">00</span><span class="cdown-l">Min</span></div>
+    <span class="cdown-sep">:</span>
+    <div class="cdown-unit"><span class="cdown-n" id="cd-s">00</span><span class="cdown-l">Sec</span></div>
+  </div>
+  <p class="cdown-note reveal" style="transition-delay:0.2s">May 30, 2026 · 10:00 AM PDT · iOS &amp; Android</p>
+</div>
+
+<!-- ═══ FOUNDING / PRICING ═══ -->
+<section id="founding" style="padding:88px 24px;background:var(--w);">
+  <div style="max-width:1160px;margin:0 auto;">
+    <div class="sec-header center" style="margin-bottom:16px">
+      <div class="sbadge reveal" style="justify-content:center;margin-bottom:14px"><span class="sdot"></span>Only <span id="spotsLeft">46</span> of 200 founding spots remaining</div>
+      <h2 class="sec-h reveal" style="transition-delay:0.1s">Be a founding member.<br>Lock in your rate forever.</h2>
+      <p class="sec-sub reveal" style="transition-delay:0.2s">All plans include Elara AI. Founding rates are locked for your first year — even after we raise prices at launch.</p>
+    </div>
+
+    <!-- Currency selector -->
+    <div class="reveal" style="display:flex;justify-content:center;gap:8px;margin-bottom:36px;flex-wrap:wrap;transition-delay:0.25s">
+      <button class="cbtn-light on" data-curr="usd" onclick="setCurr('usd')" style="flex:0 0 auto;padding:7px 18px;">🇺🇸 USD</button>
+      <button class="cbtn-light" data-curr="cad" onclick="setCurr('cad')" style="flex:0 0 auto;padding:7px 18px;">🇨🇦 CAD</button>
+      <button class="cbtn-light" data-curr="gbp" onclick="setCurr('gbp')" style="flex:0 0 auto;padding:7px 18px;">🇬🇧 GBP</button>
+      <button class="cbtn-light" data-curr="eur" onclick="setCurr('eur')" style="flex:0 0 auto;padding:7px 18px;">🇪🇺 EUR</button>
+      <button class="cbtn-light" data-curr="inr" onclick="setCurr('inr')" style="flex:0 0 auto;padding:7px 18px;">🇮🇳 INR</button>
+      <button class="cbtn-light" data-curr="aed" onclick="setCurr('aed')" style="flex:0 0 auto;padding:7px 18px;">🇦🇪 AED</button>
+    </div>
+
+    <div class="plans-wrap reveal" style="transition-delay:0.15s">
+
+      <!-- FOUNDING RATE (featured) -->
+      <div class="plan-card featured">
+        <div class="plan-popular">Founding Rate</div>
+        <span class="plan-name" style="color:rgba(255,255,255,0.55)">First 200 Members Only</span>
+        <div class="plan-price" style="margin-top:8px">
+          <sup class="curr-sym" style="font-size:1.1rem;color:#fff;font-weight:700;align-self:flex-start;margin-top:9px;">$</sup>
+          <span class="plan-amt curr-founding">5</span>
+          <sub style="font-size:0.85rem;color:rgba(255,255,255,0.5)">/month</sub>
+        </div>
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:20px;">Locked for your first year — even after prices rise</div>
+        <div class="plan-feats">
+          <div class="plan-feat"><span class="c">✓</span> Full Elara AI caretaker</div>
+          <div class="plan-feat"><span class="c">✓</span> Unlimited medications tracked</div>
+          <div class="plan-feat"><span class="c">✓</span> Daily AI check-ins</div>
+          <div class="plan-feat"><span class="c">✓</span> Real-time family alerts</div>
+          <div class="plan-feat"><span class="c">✓</span> Auto doctor reports</div>
+          <div class="plan-feat"><span class="c">✓</span> Health trend tracking</div>
+          <div class="plan-feat"><span class="c">✓</span> 10 language support</div>
+        </div>
+        <input style="width:100%;padding:11px 16px;border-radius:100px;border:1.5px solid rgba(68,171,173,0.4);background:rgba(68,171,173,0.12);color:#fff;font-size:0.88rem;font-family:inherit;outline:none;margin-bottom:10px;" id="foundingEmail" type="email" placeholder="Your email address" autocomplete="email">
+        <button class="plan-btn plan-btn-primary" onclick="claimSpot()">Claim Founding Spot — <sup class="curr-sym">$</sup><span class="curr-founding">5</span>/mo</button>
+        <div style="margin-top:10px;font-size:0.72rem;color:rgba(255,255,255,0.45);text-align:center;">🔒 Secure checkout · <span id="spotsRemCard">46</span> spots left</div>
+      </div>
+
+      <!-- MONTHLY (regular) -->
+      <div class="plan-card">
+        <span class="plan-name">Monthly</span>
+        <p class="plan-desc">Full access after founding spots fill. No commitment.</p>
+        <div class="plan-price" style="margin-top:8px">
+          <sup class="curr-sym" style="font-size:1.1rem;color:var(--ink);font-weight:700;align-self:flex-start;margin-top:9px;">$</sup>
+          <span class="plan-amt curr-regular" style="color:var(--ink);">9.99</span>
+          <sub style="font-size:0.85rem;color:var(--inks)">/month</sub>
+        </div>
+        <div style="font-size:0.78rem;color:var(--inks);margin-bottom:20px;">After 200 founding spots are claimed</div>
+        <div class="plan-feats">
+          <div class="plan-feat"><span class="c">✓</span> Full Elara AI caretaker</div>
+          <div class="plan-feat"><span class="c">✓</span> Unlimited medications tracked</div>
+          <div class="plan-feat"><span class="c">✓</span> Daily AI check-ins</div>
+          <div class="plan-feat"><span class="c">✓</span> Real-time family alerts</div>
+          <div class="plan-feat"><span class="c">✓</span> Auto doctor reports</div>
+          <div class="plan-feat"><span class="c">✓</span> Health trend tracking</div>
+          <div class="plan-feat"><span class="c">✓</span> 10 language support</div>
+        </div>
+        <input style="width:100%;padding:11px 16px;border-radius:100px;border:1.5px solid var(--bor);background:var(--off);color:var(--ink);font-size:0.88rem;font-family:inherit;outline:none;margin-bottom:10px;" id="monthlyEmail" type="email" placeholder="Your email address" autocomplete="email">
+        <button class="plan-btn plan-btn-outline" onclick="claimPlan('monthly')">Join Waitlist — <sup class="curr-sym">$</sup><span class="curr-regular">9.99</span>/mo</button>
+      </div>
+
+      <!-- ANNUAL -->
+      <div class="plan-card">
+        <div style="position:absolute;top:0;right:20px;background:var(--amber);color:#fff;font-size:0.62rem;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;padding:4px 12px;border-radius:0 0 8px 8px;">Save 25%</div>
+        <span class="plan-name">Annual</span>
+        <p class="plan-desc">Pay once for the full year. Best value, most peace of mind.</p>
+        <div class="plan-price" style="margin-top:8px">
+          <sup class="curr-sym" style="font-size:1.1rem;color:var(--ink);font-weight:700;align-self:flex-start;margin-top:9px;">$</sup>
+          <span class="plan-amt curr-annual" style="color:var(--ink);">90</span>
+          <sub style="font-size:0.85rem;color:var(--inks)">/year</sub>
+        </div>
+        <div style="font-size:0.78rem;color:var(--inks);margin-bottom:20px;">That's <sup class="curr-sym">$</sup><span class="curr-annual-mo">7.50</span>/month — always on</div>
+        <div class="plan-feats">
+          <div class="plan-feat"><span class="c">✓</span> Full Elara AI caretaker</div>
+          <div class="plan-feat"><span class="c">✓</span> Unlimited medications tracked</div>
+          <div class="plan-feat"><span class="c">✓</span> Daily AI check-ins</div>
+          <div class="plan-feat"><span class="c">✓</span> Real-time family alerts</div>
+          <div class="plan-feat"><span class="c">✓</span> Auto doctor reports</div>
+          <div class="plan-feat"><span class="c">✓</span> Health trend tracking</div>
+          <div class="plan-feat"><span class="c">✓</span> 10 language support</div>
+        </div>
+        <input style="width:100%;padding:11px 16px;border-radius:100px;border:1.5px solid var(--bor);background:var(--off);color:var(--ink);font-size:0.88rem;font-family:inherit;outline:none;margin-bottom:10px;" id="annualEmail" type="email" placeholder="Your email address" autocomplete="email">
+        <button class="plan-btn plan-btn-outline" onclick="claimPlan('annual')">Get Annual Plan — <sup class="curr-sym">$</sup><span class="curr-annual">90</span>/yr</button>
+      </div>
+    </div>
+
+    <!-- Spots progress -->
+    <div class="reveal" style="max-width:600px;margin:28px auto 0;transition-delay:0.2s">
+      <div class="spots-row"><span style="color:var(--inkm)"><span id="spotsClaimed">154</span> of 200 founding spots claimed</span><span style="color:var(--amber);font-weight:800"><span id="spotsLeftCard">46</span> left</span></div>
+      <div class="spots-track" style="background:var(--bor)"><div class="spots-fill" id="spotsBarFill"></div></div>
+      <p style="text-align:center;margin-top:10px;font-size:0.8rem;color:var(--inkm);">All founding rates locked for your first full year. Price increases after launch.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="faq-sec" id="faq">
+  <div style="max-width:1160px;margin:0 auto">
+    <div class="sec-header center" style="margin-bottom:40px">
+      <span class="sec-tag reveal">FAQ</span>
+      <h2 class="sec-h reveal" style="transition-delay:0.1s">Questions answered.</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What does the founding member rate include?<span class="faq-arr">+</span></button><div class="faq-a"><p>Founding members get $5/month (USD) for their entire first year — full access to Elara, all medications, family alerts, health tracking, daily check-ins, and auto doctor reports. After year one, you move to the standard plan. Your rate is locked in regardless of future price increases.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">When does the app launch?<span class="faq-arr">+</span></button><div class="faq-a"><p>Carely launches May 30, 2026 for iOS and Android. Founding members get early access before the public launch and their rate locked before prices go up.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I cancel anytime?<span class="faq-arr">+</span></button><div class="faq-a"><p>Yes — no contracts, no lock-ins, no cancellation fees. Cancel from inside the app at any time or email hello@carely.fit and we'll handle it within 24 hours.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is my family's health data private?<span class="faq-arr">+</span></button><div class="faq-a"><p>Absolutely. All health data is encrypted in transit and at rest. We never sell personal data. You control exactly who can see what — family members only see what you grant access to.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What health data does Elara track?<span class="faq-arr">+</span></button><div class="faq-a"><p>Elara tracks medication adherence (which doses were taken, when, and any missed doses), daily mood and wellness check-ins, and any symptoms reported during conversations. Weekly summaries are automatically sent to any connected doctor.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Who is Carely for?<span class="faq-arr">+</span></button><div class="faq-a"><p>Carely is for anyone managing medications — elderly people living independently, adult caregivers watching a parent from a distance, or someone managing their own chronic condition. If missing a dose matters, Elara is for you.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FINAL CTA ═══ -->
+<section class="fin-cta">
+  <h2 class="reveal">Your family deserves<br>peace of mind.</h2>
+  <p class="reveal" style="transition-delay:0.1s">Only <span id="spotsLeftFinalB">46</span> founding spots at <sup class="curr-sym">$</sup><span class="curr-founding">5</span>/month. When they're gone, they're gone.</p>
+  <button class="fin-cta-btn reveal" style="transition-delay:0.2s" onclick="goto('founding')">Claim My Founding Spot →</button>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <!-- Brand -->
+    <div class="footer-brand">
+      <img src="elara-bot-logo.png" alt="Carely" style="height:72px;opacity:0.95;">
+      <p>Elara is your family's AI caretaker — available 24/7 to check in, track medications, alert your family, and keep your doctor informed. Built in BC, Canada.</p>
+      <div class="foot-socials">
+        <a class="foot-social-btn" href="mailto:hello@carely.fit">hello@carely.fit</a>
+        <a class="foot-social-btn" href="https://carely.fit/contact">Contact Us</a>
+      </div>
+    </div>
+    <!-- Product -->
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="/#features">Features</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/#compare">Compare</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/blog">Blog</a>
+    </div>
+    <!-- For -->
+    <div class="footer-col">
+      <h4>For</h4>
+      <a href="/for-caregivers">Caregivers</a>
+      <a href="/for-doctors">Doctors</a>
+      <a href="/for-pharmacies">Pharmacies</a>
+      <a href="/for-senior-homes">Senior Homes</a>
+      <a href="/join-affiliate">Affiliates</a>
+    </div>
+    <!-- Company -->
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="/contact">Contact</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/partner-portal">Partner Portal</a>
+      <a href="/care-portal">Care Portal</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Carely · Lumina Path Inc. · BC, Canada · Launching May 30, 2026</div>
+    <div class="footer-copy-links">
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<!-- GSAP + ScrollTrigger -->
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
 <script>
-// ─── COOKIE ───────────────────────────────────────────────────────
-(function(){
-  var b=document.getElementById('cookie-banner');
-  if (!localStorage.getItem('cookie_consent')) b.style.display='flex';
-})();
-function cookieAccept(){localStorage.setItem('cookie_consent','accepted');document.getElementById('cookie-banner').style.display='none';}
-function cookieDecline(){localStorage.setItem('cookie_consent','declined');document.getElementById('cookie-banner').style.display='none';if(window.posthog)posthog.opt_out_capturing();}
+/* ── Nav scroll ── */
+function goto(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
+window.addEventListener('scroll', () => document.getElementById('navWrap').classList.toggle('up', scrollY > 50), {passive:true});
 
-// ─── NAV SCROLL ───────────────────────────────────────────────────
-window.addEventListener('scroll',()=>{
-  document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>60);
-},{passive:true});
+/* ── Hero entrance ── */
+const heroTL = gsap.timeline({ delay: 0.1 });
+heroTL
+  .from('.hero-eyebrow', { opacity:0, y:16, duration:0.55, ease:'power3.out' })
+  .from('.hero h1',       { opacity:0, y:44, duration:0.85, ease:'power4.out' }, '-=0.3')
+  .from('.hero-sub',      { opacity:0, y:28, duration:0.65, ease:'power3.out' }, '-=0.48')
+  .from('.hero-form',     { opacity:0, y:22, duration:0.55, ease:'power3.out' }, '-=0.38')
+  .from('.hero-trust',    { opacity:0, y:16, duration:0.5,  ease:'power3.out' }, '-=0.3')
+  .from('.hero-social',   { opacity:0, y:12, duration:0.45, ease:'power3.out' }, '-=0.25')
+  .from('#elaraCol',      { opacity:0, x:50, duration:1.0,  ease:'power4.out' }, '-=0.85');
 
-function scrollTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
+/* ── GSAP ScrollTrigger ── */
+gsap.registerPlugin(ScrollTrigger);
 
-// ─── COUNTDOWN ───────────────────────────────────────────────────
-const LAUNCH = new Date('2026-05-30T10:00:00-07:00').getTime();
-function tick(){
-  const now=Date.now(), diff=LAUNCH-now;
-  if(diff<=0){['cd-d','cd-h','cd-m','cd-s'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='00';});return;}
-  const d=Math.floor(diff/86400000), h=Math.floor((diff%86400000)/3600000),
-        m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
-  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=String(v).padStart(2,'0');};
-  set('cd-d',d); set('cd-h',h); set('cd-m',m); set('cd-s',s);
-}
-tick(); setInterval(tick,1000);
+// Refresh after fonts load (prevents layout-shift miscalculations)
+document.fonts.ready.then(() => ScrollTrigger.refresh());
 
-// ─── SPOTS ───────────────────────────────────────────────────────
-const totalSpots=200;
-const claimed=Math.min(154+(Math.floor(Date.now()/86400000)%12),180);
-const left=totalSpots-claimed;
-['spotsLeft','spotsLeftCard','topbarSpots'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=left;});
-const claimedEl=document.getElementById('spotsClaimed'); if(claimedEl)claimedEl.textContent=claimed;
-setTimeout(()=>{
-  const bar=document.getElementById('spotsBarFill');
-  if(bar) bar.style.width=(claimed/totalSpots*100)+'%';
-},400);
+// Set initial hidden states for all reveal elements
+gsap.set('.reveal', { opacity: 0, y: 28 });
 
-// ─── WAITLIST COUNT ───────────────────────────────────────────────
-const base=847, drift=Math.floor(Date.now()/7200000)%23;
-const wc=document.getElementById('waitlistCount'); if(wc)wc.textContent=base+drift;
+// Grid children get their own set (overrides parent .reveal set)
+const GRIDS = [
+  { sel: '.pain-card',            trigger: '.pain-grid',    stagger: 0.1,  scale: 0.95, y: 44 },
+  { sel: '.persona',              trigger: '.persona-grid', stagger: 0.08, scale: 0.92, y: 50 },
+  { sel: '.feat',                 trigger: '.feat-grid',    stagger: 0.04, scale: 0.88, y: 22 },
+  { sel: '.tcard',                trigger: '.testi-grid',   stagger: 0.1,  scale: 0.96, y: 40 },
+  { sel: '.plan-card',            trigger: '.plans-wrap',   stagger: 0.1,  scale: 0.94, y: 44 },
+  { sel: '.hiw-step',             trigger: '.hiw-steps',    stagger: 0.13, scale: 1,    y: 40 },
+  { sel: '.lang-flag',            trigger: '.lang-flags',   stagger: 0.04, scale: 0.85, y: 18 },
+];
+GRIDS.forEach(({ sel, scale, y }) => gsap.set(sel, { opacity: 0, y, scale }));
 
-// ─── CURRENCY ────────────────────────────────────────────────────
-const PRICES={
-  usd:{sym:'$',  founding:'5',  label:'USD'},
-  cad:{sym:'CA$',founding:'7',  label:'CAD'},
-  gbp:{sym:'£',  founding:'4',  label:'GBP'},
-  eur:{sym:'€',  founding:'5',  label:'EUR'},
-  inr:{sym:'₹',  founding:'399',label:'INR'},
-  aed:{sym:'AED ',founding:'19',label:'AED'},
-};
-const COUNTRY_CURR={CA:'cad',GB:'gbp',IN:'inr',AE:'aed',SA:'aed',DE:'eur',FR:'eur',IT:'eur',ES:'eur',NL:'eur'};
-let curr='usd';
-function setCurr(c){
-  if(!PRICES[c])c='usd';
-  curr=c;
-  const p=PRICES[c];
-  document.querySelectorAll('.curr-sym').forEach(el=>el.textContent=p.sym);
-  document.querySelectorAll('.curr-founding').forEach(el=>el.textContent=p.founding);
-  document.querySelectorAll('.curr-val[data-usd]').forEach(el=>{
-    const rates={usd:1,cad:1.4,gbp:0.8,eur:0.93,inr:83,aed:3.67};
-    const base=parseFloat(el.dataset.usd.replace(/[^0-9.]/g,''));
-    const r=rates[c]||1, sym=p.sym;
-    const val=(base*r).toFixed(c==='inr'?0:2).replace(/\.00$/,'');
-    if(el.dataset.usd.includes('/month'))el.textContent=sym+val+'/month';
-    else if(el.dataset.usd.includes('/mo'))el.textContent=sym+val+'/mo';
-    else el.textContent=sym+val;
+// Non-grid .reveal elements — individual scroll trigger
+document.querySelectorAll('.reveal').forEach(el => {
+  const inGrid = el.closest('.pain-grid, .feat-grid, .persona-grid, .testi-grid, .plans-wrap, .hiw-steps, .lang-flags');
+  if (inGrid) return;
+  gsap.to(el, {
+    opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 87%', once: true }
   });
-  document.querySelectorAll('.curr-btn').forEach(btn=>btn.classList.toggle('on',btn.dataset.curr===c));
-  ['btnUSD','btnCAD'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('on',el.dataset.curr===c);});
-}
-fetch('https://ipapi.co/json/',{signal:AbortSignal.timeout(3500)})
-  .then(r=>r.json()).then(d=>{const c=COUNTRY_CURR[d.country_code];if(c)setCurr(c);}).catch(()=>{});
+});
 
-// ─── WAITLIST SIGNUP ──────────────────────────────────────────────
-async function joinWaitlist(e){
+// Grid stagger animations
+GRIDS.forEach(({ sel, trigger, stagger, scale, y }) => {
+  const els = document.querySelectorAll(sel);
+  if (!els.length) return;
+  gsap.to(els, {
+    opacity: 1, y: 0, scale: 1,
+    stagger, duration: 0.7, ease: 'power3.out',
+    scrollTrigger: { trigger, start: 'top 82%', once: true }
+  });
+});
+
+// Stats bar stagger
+gsap.set('.stt', { opacity: 0, y: 28 });
+gsap.to('.stt', {
+  opacity: 1, y: 0, stagger: 0.09, duration: 0.6, ease: 'power3.out',
+  scrollTrigger: { trigger: '.stats-bar', start: 'top 88%', once: true }
+});
+
+// Comparison table rows
+gsap.from('.compare-table tbody tr', {
+  opacity: 0, x: -16, stagger: 0.07, duration: 0.48, ease: 'power2.out',
+  scrollTrigger: { trigger: '.compare-table', start: 'top 82%', once: true }
+});
+
+// Elara hero parallax
+gsap.to('#elaraCanvas', {
+  y: -48, ease: 'none',
+  scrollTrigger: { trigger: '.hero-wrap', start: 'top top', end: 'bottom top', scrub: 1.8 }
+});
+
+// Pain section floating bg parallax
+gsap.to('.pain::before', {
+  yPercent: -18, ease: 'none',
+  scrollTrigger: { trigger: '.pain', start: 'top bottom', end: 'bottom top', scrub: 2 }
+});
+
+// Final CTA dramatic entrance
+gsap.set('.fin-cta h2, .fin-cta p, .fin-cta-btn', { opacity: 0, y: 44 });
+gsap.to('.fin-cta h2', {
+  opacity: 1, y: 0, duration: 1.0, ease: 'power4.out',
+  scrollTrigger: { trigger: '.fin-cta', start: 'top 80%', once: true }
+});
+gsap.to('.fin-cta p', {
+  opacity: 1, y: 0, duration: 0.75, ease: 'power3.out', delay: 0.18,
+  scrollTrigger: { trigger: '.fin-cta', start: 'top 80%', once: true }
+});
+gsap.to('.fin-cta-btn', {
+  opacity: 1, y: 0, duration: 0.65, ease: 'back.out(1.4)', delay: 0.36,
+  scrollTrigger: { trigger: '.fin-cta', start: 'top 80%', once: true }
+});
+
+/* ── Hamburger ── */
+const navBurger = document.getElementById('navBurger');
+const navMob    = document.getElementById('navMob');
+if (navBurger) {
+  navBurger.addEventListener('click', () => {
+    navBurger.classList.toggle('open');
+    navMob.classList.toggle('open');
+    document.body.style.overflow = navMob.classList.contains('open') ? 'hidden' : '';
+  });
+}
+function closeMobNav() {
+  if (!navBurger) return;
+  navBurger.classList.remove('open');
+  navMob.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('click', e => {
+  if (navMob && navMob.classList.contains('open') && !navMob.contains(e.target) && !navBurger.contains(e.target)) {
+    closeMobNav();
+  }
+});
+
+/* ── Cookie consent ── */
+function cookieChoice(accepted) {
+  localStorage.setItem('carely_cookie', accepted ? 'accepted' : 'declined');
+  const bar = document.getElementById('cookieBar');
+  if (bar) { bar.style.transform = 'translateY(110%)'; setTimeout(() => bar.remove(), 500); }
+  if (accepted && window.posthog) posthog.opt_in_capturing();
+}
+(function initCookie() {
+  if (!localStorage.getItem('carely_cookie')) {
+    setTimeout(() => {
+      const bar = document.getElementById('cookieBar');
+      if (bar) bar.classList.add('show');
+    }, 2000);
+  }
+})();
+
+
+/* ── Countdown ── */
+const launch = new Date('2026-05-30T10:00:00-07:00');
+function tick(){
+  const d = Math.max(0, launch - Date.now());
+  const f = n => String(n).padStart(2,'0');
+  const set = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
+  set('cd-d', f(Math.floor(d/86400000)));
+  set('cd-h', f(Math.floor(d%86400000/3600000)));
+  set('cd-m', f(Math.floor(d%3600000/60000)));
+  set('cd-s', f(Math.floor(d%60000/1000)));
+}
+tick(); setInterval(tick, 1000);
+
+/* ── Spots ── */
+const claimed = Math.min(154 + (Math.floor(Date.now()/86400000) % 12), 180);
+const left = 200 - claimed;
+['spotsLeft','spotsLeftCard','topbarSpots','spotsStat','spotsLeftFinal','spotsLeftFinalB','spotsRemCard'].forEach(id => { const e=document.getElementById(id); if(e) e.textContent=left; });
+const ce = document.getElementById('spotsClaimed'); if(ce) ce.textContent = claimed;
+setTimeout(() => { const b=document.getElementById('spotsBarFill'); if(b) b.style.width=(claimed/200*100)+'%'; }, 700);
+
+/* ── Waitlist count ── */
+const wc = document.getElementById('waitlistCount');
+if(wc) wc.textContent = 847 + (Math.floor(Date.now()/7200000)%23);
+
+/* ── Currency ── */
+const PRICES = {
+  usd:{ sym:'$',    founding:'5',   regular:'9.99', annual:'90',  annual_mo:'7.50' },
+  cad:{ sym:'CA$',  founding:'7',   regular:'13.99',annual:'125', annual_mo:'10.42'},
+  gbp:{ sym:'£',    founding:'4',   regular:'7.99', annual:'72',  annual_mo:'6.00' },
+  eur:{ sym:'€',    founding:'5',   regular:'9.49', annual:'84',  annual_mo:'7.00' },
+  inr:{ sym:'₹',    founding:'399', regular:'799',  annual:'6999',annual_mo:'583'  },
+  aed:{ sym:'AED ', founding:'19',  regular:'37',   annual:'330', annual_mo:'27.50'},
+};
+const COUNTRY = {CA:'cad',GB:'gbp',IN:'inr',AE:'aed',SA:'aed',QA:'aed',KW:'aed',BH:'aed',OM:'aed',JO:'aed',EG:'aed',DE:'eur',FR:'eur',IT:'eur',ES:'eur',NL:'eur',BE:'eur',AT:'eur',PT:'eur',IE:'eur',FI:'eur',SE:'eur',NO:'eur',DK:'eur',CH:'eur',PL:'eur',PK:'inr',BD:'inr',LK:'inr',NP:'inr',AU:'usd',NZ:'usd',SG:'usd',MY:'usd',PH:'usd',NG:'usd',KE:'usd',ZA:'usd',BR:'usd',MX:'usd'};
+let curr = 'usd';
+function setCurr(c) {
+  if(!PRICES[c]) c='usd'; curr=c;
+  const p = PRICES[c];
+  document.querySelectorAll('.curr-sym').forEach(e=>e.textContent=p.sym);
+  document.querySelectorAll('.curr-founding').forEach(e=>e.textContent=p.founding);
+  document.querySelectorAll('.curr-regular').forEach(e=>e.textContent=p.regular);
+  document.querySelectorAll('.curr-annual').forEach(e=>e.textContent=p.annual);
+  document.querySelectorAll('.curr-annual-mo').forEach(e=>e.textContent=p.annual_mo);
+  document.querySelectorAll('.cbtn,.cbtn-light').forEach(b=>b.classList.toggle('on', b.dataset.curr===c));
+}
+/* Auto-detect currency: IP first, timezone fallback */
+(function detectCurr(){
+  const TZ_MAP = {'America/Toronto':'cad','America/Vancouver':'cad','America/Edmonton':'cad','America/Winnipeg':'cad','America/Halifax':'cad','America/St_Johns':'cad','Europe/London':'gbp','Asia/Kolkata':'inr','Asia/Calcutta':'inr','Asia/Dubai':'aed','Asia/Riyadh':'aed','Asia/Qatar':'aed','Europe/Berlin':'eur','Europe/Paris':'eur','Europe/Rome':'eur','Europe/Madrid':'eur','Europe/Amsterdam':'eur'};
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const tzCurr = TZ_MAP[tz];
+  if(tzCurr) setCurr(tzCurr);
+  fetch('https://ipapi.co/json/',{signal:AbortSignal.timeout(4000)}).then(r=>r.json()).then(d=>{const c=COUNTRY[d.country_code];if(c)setCurr(c);}).catch(()=>{});
+})();
+
+/* ── Waitlist signup ── */
+async function joinWaitlist(e) {
   e.preventDefault();
-  const email=document.getElementById('heroEmail').value.trim();
-  if(!email||!email.includes('@'))return;
-  const btn=e.target.querySelector('button');
-  btn.textContent='Joining...'; btn.disabled=true;
-  try{
-    await fetch('https://carely-backend-production.up.railway.app/waitlist',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email}),
-    });
-    btn.textContent='✓ You\'re on the list!';
-    btn.style.background='var(--teal-2)';
-    if(window.posthog)posthog.capture('waitlist_signup',{email});
-    const wc=document.getElementById('waitlistCount');
-    if(wc)wc.textContent=parseInt(wc.textContent)+1;
-  }catch{
-    btn.textContent='Get Early Access'; btn.disabled=false;
-  }
+  const email = document.getElementById('heroEmail').value.trim();
+  if(!email||!email.includes('@')) return;
+  const consent = document.getElementById('heroConsent');
+  if(consent && !consent.checked) { consent.reportValidity(); return; }
+  const btn = e.target.querySelector('button');
+  btn.textContent = 'Joining...'; btn.disabled = true;
+  try {
+    await fetch('https://carely-backend-production.up.railway.app/waitlist', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+    btn.textContent = '✓ You\'re on the list!'; btn.style.background = 'var(--t2)';
+    if(window.posthog) posthog.capture('waitlist_signup',{email});
+    const w = document.getElementById('waitlistCount'); if(w) w.textContent = parseInt(w.textContent)+1;
+  } catch { btn.textContent='Get Early Access'; btn.disabled=false; }
 }
 
-// ─── CHECKOUT ────────────────────────────────────────────────────
-async function claimSpot(){
-  const email=document.getElementById('foundingEmail').value.trim();
-  if(!email||!email.includes('@')){
-    const inp=document.getElementById('foundingEmail');
-    inp.style.borderColor='#FF6B6B'; inp.focus();
-    setTimeout(()=>inp.style.borderColor='',2000); return;
+/* ── Plan checkout ── */
+async function claimPlan(plan) {
+  const emailMap = { monthly:'monthlyEmail', annual:'annualEmail', solo:'soloEmail', ext:'extEmail' };
+  const inp = document.getElementById(emailMap[plan] || 'monthlyEmail');
+  if(!inp) return;
+  const email = inp.value.trim();
+  if(!email||!email.includes('@')) {
+    inp.style.borderColor='#e55'; inp.focus(); setTimeout(()=>inp.style.borderColor='',2000); return;
   }
-  const btn=document.querySelector('.founding-btn');
-  btn.textContent='Redirecting to checkout...'; btn.disabled=true;
-  try{
-    const res=await fetch('https://carely-backend-production.up.railway.app/subscription/buy-founding',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email}),
-    });
-    const {url}=await res.json();
-    if(url){
-      if(window.posthog)posthog.capture('founding_checkout_started',{email,currency:curr});
-      window.location.href=url;
-    } else throw new Error();
-  }catch{
-    btn.textContent='Claim My Founding Spot — $5/month'; btn.disabled=false;
-    alert('Something went wrong. Please email hello@carely.fit');
-  }
+  inp.disabled = true;
+  try {
+    const res = await fetch('https://carely-backend-production.up.railway.app/subscription/buy-founding',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email, plan})});
+    const {url} = await res.json();
+    if(url){ if(window.posthog)posthog.capture('founding_checkout_started',{email,currency:curr,plan}); window.location.href=url; }
+    else throw new Error();
+  } catch { inp.disabled=false; alert('Something went wrong. Email hello@carely.fit'); }
 }
 
-// ─── FAQ ──────────────────────────────────────────────────────────
-function toggleFaq(btn){
-  const item=btn.closest('.faq-item');
-  const isOpen=item.classList.contains('open');
+/* ── Founding checkout ── */
+async function claimSpot() {
+  const email = document.getElementById('foundingEmail').value.trim();
+  if(!email||!email.includes('@')) {
+    const inp = document.getElementById('foundingEmail');
+    inp.style.borderColor='#e55'; inp.focus(); setTimeout(()=>inp.style.borderColor='',2000); return;
+  }
+  const btn = document.querySelector('.founding-btn');
+  btn.textContent='Redirecting...'; btn.disabled=true;
+  try {
+    const res = await fetch('https://carely-backend-production.up.railway.app/subscription/buy-founding',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+    const {url} = await res.json();
+    if(url){ if(window.posthog)posthog.capture('founding_checkout_started',{email,currency:curr}); window.location.href=url; }
+    else throw new Error();
+  } catch { btn.textContent='Claim My Founding Spot — $5/month'; btn.disabled=false; alert('Something went wrong. Email hello@carely.fit'); }
+}
+
+/* ── FAQ ── */
+function toggleFaq(btn) {
+  const item=btn.closest('.faq-item'), open=item.classList.contains('open');
   document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
-  if(!isOpen) item.classList.add('open');
+  if(!open) item.classList.add('open');
 }
 
-// ─── STAT COUNTERS ────────────────────────────────────────────────
-const co=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(!e.isIntersecting)return; co.unobserve(e.target);
+/* ── Stat counters ── */
+const co = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(!e.isIntersecting) return; co.unobserve(e.target);
     const target=parseInt(e.target.dataset.count), suf=e.target.dataset.suf||'';
     let n=0; const step=target/60;
-    const iv=setInterval(()=>{n=Math.min(n+step,target);e.target.textContent=Math.round(n)+suf;if(n>=target)clearInterval(iv);},22);
+    const iv=setInterval(()=>{ n=Math.min(n+step,target); e.target.textContent=Math.round(n)+suf; if(n>=target)clearInterval(iv); },22);
   });
 },{threshold:0.5});
 document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
-
-// ─── SCROLL REVEAL ────────────────────────────────────────────────
-const ro=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}});
-},{threshold:0.08});
-document.querySelectorAll('.fade-up').forEach(el=>ro.observe(el));
 </script>
 
 <!-- PostHog -->
 <script defer>!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});</script>
-
+<script src="elara.js"></script>
+<script src="elara-widget.js" defer></script>
 </body>
 </html>

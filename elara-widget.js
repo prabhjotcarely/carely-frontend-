@@ -57,14 +57,12 @@
   badge.id = 'ecw-badge';
   badge.textContent = '1';
 
-  var fabSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  fabSvg.setAttribute('viewBox', '0 0 24 24');
-  fabSvg.style.cssText = 'width:26px;height:26px;fill:white';
-  var fabPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  fabPath.setAttribute('d', 'M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z');
-  fabSvg.appendChild(fabPath);
+  var fabImg = document.createElement('img');
+  fabImg.src = 'elara-3d-new.png';
+  fabImg.alt = 'Elara';
+  fabImg.style.cssText = 'width:52px;height:52px;border-radius:50%;object-fit:cover;';
   fab.appendChild(badge);
-  fab.appendChild(fabSvg);
+  fab.appendChild(fabImg);
 
   // Panel
   var panel = document.createElement('div');
@@ -78,7 +76,11 @@
 
   var avatarEl = document.createElement('div');
   avatarEl.className = 'ecw-avatar';
-  avatarEl.textContent = '💊';
+  var avatarImg = document.createElement('img');
+  avatarImg.src = 'elara-3d-new.png';
+  avatarImg.alt = 'Elara';
+  avatarImg.style.cssText = 'width:36px;height:36px;border-radius:50%;object-fit:cover;';
+  avatarEl.appendChild(avatarImg);
 
   var infoEl = document.createElement('div');
   infoEl.className = 'ecw-info';
