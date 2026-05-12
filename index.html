@@ -369,7 +369,12 @@
     .s-elara-text { font-size: 0.64rem; color: var(--inkm); line-height: 1.5; }
     /* Floating chat */
     .demo-chat-float { position: absolute; right: -20px; bottom: 30px; width: 210px; background: #fff; border: 1.5px solid var(--bor); border-radius: 16px; overflow: hidden; box-shadow: 0 16px 48px rgba(13,43,56,0.18); }
-    @media(max-width:840px){ .demo-inner{grid-template-columns:1fr} .demo-chat-float{position:static;width:100%;margin-top:16px;border-radius:16px} }
+    @media(max-width:840px){
+      .demo-inner { grid-template-columns: 1fr; }
+      .demo-screens { flex-direction: column; align-items: center; }
+      .demo-phone { width: 100%; max-width: 300px; }
+      .demo-chat-float { position: static; width: 100%; max-width: 300px; margin-top: 16px; border-radius: 16px; }
+    }
     /* Chat Preview */
     .elara-chat-preview { background: #fff; border: 1.5px solid var(--bor); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(13,43,56,0.12); }
     .ecp-header { background: var(--dark-grad); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
@@ -386,7 +391,7 @@
     .ecp-alert { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; font-weight: 600; padding: 7px 12px; border-radius: 8px; }
     .ecp-alert.red { background: rgba(229,85,85,0.07); color: #c44; }
     .ecp-alert.green { background: rgba(68,171,173,0.08); color: var(--t2); }
-    @media(max-width:840px){ .demo-inner{grid-template-columns:1fr} }
+    @media(max-width:840px){ .demo-inner { grid-template-columns: 1fr; } }
 
     /* ── FEATURES ── */
     .features { background: var(--dark-grad); padding: 88px 24px; position: relative; overflow: hidden; }
