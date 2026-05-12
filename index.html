@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="/elara-3d-new.png">
+  <link rel="apple-touch-icon" href="/elara-3d-new.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Pre-hide page until JS sets initial animation states — eliminates flash -->
-  <style>html{opacity:0}</style>
   <title>Carely — The AI Caretaker for Your Family's Health</title>
   <meta name="description" content="Meet Elara — your AI caretaker. Medication reminders, daily check-ins, family alerts, doctor reports. Launching May 2026. Founding spots at $5/month.">
   <meta property="og:title" content="Carely — The AI Caretaker for Your Family's Health">
@@ -47,10 +47,27 @@
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-thumb { background: var(--t2); border-radius: 2px; }
 
-    /* ── Scroll reveal — pre-hidden in CSS so GSAP never causes flash ── */
-    .reveal { opacity: 0; transform: translateY(28px); }
+    /* ── Scroll reveal — CSS pre-hides so GSAP never causes flash ── */
+    .reveal { opacity: 0; transform: translateY(20px); }
     .reveal.in-view { opacity: 1; transform: none; }
     .pain-grid, .feat-grid, .persona-grid, .testi-grid, .plans-wrap, .hiw-steps, .lang-flags { opacity: 1 !important; transform: none !important; }
+
+    /* ── Hero CSS animations — no JS dependency, no flash possible ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .hero-eyebrow { animation: fadeUp 0.55s ease forwards; animation-delay: 0.08s; opacity: 0; }
+    .hero h1      { animation: fadeUp 0.65s ease forwards; animation-delay: 0.18s; opacity: 0; }
+    .hero-sub     { animation: fadeUp 0.6s  ease forwards; animation-delay: 0.3s;  opacity: 0; }
+    .hero-form    { animation: fadeUp 0.55s ease forwards; animation-delay: 0.42s; opacity: 0; }
+    .hero-trust   { animation: fadeUp 0.5s  ease forwards; animation-delay: 0.52s; opacity: 0; }
+    .hero-social  { animation: fadeUp 0.45s ease forwards; animation-delay: 0.6s;  opacity: 0; }
+    #elaraCol     { animation: fadeUp 0.7s  ease forwards; animation-delay: 0.12s; opacity: 0; }
 
     /* ── HAMBURGER ── */
     .nav-burger { display: none; flex-direction: column; gap: 5px; width: 42px; height: 42px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
@@ -1170,26 +1187,9 @@
 <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
 <script>
-/* ── Reveal page — eliminates load flash by keeping html invisible until GSAP is ready ── */
-requestAnimationFrame(() => {
-  document.documentElement.style.transition = 'opacity 0.22s ease';
-  document.documentElement.style.opacity = '1';
-});
-
 /* ── Nav scroll ── */
 function goto(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
 window.addEventListener('scroll', () => document.getElementById('navWrap').classList.toggle('up', scrollY > 50), {passive:true});
-
-/* ── Hero entrance — smooth fade-up, no dramatic swoops ── */
-const heroTL = gsap.timeline({ delay: 0.18 });
-heroTL
-  .from('.hero-eyebrow', { opacity:0, y:10, duration:0.6,  ease:'power2.out' })
-  .from('.hero h1',       { opacity:0, y:18, duration:0.75, ease:'power2.out' }, '-=0.35')
-  .from('.hero-sub',      { opacity:0, y:14, duration:0.6,  ease:'power2.out' }, '-=0.45')
-  .from('.hero-form',     { opacity:0, y:12, duration:0.5,  ease:'power2.out' }, '-=0.38')
-  .from('.hero-trust',    { opacity:0, y:10, duration:0.45, ease:'power2.out' }, '-=0.3')
-  .from('.hero-social',   { opacity:0, y:8,  duration:0.4,  ease:'power2.out' }, '-=0.25')
-  .from('#elaraCol',      { opacity:0, y:16, duration:0.8,  ease:'power2.out' }, '-=0.7');
 
 /* ── GSAP ScrollTrigger ── */
 gsap.registerPlugin(ScrollTrigger);

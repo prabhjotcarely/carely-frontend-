@@ -1,215 +1,301 @@
-/* Elara — Three.js mascot, bright + vibrant */
+/* Elara — Canvas 2D mascot matching the Carely brand character */
 (function () {
+  'use strict';
+
   const canvas = document.getElementById('elaraCanvas');
-  if (!canvas || typeof THREE === 'undefined') return;
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
 
-  /* ── Renderer ── */
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setClearColor(0x000000, 0);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.8;
-  renderer.outputColorSpace = THREE.SRGBColorSpace || THREE.sRGBEncoding || 'srgb';
+  let W = 380, H = 456;
+  let t = 0;
+  let emotion = 'happy';
+  let blinkT = 0, nextBlink = 3 + Math.random() * 2.5, blinking = false, blinkPh = 0;
+  let mx = 0.5, my = 0.5;
 
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 50);
-  camera.position.set(0, 0.18, 4.6);
-  camera.lookAt(0, 0, 0);
+  function resize() {
+    var p = canvas.parentElement;
+    if (!p) return;
+    var w = p.getBoundingClientRect().width || p.offsetWidth || 340;
+    if (w < 10) w = 340;
+    W = Math.round(w);
+    H = Math.round(W * 1.2);
+    canvas.width = W;
+    canvas.height = H;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+  }
+  window.addEventListener('resize', resize, { passive: true });
 
-  /* ── Lights — strong, punchy ── */
-  scene.add(new THREE.AmbientLight(0xffffff, 1.8));
-  const key = new THREE.DirectionalLight(0xffffff, 3.2);
-  key.position.set(3, 5, 6);
-  scene.add(key);
-  const fill = new THREE.DirectionalLight(0x80ffec, 1.2);
-  fill.position.set(-4, 1, 3);
-  scene.add(fill);
-  const top = new THREE.DirectionalLight(0xffffff, 1.0);
-  top.position.set(0, 8, 2);
-  scene.add(top);
-  const pt = new THREE.PointLight(0x00ffcc, 1.4, 8);
-  pt.position.set(0, 1.5, 3.5);
-  scene.add(pt);
+  /* Init after layout is painted */
+  function start() {
+    resize();
+    requestAnimationFrame(frame);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { requestAnimationFrame(start); });
+  } else {
+    requestAnimationFrame(start);
+  }
 
-  /* ── Materials ── */
-  const M = {
-    main:  new THREE.MeshStandardMaterial({ color: 0x04D9B5, roughness: 0.08, metalness: 0.05, emissive: 0x00A892, emissiveIntensity: 0.22 }),
-    dark:  new THREE.MeshStandardMaterial({ color: 0x02A88C, roughness: 0.15, metalness: 0.05, emissive: 0x007060, emissiveIntensity: 0.15 }),
-    base:  new THREE.MeshStandardMaterial({ color: 0x017060, roughness: 0.2,  metalness: 0.05, emissive: 0x004840, emissiveIntensity: 0.12 }),
-    face:  new THREE.MeshStandardMaterial({ color: 0xf8fffd, roughness: 0.45, metalness: 0.0,  emissive: 0xddfff8, emissiveIntensity: 0.12 }),
-    eye:   new THREE.MeshStandardMaterial({ color: 0x071215, roughness: 0.05, metalness: 0.3  }),
-    shine: new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 1.8, roughness: 0.0, metalness: 0 }),
-    glow:  new THREE.MeshStandardMaterial({ color: 0x00ffd0, roughness: 0.05, metalness: 0.6,  emissive: 0x00efc0, emissiveIntensity: 0.9 }),
-    ghost: new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.22, roughness: 0.5 }),
-  };
-
-  const sp = (r, m, s = 28) => new THREE.Mesh(new THREE.SphereGeometry(r, s, s), m);
-  const cy = (rt, rb, h, m, s = 14) => new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, s), m);
-
-  /* ── CHARACTER ── */
-  const char = new THREE.Group();
-  scene.add(char);
-
-  /* --- HEAD --- */
-  const headG = new THREE.Group();
-  char.add(headG);
-  headG.position.y = 0.7;
-
-  // Main head sphere
-  const headM = sp(0.76, M.main);
-  headM.scale.set(1.0, 1.08, 0.97);
-  headG.add(headM);
-
-  // Face plate — bright white, clearly visible
-  const faceM = sp(0.62, M.face);
-  faceM.scale.set(0.98, 0.95, 0.24);
-  faceM.position.set(0, 0.02, 0.52);
-  headG.add(faceM);
-
-  // LEFT EYE — larger, more expressive
-  const eyeL = sp(0.13, M.eye);
-  eyeL.scale.set(1.0, 1.15, 0.85);
-  eyeL.position.set(-0.21, 0.1, 0.72);
-  headG.add(eyeL);
-
-  // RIGHT EYE
-  const eyeR = sp(0.108, M.eye);
-  eyeR.scale.set(1.0, 0.88, 0.85);
-  eyeR.position.set(0.2, 0.05, 0.715);
-  headG.add(eyeR);
-
-  // Eye shines — bigger, brighter
-  const shL = sp(0.042, M.shine, 8);
-  shL.position.set(-0.174, 0.145, 0.828);
-  headG.add(shL);
-  const shR = sp(0.034, M.shine, 8);
-  shR.position.set(0.226, 0.087, 0.808);
-  headG.add(shR);
-
-  // Ear bumps
-  [-0.78, 0.78].forEach((x, i) => {
-    const ear = sp(0.17, M.dark, 16);
-    ear.scale.set(0.55, 0.62, 0.44);
-    ear.position.set(x, 0.06, -0.02);
-    headG.add(ear);
-  });
-
-  // Antenna
-  const antS = cy(0.02, 0.02, 0.48, M.dark);
-  antS.position.set(0.27, 1.02, 0);
-  antS.rotation.z = -0.22;
-  headG.add(antS);
-  const antB = sp(0.085, M.glow, 16);
-  antB.position.set(0.362, 1.245, 0);
-  headG.add(antB);
-
-  /* --- BODY --- */
-  const bodyG = new THREE.Group();
-  char.add(bodyG);
-  bodyG.position.y = -0.26;
-
-  const bodyM = sp(0.5, M.main, 32);
-  bodyM.scale.set(1.0, 1.38, 0.92);
-  bodyG.add(bodyM);
-
-  // Belly glow circle
-  const bellyM = sp(0.16, M.ghost, 16);
-  bellyM.scale.set(1.0, 1.0, 0.18);
-  bellyM.position.set(0, 0.05, 0.46);
-  bodyG.add(bellyM);
-
-  // Arms
-  const armL = cy(0.082, 0.068, 0.36, M.dark);
-  armL.position.set(-0.66, -0.05, 0.05);
-  armL.rotation.z = Math.PI / 2 + 0.4;
-  armL.rotation.x = 0.1;
-  bodyG.add(armL);
-
-  const armR = cy(0.082, 0.068, 0.36, M.dark);
-  armR.position.set(0.66, -0.05, 0.05);
-  armR.rotation.z = -(Math.PI / 2 + 0.4);
-  armR.rotation.x = 0.1;
-  bodyG.add(armR);
-
-  /* --- FEET --- */
-  const feetG = new THREE.Group();
-  feetG.position.y = -0.68;
-  char.add(feetG);
-
-  [-0.24, 0.24].forEach(x => {
-    const foot = sp(0.22, M.base, 16);
-    foot.scale.set(1.35, 0.6, 1.1);
-    foot.position.set(x, 0, 0.07);
-    feetG.add(foot);
-  });
-
-  char.position.y = -0.12;
-
-  /* ── Animation ── */
-  let t = 0, mx = 0, my = 0;
-  let blinkT = 0, nextBlink = 3.0 + Math.random() * 2.5, blinking = false, blinkPh = 0;
-
-  document.addEventListener('mousemove', e => {
-    mx = (e.clientX / window.innerWidth - 0.5) * 2;
-    my = (e.clientY / window.innerHeight - 0.5) * 1.5;
+  document.addEventListener('mousemove', function (e) {
+    mx = e.clientX / window.innerWidth;
+    my = e.clientY / window.innerHeight;
   }, { passive: true });
 
-  function tick() {
-    requestAnimationFrame(tick);
+  function radGlow(x, y, r, rgb, a) {
+    var g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, 'rgba(' + rgb + ',' + a + ')');
+    g.addColorStop(1, 'rgba(' + rgb + ',0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function frame() {
+    requestAnimationFrame(frame);
     t += 0.016;
+    ctx.clearRect(0, 0, W, H);
 
-    // Organic float — two sine waves for natural feel
-    char.position.y = -0.12 + Math.sin(t * 0.9) * 0.09 + Math.sin(t * 0.38) * 0.04;
-    char.rotation.z = Math.sin(t * 0.58) * 0.018;
+    var s  = W / 380;
+    var cx = W / 2;
+    var floatY = Math.sin(t * 0.9) * 11 * s + Math.sin(t * 0.38) * 5 * s;
+    var cy = H * 0.50 + floatY;
+    var tilt = Math.sin(t * 0.58) * 0.016;
+    var glow = 0.48 + Math.sin(t * 1.9) * 0.13;
+    var bodyR = 95 * s;
 
-    // Head follows mouse
-    headG.rotation.y += (mx * 0.32 - headG.rotation.y) * 0.058;
-    headG.rotation.x += (-my * 0.18 - headG.rotation.x) * 0.058;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(tilt);
+    ctx.translate(-cx, -cy);
 
-    // Antenna bounce
-    const aw = Math.sin(t * 2.4) * 0.13;
-    antS.rotation.z = -0.22 + aw;
-    antB.position.x = 0.362 + Math.sin(t * 2.4) * 0.07;
-    antB.position.y = 1.245 + Math.cos(t * 2.4) * 0.05;
+    /* ── BACKGROUND HALO ── */
+    radGlow(cx, cy, 240 * s, '68,171,173', glow * 0.16);
+    radGlow(cx, cy, 140 * s, '46,232,160', glow * 0.07);
 
-    // Antenna glow pulse
-    M.glow.emissiveIntensity = 0.7 + Math.sin(t * 3.2) * 0.25;
+    /* ── EARS ── */
+    ctx.fillStyle = '#2d8899';
+    ctx.beginPath();
+    ctx.ellipse(cx - bodyR * 0.87, cy - 10 * s, 13 * s, 17 * s, -0.22, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(cx + bodyR * 0.87, cy - 10 * s, 13 * s, 17 * s, 0.22, 0, Math.PI * 2);
+    ctx.fill();
 
-    // Arm idle sway
-    armR.rotation.z = -(Math.PI / 2 + 0.4) + Math.sin(t * 1.15) * 0.1;
+    /* ── MAIN BODY ── */
+    ctx.shadowColor = 'rgba(68,171,173,' + (0.35 + glow * 0.2) + ')';
+    ctx.shadowBlur = 30 * s;
 
-    // Blink
+    var bg = ctx.createRadialGradient(cx - 28 * s, cy - 28 * s, 6 * s, cx, cy, bodyR * 1.1);
+    bg.addColorStop(0, '#64cbcc');
+    bg.addColorStop(0.42, '#44ABAD');
+    bg.addColorStop(1, '#2d8899');
+    ctx.fillStyle = bg;
+    ctx.beginPath();
+    ctx.arc(cx, cy, bodyR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    /* Body highlight */
+    var hi = ctx.createRadialGradient(cx - 30 * s, cy - 30 * s, 0, cx - 30 * s, cy - 30 * s, 56 * s);
+    hi.addColorStop(0, 'rgba(255,255,255,0.22)');
+    hi.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = hi;
+    ctx.beginPath();
+    ctx.arc(cx, cy, bodyR, 0, Math.PI * 2);
+    ctx.fill();
+
+    /* ── FACE PLATE ── */
+    var trackX = (mx - 0.5) * 7 * s;
+    var trackY = (my - 0.5) * 5 * s;
+    var fpX = cx + trackX;
+    var fpY = cy - 6 * s + trackY;
+    var fpW = 58 * s, fpH = 53 * s;
+
+    ctx.shadowColor = 'rgba(13,43,56,0.16)';
+    ctx.shadowBlur = 10 * s;
+    ctx.shadowOffsetY = 3 * s;
+
+    var fp = ctx.createRadialGradient(fpX - 10 * s, fpY - 10 * s, 2 * s, fpX, fpY, fpW);
+    fp.addColorStop(0, '#ffffff');
+    fp.addColorStop(1, '#e6f8f5');
+    ctx.fillStyle = fp;
+    ctx.beginPath();
+    ctx.ellipse(fpX, fpY, fpW, fpH, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+
+    /* ── BLINK ── */
     blinkT += 0.016;
     if (!blinking && blinkT > nextBlink) {
       blinking = true; blinkPh = 0; blinkT = 0;
-      nextBlink = 2.4 + Math.random() * 5.0;
+      nextBlink = 2.4 + Math.random() * 4;
     }
+    var blinkScale = 1;
     if (blinking) {
-      blinkPh += 0.17;
-      const v = Math.sin(blinkPh * Math.PI);
-      eyeL.scale.y = Math.max(0.06, 1.15 - v * 1.09);
-      eyeR.scale.y = Math.max(0.06, 0.88 - v * 0.82);
-      if (blinkPh >= 1) { blinking = false; eyeL.scale.y = 1.15; eyeR.scale.y = 0.88; }
+      blinkPh += 0.22;
+      blinkScale = Math.max(0.06, 1 - Math.sin(blinkPh * Math.PI));
+      if (blinkPh >= 1) { blinking = false; blinkScale = 1; }
     }
 
-    // Point light follows antenna glow
-    pt.intensity = 1.2 + Math.sin(t * 3.2) * 0.25;
+    /* ── EYES ── */
+    var eyeSX = 19 * s, eyeSY = -5 * s;
+    var eyeR  = emotion === 'excited' ? 11 * s : 9.5 * s;
 
-    renderer.render(scene, camera);
+    [[fpX - eyeSX, fpY + eyeSY], [fpX + eyeSX, fpY + eyeSY]].forEach(function (pos) {
+      var ex = pos[0], ey = pos[1];
+      ctx.save();
+      ctx.translate(ex, ey);
+      ctx.scale(1, blinkScale);
+
+      if (emotion === 'worried') {
+        ctx.fillStyle = '#0d1a1e';
+        ctx.beginPath();
+        ctx.arc(0, eyeR * 0.4, eyeR * 0.88, Math.PI, 2 * Math.PI);
+        ctx.fill();
+      } else {
+        ctx.fillStyle = '#0d1a1e';
+        ctx.beginPath();
+        ctx.arc(0, 0, eyeR, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(255,255,255,0.7)';
+        ctx.beginPath();
+        ctx.arc(-eyeR * 0.3, -eyeR * 0.32, eyeR * 0.3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    });
+
+    /* ── MOUTH ── */
+    var mY = fpY + 23 * s;
+    ctx.strokeStyle = '#0d1a1e';
+    ctx.lineWidth = 2.8 * s;
+    ctx.lineCap = 'round';
+
+    if (emotion === 'happy' || emotion === 'wave') {
+      ctx.beginPath();
+      ctx.arc(fpX, mY - 5 * s, 14 * s, 0.1, Math.PI - 0.1);
+      ctx.stroke();
+    } else if (emotion === 'excited') {
+      ctx.beginPath();
+      ctx.arc(fpX, mY - 5 * s, 16 * s, 0, Math.PI);
+      var ef = ctx.createRadialGradient(fpX, mY, 0, fpX, mY, 20 * s);
+      ef.addColorStop(0, 'rgba(230,248,245,0.9)');
+      ef.addColorStop(1, 'rgba(230,248,245,0)');
+      ctx.fillStyle = ef;
+      ctx.fill();
+      ctx.stroke();
+    } else if (emotion === 'worried') {
+      ctx.beginPath();
+      ctx.arc(fpX, mY + 5 * s, 12 * s, Math.PI + 0.25, 2 * Math.PI - 0.25);
+      ctx.stroke();
+    }
+
+    /* ── ANTENNA ── */
+    var antBob = Math.sin(t * 2.4);
+    var aBX = cx + 25 * s, aBY = cy - bodyR + 6 * s;
+    var aTX = cx + 36 * s + antBob * 6 * s;
+    var aTY = cy - bodyR - 50 * s + antBob * 3.5 * s;
+    var antGlow = 0.65 + glow * 0.35;
+
+    ctx.strokeStyle = '#1e6070';
+    ctx.lineWidth = 5 * s;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(aBX, aBY);
+    ctx.lineTo(aTX, aTY);
+    ctx.stroke();
+
+    var antRGB = emotion === 'excited' ? '68,221,140' : emotion === 'worried' ? '244,145,58' : '46,232,160';
+    radGlow(aTX, aTY, 26 * s, antRGB, antGlow * 0.55);
+
+    ctx.shadowColor = 'rgba(' + antRGB + ',0.85)';
+    ctx.shadowBlur = 14 * s;
+    var aGr = ctx.createRadialGradient(aTX - 3 * s, aTY - 3 * s, 1 * s, aTX, aTY, 11 * s);
+    aGr.addColorStop(0, 'rgba(' + antRGB + ',1)');
+    aGr.addColorStop(1, '#00c890');
+    ctx.fillStyle = aGr;
+    ctx.beginPath();
+    ctx.arc(aTX, aTY, 10.5 * s, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    /* ── ARMS ── */
+    function drawArm(side, extraRot) {
+      var ax = cx + side * (bodyR - 8 * s);
+      var ay = cy + 6 * s;
+      var rot = side * (Math.PI / 2 + 0.38) + extraRot;
+      ctx.save();
+      ctx.translate(ax, ay);
+      ctx.rotate(rot);
+      /* arm tube */
+      ctx.fillStyle = '#2d8899';
+      ctx.beginPath();
+      ctx.ellipse(0, 18 * s, 9 * s, 21 * s, 0, 0, Math.PI * 2);
+      ctx.fill();
+      /* hand nub */
+      ctx.fillStyle = '#44ABAD';
+      ctx.beginPath();
+      ctx.arc(0, 37 * s, 9.5 * s, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    var armL = emotion === 'wave' ? Math.sin(t * 4.2) * 0.52 - 0.55 : Math.sin(t * 1.1) * 0.07;
+    var armR = Math.sin(t * 1.15 + 0.5) * 0.07;
+    drawArm(-1, armL);
+    drawArm(1, armR);
+
+    /* ── FEET ── */
+    [[-24, 0], [24, 0]].forEach(function (p) {
+      ctx.fillStyle = '#2d8899';
+      ctx.beginPath();
+      ctx.ellipse(cx + p[0] * s, cy + bodyR - 5 * s, 20 * s, 12 * s, 0, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    /* ── HEART BADGE ── */
+    var hX = cx + 4 * s, hY = cy + 30 * s;
+    var hS = 1.55 * s;
+    radGlow(hX, hY, 30 * s, '68,171,173', 0.28);
+
+    ctx.shadowColor = 'rgba(13,43,56,0.2)';
+    ctx.shadowBlur = 6 * s;
+    ctx.fillStyle = '#3aa9aa';
+    ctx.save();
+    ctx.translate(hX, hY);
+    ctx.scale(hS, hS);
+    ctx.beginPath();
+    ctx.moveTo(0, -5);
+    ctx.bezierCurveTo(-12, -20, -25, -2, 0, 14);
+    ctx.bezierCurveTo(25, -2, 12, -20, 0, -5);
+    ctx.fill();
+    ctx.restore();
+    ctx.shadowBlur = 0;
+
+    /* Cross on heart */
+    var cS = 3.6 * s;
+    ctx.fillStyle = 'rgba(255,255,255,0.93)';
+    ctx.beginPath();
+    ctx.rect(hX - cS * 0.43, hY - cS * 1.12, cS * 0.86, cS * 2.24);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.rect(hX - cS * 1.12, hY - cS * 0.43, cS * 2.24, cS * 0.86);
+    ctx.fill();
+
+    ctx.restore(); /* end tilt */
   }
 
-  tick();
-
-  /* ── Responsive ── */
-  function resize() {
-    const p = canvas.parentElement;
-    if (!p) return;
-    const w = p.offsetWidth || 340;
-    const h = Math.round(w * 1.2);
-    renderer.setSize(w, h);
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-  }
-  window.addEventListener('resize', resize, { passive: true });
-  resize();
+  /* Emotion API */
+  window.elaraSetEmotion = function (state) {
+    emotion = state || 'happy';
+    /* Reset antenna glow speed per emotion */
+    switch (state) {
+      case 'excited': break;
+      case 'worried': break;
+      case 'wave':    break;
+      default: break;
+    }
+  };
 })();
