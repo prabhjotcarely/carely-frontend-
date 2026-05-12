@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carely Blog — AI Caretaker, Medication Reminders & Caregiver Guides</title>
+  <meta name="description" content="Guides, comparisons, and expert advice on medication reminders, AI caretakers, caregiver apps, and managing health for elderly parents. Powered by Carely.">
+  <link rel="canonical" href="https://carely.fit/blog/">
+  <link rel="icon" type="image/png" href="/elara-3d-new.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0D2B24; --inkm: #2D4A42; --inks: #5A7A72;
+      --t1: #028090; --t2: #02C39A; --t3: #1e6070;
+      --w: #ffffff; --off: #F4F8F7; --bor: #E2EDEB;
+      --dark: #0D3347;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--w); color: var(--ink); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Nav */
+    .nav-wrap { background: var(--dark); border-bottom: 1px solid rgba(68,171,173,0.2); }
+    .nav { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo img { height: 32px; }
+    .nav-logo span { font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+    .nav-cta { padding: 9px 22px; border-radius: 100px; background: var(--t2); color: #fff; font-size: 0.875rem; font-weight: 800; }
+
+    /* Hero */
+    .blog-hero { background: var(--dark); padding: 64px 24px 48px; text-align: center; }
+    .blog-hero .tag { display: inline-block; font-size: 0.68rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: var(--t2); background: rgba(2,195,154,0.12); border: 1px solid rgba(2,195,154,0.25); border-radius: 100px; padding: 5px 14px; margin-bottom: 18px; }
+    .blog-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 5vw, 3.4rem); color: #fff; line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 14px; }
+    .blog-hero h1 em { font-style: italic; color: var(--t2); }
+    .blog-hero p { font-size: 1rem; color: rgba(255,255,255,0.65); max-width: 540px; margin: 0 auto; line-height: 1.7; }
+
+    /* Main */
+    .blog-main { max-width: 1100px; margin: 0 auto; padding: 56px 24px 80px; }
+
+    /* Section headers */
+    .section-label { font-size: 0.68rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t1); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--bor); }
+
+    /* Grid */
+    .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 48px; }
+
+    /* Card */
+    .post-card { background: var(--off); border: 1px solid var(--bor); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: border-color 0.15s, box-shadow 0.15s; }
+    .post-card:hover { border-color: var(--t1); box-shadow: 0 4px 20px rgba(2,128,144,0.1); }
+    .post-tag { display: inline-block; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: var(--t1); background: rgba(2,128,144,0.08); border-radius: 6px; padding: 3px 8px; }
+    .post-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--ink); line-height: 1.4; }
+    .post-card p { font-size: 0.82rem; color: var(--inkm); line-height: 1.6; flex: 1; }
+    .post-read { font-size: 0.78rem; font-weight: 700; color: var(--t1); display: flex; align-items: center; gap: 4px; }
+    .post-read::after { content: '→'; }
+
+    /* CTA band */
+    .cta-band { background: linear-gradient(135deg, var(--dark), #0a2a3a); border-radius: 20px; padding: 44px 32px; text-align: center; margin-top: 24px; }
+    .cta-band h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem, 3.5vw, 2.4rem); color: #fff; letter-spacing: -0.02em; margin-bottom: 10px; }
+    .cta-band p { color: rgba(255,255,255,0.65); font-size: 0.95rem; margin-bottom: 24px; }
+    .cta-btn { display: inline-block; padding: 14px 32px; border-radius: 100px; background: var(--t2); color: #fff; font-size: 0.95rem; font-weight: 800; }
+
+    @media(max-width:640px){
+      .blog-hero { padding: 48px 20px 36px; }
+      .blog-main { padding: 40px 16px 56px; }
+      .post-grid { grid-template-columns: 1fr; }
+      .cta-band { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav-wrap">
+  <div class="nav">
+    <a href="/" class="nav-logo">
+      <img src="/elara-bot-logo.png" alt="Carely">
+      <span>Carely</span>
+    </a>
+    <a href="/#founding" class="nav-cta">Get Early Access</a>
+  </div>
+</nav>
+
+<header class="blog-hero">
+  <span class="tag">Carely Blog</span>
+  <h1>Guides for families<br>caring for <em>aging parents</em></h1>
+  <p>Medication reminders, AI caretakers, caregiver apps, and everything you need to keep your loved ones safe.</p>
+</header>
+
+<main class="blog-main">
+
+  <!-- Condition-specific guides -->
+  <div class="section-label">By Health Condition</div>
+  <div class="post-grid">
+    <a class="post-card" href="/blog/medication-reminder-alzheimers-dementia.html">
+      <span class="post-tag">Alzheimer's & Dementia</span>
+      <h3>Medication Reminder for Alzheimer's & Dementia Caregivers</h3>
+      <p>How to manage complex medication schedules for loved ones with memory loss.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/medication-reminder-diabetes.html">
+      <span class="post-tag">Diabetes</span>
+      <h3>Best Medication Reminder App for Diabetes</h3>
+      <p>Track insulin, metformin, and multiple daily medications with AI support.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/medication-reminder-heart-disease.html">
+      <span class="post-tag">Heart Disease</span>
+      <h3>Medication Reminder for Heart Disease & Post-Heart Attack</h3>
+      <p>Missing a dose of blood thinners or beta blockers can be life-threatening. Here's how to stay safe.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/medication-reminder-hypertension.html">
+      <span class="post-tag">High Blood Pressure</span>
+      <h3>Medication Reminder for High Blood Pressure</h3>
+      <p>Why hypertension patients miss doses and how AI reminders help keep BP controlled.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/medication-reminder-cancer.html">
+      <span class="post-tag">Cancer</span>
+      <h3>Medication Tracker for Cancer Patients & Caregivers</h3>
+      <p>Managing oral chemotherapy, supplements, and complex schedules during treatment.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/chronic-illness-medication-tracker.html">
+      <span class="post-tag">Chronic Illness</span>
+      <h3>Medication Tracker for Chronic Illness</h3>
+      <p>Living with a chronic condition means managing medications for life. Here's how to do it right.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/medication-reminder-adhd.html">
+      <span class="post-tag">ADHD</span>
+      <h3>Best Medication Reminder App for ADHD</h3>
+      <p>When forgetting is the symptom — how AI reminders help ADHD patients stay consistent.</p>
+      <span class="post-read">Read article</span>
+    </a>
+  </div>
+
+  <!-- Caregiver guides -->
+  <div class="section-label">For Caregivers</div>
+  <div class="post-grid">
+    <a class="post-card" href="/blog/ai-caregiver-app.html">
+      <span class="post-tag">AI Caretaker</span>
+      <h3>AI Caregiver App for Elderly Parents</h3>
+      <p>What an AI caretaker actually does — and why it's not just a fancy reminder app.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/caregiver-app-for-aging-parents.html">
+      <span class="post-tag">Aging Parents</span>
+      <h3>Best Caregiver App for Aging Parents</h3>
+      <p>Everything a caregiver needs: medication tracking, family alerts, doctor reports — in one app.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/long-distance-caregiver-app.html">
+      <span class="post-tag">Long-Distance</span>
+      <h3>Best App for Long-Distance Caregivers</h3>
+      <p>How to care for an aging parent from hundreds of miles away without the constant anxiety.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/how-to-remind-elderly-parent-medication.html">
+      <span class="post-tag">Practical Guide</span>
+      <h3>How to Remind an Elderly Parent to Take Their Medication (Without Nagging)</h3>
+      <p>Strategies that actually work — and how technology can take the burden off families.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/ai-medication-reminder-elderly-parents.html">
+      <span class="post-tag">AI Reminders</span>
+      <h3>AI Medication Reminder for Elderly Parents</h3>
+      <p>How AI-powered reminders are different from basic alarm apps — and why it matters.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/best-medication-reminder-app-elderly.html">
+      <span class="post-tag">Top Picks</span>
+      <h3>Best Medication Reminder Apps for Elderly Parents (2026)</h3>
+      <p>A no-nonsense comparison of every major app, ranked by what caregivers actually need.</p>
+      <span class="post-read">Read article</span>
+    </a>
+  </div>
+
+  <!-- Feature & product guides -->
+  <div class="section-label">Product Guides</div>
+  <div class="post-grid">
+    <a class="post-card" href="/blog/elara-ai-caretaker.html">
+      <span class="post-tag">Meet Elara</span>
+      <h3>Meet Elara — The AI Caretaker for Aging Parents</h3>
+      <p>Who Elara is, what she does, and how she's different from every other health app.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/medication-management-app.html">
+      <span class="post-tag">Medication Management</span>
+      <h3>Best Medication Management App (2026)</h3>
+      <p>From schedules to logs to doctor reports — what a complete medication management app looks like.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/dose-tracker-app.html">
+      <span class="post-tag">Dose Tracking</span>
+      <h3>Best Dose Tracker App — Track Every Dose Taken</h3>
+      <p>Why tracking doses matters and how a smart dose log helps you (and your doctor) see the full picture.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/pill-reminder-app.html">
+      <span class="post-tag">Reminders</span>
+      <h3>Best Pill Reminder App — AI Reminders That Actually Work</h3>
+      <p>Why standard alarm reminders fail seniors and what AI-based reminders do differently.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/vitals-tracking-app.html">
+      <span class="post-tag">Vitals</span>
+      <h3>Best Vitals Tracking App for Seniors</h3>
+      <p>Blood pressure, blood sugar, weight — track everything in one place alongside medications.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/blood-pressure-tracking-app.html">
+      <span class="post-tag">Blood Pressure</span>
+      <h3>Best Blood Pressure Tracking App — Log, Monitor & Alert</h3>
+      <p>How to track BP readings and automatically alert family when numbers look dangerous.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/blood-sugar-tracker-app.html">
+      <span class="post-tag">Blood Sugar</span>
+      <h3>Blood Sugar Tracker App — Free with Carely</h3>
+      <p>Log glucose readings alongside medications, and spot patterns before they become problems.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/supplement-reminder-app.html">
+      <span class="post-tag">Supplements</span>
+      <h3>Best Supplement Reminder App — Track Any Vitamin or Supplement</h3>
+      <p>Vitamins, fish oil, magnesium — Carely tracks supplements the same way it tracks medications.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/supplement-tracker-busy-professionals.html">
+      <span class="post-tag">Busy Professionals</span>
+      <h3>Best Supplement Tracker for Busy Professionals</h3>
+      <p>When your schedule is packed, your supplement routine doesn't have to suffer.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/medication-reminder-busy-professionals.html">
+      <span class="post-tag">Busy Professionals</span>
+      <h3>Medication Reminder for Busy Professionals</h3>
+      <p>How to never miss a dose when your day is back-to-back meetings and travel.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/all-in-one-health-tracker-app.html">
+      <span class="post-tag">All-in-One</span>
+      <h3>All-in-One Health Tracker App — Meds, Supplements, BP, Blood Sugar, AI</h3>
+      <p>Why scattered apps cause missed doses — and how one unified tracker changes everything.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/medicine-tracker-app.html">
+      <span class="post-tag">Medicine Tracking</span>
+      <h3>Best Medicine Tracker App — Log Every Medication & Supplement</h3>
+      <p>A complete guide to tracking all medications and supplements without missing a thing.</p>
+      <span class="post-read">Read article</span>
+    </a>
+  </div>
+
+  <!-- Regional -->
+  <div class="section-label">Regional</div>
+  <div class="post-grid">
+    <a class="post-card" href="/blog/medication-reminder-app-canada.html">
+      <span class="post-tag">Canada</span>
+      <h3>Best Medication Reminder App in Canada (2026)</h3>
+      <p>Built in BC, Canada — Carely is designed for Canadian families and healthcare workflows.</p>
+      <span class="post-read">Read article</span>
+    </a>
+  </div>
+
+  <!-- Alternatives -->
+  <div class="section-label">vs. Competitors</div>
+  <div class="post-grid">
+    <a class="post-card" href="/blog/medisafe-alternative.html">
+      <span class="post-tag">vs. Medisafe</span>
+      <h3>Best Medisafe Alternative in 2026</h3>
+      <p>Why families are switching from Medisafe to Carely — and what they gain.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/carezone-alternative.html">
+      <span class="post-tag">vs. CareZone</span>
+      <h3>Best CareZone Alternative in 2026</h3>
+      <p>CareZone shut down. Here's what Carely offers that CareZone never could.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/roundhealth-alternative.html">
+      <span class="post-tag">vs. Round Health</span>
+      <h3>Carely vs. Round Health (2026)</h3>
+      <p>Round Health is a reminder app. Carely is an AI caretaker. Here's the difference.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/meetcarely-alternative.html">
+      <span class="post-tag">vs. MeetCarely</span>
+      <h3>MeetCarely vs. Carely — Full Comparison</h3>
+      <p>Same name, different product. Here's why families choose Carely.</p>
+      <span class="post-read">Read article</span>
+    </a>
+    <a class="post-card" href="/blog/carely-one-alternative.html">
+      <span class="post-tag">vs. Carely.one</span>
+      <h3>Carely.one Alternative — Why Families Choose Carely Instead</h3>
+      <p>A direct feature comparison for families deciding between the two.</p>
+      <span class="post-read">Read article</span>
+    </a>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section-label">FAQ & Resources</div>
+  <div class="post-grid">
+    <a class="post-card" href="/blog/faq.html">
+      <span class="post-tag">FAQ</span>
+      <h3>Carely FAQ — Everything About the AI Caretaker App</h3>
+      <p>How Elara works, what's included in the trial, privacy, HIPAA, and more.</p>
+      <span class="post-read">Read article</span>
+    </a>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-band">
+    <h2>Ready to try Carely?</h2>
+    <p>200 founding spots at $5/month — price locks for your first year. Start your 7-day free trial.</p>
+    <a href="/#founding" class="cta-btn">Claim My Founding Spot →</a>
+  </div>
+
+</main>
+
+</body>
+</html>
