@@ -1250,7 +1250,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="list-item"><span>🗄️</span><div class="name">Supabase PostgreSQL</div><span class="pill green">Online</span></div>
         <div class="list-item"><span>🔴</span><div class="name">Upstash Redis (Elara memory)</div><span class="pill green">Online</span></div>
         <div class="list-item"><span>🔥</span><div class="name">Firebase FCM</div><span class="pill green">Online</span></div>
-        <div class="list-item"><span>📧</span><div class="name">SendGrid Email</div><span class="pill green">Online</span></div>
+        <div class="list-item"><span>📧</span><div class="name">SendGrid Email</div><span id="sg-pill" class="pill green">Online</span><span id="sg-usage" style="font-size:0.7rem;color:var(--g500);margin-left:6px">—/100</span></div>
       </div>
       <div class="card">
         <div class="card-title">⚠️ Known Issues</div>
@@ -2886,6 +2886,38 @@ document.addEventListener('keydown', function(e) {
       // Backend doesn't have /admin/hermes-status yet — show known state from gateway_state.json
       setHermesStatus(true, false, 'Telegram bot not configured');
     });
+})();
+
+// ═══ SendGrid daily usage monitor ══════════════════════════════════════════
+(function() {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+
+  function loadSendGridStats() {
+    fetch(BACKEND + '/admin/sendgrid-stats', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(5000) })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        var pill = document.getElementById('sg-pill');
+        var usage = document.getElementById('sg-usage');
+        if (!pill || !usage) return;
+        var sent = d.sent || 0;
+        var limit = d.limit || 100;
+        usage.textContent = sent + '/' + limit + ' today';
+        if (sent >= 90) {
+          pill.textContent = 'NEAR LIMIT'; pill.className = 'pill red';
+          usage.style.color = '#DC2626'; usage.style.fontWeight = '700';
+        } else if (sent >= 70) {
+          pill.textContent = 'High'; pill.className = 'pill amber';
+          usage.style.color = 'var(--amber)';
+        } else {
+          pill.textContent = 'Online'; pill.className = 'pill green';
+        }
+      })
+      .catch(function() {});
+  }
+
+  loadSendGridStats();
+  setInterval(loadSendGridStats, 300000); // refresh every 5 min
 })();
 </script>
 </body>

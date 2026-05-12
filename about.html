@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About Carely — Built in BC, Canada for Families Who Care</title>
+  <meta name="description" content="Carely was built by a husband and wife team in BC, Canada after watching families struggle with medication management for aging parents. Meet the team and our mission.">
+  <link rel="canonical" href="https://carely.fit/about">
+  <link rel="icon" type="image/png" href="/elara-3d-new.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0D2B24; --inkm: #2D4A42; --inks: #5A7A72;
+      --t1: #028090; --t2: #02C39A; --t3: #1e6070; --t5: #0D3347;
+      --w: #ffffff; --off: #F4F8F7; --bor: #E2EDEB;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--w); color: var(--ink); -webkit-font-smoothing: antialiased; line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Nav */
+    .nav-wrap { background: var(--t5); border-bottom: 1px solid rgba(68,171,173,0.2); position: sticky; top: 0; z-index: 100; }
+    .nav { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo img { height: 32px; }
+    .nav-logo span { font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+    .nav-cta { padding: 9px 22px; border-radius: 100px; background: var(--t2); color: #fff; font-size: 0.875rem; font-weight: 800; }
+
+    /* Hero */
+    .about-hero { background: var(--t5); padding: 80px 24px 64px; }
+    .about-hero-inner { max-width: 740px; margin: 0 auto; }
+    .tag { display: inline-block; font-size: 0.68rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: var(--t2); background: rgba(2,195,154,0.12); border: 1px solid rgba(2,195,154,0.25); border-radius: 100px; padding: 5px 14px; margin-bottom: 20px; }
+    .about-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2.2rem, 5vw, 3.6rem); color: #fff; line-height: 1.08; letter-spacing: -0.025em; margin-bottom: 22px; }
+    .about-hero h1 em { font-style: italic; color: var(--t2); }
+    .about-hero .lead { font-size: 1.1rem; color: rgba(255,255,255,0.72); line-height: 1.8; max-width: 620px; }
+
+    /* Main content */
+    main { max-width: 740px; margin: 0 auto; padding: 64px 24px 88px; }
+
+    /* Story */
+    .story { margin-bottom: 56px; }
+    .story h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--ink); letter-spacing: -0.02em; margin-bottom: 20px; line-height: 1.2; }
+    .story p { font-size: 1rem; color: var(--inkm); line-height: 1.85; margin-bottom: 18px; }
+    .story p:last-child { margin-bottom: 0; }
+    .story strong { color: var(--ink); font-weight: 700; }
+
+    /* Pull quote */
+    .pullquote { border-left: 3px solid var(--t2); margin: 32px 0; padding: 16px 24px; background: var(--off); border-radius: 0 12px 12px 0; }
+    .pullquote p { font-family: 'DM Serif Display', serif; font-size: 1.2rem; font-style: italic; color: var(--t3); line-height: 1.6; margin: 0; }
+    .pullquote cite { display: block; font-family: 'Inter', sans-serif; font-style: normal; font-size: 0.78rem; font-weight: 700; color: var(--inks); margin-top: 10px; }
+
+    /* Values */
+    .values { margin-bottom: 56px; }
+    .values h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.5rem, 3vw, 2rem); color: var(--ink); letter-spacing: -0.02em; margin-bottom: 24px; }
+    .value-list { display: flex; flex-direction: column; gap: 16px; }
+    .value-item { display: flex; gap: 16px; align-items: flex-start; background: var(--off); border: 1px solid var(--bor); border-radius: 14px; padding: 20px; }
+    .value-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+    .value-item h3 { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .value-item p { font-size: 0.88rem; color: var(--inkm); line-height: 1.65; margin: 0; }
+
+    /* Team */
+    .team { margin-bottom: 56px; }
+    .team h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.5rem, 3vw, 2rem); color: var(--ink); letter-spacing: -0.02em; margin-bottom: 24px; }
+    .team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .team-card { background: var(--off); border: 1px solid var(--bor); border-radius: 16px; padding: 24px; }
+    .team-avatar { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--t1), var(--t2)); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 900; color: #fff; margin-bottom: 14px; }
+    .team-card h3 { font-size: 1rem; font-weight: 800; color: var(--ink); margin-bottom: 2px; }
+    .team-card .role { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--t1); margin-bottom: 10px; }
+    .team-card p { font-size: 0.85rem; color: var(--inkm); line-height: 1.65; margin: 0; }
+
+    /* Location */
+    .location { background: var(--t5); border-radius: 20px; padding: 36px 32px; margin-bottom: 56px; display: flex; gap: 20px; align-items: flex-start; }
+    .location-icon { font-size: 2rem; flex-shrink: 0; }
+    .location h3 { font-size: 1rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .location p { font-size: 0.88rem; color: rgba(255,255,255,0.65); line-height: 1.65; margin: 0; }
+
+    /* CTA */
+    .about-cta { text-align: center; background: var(--off); border: 1px solid var(--bor); border-radius: 20px; padding: 48px 32px; }
+    .about-cta h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem, 3.5vw, 2.4rem); color: var(--ink); letter-spacing: -0.02em; margin-bottom: 12px; }
+    .about-cta p { color: var(--inkm); font-size: 0.95rem; margin-bottom: 24px; max-width: 440px; margin-left: auto; margin-right: auto; }
+    .cta-btn { display: inline-block; padding: 14px 32px; border-radius: 100px; background: var(--t1); color: #fff; font-size: 0.95rem; font-weight: 800; }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--bor); padding: 24px; text-align: center; font-size: 0.78rem; color: var(--inks); }
+    footer a { color: var(--t1); margin: 0 8px; }
+
+    @media(max-width:640px) {
+      .about-hero { padding: 56px 20px 48px; }
+      main { padding: 48px 20px 64px; }
+      .team-grid { grid-template-columns: 1fr; }
+      .location { flex-direction: column; }
+      .about-cta { padding: 36px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav-wrap">
+  <div class="nav">
+    <a href="/" class="nav-logo">
+      <img src="/elara-bot-logo.png" alt="Carely">
+      <span>Carely</span>
+    </a>
+    <a href="/#founding" class="nav-cta">Get Early Access</a>
+  </div>
+</nav>
+
+<header class="about-hero">
+  <div class="about-hero-inner">
+    <span class="tag">Our Story</span>
+    <h1>Built for the families<br>who never stop <em>worrying</em></h1>
+    <p class="lead">Carely started with a simple, frustrating question: why is it so hard to make sure your aging parent took their medication today?</p>
+  </div>
+</header>
+
+<main>
+
+  <section class="story">
+    <h2>Where it started</h2>
+    <p>Prabh — a registered healthcare worker from BC, Canada — watched the same scene play out across families she worked with. An aging parent. A complicated medication schedule. Adult children calling daily to ask "did you take it?" Growing guilt when they couldn't call. Growing anxiety when there was no answer.</p>
+    <p>The tools available were either <strong>basic alarm apps</strong> that seniors ignored or <strong>clinical software</strong> designed for hospitals, not families. Nothing in between that felt human, warm, and actually worked.</p>
+
+    <div class="pullquote">
+      <p>"I wanted something that would talk to my mum like I would — not just ping her. Something that remembered if she'd been dizzy lately, and actually told the family."</p>
+      <cite>— Prabh, Co-founder & COO</cite>
+    </div>
+
+    <p>So in early 2026, Prabh and TJ started building Carely — not as a tech product, but as a family tool. One that could check in every morning, log doses, alert the family when something was missed, and keep the doctor informed without anyone having to remember to do it manually.</p>
+    <p>The result is <strong>Elara</strong> — Carely's AI caretaker. She's not a chatbot. She's the steady, reliable presence that makes sure nothing slips through the cracks — so families can stop worrying and start living.</p>
+  </section>
+
+  <section class="values">
+    <h2>What we believe</h2>
+    <div class="value-list">
+      <div class="value-item">
+        <span class="value-icon">💊</span>
+        <div>
+          <h3>Missed doses are a real safety risk</h3>
+          <p>Half of chronic disease patients don't take medications as prescribed. The consequences — hospitalizations, complications, preventable deaths — are entirely avoidable with the right support.</p>
+        </div>
+      </div>
+      <div class="value-item">
+        <span class="value-icon">👨‍👩‍👧</span>
+        <div>
+          <h3>Family should be in the loop, not in the dark</h3>
+          <p>Caregivers — whether down the street or across the country — deserve real-time visibility without becoming full-time monitors. Peace of mind shouldn't require constant checking.</p>
+        </div>
+      </div>
+      <div class="value-item">
+        <span class="value-icon">🤖</span>
+        <div>
+          <h3>AI should feel like care, not surveillance</h3>
+          <p>Elara checks in with warmth and context — not cold alerts. She remembers previous conversations, notices patterns, and responds like someone who genuinely cares about the person she's talking to.</p>
+        </div>
+      </div>
+      <div class="value-item">
+        <span class="value-icon">🔒</span>
+        <div>
+          <h3>Health data is sacred</h3>
+          <p>We are PIPEDA and CCPA compliant. We never sell health data. We never use it for advertising. Your family's health information belongs to your family — full stop.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="team">
+    <h2>The team</h2>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">TJ</div>
+        <h3>Taranjit (TJ) Singh</h3>
+        <div class="role">Co-founder & CEO</div>
+        <p>Builder and operator. TJ leads product, engineering, and growth. Based in BC, Canada.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">P</div>
+        <h3>Prabhjot (Prabh) Singh</h3>
+        <div class="role">Co-founder, COO & CMO</div>
+        <p>Registered healthcare worker. Prabh leads operations, marketing, and makes sure Carely stays grounded in real clinical experience.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="location">
+    <span class="location-icon">🍁</span>
+    <div>
+      <h3>Built in BC, Canada</h3>
+      <p>Carely is built and operated by Lumina Path Inc., headquartered in British Columbia, Canada. We serve families across Canada and the United States.</p>
+    </div>
+  </div>
+
+  <div class="about-cta">
+    <h2>Ready to give your family peace of mind?</h2>
+    <p>200 founding spots at $5/month — price locks for your first year. 7-day free trial, no commitment.</p>
+    <a href="/#founding" class="cta-btn">Claim My Founding Spot →</a>
+  </div>
+
+</main>
+
+<footer>
+  <a href="/">Home</a>
+  <a href="/blog/">Blog</a>
+  <a href="/privacy">Privacy</a>
+  <a href="/terms">Terms</a>
+  <a href="/contact">Contact</a>
+  <br style="margin-bottom:8px">
+  © 2026 Carely · Lumina Path Inc. · BC, Canada
+</footer>
+
+</body>
+</html>
