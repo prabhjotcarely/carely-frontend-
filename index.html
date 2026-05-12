@@ -68,7 +68,8 @@
     .nav-mob .mob-cta:hover { background: var(--t2); }
 
     /* ── COOKIE BANNER ── */
-    .cookie-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--t5); border-top: 1px solid rgba(68,171,173,0.22); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; z-index: 9000; flex-wrap: wrap; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .cookie-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--t5); border-top: 1px solid rgba(68,171,173,0.22); padding: 14px 100px 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; z-index: 9000; flex-wrap: wrap; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+    @media(max-width:640px){ .cookie-bar { padding: 14px 16px 24px; right: 0; } }
     .cookie-bar.show { transform: translateY(0); }
     .cookie-txt { font-size: 0.78rem; color: rgba(255,255,255,0.65); line-height: 1.55; flex: 1; min-width: 200px; }
     .cookie-txt a { color: var(--t1); text-decoration: underline; }
@@ -1184,30 +1185,46 @@ gsap.registerPlugin(ScrollTrigger);
 // Refresh after fonts load (prevents layout-shift miscalculations)
 document.fonts.ready.then(() => ScrollTrigger.refresh());
 
-// Set initial hidden states for all reveal elements
-gsap.set('.reveal', { opacity: 0, y: 28 });
+// Grid container selectors (these must stay visible — their CHILDREN animate)
+const GRID_CONTAINERS = '.pain-grid, .feat-grid, .persona-grid, .testi-grid, .plans-wrap, .hiw-steps, .lang-flags';
 
-// Grid children get their own set (overrides parent .reveal set)
+// Set all .reveal hidden, then immediately un-hide grid containers
+gsap.set('.reveal', { opacity: 0, y: 28 });
+gsap.set(GRID_CONTAINERS, { clearProps: 'opacity,y,transform' });
+
+// Grid children
 const GRIDS = [
-  { sel: '.pain-card',            trigger: '.pain-grid',    stagger: 0.1,  scale: 0.95, y: 44 },
-  { sel: '.persona',              trigger: '.persona-grid', stagger: 0.08, scale: 0.92, y: 50 },
-  { sel: '.feat',                 trigger: '.feat-grid',    stagger: 0.04, scale: 0.88, y: 22 },
-  { sel: '.tcard',                trigger: '.testi-grid',   stagger: 0.1,  scale: 0.96, y: 40 },
-  { sel: '.plan-card',            trigger: '.plans-wrap',   stagger: 0.1,  scale: 0.94, y: 44 },
-  { sel: '.hiw-step',             trigger: '.hiw-steps',    stagger: 0.13, scale: 1,    y: 40 },
-  { sel: '.lang-flag',            trigger: '.lang-flags',   stagger: 0.04, scale: 0.85, y: 18 },
+  { sel: '.pain-card',  trigger: '.pain-grid',    stagger: 0.1,  scale: 0.95, y: 44 },
+  { sel: '.persona',    trigger: '.persona-grid', stagger: 0.08, scale: 0.92, y: 50 },
+  { sel: '.feat',       trigger: '.feat-grid',    stagger: 0.04, scale: 0.88, y: 22 },
+  { sel: '.tcard',      trigger: '.testi-grid',   stagger: 0.1,  scale: 0.96, y: 40 },
+  { sel: '.plan-card',  trigger: '.plans-wrap',   stagger: 0.1,  scale: 0.94, y: 44 },
+  { sel: '.hiw-step',   trigger: '.hiw-steps',    stagger: 0.13, scale: 1,    y: 40 },
+  { sel: '.lang-flag',  trigger: '.lang-flags',   stagger: 0.04, scale: 0.85, y: 18 },
 ];
 GRIDS.forEach(({ sel, scale, y }) => gsap.set(sel, { opacity: 0, y, scale }));
 
 // Non-grid .reveal elements — individual scroll trigger
 document.querySelectorAll('.reveal').forEach(el => {
-  const inGrid = el.closest('.pain-grid, .feat-grid, .persona-grid, .testi-grid, .plans-wrap, .hiw-steps, .lang-flags');
-  if (inGrid) return;
+  // Skip grid containers (visible by default) and grid children (handled below)
+  if (el.matches(GRID_CONTAINERS)) return;
+  if (el.closest(GRID_CONTAINERS)) return;
   gsap.to(el, {
     opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
     scrollTrigger: { trigger: el, start: 'top 87%', once: true }
   });
 });
+
+// Safety fallback — if ScrollTrigger fails or fires late, show everything after 3s
+setTimeout(() => {
+  GRIDS.forEach(({ sel }) => {
+    document.querySelectorAll(sel).forEach(el => {
+      if (parseFloat(window.getComputedStyle(el).opacity) < 0.1) {
+        gsap.set(el, { opacity: 1, y: 0, scale: 1 });
+      }
+    });
+  });
+}, 3000);
 
 // Grid stagger animations
 GRIDS.forEach(({ sel, trigger, stagger, scale, y }) => {
