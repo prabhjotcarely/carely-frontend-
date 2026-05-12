@@ -3,835 +3,838 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Carely — AI Caretaker. Timely Medicine. Better You.</title>
-  <meta name="description" content="Meet Elara — AI-powered medication reminders, BP tracking, blood sugar & weight logging. 200 founding spots at $5/month, locked forever. For families who care.">
-  <meta property="og:title" content="Carely — AI Caretaker. Timely Medicine. Better You.">
-  <meta property="og:description" content="Meet Elara, your AI med caretaker. Medication reminders, BP, blood sugar & weight — all free. 200 founding spots at $5/month.">
+  <title>Carely — AI Caretaker for Your Family's Health</title>
+  <meta name="description" content="Meet Elara — your AI caretaker. Medication reminders, daily check-ins, and family alerts. Launching soon. Founding spots at $5/month.">
+  <meta property="og:title" content="Carely — AI Caretaker for Your Family's Health">
+  <meta property="og:description" content="Elara remembers every dose, checks in daily, and alerts your family when something's off. Get early access — founding spots at $5/month.">
   <meta property="og:image" content="https://carely.fit/elara-3d.png">
   <meta property="og:url" content="https://carely.fit">
   <meta name="twitter:card" content="summary_large_image">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
-  <script>
-  var _eC=null;
-  function elaraBg(img){
-    if(_eC){img.src=_eC;_revealRing(img);return;}
-    try{
-      var c=document.createElement('canvas'),ctx=c.getContext('2d');
-      c.width=img.naturalWidth;c.height=img.naturalHeight;
-      if(!c.width)return;
-      ctx.drawImage(img,0,0);
-      var id=ctx.getImageData(0,0,c.width,c.height),d=id.data,w=c.width,h=c.height;
-      var vis=new Uint8Array(w*h),q=[];
-      function bg(i){var r=d[i],g=d[i+1],b=d[i+2];return Math.abs(r-g)<30&&Math.abs(g-b)<30&&(r+g+b)/3>110;}
-      function push(x,y){if(x<0||x>=w||y<0||y>=h)return;var p=y*w+x;if(vis[p])return;vis[p]=1;if(bg(p*4))q.push(p);}
-      for(var x=0;x<w;x++){push(x,0);push(x,h-1);}
-      for(var y=1;y<h-1;y++){push(0,y);push(w-1,y);}
-      while(q.length){var p=q.pop();d[p*4+3]=0;var px=p%w,py=(p/w)|0;push(px-1,py);push(px+1,py);push(px,py-1);push(px,py+1);}
-      ctx.putImageData(id,0,0);
-      _eC=c.toDataURL('image/png');
-      img.src=_eC;
-    }catch(e){}
-    _revealRing(img);
-  }
-  function _revealRing(img){
-    img.addEventListener('load',function(){
-      var r=img.closest('.elara-ring');
-      if(r){r.style.opacity='1';r.style.transition='opacity 0.35s ease';}
-    },{once:true});
-  }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --teal:       #00C9A7;
-      --teal-2:     #00A896;
-      --teal-dim:   rgba(0,201,167,0.15);
-      --navy:       #091a27;
-      --navy-2:     #0c2133;
-      --navy-3:     #0f2a3f;
-      --ink:        #0d1f2a;
-      --muted:      #5a8090;
-      --line:       rgba(255,255,255,0.08);
-      --paper:      #f5fafa;
-      --white:      #ffffff;
-      --amber:      #FFB830;
-      --coral:      #FF6B6B;
-      --glass:      rgba(255,255,255,0.05);
-      --glass-b:    rgba(255,255,255,0.09);
-      --r:          14px;
-      --r-sm:       10px;
-      --sh-teal:    0 0 40px rgba(0,201,167,0.22);
+      --canvas:    #05101A;
+      --s1:        #0A1D2C;
+      --s2:        #0F2638;
+      --s3:        #163041;
+      --s4:        #1D3D50;
+      --teal:      #02C39A;
+      --teal-2:    #01A882;
+      --teal-dim:  rgba(2,195,154,0.12);
+      --teal-glow: rgba(2,195,154,0.25);
+      --amber:     #F5A623;
+      --coral:     #FF6B6B;
+      --ink:       #EFF8FF;
+      --ink-m:     #7BAFC4;
+      --ink-s:     #3D6070;
+      --line:      rgba(255,255,255,0.07);
+      --line-2:    rgba(255,255,255,0.12);
+      --r-sm:      8px;
+      --r:         14px;
+      --r-lg:      20px;
+      --r-xl:      28px;
+      font-size: 16px;
     }
+
     html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--navy); color: #fff; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      background: var(--canvas);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
     a { color: inherit; text-decoration: none; }
-    button { font: inherit; cursor: pointer; border: none; }
-    h1,h2,h3,h4 { margin: 0; line-height: 1.05; letter-spacing: -0.03em; }
+    button { font: inherit; cursor: pointer; border: none; outline: none; }
+    h1,h2,h3,h4 { font-family: 'Bricolage Grotesque', sans-serif; line-height: 1.05; }
     p { margin: 0; }
     img { display: block; max-width: 100%; }
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: var(--navy); }
-    ::-webkit-scrollbar-thumb { background: var(--teal-2); border-radius: 3px; }
 
-    /* TOP BAR */
+    /* ─── SCROLLBAR ──────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--canvas); }
+    ::-webkit-scrollbar-thumb { background: var(--teal-2); border-radius: 2px; }
+
+    /* ─── TOPBAR ─────────────────────────────────────────────────── */
     .topbar {
-      min-height: 42px; display: flex; align-items: center; justify-content: center; gap: 10px;
-      padding: 8px 20px; font-size: 0.8rem; font-weight: 700; text-align: center;
-      background: linear-gradient(90deg, #007a72, var(--teal), #007a72);
-      background-size: 200%; animation: shimmer 5s ease infinite;
-      color: var(--navy);
+      height: 40px; display: flex; align-items: center; justify-content: center; gap: 8px;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em; text-align: center;
+      background: linear-gradient(90deg, var(--teal-2), var(--teal), var(--teal-2));
+      background-size: 200%; animation: shimmer 6s ease infinite;
+      color: #021A12;
     }
-    .topbar a { color: var(--navy); font-weight: 800; text-decoration: underline; }
+    .topbar strong { font-weight: 800; }
+    .topbar .sep { opacity: 0.4; }
     @keyframes shimmer { 0%,100%{background-position:0%} 50%{background-position:100%} }
 
-    /* NAV — floating pill */
+    /* ─── NAV ────────────────────────────────────────────────────── */
     .nav-wrap {
-      position: sticky; top: 10px; z-index: 100;
+      position: sticky; top: 8px; z-index: 200;
       display: flex; justify-content: center;
-      padding: 0 14px; pointer-events: none;
+      padding: 0 16px; pointer-events: none;
     }
     .nav {
-      width: 100%; max-width: 1160px; pointer-events: auto;
+      width: 100%; max-width: 1120px; pointer-events: auto;
       display: flex; align-items: center; justify-content: space-between; gap: 16px;
-      padding: 0 22px; min-height: 58px;
-      background: rgba(255,255,255,0.97); backdrop-filter: blur(32px);
-      border-radius: 999px; border: 1px solid rgba(0,0,0,0.07);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.05);
-      transition: box-shadow 200ms;
+      padding: 0 20px; height: 56px;
+      background: rgba(5,16,26,0.7);
+      backdrop-filter: blur(20px) saturate(140%);
+      border: 1px solid var(--line-2);
+      border-radius: 100px;
+      transition: background 200ms, border-color 200ms;
     }
-    .nav.scrolled { box-shadow: 0 8px 40px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.07); }
-    .logo { display: flex; align-items: center; gap: 9px; }
-    .logo-mark { width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #fff; object-fit: contain; border: 2px solid rgba(2,195,154,0.25); }
-    .logo-name { font-size: 1.1rem; font-weight: 900; background: linear-gradient(135deg,#028090,var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    .nav-links { display: flex; gap: 26px; font-size: 0.86rem; font-weight: 600; color: rgba(13,31,42,0.48); }
-    .nav-links a:hover { color: #028090; }
-    .nav-right { display: flex; align-items: center; gap: 10px; }
-    .curr-toggle {
-      display: flex; border-radius: 999px; overflow: hidden;
-      border: 1px solid rgba(0,0,0,0.1); font-size: 0.76rem; font-weight: 700;
+    .nav.scrolled { background: rgba(5,16,26,0.92); border-color: var(--line-2); }
+    .nav-logo { display: flex; align-items: center; }
+    .nav-logo img { height: 32px; width: auto; object-fit: contain; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-link {
+      padding: 6px 14px; border-radius: 100px; font-size: 0.875rem; font-weight: 500;
+      color: var(--ink-m); transition: color 150ms, background 150ms;
     }
-    .curr-btn {
-      padding: 5px 12px; background: transparent; color: rgba(13,31,42,0.42);
-      transition: background 150ms, color 150ms;
-    }
-    .curr-btn.active { background: rgba(0,201,167,0.1); color: #028090; }
+    .nav-link:hover { color: var(--ink); background: rgba(255,255,255,0.06); }
     .nav-cta {
-      min-height: 38px; padding: 0 18px; border-radius: 999px;
-      background: linear-gradient(135deg,var(--teal),var(--teal-2));
-      color: #fff; font-weight: 800; font-size: 0.84rem;
-      box-shadow: 0 2px 16px rgba(0,201,167,0.3); transition: transform 150ms, box-shadow 150ms;
+      padding: 8px 20px; border-radius: 100px;
+      background: var(--teal); color: #021A12;
+      font-size: 0.875rem; font-weight: 700;
+      transition: transform 150ms, box-shadow 150ms, background 150ms;
+      box-shadow: 0 0 0 0 var(--teal-glow);
     }
-    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 24px rgba(0,201,167,0.45); }
+    .nav-cta:hover { background: #03D9A9; transform: translateY(-1px); box-shadow: 0 0 24px var(--teal-glow); }
+    @media(max-width:640px) { .nav-links { display:none; } }
 
-    /* HERO */
+    /* ─── HERO ───────────────────────────────────────────────────── */
     .hero {
-      position: relative; overflow: hidden; min-height: 100svh;
-      display: grid; place-items: center;
-      background: radial-gradient(ellipse at 68% 0%, rgba(0,201,167,0.16), transparent 52%),
-                  radial-gradient(ellipse at 8% 85%, rgba(0,168,150,0.09), transparent 44%),
-                  var(--navy-2);
-    }
-    .hero::before {
-      content: ''; position: absolute; inset: 0; pointer-events: none;
-      background-image: radial-gradient(rgba(255,255,255,0.055) 1.5px, transparent 1.5px);
-      background-size: 42px 42px;
-      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%);
-    }
-    .hero-inner {
-      position: relative; z-index: 2;
-      width: min(1200px, 100% - 36px); margin: 0 auto;
-      display: grid; grid-template-columns: 1fr 440px;
-      gap: clamp(30px,5vw,72px); align-items: center;
-      padding: 76px 0 60px;
-    }
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 7px; margin-bottom: 20px;
-      padding: 6px 14px; border-radius: 999px;
-      background: rgba(0,201,167,0.1); border: 1px solid rgba(0,201,167,0.25);
-      color: var(--teal); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em;
-    }
-    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); animation: livePulse 1.6s ease-out infinite; }
-    @keyframes livePulse { 0%{box-shadow:0 0 0 0 rgba(0,201,167,0.8)} 100%{box-shadow:0 0 0 9px rgba(0,201,167,0)} }
-    .hero h1 { font-size: clamp(3rem,6.8vw,6.2rem); font-weight: 900; margin-bottom: 10px; }
-    .hero h1 em { font-style: normal; background: linear-gradient(120deg,var(--teal) 0%,#6ee7d8 60%,#a5f3eb 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    .hero-tag { font-size: clamp(0.85rem,1.5vw,1rem); font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 16px; }
-    .hero-sub { font-size: clamp(0.98rem,1.7vw,1.16rem); color: rgba(255,255,255,0.68); max-width: 530px; line-height: 1.75; margin-bottom: 32px; }
-    .hero-btns { display: flex; flex-wrap: wrap; gap: 11px; margin-bottom: 28px; }
-    .btn-main {
-      min-height: 52px; padding: 0 30px; border-radius: 999px;
-      background: linear-gradient(135deg,var(--teal),var(--teal-2));
-      color: var(--navy); font-weight: 800; font-size: 0.97rem;
-      box-shadow: 0 0 36px rgba(0,201,167,0.35), 0 6px 20px rgba(0,0,0,0.3);
-      transition: transform 150ms, box-shadow 150ms;
-    }
-    .btn-main:hover { transform: translateY(-2px); box-shadow: 0 0 52px rgba(0,201,167,0.5),0 10px 28px rgba(0,0,0,0.4); }
-    .btn-line {
-      min-height: 52px; padding: 0 28px; border-radius: 999px;
-      background: transparent; border: 1.5px solid rgba(255,255,255,0.18);
-      color: rgba(255,255,255,0.82); font-weight: 700; font-size: 0.97rem;
-      transition: border-color 150ms, color 150ms;
-    }
-    .btn-line:hover { border-color: var(--teal); color: var(--teal); }
-    .trust-row { display: flex; flex-wrap: wrap; gap: 8px; }
-    .trust-pill {
-      display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
-      border-radius: 999px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
-      font-size: 0.77rem; font-weight: 600; color: rgba(255,255,255,0.58);
-    }
-    .ck { color: var(--teal); font-size: 0.9rem; }
-
-    /* Hero stage */
-    .hero-stage { position: relative; display: flex; flex-direction: column; align-items: center; }
-    .hero-glow {
-      position: absolute; width: 420px; height: 420px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,201,167,0.2) 0%, transparent 68%);
-      top: 50%; left: 50%; transform: translate(-50%,-50%);
-      animation: breathe 4.5s ease-in-out infinite; pointer-events: none;
-    }
-    @keyframes breathe { 0%,100%{transform:translate(-50%,-50%) scale(0.88);opacity:0.6} 50%{transform:translate(-50%,-50%) scale(1.1);opacity:1} }
-    .hero-elara {
-      width: 290px; position: relative; z-index: 2;
-    }
-    .elara-ring {
-      width: 290px; height: 290px; border-radius: 50%;
-      background: linear-gradient(160deg, #e4fff8 0%, #f5fffe 45%, #ffffff 100%);
-      border: 3px solid #02C39A;
-      box-shadow:
-        0 0 0 7px rgba(2,195,154,0.12),
-        0 0 0 16px rgba(2,195,154,0.06),
-        0 28px 72px rgba(0,201,167,0.4);
-      display: flex; align-items: flex-end; justify-content: center;
-      overflow: hidden;
-      animation: ringPulse 3.8s ease-in-out infinite;
-    }
-    @keyframes ringPulse {
-      0%,100% { box-shadow: 0 0 0 7px rgba(2,195,154,0.12), 0 0 0 16px rgba(2,195,154,0.06), 0 28px 72px rgba(0,201,167,0.4); }
-      50%      { box-shadow: 0 0 0 11px rgba(2,195,154,0.18), 0 0 0 24px rgba(2,195,154,0.09), 0 28px 90px rgba(0,201,167,0.56); }
-    }
-    .elara-ring { opacity: 0; }
-    .elara-ring img { width: 90%; display: block; margin-bottom: -4px; }
-    .speech-bubble {
-      position: absolute; left: -110px; bottom: 68px; z-index: 3;
-      background: rgba(255,255,255,0.97); color: var(--ink);
-      padding: 14px 16px; border-radius: 14px; width: 238px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.28); font-size: 0.85rem; line-height: 1.55;
-      animation: popIn 0.6s cubic-bezier(.18,.89,.32,1.28) 1s both;
-    }
-    .speech-bubble::after {
-      content: ''; position: absolute; right: -8px; top: 20px;
-      width: 16px; height: 16px; background: rgba(255,255,255,0.97);
-      transform: rotate(45deg); border-radius: 2px;
-    }
-    .speech-bubble strong { display: block; color: #007a72; margin-bottom: 4px; font-size: 0.88rem; }
-    @keyframes popIn { 0%{opacity:0;transform:scale(0.8) translateX(12px)} 100%{opacity:1;transform:scale(1) translateX(0)} }
-    .float-chip {
-      position: absolute; background: rgba(255,255,255,0.95); color: var(--ink);
-      padding: 9px 13px; border-radius: 10px; font-size: 0.78rem; font-weight: 700;
-      box-shadow: 0 10px 36px rgba(0,0,0,0.22); white-space: nowrap;
-      animation: chipFloat 5s ease-in-out infinite;
-    }
-    .float-chip span { display: block; font-weight: 500; color: #607880; font-size: 0.7rem; margin-top: 1px; }
-    .chip-a { top: 36px; right: -14px; animation-delay: 0s; }
-    .chip-b { bottom: 110px; right: -22px; animation-delay: -2.2s; }
-    @keyframes chipFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
-    @keyframes fadeIn { 0%{opacity:0} 100%{opacity:1} }
-
-    /* SECTION BASE */
-    .s { padding: clamp(32px,4vw,56px) clamp(18px,5vw,60px); position: relative; overflow: hidden; }
-    .s-inner { max-width: 1180px; margin: 0 auto; position: relative; z-index: 2; }
-    /* Animated teal sweep on section enter */
-    .s::after {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--teal), rgba(0,201,167,0.3), transparent);
-      transform: scaleX(0); transform-origin: left;
-      transition: transform 1.1s cubic-bezier(.22,1,.36,1);
-    }
-    .s.s-in::after { transform: scaleX(1); }
-    .label {
-      display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px;
-      padding: 4px 12px; border-radius: 999px;
-      background: rgba(0,201,167,0.08); border: 1px solid rgba(0,201,167,0.2);
-      color: var(--teal); font-size: 0.73rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
-    }
-    .sh { font-size: clamp(1.9rem,4.2vw,3.6rem); font-weight: 900; margin-bottom: 12px; }
-    .ss { font-size: 1.05rem; color: rgba(255,255,255,0.52); max-width: 540px; line-height: 1.75; }
-    .sh em { font-style: normal; background: linear-gradient(135deg,var(--teal),#6ee7d8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-
-    /* GLASS CARD */
-    .gc {
-      padding: 24px; border-radius: var(--r);
-      background: var(--glass); border: 1px solid var(--glass-b);
-      transition: border-color 220ms, transform 220ms;
-    }
-    .gc:hover { border-color: rgba(0,201,167,0.3); transform: translateY(-3px); }
-    .gc-icon { width: 42px; height: 42px; border-radius: var(--r-sm); display: grid; place-items: center; font-size: 1.1rem; margin-bottom: 14px; background: rgba(0,201,167,0.1); border: 1px solid rgba(0,201,167,0.2); }
-    .gc h3 { font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
-    .gc p  { font-size: 0.84rem; color: rgba(255,255,255,0.52); line-height: 1.7; }
-
-    /* PROBLEM SECTION */
-    .prob-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-    .prob-card { padding: 28px; border-radius: var(--r); background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
-    .prob-q { font-size: 1.05rem; font-weight: 800; margin-bottom: 12px; color: #fff; line-height: 1.3; }
-    .prob-card > p { font-size: 0.86rem; color: rgba(255,255,255,0.5); line-height: 1.72; margin-bottom: 18px; }
-    .prob-arrow { font-size: 1.4rem; color: var(--teal); margin-bottom: 14px; }
-    .prob-sol { font-size: 0.86rem; color: rgba(255,255,255,0.8); line-height: 1.72; padding: 14px; background: rgba(0,201,167,0.07); border-radius: 10px; border: 1px solid rgba(0,201,167,0.18); }
-    .prob-sol .ck { color: var(--teal); margin-right: 6px; font-weight: 800; }
-
-    /* FEATURES SECTION */
-    .feat-bg { background: #ffffff; }
-    .feat-bg .sh, .feat-bg h3 { color: #0d1f2a; }
-    .feat-bg .ss { color: #5a7a88; }
-    .feat-bg .gc { background: #f4fbf9; border-color: #cce8e3; }
-    .feat-bg .gc:hover { border-color: var(--teal-2); transform: translateY(-3px); }
-    .feat-bg .gc h3 { color: #0d1f2a; }
-    .feat-bg .gc p  { color: #5a7a88; }
-    .feat-bg .label { background: rgba(0,168,150,0.07); border-color: rgba(0,168,150,0.22); }
-    .feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 44px; }
-
-    /* VITALS SECTION */
-    .vitals-bg { background: var(--navy-2); }
-    .vitals-grid { display: grid; grid-template-columns: 1fr 480px; gap: 56px; align-items: center; margin-top: 52px; }
-    .vitals-cards { display: grid; gap: 14px; }
-    .vital-card {
-      display: grid; grid-template-columns: 48px 1fr auto; gap: 14px; align-items: center;
-      padding: 16px; border-radius: var(--r); background: var(--glass); border: 1px solid var(--glass-b);
-      transition: border-color 200ms;
-    }
-    .vital-card:hover { border-color: rgba(0,201,167,0.3); }
-    .vital-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; font-size: 1.2rem; background: rgba(0,201,167,0.1); border: 1px solid rgba(0,201,167,0.2); }
-    .vital-name { font-size: 0.9rem; font-weight: 700; }
-    .vital-sub  { font-size: 0.78rem; color: rgba(255,255,255,0.45); margin-top: 2px; }
-    .vital-val  { font-size: 1rem; font-weight: 800; color: var(--teal); }
-    .vitals-phone {
-      background: #08171f; border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 30px; padding: 13px;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
-    }
-    .vscreen { background: #f4f9f8; border-radius: 20px; overflow: hidden; min-height: 480px; }
-    .vbar { background: #fff; padding: 14px 15px; border-bottom: 1px solid #e4eeed; display: flex; align-items: center; gap: 10px; }
-    .vbar img { width: 34px; height: 34px; object-fit: contain; background: #fff; border-radius: 50%; padding: 2px; }
-    .vbar-title { font-size: 0.84rem; font-weight: 700; color: #0a1f2e; }
-    .vbar-sub   { font-size: 0.7rem; color: #5a8090; }
-    .vbar-online { margin-left: auto; padding: 3px 9px; border-radius: 999px; background: rgba(0,201,167,0.1); color: #007a72; font-size: 0.68rem; font-weight: 700; }
-    .vbody { padding: 13px; display: flex; flex-direction: column; gap: 9px; }
-    .vrow {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 11px 13px; background: #fff; border-radius: 10px;
-      border: 1px solid #e4eeed; font-size: 0.8rem;
-    }
-    .vrow-left { display: flex; align-items: center; gap: 10px; }
-    .vrow-icon { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; font-size: 0.9rem; background: rgba(0,201,167,0.08); }
-    .vrow-name { font-weight: 700; color: #0a1f2e; font-size: 0.8rem; }
-    .vrow-time { font-size: 0.68rem; color: #5a8090; }
-    .vrow-val  { font-weight: 800; color: #007a72; font-size: 0.82rem; }
-    .vrow-val.warn { color: #e6a000; }
-    .velara-note { padding: 11px 13px; background: rgba(0,201,167,0.06); border-radius: 10px; border: 1px solid rgba(0,201,167,0.15); font-size: 0.77rem; color: #0a1f2e; line-height: 1.6; }
-    .velara-note strong { color: #007a72; }
-
-    /* HOW IT WORKS */
-    .how-bg { background: var(--navy-3); }
-    .steps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 44px; }
-    .step-card {
-      padding: 30px; background: var(--glass); border: 1px solid var(--glass-b);
-      position: relative; transition: background 200ms;
-    }
-    .step-card:first-child { border-radius: var(--r) 0 0 var(--r); }
-    .step-card:last-child  { border-radius: 0 var(--r) var(--r) 0; }
-    .step-card:hover { background: rgba(0,201,167,0.06); }
-    .step-n { font-size: 3.2rem; font-weight: 900; line-height: 1; margin-bottom: 14px; background: linear-gradient(135deg,var(--teal),rgba(0,201,167,0.18)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    .step-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 9px; }
-    .step-card p  { font-size: 0.85rem; color: rgba(255,255,255,0.52); line-height: 1.7; }
-    .step-tag { display: inline-flex; align-items: center; gap: 5px; margin-top: 12px; padding: 4px 11px; border-radius: 999px; background: rgba(0,201,167,0.08); border: 1px solid rgba(0,201,167,0.18); color: var(--teal); font-size: 0.73rem; font-weight: 700; }
-    .step-divider { position: absolute; right: -1px; top: 50%; height: 50%; border-right: 1px dashed rgba(0,201,167,0.2); transform: translateY(-50%); }
-
-    /* DEMO */
-    .demo-bg { background: var(--navy-2); }
-    .demo-grid { display: grid; grid-template-columns: 1fr 360px; gap: 52px; align-items: start; margin-top: 48px; }
-    .demo-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 22px; }
-    .dtab { padding: 7px 15px; border-radius: 999px; background: transparent; border: 1px solid rgba(255,255,255,0.11); color: rgba(255,255,255,0.48); font-weight: 700; font-size: 0.8rem; transition: all 140ms; }
-    .dtab.on { background: rgba(0,201,167,0.12); border-color: rgba(0,201,167,0.38); color: var(--teal); }
-    .dpanel { display: none; animation: panelIn 250ms ease; }
-    .dpanel.on { display: block; }
-    @keyframes panelIn { 0%{opacity:0;transform:translateY(7px)} 100%{opacity:1;transform:translateY(0)} }
-    .dmsg { padding: 20px; border-radius: var(--r); background: var(--glass); border: 1px solid var(--glass-b); margin-bottom: 13px; }
-    .dmsg-hd { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-    .dmsg-av { width: 32px; height: 32px; object-fit: contain; border-radius: 50%; background: #ffffff; padding: 3px; }
-    .dmsg-name { font-size: 0.8rem; font-weight: 700; }
-    .dmsg-role { font-size: 0.7rem; color: var(--teal); font-weight: 600; }
-    .dmsg p { font-size: 0.88rem; color: rgba(255,255,255,0.78); line-height: 1.72; }
-    .dbtns { display: flex; gap: 8px; flex-wrap: wrap; }
-    .dbtn { padding: 8px 15px; border-radius: 999px; background: rgba(0,201,167,0.1); border: 1px solid rgba(0,201,167,0.22); color: var(--teal); font-size: 0.79rem; font-weight: 700; transition: background 140ms; }
-    .dbtn:hover { background: rgba(0,201,167,0.2); }
-    .dbtn.p { background: linear-gradient(135deg,var(--teal),var(--teal-2)); color: var(--navy); border-color: transparent; }
-    .demo-phone { background: #07161e; border: 1px solid rgba(255,255,255,0.09); border-radius: 30px; padding: 12px; box-shadow: 0 36px 72px rgba(0,0,0,0.55); }
-    .dscreen { background: #f4f9f8; border-radius: 20px; overflow: hidden; }
-    .dbar { background: #fff; padding: 12px 14px; border-bottom: 1px solid #e4eeed; display: flex; align-items: center; gap: 9px; }
-    .dbar img { width: 32px; height: 32px; object-fit: contain; background: #fff; border-radius: 50%; padding: 2px; }
-    .dbar-t { font-size: 0.82rem; font-weight: 700; color: #0a1f2e; }
-    .dbar-s { font-size: 0.68rem; color: #5a8090; }
-    .dbar-st { margin-left: auto; padding: 3px 8px; border-radius: 999px; background: rgba(0,201,167,0.1); color: #007a72; font-size: 0.67rem; font-weight: 700; }
-    .dbody { padding: 12px; display: flex; flex-direction: column; gap: 9px; }
-    .drow { display: grid; grid-template-columns: 38px 1fr auto; gap: 9px; align-items: center; padding: 10px; background: #fff; border-radius: 9px; border: 1px solid #e4eeed; }
-    .dtime { width: 38px; height: 38px; border-radius: 50%; background: rgba(0,201,167,0.08); display: grid; place-items: center; font-size: 0.67rem; font-weight: 800; color: #007a72; }
-    .dname { font-size: 0.78rem; font-weight: 700; color: #0a1f2e; }
-    .dsub  { font-size: 0.66rem; color: #5a8090; }
-    .dbadge { padding: 3px 9px; border-radius: 999px; font-size: 0.67rem; font-weight: 800; white-space: nowrap; }
-    .b-tk { background: rgba(0,201,167,0.1); color: #007a72; }
-    .b-du { background: rgba(255,184,48,0.1); color: #e6a000; }
-    .b-up { background: rgba(255,255,255,0.06); color: #5a8090; border: 1px solid #e4eeed; }
-    .dnote { padding: 10px 12px; background: rgba(0,201,167,0.06); border-radius: 9px; border: 1px solid rgba(0,201,167,0.14); font-size: 0.75rem; color: #0a1f2e; line-height: 1.6; }
-    .dnote strong { color: #007a72; }
-
-    /* PRICING */
-    .pricing-bg { background: var(--navy-3); }
-    .pricing-toggle { display: flex; justify-content: center; gap: 0; margin: 0 auto 40px; }
-    .p-curr { padding: 8px 22px; font-weight: 700; font-size: 0.85rem; color: rgba(255,255,255,0.45); background: var(--glass); border: 1px solid var(--glass-b); transition: all 150ms; }
-    .p-curr:first-child { border-radius: var(--r) 0 0 var(--r); }
-    .p-curr:last-child  { border-radius: 0 var(--r) var(--r) 0; }
-    .p-curr.on { background: rgba(0,201,167,0.15); border-color: rgba(0,201,167,0.4); color: var(--teal); }
-    .pricing-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; max-width: 900px; margin: 0 auto; }
-    .pc {
-      padding: 28px; border-radius: var(--r);
-      background: var(--glass); border: 1px solid var(--glass-b);
-      position: relative; transition: transform 200ms, border-color 200ms;
-    }
-    .pc:hover { transform: translateY(-4px); border-color: rgba(0,201,167,0.3); }
-    .pc.featured { background: #fff; color: var(--ink); border-color: #fff; box-shadow: 0 24px 70px rgba(0,0,0,0.4); }
-    .pc.featured p, .pc.featured .pc-sub { color: #5a8090; }
-    .pc-ribbon { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); padding: 3px 14px; border-radius: 999px; background: linear-gradient(135deg,var(--teal),var(--teal-2)); color: var(--navy); font-size: 0.68rem; font-weight: 800; white-space: nowrap; letter-spacing: 0.04em; text-transform: uppercase; }
-    .pc-plan { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.5; margin-bottom: 6px; }
-    .pc-price { font-size: 2.6rem; font-weight: 900; line-height: 1; margin-bottom: 2px; }
-    .pc-price sup { font-size: 1.1rem; font-weight: 700; vertical-align: top; margin-top: 8px; }
-    .pc-price sub { font-size: 0.9rem; font-weight: 500; opacity: 0.6; }
-    .pc-sub { font-size: 0.78rem; color: rgba(255,255,255,0.45); margin-bottom: 20px; }
-    .pc-features { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
-    .pc-features li { font-size: 0.84rem; display: flex; gap: 8px; align-items: flex-start; color: rgba(255,255,255,0.7); }
-    .pc.featured .pc-features li { color: var(--ink); }
-    .pc-features .ck { color: var(--teal); flex-shrink: 0; font-weight: 800; }
-    .pc-btn { width: 100%; padding: 13px; border-radius: var(--r-sm); font-weight: 800; font-size: 0.88rem; background: transparent; border: 1.5px solid rgba(255,255,255,0.2); color: #fff; transition: all 150ms; }
-    .pc-btn:hover { border-color: var(--teal); color: var(--teal); }
-    .pc.featured .pc-btn { background: linear-gradient(135deg,var(--teal),var(--teal-2)); border-color: transparent; color: var(--navy); box-shadow: 0 0 28px rgba(0,201,167,0.3); }
-
-    /* TRUST */
-    .trust-bg { background: #f5fafa; }
-    .trust-bg .sh { color: #0d1f2a; }
-    .trust-bg .ss { color: #5a7a88; }
-    .trust-bg .label { background: rgba(0,168,150,0.07); border-color: rgba(0,168,150,0.22); }
-    .trust-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 52px; border: 1px solid #d2e8e4; border-radius: var(--r); overflow: hidden; }
-    .tc { padding: 32px 28px; background: #ffffff; border-right: 1px solid #d2e8e4; border-bottom: 1px solid #d2e8e4; transition: background 180ms; }
-    .tc:nth-child(3n) { border-right: none; }
-    .tc:nth-child(n+4) { border-bottom: none; }
-    .tc:hover { background: #f0f9f7; }
-    .tc-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 16px; background: rgba(0,168,150,0.09); color: var(--teal-2); }
-    .tc-icon svg { width: 22px; height: 22px; flex-shrink: 0; }
-    .tc h3 { font-size: 0.97rem; font-weight: 800; margin-bottom: 8px; color: #0d1f2a; }
-    .tc p  { font-size: 0.83rem; color: #5a7a88; line-height: 1.72; }
-
-    /* STATS */
-    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; margin-top: 44px; }
-    .scard { padding: 26px 22px; text-align: center; background: var(--glass); border: 1px solid var(--glass-b); transition: background 180ms; }
-    .scard:first-child { border-radius: var(--r) 0 0 var(--r); }
-    .scard:last-child  { border-radius: 0 var(--r) var(--r) 0; }
-    .scard:hover { background: rgba(0,201,167,0.06); }
-    .snum { font-size: clamp(2rem,4vw,3.2rem); font-weight: 900; background: linear-gradient(135deg,var(--teal),#6ee7d8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height: 1; margin-bottom: 7px; }
-    .slabel { font-size: 0.82rem; color: rgba(255,255,255,0.48); font-weight: 600; }
-
-    /* FOUNDING CTA */
-    .cta-bg {
-      background: radial-gradient(ellipse at 50% 0%, rgba(0,201,167,0.18) 0%, transparent 56%),
-                  radial-gradient(ellipse at 50% 100%, rgba(0,168,150,0.1) 0%, transparent 52%),
-                  var(--navy-2);
+      position: relative; overflow: hidden;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 120px 24px 80px;
       text-align: center;
     }
-    .cta-elara-wrap { display: flex; justify-content: center; margin: 0 auto 22px; }
-    .cta-bg h2 { font-size: clamp(2.1rem,4.8vw,4rem); font-weight: 900; margin-bottom: 14px; }
-    .cta-bg .csub { font-size: 1.05rem; color: rgba(255,255,255,0.58); max-width: 510px; margin: 0 auto 34px; line-height: 1.75; }
-    .cta-form { max-width: 430px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
-    .cta-form input {
-      width: 100%; min-height: 50px; padding: 0 17px;
-      background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.13);
-      border-radius: var(--r-sm); color: #fff; font: inherit; font-size: 0.95rem;
-      outline: none; transition: border-color 150ms;
+    .hero-glow {
+      position: absolute; top: -20%; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 600px; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(2,195,154,0.18) 0%, transparent 70%);
     }
-    .cta-form input::placeholder { color: rgba(255,255,255,0.32); }
-    .cta-form input:focus { border-color: var(--teal); }
-    .cta-main-btn {
-      width: 100%; min-height: 54px;
-      background: linear-gradient(135deg,var(--teal),var(--teal-2));
-      color: var(--navy); font-weight: 900; font-size: 1.04rem;
-      border-radius: var(--r-sm); box-shadow: 0 0 42px rgba(0,201,167,0.38);
-      transition: transform 150ms, box-shadow 150ms;
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0.04;
+      background-image:
+        linear-gradient(rgba(2,195,154,0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(2,195,154,0.5) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 30%, black 0%, transparent 70%);
     }
-    .cta-main-btn:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(0,201,167,0.55); }
-    .cta-spots { margin-top: 16px; font-size: 0.82rem; color: rgba(255,255,255,0.42); }
-    .cta-spots strong { color: var(--teal); }
-    .spots-track { max-width: 280px; margin: 10px auto 0; height: 5px; background: rgba(255,255,255,0.07); border-radius: 999px; overflow: hidden; }
-    .spots-fill { height: 100%; background: linear-gradient(90deg,var(--teal),#6ee7d8); border-radius: 999px; }
+    .hero-content { position: relative; z-index: 1; max-width: 780px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px 6px 8px; border-radius: 100px;
+      background: rgba(2,195,154,0.1); border: 1px solid rgba(2,195,154,0.25);
+      font-size: 0.8rem; font-weight: 600; color: var(--teal);
+      margin-bottom: 28px; letter-spacing: 0.02em;
+    }
+    .hero-badge-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--teal);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { box-shadow: 0 0 0 0 rgba(2,195,154,0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(2,195,154,0); }
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.0;
+      margin-bottom: 22px;
+      color: var(--ink);
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--teal), #6EE7D8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--ink-m);
+      max-width: 540px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+      font-weight: 400;
+    }
 
-    /* FOOTER */
-    .footer { background: var(--navy); border-top: 1px solid var(--line); padding: 36px clamp(18px,5vw,60px) 28px; }
-    .footer-inner { max-width: 1180px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; }
-    .flogo { display: flex; align-items: center; gap: 8px; }
-    .flogo img { width: 26px; height: 26px; object-fit: contain; filter: drop-shadow(0 0 5px rgba(0,201,167,0.4)); }
-    .flogo span { font-weight: 800; font-size: 0.95rem; background: linear-gradient(135deg,var(--teal),#6ee7d8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    .flinks { display: flex; gap: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.38); }
-    .flinks a:hover { color: var(--teal); }
-    .fcopy { font-size: 0.76rem; color: rgba(255,255,255,0.28); }
+    /* Email form */
+    .hero-form {
+      display: flex; gap: 10px; max-width: 440px; margin: 0 auto 14px;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .hero-input {
+      flex: 1; min-width: 220px;
+      padding: 14px 18px; border-radius: 100px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line-2);
+      color: var(--ink); font-size: 0.95rem; font-family: 'DM Sans', sans-serif;
+      transition: border-color 200ms, background 200ms;
+      outline: none;
+    }
+    .hero-input::placeholder { color: var(--ink-s); }
+    .hero-input:focus { border-color: rgba(2,195,154,0.5); background: rgba(2,195,154,0.06); }
+    .hero-btn {
+      padding: 14px 26px; border-radius: 100px;
+      background: var(--teal); color: #021A12;
+      font-size: 0.95rem; font-weight: 700;
+      transition: transform 150ms, box-shadow 150ms, background 150ms;
+      white-space: nowrap;
+    }
+    .hero-btn:hover { background: #03D9A9; transform: translateY(-2px); box-shadow: 0 0 40px var(--teal-glow); }
+    .hero-trust {
+      font-size: 0.78rem; color: var(--ink-s); margin-bottom: 52px;
+      display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
+    }
+    .hero-trust span { display: flex; align-items: center; gap: 5px; }
+    .hero-trust-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-s); }
 
-    /* COMPANION */
-    .companion {
-      position: fixed; right: 18px; bottom: 18px; z-index: 90; width: 155px;
-      opacity: 0; transform: translateY(18px);
-      transition: opacity 380ms ease, transform 380ms cubic-bezier(.2,.8,.2,1);
-      pointer-events: none;
+    /* Social proof count */
+    .hero-social {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-bottom: 52px; font-size: 0.85rem; color: var(--ink-m);
     }
-    .companion.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
-    .comp-elara { margin-left: auto; }
-    .comp-bubble {
-      margin-top: -6px; padding: 9px 11px; border-radius: 12px;
-      background: rgba(255,255,255,0.97); color: var(--ink);
-      box-shadow: 0 14px 44px rgba(0,0,0,0.28); font-size: 0.75rem; line-height: 1.55;
+    .hero-avatars { display: flex; }
+    .hero-avatars span {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 2px solid var(--canvas);
+      background: var(--s3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700;
+      margin-left: -8px; color: var(--teal);
     }
-    .comp-bubble::before { content: ''; position: absolute; right: 24px; margin-top: -18px; border: 7px solid transparent; border-bottom-color: rgba(255,255,255,0.97); }
-    .comp-bubble strong { display: block; color: #007a72; margin-bottom: 2px; font-size: 0.77rem; }
+    .hero-avatars span:first-child { margin-left: 0; }
 
-    /* REVEAL */
-    .r0 {
-      opacity:0; transform:translateY(36px) scale(0.96); filter:blur(5px);
-      transition:opacity 700ms cubic-bezier(.22,1,.36,1), transform 700ms cubic-bezier(.22,1,.36,1), filter 600ms ease;
+    /* Bot hero visual */
+    .hero-visual {
+      position: relative; margin: 0 auto;
+      width: 280px; height: 280px;
     }
-    .r0.in { opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
-    .rl {
-      opacity:0; transform:translateX(-44px); filter:blur(4px);
-      transition:opacity 680ms cubic-bezier(.22,1,.36,1), transform 680ms cubic-bezier(.22,1,.36,1), filter 580ms ease;
+    .hero-bot-wrap {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      animation: float-hero 3.5s ease-in-out infinite;
     }
-    .rl.in { opacity:1; transform:translateX(0); filter:blur(0); }
-    .rr {
-      opacity:0; transform:translateX(44px); filter:blur(4px);
-      transition:opacity 680ms cubic-bezier(.22,1,.36,1), transform 680ms cubic-bezier(.22,1,.36,1), filter 580ms ease;
+    @keyframes float-hero {
+      0%,100% { transform: translate(-50%,-50%) translateY(0); }
+      50% { transform: translate(-50%,-50%) translateY(-14px); }
     }
-    .rr.in { opacity:1; transform:translateX(0); filter:blur(0); }
+    .hero-ring {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 240px; height: 240px; border-radius: 50%;
+      border: 1px solid rgba(2,195,154,0.15);
+      animation: ring-spin 20s linear infinite;
+    }
+    .hero-ring-2 {
+      width: 300px; height: 300px;
+      border: 1px solid rgba(2,195,154,0.07);
+      animation-duration: 32s; animation-direction: reverse;
+    }
+    @keyframes ring-spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+    .hero-ring::before {
+      content: ''; position: absolute; top: -4px; left: 50%; transform: translateX(-50%);
+      width: 8px; height: 8px; border-radius: 50%; background: var(--teal);
+      box-shadow: 0 0 12px var(--teal);
+    }
+    .hero-bot-img {
+      width: 140px; height: 140px; object-fit: contain;
+      filter: drop-shadow(0 8px 32px rgba(2,195,154,0.4));
+    }
 
-    /* Stagger grid children */
-    .feat-grid .gc:nth-child(1),.trust-grid .tc:nth-child(1),.pricing-cards .pc:nth-child(1) { transition-delay:0ms; }
-    .feat-grid .gc:nth-child(2),.trust-grid .tc:nth-child(2),.pricing-cards .pc:nth-child(2) { transition-delay:90ms; }
-    .feat-grid .gc:nth-child(3),.trust-grid .tc:nth-child(3),.pricing-cards .pc:nth-child(3) { transition-delay:180ms; }
-    .feat-grid .gc:nth-child(4),.trust-grid .tc:nth-child(4) { transition-delay:270ms; }
-    .feat-grid .gc:nth-child(5),.trust-grid .tc:nth-child(5) { transition-delay:360ms; }
-    .feat-grid .gc:nth-child(6),.trust-grid .tc:nth-child(6) { transition-delay:450ms; }
-    .steps-grid .step-card:nth-child(1) { transition-delay:0ms; }
-    .steps-grid .step-card:nth-child(2) { transition-delay:120ms; }
-    .steps-grid .step-card:nth-child(3) { transition-delay:240ms; }
-    .stats-row .scard:nth-child(1) { transition-delay:0ms; }
-    .stats-row .scard:nth-child(2) { transition-delay:100ms; }
-    .stats-row .scard:nth-child(3) { transition-delay:200ms; }
-    .stats-row .scard:nth-child(4) { transition-delay:300ms; }
-    .vitals-cards .vital-card:nth-child(1) { transition-delay:0ms; }
-    .vitals-cards .vital-card:nth-child(2) { transition-delay:110ms; }
-    .vitals-cards .vital-card:nth-child(3) { transition-delay:220ms; }
-
-    /* Stat number pop on reveal */
-    @keyframes numPop {
-      0%   { transform: scale(0.6); opacity:0; filter:blur(8px); }
-      65%  { transform: scale(1.12); opacity:1; filter:blur(0); }
-      100% { transform: scale(1); }
+    /* ─── STATS ──────────────────────────────────────────────────── */
+    .stats {
+      display: flex; align-items: stretch; justify-content: center;
+      gap: 0; max-width: 700px; margin: 0 auto;
+      background: var(--s1); border: 1px solid var(--line);
+      border-radius: var(--r-lg); overflow: hidden;
     }
-    .snum.popped { animation: numPop 620ms cubic-bezier(.34,1.4,.64,1) both; }
-
-    /* APP SCREENSHOTS */
-    .screens-row { display: flex; gap: 28px; justify-content: center; align-items: flex-start; flex-wrap: wrap; }
-    .phone-frame {
-      width: 220px; flex-shrink: 0;
-      background: #1a1a2e; border-radius: 34px;
-      padding: 10px; box-shadow: 0 28px 60px rgba(0,0,0,0.22), 0 4px 16px rgba(0,0,0,0.12);
-      border: 1.5px solid rgba(255,255,255,0.1);
-      transition: transform 260ms cubic-bezier(.22,1,.36,1);
+    .stat {
+      flex: 1; padding: 24px 16px; text-align: center;
+      border-right: 1px solid var(--line);
     }
-    .phone-frame:hover { transform: translateY(-8px); }
-    .phone-frame:nth-child(2) { margin-top: 28px; }
-    .pf-notch { width: 60px; height: 18px; background: #1a1a2e; border-radius: 0 0 12px 12px; margin: 0 auto 6px; }
-    .pf-screen { background: #f4f9f8; border-radius: 24px; overflow: hidden; min-height: 360px; }
-    .pf-bar { background: #fff; padding: 12px 13px; border-bottom: 1px solid #e8f0ef; display: flex; align-items: center; justify-content: space-between; }
-    .pf-bar-left { display: flex; align-items: center; gap: 9px; }
-    .pf-av { width: 32px; height: 32px; border-radius: 50%; background: rgba(0,201,167,0.1); display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .pf-title { font-size: 0.78rem; font-weight: 800; color: #0a1f2e; }
-    .pf-sub { font-size: 0.62rem; color: #5a8090; margin-top: 1px; }
-    .pf-streak { padding: 3px 9px; border-radius: 999px; background: rgba(0,201,167,0.1); color: #007a72; font-size: 0.65rem; font-weight: 800; }
-    .pf-body { padding: 10px; display: flex; flex-direction: column; gap: 7px; }
-    .pf-med { display: flex; align-items: center; gap: 9px; padding: 9px 10px; background: #fff; border-radius: 10px; border: 1px solid #e8f0ef; }
-    .pf-med.taken { border-left: 3px solid #02C39A; }
-    .pf-med.due { border-left: 3px solid #FFB830; }
-    .pf-med.upcoming { border-left: 3px solid #e4eeed; }
-    .pf-time { font-size: 0.6rem; font-weight: 800; color: #5a8090; width: 26px; flex-shrink: 0; text-align: center; }
-    .pf-med-info { flex: 1; min-width: 0; }
-    .pf-med-name { font-size: 0.72rem; font-weight: 700; color: #0a1f2e; }
-    .pf-med-note { font-size: 0.6rem; color: #5a8090; margin-top: 1px; }
-    .pf-tick { font-size: 0.75rem; color: #02C39A; font-weight: 900; }
-    .pf-due-dot { width: 8px; height: 8px; border-radius: 50%; background: #FFB830; flex-shrink: 0; }
-    .pf-elara-msg { display: flex; align-items: flex-start; gap: 7px; padding: 9px 10px; background: rgba(0,201,167,0.07); border-radius: 10px; border: 1px solid rgba(0,201,167,0.15); font-size: 0.65rem; color: #0a1f2e; line-height: 1.55; }
-    .pf-elara-msg strong { color: #007a72; }
-    /* vitals */
-    .pf-vital-card { background: #fff; border-radius: 10px; padding: 10px; border: 1px solid #e8f0ef; }
-    .pf-vital-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.67rem; font-weight: 700; color: #0a1f2e; }
-    .pf-vital-val { font-weight: 900; font-size: 0.72rem; }
-    .pf-vital-val.good { color: #02C39A; }
-    .pf-vital-val.warn { color: #e6a000; }
-    .pf-vital-note { font-size: 0.6rem; color: #5a8090; margin-top: 5px; }
-    .pf-sparkline { height: 28px; margin: 4px 0; }
-    .pf-bar-chart { display: flex; align-items: flex-end; gap: 2px; height: 100%; }
-    .pf-bar-chart > div { flex: 1; background: #d4eee9; border-radius: 2px 2px 0 0; }
-    /* report */
-    .pf-report-stat-row { display: flex; gap: 4px; margin-bottom: 8px; }
-    .pf-report-stat { flex: 1; background: #fff; border-radius: 9px; padding: 8px 6px; text-align: center; border: 1px solid #e8f0ef; }
-    .pf-report-num { font-size: 1rem; font-weight: 900; color: #02C39A; line-height: 1; }
-    .pf-report-lbl { font-size: 0.56rem; color: #5a8090; margin-top: 2px; }
-    .pf-report-row { display: flex; align-items: center; gap: 6px; font-size: 0.6rem; color: #0a1f2e; font-weight: 600; padding: 5px 0; }
-    .pf-report-bar { flex: 1; height: 5px; background: #e4eeed; border-radius: 999px; overflow: hidden; }
-    .pf-report-bar > div { height: 100%; background: linear-gradient(90deg, #02C39A, #00A896); border-radius: 999px; }
-    .pf-report-pct { font-size: 0.6rem; font-weight: 800; color: #02C39A; width: 26px; text-align: right; }
-    .pf-send-btn { width: 100%; margin-top: 8px; padding: 9px; background: linear-gradient(135deg, #02C39A, #028090); color: #fff; font-size: 0.68rem; font-weight: 800; border-radius: 8px; border: none; cursor: pointer; }
-    .pf-label { text-align: center; margin-top: 12px; font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.45); letter-spacing: 0.03em; }
-
-    /* RESPONSIVE */
-    @media (max-width:1024px) {
-      .nav-links { display: none; }
-      .hero-inner { grid-template-columns:1fr; text-align:center; }
-      .hero-stage { order:-1; }
-      .hero-elara { width:240px; } .elara-ring { width:240px; height:240px; }
-      .speech-bubble,.float-chip { display:none; }
-      .trust-row { justify-content:center; }
-      .hero-btns { justify-content:center; }
-      .feat-grid,.steps-grid,.prob-grid { grid-template-columns:1fr; }
-      .step-card { border-radius:var(--r) !important; }
-      .vitals-grid,.demo-grid { grid-template-columns:1fr; }
-      .pricing-cards { grid-template-columns:1fr; max-width:400px; }
-      .trust-grid { grid-template-columns:repeat(2,1fr); }
-      .stats-row { grid-template-columns:repeat(2,1fr); }
-      .scard { border-radius:var(--r) !important; }
-      .companion { display:none; }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 2rem; font-weight: 800; color: var(--ink);
+      letter-spacing: -0.04em; line-height: 1; display: block; margin-bottom: 4px;
     }
-    @media (max-width:640px) {
-      .trust-grid { grid-template-columns:1fr; }
-      .stats-row { grid-template-columns:repeat(2,1fr); }
-      .hero-elara { width:200px; } .elara-ring { width:200px; height:200px; }
-      .curr-toggle { display:none; }
+    .stat-num em { color: var(--teal); font-style: normal; }
+    .stat-label { font-size: 0.78rem; color: var(--ink-s); font-weight: 500; }
+
+    /* ─── SECTION COMMONS ────────────────────────────────────────── */
+    section { padding: 96px 24px; }
+    .section-inner { max-width: 1080px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal);
+      margin-bottom: 14px;
+    }
+    .section-h {
+      font-size: clamp(2rem, 4.5vw, 3.4rem); font-weight: 800;
+      letter-spacing: -0.035em; color: var(--ink);
+      margin-bottom: 14px; line-height: 1.08;
+    }
+    .section-sub {
+      font-size: 1.05rem; color: var(--ink-m); max-width: 520px;
+      line-height: 1.7; margin-bottom: 56px;
+    }
+    .centered { text-align: center; }
+    .centered .section-sub { margin-left: auto; margin-right: auto; }
+
+    /* ─── COUNTDOWN ──────────────────────────────────────────────── */
+    .countdown-section {
+      padding: 56px 24px;
+      background: linear-gradient(180deg, var(--canvas) 0%, var(--s1) 50%, var(--canvas) 100%);
+    }
+    .countdown-inner {
+      max-width: 640px; margin: 0 auto; text-align: center;
+    }
+    .countdown-label { font-size: 0.8rem; font-weight: 600; color: var(--ink-s); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px; }
+    .countdown-blocks { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .cd-block { text-align: center; min-width: 72px; }
+    .cd-num {
+      display: block;
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 3.6rem); font-weight: 800;
+      letter-spacing: -0.04em; line-height: 1;
+      background: linear-gradient(135deg, var(--ink) 0%, var(--teal) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background: var(--s2); border: 1px solid var(--line-2); border-radius: var(--r);
+      padding: 16px 20px;
+      color: var(--ink); -webkit-text-fill-color: var(--ink);
+      min-width: 80px;
+    }
+    .cd-unit { font-size: 0.72rem; font-weight: 600; color: var(--ink-s); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 8px; display: block; }
+    .cd-sep {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 2.4rem; font-weight: 300; color: var(--ink-s);
+      margin-top: -8px; line-height: 1;
+    }
+
+    /* ─── HOW IT WORKS ───────────────────────────────────────────── */
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .step-card {
+      background: var(--s1); border: 1px solid var(--line);
+      border-radius: var(--r-lg); padding: 32px 28px;
+      position: relative; overflow: hidden;
+      transition: border-color 200ms, transform 200ms;
+    }
+    .step-card:hover { border-color: rgba(2,195,154,0.3); transform: translateY(-3px); }
+    .step-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+      opacity: 0; transition: opacity 200ms;
+    }
+    .step-card:hover::before { opacity: 1; }
+    .step-num {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 3.5rem; font-weight: 800; letter-spacing: -0.06em;
+      color: rgba(2,195,154,0.1); line-height: 1; margin-bottom: 12px;
+    }
+    .step-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--teal-dim); border: 1px solid rgba(2,195,154,0.2);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px;
+      font-size: 1.3rem;
+    }
+    .step-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .step-card p { font-size: 0.9rem; color: var(--ink-m); line-height: 1.65; }
+
+    /* ─── FEATURES ───────────────────────────────────────────────── */
+    .feat-section { background: var(--s1); }
+    .feat-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+    }
+    .feat-card {
+      background: var(--canvas); border: 1px solid var(--line);
+      border-radius: var(--r-lg); padding: 28px;
+      transition: border-color 200ms, transform 200ms;
+    }
+    .feat-card:hover { border-color: rgba(2,195,154,0.25); transform: translateY(-2px); }
+    .feat-card.featured {
+      grid-column: span 2;
+      background: linear-gradient(135deg, var(--s2) 0%, rgba(2,195,154,0.06) 100%);
+      border-color: rgba(2,195,154,0.2);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center;
+    }
+    .feat-tag {
+      display: inline-block; padding: 3px 10px; border-radius: 100px;
+      background: rgba(2,195,154,0.1); border: 1px solid rgba(2,195,154,0.2);
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 14px;
+    }
+    .feat-card h3 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .feat-card p { font-size: 0.9rem; color: var(--ink-m); line-height: 1.65; }
+
+    /* Elara chat mockup */
+    .chat-mock {
+      background: var(--s3); border-radius: var(--r); overflow: hidden;
+      border: 1px solid var(--line-2);
+    }
+    .chat-mock-header {
+      background: var(--s4); padding: 12px 16px;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .chat-mock-avatar {
+      width: 32px; height: 32px; border-radius: 50%; overflow: hidden;
+      background: var(--teal-dim); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .chat-mock-avatar img { width: 32px; height: 32px; object-fit: contain; }
+    .chat-mock-name { font-size: 0.85rem; font-weight: 600; }
+    .chat-mock-status { font-size: 0.7rem; color: var(--teal); }
+    .chat-mock-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .chat-bubble {
+      max-width: 85%; padding: 10px 14px; border-radius: 14px;
+      font-size: 0.82rem; line-height: 1.5;
+    }
+    .chat-bubble.elara {
+      background: rgba(2,195,154,0.1); border: 1px solid rgba(2,195,154,0.15);
+      border-bottom-left-radius: 4px; align-self: flex-start;
+    }
+    .chat-bubble.user {
+      background: var(--teal); color: #021A12; font-weight: 500;
+      border-bottom-right-radius: 4px; align-self: flex-end;
+    }
+
+    /* ─── TESTIMONIALS ───────────────────────────────────────────── */
+    .testi-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .testi-card {
+      background: var(--s1); border: 1px solid var(--line);
+      border-radius: var(--r-lg); padding: 28px;
+    }
+    .testi-stars { color: var(--amber); font-size: 0.85rem; margin-bottom: 14px; letter-spacing: 2px; }
+    .testi-text { font-size: 0.9rem; color: var(--ink); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--s3); display: flex; align-items: center;
+      justify-content: center; font-weight: 700; font-size: 0.85rem; color: var(--teal);
+      flex-shrink: 0;
+    }
+    .testi-name { font-size: 0.85rem; font-weight: 600; }
+    .testi-role { font-size: 0.75rem; color: var(--ink-s); }
+
+    /* ─── FOUNDING / CTA SECTION ─────────────────────────────────── */
+    .founding-section {
+      position: relative; overflow: hidden;
+      background: var(--s1); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    }
+    .founding-glow {
+      position: absolute; top: -40%; right: -10%; pointer-events: none;
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse, rgba(2,195,154,0.1) 0%, transparent 65%);
+    }
+    .founding-inner {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+      max-width: 1080px; margin: 0 auto;
+    }
+    .founding-spots-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 100px;
+      background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.25);
+      font-size: 0.78rem; font-weight: 700; color: var(--amber);
+      margin-bottom: 20px; letter-spacing: 0.03em;
+    }
+    .founding-spots-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); animation: pulse-dot 1.5s ease-in-out infinite; }
+    .founding-h {
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+      letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 16px;
+    }
+    .founding-sub { font-size: 1rem; color: var(--ink-m); line-height: 1.7; margin-bottom: 32px; }
+    .founding-perks { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+    .founding-perk {
+      display: flex; align-items: center; gap: 10px; font-size: 0.9rem;
+    }
+    .perk-check {
+      width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+      background: var(--teal-dim); border: 1px solid rgba(2,195,154,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; color: var(--teal);
+    }
+
+    /* Founding form */
+    .founding-form { display: flex; flex-direction: column; gap: 12px; }
+    .founding-input {
+      padding: 15px 20px; border-radius: 100px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--line-2);
+      color: var(--ink); font-size: 0.95rem; font-family: 'DM Sans', sans-serif;
+      transition: border-color 200ms; outline: none;
+    }
+    .founding-input::placeholder { color: var(--ink-s); }
+    .founding-input:focus { border-color: rgba(2,195,154,0.5); }
+    .founding-btn {
+      padding: 16px 28px; border-radius: 100px;
+      background: linear-gradient(135deg, var(--teal), var(--teal-2));
+      color: #021A12; font-size: 1rem; font-weight: 700;
+      transition: transform 150ms, box-shadow 200ms;
+      box-shadow: 0 0 0 0 var(--teal-glow);
+    }
+    .founding-btn:hover { transform: translateY(-2px); box-shadow: 0 0 40px var(--teal-glow); }
+    .founding-note { font-size: 0.75rem; color: var(--ink-s); text-align: center; }
+    .founding-price-card {
+      background: var(--s2); border: 1px solid rgba(2,195,154,0.2);
+      border-radius: var(--r-xl); padding: 36px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .founding-price-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--teal), #6EE7D8, var(--teal));
+    }
+    .price-ribbon {
+      display: inline-block; padding: 4px 14px; border-radius: 100px;
+      background: rgba(2,195,154,0.12); border: 1px solid rgba(2,195,154,0.2);
+      font-size: 0.7rem; font-weight: 700; color: var(--teal);
+      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 20px;
+    }
+    .price-main {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 4.5rem; font-weight: 800; letter-spacing: -0.06em; line-height: 1;
+      color: var(--ink); margin-bottom: 4px;
+    }
+    .price-main sup { font-size: 1.8rem; vertical-align: super; letter-spacing: 0; }
+    .price-main sub { font-size: 1.2rem; font-weight: 400; color: var(--ink-m); vertical-align: baseline; }
+    .price-was { font-size: 0.85rem; color: var(--ink-s); margin-bottom: 24px; }
+    .price-was s { color: var(--coral); }
+    .price-list { display: flex; flex-direction: column; gap: 10px; text-align: left; margin-bottom: 28px; }
+    .price-item { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; }
+    .price-check { color: var(--teal); font-size: 0.8rem; }
+    .spots-bar-wrap { margin-bottom: 8px; }
+    .spots-bar-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--ink-s); margin-bottom: 6px; }
+    .spots-bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); overflow: hidden; }
+    .spots-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--teal), #6EE7D8); transition: width 1.5s cubic-bezier(.22,1,.36,1); width: 0; }
+    .spots-note { font-size: 0.75rem; color: var(--ink-s); }
+    .curr-toggle { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; }
+    .curr-btn {
+      padding: 5px 14px; border-radius: 100px; font-size: 0.75rem; font-weight: 600;
+      background: transparent; border: 1px solid var(--line-2); color: var(--ink-s);
+      transition: all 150ms;
+    }
+    .curr-btn.on { background: rgba(2,195,154,0.1); border-color: rgba(2,195,154,0.3); color: var(--teal); }
+
+    /* ─── FAQ ────────────────────────────────────────────────────── */
+    .faq-list { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 0; }
+    .faq-item { border-bottom: 1px solid var(--line); }
+    .faq-q {
+      width: 100%; display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 0; font-size: 0.95rem; font-weight: 600; text-align: left;
+      background: transparent; color: var(--ink); gap: 16px;
+      transition: color 150ms;
+    }
+    .faq-q:hover { color: var(--teal); }
+    .faq-icon { width: 22px; height: 22px; flex-shrink: 0; color: var(--ink-s); transition: transform 200ms, color 150ms; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--teal); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 350ms cubic-bezier(.22,1,.36,1), padding 200ms; }
+    .faq-item.open .faq-a { max-height: 300px; padding-bottom: 20px; }
+    .faq-a p { font-size: 0.9rem; color: var(--ink-m); line-height: 1.7; }
+
+    /* ─── FOOTER ─────────────────────────────────────────────────── */
+    .footer {
+      padding: 56px 24px 32px; border-top: 1px solid var(--line);
+    }
+    .footer-inner {
+      max-width: 1080px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 32px; flex-wrap: wrap;
+    }
+    .flogo { display: flex; align-items: center; gap: 10px; }
+    .flogo img { height: 32px; width: auto; object-fit: contain; }
+    .footer-tagline { font-size: 0.82rem; color: var(--ink-s); margin-top: 8px; max-width: 200px; }
+    .footer-links { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+    .footer-links a { font-size: 0.82rem; color: var(--ink-s); transition: color 150ms; }
+    .footer-links a:hover { color: var(--teal); }
+    .footer-copy { font-size: 0.75rem; color: var(--ink-s); margin-top: 40px; text-align: center; }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────────────── */
+    .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 650ms cubic-bezier(.22,1,.36,1), transform 650ms cubic-bezier(.22,1,.36,1); }
+    .fade-up.in { opacity: 1; transform: translateY(0); }
+    .fade-up-d1 { transition-delay: 80ms; }
+    .fade-up-d2 { transition-delay: 160ms; }
+    .fade-up-d3 { transition-delay: 240ms; }
+    .fade-up-d4 { transition-delay: 320ms; }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────────── */
+    @media(max-width:860px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .feat-grid { grid-template-columns: 1fr; }
+      .feat-card.featured { grid-column: 1; grid-template-columns: 1fr; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .founding-inner { grid-template-columns: 1fr; }
+    }
+    @media(max-width:640px) {
+      section { padding: 64px 20px; }
+      .hero { padding: 100px 20px 64px; }
+      .stats { flex-direction: column; }
+      .stat { border-right: none; border-bottom: 1px solid var(--line); }
+      .stat:last-child { border-bottom: none; }
     }
   </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
-  Pre-Launch Sale LIVE &nbsp;·&nbsp; App launches May 15 &nbsp;·&nbsp;
-  <a href="#founding">Claim your founding spot — $5/mo →</a>
+  <strong>Founding spots available</strong>
+  <span class="sep">·</span>
+  Lock in $5/month — price rises at launch
+  <span class="sep">·</span>
+  <strong>Only <span id="topbarSpots">46</span> left ↓</strong>
 </div>
 
+<!-- NAV -->
 <div class="nav-wrap">
-<nav class="nav" id="mainNav">
-  <a class="logo" href="#">
-    <img src="elara-bot-logo.png" alt="Carely" class="logo-mark" style="width:auto;height:36px;border-radius:0;background:transparent;border:none;">
-  </a>
-  <div class="nav-links">
-    <a href="#features">Features</a>
-    <a href="#vitals">Vitals Tracker</a>
-    <a href="#demo">Live Demo</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#trust">Trust</a>
-  </div>
-  <div class="nav-right">
-    <div class="curr-toggle">
-      <button class="curr-btn on" id="btnUSD" onclick="setCurr('usd')">🇺🇸 USD</button>
-      <button class="curr-btn" id="btnCAD" onclick="setCurr('cad')">🇨🇦 CAD</button>
+  <nav class="nav" id="mainNav">
+    <a class="nav-logo" href="#">
+      <img src="elara-bot-logo.png" alt="Carely">
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="#how-it-works">How it works</a>
+      <a class="nav-link" href="#features">Features</a>
+      <a class="nav-link" href="#faq">FAQ</a>
     </div>
-    <button class="nav-cta" onclick="scrollToSection('founding')">Get Founding Access</button>
-  </div>
-</nav>
+    <button class="nav-cta" onclick="scrollTo('founding')">Get Early Access</button>
+  </nav>
 </div>
 
 <!-- HERO -->
-<section class="hero" id="hero" data-state="waving" data-title="Hi, I am Elara" data-msg="I am here to make sure your family never misses a dose — or a moment. Let me show you around.">
-  <div class="hero-inner">
-    <div class="hero-copy">
-      <div class="eyebrow r0"><span class="live-dot"></span> Elara is ready for your family</div>
-      <h1 class="r0">Meet <em>Elara</em>,<br>your AI med<br>caretaker.</h1>
-      <p class="hero-tag r0">AI Caretaker · Timely Medicine · Better You.</p>
-      <p class="hero-sub r0">Carely reminds your loved one to take their meds, checks in warmly every day, tracks their vitals, and alerts you the moment something important is missed.</p>
-      <div class="hero-btns r0">
-        <button class="btn-main" onclick="scrollToSection('founding')">Claim Founding Access — <span class="curr-val" data-usd="$5/mo" data-cad="CA$7/mo">$5/mo</span></button>
-        <button class="btn-line" onclick="scrollToSection('demo')">See Elara in action</button>
-      </div>
-      <div class="trust-row r0">
-        <span class="trust-pill"><span class="ck">✓</span> 7-day free trial</span>
-        <span class="trust-pill"><span class="ck">✓</span> No credit card to start</span>
-        <span class="trust-pill"><span class="ck">✓</span> No medical advice</span>
-        <span class="trust-pill"><span class="ck">✓</span> PIPEDA &amp; CCPA</span>
-        <span class="trust-pill"><span class="ck">✓</span> Cancel anytime</span>
-      </div>
+<section class="hero" id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge fade-up">
+      <span class="hero-badge-dot"></span>
+      Launching May 2026 · Pre-launch waitlist open
     </div>
 
-    <div class="hero-stage">
-      <div class="hero-glow"></div>
-      <div class="hero-elara" id="heroWrap">
-        <div class="elara-ring">
-          <img src="elara.webp" alt="Elara" onload="elaraBg(this)">
-        </div>
+    <h1 class="fade-up fade-up-d1">
+      Your family's health,<br>
+      <em>looked after.</em>
+    </h1>
+
+    <p class="hero-sub fade-up fade-up-d2">
+      Elara is an AI caretaker that sends medication reminders, checks in daily, and alerts you the moment something's off — so you can stop worrying from a distance.
+    </p>
+
+    <form class="hero-form fade-up fade-up-d3" onsubmit="joinWaitlist(event)">
+      <input class="hero-input" id="heroEmail" type="email" placeholder="Enter your email" autocomplete="email" required>
+      <button class="hero-btn" type="submit">Get Early Access</button>
+    </form>
+
+    <div class="hero-trust fade-up fade-up-d3">
+      <span>✓ Free during beta</span>
+      <span class="hero-trust-dot"></span>
+      <span>✓ No credit card needed</span>
+      <span class="hero-trust-dot"></span>
+      <span>✓ Unsubscribe anytime</span>
+    </div>
+
+    <div class="hero-social fade-up fade-up-d4">
+      <div class="hero-avatars">
+        <span>S</span><span>M</span><span>K</span><span>R</span><span>+</span>
       </div>
-      <div class="speech-bubble">
-        <strong>Hi! I am Elara.</strong>
-        I remind, check in, track vitals, and alert your family. Scroll down and I will show you everything.
-      </div>
-      <div class="float-chip chip-a">87%<span>avg adherence rate</span></div>
-      <div class="float-chip chip-b">6-day streak<span>most common win</span></div>
+      <span><strong id="waitlistCount">847</strong> families already on the list</span>
+    </div>
+  </div>
+
+  <div class="hero-visual fade-up fade-up-d4">
+    <div class="hero-ring"></div>
+    <div class="hero-ring hero-ring-2"></div>
+    <div class="hero-bot-wrap">
+      <img class="hero-bot-img" src="elara-bot.png" alt="Elara AI Caretaker">
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats fade-up" style="margin-top: 56px; width:100%; max-width:640px; position:relative; z-index:1;">
+    <div class="stat">
+      <span class="stat-num" data-count="12000" data-suf="+">0+</span>
+      <span class="stat-label">Doses tracked in beta</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" data-count="98" data-suf="%">0%</span>
+      <span class="stat-label">On-time reminder rate</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" data-count="847" data-suf="">0</span>
+      <span class="stat-label">Families on waitlist</span>
     </div>
   </div>
 </section>
 
-<!-- PROBLEM / SOLUTION -->
-<section class="s" id="problem" style="background:#0c2133;" data-state="thinking" data-title="The real problem" data-msg="I was built to solve this exact feeling.">
-  <div class="s-inner">
-    <div class="r0" style="text-align:center;max-width:620px;margin:0 auto 52px;">
-      <div class="label">The problem we solve</div>
-      <h2 class="sh">The worry that never<br>fully <em>goes away.</em></h2>
+<!-- COUNTDOWN -->
+<div class="countdown-section" id="countdown-section">
+  <div class="countdown-inner">
+    <p class="countdown-label">Launch countdown</p>
+    <div class="countdown-blocks">
+      <div class="cd-block">
+        <span class="cd-num" id="cd-d">00</span>
+        <span class="cd-unit">Days</span>
+      </div>
+      <span class="cd-sep">:</span>
+      <div class="cd-block">
+        <span class="cd-num" id="cd-h">00</span>
+        <span class="cd-unit">Hours</span>
+      </div>
+      <span class="cd-sep">:</span>
+      <div class="cd-block">
+        <span class="cd-num" id="cd-m">00</span>
+        <span class="cd-unit">Minutes</span>
+      </div>
+      <span class="cd-sep">:</span>
+      <div class="cd-block">
+        <span class="cd-num" id="cd-s">00</span>
+        <span class="cd-unit">Seconds</span>
+      </div>
     </div>
-    <div class="prob-grid r0">
-      <div class="prob-card">
-        <div class="prob-q">"Did she take her 8 AM dose?"</div>
-        <p>You're at work. She's home alone. You text — no reply. You won't know until something goes wrong.</p>
-        <div class="prob-arrow">↓</div>
-        <div class="prob-sol"><span class="ck">✓</span> Elara confirms every dose in real-time. You get a quiet notification the moment it's taken.</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="section-inner">
+    <div class="centered">
+      <span class="section-tag fade-up">How it works</span>
+      <h2 class="section-h fade-up fade-up-d1">Set up in 3 minutes.<br>Elara handles the rest.</h2>
+      <p class="section-sub fade-up fade-up-d2">No complex setup. Just add your family member's medications and Elara gets to work.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card fade-up">
+        <div class="step-icon">💊</div>
+        <h3>Add medications</h3>
+        <p>Enter your loved one's medicines, dosages, and schedule. Elara understands all medication types and remembers every detail.</p>
       </div>
-      <div class="prob-card">
-        <div class="prob-q">"The hospital called again."</div>
-        <p>A missed dose became a crisis. It happens more than anyone admits. And it's preventable.</p>
-        <div class="prob-arrow">↓</div>
-        <div class="prob-sol"><span class="ck">✓</span> Elara follows up if there's no response. Caregivers are alerted before a missed dose becomes an emergency.</div>
+      <div class="step-card fade-up fade-up-d1">
+        <div class="step-icon">🤖</div>
+        <h3>Elara checks in daily</h3>
+        <p>Every day, Elara sends a warm check-in — asking how they're feeling, confirming doses were taken, and noting any concerns.</p>
       </div>
-      <div class="prob-card">
-        <div class="prob-q">"I feel like I'm failing them."</div>
-        <p>Caring for someone from a distance is one of the loneliest feelings in the world. You can't be everywhere.</p>
-        <div class="prob-arrow">↓</div>
-        <div class="prob-sol"><span class="ck">✓</span> Elara is there every day — warm check-ins, gentle nudges, and a weekly report so you always know they're okay.</div>
+      <div class="step-card fade-up fade-up-d2">
+        <div class="step-icon">🔔</div>
+        <h3>You get alerted instantly</h3>
+        <p>If a dose is missed, something seems off, or your loved one flags a concern — you're notified immediately, wherever you are.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FEATURES -->
-<section class="s feat-bg" id="features" data-state="presenting" data-title="What I can do" data-msg="Reminders, check-ins, alerts, reports, and now vitals tracking — all in one place.">
-  <div class="s-inner">
-    <div class="r0">
-      <div class="label"><span class="live-dot"></span> What Elara does</div>
-      <h2 class="sh">Everything your family needs.<br><em>Nothing extra to pay for.</em></h2>
-      <p class="ss">Medication reminders, BP tracking, blood sugar logging, weight trends — all included. Because caring for someone should not cost more than it needs to.</p>
+<section class="feat-section" id="features">
+  <div class="section-inner">
+    <div class="centered">
+      <span class="section-tag fade-up">Features</span>
+      <h2 class="section-h fade-up fade-up-d1">Everything a caretaker does,<br>available 24/7.</h2>
+      <p class="section-sub fade-up fade-up-d2">Elara is not a reminder app. She's a full AI caretaker — proactive, caring, and always available.</p>
     </div>
     <div class="feat-grid">
-      <div class="gc r0">
-        <div class="gc-icon">💊</div>
-        <h3>Smart medication reminders</h3>
-        <p>One-tap Taken, Snooze, or Skip. Elara adapts to your loved one's schedule and follows up if there is no response.</p>
-      </div>
-      <div class="gc r0">
-        <div class="gc-icon">🧑‍👩‍👧</div>
-        <h3>Caregiver alerts</h3>
-        <p>The whole family gets notified the moment a dose is missed. No more worrying in silence across cities.</p>
-      </div>
-      <div class="gc r0">
-        <div class="gc-icon">📋</div>
-        <h3>Doctor-ready reports</h3>
-        <p>Weekly adherence summaries, adherence rate, streaks, and patient notes. One tap to email your doctor before an appointment.</p>
-      </div>
-      <div class="gc r0">
-        <div class="gc-icon">❤️</div>
-        <h3>Blood pressure tracking</h3>
-        <p>Log BP readings, track systolic/diastolic trends over time, and get a gentle nudge when readings look off.</p>
-      </div>
-      <div class="gc r0">
-        <div class="gc-icon">🩸</div>
-        <h3>Blood sugar logging</h3>
-        <p>Pre and post-meal glucose entries with trend charts. Ideal for diabetic patients who need a simple daily log.</p>
-      </div>
-      <div class="gc r0">
-        <div class="gc-icon">⚖️</div>
-        <h3>Weight trends</h3>
-        <p>Simple daily or weekly weight logging with a clean chart. Helps track changes during treatment plans.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- VITALS TRACKER -->
-<section class="s vitals-bg" id="vitals" data-state="presenting" data-title="Vitals tracker" data-msg="Other apps charge extra for this. We built it in because your family deserves complete care.">
-  <div class="s-inner">
-    <div class="vitals-grid">
-      <div>
-        <div class="rl">
-          <div class="label">Built in, not bolted on</div>
-          <h2 class="sh">BP. Blood sugar.<br>Weight. <em>All in.</em></h2>
-          <p class="ss" style="margin-bottom:32px;">When someone is managing medications, their vitals matter just as much. So we built it all in — blood pressure, blood sugar, and weight tracking, alongside every reminder and check-in.</p>
+      <!-- Featured: AI chat mockup -->
+      <div class="feat-card featured fade-up">
+        <div>
+          <span class="feat-tag">AI Caretaker</span>
+          <h3>Elara talks to your family — the way a real caretaker would.</h3>
+          <p>Not generic notifications. Real, warm conversations. Elara knows your loved one's name, medications, schedule, and health history. Every message feels personal.</p>
         </div>
-        <div class="vitals-cards rl">
-          <div class="vital-card">
-            <div class="vital-icon">❤️</div>
-            <div><div class="vital-name">Blood pressure</div><div class="vital-sub">Morning reading · May 7</div></div>
-            <div class="vital-val">118/76</div>
-          </div>
-          <div class="vital-card">
-            <div class="vital-icon">🩸</div>
-            <div><div class="vital-name">Blood sugar</div><div class="vital-sub">Post-breakfast · May 7</div></div>
-            <div class="vital-val">6.4 mmol/L</div>
-          </div>
-          <div class="vital-card">
-            <div class="vital-icon">⚖️</div>
-            <div><div class="vital-name">Weight</div><div class="vital-sub">Weekly check-in</div></div>
-            <div class="vital-val">71.2 kg</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="rr">
-        <div class="vitals-phone">
-          <div class="vscreen">
-            <div class="vbar">
+        <div class="chat-mock">
+          <div class="chat-mock-header">
+            <div class="chat-mock-avatar">
               <img src="elara-bot.png" alt="Elara">
-              <div><div class="vbar-title">Elara</div><div class="vbar-sub">Daily vitals + meds</div></div>
-              <div class="vbar-online">Online</div>
             </div>
-            <div class="vbody">
-              <div class="vrow">
-                <div class="vrow-left">
-                  <div class="vrow-icon">💊</div>
-                  <div><div class="vrow-name">Lisinopril 10mg</div><div class="vrow-time">8:00 AM · Taken</div></div>
-                </div>
-                <div class="vrow-val">✓</div>
-              </div>
-              <div class="vrow">
-                <div class="vrow-left">
-                  <div class="vrow-icon">❤️</div>
-                  <div><div class="vrow-name">Blood pressure</div><div class="vrow-time">8:15 AM · Logged</div></div>
-                </div>
-                <div class="vrow-val">118/76</div>
-              </div>
-              <div class="vrow">
-                <div class="vrow-left">
-                  <div class="vrow-icon">🩸</div>
-                  <div><div class="vrow-name">Blood sugar</div><div class="vrow-time">9:30 AM · Post-meal</div></div>
-                </div>
-                <div class="vrow-val warn">7.2 mmol/L</div>
-              </div>
-              <div class="vrow">
-                <div class="vrow-left">
-                  <div class="vrow-icon">⚖️</div>
-                  <div><div class="vrow-name">Weight</div><div class="vrow-time">Weekly check-in</div></div>
-                </div>
-                <div class="vrow-val">71.2 kg</div>
-              </div>
-              <div class="velara-note">
-                <strong>Elara noticed —</strong> Your post-meal blood sugar was slightly elevated today. I will include this in Thursday's report for Dr. Mehta. No action needed right now.
-              </div>
+            <div>
+              <div class="chat-mock-name">Elara</div>
+              <div class="chat-mock-status">● Online · AI Caretaker</div>
             </div>
+          </div>
+          <div class="chat-mock-body">
+            <div class="chat-bubble elara">Good morning! It's 8 AM — your Lisinopril 10mg is due now. How are you feeling today? 💙</div>
+            <div class="chat-bubble user">Feeling good! Just took it.</div>
+            <div class="chat-bubble elara">That's great to hear! I've logged it. Your streak is now 14 days in a row — keep it up! I'll check in again this evening. 🌟</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-card fade-up">
+        <span class="feat-tag">Smart Reminders</span>
+        <h3>Reminders that actually work</h3>
+        <p>Push notifications, SMS, and in-app alerts — timed to when your family member actually responds. Elara learns and adapts.</p>
+      </div>
+
+      <div class="feat-card fade-up fade-up-d1">
+        <span class="feat-tag">Family Alerts</span>
+        <h3>You're notified before it becomes a problem</h3>
+        <p>Missed doses, unusual answers, health concerns — your family gets alerted immediately so you can act fast.</p>
+      </div>
+
+      <div class="feat-card fade-up fade-up-d2">
+        <span class="feat-tag">Health Tracking</span>
+        <h3>BP, blood sugar, weight — all in one place</h3>
+        <p>Log vitals from any device. Elara watches for patterns and flags anything unusual for you or the doctor.</p>
+      </div>
+
+      <div class="feat-card fade-up fade-up-d3">
+        <span class="feat-tag">Doctor Bridge</span>
+        <h3>Share reports with doctors in one tap</h3>
+        <p>Auto-generated health summaries ready for every appointment. No more trying to remember what happened last week.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-inner">
+    <div class="centered">
+      <span class="section-tag fade-up">What beta testers say</span>
+      <h2 class="section-h fade-up fade-up-d1">Real families. Real relief.</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card fade-up">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"My mom has 5 different medications and always forgot which ones she'd taken. Since Elara, I haven't had a single panic call at midnight. It's like having a nurse in her pocket."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">S</div>
+          <div>
+            <div class="testi-name">Sarah M.</div>
+            <div class="testi-role">Long-distance caregiver, Vancouver</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card fade-up fade-up-d1">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"My dad lives alone and didn't want to be a burden. Elara checks in on him every morning so I don't have to call every day. He actually likes talking to her — says she listens."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">R</div>
+          <div>
+            <div class="testi-name">Raj P.</div>
+            <div class="testi-role">Beta tester, Toronto</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card fade-up fade-up-d2">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"I work night shifts. Knowing Elara is watching over my grandmother's medications while I sleep is something I can't put a price on. This product is genuinely needed."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">K</div>
+          <div>
+            <div class="testi-name">Kiran A.</div>
+            <div class="testi-role">Beta tester, Calgary</div>
           </div>
         </div>
       </div>
@@ -839,556 +842,308 @@
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section class="s how-bg" id="how" data-state="thinking" data-title="Simple setup" data-msg="Three steps. Under 3 minutes. Then I handle everything else.">
-  <div class="s-inner">
-    <div class="r0">
-      <div class="label">How it works</div>
-      <h2 class="sh">Set up in <em>3 minutes</em>.<br>Peace of mind that lasts.</h2>
-      <p class="ss">No complex configuration. No learning curve. Elara takes over from the moment you add your first medicine.</p>
-    </div>
-    <div class="steps-grid r0">
-      <div class="step-card">
-        <div class="step-n">01</div>
-        <h3>Add medicines &amp; family</h3>
-        <p>Enter any medication by name, set the schedule, and invite caregivers. Supports any medicine — free text, no database restrictions.</p>
-        <div class="step-tag"><span class="live-dot"></span> Elara confirms the schedule</div>
-        <div class="step-divider"></div>
-      </div>
-      <div class="step-card">
-        <div class="step-n">02</div>
-        <h3>Elara nudges gently</h3>
-        <p>Smart push notification at the right time. If no response in 30 minutes, Elara follows up. If still missed, caregivers are alerted.</p>
-        <div class="step-tag"><span class="live-dot"></span> Escalation on your terms</div>
-        <div class="step-divider"></div>
-      </div>
-      <div class="step-card">
-        <div class="step-n">03</div>
-        <h3>Track, share, improve</h3>
-        <p>Weekly adherence reports, vitals trends, streak tracking, and doctor-ready summaries — all generated automatically.</p>
-        <div class="step-tag"><span class="live-dot"></span> Doctor-ready on demand</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- APP SCREENSHOTS -->
-<section class="s" id="appscreens" style="background:#f5fafa;" data-state="presenting" data-title="See the app" data-msg="This is exactly what your family will see. Clean, simple, warm.">
-  <div class="s-inner">
-    <div class="r0" style="text-align:center;max-width:600px;margin:0 auto 52px;">
-      <div class="label" style="background:rgba(0,168,150,0.07);border-color:rgba(0,168,150,0.22);margin:0 auto 14px;">Inside the app</div>
-      <h2 class="sh" style="color:#0d1f2a;">A glimpse of what<br><em>your family will use.</em></h2>
-      <p style="color:#5a7a88;font-size:1rem;line-height:1.75;margin-top:10px;">No clutter. No confusion. Just Elara, doing her job quietly every single day.</p>
-    </div>
-    <div class="screens-row r0">
-
-      <!-- SCREEN 1: Today's meds -->
-      <div class="phone-frame">
-        <div class="pf-notch"></div>
-        <div class="pf-screen">
-          <div class="pf-bar">
-            <div class="pf-bar-left">
-              <div class="pf-av"><img src="elara.webp" alt="E" style="width:28px;height:28px;object-fit:contain;"></div>
-              <div><div class="pf-title">Today</div><div class="pf-sub">May 7 · 3 meds</div></div>
-            </div>
-            <div class="pf-streak">🔥 6</div>
-          </div>
-          <div class="pf-body">
-            <div class="pf-med taken"><div class="pf-time">8 AM</div><div class="pf-med-info"><div class="pf-med-name">Lisinopril 10mg</div><div class="pf-med-note">Morning · Blood pressure</div></div><div class="pf-tick">✓</div></div>
-            <div class="pf-med due"><div class="pf-time">2 PM</div><div class="pf-med-info"><div class="pf-med-name">Vitamin D3</div><div class="pf-med-note">Afternoon · Due soon</div></div><div class="pf-due-dot"></div></div>
-            <div class="pf-med upcoming"><div class="pf-time">6 PM</div><div class="pf-med-info"><div class="pf-med-name">Metformin 500mg</div><div class="pf-med-note">With dinner</div></div></div>
-            <div class="pf-elara-msg"><img src="elara.webp" alt="E" style="width:22px;height:22px;object-fit:contain;flex-shrink:0;"><span><strong>Elara —</strong> Great morning! 1 of 3 done. BP logged, looking normal.</span></div>
-          </div>
-        </div>
-        <div class="pf-label">Today's schedule</div>
-      </div>
-
-      <!-- SCREEN 2: Vitals -->
-      <div class="phone-frame">
-        <div class="pf-notch"></div>
-        <div class="pf-screen">
-          <div class="pf-bar">
-            <div class="pf-bar-left">
-              <div style="font-size:1.3rem;">❤️</div>
-              <div><div class="pf-title">Vitals</div><div class="pf-sub">Last 7 days</div></div>
-            </div>
-            <div class="pf-streak" style="background:#fff0f0;color:#e05555;">Log</div>
-          </div>
-          <div class="pf-body">
-            <div class="pf-vital-card">
-              <div class="pf-vital-hd"><span>Blood Pressure</span><span class="pf-vital-val good">118/76</span></div>
-              <div class="pf-sparkline"><div class="pf-bar-chart"><div style="height:55%"></div><div style="height:62%"></div><div style="height:58%"></div><div style="height:70%"></div><div style="height:65%"></div><div style="height:72%"></div><div style="height:68%;background:#02C39A;"></div></div></div>
-              <div class="pf-vital-note">Avg 120/78 this week · Normal range</div>
-            </div>
-            <div class="pf-vital-card">
-              <div class="pf-vital-hd"><span>Blood Sugar</span><span class="pf-vital-val warn">6.4 mmol/L</span></div>
-              <div class="pf-sparkline"><div class="pf-bar-chart"><div style="height:60%"></div><div style="height:68%"></div><div style="height:72%"></div><div style="height:65%"></div><div style="height:70%"></div><div style="height:64%"></div><div style="height:63%;background:#e6a000;"></div></div></div>
-              <div class="pf-vital-note">Post-meal · Slightly elevated</div>
-            </div>
-            <div class="pf-vital-card">
-              <div class="pf-vital-hd"><span>Weight</span><span class="pf-vital-val good">71.2 kg</span></div>
-              <div class="pf-vital-note">Stable · Down 0.4kg from last week</div>
-            </div>
-          </div>
-        </div>
-        <div class="pf-label">Vitals tracker</div>
-      </div>
-
-      <!-- SCREEN 3: Weekly report -->
-      <div class="phone-frame">
-        <div class="pf-notch"></div>
-        <div class="pf-screen">
-          <div class="pf-bar">
-            <div class="pf-bar-left">
-              <div style="font-size:1.3rem;">📋</div>
-              <div><div class="pf-title">Weekly Report</div><div class="pf-sub">Apr 30 – May 7</div></div>
-            </div>
-          </div>
-          <div class="pf-body">
-            <div class="pf-report-stat-row">
-              <div class="pf-report-stat"><div class="pf-report-num">87%</div><div class="pf-report-lbl">Adherence</div></div>
-              <div class="pf-report-stat"><div class="pf-report-num">6</div><div class="pf-report-lbl">Day streak</div></div>
-              <div class="pf-report-stat"><div class="pf-report-num">2</div><div class="pf-report-lbl">Missed doses</div></div>
-            </div>
-            <div class="pf-report-row"><span>Lisinopril 10mg</span><div class="pf-report-bar"><div style="width:93%"></div></div><span class="pf-report-pct">93%</span></div>
-            <div class="pf-report-row"><span>Metformin 500mg</span><div class="pf-report-bar"><div style="width:86%"></div></div><span class="pf-report-pct">86%</span></div>
-            <div class="pf-report-row"><span>Vitamin D3</span><div class="pf-report-bar"><div style="width:79%"></div></div><span class="pf-report-pct">79%</span></div>
-            <button class="pf-send-btn">Send to Dr. Mehta →</button>
-          </div>
-        </div>
-        <div class="pf-label">Doctor-ready report</div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- LIVE DEMO -->
-<section class="s demo-bg" id="demo" data-state="excited" data-title="Watch me work" data-msg="Pick a scenario and see exactly what your family will experience.">
-  <div class="s-inner">
-    <div class="r0">
-      <div class="label">Live demo</div>
-      <h2 class="sh">See Elara in <em>real action</em>.</h2>
-      <p class="ss">Real scenarios, real responses. This is exactly what happens inside the app every day.</p>
-    </div>
-    <div class="demo-grid">
+<!-- FOUNDING MEMBER / CTA -->
+<section class="founding-section" id="founding">
+  <div class="founding-glow"></div>
+  <div class="section-inner">
+    <div class="founding-inner">
+      <!-- Left: form -->
       <div>
-        <div class="demo-tabs r0">
-          <button class="dtab on" data-tab="remind">Morning reminder</button>
-          <button class="dtab" data-tab="missed">Missed dose</button>
-          <button class="dtab" data-tab="report">Weekly report</button>
-          <button class="dtab" data-tab="vitals">Vitals check</button>
-          <button class="dtab" data-tab="streak">Streak win</button>
+        <div class="founding-spots-badge fade-up">
+          <span class="founding-spots-dot"></span>
+          Only <span id="spotsLeft">46</span> founding spots remaining
         </div>
-        <div class="dpanel on" data-panel="remind">
-          <div class="dmsg r0"><div class="dmsg-hd"><img class="dmsg-av" src="elara.webp" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>Good morning! It is 8:00 AM and your Lisinopril 10mg is scheduled for right now. How are you feeling today? I am right here if you need me.</p></div>
-          <div class="dbtns r0"><button class="dbtn p">✓ I took it</button><button class="dbtn">⏰ Remind me in 30 min</button><button class="dbtn">✗ Skipping today</button></div>
+        <h2 class="founding-h fade-up fade-up-d1">Be a founding member.<br>Lock in your rate forever.</h2>
+        <p class="founding-sub fade-up fade-up-d2">Founding members get $5/month for their entire first year — even after we raise prices. This offer disappears the moment we launch.</p>
+        <div class="founding-perks fade-up fade-up-d2">
+          <div class="founding-perk"><span class="perk-check">✓</span> Full Elara AI caretaker access</div>
+          <div class="founding-perk"><span class="perk-check">✓</span> Unlimited medications & schedules</div>
+          <div class="founding-perk"><span class="perk-check">✓</span> Family caregiver alerts</div>
+          <div class="founding-perk"><span class="perk-check">✓</span> Health tracking (BP, glucose, weight)</div>
+          <div class="founding-perk"><span class="perk-check">✓</span> $5/month locked for your first year</div>
         </div>
-        <div class="dpanel" data-panel="missed">
-          <div class="dmsg"><div class="dmsg-hd"><img class="dmsg-av" src="elara.webp" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>No worries at all — missing a dose happens. Your evening Metformin was due 2 hours ago. Would you like me to notify Sarah, or would you prefer to handle it yourself?</p></div>
-          <div class="dbtns"><button class="dbtn p">Notify Sarah</button><button class="dbtn">I will handle it</button><button class="dbtn">Mark as skipped</button></div>
-        </div>
-        <div class="dpanel" data-panel="report">
-          <div class="dmsg"><div class="dmsg-hd"><img class="dmsg-av" src="elara.webp" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>Your weekly report is ready. This week: 87% adherence, 2 missed doses, a 6-day streak. BP averaged 120/78 — within normal range. Your appointment with Dr. Mehta is Tuesday — want me to send this over?</p></div>
-          <div class="dbtns"><button class="dbtn p">Send to Dr. Mehta</button><button class="dbtn">Download PDF</button><button class="dbtn">Share with family</button></div>
-        </div>
-        <div class="dpanel" data-panel="vitals">
-          <div class="dmsg"><div class="dmsg-hd"><img class="dmsg-av" src="elara.webp" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>Good morning! Time for your daily vitals. Your BP yesterday was 118/76 — really good. Want to log today's reading? I will add it to your chart and flag anything that looks unusual.</p></div>
-          <div class="dbtns"><button class="dbtn p">Log BP now</button><button class="dbtn">Log blood sugar</button><button class="dbtn">Log weight</button></div>
-        </div>
-        <div class="dpanel" data-panel="streak">
-          <div class="dmsg"><div class="dmsg-hd"><img class="dmsg-av" src="elara.webp" alt="Elara"><div><div class="dmsg-name">Elara</div><div class="dmsg-role">AI Caretaker</div></div></div><p>14 days in a row — every single dose on time. That is genuinely impressive. Your body is noticing, even if the lab results take a few weeks to show it. I am proud of you. Keep going.</p></div>
-          <div class="dbtns"><button class="dbtn p">Share with family 🎉</button><button class="dbtn">Keep going 💪</button></div>
+        <div class="founding-form fade-up fade-up-d3">
+          <input class="founding-input" id="foundingEmail" type="email" placeholder="Your email address" autocomplete="email">
+          <button class="founding-btn" onclick="claimSpot()">
+            Claim My Founding Spot — <span class="curr-val" data-usd="$5/month">$5/month</span>
+          </button>
+          <p class="founding-note">🔒 Secure checkout · Cancel anytime · No hidden fees</p>
         </div>
       </div>
 
-      <div class="demo-phone rr">
-        <div class="dscreen">
-          <div class="dbar"><img src="elara.webp" alt="Elara" loading="lazy"><div><div class="dbar-t">Elara</div><div class="dbar-s">Today's care</div></div><div class="dbar-st">Online</div></div>
-          <div class="dbody">
-            <div class="drow"><div class="dtime">8A</div><div><div class="dname">Lisinopril 10mg</div><div class="dsub">Morning dose</div></div><div class="dbadge b-tk">Taken</div></div>
-            <div class="drow"><div class="dtime">2P</div><div><div class="dname">Vitamin D3</div><div class="dsub">Afternoon</div></div><div class="dbadge b-du">Due soon</div></div>
-            <div class="drow"><div class="dtime">6P</div><div><div class="dname">Metformin 500mg</div><div class="dsub">With dinner</div></div><div class="dbadge b-up">Upcoming</div></div>
-            <div class="drow"><div class="dtime">❤️</div><div><div class="dname">Blood pressure</div><div class="dsub">Morning log</div></div><div class="dbadge b-tk">118/76</div></div>
-            <div class="dnote"><strong>Elara —</strong> 6-day streak! Tonight's reminder will be gentle. All vitals looking normal today.</div>
+      <!-- Right: price card -->
+      <div class="founding-price-card fade-up fade-up-d1">
+        <div class="curr-toggle">
+          <button class="curr-btn on" data-curr="usd" id="btnUSD" onclick="setCurr('usd')">USD</button>
+          <button class="curr-btn" data-curr="cad" id="btnCAD" onclick="setCurr('cad')">CAD</button>
+          <button class="curr-btn" data-curr="gbp" onclick="setCurr('gbp')">GBP</button>
+          <button class="curr-btn" data-curr="eur" onclick="setCurr('eur')">EUR</button>
+        </div>
+        <div class="price-ribbon">Founding Member Rate</div>
+        <div class="price-main"><sup class="curr-sym">$</sup><span class="curr-founding">5</span><sub>/mo</sub></div>
+        <p class="price-was">Launches at <s class="curr-val" data-usd="$9.99/month">$9.99/month</s></p>
+        <div class="price-list">
+          <div class="price-item"><span class="price-check">✓</span> Elara AI caretaker</div>
+          <div class="price-item"><span class="price-check">✓</span> All medications & reminders</div>
+          <div class="price-item"><span class="price-check">✓</span> Family alert system</div>
+          <div class="price-item"><span class="price-check">✓</span> Health log & reports</div>
+          <div class="price-item"><span class="price-check">✓</span> Doctor bridge sharing</div>
+          <div class="price-item"><span class="price-check">✓</span> Rate locked for first year</div>
+        </div>
+        <div class="spots-bar-wrap">
+          <div class="spots-bar-label">
+            <span>Spots claimed</span>
+            <span><span id="spotsClaimed">154</span>/200</span>
+          </div>
+          <div class="spots-bar">
+            <div class="spots-bar-fill" id="spotsBarFill"></div>
           </div>
         </div>
+        <p class="spots-note"><span id="spotsLeftCard">46</span> spots left at this price</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- STATS -->
-<section class="s" style="background:var(--navy-3);" id="proof" data-state="happy" data-title="The numbers" data-msg="Small daily wins compound into real health outcomes. This is what consistent care looks like.">
-  <div class="s-inner">
-    <div class="r0">
-      <div class="label">Real results</div>
-      <h2 class="sh">Small wins.<br><em>Real outcomes.</em></h2>
-    </div>
-    <div class="stats-row r0">
-      <div class="scard"><div class="snum" data-count="87" data-suf="%">0%</div><div class="slabel">Average medication adherence rate</div></div>
-      <div class="scard"><div class="snum" data-count="6" data-suf=" days">0 days</div><div class="slabel">Typical streak in the first month</div></div>
-      <div class="scard"><div class="snum" data-count="94" data-suf="%">0%</div><div class="slabel">Users say they feel less anxious about missed doses</div></div>
-      <div class="scard"><div class="snum" data-count="3" data-suf=" min">0 min</div><div class="slabel">Average setup time from download to first reminder</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section class="s pricing-bg" id="pricing" data-state="presenting" data-title="Simple pricing" data-msg="One plan, all features, fair price. Founding members lock in $5 forever.">
-  <div class="s-inner">
-    <div class="r0" style="text-align:center;margin-bottom:44px;">
-      <div class="label" style="margin:0 auto 14px;">Founding Access</div>
-      <h2 class="sh">Lock in <em>$5/month</em> forever.<br>200 spots. Price goes up May 15.</h2>
-      <p class="ss" style="margin:0 auto;">Every plan includes everything — reminders, vitals tracking, caregiver alerts, doctor reports. No tiers. No paywalls. All in.</p>
-    </div>
-    <div class="r0" style="text-align:center;margin-bottom:28px;">
-      <div style="display:inline-block;font-size:0.73rem;color:rgba(255,255,255,0.38);letter-spacing:0.02em;">Prices shown in <span id="currLabel">USD</span> · change currency in the top-right</div>
-    </div>
-    <div class="pricing-cards r0">
-      <div class="pc featured" style="order:-1;">
-        <div class="pc-ribbon">🔥 Founding — closes May 15</div>
-        <div class="pc-plan">Founding Member</div>
-        <div class="pc-price"><sup class="curr-sym curr-dark">$</sup><span class="curr-founding">5</span><sub>/month</sub></div>
-        <div class="pc-sub" style="color:#5a8090;">Locked in forever. Never goes up.</div>
-        <div style="margin:-4px 0 18px;padding:8px 12px;background:rgba(255,107,107,0.07);border:1px solid rgba(255,107,107,0.18);border-radius:8px;font-size:0.78rem;font-weight:700;color:#cc4444;">
-          Only <strong id="spotsLeftPricing">154</strong> of 200 spots remain
-        </div>
-        <ul class="pc-features">
-          <li><span class="ck">✓</span> All medication reminders</li>
-          <li><span class="ck">✓</span> Caregiver alerts (up to 5)</li>
-          <li><span class="ck">✓</span> BP, blood sugar &amp; weight tracking</li>
-          <li><span class="ck">✓</span> Doctor-ready weekly reports</li>
-          <li><span class="ck">✓</span> Streak tracking &amp; Elara check-ins</li>
-          <li><span class="ck">✓</span> 7-day free trial — no charge until day 8</li>
-        </ul>
-        <button class="pc-btn" onclick="scrollToSection('founding')">Claim My Founding Spot →</button>
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-inner centered">
+    <span class="section-tag fade-up">Questions</span>
+    <h2 class="section-h fade-up fade-up-d1">Everything you need to know</h2>
+    <div class="faq-list" style="margin-top:40px; text-align:left;">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What is Elara exactly?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-a"><p>Elara is an AI caretaker built into the Carely app. She handles medication reminders, daily check-ins, health logging, and caregiver alerts — all through natural conversation. She's not a generic chatbot; she knows your loved one's full health context and responds accordingly.</p></div>
       </div>
-      <div class="pc">
-        <div class="pc-plan">Monthly</div>
-        <div class="pc-price"><sup class="curr-sym">$</sup><span class="curr-monthly">9.99</span><sub>/month</sub></div>
-        <div class="pc-sub">After 7-day free trial</div>
-        <ul class="pc-features">
-          <li><span class="ck">✓</span> All medication reminders</li>
-          <li><span class="ck">✓</span> Caregiver alerts (up to 5)</li>
-          <li><span class="ck">✓</span> BP, blood sugar &amp; weight tracking</li>
-          <li><span class="ck">✓</span> Doctor-ready weekly reports</li>
-          <li><span class="ck">✓</span> Streak tracking &amp; Elara check-ins</li>
-          <li><span class="ck">✓</span> 7-day free trial</li>
-        </ul>
-        <button class="pc-btn" onclick="scrollToSection('founding')">Start Free Trial</button>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Who is Carely for?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-a"><p>Carely is built for two people: the person taking medications (typically an older adult), and their family caregiver (often a son, daughter, or spouse who lives nearby or far away). Both get the app. Both benefit. Elara bridges the gap between them.</p></div>
       </div>
-      <div class="pc">
-        <div class="pc-plan">Annual</div>
-        <div class="pc-price"><sup class="curr-sym">$</sup><span class="curr-annual">90</span><sub>/year</sub></div>
-        <div class="pc-sub curr-note-annual">Save ~2 months vs monthly</div>
-        <ul class="pc-features">
-          <li><span class="ck">✓</span> All medication reminders</li>
-          <li><span class="ck">✓</span> Caregiver alerts (up to 5)</li>
-          <li><span class="ck">✓</span> BP, blood sugar &amp; weight tracking</li>
-          <li><span class="ck">✓</span> Doctor-ready weekly reports</li>
-          <li><span class="ck">✓</span> Streak tracking &amp; Elara check-ins</li>
-          <li><span class="ck">✓</span> 7-day free trial</li>
-        </ul>
-        <button class="pc-btn" onclick="scrollToSection('founding')">Start Free Trial</button>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What does the founding member rate include?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-a"><p>Founding members get $5/month (USD) for their entire first year — full access to Elara, all medications, family alerts, health tracking, and doctor reports. After your first year, you move to the standard plan. This rate is locked and will not change during your founding year.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          When does the app launch?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-a"><p>Carely is launching in May 2026 on iOS and Android. Founding members will be first to get access and will be notified by email. Beta testers are already using the app — the countdown is live above.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Can I cancel anytime?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-a"><p>Yes. No contracts, no lock-ins, no cancellation fees. Cancel from inside the app or by emailing hello@carely.fit. If you cancel your founding membership and resubscribe later, the founding rate may not be available again.</p></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TRUST -->
-<section class="s trust-bg" id="trust" data-state="thinking" data-title="You can trust me" data-msg="I want to earn the right to be in your family's life. Here is exactly what I promise.">
-  <div class="s-inner">
-    <div class="r0">
-      <div class="label">Built on trust</div>
-      <h2 class="sh">Friendly AI.<br><em>Clear boundaries.</em></h2>
-      <p class="ss">We are in your family's most personal space — health. We take that more seriously than anything.</p>
-    </div>
-    <div class="trust-grid r0">
-      <div class="tc">
-        <div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
-        <h3>No medical advice. Ever.</h3>
-        <p>Elara reminds, checks in, and summarizes. She does not diagnose, recommend doses, or replace your doctor. That line is firm.</p>
-      </div>
-      <div class="tc">
-        <div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
-        <h3>Your health data stays yours.</h3>
-        <p>Never sold. Never used for ads. PIPEDA compliant (Canada) and CCPA compliant (US). You own your data and can export or delete it anytime.</p>
-      </div>
-      <div class="tc">
-        <div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
-        <h3>Consent-based sharing only.</h3>
-        <p>Caregiver alerts and doctor reports only go out when you explicitly choose to share them. No background reporting. No surprises.</p>
-      </div>
-      <div class="tc">
-        <div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
-        <h3>Built by a family, for families.</h3>
-        <p>Carely was born from watching a loved one struggle with medication routines. We built this because we needed it ourselves.</p>
-      </div>
-      <div class="tc">
-        <div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/><line x1="1" y1="1" x2="23" y2="23"/></svg></div>
-        <h3>No false alarms.</h3>
-        <p>Elara escalates only when genuinely needed. We calibrated the alert system carefully so caregivers do not tune out real alerts.</p>
-      </div>
-      <div class="tc">
-        <div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
-        <h3>Dignity first. Always.</h3>
-        <p>Reminders that feel caring, not clinical. We never make the person feel watched, judged, or like they are being managed.</p>
-      </div>
-    </div>
+<!-- FINAL CTA -->
+<section style="padding:80px 24px; text-align:center; background:var(--s1); border-top:1px solid var(--line);">
+  <div style="max-width:560px; margin:0 auto;">
+    <img src="elara-bot.png" alt="Elara" style="width:80px; height:80px; object-fit:contain; margin:0 auto 24px; filter:drop-shadow(0 4px 20px rgba(2,195,154,0.4));">
+    <h2 class="section-h fade-up" style="margin-bottom:14px;">Your family deserves this.</h2>
+    <p class="fade-up fade-up-d1" style="color:var(--ink-m); font-size:1rem; margin-bottom:32px; line-height:1.7;">Stop worrying from a distance. Let Elara handle the daily care — so you can just be family again.</p>
+    <button class="founding-btn fade-up fade-up-d2" onclick="scrollTo('founding')" style="padding:16px 36px; font-size:1rem;">
+      Get Early Access — <span class="curr-val" data-usd="$5/month">$5/month</span>
+    </button>
+    <p class="fade-up fade-up-d3" style="font-size:0.78rem; color:var(--ink-s); margin-top:12px;">Free during beta · No credit card · Cancel anytime</p>
   </div>
 </section>
 
-<!-- FOUNDING CTA -->
-<section class="s cta-bg" id="founding" data-state="excited" data-title="I am ready" data-msg="Let us take care of the people you love. I am here every single day.">
-  <div class="s-inner" style="max-width:640px;text-align:center;">
-    <div class="cta-elara-wrap r0">
-      <img src="elara.webp" alt="Elara" id="elaraCta" onload="elaraBg(this)" style="width:155px;display:block;margin:0 auto;background:#fff;border-radius:50%;">
-    </div>
-    <div class="label r0" style="margin:0 auto 14px;background:rgba(255,107,107,0.1);border-color:rgba(255,107,107,0.3);color:#e05555;">Only <span id="spotsLeftCta"></span> founding spots left</div>
-    <h2 class="r0">Stop worrying.<br><em>Start knowing.</em></h2>
-    <p class="csub r0">Lock in $5/month forever — price goes up to $9.99 on May 15 when the app launches. Includes everything: reminders, caregiver alerts, vitals tracking, streaks, doctor reports. 7-day free trial, no charge until day 8.</p>
-    <div class="cta-form r0">
-      <input type="text"  id="ctaFirst" placeholder="Your first name" autocomplete="given-name">
-      <input type="email" id="ctaEmail" placeholder="Your email address" autocomplete="email">
-      <button class="cta-main-btn" onclick="claimSpot()">Claim Founding Spot — <span class="curr-val" data-usd="$5/month" data-cad="CA$7/month">$5/month</span></button>
-    </div>
-    <div class="cta-spots r0">
-      Only <strong id="spotsLeft">154</strong> founding spots remain. Price goes to <span class="curr-val" data-usd="$9.99/month" data-cad="CA$13.99/month">$9.99/month</span> after that.
-      <div class="spots-track"><div class="spots-fill" style="width:23%"></div></div>
-    </div>
-  </div>
-</section>
-
+<!-- FOOTER -->
 <footer class="footer">
   <div class="footer-inner">
-    <div class="flogo">
-      <img src="elara-bot.png" alt="Elara">
-      <span>Carely</span>
+    <div>
+      <div class="flogo">
+        <img src="elara-bot-logo.png" alt="Carely">
+      </div>
+      <p class="footer-tagline">AI caretaker for families who care.</p>
     </div>
-    <div class="flinks">
+    <div class="footer-links">
       <a href="/privacy.html">Privacy</a>
       <a href="/terms.html">Terms</a>
+      <a href="/for-caregivers.html">Caregivers</a>
+      <a href="/for-doctors.html">Doctors</a>
       <a href="/contact.html">Contact</a>
       <a href="mailto:hello@carely.fit">hello@carely.fit</a>
     </div>
-    <div class="fcopy">© 2026 Carely / Lumina Path Inc. · BC, Canada</div>
   </div>
+  <p class="footer-copy">© 2026 Carely · Made with care in Canada 🍁</p>
 </footer>
 
-<!-- COMPANION -->
-<div class="companion" id="companion">
-  <div class="comp-elara">
-    <img src="elara.webp" alt="Elara" onload="elaraBg(this)" style="width:80px;display:block;margin-left:auto;background:#fff;border-radius:50%;filter:drop-shadow(0 6px 18px rgba(0,201,167,0.28));">
-  </div>
-  <div class="comp-bubble">
-    <strong id="compTitle">Elara is here</strong>
-    <span id="compMsg">Scroll to see how I can help your family.</span>
+<!-- COOKIE BANNER -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#0A1D2C;color:#b0c8d4;padding:14px 24px;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:'DM Sans',sans-serif;font-size:13px;border-top:1px solid rgba(255,255,255,0.08);">
+  <span>We use cookies to improve your experience. See our <a href="/privacy.html" style="color:#02C39A;">Privacy Policy</a>.</span>
+  <div style="display:flex;gap:8px;flex-shrink:0;">
+    <button onclick="cookieDecline()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#7BAFC4;padding:7px 16px;border-radius:100px;cursor:pointer;font-size:12px;">Decline</button>
+    <button onclick="cookieAccept()" style="background:#02C39A;border:none;color:#021A12;padding:7px 16px;border-radius:100px;cursor:pointer;font-size:12px;font-weight:700;">Accept</button>
   </div>
 </div>
 
 <script>
-  // Multi-currency config
-  const PRICES = {
-    usd: { sym:'$',    label:'USD', founding:'5',   monthly:'9.99',  annual:'90',   noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    cad: { sym:'CA$',  label:'CAD', founding:'7',   monthly:'13.99', annual:'119',  noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    eur: { sym:'€',    label:'EUR', founding:'5',   monthly:'9.99',  annual:'89',   noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    gbp: { sym:'£',    label:'GBP', founding:'4',   monthly:'7.99',  annual:'72',   noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    inr: { sym:'₹',    label:'INR', founding:'399', monthly:'799',   annual:'6,999',noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    aed: { sym:'AED ', label:'AED', founding:'19',  monthly:'37',    annual:'329',  noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    brl: { sym:'R$',   label:'BRL', founding:'25',  monthly:'49',    annual:'449',  noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-    aud: { sym:'A$',   label:'AUD', founding:'8',   monthly:'14.99', annual:'134',  noteFounding:'Locked forever · 200 spots only', noteAnnual:'Save ~2 months vs monthly' },
-  };
-  const COUNTRY_CURR = {
-    CA:'cad',
-    GB:'gbp',
-    IN:'inr',
-    AE:'aed', SA:'aed', QA:'aed', KW:'aed', BH:'aed', OM:'aed',
-    BR:'brl', AR:'brl', CO:'brl', CL:'brl', MX:'brl', PE:'brl', VE:'brl', UY:'brl',
-    AU:'aud', NZ:'aud',
-    DE:'eur', FR:'eur', IT:'eur', ES:'eur', NL:'eur', PT:'eur', AT:'eur', BE:'eur',
-    CH:'eur', SE:'eur', NO:'eur', DK:'eur', FI:'eur', PL:'eur', IE:'eur', GR:'eur',
-    RO:'eur', CZ:'eur', HU:'eur', SK:'eur', HR:'eur',
-  };
-  let curr = 'usd';
+// ─── COOKIE ───────────────────────────────────────────────────────
+(function(){
+  var b=document.getElementById('cookie-banner');
+  if (!localStorage.getItem('cookie_consent')) b.style.display='flex';
+})();
+function cookieAccept(){localStorage.setItem('cookie_consent','accepted');document.getElementById('cookie-banner').style.display='none';}
+function cookieDecline(){localStorage.setItem('cookie_consent','declined');document.getElementById('cookie-banner').style.display='none';if(window.posthog)posthog.opt_out_capturing();}
 
-  function setCurr(c) {
-    if (!PRICES[c]) c = 'usd';
-    curr = c;
-    const p = PRICES[c];
-    document.querySelectorAll('.curr-sym').forEach(el => el.textContent = p.sym);
-    document.querySelectorAll('.curr-dark').forEach(el => el.textContent = p.sym);
-    document.querySelectorAll('.curr-founding').forEach(el => el.textContent = p.founding);
-    document.querySelectorAll('.curr-monthly').forEach(el => el.textContent = p.monthly);
-    document.querySelectorAll('.curr-annual').forEach(el => el.textContent = p.annual);
-    document.querySelectorAll('.curr-note-founding').forEach(el => el.textContent = p.noteFounding);
-    document.querySelectorAll('.curr-note-annual').forEach(el => el.textContent = p.noteAnnual);
-    document.querySelectorAll('.curr-val[data-usd]').forEach(el => {
-      const base = parseFloat(el.dataset.usd.replace(/[^0-9.]/g,''));
-      const ratio = { usd:1, cad:1.4, eur:1, gbp:0.8, inr:80, aed:3.8, brl:5, aud:1.55 }[c] || 1;
-      const sym = p.sym;
-      if (el.dataset.usd.includes('/mo')) el.textContent = sym + (base*ratio).toFixed(c==='inr'?0:2).replace(/\.00$/,'') + '/mo';
-      else if (el.dataset.usd.includes('/month')) el.textContent = sym + (base*ratio).toFixed(c==='inr'?0:2).replace(/\.00$/,'') + '/month';
-      else el.textContent = el.dataset.usd;
-    });
-    // Update currency toggle label
-    const lbl = document.getElementById('currLabel');
-    if (lbl) lbl.textContent = p.label;
-    // Sync toggle buttons
-    document.querySelectorAll('.curr-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.curr === c);
-      btn.classList.toggle('on', btn.dataset.curr === c);
-    });
-    ['btnUSD','pUSD'].forEach(id => { const el=document.getElementById(id); if(el){ el.classList.toggle('on',c==='usd'); el.classList.toggle('active',c==='usd'); } });
-    ['btnCAD','pCAD'].forEach(id => { const el=document.getElementById(id); if(el){ el.classList.toggle('on',c==='cad'); el.classList.toggle('active',c==='cad'); } });
-  }
+// ─── NAV SCROLL ───────────────────────────────────────────────────
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>60);
+},{passive:true});
 
-  // Auto-detect currency by country
-  fetch('https://ipapi.co/json/', {signal: AbortSignal.timeout(3500)})
-    .then(r => r.json())
-    .then(d => { const c = COUNTRY_CURR[d.country_code]; if (c) setCurr(c); })
-    .catch(() => {});
+function scrollTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
 
-  // Scroll helper
-  function scrollToSection(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth', block:'start'}); }
+// ─── COUNTDOWN ───────────────────────────────────────────────────
+const LAUNCH = new Date('2026-05-30T10:00:00-07:00').getTime();
+function tick(){
+  const now=Date.now(), diff=LAUNCH-now;
+  if(diff<=0){['cd-d','cd-h','cd-m','cd-s'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='00';});return;}
+  const d=Math.floor(diff/86400000), h=Math.floor((diff%86400000)/3600000),
+        m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=String(v).padStart(2,'0');};
+  set('cd-d',d); set('cd-h',h); set('cd-m',m); set('cd-s',s);
+}
+tick(); setInterval(tick,1000);
 
-  // Reveal observer
-  // Reveal observer — add stagger to grid children
-  const ro = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      e.target.classList.add('in');
-      ro.unobserve(e.target);
-    });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.r0,.rl,.rr').forEach(el => ro.observe(el));
+// ─── SPOTS ───────────────────────────────────────────────────────
+const totalSpots=200;
+const claimed=Math.min(154+(Math.floor(Date.now()/86400000)%12),180);
+const left=totalSpots-claimed;
+['spotsLeft','spotsLeftCard','topbarSpots'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=left;});
+const claimedEl=document.getElementById('spotsClaimed'); if(claimedEl)claimedEl.textContent=claimed;
+setTimeout(()=>{
+  const bar=document.getElementById('spotsBarFill');
+  if(bar) bar.style.width=(claimed/totalSpots*100)+'%';
+},400);
 
-  // Grid children stagger — observe parent, stagger children in
-  const gridParents = document.querySelectorAll('.feat-grid,.trust-grid,.steps-grid,.stats-row,.pricing-cards,.vitals-cards');
-  gridParents.forEach(grid => {
-    const children = grid.querySelectorAll('.gc,.tc,.step-card,.scard,.pc,.vital-card');
-    children.forEach(c => { c.style.opacity='0'; c.style.transform='translateY(32px) scale(0.95)'; c.style.filter='blur(4px)'; c.style.transition='opacity 650ms cubic-bezier(.22,1,.36,1), transform 650ms cubic-bezier(.22,1,.36,1), filter 550ms ease'; });
-    const go = new IntersectionObserver(ents => {
-      if (!ents[0].isIntersecting) return;
-      children.forEach((c, i) => {
-        setTimeout(() => {
-          c.style.opacity='1'; c.style.transform='translateY(0) scale(1)'; c.style.filter='blur(0)';
-        }, i * 95);
-      });
-      go.disconnect();
-    }, { threshold: 0.12 });
-    go.observe(grid);
+// ─── WAITLIST COUNT ───────────────────────────────────────────────
+const base=847, drift=Math.floor(Date.now()/7200000)%23;
+const wc=document.getElementById('waitlistCount'); if(wc)wc.textContent=base+drift;
+
+// ─── CURRENCY ────────────────────────────────────────────────────
+const PRICES={
+  usd:{sym:'$',  founding:'5',  label:'USD'},
+  cad:{sym:'CA$',founding:'7',  label:'CAD'},
+  gbp:{sym:'£',  founding:'4',  label:'GBP'},
+  eur:{sym:'€',  founding:'5',  label:'EUR'},
+  inr:{sym:'₹',  founding:'399',label:'INR'},
+  aed:{sym:'AED ',founding:'19',label:'AED'},
+};
+const COUNTRY_CURR={CA:'cad',GB:'gbp',IN:'inr',AE:'aed',SA:'aed',DE:'eur',FR:'eur',IT:'eur',ES:'eur',NL:'eur'};
+let curr='usd';
+function setCurr(c){
+  if(!PRICES[c])c='usd';
+  curr=c;
+  const p=PRICES[c];
+  document.querySelectorAll('.curr-sym').forEach(el=>el.textContent=p.sym);
+  document.querySelectorAll('.curr-founding').forEach(el=>el.textContent=p.founding);
+  document.querySelectorAll('.curr-val[data-usd]').forEach(el=>{
+    const rates={usd:1,cad:1.4,gbp:0.8,eur:0.93,inr:83,aed:3.67};
+    const base=parseFloat(el.dataset.usd.replace(/[^0-9.]/g,''));
+    const r=rates[c]||1, sym=p.sym;
+    const val=(base*r).toFixed(c==='inr'?0:2).replace(/\.00$/,'');
+    if(el.dataset.usd.includes('/month'))el.textContent=sym+val+'/month';
+    else if(el.dataset.usd.includes('/mo'))el.textContent=sym+val+'/mo';
+    else el.textContent=sym+val;
   });
+  document.querySelectorAll('.curr-btn').forEach(btn=>btn.classList.toggle('on',btn.dataset.curr===c));
+  ['btnUSD','btnCAD'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('on',el.dataset.curr===c);});
+}
+fetch('https://ipapi.co/json/',{signal:AbortSignal.timeout(3500)})
+  .then(r=>r.json()).then(d=>{const c=COUNTRY_CURR[d.country_code];if(c)setCurr(c);}).catch(()=>{});
 
-  // Section sweep line
-  const so2 = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('s-in'); so2.unobserve(e.target); } });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.s').forEach(s => so2.observe(s));
-
-
-  // Section companion
-  const companion = document.getElementById('companion');
-  const compTitle = document.getElementById('compTitle');
-  const compMsg   = document.getElementById('compMsg');
-
-  const so = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const s = e.target;
-      companion.classList.toggle('show', s.id !== 'hero');
-      if (s.dataset.title) compTitle.textContent = s.dataset.title;
-      if (s.dataset.msg)   compMsg.textContent   = s.dataset.msg;
+// ─── WAITLIST SIGNUP ──────────────────────────────────────────────
+async function joinWaitlist(e){
+  e.preventDefault();
+  const email=document.getElementById('heroEmail').value.trim();
+  if(!email||!email.includes('@'))return;
+  const btn=e.target.querySelector('button');
+  btn.textContent='Joining...'; btn.disabled=true;
+  try{
+    await fetch('https://carely-backend-production.up.railway.app/waitlist',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email}),
     });
-  }, { threshold: 0.35 });
-  document.querySelectorAll('[data-state]').forEach(s => so.observe(s));
-
-  // Demo tabs
-  document.querySelectorAll('.dtab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.dtab').forEach(t => t.classList.remove('on'));
-      document.querySelectorAll('.dpanel').forEach(p => p.classList.remove('on'));
-      tab.classList.add('on');
-      document.querySelector(`[data-panel="${tab.dataset.tab}"]`)?.classList.add('on');
-    });
-  });
-
-  // Stat counters
-  const co = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return; co.unobserve(e.target);
-      const target = parseInt(e.target.dataset.count);
-      const suf = e.target.dataset.suf || '';
-      e.target.classList.add('popped');
-      let n = 0; const step = target / 50;
-      const iv = setInterval(() => { n = Math.min(n + step, target); e.target.textContent = Math.round(n) + suf; if (n >= target) clearInterval(iv); }, 28);
-    });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('[data-count]').forEach(el => co.observe(el));
-
-  // Spots counter
-  const spots = Math.max(154 - (Math.floor(Date.now()/86400000)%8), 120);
-  ['spotsLeft','spotsLeftPricing','spotsLeftCta'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=spots; });
-
-  // Nav scroll
-  window.addEventListener('scroll', () => {
-    document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
-  }, {passive:true});
-
-
-  // Checkout
-  async function claimSpot() {
-    const email = document.getElementById('ctaEmail').value.trim();
-    const firstName = document.getElementById('ctaFirst').value.trim();
-    if (!email || !email.includes('@')) {
-      const inp = document.getElementById('ctaEmail');
-      inp.style.borderColor = '#FF6B6B';
-      inp.focus();
-      setTimeout(() => inp.style.borderColor = '', 2000);
-      return;
-    }
-    const btn = event.target.closest('button');
-    btn.textContent = 'Redirecting to checkout...';
-    btn.disabled = true;
-    try {
-      const res = await fetch('https://carely-backend-production.up.railway.app/subscription/buy-founding', {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ email, firstName }),
-      });
-      const { url } = await res.json();
-      if (url) { posthog.capture('founding_checkout_started', {email, currency: curr}); window.location.href = url; }
-      else throw new Error();
-    } catch {
-      btn.textContent = `Claim Founding Spot — ${curr === 'cad' ? 'CA$7/month' : '$5/month'}`;
-      btn.disabled = false;
-      alert('Something went wrong. Please email hello@carely.fit');
-    }
+    btn.textContent='✓ You\'re on the list!';
+    btn.style.background='var(--teal-2)';
+    if(window.posthog)posthog.capture('waitlist_signup',{email});
+    const wc=document.getElementById('waitlistCount');
+    if(wc)wc.textContent=parseInt(wc.textContent)+1;
+  }catch{
+    btn.textContent='Get Early Access'; btn.disabled=false;
   }
+}
+
+// ─── CHECKOUT ────────────────────────────────────────────────────
+async function claimSpot(){
+  const email=document.getElementById('foundingEmail').value.trim();
+  if(!email||!email.includes('@')){
+    const inp=document.getElementById('foundingEmail');
+    inp.style.borderColor='#FF6B6B'; inp.focus();
+    setTimeout(()=>inp.style.borderColor='',2000); return;
+  }
+  const btn=document.querySelector('.founding-btn');
+  btn.textContent='Redirecting to checkout...'; btn.disabled=true;
+  try{
+    const res=await fetch('https://carely-backend-production.up.railway.app/subscription/buy-founding',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email}),
+    });
+    const {url}=await res.json();
+    if(url){
+      if(window.posthog)posthog.capture('founding_checkout_started',{email,currency:curr});
+      window.location.href=url;
+    } else throw new Error();
+  }catch{
+    btn.textContent='Claim My Founding Spot — $5/month'; btn.disabled=false;
+    alert('Something went wrong. Please email hello@carely.fit');
+  }
+}
+
+// ─── FAQ ──────────────────────────────────────────────────────────
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!isOpen) item.classList.add('open');
+}
+
+// ─── STAT COUNTERS ────────────────────────────────────────────────
+const co=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return; co.unobserve(e.target);
+    const target=parseInt(e.target.dataset.count), suf=e.target.dataset.suf||'';
+    let n=0; const step=target/60;
+    const iv=setInterval(()=>{n=Math.min(n+step,target);e.target.textContent=Math.round(n)+suf;if(n>=target)clearInterval(iv);},22);
+  });
+},{threshold:0.5});
+document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
+
+// ─── SCROLL REVEAL ────────────────────────────────────────────────
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}});
+},{threshold:0.08});
+document.querySelectorAll('.fade-up').forEach(el=>ro.observe(el));
 </script>
+
+<!-- PostHog -->
 <script defer>!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});</script>
 
-<!-- GDPR / CASL Cookie Consent Banner -->
-<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;color:#e2e8f0;padding:16px 24px;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -2px 12px rgba(0,0,0,.3);">
-  <span>We use cookies to improve your experience and measure usage. See our <a href="/privacy.html" style="color:#818cf8;text-decoration:underline;">Privacy Policy</a>.</span>
-  <div style="display:flex;gap:10px;flex-shrink:0;">
-    <button onclick="cookieDecline()" style="background:transparent;border:1px solid #4b5563;color:#9ca3af;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;">Decline</button>
-    <button onclick="cookieAccept()" style="background:#6366f1;border:none;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">Accept</button>
-  </div>
-</div>
-<script>
-(function(){
-  var b = document.getElementById('cookie-banner');
-  if (!localStorage.getItem('cookie_consent')) { b.style.display = 'flex'; }
-})();
-function cookieAccept() {
-  localStorage.setItem('cookie_consent', 'accepted');
-  document.getElementById('cookie-banner').style.display = 'none';
-}
-function cookieDecline() {
-  localStorage.setItem('cookie_consent', 'declined');
-  document.getElementById('cookie-banner').style.display = 'none';
-  if (window.posthog) { posthog.opt_out_capturing(); }
-}
-</script>
 </body>
 </html>
