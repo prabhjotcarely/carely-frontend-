@@ -43,6 +43,22 @@
     <priority>0.4</priority>
   </url>
 
+  <url>
+    <loc>https://carely.fit/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://carely.fit/blog/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://carely.fit/join-affiliate</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
   <!-- Blog / SEO / AEO pages -->
   <url>
     <loc>https://carely.fit/blog/elara-ai-caretaker</loc>
