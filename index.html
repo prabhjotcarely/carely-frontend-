@@ -1024,7 +1024,7 @@
           <div class="plan-feat"><span class="c">✓</span> 10 language support</div>
         </div>
         <input style="width:100%;padding:11px 16px;border-radius:100px;border:1.5px solid rgba(68,171,173,0.4);background:rgba(68,171,173,0.12);color:#fff;font-size:0.88rem;font-family:inherit;outline:none;margin-bottom:10px;" id="foundingEmail" type="email" placeholder="Your email address" autocomplete="email">
-        <button class="plan-btn plan-btn-primary" onclick="claimSpot()">Claim Founding Spot — <sup class="curr-sym">$</sup><span class="curr-founding">5</span>/mo</button>
+        <button class="plan-btn plan-btn-primary" id="foundingClaimBtn" onclick="claimSpot(this)">Claim Founding Spot — <sup class="curr-sym">$</sup><span class="curr-founding">5</span>/mo</button>
         <div style="margin-top:10px;font-size:0.72rem;color:rgba(255,255,255,0.45);text-align:center;">🔒 Secure checkout · <span id="spotsRemCard">46</span> spots left</div>
       </div>
 
@@ -1125,7 +1125,7 @@
     <div class="footer-col">
       <h4>Product</h4>
       <a href="/#features">Features</a>
-      <a href="/#pricing">Pricing</a>
+      <a href="/#founding">Pricing</a>
       <a href="/#compare">Compare</a>
       <a href="/#faq">FAQ</a>
       <a href="/blog">Blog</a>
@@ -1406,20 +1406,23 @@ async function claimPlan(plan) {
 }
 
 /* ── Founding checkout ── */
-async function claimSpot() {
+async function claimSpot(btn) {
   const email = document.getElementById('foundingEmail').value.trim();
   if(!email||!email.includes('@')) {
     const inp = document.getElementById('foundingEmail');
     inp.style.borderColor='#e55'; inp.focus(); setTimeout(()=>inp.style.borderColor='',2000); return;
   }
-  const btn = document.querySelector('.founding-btn');
-  btn.textContent='Redirecting...'; btn.disabled=true;
+  const origText = btn ? btn.textContent : '';
+  if(btn){ btn.textContent='Redirecting...'; btn.disabled=true; }
   try {
     const res = await fetch('https://carely-backend-production.up.railway.app/subscription/buy-founding',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
     const {url} = await res.json();
     if(url){ if(window.posthog)posthog.capture('founding_checkout_started',{email,currency:curr}); window.location.href=url; }
     else throw new Error();
-  } catch { btn.textContent='Claim My Founding Spot — $5/month'; btn.disabled=false; alert('Something went wrong. Email hello@carely.fit'); }
+  } catch {
+    if(btn){ btn.textContent=origText||'Claim Founding Spot'; btn.disabled=false; }
+    alert('Something went wrong. Email hello@carely.fit');
+  }
 }
 
 /* ── FAQ ── */
