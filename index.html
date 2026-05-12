@@ -40,26 +40,17 @@
       --app-grad: linear-gradient(140deg, #44abad 0%, #2d8899 38%, #1e6070 72%, #175060 100%);
       --dark-grad: linear-gradient(135deg, #0d2b38 0%, #175060 55%, #1e6070 100%);
     }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--w); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    html { scroll-behavior: smooth; overflow-x: hidden; } /* overflow-x on html fixes iOS Safari horizontal scroll */
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--w); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; max-width: 100vw; }
     a { color: inherit; text-decoration: none; }
     button { font: inherit; cursor: pointer; border: none; outline: none; }
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-thumb { background: var(--t2); border-radius: 2px; }
 
-    /* ── Scroll reveal — CSS pre-hides so GSAP never causes flash ── */
-    .reveal { opacity: 0; transform: translateY(20px); }
-    .reveal.in-view { opacity: 1; transform: none; }
-    .pain-grid, .feat-grid, .persona-grid, .testi-grid, .plans-wrap, .hiw-steps, .lang-flags { opacity: 1 !important; transform: none !important; }
-
-    /* ── Hero CSS animations — no JS dependency, no flash possible ── */
+    /* ── Hero CSS animations — pure CSS, zero JS/CDN dependency ── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
     }
     .hero-eyebrow { animation: fadeUp 0.55s ease forwards; animation-delay: 0.08s; opacity: 0; }
     .hero h1      { animation: fadeUp 0.65s ease forwards; animation-delay: 0.18s; opacity: 0; }
@@ -68,6 +59,70 @@
     .hero-trust   { animation: fadeUp 0.5s  ease forwards; animation-delay: 0.52s; opacity: 0; }
     .hero-social  { animation: fadeUp 0.45s ease forwards; animation-delay: 0.6s;  opacity: 0; }
     #elaraCol     { animation: fadeUp 0.7s  ease forwards; animation-delay: 0.12s; opacity: 0; }
+
+    /* ── Scroll reveal — IntersectionObserver adds .in-view, CSS transitions handle the rest ── */
+    .reveal {
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.in-view { opacity: 1; transform: none; }
+
+    /* Grid containers visible by default — children animate */
+    .pain-grid, .feat-grid, .persona-grid, .testi-grid, .plans-wrap, .hiw-steps, .lang-flags, .stats-bar { opacity: 1; transform: none; }
+
+    /* Grid children — hidden initially, revealed when parent gets .in-view */
+    .pain-card, .persona, .tcard, .plan-card, .hiw-step, .stt {
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .feat   { opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .lang-flag { opacity: 0; transform: translateY(10px); transition: opacity 0.45s ease, transform 0.45s ease; }
+
+    /* Revealed state */
+    .pain-grid.in-view .pain-card, .persona-grid.in-view .persona, .feat-grid.in-view .feat,
+    .testi-grid.in-view .tcard, .plans-wrap.in-view .plan-card, .hiw-steps.in-view .hiw-step,
+    .stats-bar.in-view .stt, .lang-flags.in-view .lang-flag { opacity: 1; transform: none; }
+
+    /* Stagger delays via nth-child */
+    .pain-grid.in-view .pain-card:nth-child(2) { transition-delay: 0.07s; }
+    .pain-grid.in-view .pain-card:nth-child(3) { transition-delay: 0.14s; }
+    .persona-grid.in-view .persona:nth-child(2) { transition-delay: 0.06s; }
+    .persona-grid.in-view .persona:nth-child(3) { transition-delay: 0.12s; }
+    .persona-grid.in-view .persona:nth-child(4) { transition-delay: 0.18s; }
+    .persona-grid.in-view .persona:nth-child(5) { transition-delay: 0.24s; }
+    .feat-grid.in-view .feat:nth-child(2) { transition-delay: 0.04s; }
+    .feat-grid.in-view .feat:nth-child(3) { transition-delay: 0.08s; }
+    .feat-grid.in-view .feat:nth-child(4) { transition-delay: 0.12s; }
+    .feat-grid.in-view .feat:nth-child(5) { transition-delay: 0.16s; }
+    .feat-grid.in-view .feat:nth-child(6) { transition-delay: 0.20s; }
+    .feat-grid.in-view .feat:nth-child(7) { transition-delay: 0.24s; }
+    .feat-grid.in-view .feat:nth-child(8) { transition-delay: 0.28s; }
+    .feat-grid.in-view .feat:nth-child(9) { transition-delay: 0.32s; }
+    .feat-grid.in-view .feat:nth-child(10){ transition-delay: 0.36s; }
+    .testi-grid.in-view .tcard:nth-child(2) { transition-delay: 0.08s; }
+    .testi-grid.in-view .tcard:nth-child(3) { transition-delay: 0.16s; }
+    .plans-wrap.in-view .plan-card:nth-child(2) { transition-delay: 0.08s; }
+    .plans-wrap.in-view .plan-card:nth-child(3) { transition-delay: 0.16s; }
+    .hiw-steps.in-view .hiw-step:nth-child(2) { transition-delay: 0.1s; }
+    .hiw-steps.in-view .hiw-step:nth-child(3) { transition-delay: 0.2s; }
+    .stats-bar.in-view .stt:nth-child(2) { transition-delay: 0.07s; }
+    .stats-bar.in-view .stt:nth-child(3) { transition-delay: 0.14s; }
+    .stats-bar.in-view .stt:nth-child(4) { transition-delay: 0.21s; }
+    .lang-flags.in-view .lang-flag:nth-child(2)  { transition-delay: 0.04s; }
+    .lang-flags.in-view .lang-flag:nth-child(3)  { transition-delay: 0.08s; }
+    .lang-flags.in-view .lang-flag:nth-child(4)  { transition-delay: 0.12s; }
+    .lang-flags.in-view .lang-flag:nth-child(5)  { transition-delay: 0.16s; }
+    .lang-flags.in-view .lang-flag:nth-child(6)  { transition-delay: 0.20s; }
+    .lang-flags.in-view .lang-flag:nth-child(7)  { transition-delay: 0.24s; }
+    .lang-flags.in-view .lang-flag:nth-child(8)  { transition-delay: 0.28s; }
+    .lang-flags.in-view .lang-flag:nth-child(9)  { transition-delay: 0.32s; }
+    .lang-flags.in-view .lang-flag:nth-child(10) { transition-delay: 0.36s; }
+
+    /* Final CTA stagger */
+    .fin-cta h2, .fin-cta p, .fin-cta-btn { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fin-cta.in-view h2 { opacity: 1; transform: none; }
+    .fin-cta.in-view p  { opacity: 1; transform: none; transition-delay: 0.15s; }
+    .fin-cta.in-view .fin-cta-btn { opacity: 1; transform: none; transition-delay: 0.28s; }
 
     /* ── HAMBURGER ── */
     .nav-burger { display: none; flex-direction: column; gap: 5px; width: 42px; height: 42px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
@@ -1191,100 +1246,25 @@
 function goto(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
 window.addEventListener('scroll', () => document.getElementById('navWrap').classList.toggle('up', scrollY > 50), {passive:true});
 
-/* ── GSAP ScrollTrigger ── */
-gsap.registerPlugin(ScrollTrigger);
-
-// Refresh after fonts load (prevents layout-shift miscalculations)
-document.fonts.ready.then(() => ScrollTrigger.refresh());
-
-// Grid container selectors (these must stay visible — their CHILDREN animate)
-const GRID_CONTAINERS = '.pain-grid, .feat-grid, .persona-grid, .testi-grid, .plans-wrap, .hiw-steps, .lang-flags';
-
-// CSS pre-hides .reveal — GSAP only needs to set grid children
-
-// Grid children — no scale, gentle y, power2 for smooth feel
-const GRIDS = [
-  { sel: '.pain-card',  trigger: '.pain-grid',    stagger: 0.08, y: 20 },
-  { sel: '.persona',    trigger: '.persona-grid', stagger: 0.07, y: 18 },
-  { sel: '.feat',       trigger: '.feat-grid',    stagger: 0.04, y: 14 },
-  { sel: '.tcard',      trigger: '.testi-grid',   stagger: 0.08, y: 18 },
-  { sel: '.plan-card',  trigger: '.plans-wrap',   stagger: 0.08, y: 20 },
-  { sel: '.hiw-step',   trigger: '.hiw-steps',    stagger: 0.1,  y: 18 },
-  { sel: '.lang-flag',  trigger: '.lang-flags',   stagger: 0.04, y: 12 },
-];
-GRIDS.forEach(({ sel, y }) => gsap.set(sel, { opacity: 0, y }));
-
-// Non-grid .reveal elements — gentle fade up
-document.querySelectorAll('.reveal').forEach(el => {
-  if (el.matches(GRID_CONTAINERS)) return;
-  if (el.closest(GRID_CONTAINERS)) return;
-  gsap.to(el, {
-    opacity: 1, y: 0, duration: 0.65, ease: 'power2.out',
-    scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+/* ── IntersectionObserver — smooth scroll reveals, zero CDN dependency ── */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      revealObserver.unobserve(entry.target);
+    }
   });
-});
+}, { rootMargin: '0px 0px -60px 0px', threshold: 0.1 });
 
-// Safety fallback
-setTimeout(() => {
-  GRIDS.forEach(({ sel }) => {
-    document.querySelectorAll(sel).forEach(el => {
-      if (parseFloat(window.getComputedStyle(el).opacity) < 0.1) {
-        gsap.set(el, { opacity: 1, y: 0 });
-      }
-    });
-  });
-}, 3000);
+document.querySelectorAll('.reveal, .pain-grid, .feat-grid, .persona-grid, .testi-grid, .plans-wrap, .hiw-steps, .stats-bar, .lang-flags, .fin-cta').forEach(el => revealObserver.observe(el));
 
-// Grid stagger animations
-GRIDS.forEach(({ sel, trigger, stagger }) => {
-  const els = document.querySelectorAll(sel);
-  if (!els.length) return;
-  gsap.to(els, {
-    opacity: 1, y: 0,
-    stagger, duration: 0.65, ease: 'power2.out',
-    scrollTrigger: { trigger, start: 'top 84%', once: true }
-  });
-});
-
-// Stats bar stagger
-gsap.set('.stt', { opacity: 0, y: 28 });
-gsap.to('.stt', {
-  opacity: 1, y: 0, stagger: 0.09, duration: 0.6, ease: 'power3.out',
-  scrollTrigger: { trigger: '.stats-bar', start: 'top 88%', once: true }
-});
-
-// Comparison table rows
-gsap.from('.compare-table tbody tr', {
-  opacity: 0, x: -16, stagger: 0.07, duration: 0.48, ease: 'power2.out',
-  scrollTrigger: { trigger: '.compare-table', start: 'top 82%', once: true }
-});
-
-// Elara hero parallax
-gsap.to('#elaraCanvas', {
-  y: -48, ease: 'none',
-  scrollTrigger: { trigger: '.hero-wrap', start: 'top top', end: 'bottom top', scrub: 1.8 }
-});
-
-// Pain section floating bg parallax
-gsap.to('.pain::before', {
-  yPercent: -18, ease: 'none',
-  scrollTrigger: { trigger: '.pain', start: 'top bottom', end: 'bottom top', scrub: 2 }
-});
-
-// Final CTA
-gsap.set('.fin-cta h2, .fin-cta p, .fin-cta-btn', { opacity: 0, y: 16 });
-gsap.to('.fin-cta h2', {
-  opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
-  scrollTrigger: { trigger: '.fin-cta', start: 'top 82%', once: true }
-});
-gsap.to('.fin-cta p', {
-  opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: 0.15,
-  scrollTrigger: { trigger: '.fin-cta', start: 'top 82%', once: true }
-});
-gsap.to('.fin-cta-btn', {
-  opacity: 1, y: 0, duration: 0.55, ease: 'power2.out', delay: 0.28,
-  scrollTrigger: { trigger: '.fin-cta', start: 'top 82%', once: true }
-});
+// GSAP kept only for parallax — no blocking, degrades gracefully if CDN slow
+if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+  document.fonts.ready.then(() => ScrollTrigger.refresh());
+  gsap.to('#elaraCanvas', { y: -48, ease: 'none', scrollTrigger: { trigger: '.hero-wrap', start: 'top top', end: 'bottom top', scrub: 1.8 } });
+  gsap.to('.pain::before', { yPercent: -18, ease: 'none', scrollTrigger: { trigger: '.pain', start: 'top bottom', end: 'bottom top', scrub: 2 } });
+}
 
 /* ── Hamburger ── */
 const navBurger = document.getElementById('navBurger');
