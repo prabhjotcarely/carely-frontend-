@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Pre-hide page until JS sets initial animation states — eliminates flash -->
+  <style>html{opacity:0}</style>
   <title>Carely — The AI Caretaker for Your Family's Health</title>
   <meta name="description" content="Meet Elara — your AI caretaker. Medication reminders, daily check-ins, family alerts, doctor reports. Launching May 2026. Founding spots at $5/month.">
   <meta property="og:title" content="Carely — The AI Caretaker for Your Family's Health">
@@ -360,7 +362,8 @@
     .persona p { font-size: 0.875rem; color: rgba(255,255,255,0.7); line-height: 1.72; margin-bottom: 22px; }
     .persona-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .ptag { padding: 4px 10px; border-radius: 100px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); font-size: 0.68rem; font-weight: 700; color: rgba(255,255,255,0.8); }
-    @media(max-width:840px){ .persona-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto} }
+    @media(max-width:520px){ .persona-grid{grid-template-columns:1fr;max-width:100%} }
+    @media(min-width:521px) and (max-width:840px){ .persona-grid{grid-template-columns:repeat(2,1fr)} }
 
     /* ── COMPARISON ── */
     .compare { padding: 88px 24px; background: var(--off); }
@@ -1167,20 +1170,26 @@
 <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
 <script>
+/* ── Reveal page — eliminates load flash by keeping html invisible until GSAP is ready ── */
+requestAnimationFrame(() => {
+  document.documentElement.style.transition = 'opacity 0.22s ease';
+  document.documentElement.style.opacity = '1';
+});
+
 /* ── Nav scroll ── */
 function goto(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
 window.addEventListener('scroll', () => document.getElementById('navWrap').classList.toggle('up', scrollY > 50), {passive:true});
 
-/* ── Hero entrance ── */
-const heroTL = gsap.timeline({ delay: 0.1 });
+/* ── Hero entrance — smooth fade-up, no dramatic swoops ── */
+const heroTL = gsap.timeline({ delay: 0.18 });
 heroTL
-  .from('.hero-eyebrow', { opacity:0, y:16, duration:0.55, ease:'power3.out' })
-  .from('.hero h1',       { opacity:0, y:44, duration:0.85, ease:'power4.out' }, '-=0.3')
-  .from('.hero-sub',      { opacity:0, y:28, duration:0.65, ease:'power3.out' }, '-=0.48')
-  .from('.hero-form',     { opacity:0, y:22, duration:0.55, ease:'power3.out' }, '-=0.38')
-  .from('.hero-trust',    { opacity:0, y:16, duration:0.5,  ease:'power3.out' }, '-=0.3')
-  .from('.hero-social',   { opacity:0, y:12, duration:0.45, ease:'power3.out' }, '-=0.25')
-  .from('#elaraCol',      { opacity:0, x:50, duration:1.0,  ease:'power4.out' }, '-=0.85');
+  .from('.hero-eyebrow', { opacity:0, y:10, duration:0.6,  ease:'power2.out' })
+  .from('.hero h1',       { opacity:0, y:18, duration:0.75, ease:'power2.out' }, '-=0.35')
+  .from('.hero-sub',      { opacity:0, y:14, duration:0.6,  ease:'power2.out' }, '-=0.45')
+  .from('.hero-form',     { opacity:0, y:12, duration:0.5,  ease:'power2.out' }, '-=0.38')
+  .from('.hero-trust',    { opacity:0, y:10, duration:0.45, ease:'power2.out' }, '-=0.3')
+  .from('.hero-social',   { opacity:0, y:8,  duration:0.4,  ease:'power2.out' }, '-=0.25')
+  .from('#elaraCol',      { opacity:0, y:16, duration:0.8,  ease:'power2.out' }, '-=0.7');
 
 /* ── GSAP ScrollTrigger ── */
 gsap.registerPlugin(ScrollTrigger);
@@ -1193,48 +1202,47 @@ const GRID_CONTAINERS = '.pain-grid, .feat-grid, .persona-grid, .testi-grid, .pl
 
 // CSS pre-hides .reveal — GSAP only needs to set grid children
 
-// Grid children
+// Grid children — no scale, gentle y, power2 for smooth feel
 const GRIDS = [
-  { sel: '.pain-card',  trigger: '.pain-grid',    stagger: 0.1,  scale: 0.95, y: 44 },
-  { sel: '.persona',    trigger: '.persona-grid', stagger: 0.08, scale: 0.92, y: 50 },
-  { sel: '.feat',       trigger: '.feat-grid',    stagger: 0.04, scale: 0.88, y: 22 },
-  { sel: '.tcard',      trigger: '.testi-grid',   stagger: 0.1,  scale: 0.96, y: 40 },
-  { sel: '.plan-card',  trigger: '.plans-wrap',   stagger: 0.1,  scale: 0.94, y: 44 },
-  { sel: '.hiw-step',   trigger: '.hiw-steps',    stagger: 0.13, scale: 1,    y: 40 },
-  { sel: '.lang-flag',  trigger: '.lang-flags',   stagger: 0.04, scale: 0.85, y: 18 },
+  { sel: '.pain-card',  trigger: '.pain-grid',    stagger: 0.08, y: 20 },
+  { sel: '.persona',    trigger: '.persona-grid', stagger: 0.07, y: 18 },
+  { sel: '.feat',       trigger: '.feat-grid',    stagger: 0.04, y: 14 },
+  { sel: '.tcard',      trigger: '.testi-grid',   stagger: 0.08, y: 18 },
+  { sel: '.plan-card',  trigger: '.plans-wrap',   stagger: 0.08, y: 20 },
+  { sel: '.hiw-step',   trigger: '.hiw-steps',    stagger: 0.1,  y: 18 },
+  { sel: '.lang-flag',  trigger: '.lang-flags',   stagger: 0.04, y: 12 },
 ];
-GRIDS.forEach(({ sel, scale, y }) => gsap.set(sel, { opacity: 0, y, scale }));
+GRIDS.forEach(({ sel, y }) => gsap.set(sel, { opacity: 0, y }));
 
-// Non-grid .reveal elements — individual scroll trigger
+// Non-grid .reveal elements — gentle fade up
 document.querySelectorAll('.reveal').forEach(el => {
-  // Skip grid containers (visible by default) and grid children (handled below)
   if (el.matches(GRID_CONTAINERS)) return;
   if (el.closest(GRID_CONTAINERS)) return;
   gsap.to(el, {
-    opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
-    scrollTrigger: { trigger: el, start: 'top 87%', once: true }
+    opacity: 1, y: 0, duration: 0.65, ease: 'power2.out',
+    scrollTrigger: { trigger: el, start: 'top 88%', once: true }
   });
 });
 
-// Safety fallback — if ScrollTrigger fails or fires late, show everything after 3s
+// Safety fallback
 setTimeout(() => {
   GRIDS.forEach(({ sel }) => {
     document.querySelectorAll(sel).forEach(el => {
       if (parseFloat(window.getComputedStyle(el).opacity) < 0.1) {
-        gsap.set(el, { opacity: 1, y: 0, scale: 1 });
+        gsap.set(el, { opacity: 1, y: 0 });
       }
     });
   });
 }, 3000);
 
 // Grid stagger animations
-GRIDS.forEach(({ sel, trigger, stagger, scale, y }) => {
+GRIDS.forEach(({ sel, trigger, stagger }) => {
   const els = document.querySelectorAll(sel);
   if (!els.length) return;
   gsap.to(els, {
-    opacity: 1, y: 0, scale: 1,
-    stagger, duration: 0.7, ease: 'power3.out',
-    scrollTrigger: { trigger, start: 'top 82%', once: true }
+    opacity: 1, y: 0,
+    stagger, duration: 0.65, ease: 'power2.out',
+    scrollTrigger: { trigger, start: 'top 84%', once: true }
   });
 });
 
@@ -1263,19 +1271,19 @@ gsap.to('.pain::before', {
   scrollTrigger: { trigger: '.pain', start: 'top bottom', end: 'bottom top', scrub: 2 }
 });
 
-// Final CTA dramatic entrance
-gsap.set('.fin-cta h2, .fin-cta p, .fin-cta-btn', { opacity: 0, y: 44 });
+// Final CTA
+gsap.set('.fin-cta h2, .fin-cta p, .fin-cta-btn', { opacity: 0, y: 16 });
 gsap.to('.fin-cta h2', {
-  opacity: 1, y: 0, duration: 1.0, ease: 'power4.out',
-  scrollTrigger: { trigger: '.fin-cta', start: 'top 80%', once: true }
+  opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+  scrollTrigger: { trigger: '.fin-cta', start: 'top 82%', once: true }
 });
 gsap.to('.fin-cta p', {
-  opacity: 1, y: 0, duration: 0.75, ease: 'power3.out', delay: 0.18,
-  scrollTrigger: { trigger: '.fin-cta', start: 'top 80%', once: true }
+  opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: 0.15,
+  scrollTrigger: { trigger: '.fin-cta', start: 'top 82%', once: true }
 });
 gsap.to('.fin-cta-btn', {
-  opacity: 1, y: 0, duration: 0.65, ease: 'back.out(1.4)', delay: 0.36,
-  scrollTrigger: { trigger: '.fin-cta', start: 'top 80%', once: true }
+  opacity: 1, y: 0, duration: 0.55, ease: 'power2.out', delay: 0.28,
+  scrollTrigger: { trigger: '.fin-cta', start: 'top 82%', once: true }
 });
 
 /* ── Hamburger ── */
