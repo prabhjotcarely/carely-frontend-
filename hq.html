@@ -208,30 +208,52 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="pin-screen">
   <div class="pin-logo"><img src="elara-bot-logo.png" alt="Carely" style="height:64px;"></div>
   <div class="pin-title">Carely HQ</div>
-  <div class="pin-sub">Mission Control · Enter PIN to continue</div>
-  <div class="pin-dots">
-    <div class="pin-dot" id="d0"></div>
-    <div class="pin-dot" id="d1"></div>
-    <div class="pin-dot" id="d2"></div>
-    <div class="pin-dot" id="d3"></div>
-    <div class="pin-dot" id="d4"></div>
-    <div class="pin-dot" id="d5"></div>
+
+  <!-- Step 1: Who's logging in -->
+  <div id="pin-step-who" style="text-align:center;margin-bottom:20px;">
+    <div class="pin-sub" style="margin-bottom:16px;">Who's logging in?</div>
+    <div style="display:flex;gap:14px;justify-content:center;">
+      <div onclick="selectMember('tj')" id="member-tj" style="cursor:pointer;padding:16px 24px;border:2px solid rgba(255,255,255,0.2);border-radius:14px;transition:all .2s;min-width:110px;">
+        <div style="font-size:28px;margin-bottom:6px;">👨‍💻</div>
+        <div style="font-size:14px;font-weight:800;color:#fff;">TJ</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);">CEO · Engineering</div>
+      </div>
+      <div onclick="selectMember('prabh')" id="member-prabh" style="cursor:pointer;padding:16px 24px;border:2px solid rgba(255,255,255,0.2);border-radius:14px;transition:all .2s;min-width:110px;">
+        <div style="font-size:28px;margin-bottom:6px;">👩‍💼</div>
+        <div style="font-size:14px;font-weight:800;color:#fff;">Prabh</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);">COO · Marketing</div>
+      </div>
+    </div>
   </div>
-  <div class="pin-pad">
-    <button class="pin-btn" onclick="pinKey('1')">1</button>
-    <button class="pin-btn" onclick="pinKey('2')">2</button>
-    <button class="pin-btn" onclick="pinKey('3')">3</button>
-    <button class="pin-btn" onclick="pinKey('4')">4</button>
-    <button class="pin-btn" onclick="pinKey('5')">5</button>
-    <button class="pin-btn" onclick="pinKey('6')">6</button>
-    <button class="pin-btn" onclick="pinKey('7')">7</button>
-    <button class="pin-btn" onclick="pinKey('8')">8</button>
-    <button class="pin-btn" onclick="pinKey('9')">9</button>
-    <button class="pin-btn" style="font-size:0.85rem" onclick="pinClear()">CLR</button>
-    <button class="pin-btn" onclick="pinKey('0')">0</button>
-    <button class="pin-btn" style="font-size:0.85rem" onclick="pinBack()">⌫</button>
+
+  <!-- Step 2: PIN entry (shown after member selected) -->
+  <div id="pin-step-pin" style="display:none;">
+    <div class="pin-sub" id="pin-member-label">Enter your PIN</div>
+    <div class="pin-dots" style="margin-top:16px;">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
+      <div class="pin-dot" id="d4"></div>
+      <div class="pin-dot" id="d5"></div>
+    </div>
+    <div class="pin-pad">
+      <button class="pin-btn" onclick="pinKey('1')">1</button>
+      <button class="pin-btn" onclick="pinKey('2')">2</button>
+      <button class="pin-btn" onclick="pinKey('3')">3</button>
+      <button class="pin-btn" onclick="pinKey('4')">4</button>
+      <button class="pin-btn" onclick="pinKey('5')">5</button>
+      <button class="pin-btn" onclick="pinKey('6')">6</button>
+      <button class="pin-btn" onclick="pinKey('7')">7</button>
+      <button class="pin-btn" onclick="pinKey('8')">8</button>
+      <button class="pin-btn" onclick="pinKey('9')">9</button>
+      <button class="pin-btn" style="font-size:0.85rem" onclick="pinClear()">CLR</button>
+      <button class="pin-btn" onclick="pinKey('0')">0</button>
+      <button class="pin-btn" style="font-size:0.85rem" onclick="pinBack()">⌫</button>
+    </div>
+    <div class="pin-error" id="pin-error"></div>
+    <div onclick="backToWho()" style="margin-top:12px;font-size:12px;color:rgba(255,255,255,0.4);cursor:pointer;text-align:center;">← Switch member</div>
   </div>
-  <div class="pin-error" id="pin-error"></div>
 </div>
 
 <body>
@@ -244,6 +266,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="sb-logo">
     <img src="elara-bot-logo.png" alt="Carely" style="height:46px;margin-bottom:6px;display:block;">
     <div class="sub">Mission Control HQ</div>
+    <div id="sb-member-badge" style="display:none;margin-top:8px;background:rgba(2,195,154,0.15);border:1px solid rgba(2,195,154,0.3);border-radius:8px;padding:7px 10px;display:flex;align-items:center;gap:8px;">
+      <span id="sb-member-icon" style="font-size:18px;">👨‍💻</span>
+      <div>
+        <div id="sb-member-name" style="font-size:12px;font-weight:800;color:#02C39A;">TJ</div>
+        <div id="sb-member-role" style="font-size:10px;color:rgba(255,255,255,0.4);">CEO · Engineering</div>
+      </div>
+      <span onclick="doLogout()" style="margin-left:auto;font-size:10px;color:rgba(255,255,255,0.3);cursor:pointer;">logout</span>
+    </div>
   </div>
 
   <div class="sb-sec">
@@ -261,6 +291,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="sb-sec">
     <div class="sb-sec-title">Growth</div>
+    <div class="sb-item" onclick="nav(this,'proposals')"><span class="ic">🧠</span> Proposals <span class="dot-a" id="proposals-dot"></span></div>
     <div class="sb-item" onclick="nav(this,'content-hub')"><span class="ic">🎬</span> Content Hub <span class="dot-g"></span></div>
     <div class="sb-item" onclick="nav(this,'approvals')"><span class="ic">✅</span> Approvals <span class="dot-a"></span></div>
     <div class="sb-item" onclick="nav(this,'platforms')"><span class="ic">🌐</span> Platforms</div>
@@ -666,6 +697,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
+  <!-- ══ PROPOSALS (Hermes → TJ/Prabh) ══ -->
+  <div class="page" id="page-proposals">
+    <div class="ph"><h1>🧠 Hermes Proposals</h1><p>Changes Hermes wants to make · Approve to execute · Reject to cancel · Nothing runs without your OK</p></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+      <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="proposals-count-label">Loading...</div>
+      <select id="proposals-filter" onchange="loadProposals()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
+        <option value="pending">Pending approval</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+        <option value="">All</option>
+      </select>
+      <button onclick="loadProposals()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+    </div>
+    <div id="proposals-feed" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem;">Loading proposals...</div>
+    </div>
+  </div>
+
   <!-- ══ APPROVALS ══ -->
   <div class="page" id="page-approvals">
     <div class="ph"><h1>✅ Approvals</h1><p>Agent drafts pending TJ sign-off · Approve to send · Skip to discard</p></div>
@@ -808,22 +857,83 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ CRM ══ -->
   <div class="page" id="page-crm">
-    <div class="ph"><h1>👤 CRM</h1><p>All users · Plans · Activity · Trial status — live from Supabase</p></div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-      <select id="crm-filter" onchange="loadCRM()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
-        <option value="">All users</option>
-        <option value="founding">Founding</option>
-        <option value="monthly">Monthly</option>
-        <option value="annual">Annual</option>
-        <option value="trial">Trial</option>
-        <option value="cancelled">Cancelled</option>
-      </select>
-      <div style="font-size:0.8rem;color:var(--g500)" id="crm-count">Loading...</div>
-      <button onclick="loadCRM()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+    <div class="ph"><h1>👤 CRM</h1><p>Consumer users + B2B pipeline · All contacts · Live from backend</p></div>
+
+    <!-- CRM Tab switcher -->
+    <div class="tabs" style="margin-bottom:16px;">
+      <div class="tab active" onclick="crmTab('users',this)">Consumer Users</div>
+      <div class="tab" onclick="crmTab('b2b',this)">B2B Pipeline</div>
+      <div class="tab" onclick="crmTab('stats',this)">Pipeline Stats</div>
     </div>
-    <div class="card" style="overflow-x:auto">
-      <div id="crm-table-wrap">
-        <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading users...</div>
+
+    <!-- Consumer Users tab -->
+    <div id="crm-pane-users">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <select id="crm-filter" onchange="loadCRM()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
+          <option value="">All users</option>
+          <option value="founding">Founding</option>
+          <option value="monthly">Monthly</option>
+          <option value="annual">Annual</option>
+          <option value="trial">Trial</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <div style="font-size:0.8rem;color:var(--g500)" id="crm-count">Loading...</div>
+        <button onclick="loadCRM()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      </div>
+      <div class="card" style="overflow-x:auto">
+        <div id="crm-table-wrap">
+          <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading users...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B2B Pipeline tab -->
+    <div id="crm-pane-b2b" style="display:none;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <select id="b2b-status-filter" onchange="loadB2BPipeline()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
+          <option value="">All stages</option>
+          <option value="pending">Prospecting</option>
+          <option value="sent">Contacted</option>
+          <option value="opened">Opened Email</option>
+          <option value="clicked">Clicked Link</option>
+          <option value="replied">Replied</option>
+          <option value="converted">Won</option>
+          <option value="unsubscribed">Unsubscribed</option>
+        </select>
+        <select id="b2b-type-filter" onchange="loadB2BPipeline()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
+          <option value="">All types</option>
+          <option value="senior_living">Senior Living</option>
+          <option value="pharmacy">Pharmacy</option>
+          <option value="clinic">Clinic</option>
+          <option value="caregiver_org">Caregiver Org</option>
+          <option value="home_care">Home Care</option>
+        </select>
+        <div style="font-size:0.8rem;color:var(--g500)" id="b2b-count">Loading...</div>
+        <button onclick="loadB2BPipeline()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      </div>
+
+      <!-- Pipeline stage summary -->
+      <div class="metric-row" id="b2b-stage-summary" style="margin-bottom:16px;"></div>
+
+      <div class="card" style="overflow-x:auto;">
+        <div id="b2b-table-wrap">
+          <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem;">Loading B2B pipeline...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pipeline Stats tab -->
+    <div id="crm-pane-stats" style="display:none;">
+      <div class="metric-row" id="b2b-stats-row"></div>
+      <div class="cols" style="margin-top:16px;">
+        <div class="card">
+          <div class="card-title">Top Performing Segments</div>
+          <div id="b2b-segment-breakdown" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Cole + Hermes Activity (Last 7 Days)</div>
+          <div id="b2b-cole-activity" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -2167,47 +2277,422 @@ function submitEdit(id) {
   });
 }
 
-// PIN lock
-var PIN_HASH = '272727';
+// ═══ TEAM AUTH ════════════════════════════════════════════════════════════════
+var TEAM = {
+  tj:    { pin: '272727', name: 'TJ',    role: 'CEO · Engineering', icon: '👨‍💻' },
+  prabh: { pin: '626262', name: 'Prabh', role: 'COO · Marketing',   icon: '👩‍💼' }
+};
+var _selectedMember = null;
 var pinEntry = '';
+
 (function() {
-  var session = sessionStorage.getItem('carely-hq-auth');
-  if (session === 'ok') {
+  var stored = sessionStorage.getItem('carely-hq-member');
+  if (stored && TEAM[stored]) {
     document.getElementById('pin-screen').classList.add('hidden');
+    _showMemberBadge(stored);
   }
 })();
+
+function selectMember(id) {
+  if (!TEAM[id]) return;
+  _selectedMember = id;
+  document.getElementById('pin-step-who').style.display = 'none';
+  document.getElementById('pin-step-pin').style.display = '';
+  var label = document.getElementById('pin-member-label');
+  if (label) label.textContent = 'Enter PIN for ' + TEAM[id].name;
+  pinEntry = '';
+  _updateDots();
+}
+
+function backToWho() {
+  _selectedMember = null;
+  pinEntry = '';
+  document.getElementById('pin-step-who').style.display = '';
+  document.getElementById('pin-step-pin').style.display = 'none';
+  var err = document.getElementById('pin-error');
+  if (err) err.textContent = '';
+  _updateDots();
+}
+
+function _updateDots() {
+  for (var i = 0; i < 6; i++) {
+    var el = document.getElementById('d' + i);
+    if (el) el.classList.toggle('filled', i < pinEntry.length);
+  }
+}
+
 function pinKey(d) {
   if (pinEntry.length >= 6) return;
   pinEntry += d;
-  updateDots();
-  if (pinEntry.length === 6) checkPin();
+  _updateDots();
+  if (pinEntry.length === 6) _checkPin();
 }
-function pinBack() { pinEntry = pinEntry.slice(0,-1); updateDots(); }
-function pinClear() { pinEntry = ''; updateDots(); }
-function updateDots() {
-  for (var i = 0; i < 6; i++) {
-    document.getElementById('d' + i).classList.toggle('filled', i < pinEntry.length);
-  }
-}
-function checkPin() {
-  if (pinEntry === PIN_HASH) {
-    sessionStorage.setItem('carely-hq-auth', 'ok');
+
+function pinBack() { pinEntry = pinEntry.slice(0, -1); _updateDots(); }
+function pinClear() { pinEntry = ''; _updateDots(); }
+
+function _checkPin() {
+  var member = TEAM[_selectedMember];
+  if (!member) return;
+  if (pinEntry === member.pin) {
+    sessionStorage.setItem('carely-hq-member', _selectedMember);
     document.getElementById('pin-screen').classList.add('hidden');
+    _showMemberBadge(_selectedMember);
   } else {
-    document.getElementById('pin-error').textContent = 'Incorrect PIN. Try again.';
+    var err = document.getElementById('pin-error');
+    if (err) err.textContent = 'Incorrect PIN. Try again.';
     pinEntry = '';
-    updateDots();
-    setTimeout(function(){ document.getElementById('pin-error').textContent = ''; }, 2000);
+    _updateDots();
+    setTimeout(function() { if (err) err.textContent = ''; }, 2000);
   }
 }
+
+function _showMemberBadge(id) {
+  var member = TEAM[id];
+  if (!member) return;
+  var badge = document.getElementById('sb-member-badge');
+  var icon  = document.getElementById('sb-member-icon');
+  var name  = document.getElementById('sb-member-name');
+  var role  = document.getElementById('sb-member-role');
+  if (badge) badge.style.display = 'flex';
+  if (icon)  icon.textContent    = member.icon;
+  if (name)  name.textContent    = member.name;
+  if (role)  role.textContent    = member.role;
+}
+
+function doLogout() {
+  sessionStorage.removeItem('carely-hq-member');
+  _selectedMember = null;
+  pinEntry = '';
+  var badge = document.getElementById('sb-member-badge');
+  if (badge) badge.style.display = 'none';
+  backToWho();
+  document.getElementById('pin-screen').classList.remove('hidden');
+}
+
 document.addEventListener('keydown', function(e) {
   var ps = document.getElementById('pin-screen');
-  if (ps && !ps.classList.contains('hidden')) {
+  if (ps && !ps.classList.contains('hidden') && _selectedMember) {
     if (e.key >= '0' && e.key <= '9') pinKey(e.key);
     else if (e.key === 'Backspace') pinBack();
     else if (e.key === 'Escape') pinClear();
   }
 });
+
+// ═══ CRM TABS ═════════════════════════════════════════════════════════════════
+function crmTab(pane, tabEl) {
+  ['users','b2b','stats'].forEach(function(p) {
+    var el = document.getElementById('crm-pane-' + p);
+    if (el) el.style.display = p === pane ? '' : 'none';
+  });
+  document.querySelectorAll('#page-crm .tab').forEach(function(t) { t.classList.remove('active'); });
+  if (tabEl) tabEl.classList.add('active');
+  if (pane === 'b2b')   loadB2BPipeline();
+  if (pane === 'stats') loadB2BStats();
+}
+
+// ═══ B2B PIPELINE ══════════════════════════════════════════════════════════════
+function loadB2BPipeline() {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var statusF = document.getElementById('b2b-status-filter');
+  var typeF   = document.getElementById('b2b-type-filter');
+  var countEl = document.getElementById('b2b-count');
+  var wrap    = document.getElementById('b2b-table-wrap');
+  var summary = document.getElementById('b2b-stage-summary');
+
+  if (wrap) {
+    wrap.textContent = '';
+    var ld = document.createElement('div');
+    ld.style.cssText = 'text-align:center;padding:28px;color:var(--g500);font-size:0.82rem';
+    ld.textContent = 'Loading pipeline...';
+    wrap.appendChild(ld);
+  }
+
+  var qs = [];
+  if (statusF && statusF.value) qs.push('status=' + encodeURIComponent(statusF.value));
+  if (typeF   && typeF.value)   qs.push('type='   + encodeURIComponent(typeF.value));
+  var url = BACKEND + '/admin/outreach-targets' + (qs.length ? '?' + qs.join('&') : '');
+
+  fetch(url, { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(8000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var targets = Array.isArray(d) ? d : (d.targets || d.data || []);
+      if (countEl) countEl.textContent = targets.length + ' orgs';
+
+      if (summary) {
+        summary.textContent = '';
+        var STAGE_LABELS = { pending:'Prospecting', sent:'Contacted', opened:'Opened', clicked:'Clicked', replied:'Replied', converted:'Won', unsubscribed:'Unsub' };
+        var counts = {};
+        targets.forEach(function(t) { counts[t.status] = (counts[t.status]||0) + 1; });
+        Object.keys(STAGE_LABELS).forEach(function(s) {
+          if (!counts[s]) return;
+          var m = document.createElement('div'); m.className = 'metric';
+          var lbl = document.createElement('div'); lbl.className = 'metric-label'; lbl.textContent = STAGE_LABELS[s]; m.appendChild(lbl);
+          var val = document.createElement('div'); val.className = 'metric-val teal'; val.textContent = counts[s]; m.appendChild(val);
+          summary.appendChild(m);
+        });
+      }
+
+      if (wrap) {
+        wrap.textContent = '';
+        if (!targets.length) {
+          var empty = document.createElement('div');
+          empty.style.cssText = 'text-align:center;padding:28px;color:var(--g500);font-size:0.82rem';
+          empty.textContent = 'No organizations in pipeline yet. Cole is building it.';
+          wrap.appendChild(empty);
+          return;
+        }
+        var tbl = document.createElement('table'); tbl.className = 'tbl';
+        var thead = document.createElement('thead');
+        var hrow  = document.createElement('tr');
+        ['Organization','Type','Region','Status','Last Contact','Emails Sent','Actions'].forEach(function(h) {
+          var th = document.createElement('th'); th.textContent = h; hrow.appendChild(th);
+        });
+        thead.appendChild(hrow); tbl.appendChild(thead);
+        var tbody = document.createElement('tbody');
+        var SC = { pending:'amber', sent:'', opened:'teal', clicked:'teal', replied:'green', converted:'green', unsubscribed:'red' };
+        targets.forEach(function(t) {
+          var tr = document.createElement('tr');
+          var vals = [
+            t.org_name || '—',
+            (t.org_type || '').replace(/_/g,' '),
+            t.region || '—',
+            t.status || '—',
+            t.last_contacted_at ? new Date(t.last_contacted_at).toLocaleDateString() : '—',
+            String(t.emails_sent || 0)
+          ];
+          vals.forEach(function(v, i) {
+            var td = document.createElement('td');
+            if (i === 3) {
+              var pill = document.createElement('span');
+              pill.className = 'pill ' + (SC[t.status] || '');
+              pill.textContent = v;
+              td.appendChild(pill);
+            } else {
+              td.textContent = v;
+            }
+            tr.appendChild(td);
+          });
+          var tdA = document.createElement('td');
+          if (t.status !== 'unsubscribed') {
+            var btn = document.createElement('button');
+            btn.style.cssText = 'font-size:0.7rem;border:1px solid var(--g300);padding:2px 8px;border-radius:5px;background:white;cursor:pointer;color:var(--g500)';
+            btn.textContent = 'Details';
+            (function(org) {
+              btn.onclick = function() {
+                alert('Org: ' + org.org_name + '\nEmail: ' + (org.contact_email||'—') + '\nWebsite: ' + (org.website||'—') + '\nNote: ' + (org.notes||'—'));
+              };
+            })(t);
+            tdA.appendChild(btn);
+          }
+          tr.appendChild(tdA);
+          tbody.appendChild(tr);
+        });
+        tbl.appendChild(tbody);
+        wrap.appendChild(tbl);
+      }
+    })
+    .catch(function() {
+      if (wrap) {
+        wrap.textContent = '';
+        var er = document.createElement('div');
+        er.style.cssText = 'text-align:center;padding:28px;color:var(--red);font-size:0.82rem';
+        er.textContent = 'Could not load pipeline — backend unreachable.';
+        wrap.appendChild(er);
+      }
+      if (countEl) countEl.textContent = 'Error';
+    });
+}
+
+// ═══ B2B STATS ══════════════════════════════════════════════════════════════
+function loadB2BStats() {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var statsRow = document.getElementById('b2b-stats-row');
+  var segEl    = document.getElementById('b2b-segment-breakdown');
+  var actEl    = document.getElementById('b2b-cole-activity');
+  if (statsRow) statsRow.textContent = '';
+  if (segEl)    { segEl.textContent = ''; var ld1 = document.createElement('div'); ld1.style.cssText='color:var(--g500);font-size:0.82rem'; ld1.textContent='Loading...'; segEl.appendChild(ld1); }
+  if (actEl)    { actEl.textContent = ''; var ld2 = document.createElement('div'); ld2.style.cssText='color:var(--g500);font-size:0.82rem'; ld2.textContent='Loading...'; actEl.appendChild(ld2); }
+
+  fetch(BACKEND + '/admin/outreach-targets', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(8000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var targets = Array.isArray(d) ? d : (d.targets || d.data || []);
+      var total      = targets.length;
+      var contacted  = targets.filter(function(t) { return t.emails_sent > 0; }).length;
+      var replies    = targets.filter(function(t) { return t.status === 'replied'; }).length;
+      var won        = targets.filter(function(t) { return t.status === 'converted'; }).length;
+      var unsub      = targets.filter(function(t) { return t.status === 'unsubscribed'; }).length;
+      var replyRate  = contacted ? Math.round(replies / contacted * 100) : 0;
+
+      if (statsRow) {
+        [
+          ['Total Orgs',   total,          ''],
+          ['Contacted',    contacted,      'teal'],
+          ['Replied',      replies,        'green'],
+          ['Won',          won,            'green'],
+          ['Reply Rate',   replyRate + '%', replyRate >= 5 ? 'green' : 'amber'],
+          ['Unsubscribed', unsub,          'red']
+        ].forEach(function(row) {
+          var m = document.createElement('div'); m.className = 'metric';
+          var lbl = document.createElement('div'); lbl.className = 'metric-label'; lbl.textContent = row[0]; m.appendChild(lbl);
+          var val = document.createElement('div'); val.className = 'metric-val ' + row[2]; val.textContent = row[1]; m.appendChild(val);
+          statsRow.appendChild(m);
+        });
+      }
+
+      if (segEl) {
+        segEl.textContent = '';
+        var byType = {};
+        targets.forEach(function(t) { var k = t.org_type || 'other'; byType[k] = (byType[k]||0) + 1; });
+        var keys = Object.keys(byType).sort(function(a,b) { return byType[b] - byType[a]; });
+        if (!keys.length) { segEl.textContent = 'No data yet'; }
+        else keys.forEach(function(k) {
+          var row = document.createElement('div');
+          row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;padding:5px 0;border-bottom:1px solid var(--g100)';
+          var lbl = document.createElement('span'); lbl.textContent = k.replace(/_/g,' '); row.appendChild(lbl);
+          var cnt = document.createElement('span'); cnt.style.fontWeight = '700'; cnt.textContent = byType[k]; row.appendChild(cnt);
+          segEl.appendChild(row);
+        });
+      }
+
+      if (actEl) {
+        actEl.textContent = '';
+        [
+          'Pipeline built: ' + total + ' orgs discovered',
+          'Emails sent to: ' + contacted + ' orgs',
+          'Reply rate: ' + replyRate + '% (' + replies + ' replies)',
+          'Converted / won: ' + won + ' orgs',
+          'Unsubscribes honoured: ' + unsub
+        ].forEach(function(a) {
+          var row = document.createElement('div');
+          row.style.cssText = 'font-size:0.8rem;padding:5px 0;border-bottom:1px solid var(--g100)';
+          row.textContent = '· ' + a;
+          actEl.appendChild(row);
+        });
+      }
+    })
+    .catch(function() {
+      if (statsRow) {
+        var er = document.createElement('div'); er.style.cssText='color:var(--red);font-size:0.82rem;padding:8px';
+        er.textContent = 'Could not load stats.'; statsRow.appendChild(er);
+      }
+    });
+}
+
+// ═══ PROPOSALS ═══════════════════════════════════════════════════════════════
+function loadProposals() {
+  var BACKEND  = 'https://carely-backend-production.up.railway.app';
+  var SECRET   = 'carely-admin-6add43330d2313d8';
+  var filterEl = document.getElementById('proposals-filter');
+  var filter   = filterEl ? filterEl.value : 'pending';
+  var feed     = document.getElementById('proposals-feed');
+  var countLbl = document.getElementById('proposals-count-label');
+
+  if (feed) {
+    feed.textContent = '';
+    var ld = document.createElement('div');
+    ld.style.cssText = 'text-align:center;padding:28px;color:var(--g500);font-size:0.82rem';
+    ld.textContent = 'Loading proposals...';
+    feed.appendChild(ld);
+  }
+
+  var url = BACKEND + '/admin/proposals' + (filter ? '?status=' + encodeURIComponent(filter) : '');
+  fetch(url, { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(8000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var proposals = Array.isArray(d) ? d : (d.proposals || []);
+      if (countLbl) countLbl.textContent = proposals.length + ' proposal' + (proposals.length !== 1 ? 's' : '');
+      if (!feed) return;
+      feed.textContent = '';
+      if (!proposals.length) {
+        var empty = document.createElement('div'); empty.className = 'card';
+        empty.style.cssText = 'text-align:center;padding:28px;color:var(--g500);font-size:0.82rem';
+        empty.textContent = 'No proposals in this category.';
+        feed.appendChild(empty);
+        return;
+      }
+      var SC = { pending:'amber', approved:'green', rejected:'red' };
+      proposals.forEach(function(p) {
+        var card = document.createElement('div'); card.className = 'card';
+
+        var hdr = document.createElement('div'); hdr.style.cssText = 'display:flex;align-items:flex-start;gap:10px;margin-bottom:12px';
+        var iconEl = document.createElement('div'); iconEl.style.cssText = 'font-size:1.4rem;flex-shrink:0'; iconEl.textContent = '🧠'; hdr.appendChild(iconEl);
+        var info = document.createElement('div'); info.style.flex = '1';
+        var titleEl = document.createElement('div'); titleEl.style.cssText = 'font-size:0.9rem;font-weight:800;color:var(--deep)'; titleEl.textContent = p.title || 'Untitled Proposal'; info.appendChild(titleEl);
+        var metaEl = document.createElement('div'); metaEl.style.cssText = 'font-size:0.72rem;color:var(--g500);margin-top:2px';
+        metaEl.textContent = (p.category || 'General') + ' · ' + (p.created_at ? new Date(p.created_at).toLocaleDateString() : 'Just now');
+        info.appendChild(metaEl);
+        hdr.appendChild(info);
+        var pillEl = document.createElement('span'); pillEl.className = 'pill ' + (SC[p.status]||''); pillEl.textContent = p.status || 'pending'; hdr.appendChild(pillEl);
+        card.appendChild(hdr);
+
+        if (p.description || p.body) {
+          var desc = document.createElement('div');
+          desc.style.cssText = 'font-size:0.82rem;color:var(--text);margin-bottom:12px;line-height:1.6;background:var(--g100);padding:10px 12px;border-radius:8px';
+          desc.textContent = p.description || p.body;
+          card.appendChild(desc);
+        }
+
+        if (p.impact || p.effort) {
+          var badges = document.createElement('div'); badges.style.cssText = 'display:flex;gap:10px;margin-bottom:12px';
+          if (p.impact) { var ip = document.createElement('span'); ip.className = 'pill green'; ip.textContent = 'Impact: ' + p.impact; badges.appendChild(ip); }
+          if (p.effort) { var ep = document.createElement('span'); ep.className = 'pill amber'; ep.textContent = 'Effort: ' + p.effort; badges.appendChild(ep); }
+          card.appendChild(badges);
+        }
+
+        if (p.status === 'pending') {
+          var actions = document.createElement('div'); actions.style.cssText = 'display:flex;gap:8px';
+          var appBtn = document.createElement('button');
+          appBtn.style.cssText = 'padding:6px 16px;border-radius:8px;border:none;background:var(--green);color:white;font-weight:700;font-size:0.8rem;cursor:pointer';
+          appBtn.textContent = 'Approve — Execute';
+          (function(pid) { appBtn.onclick = function() { approveProposal(pid); }; })(p.id);
+          actions.appendChild(appBtn);
+          var rejBtn = document.createElement('button');
+          rejBtn.style.cssText = 'padding:6px 16px;border-radius:8px;border:1.5px solid var(--red);background:white;color:var(--red);font-weight:700;font-size:0.8rem;cursor:pointer';
+          rejBtn.textContent = 'Reject';
+          (function(pid) { rejBtn.onclick = function() { rejectProposal(pid); }; })(p.id);
+          actions.appendChild(rejBtn);
+          card.appendChild(actions);
+        }
+
+        feed.appendChild(card);
+      });
+    })
+    .catch(function() {
+      if (feed) {
+        feed.textContent = '';
+        var er = document.createElement('div'); er.className = 'card';
+        er.style.cssText = 'text-align:center;padding:28px;color:var(--red);font-size:0.82rem';
+        er.textContent = 'Could not load proposals — backend unreachable.';
+        feed.appendChild(er);
+      }
+      if (countLbl) countLbl.textContent = 'Error';
+    });
+}
+
+function approveProposal(id) {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+  if (!confirm('Approve this proposal? Hermes will execute it immediately.')) return;
+  fetch(BACKEND + '/admin/proposals/' + encodeURIComponent(id) + '/approve', {
+    method: 'POST', headers: { 'x-carely-secret': SECRET }
+  })
+    .then(function() { loadProposals(); })
+    .catch(function() { alert('Could not approve — check backend.'); });
+}
+
+function rejectProposal(id) {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+  fetch(BACKEND + '/admin/proposals/' + encodeURIComponent(id) + '/reject', {
+    method: 'POST', headers: { 'x-carely-secret': SECRET }
+  })
+    .then(function() { loadProposals(); })
+    .catch(function() { alert('Could not reject — check backend.'); });
+}
 
 // ═══ LIVE BACKEND DATA ═══════════════════════════════════════════════════════
 (function() {
