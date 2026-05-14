@@ -300,6 +300,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="sb-sec">
     <div class="sb-sec-title">Intelligence</div>
+    <div class="sb-item" onclick="nav(this,'brain')"><span class="ic">🧬</span> Obsidian Brain <span class="dot-g"></span></div>
     <div class="sb-item" onclick="nav(this,'intel-pool')"><span class="ic">🎯</span> Intel Pool <span class="dot-a"></span></div>
     <div class="sb-item" onclick="nav(this,'seo')"><span class="ic">🔍</span> SEO</div>
     <div class="sb-item" onclick="nav(this,'agent-chat')"><span class="ic">🤖</span> Agent Activity</div>
@@ -347,9 +348,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="ph"><h1>📋 Daily Brief</h1><p>What the business needs today · Agent network status · Open issues</p></div>
     <div class="alert green">✅ <div><strong>May 14, 2026 — T-16 days to launch (May 30).</strong> All 18 agents running. Persona Intelligence System live on Railway. <span style="color:#dc2626;font-weight:700">BLOCKERS: OpenRouter $0 (top up now) · Reddit creds missing · iOS not submitted</span></div></div>
     <div class="metric-row">
-      <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber">0</div><div class="metric-sub">Launch day — first sale pending</div></div>
-      <div class="metric"><div class="metric-label">Beta Testers</div><div class="metric-val teal">12</div><div class="metric-sub">Active on closed testing</div></div>
-      <div class="metric"><div class="metric-label">MRR</div><div class="metric-val">$0</div><div class="metric-sub">Grows from May 5 launch</div></div>
+      <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber" id="db-paid">—</div><div class="metric-sub">Live from Stripe</div></div>
+      <div class="metric"><div class="metric-label">Beta Testers</div><div class="metric-val teal" id="db-trial">—</div><div class="metric-sub">Active trial users</div></div>
+      <div class="metric"><div class="metric-label">MRR</div><div class="metric-val" id="db-mrr">—</div><div class="metric-sub">Monthly recurring revenue</div></div>
       <div class="metric"><div class="metric-label">Monthly Burn</div><div class="metric-val amber">~$22</div><div class="metric-sub">Railway + OpenAI + domain</div></div>
     </div>
     <div class="cols">
@@ -372,29 +373,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <div class="card">
       <div class="card-title">📡 Agent Status</div>
-      <table class="tbl">
-        <thead><tr><th>Agent</th><th>Role</th><th>Schedule</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Frank</strong></td><td>Dose reminders via FCM</td><td>Every minute</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Maya</strong></td><td>Missed dose detector</td><td>Every 30 min</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Cara</strong></td><td>Caregiver missed-dose alert</td><td>Triggered by Maya</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Grace</strong></td><td>Daily "are you okay?" push</td><td>10 AM UTC</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Elara</strong></td><td>AI caretaker — core product chat</td><td>On-demand</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Dr. Bridge</strong></td><td>Doctor + caregiver PDF reports</td><td>Hourly check / weekly email</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Nina</strong></td><td>Email nurture + support triage</td><td>10 AM UTC daily</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Blaze</strong></td><td>Launch email blast</td><td>May 5 — one-time</td><td><span class="pill green">Fired ✓</span></td></tr>
-          <tr><td><strong>Lena</strong></td><td>Win-back + retention closer</td><td>11 AM UTC daily</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Leo</strong></td><td>LinkedIn posts 6x/week as Prabh</td><td>Mon/Wed/Fri 8AM + Tue/Thu/Sat 5PM PST</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Rex</strong></td><td>Reddit monitor 18 subreddits</td><td>Every 6 hours</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Cole</strong></td><td>B2B outreach — orgs, clinics</td><td>2 PM UTC daily</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Ace</strong></td><td>Morning brief + EOD strategic scan + per-agent directives</td><td>8 AM + 8 PM PST</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Scout</strong></td><td>ASO weekly report + SEO + Google IndexNow</td><td>On deploy + Sundays 7 AM PST</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Oracle</strong></td><td>World intel — Reddit ICP signals + iTunes ratings synthesis</td><td>Every 30 min</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Signals</strong></td><td>Customer pain scan — 7 ICP subreddits for content angles</td><td>Every 2 hours</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Comp Intel</strong></td><td>Competitor App Store snapshot — rating deltas, version changes</td><td>Every 6 hours</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Vance</strong></td><td>Daily TikTok/Reels/Shorts script for Prabh to film</td><td>9 AM PST daily</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Refer</strong></td><td>Referral engine — viral loop, reward tracking</td><td>Triggered on high adherence</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Hermes</strong></td><td>CEO — reads all metrics, commands all agents, responds to TJ via Telegram</td><td>8 AM + 8 PM PST + on-demand</td><td><span class="pill teal">Active</span></td></tr>
+      <table class="tbl" id="brief-agent-table">
+        <thead><tr><th>Agent</th><th>Role</th><th>Schedule (PST)</th><th>Last Run</th><th>Status</th></tr></thead>
+        <tbody id="brief-agent-tbody">
+          <tr><td><strong>Frank</strong></td><td>Dose reminders via FCM</td><td>Every minute</td><td id="brief-last-frank">—</td><td><span id="brief-pill-frank" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Maya</strong></td><td>Missed dose detector</td><td>Every 30 min</td><td id="brief-last-maya">—</td><td><span id="brief-pill-maya" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Cara</strong></td><td>Caregiver alert</td><td>Triggered by Maya</td><td id="brief-last-cara">—</td><td><span id="brief-pill-cara" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Grace</strong></td><td>Daily check-in push</td><td>10 AM PST</td><td id="brief-last-grace">—</td><td><span id="brief-pill-grace" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Elara</strong></td><td>AI caretaker chat</td><td>8 AM PST + on-demand</td><td id="brief-last-elara">—</td><td><span id="brief-pill-elara" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Dr. Bridge</strong></td><td>Doctor PDF reports</td><td>Hourly · weekly email 8 AM Sun</td><td id="brief-last-drbridge">—</td><td><span id="brief-pill-drbridge" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Nina</strong></td><td>Nurture + trial onboarding</td><td>10 AM PST</td><td id="brief-last-nina">—</td><td><span id="brief-pill-nina" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Lena</strong></td><td>Win-back + closer</td><td>11 AM PST</td><td id="brief-last-lena">—</td><td><span id="brief-pill-lena" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Blaze</strong></td><td>Launch email blast</td><td>May 30 launch day</td><td id="brief-last-blaze">—</td><td><span id="brief-pill-blaze" class="pill amber">Standby</span></td></tr>
+          <tr><td><strong>Leo</strong></td><td>LinkedIn 6x/week</td><td>Mon/Wed/Fri 8AM · Tue/Thu/Sat 5PM</td><td id="brief-last-leo">—</td><td><span id="brief-pill-leo" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Rex</strong></td><td>Reddit monitor 18 subs</td><td>Every 6 hours</td><td id="brief-last-rex">—</td><td><span id="brief-pill-rex" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Cole</strong></td><td>B2B outreach</td><td>Research 9 AM · Outreach 10 AM</td><td id="brief-last-cole">—</td><td><span id="brief-pill-cole" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Vance</strong></td><td>TikTok/Reels scripts for Prabh</td><td>9 AM PST</td><td id="brief-last-vance">—</td><td><span id="brief-pill-vance" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Scout</strong></td><td>ASO + SEO + IndexNow</td><td>Deploy + Sundays 9 AM</td><td id="brief-last-scout">—</td><td><span id="brief-pill-scout" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Oracle</strong></td><td>World intel · Reddit + iTunes</td><td>Every 30 min</td><td id="brief-last-oracle">—</td><td><span id="brief-pill-oracle" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Signals</strong></td><td>Customer pain scan</td><td>Every 2 hours</td><td id="brief-last-signals">—</td><td><span id="brief-pill-signals" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Comp Intel</strong></td><td>Competitor App Store monitor</td><td>Every 6 hours</td><td id="brief-last-compintel">—</td><td><span id="brief-pill-compintel" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Refer</strong></td><td>Referral + viral loop</td><td>1 PM PST daily</td><td id="brief-last-refer">—</td><td><span id="brief-pill-refer" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Ace</strong></td><td>Morning brief + EOD scan</td><td>8 AM + 8 PM PST</td><td id="brief-last-ace">—</td><td><span id="brief-pill-ace" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Hermes</strong></td><td>CEO — commands all agents</td><td>Every 15 min pulse + 7 AM / 8:05 PM</td><td id="brief-last-hermes">—</td><td><span id="brief-pill-hermes" class="pill teal">Active</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -753,6 +754,44 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="list-item"><span>📱</span><div class="name">Google Play Console</div><div class="meta">com.carely.meds — Closed Testing Alpha</div></div>
       <div class="list-item"><span>💳</span><div class="name">Stripe Dashboard</div><div class="meta">dashboard.stripe.com — Founding + Monthly + Annual plans</div></div>
     </div>
+  </div>
+
+  <!-- ══ OBSIDIAN BRAIN ══ -->
+  <div class="page" id="page-brain">
+    <div class="ph"><h1>🧬 Obsidian Brain</h1><p>Hermes' shared knowledge base · All agents read this · 11 live topics · Updates daily</p></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+      <div id="brain-status" style="font-size:0.82rem;font-weight:700;color:var(--deep)">Loading brain...</div>
+      <button onclick="loadBrain()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      <button onclick="showBrainInject()" style="font-size:0.73rem;border:none;padding:3px 12px;border-radius:6px;background:var(--teal);color:white;cursor:pointer;font-weight:700">+ Inject Note</button>
+    </div>
+    <!-- Inject panel (hidden by default) -->
+    <div id="brain-inject-panel" style="display:none;background:white;border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:0 1px 8px rgba(0,0,0,0.06);">
+      <div style="font-size:0.85rem;font-weight:800;color:var(--deep);margin-bottom:10px;">Inject into Brain</div>
+      <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
+        <select id="brain-inject-topic" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;flex:1;min-width:160px">
+          <option value="growth_playbook">Growth Playbook</option>
+          <option value="agent_directives">Agent Directives</option>
+          <option value="product">Product</option>
+          <option value="customers">Customers</option>
+          <option value="pricing">Pricing</option>
+          <option value="competitors">Competitors</option>
+          <option value="market">Market</option>
+          <option value="feedback_patterns">Feedback Patterns</option>
+          <option value="carely_brand">Carely Brand</option>
+          <option value="carely_voice">Carely Voice</option>
+          <option value="launch_state">Launch State</option>
+        </select>
+        <input id="brain-inject-key" type="text" placeholder="key (e.g. pricing_note_may14)" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;flex:1;min-width:160px" />
+      </div>
+      <textarea id="brain-inject-value" placeholder="What should Hermes and all agents know?" rows="3" style="width:100%;font-size:0.82rem;padding:8px 12px;border:1px solid var(--g300);border-radius:8px;resize:vertical;font-family:inherit;margin-bottom:8px;"></textarea>
+      <div style="display:flex;gap:8px;">
+        <button onclick="submitBrainInject()" style="padding:6px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.8rem;cursor:pointer">Inject</button>
+        <button onclick="document.getElementById('brain-inject-panel').style.display='none'" style="padding:6px 14px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);font-size:0.8rem;cursor:pointer">Cancel</button>
+        <span id="brain-inject-msg" style="font-size:0.78rem;align-self:center;color:var(--green);"></span>
+      </div>
+    </div>
+    <!-- Brain topics grid -->
+    <div id="brain-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;"></div>
   </div>
 
   <!-- ══ INTEL POOL ══ -->
@@ -1633,6 +1672,18 @@ function nav(el, id) {
   document.getElementById('topbar-title').textContent = label.replace(/[●▸]/g,'').trim();
   document.querySelector('.page-area').scrollTo({ top: 0, behavior: 'smooth' });
   closeSidebar();
+  // Trigger fresh data loads when navigating to data-driven pages
+  var PAGE_LOADERS = {
+    'proposals':    function() { loadProposals(); },
+    'approvals':    function() { if (window.loadDrafts) window.loadDrafts(); },
+    'crm':          function() { if (window.loadCRM) window.loadCRM(); },
+    'my-inbox':     function() { if (window.loadInbox) window.loadInbox(); },
+    'team-chat':    function() { if (window.loadTeamFeed) window.loadTeamFeed(); },
+    'agent-chat':   function() { if (window.loadTeamFeed) window.loadTeamFeed(); if (window.loadAgentActivity) window.loadAgentActivity(); },
+    'all-agents':   function() { if (window.loadAgentActivity) window.loadAgentActivity(); },
+    'brain':        function() { loadBrain(); }
+  };
+  if (PAGE_LOADERS[id]) setTimeout(PAGE_LOADERS[id], 50);
 }
 
 function switchTab(el, id) {
@@ -2280,7 +2331,7 @@ function submitEdit(id) {
 // ═══ TEAM AUTH ════════════════════════════════════════════════════════════════
 var TEAM = {
   tj:    { pin: '272727', name: 'TJ',    role: 'CEO · Engineering', icon: '👨‍💻' },
-  prabh: { pin: '626262', name: 'Prabh', role: 'COO · Marketing',   icon: '👩‍💼' }
+  prabh: { pin: '272727', name: 'Prabh', role: 'COO · Marketing',   icon: '👩‍💼' }
 };
 var _selectedMember = null;
 var pinEntry = '';
@@ -2763,6 +2814,11 @@ function rejectProposal(id) {
 
     var wlEl = $('fv-waitlist'); if (wlEl) wlEl.textContent = wl.total || '—';
     var pcEl = $('fv-paid');     if (pcEl) pcEl.textContent = paid;
+
+    // Daily Brief live metrics
+    var dbPaid = $('db-paid'); if (dbPaid) { dbPaid.textContent = paid; dbPaid.className = 'metric-val ' + (paid > 0 ? 'green' : 'amber'); }
+    var dbTrial = $('db-trial'); if (dbTrial) dbTrial.textContent = u.trial || 0;
+    var dbMrr = $('db-mrr'); if (dbMrr) { dbMrr.textContent = '$' + (+(rev.mrr)||0).toFixed(0); dbMrr.className = 'metric-val ' + (rev.mrr > 0 ? 'green' : ''); }
 
     lastAt = Date.now();
     var lu = $('live-updated'); if (lu) lu.textContent = '· Updated just now';
@@ -3329,12 +3385,30 @@ function rejectProposal(id) {
   var BACKEND = 'https://carely-backend-production.up.railway.app';
   var SECRET  = 'carely-admin-6add43330d2313d8';
 
+  function timeAgoShort(iso) {
+    if (!iso) return '—';
+    var s = Math.round((Date.now() - new Date(iso)) / 1000);
+    if (s < 60) return s + 's ago';
+    if (s < 3600) return Math.floor(s / 60) + 'm ago';
+    if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+    return Math.floor(s / 86400) + 'd ago';
+  }
+
   function updateDots(status) {
     Object.keys(status).forEach(function(agent) {
-      var id = 'agent-dot-' + agent.toLowerCase().replace(/\s/g,'-').replace(/\./g,'');
-      var el = document.getElementById(id);
-      if (!el) return;
-      el.className = status[agent].alive ? 'dot-on' : 'dot-off';
+      var key = agent.toLowerCase().replace(/\s/g,'-').replace(/\./g,'');
+      // All-agents page dots
+      var dotEl = document.getElementById('agent-dot-' + key);
+      if (dotEl) dotEl.className = status[agent].alive ? 'dot-on' : 'dot-off';
+      // Daily Brief table: status pill + last run
+      var briefKey = key.replace(/-/g,'').replace(' ','');
+      var pillEl = document.getElementById('brief-pill-' + briefKey);
+      if (pillEl) {
+        pillEl.textContent = status[agent].alive ? 'Running' : 'Offline';
+        pillEl.className   = 'pill ' + (status[agent].alive ? 'green' : 'red');
+      }
+      var lastEl = document.getElementById('brief-last-' + briefKey);
+      if (lastEl) lastEl.textContent = timeAgoShort(status[agent].lastRun || status[agent].last_run);
     });
   }
 
@@ -3413,6 +3487,150 @@ function rejectProposal(id) {
 
   loadSendGridStats();
   setInterval(loadSendGridStats, 300000); // refresh every 5 min
+})();
+
+// ═══ OBSIDIAN BRAIN ════════════════════════════════════════════════════════
+var BRAIN_BACKEND = 'https://carely-backend-production.up.railway.app';
+var BRAIN_SECRET  = 'carely-admin-6add43330d2313d8';
+
+var BRAIN_TOPIC_META = {
+  product:           { icon: '📱', label: 'Product',           color: '#2563EB' },
+  competitors:       { icon: '⚔️',  label: 'Competitors',       color: '#DC2626' },
+  customers:         { icon: '👥', label: 'Customers',          color: '#16A34A' },
+  market:            { icon: '🌍', label: 'Market',             color: '#D97706' },
+  pricing:           { icon: '💰', label: 'Pricing',            color: '#059669' },
+  growth_playbook:   { icon: '🚀', label: 'Growth Playbook',    color: '#7C3AED' },
+  agent_directives:  { icon: '🤖', label: 'Agent Directives',   color: '#0891B2' },
+  carely_brand:      { icon: '💙', label: 'Carely Brand',        color: '#0D3347' },
+  carely_voice:      { icon: '🗣️', label: 'Carely Voice',        color: '#2D8899' },
+  launch_state:      { icon: '🚀', label: 'Launch State',       color: '#F97316' },
+  feedback_patterns: { icon: '💬', label: 'Feedback Patterns',  color: '#EC4899' }
+};
+
+function loadBrain() {
+  var grid   = document.getElementById('brain-grid');
+  var status = document.getElementById('brain-status');
+  if (!grid) return;
+  if (status) status.textContent = 'Loading brain...';
+  grid.textContent = '';
+
+  fetch(BRAIN_BACKEND + '/admin/brain', { headers: { 'x-carely-secret': BRAIN_SECRET }, signal: AbortSignal.timeout(8000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      // Brain returns { entries: [{topic, content, updatedAt, updatedBy, version}] }
+      var topics = {};
+      (d.entries || []).forEach(function(e) { topics[e.topic] = e; });
+      var keys = Object.keys(topics);
+      if (status) status.textContent = keys.length + ' topics live · ' + new Date().toLocaleTimeString('en-CA', { hour12: false }) + ' PST';
+      if (!keys.length) {
+        var empty = document.createElement('div');
+        empty.style.cssText = 'grid-column:1/-1;text-align:center;padding:40px;color:var(--g500);font-size:0.85rem';
+        empty.textContent = 'Brain is empty — Hermes will seed it on next pulse.';
+        grid.appendChild(empty);
+        return;
+      }
+      keys.forEach(function(topic) {
+        var meta  = BRAIN_TOPIC_META[topic] || { icon: '📄', label: topic, color: '#6B7280' };
+        var data  = topics[topic];
+        var card  = document.createElement('div');
+        card.style.cssText = 'background:white;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,0.05);border-top:3px solid ' + meta.color;
+
+        var hdr = document.createElement('div');
+        hdr.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:12px';
+        var ic = document.createElement('span'); ic.style.fontSize='1.2rem'; ic.textContent = meta.icon; hdr.appendChild(ic);
+        var lbl = document.createElement('div');
+        lbl.style.cssText = 'font-size:0.82rem;font-weight:800;color:var(--deep);flex:1'; lbl.textContent = meta.label; hdr.appendChild(lbl);
+        var cnt = document.createElement('span');
+        cnt.style.cssText = 'font-size:0.68rem;color:var(--g500)';
+        var wordCount = (typeof data === 'string' ? data : (data && data.content ? data.content : '')).split(/\s+/).filter(Boolean).length;
+        cnt.textContent = wordCount + ' words';
+        hdr.appendChild(cnt);
+        card.appendChild(hdr);
+
+        var body = document.createElement('div');
+        body.style.cssText = 'display:flex;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto';
+
+        // content is a string (brain stores full topic as text)
+        var rawContent = typeof data === 'string' ? data : (data && data.content ? data.content : JSON.stringify(data));
+        var updatedAt  = data && data.updatedAt ? new Date(data.updatedAt).toLocaleDateString('en-CA') : '';
+        var updatedBy  = data && data.updatedBy ? data.updatedBy : '';
+
+        if (updatedAt || updatedBy) {
+          var metaRow = document.createElement('div');
+          metaRow.style.cssText = 'font-size:0.65rem;color:var(--g500);margin-bottom:6px';
+          metaRow.textContent = 'Updated ' + updatedAt + (updatedBy ? ' by ' + updatedBy : '');
+          body.appendChild(metaRow);
+        }
+
+        // Split on double-newlines to show as sections
+        var sections = rawContent.split(/\n\n+/).filter(Boolean).slice(0, 8);
+        sections.forEach(function(sec) {
+          var row = document.createElement('div');
+          row.style.cssText = 'font-size:0.78rem;padding:6px 10px;background:var(--g100);border-radius:6px;line-height:1.5;white-space:pre-wrap;word-break:break-word';
+          row.textContent = sec.slice(0, 400);
+          body.appendChild(row);
+        });
+        if (rawContent.split(/\n\n+/).filter(Boolean).length > 8) {
+          var more = document.createElement('div');
+          more.style.cssText = 'font-size:0.72rem;color:var(--g500);text-align:center;padding:4px';
+          more.textContent = '+ more content · click Refresh to reload';
+          body.appendChild(more);
+        }
+
+        card.appendChild(body);
+        grid.appendChild(card);
+      });
+    })
+    .catch(function() {
+      if (status) status.textContent = 'Brain unreachable — backend offline?';
+      if (grid) {
+        var er = document.createElement('div');
+        er.style.cssText = 'grid-column:1/-1;text-align:center;padding:40px;color:var(--red);font-size:0.85rem';
+        er.textContent = 'Could not connect to Obsidian Brain. Check Railway backend.';
+        grid.appendChild(er);
+      }
+    });
+}
+
+function showBrainInject() {
+  var p = document.getElementById('brain-inject-panel');
+  if (p) p.style.display = p.style.display === 'none' ? '' : 'none';
+}
+
+function submitBrainInject() {
+  var topic = document.getElementById('brain-inject-topic');
+  var key   = document.getElementById('brain-inject-key');
+  var val   = document.getElementById('brain-inject-value');
+  var msg   = document.getElementById('brain-inject-msg');
+  if (!topic || !key || !val) return;
+  if (!key.value.trim() || !val.value.trim()) { if (msg) { msg.textContent = 'Fill in key and value.'; msg.style.color = 'var(--red)'; } return; }
+  if (msg) { msg.textContent = 'Injecting...'; msg.style.color = 'var(--g500)'; }
+  // Fetch existing content then append the note
+  fetch(BRAIN_BACKEND + '/admin/brain', { headers: { 'x-carely-secret': BRAIN_SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var existing = '';
+      (d.entries || []).forEach(function(e) { if (e.topic === topic.value) existing = e.content || ''; });
+      var note = '\n\n[TJ note · ' + new Date().toLocaleDateString('en-CA') + ' · ' + key.value.trim() + ']\n' + val.value.trim();
+      return fetch(BRAIN_BACKEND + '/admin/brain/' + encodeURIComponent(topic.value), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'x-carely-secret': BRAIN_SECRET },
+        body: JSON.stringify({ content: existing + note })
+      });
+    })
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      if (msg) { msg.textContent = 'Injected! Brain updated.'; msg.style.color = 'var(--green)'; }
+      val.value = ''; key.value = '';
+      setTimeout(function() { loadBrain(); if (msg) msg.textContent = ''; }, 800);
+    })
+    .catch(function() { if (msg) { msg.textContent = 'Inject failed — check backend.'; msg.style.color = 'var(--red)'; } });
+}
+
+// ═══ INIT: load data for pages that need it on startup ═══════════════════════
+(function() {
+  loadProposals();
+  if (window.loadDrafts) window.loadDrafts();
 })();
 </script>
 </body>
