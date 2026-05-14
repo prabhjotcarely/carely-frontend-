@@ -339,8 +339,12 @@
     .midcta-light .midcta-btn { background: var(--t3); }
     .midcta-light .midcta-btn:hover { background: var(--t4); }
 
+    /* ── SECTION WAVE TOPPER ── */
+    .section-wave { display: block; line-height: 0; background: var(--t5); }
+    .section-wave svg { display: block; width: 100%; height: 60px; }
+
     /* ── DEMO / SLIDESHOW ── */
-    .demo { padding: 88px 24px; background: var(--w); }
+    .demo { padding: 60px 24px 88px; background: var(--w); }
     .demo-inner { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
     .slideshow-wrap { display: flex; flex-direction: column; align-items: center; gap: 20px; }
     .slide-tabs { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
@@ -350,7 +354,7 @@
     .slide-phone-wrap { position: relative; width: 260px; }
     .demo-phone { width: 260px; background: #0a1a22; border-radius: 40px; padding: 12px; box-shadow: 0 40px 80px rgba(13,43,56,0.35), 0 0 0 1.5px rgba(68,171,173,0.15), inset 0 1px 0 rgba(255,255,255,0.08); }
     .phone-notch-bar { width: 60px; height: 5px; background: #1a2e38; border-radius: 3px; margin: 0 auto 8px; }
-    .demo-phone-screen { border-radius: 26px; overflow: hidden; background: var(--off); min-height: 420px; }
+    .demo-phone-screen { border-radius: 26px; overflow: hidden; background: #0B2D3D; min-height: 420px; }
     .slide-panel { display: none; animation: slideIn 0.35s ease; }
     .slide-panel.active { display: block; }
     @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -366,60 +370,61 @@
     .s-stat { flex: 1; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 6px; text-align: center; }
     .s-stat-n { font-size: 0.85rem; font-weight: 900; color: #fff; }
     .s-stat-l { font-size: 0.5rem; color: rgba(255,255,255,0.6); }
-    .s-dash-body { padding: 12px; }
-    .s-med-card { background: #fff; border-radius: 10px; padding: 9px 11px; margin-bottom: 7px; display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 6px rgba(13,43,56,0.07); border: 1px solid var(--bor); }
+    .s-dash-body { padding: 12px; background: #0B2D3D; }
+    .s-med-card { background: rgba(255,255,255,0.07); border-radius: 10px; padding: 9px 11px; margin-bottom: 7px; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.1); }
     .s-med-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .s-med-dot.green { background: var(--t1); } .s-med-dot.amber { background: var(--amber); } .s-med-dot.red { background: #e55; }
-    .s-med-name { font-size: 0.67rem; font-weight: 700; color: var(--ink); }
-    .s-med-time { font-size: 0.57rem; color: var(--inks); }
+    .s-med-dot.green { background: #02C39A; } .s-med-dot.amber { background: var(--amber); } .s-med-dot.red { background: #e55; }
+    .s-med-name { font-size: 0.67rem; font-weight: 700; color: #fff; }
+    .s-med-time { font-size: 0.57rem; color: rgba(255,255,255,0.5); }
     .s-med-status { margin-left: auto; font-size: 0.58rem; font-weight: 700; white-space: nowrap; }
-    .s-med-status.green { color: var(--t1); } .s-med-status.amber { color: var(--amber); } .s-med-status.red { color: #e55; }
-    .s-elara-bubble { background: rgba(30,96,112,0.07); border: 1px solid rgba(68,171,173,0.2); border-radius: 10px 10px 10px 3px; padding: 8px 10px; }
-    .s-elara-from { font-size: 0.52rem; font-weight: 900; letter-spacing: 0.07em; text-transform: uppercase; color: var(--t2); margin-bottom: 2px; }
-    .s-elara-text { font-size: 0.64rem; color: var(--inkm); line-height: 1.5; }
+    .s-med-status.green { color: #02C39A; } .s-med-status.amber { color: var(--amber); } .s-med-status.red { color: #e55; }
+    .s-elara-bubble { background: rgba(2,195,154,0.1); border: 1px solid rgba(2,195,154,0.25); border-radius: 10px 10px 10px 3px; padding: 8px 10px; }
+    .s-elara-from { font-size: 0.52rem; font-weight: 900; letter-spacing: 0.07em; text-transform: uppercase; color: #02C39A; margin-bottom: 2px; }
+    .s-elara-text { font-size: 0.64rem; color: rgba(255,255,255,0.8); line-height: 1.5; }
     /* Elara chat screen */
     .s-chat-header { background: var(--dark-grad); padding: 14px; display: flex; align-items: center; gap: 10px; }
-    .s-chat-av { width: 30px; height: 30px; border-radius: 50%; background: var(--t2); color: #fff; font-size: 0.75rem; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .s-chat-av { width: 30px; height: 30px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 1.5px solid #02C39A; }
+    .s-chat-av img { width: 100%; height: 100%; object-fit: cover; }
     .s-chat-name { font-size: 0.82rem; font-weight: 700; color: #fff; }
     .s-chat-sub { font-size: 0.55rem; color: rgba(255,255,255,0.6); }
-    .s-chat-body { padding: 12px; display: flex; flex-direction: column; gap: 7px; background: #F4F7F9; min-height: 340px; }
+    .s-chat-body { padding: 12px; display: flex; flex-direction: column; gap: 7px; background: #0B2D3D; min-height: 340px; }
     .s-msg { padding: 8px 11px; border-radius: 12px; font-size: 0.68rem; line-height: 1.5; max-width: 85%; }
-    .s-msg.bot { background: #fff; color: var(--ink); border: 1px solid var(--bor); border-bottom-left-radius: 3px; align-self: flex-start; }
-    .s-msg.usr { background: var(--t3); color: #fff; border-bottom-right-radius: 3px; align-self: flex-end; }
+    .s-msg.bot { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.1); border-bottom-left-radius: 3px; align-self: flex-start; }
+    .s-msg.usr { background: #02C39A; color: #0B2D3D; border-bottom-right-radius: 3px; align-self: flex-end; font-weight: 700; }
     /* Progress screen */
     .s-prog-header { background: var(--dark-grad); padding: 14px; }
     .s-prog-title { font-size: 0.85rem; font-weight: 900; color: #fff; margin-bottom: 4px; }
     .s-prog-sub { font-size: 0.58rem; color: rgba(255,255,255,0.65); }
-    .s-ring-wrap { display: flex; flex-direction: column; align-items: center; padding: 14px; background: #F4F7F9; }
-    .s-ring { width: 90px; height: 90px; border-radius: 50%; border: 9px solid #e0e0e0; border-top-color: var(--t1); border-right-color: var(--t1); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
-    .s-ring-pct { font-size: 1.1rem; font-weight: 900; color: var(--t2); }
+    .s-ring-wrap { display: flex; flex-direction: column; align-items: center; padding: 14px; background: #0B2D3D; }
+    .s-ring { width: 90px; height: 90px; border-radius: 50%; border: 9px solid rgba(255,255,255,0.1); border-top-color: #02C39A; border-right-color: #02C39A; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+    .s-ring-pct { font-size: 1.1rem; font-weight: 900; color: #02C39A; }
     .s-streak-row { display: flex; gap: 8px; width: 100%; margin-bottom: 10px; }
-    .s-streak-card { flex: 1; background: #fff; border-radius: 10px; padding: 8px; text-align: center; border: 1px solid var(--bor); }
-    .s-streak-val { font-size: 1rem; font-weight: 900; color: var(--ink); }
-    .s-streak-lab { font-size: 0.52rem; color: var(--inks); }
+    .s-streak-card { flex: 1; background: rgba(255,255,255,0.07); border-radius: 10px; padding: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+    .s-streak-val { font-size: 1rem; font-weight: 900; color: #fff; }
+    .s-streak-lab { font-size: 0.52rem; color: rgba(255,255,255,0.5); }
     .s-badge-row { display: flex; gap: 6px; justify-content: center; }
-    .s-badge { font-size: 1.2rem; width: 34px; height: 34px; background: var(--t1); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .s-badge.dim { background: #e0e0e0; filter: grayscale(1); opacity: 0.5; }
+    .s-badge { font-size: 1.2rem; width: 34px; height: 34px; background: rgba(2,195,154,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .s-badge.dim { background: rgba(255,255,255,0.05); filter: grayscale(1); opacity: 0.4; }
     /* Vitals screen */
     .s-vit-header { background: var(--dark-grad); padding: 14px; }
     .s-vit-title { font-size: 0.85rem; font-weight: 900; color: #fff; }
-    .s-vit-body { padding: 12px; background: #F4F7F9; }
-    .s-vit-card { background: #fff; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; border: 1px solid var(--bor); }
-    .s-vit-label { font-size: 0.55rem; font-weight: 800; color: var(--t2); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
-    .s-vit-val { font-size: 1.1rem; font-weight: 900; color: var(--ink); }
-    .s-vit-unit { font-size: 0.6rem; color: var(--inks); margin-left: 3px; }
-    .s-vit-trend { font-size: 0.55rem; color: var(--t1); margin-top: 2px; }
-    .s-watch-banner { background: rgba(114,46,209,0.08); border: 1px solid rgba(114,46,209,0.2); border-radius: 10px; padding: 8px 10px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
-    .s-watch-text { font-size: 0.6rem; color: #531DAB; font-weight: 600; }
+    .s-vit-body { padding: 12px; background: #0B2D3D; }
+    .s-vit-card { background: rgba(255,255,255,0.07); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1); }
+    .s-vit-label { font-size: 0.55rem; font-weight: 800; color: #02C39A; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+    .s-vit-val { font-size: 1.1rem; font-weight: 900; color: #fff; }
+    .s-vit-unit { font-size: 0.6rem; color: rgba(255,255,255,0.5); margin-left: 3px; }
+    .s-vit-trend { font-size: 0.55rem; color: #02C39A; margin-top: 2px; }
+    .s-watch-banner { background: rgba(114,46,209,0.15); border: 1px solid rgba(114,46,209,0.3); border-radius: 10px; padding: 8px 10px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+    .s-watch-text { font-size: 0.6rem; color: #b491f7; font-weight: 600; }
     /* Caregiver screen */
     .s-care-header { background: var(--dark-grad); padding: 14px; }
     .s-care-title { font-size: 0.85rem; font-weight: 900; color: #fff; }
     .s-care-sub { font-size: 0.58rem; color: rgba(255,255,255,0.65); margin-top: 2px; }
-    .s-care-body { padding: 12px; background: #F4F7F9; }
-    .s-person-card { background: #fff; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; border: 1px solid var(--bor); display: flex; align-items: center; gap: 8px; }
+    .s-care-body { padding: 12px; background: #0B2D3D; }
+    .s-person-card { background: rgba(255,255,255,0.07); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 8px; }
     .s-person-av { width: 28px; height: 28px; border-radius: 50%; background: var(--t3); color: #fff; font-size: 0.65rem; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .s-person-name { font-size: 0.68rem; font-weight: 700; color: var(--ink); }
-    .s-person-status { font-size: 0.57rem; color: var(--inks); }
+    .s-person-name { font-size: 0.68rem; font-weight: 700; color: #fff; }
+    .s-person-status { font-size: 0.57rem; color: rgba(255,255,255,0.5); }
     .s-person-dot { width: 7px; height: 7px; border-radius: 50%; margin-left: auto; flex-shrink: 0; }
     /* Chat Preview */
     .ecp-header { background: var(--dark-grad); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
@@ -862,6 +867,13 @@
   </div>
 </div>
 
+<!-- WAVE CURVE TOPPER -->
+<div class="section-wave">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 C480,60 960,60 1440,0 L1440,60 L0,60 Z" fill="#ffffff"/>
+  </svg>
+</div>
+
 <!-- ═══ PRODUCT DEMO ═══ -->
 <section class="demo" id="demo">
   <div class="demo-inner">
@@ -882,7 +894,7 @@
       <!-- Tab buttons -->
       <div class="slide-tabs">
         <button class="slide-tab active" onclick="showSlide(0)">🏠 Dashboard</button>
-        <button class="slide-tab" onclick="showSlide(1)">🤖 Elara Chat</button>
+        <button class="slide-tab" onclick="showSlide(1)"><img src="elara-avatar.jpg" style="width:14px;height:14px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:3px;"> Elara Chat</button>
         <button class="slide-tab" onclick="showSlide(2)">📈 Progress</button>
         <button class="slide-tab" onclick="showSlide(3)">❤️ Vitals</button>
         <button class="slide-tab" onclick="showSlide(4)">👨‍👩‍👧 Care Team</button>
@@ -898,7 +910,7 @@
             <div class="slide-panel active" id="slide-0">
               <div class="s-dash-header">
                 <div class="s-dash-time">Thursday, May 30 · 8:42 AM</div>
-                <div class="s-dash-greet">Good morning, Margaret 👋</div>
+                <div class="s-dash-greet">Good morning, Alex 👋</div>
                 <div class="s-stat-row">
                   <div class="s-stat"><div class="s-stat-n">2</div><div class="s-stat-l">Taken</div></div>
                   <div class="s-stat"><div class="s-stat-n">1</div><div class="s-stat-l">Pending</div></div>
@@ -906,7 +918,7 @@
                 </div>
               </div>
               <div class="s-dash-body">
-                <div style="font-size:0.55rem;font-weight:900;letter-spacing:0.07em;text-transform:uppercase;color:var(--inks);margin-bottom:8px;">Today's Schedule</div>
+                <div style="font-size:0.55rem;font-weight:900;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:8px;">Today's Schedule</div>
                 <div class="s-med-card"><div class="s-med-dot green"></div><div><div class="s-med-name">Lisinopril</div><div class="s-med-time">8:00 AM · Confirmed ✓</div></div><span class="s-med-status green">Taken</span></div>
                 <div class="s-med-card"><div class="s-med-dot amber"></div><div><div class="s-med-name">Metformin</div><div class="s-med-time">12:00 PM · Upcoming</div></div><span class="s-med-status amber">Due soon</span></div>
                 <div class="s-med-card"><div class="s-med-dot green"></div><div><div class="s-med-name">Vitamin D</div><div class="s-med-time">8:00 AM · Morning</div></div><span class="s-med-status green">Taken</span></div>
@@ -917,7 +929,7 @@
             <!-- Slide 1: Elara Chat -->
             <div class="slide-panel" id="slide-1">
               <div class="s-chat-header">
-                <div class="s-chat-av">E</div>
+                <div class="s-chat-av"><img src="elara-avatar.jpg" alt="Elara"></div>
                 <div>
                   <div class="s-chat-name">Elara · AI Caretaker</div>
                   <div class="s-chat-sub">● Always available</div>
@@ -945,7 +957,7 @@
                   <div class="s-streak-card"><div class="s-streak-val">142</div><div class="s-streak-lab">doses taken</div></div>
                   <div class="s-streak-card"><div class="s-streak-val">85%</div><div class="s-streak-lab">last week</div></div>
                 </div>
-                <div style="font-size:0.55rem;font-weight:800;color:var(--inks);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Achievements</div>
+                <div style="font-size:0.55rem;font-weight:800;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Achievements</div>
                 <div class="s-badge-row">
                   <div class="s-badge">🌱</div>
                   <div class="s-badge">⚡</div>
@@ -993,7 +1005,7 @@
                 <div class="s-care-sub">Caregivers · Doctor · Pharmacy</div>
               </div>
               <div class="s-care-body">
-                <div style="font-size:0.55rem;font-weight:800;color:var(--inks);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Caregivers</div>
+                <div style="font-size:0.55rem;font-weight:800;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Caregivers</div>
                 <div class="s-person-card">
                   <div class="s-person-av">SJ</div>
                   <div><div class="s-person-name">Sarah Johnson</div><div class="s-person-status">Last seen · Today 8:30 AM</div></div>
@@ -1004,7 +1016,7 @@
                   <div><div class="s-person-name">Robert Thompson</div><div class="s-person-status">Active · Gets alerts</div></div>
                   <div class="s-person-dot" style="background:var(--t1)"></div>
                 </div>
-                <div style="font-size:0.55rem;font-weight:800;color:var(--inks);text-transform:uppercase;letter-spacing:0.07em;margin:8px 0 6px;">Doctor</div>
+                <div style="font-size:0.55rem;font-weight:800;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.07em;margin:8px 0 6px;">Doctor</div>
                 <div class="s-person-card">
                   <div class="s-person-av" style="background:#028090;">DP</div>
                   <div><div class="s-person-name">Dr. Patel</div><div class="s-person-status">Weekly reports · Connected ✓</div></div>
