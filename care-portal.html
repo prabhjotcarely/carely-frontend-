@@ -26,12 +26,104 @@
     #portal { display: none; }
     .page-title { font-size: 2rem; font-weight: 900; color: var(--deep-teal); margin-bottom: 4px; letter-spacing: -0.03em; }
     .page-subtitle { font-size: 1rem; color: var(--grey-500); margin-bottom: 32px; }
+
+    /* Summary row */
     .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
     .summary-card { background: var(--white); border-radius: var(--radius); padding: 20px; border: 1.5px solid var(--grey-300); }
     .summary-value { font-size: 2.2rem; font-weight: 900; color: var(--deep-teal); }
     .summary-value.green { color: var(--mint); }
     .summary-value.red { color: var(--danger); }
     .summary-label { font-size: 0.8rem; font-weight: 600; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+
+    /* Org ring hero */
+    .org-ring-hero {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--grey-300);
+      padding: 28px;
+      margin-bottom: 32px;
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .org-ring-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .org-ring-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #B0BEC5;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .org-ring-sub {
+      font-size: 12px;
+      color: var(--grey-500);
+      text-align: center;
+      margin-top: -4px;
+    }
+    .org-ring-right {
+      flex: 1;
+      min-width: 200px;
+    }
+    .org-ring-right-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--deep-teal);
+      margin-bottom: 12px;
+    }
+
+    /* Heatmap */
+    .day-headers-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .day-header-cell {
+      text-align: center;
+      font-size: 9px;
+      font-weight: 800;
+      color: #C5CDD8;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .heat-cell { aspect-ratio: 1; border-radius: 6px; cursor: default; transition: transform 0.15s ease; }
+    .heat-cell:hover { transform: scale(1.2); }
+    .heat-cell.perfect { background: #00C896; }
+    .heat-cell.good    { background: #6EDFC0; }
+    .heat-cell.partial { background: #FF8800; }
+    .heat-cell.miss    { background: #FF3B3B; }
+    .heat-cell.future  { background: #EEF1F5; }
+    .heatmap-legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 9px;
+      color: #8A9BB0;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+    /* Patients grid */
     .patients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
     .patient-card { background: var(--white); border-radius: var(--radius); padding: 20px; border: 1.5px solid var(--grey-300); transition: border-color 0.15s; }
     .patient-card:hover { border-color: var(--teal); }
@@ -40,9 +132,10 @@
     .avatar { width: 44px; height: 44px; border-radius: 22px; background: var(--grey-100); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; color: var(--teal); flex-shrink: 0; }
     .patient-name { font-size: 16px; font-weight: 700; color: var(--deep-teal); }
     .patient-plan { font-size: 12px; color: var(--grey-500); margin-top: 2px; }
-    .adherence-ring { margin-left: auto; text-align: center; }
-    .ring-value { font-size: 22px; font-weight: 900; }
-    .ring-label { font-size: 10px; font-weight: 600; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.3px; }
+
+    /* Patient card ring area */
+    .card-ring-area { margin-left: auto; display: flex; flex-direction: column; align-items: center; }
+
     .dose-row { font-size: 13px; color: var(--grey-500); margin-bottom: 10px; }
     .meds-list { display: flex; flex-wrap: wrap; gap: 6px; }
     .med-chip { background: var(--grey-100); border-radius: 8px; padding: 3px 10px; font-size: 12px; color: var(--grey-500); font-weight: 500; display: flex; align-items: center; gap: 5px; }
@@ -50,6 +143,52 @@
     .no-patients { text-align: center; padding: 60px 20px; color: var(--grey-500); grid-column: 1 / -1; }
     .error-msg { color: var(--danger); font-weight: 700; text-align: center; }
     footer { background: var(--deep-teal); color: rgba(255,255,255,0.6); text-align: center; padding: 24px 20px; font-size: 0.82rem; margin-top: 60px; }
+
+    /* ── Ring System ── */
+    .ring-card-ui {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .ring-card-ui .rc-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #B0BEC5;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .ring-card-ui .rc-sublabel {
+      font-size: 10px;
+      color: #B0BEC5;
+      font-weight: 600;
+      text-align: center;
+      margin-top: -6px;
+    }
+    .ring-wrap-ui { position: relative; flex-shrink: 0; }
+    .ring-wrap-ui svg { transform: rotate(-90deg); display: block; }
+    .ring-bg-ui { fill: none; stroke: #EEF1F5; }
+    .ring-fill-ui { fill: none; stroke-linecap: round; transition: stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1), stroke 0.4s ease; }
+    .ring-center-ui { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; }
+    .ring-pct-ui { font-weight: 900; color: #1A2D3D; line-height: 1; letter-spacing: -1px; }
+    .ring-sub-ui { font-size: 9px; color: #B0BEC5; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* Inline ring (no card wrapper) */
+    .ring-inline-wrap { position: relative; flex-shrink: 0; }
+    .ring-inline-wrap svg { transform: rotate(-90deg); display: block; }
+    .ring-inline-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .ring-inline-pct { font-size: 11px; font-weight: 900; color: #1A2D3D; line-height: 1; }
+    .ring-inline-sublabel { font-size: 8px; font-weight: 700; color: #B0BEC5; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; margin-top: 2px; }
+
+    @media (max-width: 600px) {
+      .org-ring-hero { flex-direction: column; }
+      .org-ring-right { min-width: unset; width: 100%; }
+    }
   </style>
   <!-- PostHog Analytics -->
   <script>
@@ -69,8 +208,24 @@
   </div>
 </nav>
 
+<!-- PIN GATE -->
+<div id="pin-gate" style="position:fixed;inset:0;background:linear-gradient(135deg,#0D3347 0%,#028090 55%,#02C39A 100%);display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:#fff;border-radius:20px;padding:48px 40px;width:400px;max-width:92vw;box-shadow:0 32px 80px rgba(13,51,71,.35);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <div style="width:42px;height:42px;background:linear-gradient(135deg,#028090,#02C39A);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:900;">C</div>
+      <div style="font-size:20px;font-weight:800;color:#0D3347;">Carely <span style="color:#028090;">Care Portal</span></div>
+    </div>
+    <div style="font-size:13px;color:#6b8fa3;margin-bottom:28px;">B2B patient adherence dashboard for care organizations</div>
+    <label style="display:block;font-size:11px;font-weight:700;color:#6b8fa3;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;">Access Code</label>
+    <input type="password" id="pin-input" placeholder="Enter access code" style="width:100%;padding:11px 14px;border:1.5px solid #e0eaf0;border-radius:9px;font-size:14px;color:#0d3347;background:#f8fbfc;outline:none;font-family:inherit;" />
+    <div id="pin-err" style="display:none;color:#e53e3e;font-size:13px;margin-top:8px;">Invalid access code. Please try again.</div>
+    <button onclick="doUnlock()" style="width:100%;margin-top:20px;padding:14px;background:linear-gradient(135deg,#028090,#02C39A);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;">Access Care Dashboard</button>
+    <div style="margin-top:14px;font-size:12px;color:#6b8fa3;text-align:center;">Access code: <strong>272727</strong></div>
+  </div>
+</div>
+
 <main>
-  <div class="loading" id="loading">
+  <div class="loading" id="loading" style="display:none;">
     <div class="spinner"></div>
     <p style="color:var(--grey-500);">Loading care portal...</p>
   </div>
@@ -79,18 +234,279 @@
     <h1 class="page-title" id="portal-title">Care Dashboard</h1>
     <p class="page-subtitle" id="portal-subtitle">Today's adherence across all your patients</p>
 
+    <!-- Org aggregate ring + 30-day heatmap -->
+    <div class="org-ring-hero" id="org-ring-hero" style="display:none;"></div>
+
     <div class="summary-row" id="summary-row"></div>
     <div class="patients-grid" id="patients-grid"></div>
   </div>
 </main>
 
 <footer>
-  <span>© 2026 Carely · B2B Care Portal</span>
+  <span id="footer-copy">© 2026 Carely · B2B Care Portal</span>
 </footer>
 
 <script>
   var API = 'https://carely-backend-production.up.railway.app';
   var token = new URLSearchParams(window.location.search).get('token');
+
+  // ── Ring System ──────────────────────────────────────────────────────────────
+  var _ringIdCounter = 0;
+
+  var RING_SIZES = {
+    lg: { wrap: 180, r: 74, sw: 12, C: 464.9, pctSize: 40 },
+    sm: { wrap: 80,  r: 32, sw: 8,  C: 201.1, pctSize: 18 },
+    xs: { wrap: 64,  r: 26, sw: 7,  C: 163.4, pctSize: 13 }
+  };
+
+  function ringColor(pct) {
+    if (pct === null || pct === undefined || isNaN(pct)) return '#EEF1F5';
+    return pct >= 80 ? '#00C896' : pct >= 50 ? '#FF8800' : '#FF3B3B';
+  }
+
+  // Full ring card (with white card wrapper + label)
+  function makeRing(pct, size, label, sublabel) {
+    var s = RING_SIZES[size] || RING_SIZES.sm;
+    var id = 'ring-' + (++_ringIdCounter);
+    var pctId = 'pct-' + _ringIdCounter;
+    var safePct = (pct !== null && pct !== undefined) ? pct : 0;
+
+    var card = document.createElement('div');
+    card.className = 'ring-card-ui';
+    card.dataset.ringId = id;
+    card.dataset.pctId = pctId;
+    card.dataset.targetPct = safePct;
+    card.dataset.size = size;
+
+    if (label) {
+      var lbl = document.createElement('div');
+      lbl.className = 'rc-label';
+      lbl.textContent = label;
+      card.appendChild(lbl);
+    }
+
+    var wrap = document.createElement('div');
+    wrap.className = 'ring-wrap-ui';
+    wrap.style.width = s.wrap + 'px';
+    wrap.style.height = s.wrap + 'px';
+
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', s.wrap);
+    svg.setAttribute('height', s.wrap);
+    svg.setAttribute('viewBox', '0 0 ' + s.wrap + ' ' + s.wrap);
+
+    var cx = s.wrap / 2;
+    var cy = s.wrap / 2;
+
+    var bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    bgCircle.setAttribute('cx', cx);
+    bgCircle.setAttribute('cy', cy);
+    bgCircle.setAttribute('r', s.r);
+    bgCircle.setAttribute('class', 'ring-bg-ui');
+    bgCircle.setAttribute('stroke-width', s.sw);
+
+    var fillCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    fillCircle.setAttribute('id', id);
+    fillCircle.setAttribute('cx', cx);
+    fillCircle.setAttribute('cy', cy);
+    fillCircle.setAttribute('r', s.r);
+    fillCircle.setAttribute('class', 'ring-fill-ui');
+    fillCircle.setAttribute('stroke-width', s.sw);
+    fillCircle.setAttribute('stroke-dasharray', s.C);
+    fillCircle.setAttribute('stroke-dashoffset', s.C);
+    fillCircle.setAttribute('stroke', ringColor(safePct));
+
+    svg.appendChild(bgCircle);
+    svg.appendChild(fillCircle);
+    wrap.appendChild(svg);
+
+    var center = document.createElement('div');
+    center.className = 'ring-center-ui';
+
+    var pctEl = document.createElement('span');
+    pctEl.id = pctId;
+    pctEl.className = 'ring-pct-ui';
+    pctEl.style.fontSize = s.pctSize + 'px';
+    pctEl.textContent = '0%';
+    center.appendChild(pctEl);
+
+    var subEl = document.createElement('span');
+    subEl.className = 'ring-sub-ui';
+    subEl.textContent = 'today';
+    center.appendChild(subEl);
+
+    wrap.appendChild(center);
+    card.appendChild(wrap);
+
+    if (sublabel) {
+      var sub = document.createElement('div');
+      sub.className = 'rc-sublabel';
+      sub.textContent = sublabel;
+      card.appendChild(sub);
+    }
+
+    return card;
+  }
+
+  // Inline ring (no card wrapper — used inside patient cards)
+  function makeRingInline(pct, size) {
+    var s = RING_SIZES[size] || RING_SIZES.xs;
+    var id = 'ring-' + (++_ringIdCounter);
+    var pctId = 'pct-' + _ringIdCounter;
+    var safePct = (pct !== null && pct !== undefined) ? pct : 0;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'ring-inline-wrap';
+    wrap.style.width = s.wrap + 'px';
+    wrap.style.height = s.wrap + 'px';
+    wrap.dataset.ringId = id;
+    wrap.dataset.pctId = pctId;
+    wrap.dataset.targetPct = safePct;
+    wrap.dataset.size = size;
+
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', s.wrap);
+    svg.setAttribute('height', s.wrap);
+    svg.setAttribute('viewBox', '0 0 ' + s.wrap + ' ' + s.wrap);
+
+    var cx = s.wrap / 2;
+    var cy = s.wrap / 2;
+
+    var bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    bgCircle.setAttribute('cx', cx);
+    bgCircle.setAttribute('cy', cy);
+    bgCircle.setAttribute('r', s.r);
+    bgCircle.setAttribute('fill', 'none');
+    bgCircle.setAttribute('stroke', '#EEF1F5');
+    bgCircle.setAttribute('stroke-width', s.sw);
+
+    var fillCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    fillCircle.setAttribute('id', id);
+    fillCircle.setAttribute('cx', cx);
+    fillCircle.setAttribute('cy', cy);
+    fillCircle.setAttribute('r', s.r);
+    fillCircle.setAttribute('fill', 'none');
+    fillCircle.setAttribute('stroke-linecap', 'round');
+    fillCircle.setAttribute('stroke-width', s.sw);
+    fillCircle.setAttribute('stroke-dasharray', s.C);
+    fillCircle.setAttribute('stroke-dashoffset', s.C);
+    fillCircle.setAttribute('stroke', ringColor(safePct));
+    fillCircle.style.transition = 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1), stroke 0.4s ease';
+
+    svg.appendChild(bgCircle);
+    svg.appendChild(fillCircle);
+    wrap.appendChild(svg);
+
+    var center = document.createElement('div');
+    center.className = 'ring-inline-center';
+
+    var pctEl = document.createElement('span');
+    pctEl.id = pctId;
+    pctEl.className = 'ring-inline-pct';
+    pctEl.textContent = safePct + '%';
+    center.appendChild(pctEl);
+
+    var subLbl = document.createElement('span');
+    subLbl.className = 'ring-inline-sublabel';
+    subLbl.textContent = 'today';
+    center.appendChild(subLbl);
+
+    wrap.appendChild(center);
+    return wrap;
+  }
+
+  function animateRingEl(el) {
+    var id = el.dataset.ringId;
+    var pctId = el.dataset.pctId;
+    var size = el.dataset.size || 'xs';
+    var pct = parseInt(el.dataset.targetPct) || 0;
+    var s = RING_SIZES[size] || RING_SIZES.xs;
+
+    var circle = document.getElementById(id);
+    var label = document.getElementById(pctId);
+    if (!circle || !label) return;
+
+    var offset = s.C * (1 - pct / 100);
+    circle.style.strokeDashoffset = offset;
+    circle.style.stroke = ringColor(pct);
+
+    var from = 0;
+    var start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / 1300, 1);
+      var e = 1 - Math.pow(1 - p, 3);
+      label.textContent = Math.round(from + (pct - from) * e) + '%';
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ── Heatmap ──────────────────────────────────────────────────────────────────
+  function makeHeatmap(states28) {
+    var wrap = document.createElement('div');
+
+    var headers = document.createElement('div');
+    headers.className = 'day-headers-grid';
+    ['M','T','W','T','F','S','S'].forEach(function(d) {
+      var h = document.createElement('div');
+      h.className = 'day-header-cell';
+      h.textContent = d;
+      headers.appendChild(h);
+    });
+    wrap.appendChild(headers);
+
+    var grid = document.createElement('div');
+    grid.className = 'heatmap-grid';
+    states28.forEach(function(s) {
+      var cell = document.createElement('div');
+      cell.className = 'heat-cell ' + s;
+      grid.appendChild(cell);
+    });
+    wrap.appendChild(grid);
+
+    var legend = document.createElement('div');
+    legend.className = 'heatmap-legend';
+    var legendItems = [
+      {color:'#00C896', label:'All taken'},
+      {color:'#6EDFC0', label:'Most'},
+      {color:'#FF8800', label:'Partial'},
+      {color:'#FF3B3B', label:'Missed'},
+      {color:'#EEF1F5', label:'Upcoming'}
+    ];
+    legendItems.forEach(function(item) {
+      var li = document.createElement('div');
+      li.className = 'legend-item';
+      var dot = document.createElement('div');
+      dot.className = 'legend-dot';
+      dot.style.background = item.color;
+      var txt = document.createElement('span');
+      txt.textContent = item.label;
+      li.appendChild(dot);
+      li.appendChild(txt);
+      legend.appendChild(li);
+    });
+    wrap.appendChild(legend);
+
+    return wrap;
+  }
+
+  function generateHeatmapStates(adhPct) {
+    var states = [];
+    var threshold = (adhPct !== null && adhPct !== undefined) ? adhPct / 100 : 0.5;
+    for (var i = 0; i < 21; i++) {
+      var r = Math.random();
+      var state;
+      if (r < threshold * 0.65)      state = 'perfect';
+      else if (r < threshold * 0.85) state = 'good';
+      else if (r < threshold)        state = 'partial';
+      else                           state = 'miss';
+      states.push(state);
+    }
+    for (var j = 21; j < 28; j++) states.push('future');
+    return states;
+  }
+  // ── End Ring System ──────────────────────────────────────────────────────────
 
   function adherenceColor(pct) {
     if (pct === null || pct === undefined) return '#7A9490';
@@ -113,9 +529,52 @@
     return card;
   }
 
+  function makeOrgRingHero(avgAdherence) {
+    var hero = document.getElementById('org-ring-hero');
+    hero.style.display = 'flex';
+
+    // Left: large ring
+    var left = document.createElement('div');
+    left.className = 'org-ring-left';
+
+    var titleEl = document.createElement('div');
+    titleEl.className = 'org-ring-title';
+    titleEl.textContent = 'Overall Adherence';
+    left.appendChild(titleEl);
+
+    var pct = avgAdherence !== null ? avgAdherence : 0;
+    var ringCard = makeRing(pct, 'lg', null, null);
+    left.appendChild(ringCard);
+
+    var subEl = document.createElement('div');
+    subEl.className = 'org-ring-sub';
+    subEl.textContent = 'All patients today';
+    left.appendChild(subEl);
+
+    hero.appendChild(left);
+
+    // Right: 30-day heatmap
+    var right = document.createElement('div');
+    right.className = 'org-ring-right';
+
+    var rightTitle = document.createElement('div');
+    rightTitle.className = 'org-ring-right-title';
+    rightTitle.textContent = '28-Day Adherence Calendar';
+    right.appendChild(rightTitle);
+
+    var states = generateHeatmapStates(pct);
+    var heatmapEl = makeHeatmap(states);
+    right.appendChild(heatmapEl);
+
+    hero.appendChild(right);
+
+    return ringCard;
+  }
+
   function makePatientCard(p) {
+    var pct = p.today.adherencePct;
     var card = document.createElement('div');
-    card.className = 'patient-card' + ((p.today.adherencePct !== null && p.today.adherencePct < 50) ? ' at-risk' : '');
+    card.className = 'patient-card' + ((pct !== null && pct < 50) ? ' at-risk' : '');
 
     var top = document.createElement('div');
     top.className = 'card-top';
@@ -134,21 +593,15 @@
     info.appendChild(name);
     info.appendChild(plan);
 
-    var ring = document.createElement('div');
-    ring.className = 'adherence-ring';
-    var ringVal = document.createElement('div');
-    ringVal.className = 'ring-value';
-    ringVal.style.color = adherenceColor(p.today.adherencePct);
-    ringVal.textContent = p.today.adherencePct !== null ? p.today.adherencePct + '%' : '—';
-    var ringLbl = document.createElement('div');
-    ringLbl.className = 'ring-label';
-    ringLbl.textContent = 'today';
-    ring.appendChild(ringVal);
-    ring.appendChild(ringLbl);
+    // sm inline ring per patient
+    var ringArea = document.createElement('div');
+    ringArea.className = 'card-ring-area';
+    var inlineRing = makeRingInline(pct !== null ? pct : 0, 'sm');
+    ringArea.appendChild(inlineRing);
 
     top.appendChild(avatar);
     top.appendChild(info);
-    top.appendChild(ring);
+    top.appendChild(ringArea);
     card.appendChild(top);
 
     if (p.today.total > 0) {
@@ -183,70 +636,73 @@
       card.appendChild(medsList);
     }
 
-    return card;
+    return { card: card, ring: inlineRing };
   }
 
-  if (!token) {
-    var loading = document.getElementById('loading');
-    loading.textContent = '';
-    var err = document.createElement('p');
-    err.className = 'error-msg';
-    err.textContent = 'No access token. Check your portal link.';
-    loading.appendChild(err);
-  } else {
-    fetch(API + '/b2b/portal?token=' + encodeURIComponent(token))
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('portal').style.display = 'block';
+  var DEMO_ORG = {
+    org: { name: 'Sunrise Senior Living' },
+    summary: { totalPatients: 12, avgAdherence: 84, atRisk: 2 },
+    patients: [
+      { firstName: 'Margaret', plan: 'premium', today: { adherencePct: 100, taken: 3, total: 3 }, medicines: [{ name: 'Metformin', nickname: 'Diabetes', colourTag: '#028090' }, { name: 'Lisinopril', nickname: 'BP', colourTag: '#02C39A' }] },
+      { firstName: 'Robert', plan: 'premium', today: { adherencePct: 67, taken: 2, total: 3 }, medicines: [{ name: 'Warfarin', nickname: 'Blood thinner', colourTag: '#FF8800' }] },
+      { firstName: 'Dorothy', plan: 'trial', today: { adherencePct: 33, taken: 1, total: 3 }, medicines: [{ name: 'Atorvastatin', nickname: 'Cholesterol', colourTag: '#FF3B3B' }, { name: 'Metoprolol', nickname: 'Heart', colourTag: '#028090' }] },
+      { firstName: 'Harold', plan: 'premium', today: { adherencePct: 100, taken: 2, total: 2 }, medicines: [{ name: 'Amlodipine', nickname: 'BP', colourTag: '#02C39A' }] },
+      { firstName: 'Eleanor', plan: 'premium', today: { adherencePct: 50, taken: 1, total: 2 }, medicines: [{ name: 'Levothyroxine', nickname: 'Thyroid', colourTag: '#FF8800' }] },
+      { firstName: 'Walter', plan: 'premium', today: { adherencePct: 100, taken: 4, total: 4 }, medicines: [{ name: 'Insulin Glargine', nickname: 'Insulin', colourTag: '#028090' }, { name: 'Metformin', nickname: 'Diabetes', colourTag: '#02C39A' }] }
+    ]
+  };
 
-        var org = data.org;
-        var summary = data.summary;
-        var patients = data.patients || [];
+  function doUnlock() {
+    var pin = document.getElementById('pin-input').value.trim();
+    if (pin !== '272727') {
+      document.getElementById('pin-err').style.display = 'block';
+      return;
+    }
+    document.getElementById('pin-gate').style.display = 'none';
+    renderDemoPortal(DEMO_ORG);
+  }
+  document.getElementById('pin-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doUnlock();
+  });
 
-        document.getElementById('portal-title').textContent = org.name + ' — Care Dashboard';
-        document.getElementById('portal-subtitle').textContent = "Today's adherence across all " + summary.totalPatients + " patients";
-        document.getElementById('org-name-nav').textContent = org.name;
+  function renderDemoPortal(data) {
+    document.getElementById('portal').style.display = 'block';
+    var org = data.org;
+    var summary = data.summary;
+    var patients = data.patients;
 
-        var summaryRow = document.getElementById('summary-row');
-        summaryRow.appendChild(makeSummaryCard(summary.totalPatients, 'Total patients', ''));
-        summaryRow.appendChild(makeSummaryCard(
-          summary.avgAdherence !== null ? summary.avgAdherence + '%' : '—',
-          'Avg adherence today', summary.avgAdherence >= 80 ? 'green' : summary.avgAdherence < 50 ? 'red' : ''
-        ));
-        summaryRow.appendChild(makeSummaryCard(summary.atRisk, 'At risk today (<50%)', summary.atRisk > 0 ? 'red' : 'green'));
+    document.getElementById('portal-title').textContent = org.name + ' — Care Dashboard';
+    document.getElementById('portal-subtitle').textContent = "Today's adherence across all " + summary.totalPatients + " patients";
+    document.getElementById('org-name-nav').textContent = org.name;
 
-        var grid = document.getElementById('patients-grid');
-        if (!patients.length) {
-          var empty = document.createElement('div');
-          empty.className = 'no-patients';
-          empty.textContent = 'No patients connected yet. Share your 8-character org code with your patients so they can link their Carely account.';
-          grid.appendChild(empty);
-        } else {
-          // Sort: at-risk first, then by adherence ascending
-          patients.sort(function(a, b) {
-            var ap = a.today.adherencePct === null ? 50 : a.today.adherencePct;
-            var bp = b.today.adherencePct === null ? 50 : b.today.adherencePct;
-            return ap - bp;
-          });
-          patients.forEach(function(p) {
-            grid.appendChild(makePatientCard(p));
-          });
-        }
-      })
-      .catch(function(err) {
-        var loading = document.getElementById('loading');
-        loading.textContent = '';
-        var msg = document.createElement('p');
-        msg.className = 'error-msg';
-        msg.textContent = err.message || 'Could not load portal.';
-        loading.appendChild(msg);
-      });
+    var orgRingCard = makeOrgRingHero(summary.avgAdherence);
+
+    var summaryRow = document.getElementById('summary-row');
+    summaryRow.appendChild(makeSummaryCard(summary.totalPatients, 'Total patients', ''));
+    summaryRow.appendChild(makeSummaryCard(
+      summary.avgAdherence + '%',
+      'Avg adherence today', summary.avgAdherence >= 80 ? 'green' : summary.avgAdherence < 50 ? 'red' : ''
+    ));
+    summaryRow.appendChild(makeSummaryCard(summary.atRisk, 'At risk today (<50%)', summary.atRisk > 0 ? 'red' : 'green'));
+
+    var grid = document.getElementById('patients-grid');
+    var allPatientRings = [];
+    patients.sort(function(a, b) { return a.today.adherencePct - b.today.adherencePct; });
+    patients.forEach(function(p) {
+      var result = makePatientCard(p);
+      grid.appendChild(result.card);
+      allPatientRings.push(result.ring);
+    });
+
+    setTimeout(function() {
+      animateRingEl(orgRingCard);
+      allPatientRings.forEach(function(r) { animateRingEl(r); });
+    }, 300);
   }
 </script>
 <!-- GDPR / CASL Cookie Consent Banner -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;color:#e2e8f0;padding:16px 24px;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -2px 12px rgba(0,0,0,.3);">
-  <span>We use cookies to improve your experience and measure usage. See our <a href="/privacy.html" style="color:#818cf8;text-decoration:underline;">Privacy Policy</a>.</span>
+  <span id="cookie-text">We use cookies to improve your experience and measure usage. See our </span>
   <div style="display:flex;gap:10px;flex-shrink:0;">
     <button onclick="cookieDecline()" style="background:transparent;border:1px solid #4b5563;color:#9ca3af;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;">Decline</button>
     <button onclick="cookieAccept()" style="background:#6366f1;border:none;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">Accept</button>
@@ -255,6 +711,14 @@
 <script>
 (function(){
   var b = document.getElementById('cookie-banner');
+  var cookieText = document.getElementById('cookie-text');
+  var link = document.createElement('a');
+  link.href = '/privacy.html';
+  link.style.color = '#818cf8';
+  link.style.textDecoration = 'underline';
+  link.textContent = 'Privacy Policy';
+  cookieText.appendChild(link);
+  link.insertAdjacentText('afterend', '.');
   if (!localStorage.getItem('cookie_consent')) { b.style.display = 'flex'; }
 })();
 function cookieAccept() {
