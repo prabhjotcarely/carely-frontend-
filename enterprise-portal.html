@@ -102,28 +102,266 @@ main{flex:1;padding:28px;max-width:1300px;width:100%;}
 .table-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;}
 th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:10px 14px;text-align:left;background:#f4f8fa;border-bottom:1.5px solid var(--border);}
-td{padding:13px 14px;border-bottom:1px solid var(--border);font-size:13.5px;color:var(--text);}
+td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:13.5px;color:var(--text);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:#f8fbfc;cursor:pointer;}
-.adh-wrap{display:flex;align-items:center;gap:8px;}
-.adh-track{flex:1;height:6px;background:#e2edf2;border-radius:3px;min-width:60px;}
-.adh-fill{height:100%;border-radius:3px;}
 .pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;}
 .p-green{background:#e6f9f3;color:var(--green);}
 .p-orange{background:#fff3e8;color:var(--orange);}
 .p-red{background:#fdecea;color:var(--red);}
 
+/* ── RING SYSTEM ── */
+/* Standalone ring card (for overview, analytics, panel) */
+.ring-card-ui {
+  background:#fff;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.07),0 1px 4px rgba(0,0,0,0.04);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+}
+.ring-card-ui .rc-label {
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+  color:#B0BEC5;
+  text-transform:uppercase;
+  text-align:center;
+}
+.ring-card-ui .rc-sublabel {
+  font-size:10px;
+  color:#B0BEC5;
+  font-weight:600;
+  text-align:center;
+  margin-top:-8px;
+}
+.ring-wrap-ui {
+  position:relative;
+  flex-shrink:0;
+}
+.ring-wrap-ui svg {
+  transform:rotate(-90deg);
+  display:block;
+}
+.ring-bg-ui { fill:none; stroke:#EEF1F5; }
+.ring-fill-ui {
+  fill:none;
+  stroke-linecap:round;
+  transition:stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1), stroke 0.4s ease;
+}
+.ring-center-ui {
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1px;
+}
+.ring-pct-ui {
+  font-weight:900;
+  color:#1A2D3D;
+  line-height:1;
+  letter-spacing:-1px;
+}
+.ring-sub-ui {
+  font-size:9px;
+  color:#B0BEC5;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+/* Inline ring (for table cells — no card wrapper) */
+.ring-inline-wrap {
+  position:relative;
+  flex-shrink:0;
+}
+.ring-inline-wrap svg { transform:rotate(-90deg); display:block; }
+.ring-inline-center {
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.ring-inline-pct {
+  font-size:11px;
+  font-weight:900;
+  color:#1A2D3D;
+  line-height:1;
+}
+
+/* Overview ring cluster */
+.overview-ring-section {
+  display:flex;
+  gap:20px;
+  align-items:flex-start;
+  flex-wrap:wrap;
+  margin-bottom:24px;
+  background:#fff;
+  border-radius:16px;
+  padding:28px;
+  border:1.5px solid var(--border);
+  box-shadow:0 2px 8px rgba(13,51,71,.04);
+}
+.org-hero-ring {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
+}
+.org-hero-ring .hero-label {
+  font-size:11px;
+  font-weight:800;
+  color:#B0BEC5;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.org-hero-ring .hero-sub {
+  font-size:11px;
+  color:var(--muted);
+  text-align:center;
+  margin-top:-8px;
+}
+.band-rings {
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  align-items:center;
+  flex:1;
+}
+.divider-v {
+  width:1px;
+  background:var(--border);
+  align-self:stretch;
+  margin:0 8px;
+}
+
+/* Analytics ring cluster */
+.analytics-rings-row {
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+
+/* Trend indicator */
+.trend-indicator {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:#fff;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.07);
+  min-width:90px;
+}
+.trend-arrow {
+  font-size:36px;
+  font-weight:900;
+  line-height:1;
+}
+.trend-arrow.up { color:#00C896; }
+.trend-arrow.down { color:#FF3B3B; }
+.trend-label {
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:#B0BEC5;
+}
+.trend-val {
+  font-size:14px;
+  font-weight:800;
+  color:#1A2D3D;
+}
+
 /* PATIENT DETAIL PANEL */
-#pt-panel{position:fixed;top:0;right:-420px;width:400px;height:100vh;background:#fff;box-shadow:-4px 0 30px rgba(13,51,71,.12);z-index:200;transition:right .3s cubic-bezier(.22,.68,0,1);display:flex;flex-direction:column;}
+#pt-panel{position:fixed;top:0;right:-440px;width:420px;height:100vh;background:#fff;box-shadow:-4px 0 30px rgba(13,51,71,.12);z-index:200;transition:right .3s cubic-bezier(.22,.68,0,1);display:flex;flex-direction:column;}
 #pt-panel.open{right:0;}
 .pnl-head{padding:20px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .pnl-name{font-size:17px;font-weight:800;color:var(--deep);}
 .pnl-close{font-size:22px;color:var(--muted);cursor:pointer;line-height:1;}
 .pnl-body{flex:1;overflow-y:auto;padding:20px;}
-.pnl-stat{display:flex;gap:12px;margin-bottom:18px;}
+
+/* Panel ring + stats row */
+.pnl-ring-stats {
+  display:flex;
+  gap:16px;
+  align-items:center;
+  margin-bottom:20px;
+}
+.pnl-stats-col {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  flex:1;
+}
 .pnl-s{flex:1;background:var(--bg);border-radius:10px;padding:14px;text-align:center;}
 .pnl-sv{font-size:22px;font-weight:900;color:var(--teal);}
 .pnl-sl{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* Panel heatmap */
+.pnl-heatmap-section { margin-bottom:18px; }
+.pnl-section-label { font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px; }
+.pnl-heatmap-grid {
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+  margin-bottom:8px;
+}
+.pnl-day-headers {
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+  margin-bottom:5px;
+}
+.pnl-day-hdr {
+  text-align:center;
+  font-size:8px;
+  font-weight:800;
+  color:#C5CDD8;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+}
+.heat-cell {
+  aspect-ratio:1;
+  border-radius:5px;
+  cursor:default;
+  transition:transform 0.15s ease;
+}
+.heat-cell:hover { transform:scale(1.2); }
+.heat-cell.perfect { background:#00C896; }
+.heat-cell.good    { background:#6EDFC0; }
+.heat-cell.partial { background:#FF8800; }
+.heat-cell.miss    { background:#FF3B3B; }
+.heat-cell.future  { background:#EEF1F5; }
+.heatmap-legend-sm {
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:6px;
+}
+.legend-item-sm {
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-size:8px;
+  color:#8A9BB0;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+}
+.legend-dot-sm {
+  width:8px; height:8px; border-radius:2px; flex-shrink:0;
+}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:18px;}
 .cal-day{width:100%;padding-top:100%;border-radius:4px;position:relative;}
 .cal-day span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;}
@@ -208,6 +446,10 @@ input[type=range]{width:100%;accent-color:var(--teal);}
   .metrics{grid-template-columns:1fr 1fr;}
   .roi-nums{grid-template-columns:1fr 1fr;}
   #pt-panel{width:100%;}
+  .overview-ring-section{flex-direction:column;}
+  .band-rings{flex-direction:row;}
+  .divider-v{display:none;}
+  .analytics-rings-row{justify-content:center;}
 }
 .mob-menu{display:none;}
 @media(max-width:768px){.mob-menu{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:none;background:transparent;cursor:pointer;font-size:20px;}}
@@ -275,7 +517,7 @@ input[type=range]{width:100%;accent-color:var(--teal);}
         <div class="topbar-right">
           <div class="alert-dot"></div>
           <span style="font-size:13px;color:var(--muted);">3 at-risk</span>
-          <span class="topbar-help" onclick="nav('feedback',document.querySelector(\'.nav-item:last-of-type\'))">Need help?</span>
+          <span class="topbar-help" onclick="nav('feedback',document.querySelector('.nav-item:last-of-type'))">Need help?</span>
         </div>
       </div>
 
@@ -283,6 +525,10 @@ input[type=range]{width:100%;accent-color:var(--teal);}
 
         <!-- OVERVIEW -->
         <div class="pane active" id="pane-overview">
+
+          <!-- ORG ADHERENCE RING CLUSTER -->
+          <div class="overview-ring-section" id="overview-ring-section"></div>
+
           <div class="metrics" id="overview-metrics"></div>
           <div class="grid2">
             <div class="card">
@@ -346,6 +592,9 @@ input[type=range]{width:100%;accent-color:var(--teal);}
 
         <!-- ANALYTICS -->
         <div class="pane" id="pane-analytics">
+          <!-- Ring cluster at top -->
+          <div class="analytics-rings-row" id="analytics-rings-row"></div>
+
           <div class="grid2">
             <div class="card">
               <div class="card-title">30-Day Adherence Trend</div>
@@ -481,16 +730,8 @@ input[type=range]{width:100%;accent-color:var(--teal);}
     <div class="pnl-name" id="pnl-name">Patient Name</div>
     <span class="pnl-close" onclick="closePanel()">&#215;</span>
   </div>
-  <div class="pnl-body">
-    <div class="pnl-stat">
-      <div class="pnl-s"><div class="pnl-sv" id="pnl-adh">84%</div><div class="pnl-sl">Adherence</div></div>
-      <div class="pnl-s"><div class="pnl-sv" id="pnl-streak">22d</div><div class="pnl-sl">Streak</div></div>
-      <div class="pnl-s"><div class="pnl-sv" id="pnl-missed">3</div><div class="pnl-sl">Missed (30d)</div></div>
-    </div>
-    <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">30-Day Calendar</div>
-    <div class="cal-grid" id="pnl-cal"></div>
-    <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:16px 0 8px;">Medications</div>
-    <div class="med-list" id="pnl-meds"></div>
+  <div class="pnl-body" id="pnl-body">
+    <!-- Populated dynamically -->
   </div>
   <div class="pnl-actions">
     <button class="pnl-btn pnl-btn-teal" onclick="alertCaregiver()">Alert Caregiver</button>
@@ -499,9 +740,272 @@ input[type=range]{width:100%;accent-color:var(--teal);}
 </div>
 
 <script>
-// ── State ─────────────────────────────────────────────────────────────────────
+// ── Ring System ──────────────────────────────────────────────────────────────
+
+var RING_SIZES = {
+  lg:  { wrap: 180, r: 74,  sw: 12, C: 464.9, pctSize: 40, subSize: 9 },
+  md:  { wrap: 120, r: 50,  sw: 10, C: 314.2, pctSize: 26, subSize: 8 },
+  sm:  { wrap: 80,  r: 32,  sw: 8,  C: 201.1, pctSize: 18, subSize: 7 },
+  xs:  { wrap: 64,  r: 26,  sw: 7,  C: 163.4, pctSize: 14, subSize: 0 }
+};
+
+var _ringIdCounter = 0;
+
+function ringColor(pct) {
+  return pct >= 80 ? '#00C896' : pct >= 50 ? '#FF8800' : '#FF3B3B';
+}
+
+// Full ring card (standalone — with white card wrapper, shadow, label)
+function makeRing(pct, size, label, sublabel) {
+  var s = RING_SIZES[size] || RING_SIZES.md;
+  var id = 'ring-' + (++_ringIdCounter);
+  var pctId = 'pct-' + _ringIdCounter;
+
+  var card = document.createElement('div');
+  card.className = 'ring-card-ui';
+  card.dataset.ringId = id;
+  card.dataset.pctId = pctId;
+  card.dataset.targetPct = pct;
+  card.dataset.size = size;
+
+  if (label) {
+    var lbl = document.createElement('div');
+    lbl.className = 'rc-label';
+    lbl.textContent = label;
+    card.appendChild(lbl);
+  }
+
+  var wrap = document.createElement('div');
+  wrap.className = 'ring-wrap-ui';
+  wrap.style.width = s.wrap + 'px';
+  wrap.style.height = s.wrap + 'px';
+
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('width', s.wrap);
+  svg.setAttribute('height', s.wrap);
+  svg.setAttribute('viewBox', '0 0 ' + s.wrap + ' ' + s.wrap);
+
+  var cx = s.wrap / 2;
+  var cy = s.wrap / 2;
+
+  var bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  bgCircle.setAttribute('cx', cx);
+  bgCircle.setAttribute('cy', cy);
+  bgCircle.setAttribute('r', s.r);
+  bgCircle.setAttribute('class', 'ring-bg-ui');
+  bgCircle.setAttribute('stroke-width', s.sw);
+
+  var fillCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  fillCircle.setAttribute('id', id);
+  fillCircle.setAttribute('cx', cx);
+  fillCircle.setAttribute('cy', cy);
+  fillCircle.setAttribute('r', s.r);
+  fillCircle.setAttribute('class', 'ring-fill-ui');
+  fillCircle.setAttribute('stroke-width', s.sw);
+  fillCircle.setAttribute('stroke-dasharray', s.C);
+  fillCircle.setAttribute('stroke-dashoffset', s.C);
+  fillCircle.setAttribute('stroke', ringColor(pct));
+
+  svg.appendChild(bgCircle);
+  svg.appendChild(fillCircle);
+  wrap.appendChild(svg);
+
+  var center = document.createElement('div');
+  center.className = 'ring-center-ui';
+
+  var pctEl = document.createElement('span');
+  pctEl.id = pctId;
+  pctEl.className = 'ring-pct-ui';
+  pctEl.style.fontSize = s.pctSize + 'px';
+  pctEl.textContent = '0%';
+  center.appendChild(pctEl);
+
+  if (s.subSize > 0) {
+    var subEl = document.createElement('span');
+    subEl.className = 'ring-sub-ui';
+    subEl.style.fontSize = s.subSize + 'px';
+    subEl.textContent = 'adherence';
+    center.appendChild(subEl);
+  }
+
+  wrap.appendChild(center);
+  card.appendChild(wrap);
+
+  if (sublabel) {
+    var sub = document.createElement('div');
+    sub.className = 'rc-sublabel';
+    sub.textContent = sublabel;
+    card.appendChild(sub);
+  }
+
+  return card;
+}
+
+// Inline ring (for table cells — no card wrapper)
+function makeRingInline(pct, size) {
+  var s = RING_SIZES[size] || RING_SIZES.xs;
+  var id = 'ring-' + (++_ringIdCounter);
+  var pctId = 'pct-' + _ringIdCounter;
+
+  var wrap = document.createElement('div');
+  wrap.className = 'ring-inline-wrap';
+  wrap.style.width = s.wrap + 'px';
+  wrap.style.height = s.wrap + 'px';
+  wrap.dataset.ringId = id;
+  wrap.dataset.pctId = pctId;
+  wrap.dataset.targetPct = pct;
+
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('width', s.wrap);
+  svg.setAttribute('height', s.wrap);
+  svg.setAttribute('viewBox', '0 0 ' + s.wrap + ' ' + s.wrap);
+
+  var cx = s.wrap / 2;
+  var cy = s.wrap / 2;
+
+  var bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  bgCircle.setAttribute('cx', cx);
+  bgCircle.setAttribute('cy', cy);
+  bgCircle.setAttribute('r', s.r);
+  bgCircle.setAttribute('fill', 'none');
+  bgCircle.setAttribute('stroke', '#EEF1F5');
+  bgCircle.setAttribute('stroke-width', s.sw);
+
+  var fillCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  fillCircle.setAttribute('id', id);
+  fillCircle.setAttribute('cx', cx);
+  fillCircle.setAttribute('cy', cy);
+  fillCircle.setAttribute('r', s.r);
+  fillCircle.setAttribute('fill', 'none');
+  fillCircle.setAttribute('stroke-linecap', 'round');
+  fillCircle.setAttribute('stroke-width', s.sw);
+  fillCircle.setAttribute('stroke-dasharray', s.C);
+  fillCircle.setAttribute('stroke-dashoffset', s.C);
+  fillCircle.setAttribute('stroke', ringColor(pct));
+  fillCircle.style.transition = 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1), stroke 0.4s ease';
+
+  svg.appendChild(bgCircle);
+  svg.appendChild(fillCircle);
+  wrap.appendChild(svg);
+
+  var center = document.createElement('div');
+  center.className = 'ring-inline-center';
+
+  var pctEl = document.createElement('span');
+  pctEl.id = pctId;
+  pctEl.className = 'ring-inline-pct';
+  pctEl.textContent = pct + '%';
+  center.appendChild(pctEl);
+
+  wrap.appendChild(center);
+  return wrap;
+}
+
+function animateRing(ringEl, pct) {
+  // ringEl can be a .ring-card-ui or .ring-inline-wrap
+  var ringId = ringEl.dataset.ringId;
+  var pctId = ringEl.dataset.pctId;
+  var size = ringEl.dataset.size;
+  var s = RING_SIZES[size] || RING_SIZES.xs;
+
+  var circle = document.getElementById(ringId);
+  var label = document.getElementById(pctId);
+  if (!circle || !label) return;
+
+  var offset = s.C * (1 - pct / 100);
+  circle.style.strokeDashoffset = offset;
+  circle.style.stroke = ringColor(pct);
+
+  var from = parseInt(label.textContent) || 0;
+  var start = null;
+  function step(ts) {
+    if (!start) start = ts;
+    var p = Math.min((ts - start) / 1300, 1);
+    var e = 1 - Math.pow(1 - p, 3);
+    label.textContent = Math.round(from + (pct - from) * e) + '%';
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function animateAllRings(container) {
+  var cards = (container || document).querySelectorAll('[data-ring-id]');
+  cards.forEach(function(el) {
+    var pct = parseInt(el.dataset.targetPct) || 0;
+    animateRing(el, pct);
+  });
+}
+
+// ── Heatmap ──────────────────────────────────────────────────────────────────
+function makeHeatmap(states28) {
+  var wrap = document.createElement('div');
+
+  var headers = document.createElement('div');
+  headers.className = 'pnl-day-headers';
+  ['M','T','W','T','F','S','S'].forEach(function(d) {
+    var h = document.createElement('div');
+    h.className = 'pnl-day-hdr';
+    h.textContent = d;
+    headers.appendChild(h);
+  });
+  wrap.appendChild(headers);
+
+  var grid = document.createElement('div');
+  grid.className = 'pnl-heatmap-grid';
+  states28.forEach(function(s) {
+    var cell = document.createElement('div');
+    cell.className = 'heat-cell ' + s;
+    grid.appendChild(cell);
+  });
+  wrap.appendChild(grid);
+
+  var legend = document.createElement('div');
+  legend.className = 'heatmap-legend-sm';
+  [
+    {color:'#00C896', label:'All taken'},
+    {color:'#6EDFC0', label:'Most'},
+    {color:'#FF8800', label:'Partial'},
+    {color:'#FF3B3B', label:'Missed'},
+    {color:'#EEF1F5', label:'Future'},
+  ].forEach(function(item) {
+    var li = document.createElement('div');
+    li.className = 'legend-item-sm';
+    var dot = document.createElement('div');
+    dot.className = 'legend-dot-sm';
+    dot.style.background = item.color;
+    var txt = document.createElement('span');
+    txt.textContent = item.label;
+    li.appendChild(dot);
+    li.appendChild(txt);
+    legend.appendChild(li);
+  });
+  wrap.appendChild(legend);
+
+  return wrap;
+}
+
+function generateHeatmapStates(adhPct) {
+  // Generate a plausible 28-cell heatmap from an adherence %
+  var states = [];
+  for (var i = 0; i < 21; i++) {
+    var r = Math.random();
+    var threshold = adhPct / 100;
+    var state;
+    if (r < threshold * 0.7)       state = 'perfect';
+    else if (r < threshold * 0.9)  state = 'good';
+    else if (r < threshold)        state = 'partial';
+    else                           state = 'miss';
+    states.push(state);
+  }
+  for (var j = 21; j < 28; j++) states.push('future');
+  return states;
+}
+
+// ── State ────────────────────────────────────────────────────────────────────
 var ORG_TYPE = 'senior';
 var STAR_RATING = 0;
+var _overviewRingsRendered = false;
+var _analyticsRingsRendered = false;
 
 var PATIENTS = [
   {name:'Margaret K.',room:'14B',age:81,cond:'Type 2 Diabetes',adh:41,streak:2,status:'atrisk',last:'2h ago',meds:[{name:'Metformin 500mg',time:'8AM, 8PM',color:'#028090'},{name:'Lisinopril 10mg',time:'8AM',color:'#02C39A'}]},
@@ -624,7 +1128,7 @@ var ORG_CONFIG = {
   },
 };
 
-// ── Auth ──────────────────────────────────────────────────────────────────────
+// ── Auth ─────────────────────────────────────────────────────────────────────
 function doLogin(){
   var org=document.getElementById('l-org').value.trim();
   var type=document.getElementById('l-type').value;
@@ -641,6 +1145,8 @@ function doLogin(){
   renderROI();
   renderAlerts();
   renderReports();
+  renderOverviewRings();
+  renderAnalyticsRings();
 }
 document.getElementById('l-code').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 function doLogout(){document.getElementById('login-screen').style.display='flex';document.getElementById('app').style.display='none';}
@@ -670,7 +1176,7 @@ function applyOrgType(org){
   });
 }
 
-// ── Nav ───────────────────────────────────────────────────────────────────────
+// ── Nav ──────────────────────────────────────────────────────────────────────
 function nav(id,el){
   document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
@@ -682,9 +1188,109 @@ function nav(id,el){
 }
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
 
-// ── Charts ────────────────────────────────────────────────────────────────────
+// ── Overview Ring Cluster ────────────────────────────────────────────────────
+function renderOverviewRings() {
+  var section = document.getElementById('overview-ring-section');
+  section.innerHTML = '';
+
+  // Hero org ring
+  var heroWrap = document.createElement('div');
+  heroWrap.className = 'org-hero-ring';
+
+  var heroLabelEl = document.createElement('div');
+  heroLabelEl.className = 'hero-label';
+  heroLabelEl.textContent = 'Org-Wide Adherence';
+  heroWrap.appendChild(heroLabelEl);
+
+  var heroRing = makeRing(84, 'lg', null, null);
+  heroWrap.appendChild(heroRing);
+
+  var heroSubEl = document.createElement('div');
+  heroSubEl.className = 'hero-sub';
+  heroSubEl.textContent = 'All patients this week';
+  heroWrap.appendChild(heroSubEl);
+
+  section.appendChild(heroWrap);
+
+  var divider = document.createElement('div');
+  divider.className = 'divider-v';
+  section.appendChild(divider);
+
+  // Band rings
+  var bandWrap = document.createElement('div');
+  bandWrap.className = 'band-rings';
+
+  var bands = [
+    { pct: 59, label: 'High Adherence', sub: '59% of patients', size: 'sm' },
+    { pct: 33, label: 'Moderate',       sub: '33% of patients', size: 'sm' },
+    { pct: 8,  label: 'At Risk',        sub: '8% of patients',  size: 'sm' },
+  ];
+
+  bands.forEach(function(b) {
+    var ringCard = makeRing(b.pct, b.size, b.label, b.sub);
+    bandWrap.appendChild(ringCard);
+  });
+
+  section.appendChild(bandWrap);
+
+  // Animate after short delay
+  setTimeout(function() {
+    animateAllRings(section);
+  }, 300);
+}
+
+// ── Analytics Ring Cluster ───────────────────────────────────────────────────
+function renderAnalyticsRings() {
+  var row = document.getElementById('analytics-rings-row');
+  row.innerHTML = '';
+
+  // Compute from chart data (consistent with bar charts)
+  var weekVals = [79, 82, 80, 86, 88, 84, 87];
+  var base30 = [74,76,78,75,80,82,79,83,81,84,86,82,85,84,87,83,88,85,89,86,84,87,85,88,86,84,87,85,84,87];
+  var thisWeekAvg = Math.round(weekVals.reduce(function(a,b){return a+b;},0) / weekVals.length);
+  var lastWeekAvg = 81; // consistent slightly lower
+  var thirtyDayAvg = Math.round(base30.reduce(function(a,b){return a+b;},0) / base30.length);
+  var trend = thisWeekAvg - lastWeekAvg;
+
+  var analyticsRings = [
+    { pct: thisWeekAvg,  label: 'This Week',   sub: 'Avg all patients', size: 'md' },
+    { pct: lastWeekAvg,  label: 'Last Week',   sub: 'Previous 7 days',  size: 'md' },
+    { pct: thirtyDayAvg, label: '30-Day Avg',  sub: 'Rolling average',  size: 'md' },
+  ];
+
+  analyticsRings.forEach(function(r) {
+    var card = makeRing(r.pct, r.size, r.label, r.sub);
+    row.appendChild(card);
+  });
+
+  // Trend indicator
+  var trendEl = document.createElement('div');
+  trendEl.className = 'trend-indicator';
+
+  var arrowEl = document.createElement('div');
+  arrowEl.className = 'trend-arrow ' + (trend >= 0 ? 'up' : 'down');
+  arrowEl.textContent = trend >= 0 ? '↑' : '↓';
+
+  var trendValEl = document.createElement('div');
+  trendValEl.className = 'trend-val';
+  trendValEl.textContent = (trend >= 0 ? '+' : '') + trend + '%';
+
+  var trendLblEl = document.createElement('div');
+  trendLblEl.className = 'trend-label';
+  trendLblEl.textContent = 'vs last week';
+
+  trendEl.appendChild(arrowEl);
+  trendEl.appendChild(trendValEl);
+  trendEl.appendChild(trendLblEl);
+  row.appendChild(trendEl);
+
+  setTimeout(function() {
+    animateAllRings(row);
+  }, 300);
+}
+
+// ── Charts ───────────────────────────────────────────────────────────────────
 function initCharts(){
-  // 7-day
   var days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],vals=[79,82,80,86,88,84,87];
   var el=document.getElementById('trend-bars');el.innerHTML='';
   days.forEach(function(d,i){
@@ -693,7 +1299,6 @@ function initCharts(){
     var lbl=document.createElement('div');lbl.className='bar-lbl';lbl.textContent=d;
     col.appendChild(bar);col.appendChild(lbl);el.appendChild(col);
   });
-  // 30-day
   var mb=document.getElementById('monthly-bars');mb.innerHTML='';
   var base=[74,76,78,75,80,82,79,83,81,84,86,82,85,84,87,83,88,85,89,86,84,87,85,88,86,84,87,85,84,87];
   base.forEach(function(v){
@@ -701,7 +1306,6 @@ function initCharts(){
     var bar=document.createElement('div');bar.style.width='100%';bar.style.height=Math.round((v-65)*1.3)+'px';bar.style.background='linear-gradient(180deg,#02C39A,#028090)';bar.style.borderRadius='2px 2px 0 0';
     col.appendChild(bar);mb.appendChild(col);
   });
-  // DOW
   var dow=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],dv=[88,86,83,87,85,76,74];
   var db=document.getElementById('dow-bars');db.innerHTML='';
   dow.forEach(function(d,i){
@@ -712,21 +1316,84 @@ function initCharts(){
   });
 }
 
-// ── Patients ──────────────────────────────────────────────────────────────────
+// ── Patients ─────────────────────────────────────────────────────────────────
 function renderPt(data){
-  data=data||PATIENTS;
-  var tbody=document.getElementById('pt-tbody');tbody.innerHTML='';
+  data = data || PATIENTS;
+  var tbody = document.getElementById('pt-tbody');
+  tbody.innerHTML = '';
+  var ringsToAnimate = [];
+
   data.forEach(function(p){
-    var color=p.adh>=80?'#38a169':p.adh>=60?'#dd6b20':'#e53e3e';
-    var pill=p.status==='high'?'<span class="pill p-green">On Track</span>':p.status==='moderate'?'<span class="pill p-orange">Moderate</span>':'<span class="pill p-red">At Risk</span>';
-    var tr=document.createElement('tr');
-    tr.innerHTML='<td>'+p.name+'</td><td>'+p.age+'</td><td>'+p.cond+'</td>'
-      +'<td><div class="adh-wrap"><div class="adh-track"><div class="adh-fill" style="width:'+p.adh+'%;background:'+color+';height:100%;border-radius:3px;"></div></div><span style="font-size:13px;font-weight:700;color:'+color+';">'+p.adh+'%</span></div></td>'
-      +'<td>'+p.streak+'d</td><td>'+pill+'</td><td style="color:var(--muted);">'+p.last+'</td>';
-    tr.onclick=function(){openPanel(p);};
+    var tr = document.createElement('tr');
+    tr.onclick = function(){ openPanel(p); };
+
+    // Name cell
+    var tdName = document.createElement('td');
+    tdName.textContent = p.name;
+    tr.appendChild(tdName);
+
+    // Age
+    var tdAge = document.createElement('td');
+    tdAge.textContent = p.age;
+    tr.appendChild(tdAge);
+
+    // Condition
+    var tdCond = document.createElement('td');
+    tdCond.textContent = p.cond;
+    tr.appendChild(tdCond);
+
+    // Adherence — xs inline ring
+    var tdAdh = document.createElement('td');
+    var ringWrap = makeRingInline(p.adh, 'xs');
+    tdAdh.appendChild(ringWrap);
+    tr.appendChild(tdAdh);
+    ringsToAnimate.push(ringWrap);
+
+    // Streak
+    var tdStreak = document.createElement('td');
+    tdStreak.textContent = p.streak + 'd';
+    tr.appendChild(tdStreak);
+
+    // Status pill
+    var tdStatus = document.createElement('td');
+    var pill = document.createElement('span');
+    if (p.status === 'high') {
+      pill.className = 'pill p-green';
+      pill.textContent = 'On Track';
+    } else if (p.status === 'moderate') {
+      pill.className = 'pill p-orange';
+      pill.textContent = 'Moderate';
+    } else {
+      pill.className = 'pill p-red';
+      pill.textContent = 'At Risk';
+    }
+    tdStatus.appendChild(pill);
+    tr.appendChild(tdStatus);
+
+    // Last dose
+    var tdLast = document.createElement('td');
+    tdLast.style.color = 'var(--muted)';
+    tdLast.textContent = p.last;
+    tr.appendChild(tdLast);
+
     tbody.appendChild(tr);
   });
+
+  // Animate table rings
+  setTimeout(function() {
+    ringsToAnimate.forEach(function(el) {
+      var pct = parseInt(el.dataset.targetPct) || 0;
+      var ringId = el.dataset.ringId;
+      var s = RING_SIZES['xs'];
+      var circle = document.getElementById(ringId);
+      if (!circle) return;
+      var offset = s.C * (1 - pct / 100);
+      circle.style.strokeDashoffset = offset;
+      circle.style.stroke = ringColor(pct);
+    });
+  }, 300);
 }
+
 function filterPt(){
   var q=document.getElementById('pt-search').value.toLowerCase();
   var f=document.getElementById('pt-fil').value;
@@ -744,28 +1411,115 @@ function exportCSV(){
 
 // ── Patient Panel ─────────────────────────────────────────────────────────────
 function openPanel(p){
-  document.getElementById('pnl-name').textContent=p.name+(p.room?' — '+(ORG_CONFIG[ORG_TYPE].roomLabel||'Room')+' '+p.room:'');
-  document.getElementById('pnl-adh').textContent=p.adh+'%';
-  document.getElementById('pnl-streak').textContent=p.streak+'d';
-  document.getElementById('pnl-missed').textContent=Math.round((1-p.adh/100)*30);
-  // calendar
-  var cal=document.getElementById('pnl-cal');cal.innerHTML='';
-  for(var i=0;i<30;i++){
-    var r=Math.random();var cls=r>0.85?'d-missed':r>0.75?'d-partial':'d-taken';
-    if(p.adh<50&&Math.random()>0.4)cls='d-missed';
-    var d=document.createElement('div');d.className='cal-day '+cls;
-    var s=document.createElement('span');s.textContent=i+1;d.appendChild(s);cal.appendChild(d);
-  }
-  // meds
-  var ml=document.getElementById('pnl-meds');ml.innerHTML='';
-  (p.meds||[{name:'Medication data loading...',time:'',color:'#028090'}]).forEach(function(m){
-    var row=document.createElement('div');row.className='med-row';
-    row.innerHTML='<div class="med-dot" style="background:'+m.color+';"></div><div class="med-name">'+m.name+'</div><div class="med-time">'+m.time+'</div>';
-    ml.appendChild(row);
+  document.getElementById('pnl-name').textContent = p.name + (p.room ? ' — ' + (ORG_CONFIG[ORG_TYPE].roomLabel || 'Room') + ' ' + p.room : '');
+
+  var body = document.getElementById('pnl-body');
+  body.innerHTML = '';
+
+  // Ring + stats row
+  var ringStatsRow = document.createElement('div');
+  ringStatsRow.className = 'pnl-ring-stats';
+
+  var mainRing = makeRing(p.adh, 'md', null, null);
+  ringStatsRow.appendChild(mainRing);
+
+  var statsCol = document.createElement('div');
+  statsCol.className = 'pnl-stats-col';
+
+  var statItems = [
+    { val: p.adh + '%',                          label: 'Adherence' },
+    { val: p.streak + 'd',                        label: 'Streak' },
+    { val: String(Math.round((1 - p.adh/100)*30)), label: 'Missed (30d)' },
+  ];
+  statItems.forEach(function(item) {
+    var s = document.createElement('div');
+    s.className = 'pnl-s';
+    var sv = document.createElement('div');
+    sv.className = 'pnl-sv';
+    sv.textContent = item.val;
+    var sl = document.createElement('div');
+    sl.className = 'pnl-sl';
+    sl.textContent = item.label;
+    s.appendChild(sv);
+    s.appendChild(sl);
+    statsCol.appendChild(s);
   });
+  ringStatsRow.appendChild(statsCol);
+  body.appendChild(ringStatsRow);
+
+  // 28-day heatmap
+  var heatSection = document.createElement('div');
+  heatSection.className = 'pnl-heatmap-section';
+
+  var heatLabel = document.createElement('div');
+  heatLabel.className = 'pnl-section-label';
+  heatLabel.textContent = '28-Day Heatmap';
+  heatSection.appendChild(heatLabel);
+
+  var states = generateHeatmapStates(p.adh);
+  var heatmapEl = makeHeatmap(states);
+  heatSection.appendChild(heatmapEl);
+  body.appendChild(heatSection);
+
+  // 30-Day Calendar (existing style, numbered)
+  var calLabel = document.createElement('div');
+  calLabel.className = 'pnl-section-label';
+  calLabel.textContent = '30-Day Calendar';
+  body.appendChild(calLabel);
+
+  var calGrid = document.createElement('div');
+  calGrid.className = 'cal-grid';
+  for (var i = 0; i < 30; i++) {
+    var r = Math.random();
+    var cls = r > 0.85 ? 'd-missed' : r > 0.75 ? 'd-partial' : 'd-taken';
+    if (p.adh < 50 && Math.random() > 0.4) cls = 'd-missed';
+    var dayEl = document.createElement('div');
+    dayEl.className = 'cal-day ' + cls;
+    var sp = document.createElement('span');
+    sp.textContent = i + 1;
+    dayEl.appendChild(sp);
+    calGrid.appendChild(dayEl);
+  }
+  body.appendChild(calGrid);
+
+  // Medications
+  var medLabel = document.createElement('div');
+  medLabel.className = 'pnl-section-label';
+  medLabel.style.margin = '16px 0 8px';
+  medLabel.textContent = 'Medications';
+  body.appendChild(medLabel);
+
+  var medList = document.createElement('div');
+  medList.className = 'med-list';
+  var meds = p.meds || [{name:'Medication data loading...',time:'',color:'#028090'}];
+  meds.forEach(function(m) {
+    var row = document.createElement('div');
+    row.className = 'med-row';
+    var dot = document.createElement('div');
+    dot.className = 'med-dot';
+    dot.style.background = m.color;
+    var nameEl = document.createElement('div');
+    nameEl.className = 'med-name';
+    nameEl.textContent = m.name;
+    var timeEl = document.createElement('div');
+    timeEl.className = 'med-time';
+    timeEl.textContent = m.time;
+    row.appendChild(dot);
+    row.appendChild(nameEl);
+    row.appendChild(timeEl);
+    medList.appendChild(row);
+  });
+  body.appendChild(medList);
+
   document.getElementById('pt-panel').classList.add('open');
   document.getElementById('overlay').classList.add('show');
+
+  // Animate the panel ring
+  setTimeout(function() {
+    animateRing(mainRing, p.adh);
+  }, 200);
 }
+
 function closePanel(){
   document.getElementById('pt-panel').classList.remove('open');
   document.getElementById('overlay').classList.remove('show');
