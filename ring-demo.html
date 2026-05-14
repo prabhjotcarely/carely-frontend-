@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carely — Progress Ring Demo</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0B2D3D;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 48px 24px;
+      gap: 48px;
+    }
+
+    h1 {
+      color: rgba(255,255,255,0.5);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ──────────────────────────────────────────
+       THE RING COMPONENT
+       ────────────────────────────────────────── */
+    .ring-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(2,195,154,0.25);
+      border-radius: 24px;
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 200px;
+    }
+
+    .ring-card .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #02C39A;
+      text-transform: uppercase;
+    }
+
+    /* SVG ring */
+    .ring-wrap {
+      position: relative;
+      width: 140px;
+      height: 140px;
+    }
+
+    .ring-wrap svg {
+      transform: rotate(-90deg);
+    }
+
+    .ring-bg {
+      fill: none;
+      stroke: rgba(255,255,255,0.08);
+      stroke-width: 10;
+    }
+
+    .ring-fill {
+      fill: none;
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                  stroke 0.4s ease;
+    }
+
+    .ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .ring-pct {
+      font-size: 32px;
+      font-weight: 900;
+      color: #FFFFFF;
+      line-height: 1;
+    }
+
+    .ring-sub {
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* colour states */
+    .ring-fill.green  { stroke: #02C39A; }
+    .ring-fill.orange { stroke: #F5A623; }
+    .ring-fill.red    { stroke: #FF6B6B; }
+
+    .meta {
+      text-align: center;
+    }
+    .meta .pct-big {
+      font-size: 14px;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+    .meta .week-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 2px;
+    }
+    .meta .imp {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .imp.up   { color: #02C39A; border: 1px solid #02C39A; }
+    .imp.down { color: #FF6B6B; border: 1px solid #FF6B6B; }
+    .imp.same { color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.15); }
+
+    /* ──────────────────────────────────────────
+       CALENDAR HEATMAP
+       ────────────────────────────────────────── */
+    .heatmap-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 24px 28px;
+      width: 340px;
+    }
+
+    .heatmap-card h3 {
+      font-size: 14px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 16px;
+    }
+
+    .day-headers {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .day-header {
+      text-align: center;
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.5px;
+    }
+
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .heat-cell {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      cursor: default;
+      transition: transform 0.15s ease;
+    }
+    .heat-cell:hover { transform: scale(1.2); }
+    .heat-cell.empty   { background: rgba(255,255,255,0.05); }
+    .heat-cell.perfect { background: #02C39A; }
+    .heat-cell.good    { background: rgba(2,195,154,0.55); }
+    .heat-cell.partial { background: #F5A623; }
+    .heat-cell.miss    { background: rgba(255,107,107,0.5); }
+    .heat-cell.future  { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); }
+
+    .heatmap-legend {
+      display: flex;
+      gap: 12px;
+      margin-top: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 9px;
+      color: rgba(255,255,255,0.4);
+      font-weight: 600;
+    }
+    .legend-dot {
+      width: 10px; height: 10px; border-radius: 3px;
+    }
+
+    /* ──────────────────────────────────────────
+       CONTROLS
+       ────────────────────────────────────────── */
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      background: rgba(2,195,154,0.15);
+      border: 1px solid rgba(2,195,154,0.3);
+      color: #02C39A;
+      border-radius: 20px;
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .btn:hover { background: rgba(2,195,154,0.3); }
+    .btn.active { background: #02C39A; color: #0B2D3D; }
+
+    .note {
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      text-align: center;
+      max-width: 400px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Progress Ring Demo — Carely</h1>
+
+  <!-- Ring examples -->
+  <div class="row">
+    <!-- 92% -->
+    <div class="ring-card">
+      <div class="label">This Week</div>
+      <div class="ring-wrap">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <circle class="ring-bg" cx="70" cy="70" r="58" />
+          <circle class="ring-fill green" id="ring-92" cx="70" cy="70" r="58"
+            stroke-dasharray="364.4"
+            stroke-dashoffset="364.4" />
+        </svg>
+        <div class="ring-center">
+          <span class="ring-pct" id="pct-92">0%</span>
+          <span class="ring-sub">adherence</span>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="imp up">↑ 12% vs last week</div>
+      </div>
+    </div>
+
+    <!-- 67% -->
+    <div class="ring-card">
+      <div class="label">This Week</div>
+      <div class="ring-wrap">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <circle class="ring-bg" cx="70" cy="70" r="58" />
+          <circle class="ring-fill orange" id="ring-67" cx="70" cy="70" r="58"
+            stroke-dasharray="364.4"
+            stroke-dashoffset="364.4" />
+        </svg>
+        <div class="ring-center">
+          <span class="ring-pct" id="pct-67">0%</span>
+          <span class="ring-sub">adherence</span>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="imp down">↓ 5% vs last week</div>
+      </div>
+    </div>
+
+    <!-- 34% -->
+    <div class="ring-card">
+      <div class="label">This Week</div>
+      <div class="ring-wrap">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <circle class="ring-bg" cx="70" cy="70" r="58" />
+          <circle class="ring-fill red" id="ring-34" cx="70" cy="70" r="58"
+            stroke-dasharray="364.4"
+            stroke-dashoffset="364.4" />
+        </svg>
+        <div class="ring-center">
+          <span class="ring-pct" id="pct-34">0%</span>
+          <span class="ring-sub">adherence</span>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="imp same">Same as last week</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calendar Heatmap -->
+  <div class="heatmap-card">
+    <h3>Last 4 Weeks</h3>
+    <div class="day-headers">
+      <div class="day-header">M</div>
+      <div class="day-header">T</div>
+      <div class="day-header">W</div>
+      <div class="day-header">T</div>
+      <div class="day-header">F</div>
+      <div class="day-header">S</div>
+      <div class="day-header">S</div>
+    </div>
+    <div class="heatmap-grid" id="heatmap"></div>
+    <div class="heatmap-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#02C39A"></div>All taken</div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(2,195,154,0.55)"></div>Most taken</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#F5A623"></div>Partial</div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(255,107,107,0.5)"></div>Missed</div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1)"></div>Upcoming</div>
+    </div>
+  </div>
+
+  <!-- Live demo controls -->
+  <div>
+    <p class="note" style="margin-bottom:12px;text-align:center">Try different scores:</p>
+    <div class="controls">
+      <button class="btn" onclick="animateRing(100)">100%</button>
+      <button class="btn active" onclick="animateRing(92)">92%</button>
+      <button class="btn" onclick="animateRing(75)">75%</button>
+      <button class="btn" onclick="animateRing(50)">50%</button>
+      <button class="btn" onclick="animateRing(25)">25%</button>
+      <button class="btn" onclick="animateRing(0)">0%</button>
+    </div>
+  </div>
+
+  <p class="note">This is how the progress ring will look inside the Carely app. The ring fills clockwise, colour shifts green → orange → red based on adherence score. The calendar shows the last 28 days at a glance.</p>
+
+<script>
+  const CIRCUMFERENCE = 2 * Math.PI * 58; // ≈ 364.4
+
+  function animateRing(pct) {
+    // Update all three demo rings to the chosen pct
+    ['ring-92', 'ring-67', 'ring-34'].forEach((id, idx) => {
+      const values = [pct, Math.max(0, pct - 25), Math.max(0, pct - 58)];
+      const v = values[idx];
+      const el = document.getElementById(id);
+      const pctEl = document.getElementById('pct-' + [92,67,34][idx]);
+
+      const offset = CIRCUMFERENCE * (1 - v / 100);
+      el.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.4s ease';
+      el.style.strokeDashoffset = offset;
+      el.style.stroke = v >= 80 ? '#02C39A' : v >= 50 ? '#F5A623' : '#FF6B6B';
+
+      // Count up animation
+      let start = null;
+      const startVal = parseInt(pctEl.textContent) || 0;
+      function step(ts) {
+        if (!start) start = ts;
+        const progress = Math.min((ts - start) / 1200, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        pctEl.textContent = Math.round(startVal + (v - startVal) * eased) + '%';
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+
+    document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  // Build heatmap with sample data
+  function buildHeatmap() {
+    const grid = document.getElementById('heatmap');
+    const states = ['perfect','good','partial','miss','perfect','perfect','good',
+                    'perfect','miss','good','perfect','partial','good','perfect',
+                    'good','good','perfect','miss','miss','partial','good',
+                    'perfect','future','future','future','future','future','future'];
+    states.forEach(state => {
+      const cell = document.createElement('div');
+      cell.className = 'heat-cell ' + state;
+      grid.appendChild(cell);
+    });
+  }
+  buildHeatmap();
+
+  // Auto-animate on load
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const rings = [
+        { id: 'ring-92', pct: 92 },
+        { id: 'ring-67', pct: 67 },
+        { id: 'ring-34', pct: 34 },
+      ];
+      rings.forEach(({ id, pct }) => {
+        const el = document.getElementById(id);
+        const pctEl = document.getElementById('pct-' + pct);
+        const offset = CIRCUMFERENCE * (1 - pct / 100);
+        el.style.strokeDashoffset = offset;
+
+        let start = null;
+        function step(ts) {
+          if (!start) start = ts;
+          const progress = Math.min((ts - start) / 1400, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          pctEl.textContent = Math.round(pct * eased) + '%';
+          if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    }, 300);
+  });
+</script>
+</body>
+</html>
