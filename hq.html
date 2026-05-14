@@ -208,30 +208,52 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="pin-screen">
   <div class="pin-logo"><img src="elara-bot-logo.png" alt="Carely" style="height:64px;"></div>
   <div class="pin-title">Carely HQ</div>
-  <div class="pin-sub">Mission Control · Enter PIN to continue</div>
-  <div class="pin-dots">
-    <div class="pin-dot" id="d0"></div>
-    <div class="pin-dot" id="d1"></div>
-    <div class="pin-dot" id="d2"></div>
-    <div class="pin-dot" id="d3"></div>
-    <div class="pin-dot" id="d4"></div>
-    <div class="pin-dot" id="d5"></div>
+
+  <!-- Step 1: Who's logging in -->
+  <div id="pin-step-who" style="text-align:center;margin-bottom:20px;">
+    <div class="pin-sub" style="margin-bottom:16px;">Who's logging in?</div>
+    <div style="display:flex;gap:14px;justify-content:center;">
+      <div onclick="selectMember('tj')" id="member-tj" style="cursor:pointer;padding:16px 24px;border:2px solid rgba(255,255,255,0.2);border-radius:14px;transition:all .2s;min-width:110px;">
+        <div style="font-size:28px;margin-bottom:6px;">👨‍💻</div>
+        <div style="font-size:14px;font-weight:800;color:#fff;">TJ</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);">CEO · Engineering</div>
+      </div>
+      <div onclick="selectMember('prabh')" id="member-prabh" style="cursor:pointer;padding:16px 24px;border:2px solid rgba(255,255,255,0.2);border-radius:14px;transition:all .2s;min-width:110px;">
+        <div style="font-size:28px;margin-bottom:6px;">👩‍💼</div>
+        <div style="font-size:14px;font-weight:800;color:#fff;">Prabh</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);">COO · Marketing</div>
+      </div>
+    </div>
   </div>
-  <div class="pin-pad">
-    <button class="pin-btn" onclick="pinKey('1')">1</button>
-    <button class="pin-btn" onclick="pinKey('2')">2</button>
-    <button class="pin-btn" onclick="pinKey('3')">3</button>
-    <button class="pin-btn" onclick="pinKey('4')">4</button>
-    <button class="pin-btn" onclick="pinKey('5')">5</button>
-    <button class="pin-btn" onclick="pinKey('6')">6</button>
-    <button class="pin-btn" onclick="pinKey('7')">7</button>
-    <button class="pin-btn" onclick="pinKey('8')">8</button>
-    <button class="pin-btn" onclick="pinKey('9')">9</button>
-    <button class="pin-btn" style="font-size:0.85rem" onclick="pinClear()">CLR</button>
-    <button class="pin-btn" onclick="pinKey('0')">0</button>
-    <button class="pin-btn" style="font-size:0.85rem" onclick="pinBack()">⌫</button>
+
+  <!-- Step 2: PIN entry (shown after member selected) -->
+  <div id="pin-step-pin" style="display:none;">
+    <div class="pin-sub" id="pin-member-label">Enter your PIN</div>
+    <div class="pin-dots" style="margin-top:16px;">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
+      <div class="pin-dot" id="d4"></div>
+      <div class="pin-dot" id="d5"></div>
+    </div>
+    <div class="pin-pad">
+      <button class="pin-btn" onclick="pinKey('1')">1</button>
+      <button class="pin-btn" onclick="pinKey('2')">2</button>
+      <button class="pin-btn" onclick="pinKey('3')">3</button>
+      <button class="pin-btn" onclick="pinKey('4')">4</button>
+      <button class="pin-btn" onclick="pinKey('5')">5</button>
+      <button class="pin-btn" onclick="pinKey('6')">6</button>
+      <button class="pin-btn" onclick="pinKey('7')">7</button>
+      <button class="pin-btn" onclick="pinKey('8')">8</button>
+      <button class="pin-btn" onclick="pinKey('9')">9</button>
+      <button class="pin-btn" style="font-size:0.85rem" onclick="pinClear()">CLR</button>
+      <button class="pin-btn" onclick="pinKey('0')">0</button>
+      <button class="pin-btn" style="font-size:0.85rem" onclick="pinBack()">⌫</button>
+    </div>
+    <div class="pin-error" id="pin-error"></div>
+    <div onclick="backToWho()" style="margin-top:12px;font-size:12px;color:rgba(255,255,255,0.4);cursor:pointer;text-align:center;">← Switch member</div>
   </div>
-  <div class="pin-error" id="pin-error"></div>
 </div>
 
 <body>
@@ -244,6 +266,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="sb-logo">
     <img src="elara-bot-logo.png" alt="Carely" style="height:46px;margin-bottom:6px;display:block;">
     <div class="sub">Mission Control HQ</div>
+    <div id="sb-member-badge" style="display:none;margin-top:8px;background:rgba(2,195,154,0.15);border:1px solid rgba(2,195,154,0.3);border-radius:8px;padding:7px 10px;display:flex;align-items:center;gap:8px;">
+      <span id="sb-member-icon" style="font-size:18px;">👨‍💻</span>
+      <div>
+        <div id="sb-member-name" style="font-size:12px;font-weight:800;color:#02C39A;">TJ</div>
+        <div id="sb-member-role" style="font-size:10px;color:rgba(255,255,255,0.4);">CEO · Engineering</div>
+      </div>
+      <span onclick="doLogout()" style="margin-left:auto;font-size:10px;color:rgba(255,255,255,0.3);cursor:pointer;">logout</span>
+    </div>
   </div>
 
   <div class="sb-sec">
@@ -261,6 +291,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="sb-sec">
     <div class="sb-sec-title">Growth</div>
+    <div class="sb-item" onclick="nav(this,'proposals')"><span class="ic">🧠</span> Proposals <span class="dot-a" id="proposals-dot"></span></div>
     <div class="sb-item" onclick="nav(this,'content-hub')"><span class="ic">🎬</span> Content Hub <span class="dot-g"></span></div>
     <div class="sb-item" onclick="nav(this,'approvals')"><span class="ic">✅</span> Approvals <span class="dot-a"></span></div>
     <div class="sb-item" onclick="nav(this,'platforms')"><span class="ic">🌐</span> Platforms</div>
@@ -269,6 +300,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="sb-sec">
     <div class="sb-sec-title">Intelligence</div>
+    <div class="sb-item" onclick="nav(this,'brain')"><span class="ic">🧬</span> Obsidian Brain <span class="dot-g"></span></div>
     <div class="sb-item" onclick="nav(this,'intel-pool')"><span class="ic">🎯</span> Intel Pool <span class="dot-a"></span></div>
     <div class="sb-item" onclick="nav(this,'seo')"><span class="ic">🔍</span> SEO</div>
     <div class="sb-item" onclick="nav(this,'agent-chat')"><span class="ic">🤖</span> Agent Activity</div>
@@ -284,7 +316,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="sb-sec">
     <div class="sb-sec-title">System</div>
-    <div class="sb-item" onclick="nav(this,'all-agents')"><span class="ic">🧠</span> All 20 Agents</div>
+    <div class="sb-item" onclick="nav(this,'all-agents')"><span class="ic">🧠</span> All 18 Agents</div>
     <div class="sb-item" onclick="nav(this,'org-chart')"><span class="ic">🏗️</span> Org Chart</div>
     <div class="sb-item" onclick="nav(this,'health')"><span class="ic">❤️</span> Health &amp; Timeline</div>
     <div class="sb-item" onclick="nav(this,'api-keys')"><span class="ic">⏱</span> API Keys <span class="dot-a"></span></div>
@@ -303,7 +335,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="topbar-left" id="topbar-title">Daily Brief</div>
     <div class="topbar-right">
       <span class="badge-live">LIVE</span>
-      <span class="badge-launch">🚀 Launched May 5</span>
+      <span class="badge-launch">🚀 Launch May 30</span>
+      <span id="launch-countdown" style="font-size:0.68rem;font-weight:700;color:#F97316;letter-spacing:0.02em"></span>
       <span class="clock" id="clock">--:--:--</span>
       <span id="live-updated" style="font-size:0.7rem;color:var(--g500)"></span>
       <span class="refresh-btn" onclick="location.reload()">↻</span>
@@ -313,11 +346,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- ══ DAILY BRIEF ══ -->
   <div class="page active" id="page-daily-brief">
     <div class="ph"><h1>📋 Daily Brief</h1><p>What the business needs today · Agent network status · Open issues</p></div>
-    <div class="alert green">✅ <div><strong>May 6, 2026 — Day 2 Post-Launch.</strong> All 20 agents running on Railway. Ace monitoring signups, churn, and MRR milestones every hour. Check HQ Inbox for alerts.</div></div>
+    <div class="alert green">✅ <div><strong>May 14, 2026 — T-16 days to launch (May 30).</strong> All 18 agents running. Persona Intelligence System live on Railway. <span style="color:#dc2626;font-weight:700">BLOCKERS: OpenRouter $0 (top up now) · Reddit creds missing · iOS not submitted</span></div></div>
     <div class="metric-row">
-      <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber">0</div><div class="metric-sub">Launch day — first sale pending</div></div>
-      <div class="metric"><div class="metric-label">Beta Testers</div><div class="metric-val teal">12</div><div class="metric-sub">Active on closed testing</div></div>
-      <div class="metric"><div class="metric-label">MRR</div><div class="metric-val">$0</div><div class="metric-sub">Grows from May 5 launch</div></div>
+      <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber" id="db-paid">—</div><div class="metric-sub">Live from Stripe</div></div>
+      <div class="metric"><div class="metric-label">Beta Testers</div><div class="metric-val teal" id="db-trial">—</div><div class="metric-sub">Active trial users</div></div>
+      <div class="metric"><div class="metric-label">MRR</div><div class="metric-val" id="db-mrr">—</div><div class="metric-sub">Monthly recurring revenue</div></div>
       <div class="metric"><div class="metric-label">Monthly Burn</div><div class="metric-val amber">~$22</div><div class="metric-sub">Railway + OpenAI + domain</div></div>
     </div>
     <div class="cols">
@@ -340,29 +373,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <div class="card">
       <div class="card-title">📡 Agent Status</div>
-      <table class="tbl">
-        <thead><tr><th>Agent</th><th>Role</th><th>Schedule</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Frank</strong></td><td>Dose reminders via FCM</td><td>Every minute</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Maya</strong></td><td>Missed dose detector</td><td>Every 30 min</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Cara</strong></td><td>Caregiver missed-dose alert</td><td>Triggered by Maya</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Grace</strong></td><td>Daily "are you okay?" push</td><td>10 AM UTC</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Elara</strong></td><td>AI caretaker — core product chat</td><td>On-demand</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Dr. Bridge</strong></td><td>Doctor + caregiver PDF reports</td><td>Hourly check / weekly email</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Nina</strong></td><td>Email nurture + support triage</td><td>10 AM UTC daily</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Blaze</strong></td><td>Launch email blast</td><td>May 5 — one-time</td><td><span class="pill green">Fired ✓</span></td></tr>
-          <tr><td><strong>Lena</strong></td><td>Win-back + retention closer</td><td>11 AM UTC daily</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Leo</strong></td><td>LinkedIn posts 6x/week as Prabh</td><td>Mon/Wed/Fri 8AM + Tue/Thu/Sat 5PM PST</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Rex</strong></td><td>Reddit monitor 18 subreddits</td><td>Every 6 hours</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Cole</strong></td><td>B2B outreach — orgs, clinics</td><td>2 PM UTC daily</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Ace</strong></td><td>Morning brief + EOD strategic scan + per-agent directives</td><td>8 AM + 8 PM PST</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Scout</strong></td><td>ASO weekly report + SEO + Google IndexNow</td><td>On deploy + Sundays 7 AM PST</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Oracle</strong></td><td>World intel — Reddit ICP signals + iTunes ratings synthesis</td><td>Every 30 min</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Signals</strong></td><td>Customer pain scan — 7 ICP subreddits for content angles</td><td>Every 2 hours</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Comp Intel</strong></td><td>Competitor App Store snapshot — rating deltas, version changes</td><td>Every 6 hours</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Vance</strong></td><td>Daily TikTok/Reels/Shorts script for Prabh to film</td><td>9 AM PST daily</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Refer</strong></td><td>Referral engine — viral loop, reward tracking</td><td>Triggered on high adherence</td><td><span class="pill green">Running</span></td></tr>
-          <tr><td><strong>Hermes</strong></td><td>CEO — reads all metrics, commands all agents, responds to TJ via Telegram</td><td>8 AM + 8 PM PST + on-demand</td><td><span class="pill teal">Active</span></td></tr>
+      <table class="tbl" id="brief-agent-table">
+        <thead><tr><th>Agent</th><th>Role</th><th>Schedule (PST)</th><th>Last Run</th><th>Status</th></tr></thead>
+        <tbody id="brief-agent-tbody">
+          <tr><td><strong>Frank</strong></td><td>Dose reminders via FCM</td><td>Every minute</td><td id="brief-last-frank">—</td><td><span id="brief-pill-frank" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Maya</strong></td><td>Missed dose detector</td><td>Every 30 min</td><td id="brief-last-maya">—</td><td><span id="brief-pill-maya" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Cara</strong></td><td>Caregiver alert</td><td>Triggered by Maya</td><td id="brief-last-cara">—</td><td><span id="brief-pill-cara" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Grace</strong></td><td>Daily check-in push</td><td>10 AM PST</td><td id="brief-last-grace">—</td><td><span id="brief-pill-grace" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Elara</strong></td><td>AI caretaker chat</td><td>8 AM PST + on-demand</td><td id="brief-last-elara">—</td><td><span id="brief-pill-elara" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Dr. Bridge</strong></td><td>Doctor PDF reports</td><td>Hourly · weekly email 8 AM Sun</td><td id="brief-last-drbridge">—</td><td><span id="brief-pill-drbridge" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Nina</strong></td><td>Nurture + trial onboarding</td><td>10 AM PST</td><td id="brief-last-nina">—</td><td><span id="brief-pill-nina" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Lena</strong></td><td>Win-back + closer</td><td>11 AM PST</td><td id="brief-last-lena">—</td><td><span id="brief-pill-lena" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Blaze</strong></td><td>Launch email blast</td><td>May 30 launch day</td><td id="brief-last-blaze">—</td><td><span id="brief-pill-blaze" class="pill amber">Standby</span></td></tr>
+          <tr><td><strong>Leo</strong></td><td>LinkedIn 6x/week</td><td>Mon/Wed/Fri 8AM · Tue/Thu/Sat 5PM</td><td id="brief-last-leo">—</td><td><span id="brief-pill-leo" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Rex</strong></td><td>Reddit monitor 18 subs</td><td>Every 6 hours</td><td id="brief-last-rex">—</td><td><span id="brief-pill-rex" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Cole</strong></td><td>B2B outreach</td><td>Research 9 AM · Outreach 10 AM</td><td id="brief-last-cole">—</td><td><span id="brief-pill-cole" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Vance</strong></td><td>TikTok/Reels scripts for Prabh</td><td>9 AM PST</td><td id="brief-last-vance">—</td><td><span id="brief-pill-vance" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Scout</strong></td><td>ASO + SEO + IndexNow</td><td>Deploy + Sundays 9 AM</td><td id="brief-last-scout">—</td><td><span id="brief-pill-scout" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Oracle</strong></td><td>World intel · Reddit + iTunes</td><td>Every 30 min</td><td id="brief-last-oracle">—</td><td><span id="brief-pill-oracle" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Signals</strong></td><td>Customer pain scan</td><td>Every 2 hours</td><td id="brief-last-signals">—</td><td><span id="brief-pill-signals" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Comp Intel</strong></td><td>Competitor App Store monitor</td><td>Every 6 hours</td><td id="brief-last-compintel">—</td><td><span id="brief-pill-compintel" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Refer</strong></td><td>Referral + viral loop</td><td>1 PM PST daily</td><td id="brief-last-refer">—</td><td><span id="brief-pill-refer" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Ace</strong></td><td>Morning brief + EOD scan</td><td>8 AM + 8 PM PST</td><td id="brief-last-ace">—</td><td><span id="brief-pill-ace" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Hermes</strong></td><td>CEO — commands all agents</td><td>Every 15 min pulse + 7 AM / 8:05 PM</td><td id="brief-last-hermes">—</td><td><span id="brief-pill-hermes" class="pill teal">Active</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -665,6 +698,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
+  <!-- ══ PROPOSALS (Hermes → TJ/Prabh) ══ -->
+  <div class="page" id="page-proposals">
+    <div class="ph"><h1>🧠 Hermes Proposals</h1><p>Changes Hermes wants to make · Approve to execute · Reject to cancel · Nothing runs without your OK</p></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+      <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="proposals-count-label">Loading...</div>
+      <select id="proposals-filter" onchange="loadProposals()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
+        <option value="pending">Pending approval</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+        <option value="">All</option>
+      </select>
+      <button onclick="loadProposals()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+    </div>
+    <div id="proposals-feed" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem;">Loading proposals...</div>
+    </div>
+  </div>
+
   <!-- ══ APPROVALS ══ -->
   <div class="page" id="page-approvals">
     <div class="ph"><h1>✅ Approvals</h1><p>Agent drafts pending TJ sign-off · Approve to send · Skip to discard</p></div>
@@ -703,6 +754,44 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="list-item"><span>📱</span><div class="name">Google Play Console</div><div class="meta">com.carely.meds — Closed Testing Alpha</div></div>
       <div class="list-item"><span>💳</span><div class="name">Stripe Dashboard</div><div class="meta">dashboard.stripe.com — Founding + Monthly + Annual plans</div></div>
     </div>
+  </div>
+
+  <!-- ══ OBSIDIAN BRAIN ══ -->
+  <div class="page" id="page-brain">
+    <div class="ph"><h1>🧬 Obsidian Brain</h1><p>Hermes' shared knowledge base · All agents read this · 11 live topics · Updates daily</p></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+      <div id="brain-status" style="font-size:0.82rem;font-weight:700;color:var(--deep)">Loading brain...</div>
+      <button onclick="loadBrain()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      <button onclick="showBrainInject()" style="font-size:0.73rem;border:none;padding:3px 12px;border-radius:6px;background:var(--teal);color:white;cursor:pointer;font-weight:700">+ Inject Note</button>
+    </div>
+    <!-- Inject panel (hidden by default) -->
+    <div id="brain-inject-panel" style="display:none;background:white;border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:0 1px 8px rgba(0,0,0,0.06);">
+      <div style="font-size:0.85rem;font-weight:800;color:var(--deep);margin-bottom:10px;">Inject into Brain</div>
+      <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
+        <select id="brain-inject-topic" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;flex:1;min-width:160px">
+          <option value="growth_playbook">Growth Playbook</option>
+          <option value="agent_directives">Agent Directives</option>
+          <option value="product">Product</option>
+          <option value="customers">Customers</option>
+          <option value="pricing">Pricing</option>
+          <option value="competitors">Competitors</option>
+          <option value="market">Market</option>
+          <option value="feedback_patterns">Feedback Patterns</option>
+          <option value="carely_brand">Carely Brand</option>
+          <option value="carely_voice">Carely Voice</option>
+          <option value="launch_state">Launch State</option>
+        </select>
+        <input id="brain-inject-key" type="text" placeholder="key (e.g. pricing_note_may14)" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;flex:1;min-width:160px" />
+      </div>
+      <textarea id="brain-inject-value" placeholder="What should Hermes and all agents know?" rows="3" style="width:100%;font-size:0.82rem;padding:8px 12px;border:1px solid var(--g300);border-radius:8px;resize:vertical;font-family:inherit;margin-bottom:8px;"></textarea>
+      <div style="display:flex;gap:8px;">
+        <button onclick="submitBrainInject()" style="padding:6px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.8rem;cursor:pointer">Inject</button>
+        <button onclick="document.getElementById('brain-inject-panel').style.display='none'" style="padding:6px 14px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);font-size:0.8rem;cursor:pointer">Cancel</button>
+        <span id="brain-inject-msg" style="font-size:0.78rem;align-self:center;color:var(--green);"></span>
+      </div>
+    </div>
+    <!-- Brain topics grid -->
+    <div id="brain-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;"></div>
   </div>
 
   <!-- ══ INTEL POOL ══ -->
@@ -807,22 +896,83 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ CRM ══ -->
   <div class="page" id="page-crm">
-    <div class="ph"><h1>👤 CRM</h1><p>All users · Plans · Activity · Trial status — live from Supabase</p></div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-      <select id="crm-filter" onchange="loadCRM()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
-        <option value="">All users</option>
-        <option value="founding">Founding</option>
-        <option value="monthly">Monthly</option>
-        <option value="annual">Annual</option>
-        <option value="trial">Trial</option>
-        <option value="cancelled">Cancelled</option>
-      </select>
-      <div style="font-size:0.8rem;color:var(--g500)" id="crm-count">Loading...</div>
-      <button onclick="loadCRM()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+    <div class="ph"><h1>👤 CRM</h1><p>Consumer users + B2B pipeline · All contacts · Live from backend</p></div>
+
+    <!-- CRM Tab switcher -->
+    <div class="tabs" style="margin-bottom:16px;">
+      <div class="tab active" onclick="crmTab('users',this)">Consumer Users</div>
+      <div class="tab" onclick="crmTab('b2b',this)">B2B Pipeline</div>
+      <div class="tab" onclick="crmTab('stats',this)">Pipeline Stats</div>
     </div>
-    <div class="card" style="overflow-x:auto">
-      <div id="crm-table-wrap">
-        <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading users...</div>
+
+    <!-- Consumer Users tab -->
+    <div id="crm-pane-users">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <select id="crm-filter" onchange="loadCRM()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
+          <option value="">All users</option>
+          <option value="founding">Founding</option>
+          <option value="monthly">Monthly</option>
+          <option value="annual">Annual</option>
+          <option value="trial">Trial</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <div style="font-size:0.8rem;color:var(--g500)" id="crm-count">Loading...</div>
+        <button onclick="loadCRM()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      </div>
+      <div class="card" style="overflow-x:auto">
+        <div id="crm-table-wrap">
+          <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading users...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B2B Pipeline tab -->
+    <div id="crm-pane-b2b" style="display:none;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <select id="b2b-status-filter" onchange="loadB2BPipeline()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
+          <option value="">All stages</option>
+          <option value="pending">Prospecting</option>
+          <option value="sent">Contacted</option>
+          <option value="opened">Opened Email</option>
+          <option value="clicked">Clicked Link</option>
+          <option value="replied">Replied</option>
+          <option value="converted">Won</option>
+          <option value="unsubscribed">Unsubscribed</option>
+        </select>
+        <select id="b2b-type-filter" onchange="loadB2BPipeline()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
+          <option value="">All types</option>
+          <option value="senior_living">Senior Living</option>
+          <option value="pharmacy">Pharmacy</option>
+          <option value="clinic">Clinic</option>
+          <option value="caregiver_org">Caregiver Org</option>
+          <option value="home_care">Home Care</option>
+        </select>
+        <div style="font-size:0.8rem;color:var(--g500)" id="b2b-count">Loading...</div>
+        <button onclick="loadB2BPipeline()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      </div>
+
+      <!-- Pipeline stage summary -->
+      <div class="metric-row" id="b2b-stage-summary" style="margin-bottom:16px;"></div>
+
+      <div class="card" style="overflow-x:auto;">
+        <div id="b2b-table-wrap">
+          <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem;">Loading B2B pipeline...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pipeline Stats tab -->
+    <div id="crm-pane-stats" style="display:none;">
+      <div class="metric-row" id="b2b-stats-row"></div>
+      <div class="cols" style="margin-top:16px;">
+        <div class="card">
+          <div class="card-title">Top Performing Segments</div>
+          <div id="b2b-segment-breakdown" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Cole + Hermes Activity (Last 7 Days)</div>
+          <div id="b2b-cole-activity" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1522,6 +1672,18 @@ function nav(el, id) {
   document.getElementById('topbar-title').textContent = label.replace(/[●▸]/g,'').trim();
   document.querySelector('.page-area').scrollTo({ top: 0, behavior: 'smooth' });
   closeSidebar();
+  // Trigger fresh data loads when navigating to data-driven pages
+  var PAGE_LOADERS = {
+    'proposals':    function() { loadProposals(); },
+    'approvals':    function() { if (window.loadDrafts) window.loadDrafts(); },
+    'crm':          function() { if (window.loadCRM) window.loadCRM(); },
+    'my-inbox':     function() { if (window.loadInbox) window.loadInbox(); },
+    'team-chat':    function() { if (window.loadTeamFeed) window.loadTeamFeed(); },
+    'agent-chat':   function() { if (window.loadTeamFeed) window.loadTeamFeed(); if (window.loadAgentActivity) window.loadAgentActivity(); },
+    'all-agents':   function() { if (window.loadAgentActivity) window.loadAgentActivity(); },
+    'brain':        function() { loadBrain(); }
+  };
+  if (PAGE_LOADERS[id]) setTimeout(PAGE_LOADERS[id], 50);
 }
 
 function switchTab(el, id) {
@@ -1532,10 +1694,20 @@ function switchTab(el, id) {
   document.getElementById(id).classList.add('active');
 }
 
-// Clock
+// Clock + Launch Countdown
 function tick() {
+  var now = new Date();
   document.getElementById('clock').textContent =
-    new Date().toLocaleTimeString('en-CA', { hour12: false });
+    now.toLocaleTimeString('en-CA', { hour12: false });
+  var launch = new Date('2026-05-30T00:00:00-07:00');
+  var diff = launch - now;
+  if (diff > 0) {
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var el = document.getElementById('launch-countdown');
+    if (el) el.textContent = d + 'd ' + h + 'h ' + m + 'm';
+  }
 }
 tick();
 setInterval(tick, 1000);
@@ -1615,7 +1787,7 @@ function sendHQ() {
     } else if (t.match(/reddit/)) {
       reply = 'Rex (Reddit) ran 4 monitor cycles today. Drafts pushed to Approvals queue for Prabh to review before posting.';
     } else if (t.match(/railway|backend|server/)) {
-      reply = 'Backend is green on Railway. All 20 agents confirmed running — 8 patient care + 6 growth + 4 intelligence + Ace director + Hermes CEO. No errors in logs.';
+      reply = 'Backend is green on Railway. All 18 agents confirmed running — 8 patient care + 6 growth + 4 intelligence + Ace director + Hermes CEO. No errors in logs.';
     } else if (t.match(/blaze|launch|email blast/)) {
       reply = 'Blaze fired May 5 — launch email to full Mailchimp waitlist. Mission complete. Will fire again for 100-customer milestone.';
     } else if (t.match(/ios|apple|duns/)) {
@@ -1654,7 +1826,7 @@ function sendHQ() {
     } else if (t.match(/seo|scout|sitemap|indexnow/)) {
       reply = 'Scout pinged all 7 blog URLs to Google IndexNow on last deploy. 2 content gaps remain: "seniors USA" and "family caregiver".';
     } else {
-      var defaults = ['Got it. Check the relevant page in HQ for live data.','Logged. All 20 agents are green right now.','Noted. I\'ll include this in tomorrow\'s brief.'];
+      var defaults = ['Got it. Check the relevant page in HQ for live data.','Logged. All 18 agents are green right now.','Noted. I\'ll include this in tomorrow\'s brief.'];
       reply = defaults[Math.floor(Math.random()*defaults.length)];
     }
     thinkingBubble.textContent = reply;
@@ -2156,47 +2328,422 @@ function submitEdit(id) {
   });
 }
 
-// PIN lock
-var PIN_HASH = '126226'; // change this to your 6-digit PIN
+// ═══ TEAM AUTH ════════════════════════════════════════════════════════════════
+var TEAM = {
+  tj:    { pin: '272727', name: 'TJ',    role: 'CEO · Engineering', icon: '👨‍💻' },
+  prabh: { pin: '272727', name: 'Prabh', role: 'COO · Marketing',   icon: '👩‍💼' }
+};
+var _selectedMember = null;
 var pinEntry = '';
+
 (function() {
-  var session = sessionStorage.getItem('carely-hq-auth');
-  if (session === 'ok') {
+  var stored = sessionStorage.getItem('carely-hq-member');
+  if (stored && TEAM[stored]) {
     document.getElementById('pin-screen').classList.add('hidden');
+    _showMemberBadge(stored);
   }
 })();
+
+function selectMember(id) {
+  if (!TEAM[id]) return;
+  _selectedMember = id;
+  document.getElementById('pin-step-who').style.display = 'none';
+  document.getElementById('pin-step-pin').style.display = '';
+  var label = document.getElementById('pin-member-label');
+  if (label) label.textContent = 'Enter PIN for ' + TEAM[id].name;
+  pinEntry = '';
+  _updateDots();
+}
+
+function backToWho() {
+  _selectedMember = null;
+  pinEntry = '';
+  document.getElementById('pin-step-who').style.display = '';
+  document.getElementById('pin-step-pin').style.display = 'none';
+  var err = document.getElementById('pin-error');
+  if (err) err.textContent = '';
+  _updateDots();
+}
+
+function _updateDots() {
+  for (var i = 0; i < 6; i++) {
+    var el = document.getElementById('d' + i);
+    if (el) el.classList.toggle('filled', i < pinEntry.length);
+  }
+}
+
 function pinKey(d) {
   if (pinEntry.length >= 6) return;
   pinEntry += d;
-  updateDots();
-  if (pinEntry.length === 6) checkPin();
+  _updateDots();
+  if (pinEntry.length === 6) _checkPin();
 }
-function pinBack() { pinEntry = pinEntry.slice(0,-1); updateDots(); }
-function pinClear() { pinEntry = ''; updateDots(); }
-function updateDots() {
-  for (var i = 0; i < 6; i++) {
-    document.getElementById('d' + i).classList.toggle('filled', i < pinEntry.length);
-  }
-}
-function checkPin() {
-  if (pinEntry === PIN_HASH) {
-    sessionStorage.setItem('carely-hq-auth', 'ok');
+
+function pinBack() { pinEntry = pinEntry.slice(0, -1); _updateDots(); }
+function pinClear() { pinEntry = ''; _updateDots(); }
+
+function _checkPin() {
+  var member = TEAM[_selectedMember];
+  if (!member) return;
+  if (pinEntry === member.pin) {
+    sessionStorage.setItem('carely-hq-member', _selectedMember);
     document.getElementById('pin-screen').classList.add('hidden');
+    _showMemberBadge(_selectedMember);
   } else {
-    document.getElementById('pin-error').textContent = 'Incorrect PIN. Try again.';
+    var err = document.getElementById('pin-error');
+    if (err) err.textContent = 'Incorrect PIN. Try again.';
     pinEntry = '';
-    updateDots();
-    setTimeout(function(){ document.getElementById('pin-error').textContent = ''; }, 2000);
+    _updateDots();
+    setTimeout(function() { if (err) err.textContent = ''; }, 2000);
   }
 }
+
+function _showMemberBadge(id) {
+  var member = TEAM[id];
+  if (!member) return;
+  var badge = document.getElementById('sb-member-badge');
+  var icon  = document.getElementById('sb-member-icon');
+  var name  = document.getElementById('sb-member-name');
+  var role  = document.getElementById('sb-member-role');
+  if (badge) badge.style.display = 'flex';
+  if (icon)  icon.textContent    = member.icon;
+  if (name)  name.textContent    = member.name;
+  if (role)  role.textContent    = member.role;
+}
+
+function doLogout() {
+  sessionStorage.removeItem('carely-hq-member');
+  _selectedMember = null;
+  pinEntry = '';
+  var badge = document.getElementById('sb-member-badge');
+  if (badge) badge.style.display = 'none';
+  backToWho();
+  document.getElementById('pin-screen').classList.remove('hidden');
+}
+
 document.addEventListener('keydown', function(e) {
   var ps = document.getElementById('pin-screen');
-  if (ps && !ps.classList.contains('hidden')) {
+  if (ps && !ps.classList.contains('hidden') && _selectedMember) {
     if (e.key >= '0' && e.key <= '9') pinKey(e.key);
     else if (e.key === 'Backspace') pinBack();
     else if (e.key === 'Escape') pinClear();
   }
 });
+
+// ═══ CRM TABS ═════════════════════════════════════════════════════════════════
+function crmTab(pane, tabEl) {
+  ['users','b2b','stats'].forEach(function(p) {
+    var el = document.getElementById('crm-pane-' + p);
+    if (el) el.style.display = p === pane ? '' : 'none';
+  });
+  document.querySelectorAll('#page-crm .tab').forEach(function(t) { t.classList.remove('active'); });
+  if (tabEl) tabEl.classList.add('active');
+  if (pane === 'b2b')   loadB2BPipeline();
+  if (pane === 'stats') loadB2BStats();
+}
+
+// ═══ B2B PIPELINE ══════════════════════════════════════════════════════════════
+function loadB2BPipeline() {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var statusF = document.getElementById('b2b-status-filter');
+  var typeF   = document.getElementById('b2b-type-filter');
+  var countEl = document.getElementById('b2b-count');
+  var wrap    = document.getElementById('b2b-table-wrap');
+  var summary = document.getElementById('b2b-stage-summary');
+
+  if (wrap) {
+    wrap.textContent = '';
+    var ld = document.createElement('div');
+    ld.style.cssText = 'text-align:center;padding:28px;color:var(--g500);font-size:0.82rem';
+    ld.textContent = 'Loading pipeline...';
+    wrap.appendChild(ld);
+  }
+
+  var qs = [];
+  if (statusF && statusF.value) qs.push('status=' + encodeURIComponent(statusF.value));
+  if (typeF   && typeF.value)   qs.push('type='   + encodeURIComponent(typeF.value));
+  var url = BACKEND + '/admin/outreach-targets' + (qs.length ? '?' + qs.join('&') : '');
+
+  fetch(url, { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(8000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var targets = Array.isArray(d) ? d : (d.targets || d.data || []);
+      if (countEl) countEl.textContent = targets.length + ' orgs';
+
+      if (summary) {
+        summary.textContent = '';
+        var STAGE_LABELS = { pending:'Prospecting', sent:'Contacted', opened:'Opened', clicked:'Clicked', replied:'Replied', converted:'Won', unsubscribed:'Unsub' };
+        var counts = {};
+        targets.forEach(function(t) { counts[t.status] = (counts[t.status]||0) + 1; });
+        Object.keys(STAGE_LABELS).forEach(function(s) {
+          if (!counts[s]) return;
+          var m = document.createElement('div'); m.className = 'metric';
+          var lbl = document.createElement('div'); lbl.className = 'metric-label'; lbl.textContent = STAGE_LABELS[s]; m.appendChild(lbl);
+          var val = document.createElement('div'); val.className = 'metric-val teal'; val.textContent = counts[s]; m.appendChild(val);
+          summary.appendChild(m);
+        });
+      }
+
+      if (wrap) {
+        wrap.textContent = '';
+        if (!targets.length) {
+          var empty = document.createElement('div');
+          empty.style.cssText = 'text-align:center;padding:28px;color:var(--g500);font-size:0.82rem';
+          empty.textContent = 'No organizations in pipeline yet. Cole is building it.';
+          wrap.appendChild(empty);
+          return;
+        }
+        var tbl = document.createElement('table'); tbl.className = 'tbl';
+        var thead = document.createElement('thead');
+        var hrow  = document.createElement('tr');
+        ['Organization','Type','Region','Status','Last Contact','Emails Sent','Actions'].forEach(function(h) {
+          var th = document.createElement('th'); th.textContent = h; hrow.appendChild(th);
+        });
+        thead.appendChild(hrow); tbl.appendChild(thead);
+        var tbody = document.createElement('tbody');
+        var SC = { pending:'amber', sent:'', opened:'teal', clicked:'teal', replied:'green', converted:'green', unsubscribed:'red' };
+        targets.forEach(function(t) {
+          var tr = document.createElement('tr');
+          var vals = [
+            t.org_name || '—',
+            (t.org_type || '').replace(/_/g,' '),
+            t.region || '—',
+            t.status || '—',
+            t.last_contacted_at ? new Date(t.last_contacted_at).toLocaleDateString() : '—',
+            String(t.emails_sent || 0)
+          ];
+          vals.forEach(function(v, i) {
+            var td = document.createElement('td');
+            if (i === 3) {
+              var pill = document.createElement('span');
+              pill.className = 'pill ' + (SC[t.status] || '');
+              pill.textContent = v;
+              td.appendChild(pill);
+            } else {
+              td.textContent = v;
+            }
+            tr.appendChild(td);
+          });
+          var tdA = document.createElement('td');
+          if (t.status !== 'unsubscribed') {
+            var btn = document.createElement('button');
+            btn.style.cssText = 'font-size:0.7rem;border:1px solid var(--g300);padding:2px 8px;border-radius:5px;background:white;cursor:pointer;color:var(--g500)';
+            btn.textContent = 'Details';
+            (function(org) {
+              btn.onclick = function() {
+                alert('Org: ' + org.org_name + '\nEmail: ' + (org.contact_email||'—') + '\nWebsite: ' + (org.website||'—') + '\nNote: ' + (org.notes||'—'));
+              };
+            })(t);
+            tdA.appendChild(btn);
+          }
+          tr.appendChild(tdA);
+          tbody.appendChild(tr);
+        });
+        tbl.appendChild(tbody);
+        wrap.appendChild(tbl);
+      }
+    })
+    .catch(function() {
+      if (wrap) {
+        wrap.textContent = '';
+        var er = document.createElement('div');
+        er.style.cssText = 'text-align:center;padding:28px;color:var(--red);font-size:0.82rem';
+        er.textContent = 'Could not load pipeline — backend unreachable.';
+        wrap.appendChild(er);
+      }
+      if (countEl) countEl.textContent = 'Error';
+    });
+}
+
+// ═══ B2B STATS ══════════════════════════════════════════════════════════════
+function loadB2BStats() {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var statsRow = document.getElementById('b2b-stats-row');
+  var segEl    = document.getElementById('b2b-segment-breakdown');
+  var actEl    = document.getElementById('b2b-cole-activity');
+  if (statsRow) statsRow.textContent = '';
+  if (segEl)    { segEl.textContent = ''; var ld1 = document.createElement('div'); ld1.style.cssText='color:var(--g500);font-size:0.82rem'; ld1.textContent='Loading...'; segEl.appendChild(ld1); }
+  if (actEl)    { actEl.textContent = ''; var ld2 = document.createElement('div'); ld2.style.cssText='color:var(--g500);font-size:0.82rem'; ld2.textContent='Loading...'; actEl.appendChild(ld2); }
+
+  fetch(BACKEND + '/admin/outreach-targets', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(8000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var targets = Array.isArray(d) ? d : (d.targets || d.data || []);
+      var total      = targets.length;
+      var contacted  = targets.filter(function(t) { return t.emails_sent > 0; }).length;
+      var replies    = targets.filter(function(t) { return t.status === 'replied'; }).length;
+      var won        = targets.filter(function(t) { return t.status === 'converted'; }).length;
+      var unsub      = targets.filter(function(t) { return t.status === 'unsubscribed'; }).length;
+      var replyRate  = contacted ? Math.round(replies / contacted * 100) : 0;
+
+      if (statsRow) {
+        [
+          ['Total Orgs',   total,          ''],
+          ['Contacted',    contacted,      'teal'],
+          ['Replied',      replies,        'green'],
+          ['Won',          won,            'green'],
+          ['Reply Rate',   replyRate + '%', replyRate >= 5 ? 'green' : 'amber'],
+          ['Unsubscribed', unsub,          'red']
+        ].forEach(function(row) {
+          var m = document.createElement('div'); m.className = 'metric';
+          var lbl = document.createElement('div'); lbl.className = 'metric-label'; lbl.textContent = row[0]; m.appendChild(lbl);
+          var val = document.createElement('div'); val.className = 'metric-val ' + row[2]; val.textContent = row[1]; m.appendChild(val);
+          statsRow.appendChild(m);
+        });
+      }
+
+      if (segEl) {
+        segEl.textContent = '';
+        var byType = {};
+        targets.forEach(function(t) { var k = t.org_type || 'other'; byType[k] = (byType[k]||0) + 1; });
+        var keys = Object.keys(byType).sort(function(a,b) { return byType[b] - byType[a]; });
+        if (!keys.length) { segEl.textContent = 'No data yet'; }
+        else keys.forEach(function(k) {
+          var row = document.createElement('div');
+          row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;padding:5px 0;border-bottom:1px solid var(--g100)';
+          var lbl = document.createElement('span'); lbl.textContent = k.replace(/_/g,' '); row.appendChild(lbl);
+          var cnt = document.createElement('span'); cnt.style.fontWeight = '700'; cnt.textContent = byType[k]; row.appendChild(cnt);
+          segEl.appendChild(row);
+        });
+      }
+
+      if (actEl) {
+        actEl.textContent = '';
+        [
+          'Pipeline built: ' + total + ' orgs discovered',
+          'Emails sent to: ' + contacted + ' orgs',
+          'Reply rate: ' + replyRate + '% (' + replies + ' replies)',
+          'Converted / won: ' + won + ' orgs',
+          'Unsubscribes honoured: ' + unsub
+        ].forEach(function(a) {
+          var row = document.createElement('div');
+          row.style.cssText = 'font-size:0.8rem;padding:5px 0;border-bottom:1px solid var(--g100)';
+          row.textContent = '· ' + a;
+          actEl.appendChild(row);
+        });
+      }
+    })
+    .catch(function() {
+      if (statsRow) {
+        var er = document.createElement('div'); er.style.cssText='color:var(--red);font-size:0.82rem;padding:8px';
+        er.textContent = 'Could not load stats.'; statsRow.appendChild(er);
+      }
+    });
+}
+
+// ═══ PROPOSALS ═══════════════════════════════════════════════════════════════
+function loadProposals() {
+  var BACKEND  = 'https://carely-backend-production.up.railway.app';
+  var SECRET   = 'carely-admin-6add43330d2313d8';
+  var filterEl = document.getElementById('proposals-filter');
+  var filter   = filterEl ? filterEl.value : 'pending';
+  var feed     = document.getElementById('proposals-feed');
+  var countLbl = document.getElementById('proposals-count-label');
+
+  if (feed) {
+    feed.textContent = '';
+    var ld = document.createElement('div');
+    ld.style.cssText = 'text-align:center;padding:28px;color:var(--g500);font-size:0.82rem';
+    ld.textContent = 'Loading proposals...';
+    feed.appendChild(ld);
+  }
+
+  var url = BACKEND + '/admin/proposals' + (filter ? '?status=' + encodeURIComponent(filter) : '');
+  fetch(url, { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(8000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var proposals = Array.isArray(d) ? d : (d.proposals || []);
+      if (countLbl) countLbl.textContent = proposals.length + ' proposal' + (proposals.length !== 1 ? 's' : '');
+      if (!feed) return;
+      feed.textContent = '';
+      if (!proposals.length) {
+        var empty = document.createElement('div'); empty.className = 'card';
+        empty.style.cssText = 'text-align:center;padding:28px;color:var(--g500);font-size:0.82rem';
+        empty.textContent = 'No proposals in this category.';
+        feed.appendChild(empty);
+        return;
+      }
+      var SC = { pending:'amber', approved:'green', rejected:'red' };
+      proposals.forEach(function(p) {
+        var card = document.createElement('div'); card.className = 'card';
+
+        var hdr = document.createElement('div'); hdr.style.cssText = 'display:flex;align-items:flex-start;gap:10px;margin-bottom:12px';
+        var iconEl = document.createElement('div'); iconEl.style.cssText = 'font-size:1.4rem;flex-shrink:0'; iconEl.textContent = '🧠'; hdr.appendChild(iconEl);
+        var info = document.createElement('div'); info.style.flex = '1';
+        var titleEl = document.createElement('div'); titleEl.style.cssText = 'font-size:0.9rem;font-weight:800;color:var(--deep)'; titleEl.textContent = p.title || 'Untitled Proposal'; info.appendChild(titleEl);
+        var metaEl = document.createElement('div'); metaEl.style.cssText = 'font-size:0.72rem;color:var(--g500);margin-top:2px';
+        metaEl.textContent = (p.category || 'General') + ' · ' + (p.created_at ? new Date(p.created_at).toLocaleDateString() : 'Just now');
+        info.appendChild(metaEl);
+        hdr.appendChild(info);
+        var pillEl = document.createElement('span'); pillEl.className = 'pill ' + (SC[p.status]||''); pillEl.textContent = p.status || 'pending'; hdr.appendChild(pillEl);
+        card.appendChild(hdr);
+
+        if (p.description || p.body) {
+          var desc = document.createElement('div');
+          desc.style.cssText = 'font-size:0.82rem;color:var(--text);margin-bottom:12px;line-height:1.6;background:var(--g100);padding:10px 12px;border-radius:8px';
+          desc.textContent = p.description || p.body;
+          card.appendChild(desc);
+        }
+
+        if (p.impact || p.effort) {
+          var badges = document.createElement('div'); badges.style.cssText = 'display:flex;gap:10px;margin-bottom:12px';
+          if (p.impact) { var ip = document.createElement('span'); ip.className = 'pill green'; ip.textContent = 'Impact: ' + p.impact; badges.appendChild(ip); }
+          if (p.effort) { var ep = document.createElement('span'); ep.className = 'pill amber'; ep.textContent = 'Effort: ' + p.effort; badges.appendChild(ep); }
+          card.appendChild(badges);
+        }
+
+        if (p.status === 'pending') {
+          var actions = document.createElement('div'); actions.style.cssText = 'display:flex;gap:8px';
+          var appBtn = document.createElement('button');
+          appBtn.style.cssText = 'padding:6px 16px;border-radius:8px;border:none;background:var(--green);color:white;font-weight:700;font-size:0.8rem;cursor:pointer';
+          appBtn.textContent = 'Approve — Execute';
+          (function(pid) { appBtn.onclick = function() { approveProposal(pid); }; })(p.id);
+          actions.appendChild(appBtn);
+          var rejBtn = document.createElement('button');
+          rejBtn.style.cssText = 'padding:6px 16px;border-radius:8px;border:1.5px solid var(--red);background:white;color:var(--red);font-weight:700;font-size:0.8rem;cursor:pointer';
+          rejBtn.textContent = 'Reject';
+          (function(pid) { rejBtn.onclick = function() { rejectProposal(pid); }; })(p.id);
+          actions.appendChild(rejBtn);
+          card.appendChild(actions);
+        }
+
+        feed.appendChild(card);
+      });
+    })
+    .catch(function() {
+      if (feed) {
+        feed.textContent = '';
+        var er = document.createElement('div'); er.className = 'card';
+        er.style.cssText = 'text-align:center;padding:28px;color:var(--red);font-size:0.82rem';
+        er.textContent = 'Could not load proposals — backend unreachable.';
+        feed.appendChild(er);
+      }
+      if (countLbl) countLbl.textContent = 'Error';
+    });
+}
+
+function approveProposal(id) {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+  if (!confirm('Approve this proposal? Hermes will execute it immediately.')) return;
+  fetch(BACKEND + '/admin/proposals/' + encodeURIComponent(id) + '/approve', {
+    method: 'POST', headers: { 'x-carely-secret': SECRET }
+  })
+    .then(function() { loadProposals(); })
+    .catch(function() { alert('Could not approve — check backend.'); });
+}
+
+function rejectProposal(id) {
+  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var SECRET  = 'carely-admin-6add43330d2313d8';
+  fetch(BACKEND + '/admin/proposals/' + encodeURIComponent(id) + '/reject', {
+    method: 'POST', headers: { 'x-carely-secret': SECRET }
+  })
+    .then(function() { loadProposals(); })
+    .catch(function() { alert('Could not reject — check backend.'); });
+}
 
 // ═══ LIVE BACKEND DATA ═══════════════════════════════════════════════════════
 (function() {
@@ -2267,6 +2814,11 @@ document.addEventListener('keydown', function(e) {
 
     var wlEl = $('fv-waitlist'); if (wlEl) wlEl.textContent = wl.total || '—';
     var pcEl = $('fv-paid');     if (pcEl) pcEl.textContent = paid;
+
+    // Daily Brief live metrics
+    var dbPaid = $('db-paid'); if (dbPaid) { dbPaid.textContent = paid; dbPaid.className = 'metric-val ' + (paid > 0 ? 'green' : 'amber'); }
+    var dbTrial = $('db-trial'); if (dbTrial) dbTrial.textContent = u.trial || 0;
+    var dbMrr = $('db-mrr'); if (dbMrr) { dbMrr.textContent = '$' + (+(rev.mrr)||0).toFixed(0); dbMrr.className = 'metric-val ' + (rev.mrr > 0 ? 'green' : ''); }
 
     lastAt = Date.now();
     var lu = $('live-updated'); if (lu) lu.textContent = '· Updated just now';
@@ -2833,12 +3385,30 @@ document.addEventListener('keydown', function(e) {
   var BACKEND = 'https://carely-backend-production.up.railway.app';
   var SECRET  = 'carely-admin-6add43330d2313d8';
 
+  function timeAgoShort(iso) {
+    if (!iso) return '—';
+    var s = Math.round((Date.now() - new Date(iso)) / 1000);
+    if (s < 60) return s + 's ago';
+    if (s < 3600) return Math.floor(s / 60) + 'm ago';
+    if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+    return Math.floor(s / 86400) + 'd ago';
+  }
+
   function updateDots(status) {
     Object.keys(status).forEach(function(agent) {
-      var id = 'agent-dot-' + agent.toLowerCase().replace(/\s/g,'-').replace(/\./g,'');
-      var el = document.getElementById(id);
-      if (!el) return;
-      el.className = status[agent].alive ? 'dot-on' : 'dot-off';
+      var key = agent.toLowerCase().replace(/\s/g,'-').replace(/\./g,'');
+      // All-agents page dots
+      var dotEl = document.getElementById('agent-dot-' + key);
+      if (dotEl) dotEl.className = status[agent].alive ? 'dot-on' : 'dot-off';
+      // Daily Brief table: status pill + last run
+      var briefKey = key.replace(/-/g,'').replace(' ','');
+      var pillEl = document.getElementById('brief-pill-' + briefKey);
+      if (pillEl) {
+        pillEl.textContent = status[agent].alive ? 'Running' : 'Offline';
+        pillEl.className   = 'pill ' + (status[agent].alive ? 'green' : 'red');
+      }
+      var lastEl = document.getElementById('brief-last-' + briefKey);
+      if (lastEl) lastEl.textContent = timeAgoShort(status[agent].lastRun || status[agent].last_run);
     });
   }
 
@@ -2917,6 +3487,150 @@ document.addEventListener('keydown', function(e) {
 
   loadSendGridStats();
   setInterval(loadSendGridStats, 300000); // refresh every 5 min
+})();
+
+// ═══ OBSIDIAN BRAIN ════════════════════════════════════════════════════════
+var BRAIN_BACKEND = 'https://carely-backend-production.up.railway.app';
+var BRAIN_SECRET  = 'carely-admin-6add43330d2313d8';
+
+var BRAIN_TOPIC_META = {
+  product:           { icon: '📱', label: 'Product',           color: '#2563EB' },
+  competitors:       { icon: '⚔️',  label: 'Competitors',       color: '#DC2626' },
+  customers:         { icon: '👥', label: 'Customers',          color: '#16A34A' },
+  market:            { icon: '🌍', label: 'Market',             color: '#D97706' },
+  pricing:           { icon: '💰', label: 'Pricing',            color: '#059669' },
+  growth_playbook:   { icon: '🚀', label: 'Growth Playbook',    color: '#7C3AED' },
+  agent_directives:  { icon: '🤖', label: 'Agent Directives',   color: '#0891B2' },
+  carely_brand:      { icon: '💙', label: 'Carely Brand',        color: '#0D3347' },
+  carely_voice:      { icon: '🗣️', label: 'Carely Voice',        color: '#2D8899' },
+  launch_state:      { icon: '🚀', label: 'Launch State',       color: '#F97316' },
+  feedback_patterns: { icon: '💬', label: 'Feedback Patterns',  color: '#EC4899' }
+};
+
+function loadBrain() {
+  var grid   = document.getElementById('brain-grid');
+  var status = document.getElementById('brain-status');
+  if (!grid) return;
+  if (status) status.textContent = 'Loading brain...';
+  grid.textContent = '';
+
+  fetch(BRAIN_BACKEND + '/admin/brain', { headers: { 'x-carely-secret': BRAIN_SECRET }, signal: AbortSignal.timeout(8000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      // Brain returns { entries: [{topic, content, updatedAt, updatedBy, version}] }
+      var topics = {};
+      (d.entries || []).forEach(function(e) { topics[e.topic] = e; });
+      var keys = Object.keys(topics);
+      if (status) status.textContent = keys.length + ' topics live · ' + new Date().toLocaleTimeString('en-CA', { hour12: false }) + ' PST';
+      if (!keys.length) {
+        var empty = document.createElement('div');
+        empty.style.cssText = 'grid-column:1/-1;text-align:center;padding:40px;color:var(--g500);font-size:0.85rem';
+        empty.textContent = 'Brain is empty — Hermes will seed it on next pulse.';
+        grid.appendChild(empty);
+        return;
+      }
+      keys.forEach(function(topic) {
+        var meta  = BRAIN_TOPIC_META[topic] || { icon: '📄', label: topic, color: '#6B7280' };
+        var data  = topics[topic];
+        var card  = document.createElement('div');
+        card.style.cssText = 'background:white;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,0.05);border-top:3px solid ' + meta.color;
+
+        var hdr = document.createElement('div');
+        hdr.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:12px';
+        var ic = document.createElement('span'); ic.style.fontSize='1.2rem'; ic.textContent = meta.icon; hdr.appendChild(ic);
+        var lbl = document.createElement('div');
+        lbl.style.cssText = 'font-size:0.82rem;font-weight:800;color:var(--deep);flex:1'; lbl.textContent = meta.label; hdr.appendChild(lbl);
+        var cnt = document.createElement('span');
+        cnt.style.cssText = 'font-size:0.68rem;color:var(--g500)';
+        var wordCount = (typeof data === 'string' ? data : (data && data.content ? data.content : '')).split(/\s+/).filter(Boolean).length;
+        cnt.textContent = wordCount + ' words';
+        hdr.appendChild(cnt);
+        card.appendChild(hdr);
+
+        var body = document.createElement('div');
+        body.style.cssText = 'display:flex;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto';
+
+        // content is a string (brain stores full topic as text)
+        var rawContent = typeof data === 'string' ? data : (data && data.content ? data.content : JSON.stringify(data));
+        var updatedAt  = data && data.updatedAt ? new Date(data.updatedAt).toLocaleDateString('en-CA') : '';
+        var updatedBy  = data && data.updatedBy ? data.updatedBy : '';
+
+        if (updatedAt || updatedBy) {
+          var metaRow = document.createElement('div');
+          metaRow.style.cssText = 'font-size:0.65rem;color:var(--g500);margin-bottom:6px';
+          metaRow.textContent = 'Updated ' + updatedAt + (updatedBy ? ' by ' + updatedBy : '');
+          body.appendChild(metaRow);
+        }
+
+        // Split on double-newlines to show as sections
+        var sections = rawContent.split(/\n\n+/).filter(Boolean).slice(0, 8);
+        sections.forEach(function(sec) {
+          var row = document.createElement('div');
+          row.style.cssText = 'font-size:0.78rem;padding:6px 10px;background:var(--g100);border-radius:6px;line-height:1.5;white-space:pre-wrap;word-break:break-word';
+          row.textContent = sec.slice(0, 400);
+          body.appendChild(row);
+        });
+        if (rawContent.split(/\n\n+/).filter(Boolean).length > 8) {
+          var more = document.createElement('div');
+          more.style.cssText = 'font-size:0.72rem;color:var(--g500);text-align:center;padding:4px';
+          more.textContent = '+ more content · click Refresh to reload';
+          body.appendChild(more);
+        }
+
+        card.appendChild(body);
+        grid.appendChild(card);
+      });
+    })
+    .catch(function() {
+      if (status) status.textContent = 'Brain unreachable — backend offline?';
+      if (grid) {
+        var er = document.createElement('div');
+        er.style.cssText = 'grid-column:1/-1;text-align:center;padding:40px;color:var(--red);font-size:0.85rem';
+        er.textContent = 'Could not connect to Obsidian Brain. Check Railway backend.';
+        grid.appendChild(er);
+      }
+    });
+}
+
+function showBrainInject() {
+  var p = document.getElementById('brain-inject-panel');
+  if (p) p.style.display = p.style.display === 'none' ? '' : 'none';
+}
+
+function submitBrainInject() {
+  var topic = document.getElementById('brain-inject-topic');
+  var key   = document.getElementById('brain-inject-key');
+  var val   = document.getElementById('brain-inject-value');
+  var msg   = document.getElementById('brain-inject-msg');
+  if (!topic || !key || !val) return;
+  if (!key.value.trim() || !val.value.trim()) { if (msg) { msg.textContent = 'Fill in key and value.'; msg.style.color = 'var(--red)'; } return; }
+  if (msg) { msg.textContent = 'Injecting...'; msg.style.color = 'var(--g500)'; }
+  // Fetch existing content then append the note
+  fetch(BRAIN_BACKEND + '/admin/brain', { headers: { 'x-carely-secret': BRAIN_SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var existing = '';
+      (d.entries || []).forEach(function(e) { if (e.topic === topic.value) existing = e.content || ''; });
+      var note = '\n\n[TJ note · ' + new Date().toLocaleDateString('en-CA') + ' · ' + key.value.trim() + ']\n' + val.value.trim();
+      return fetch(BRAIN_BACKEND + '/admin/brain/' + encodeURIComponent(topic.value), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'x-carely-secret': BRAIN_SECRET },
+        body: JSON.stringify({ content: existing + note })
+      });
+    })
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      if (msg) { msg.textContent = 'Injected! Brain updated.'; msg.style.color = 'var(--green)'; }
+      val.value = ''; key.value = '';
+      setTimeout(function() { loadBrain(); if (msg) msg.textContent = ''; }, 800);
+    })
+    .catch(function() { if (msg) { msg.textContent = 'Inject failed — check backend.'; msg.style.color = 'var(--red)'; } });
+}
+
+// ═══ INIT: load data for pages that need it on startup ═══════════════════════
+(function() {
+  loadProposals();
+  if (window.loadDrafts) window.loadDrafts();
 })();
 </script>
 </body>
