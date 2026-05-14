@@ -354,78 +354,94 @@
     .slide-phone-wrap { position: relative; width: 260px; }
     .demo-phone { width: 260px; background: #0a1a22; border-radius: 40px; padding: 12px; box-shadow: 0 40px 80px rgba(13,43,56,0.35), 0 0 0 1.5px rgba(68,171,173,0.15), inset 0 1px 0 rgba(255,255,255,0.08); }
     .phone-notch-bar { width: 60px; height: 5px; background: #1a2e38; border-radius: 3px; margin: 0 auto 8px; }
-    .demo-phone-screen { border-radius: 26px; overflow: hidden; background: #0B2D3D; min-height: 420px; }
-    .slide-panel { display: none; animation: slideIn 0.35s ease; }
+    .demo-phone-screen { border-radius: 26px; overflow: hidden; background: #f7fafb; min-height: 420px; }
+    .slide-panel { display: none; animation: slideIn 0.35s cubic-bezier(0.34,1.56,0.64,1); }
     .slide-panel.active { display: block; }
-    @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes ringFill { from { stroke-dashoffset: 283; } to { stroke-dashoffset: 60; } }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
     .slide-dots { display: flex; gap: 6px; }
     .slide-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bor); cursor: pointer; transition: all 0.18s; }
     .slide-dot.active { background: var(--t3); width: 22px; border-radius: 4px; }
     .slide-caption { font-size: 0.82rem; color: var(--inkm); text-align: center; max-width: 260px; line-height: 1.55; min-height: 36px; }
-    /* Screen content styles */
-    .s-dash-header { background: var(--dark-grad); padding: 14px 14px 18px; }
-    .s-dash-time { font-size: 0.6rem; color: rgba(255,255,255,0.65); margin-bottom: 3px; }
-    .s-dash-greet { font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: #fff; }
-    .s-stat-row { display: flex; gap: 6px; margin-top: 10px; }
-    .s-stat { flex: 1; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 6px; text-align: center; }
-    .s-stat-n { font-size: 0.85rem; font-weight: 900; color: #fff; }
-    .s-stat-l { font-size: 0.5rem; color: rgba(255,255,255,0.6); }
-    .s-dash-body { padding: 12px; background: #0B2D3D; }
-    .s-med-card { background: rgba(255,255,255,0.07); border-radius: 10px; padding: 9px 11px; margin-bottom: 7px; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.1); }
-    .s-med-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .s-med-dot.green { background: #02C39A; } .s-med-dot.amber { background: var(--amber); } .s-med-dot.red { background: #e55; }
-    .s-med-name { font-size: 0.67rem; font-weight: 700; color: #fff; }
-    .s-med-time { font-size: 0.57rem; color: rgba(255,255,255,0.5); }
-    .s-med-status { margin-left: auto; font-size: 0.58rem; font-weight: 700; white-space: nowrap; }
-    .s-med-status.green { color: #02C39A; } .s-med-status.amber { color: var(--amber); } .s-med-status.red { color: #e55; }
-    .s-elara-bubble { background: rgba(2,195,154,0.1); border: 1px solid rgba(2,195,154,0.25); border-radius: 10px 10px 10px 3px; padding: 8px 10px; }
-    .s-elara-from { font-size: 0.52rem; font-weight: 900; letter-spacing: 0.07em; text-transform: uppercase; color: #02C39A; margin-bottom: 2px; }
-    .s-elara-text { font-size: 0.64rem; color: rgba(255,255,255,0.8); line-height: 1.5; }
-    /* Elara chat screen */
+    /* ── DASHBOARD ── */
+    .s-dash-header { background: var(--dark-grad); padding: 14px 14px 22px; position: relative; overflow: hidden; }
+    .s-dash-header::after { content:''; position:absolute; bottom:-30px; right:-20px; width:80px; height:80px; border-radius:50%; background:rgba(2,195,154,0.15); }
+    .s-dash-time { font-size: 0.58rem; color: rgba(255,255,255,0.6); margin-bottom: 3px; letter-spacing:0.04em; }
+    .s-dash-greet { font-family: 'DM Serif Display', serif; font-size: 1rem; color: #fff; }
+    .s-stat-row { display: flex; gap: 6px; margin-top: 12px; }
+    .s-stat { flex: 1; background: rgba(255,255,255,0.13); border-radius: 10px; padding: 7px 5px; text-align: center; border: 1px solid rgba(255,255,255,0.12); backdrop-filter:blur(4px); }
+    .s-stat-n { font-size: 0.9rem; font-weight: 900; color: #fff; }
+    .s-stat-l { font-size: 0.48rem; color: rgba(255,255,255,0.55); margin-top:1px; }
+    .s-dash-body { padding: 10px 12px 12px; background: #f7fafb; }
+    .s-sec-label { font-size: 0.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: #7a9fa8; margin-bottom: 6px; }
+    .s-med-card { background: #fff; border-radius: 12px; padding: 9px 11px; margin-bottom: 7px; display: flex; align-items: center; gap: 9px; box-shadow: 0 2px 10px rgba(13,43,56,0.07); border: 1px solid rgba(13,43,56,0.05); animation: fadeUp 0.4s ease both; }
+    .s-med-card:nth-child(2){animation-delay:0.05s} .s-med-card:nth-child(3){animation-delay:0.1s} .s-med-card:nth-child(4){animation-delay:0.15s}
+    .s-med-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .s-med-dot.green { background: #02C39A; box-shadow:0 0 0 2px rgba(2,195,154,0.2); } .s-med-dot.amber { background: #f59e0b; box-shadow:0 0 0 2px rgba(245,158,11,0.2); } .s-med-dot.red { background: #ef4444; }
+    .s-med-name { font-size: 0.67rem; font-weight: 700; color: #0d3347; }
+    .s-med-time { font-size: 0.55rem; color: #7a9fa8; margin-top:1px; }
+    .s-med-status { margin-left: auto; font-size: 0.56rem; font-weight: 800; white-space: nowrap; padding: 3px 7px; border-radius: 100px; }
+    .s-med-status.green { color: #02C39A; background: rgba(2,195,154,0.1); }
+    .s-med-status.amber { color: #f59e0b; background: rgba(245,158,11,0.1); }
+    .s-med-status.red { color: #ef4444; background: rgba(239,68,68,0.1); }
+    .s-elara-bubble { background: linear-gradient(135deg,rgba(2,195,154,0.08),rgba(0,168,150,0.05)); border: 1px solid rgba(2,195,154,0.2); border-radius: 12px 12px 12px 3px; padding: 9px 11px; box-shadow: 0 2px 10px rgba(2,195,154,0.08); }
+    .s-elara-from { font-size: 0.5rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: #02C39A; margin-bottom: 3px; }
+    .s-elara-text { font-size: 0.63rem; color: #0d3347; line-height: 1.55; }
+    /* ── ELARA CHAT ── */
     .s-chat-header { background: var(--dark-grad); padding: 14px; display: flex; align-items: center; gap: 10px; }
-    .s-chat-av { width: 30px; height: 30px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 1.5px solid #02C39A; }
+    .s-chat-av { width: 32px; height: 32px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 2px solid #02C39A; box-shadow:0 0 0 3px rgba(2,195,154,0.2); }
     .s-chat-av img { width: 100%; height: 100%; object-fit: cover; }
     .s-chat-name { font-size: 0.82rem; font-weight: 700; color: #fff; }
-    .s-chat-sub { font-size: 0.55rem; color: rgba(255,255,255,0.6); }
-    .s-chat-body { padding: 12px; display: flex; flex-direction: column; gap: 7px; background: #0B2D3D; min-height: 340px; }
-    .s-msg { padding: 8px 11px; border-radius: 12px; font-size: 0.68rem; line-height: 1.5; max-width: 85%; }
-    .s-msg.bot { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.1); border-bottom-left-radius: 3px; align-self: flex-start; }
-    .s-msg.usr { background: #02C39A; color: #0B2D3D; border-bottom-right-radius: 3px; align-self: flex-end; font-weight: 700; }
-    /* Progress screen */
+    .s-chat-sub { font-size: 0.53rem; color: rgba(255,255,255,0.6); display:flex;align-items:center;gap:4px; }
+    .s-chat-sub::before{content:'';width:5px;height:5px;border-radius:50%;background:#02C39A;animation:pulse 2s infinite;}
+    .s-chat-body { padding: 12px; display: flex; flex-direction: column; gap: 8px; background: #f0f7f8; min-height: 340px; }
+    .s-msg { padding: 9px 12px; border-radius: 14px; font-size: 0.67rem; line-height: 1.55; max-width: 86%; animation: fadeUp 0.3s ease both; }
+    .s-msg:nth-child(1){animation-delay:0.05s} .s-msg:nth-child(2){animation-delay:0.15s} .s-msg:nth-child(3){animation-delay:0.25s} .s-msg:nth-child(4){animation-delay:0.35s}
+    .s-msg.bot { background: #fff; color: #0d3347; border: 1px solid rgba(13,43,56,0.08); border-bottom-left-radius: 3px; align-self: flex-start; box-shadow: 0 2px 8px rgba(13,43,56,0.07); }
+    .s-msg.usr { background: linear-gradient(135deg,#02C39A,#00A896); color: #fff; border-bottom-right-radius: 3px; align-self: flex-end; font-weight: 600; box-shadow: 0 4px 12px rgba(2,195,154,0.3); }
+    /* ── PROGRESS ── */
     .s-prog-header { background: var(--dark-grad); padding: 14px; }
     .s-prog-title { font-size: 0.85rem; font-weight: 900; color: #fff; margin-bottom: 4px; }
     .s-prog-sub { font-size: 0.58rem; color: rgba(255,255,255,0.65); }
-    .s-ring-wrap { display: flex; flex-direction: column; align-items: center; padding: 14px; background: #0B2D3D; }
-    .s-ring { width: 90px; height: 90px; border-radius: 50%; border: 9px solid rgba(255,255,255,0.1); border-top-color: #02C39A; border-right-color: #02C39A; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
-    .s-ring-pct { font-size: 1.1rem; font-weight: 900; color: #02C39A; }
-    .s-streak-row { display: flex; gap: 8px; width: 100%; margin-bottom: 10px; }
-    .s-streak-card { flex: 1; background: rgba(255,255,255,0.07); border-radius: 10px; padding: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
-    .s-streak-val { font-size: 1rem; font-weight: 900; color: #fff; }
-    .s-streak-lab { font-size: 0.52rem; color: rgba(255,255,255,0.5); }
+    .s-ring-wrap { display: flex; flex-direction: column; align-items: center; padding: 16px 12px 12px; background: #f7fafb; }
+    .s-ring-svg { width: 92px; height: 92px; margin-bottom: 8px; }
+    .s-ring-svg circle { fill: none; stroke-width: 9; stroke-linecap: round; }
+    .s-ring-bg { stroke: #e2edeb; }
+    .s-ring-fill { stroke: #02C39A; stroke-dasharray: 283; stroke-dashoffset: 60; animation: ringFill 1.2s cubic-bezier(0.34,1.56,0.64,1) both 0.3s; transform: rotate(-90deg); transform-origin: 50% 50%; filter:drop-shadow(0 0 6px rgba(2,195,154,0.4)); }
+    .s-ring-pct { font-size: 1.05rem; font-weight: 900; color: #02C39A; }
+    .s-ring-sub { font-size: 0.5rem; color: #7a9fa8; }
+    .s-streak-row { display: flex; gap: 7px; width: 100%; margin-bottom: 10px; }
+    .s-streak-card { flex: 1; background: #fff; border-radius: 12px; padding: 9px 6px; text-align: center; box-shadow: 0 2px 10px rgba(13,43,56,0.07); border: 1px solid rgba(13,43,56,0.05); }
+    .s-streak-val { font-size: 1.05rem; font-weight: 900; color: #0d3347; }
+    .s-streak-lab { font-size: 0.5rem; color: #7a9fa8; margin-top:1px; }
     .s-badge-row { display: flex; gap: 6px; justify-content: center; }
-    .s-badge { font-size: 1.2rem; width: 34px; height: 34px; background: rgba(2,195,154,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .s-badge.dim { background: rgba(255,255,255,0.05); filter: grayscale(1); opacity: 0.4; }
-    /* Vitals screen */
+    .s-badge { font-size: 1.2rem; width: 36px; height: 36px; background: linear-gradient(135deg,rgba(2,195,154,0.15),rgba(0,168,150,0.08)); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow:0 2px 8px rgba(2,195,154,0.15); }
+    .s-badge.dim { background: #f0f0f0; filter: grayscale(1); opacity: 0.4; }
+    /* ── VITALS ── */
     .s-vit-header { background: var(--dark-grad); padding: 14px; }
     .s-vit-title { font-size: 0.85rem; font-weight: 900; color: #fff; }
-    .s-vit-body { padding: 12px; background: #0B2D3D; }
-    .s-vit-card { background: rgba(255,255,255,0.07); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1); }
-    .s-vit-label { font-size: 0.55rem; font-weight: 800; color: #02C39A; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
-    .s-vit-val { font-size: 1.1rem; font-weight: 900; color: #fff; }
-    .s-vit-unit { font-size: 0.6rem; color: rgba(255,255,255,0.5); margin-left: 3px; }
-    .s-vit-trend { font-size: 0.55rem; color: #02C39A; margin-top: 2px; }
-    .s-watch-banner { background: rgba(114,46,209,0.15); border: 1px solid rgba(114,46,209,0.3); border-radius: 10px; padding: 8px 10px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
-    .s-watch-text { font-size: 0.6rem; color: #b491f7; font-weight: 600; }
-    /* Caregiver screen */
+    .s-vit-body { padding: 12px; background: #f7fafb; }
+    .s-vit-card { background: #fff; border-radius: 12px; padding: 11px 13px; margin-bottom: 8px; box-shadow: 0 2px 10px rgba(13,43,56,0.07); border: 1px solid rgba(13,43,56,0.05); animation: fadeUp 0.4s ease both; }
+    .s-vit-card:nth-child(2){animation-delay:0.08s} .s-vit-card:nth-child(3){animation-delay:0.16s}
+    .s-vit-label { font-size: 0.52rem; font-weight: 800; color: #02C39A; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .s-vit-val { font-size: 1.15rem; font-weight: 900; color: #0d3347; }
+    .s-vit-unit { font-size: 0.6rem; color: #7a9fa8; margin-left: 3px; }
+    .s-vit-trend { font-size: 0.54rem; color: #02C39A; margin-top: 2px; font-weight:600; }
+    .s-watch-banner { background: linear-gradient(135deg,rgba(114,46,209,0.08),rgba(99,32,180,0.05)); border: 1px solid rgba(114,46,209,0.2); border-radius: 12px; padding: 8px 11px; display: flex; align-items: center; gap: 7px; margin-bottom: 10px; }
+    .s-watch-text { font-size: 0.6rem; color: #7c3aed; font-weight: 700; }
+    /* ── CARE TEAM ── */
     .s-care-header { background: var(--dark-grad); padding: 14px; }
     .s-care-title { font-size: 0.85rem; font-weight: 900; color: #fff; }
-    .s-care-sub { font-size: 0.58rem; color: rgba(255,255,255,0.65); margin-top: 2px; }
-    .s-care-body { padding: 12px; background: #0B2D3D; }
-    .s-person-card { background: rgba(255,255,255,0.07); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 8px; }
-    .s-person-av { width: 28px; height: 28px; border-radius: 50%; background: var(--t3); color: #fff; font-size: 0.65rem; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .s-person-name { font-size: 0.68rem; font-weight: 700; color: #fff; }
-    .s-person-status { font-size: 0.57rem; color: rgba(255,255,255,0.5); }
-    .s-person-dot { width: 7px; height: 7px; border-radius: 50%; margin-left: auto; flex-shrink: 0; }
+    .s-care-sub { font-size: 0.56rem; color: rgba(255,255,255,0.65); margin-top: 2px; }
+    .s-care-body { padding: 12px; background: #f7fafb; }
+    .s-person-card { background: #fff; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 2px 10px rgba(13,43,56,0.07); border: 1px solid rgba(13,43,56,0.05); display: flex; align-items: center; gap: 9px; animation: fadeUp 0.4s ease both; }
+    .s-person-card:nth-child(2){animation-delay:0.08s} .s-person-card:nth-child(3){animation-delay:0.16s}
+    .s-person-av { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg,var(--t3),var(--t2)); color: #fff; font-size: 0.65rem; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow:0 2px 6px rgba(2,195,154,0.3); }
+    .s-person-name { font-size: 0.68rem; font-weight: 700; color: #0d3347; }
+    .s-person-status { font-size: 0.55rem; color: #7a9fa8; margin-top:1px; }
+    .s-person-dot { width: 8px; height: 8px; border-radius: 50%; margin-left: auto; flex-shrink: 0; }
     /* Chat Preview */
     .ecp-header { background: var(--dark-grad); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
     .ecp-av { width: 36px; height: 36px; border-radius: 50%; background: var(--t2); color: #fff; font-weight: 900; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -918,7 +934,7 @@
                 </div>
               </div>
               <div class="s-dash-body">
-                <div style="font-size:0.55rem;font-weight:900;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:8px;">Today's Schedule</div>
+                <div class="s-sec-label">Today's Schedule</div>
                 <div class="s-med-card"><div class="s-med-dot green"></div><div><div class="s-med-name">Lisinopril</div><div class="s-med-time">8:00 AM · Confirmed ✓</div></div><span class="s-med-status green">Taken</span></div>
                 <div class="s-med-card"><div class="s-med-dot amber"></div><div><div class="s-med-name">Metformin</div><div class="s-med-time">12:00 PM · Upcoming</div></div><span class="s-med-status amber">Due soon</span></div>
                 <div class="s-med-card"><div class="s-med-dot green"></div><div><div class="s-med-name">Vitamin D</div><div class="s-med-time">8:00 AM · Morning</div></div><span class="s-med-status green">Taken</span></div>
@@ -951,13 +967,18 @@
                 <div class="s-prog-sub">🔥 23-day streak · 89% this week</div>
               </div>
               <div class="s-ring-wrap">
-                <div class="s-ring"><span class="s-ring-pct">89%</span></div>
+                <svg class="s-ring-svg" viewBox="0 0 100 100">
+                  <circle class="s-ring-bg" cx="50" cy="50" r="45"/>
+                  <circle class="s-ring-fill" cx="50" cy="50" r="45"/>
+                  <text x="50" y="46" text-anchor="middle" font-size="18" font-weight="900" fill="#02C39A" font-family="system-ui,sans-serif">89%</text>
+                  <text x="50" y="58" text-anchor="middle" font-size="8" fill="#7a9fa8" font-family="system-ui,sans-serif">this week</text>
+                </svg>
                 <div class="s-streak-row">
                   <div class="s-streak-card"><div class="s-streak-val">23</div><div class="s-streak-lab">day streak</div></div>
                   <div class="s-streak-card"><div class="s-streak-val">142</div><div class="s-streak-lab">doses taken</div></div>
                   <div class="s-streak-card"><div class="s-streak-val">85%</div><div class="s-streak-lab">last week</div></div>
                 </div>
-                <div style="font-size:0.55rem;font-weight:800;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Achievements</div>
+                <div style="font-size:0.5rem;font-weight:900;color:#7a9fa8;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:7px;">Achievements</div>
                 <div class="s-badge-row">
                   <div class="s-badge">🌱</div>
                   <div class="s-badge">⚡</div>
@@ -1005,7 +1026,7 @@
                 <div class="s-care-sub">Caregivers · Doctor · Pharmacy</div>
               </div>
               <div class="s-care-body">
-                <div style="font-size:0.55rem;font-weight:800;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Caregivers</div>
+                <div style="font-size:0.55rem;font-weight:800;color:#7a9fa8;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;font-size:0.5rem;font-weight:900;">Caregivers</div>
                 <div class="s-person-card">
                   <div class="s-person-av">SJ</div>
                   <div><div class="s-person-name">Sarah Johnson</div><div class="s-person-status">Last seen · Today 8:30 AM</div></div>
@@ -1016,7 +1037,7 @@
                   <div><div class="s-person-name">Robert Thompson</div><div class="s-person-status">Active · Gets alerts</div></div>
                   <div class="s-person-dot" style="background:var(--t1)"></div>
                 </div>
-                <div style="font-size:0.55rem;font-weight:800;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.07em;margin:8px 0 6px;">Doctor</div>
+                <div style="font-size:0.55rem;font-weight:800;color:#7a9fa8;text-transform:uppercase;letter-spacing:0.1em;margin:8px 0 6px;font-size:0.5rem;font-weight:900;">Doctor</div>
                 <div class="s-person-card">
                   <div class="s-person-av" style="background:#028090;">DP</div>
                   <div><div class="s-person-name">Dr. Patel</div><div class="s-person-status">Weekly reports · Connected ✓</div></div>
