@@ -29,10 +29,66 @@
     .report-label { font-size: 0.78rem; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 4px; }
     .report-patient { font-size: 1.6rem; font-weight: 900; color: var(--deep-teal); letter-spacing: -0.02em; }
     .report-meta { font-size: 0.9rem; color: var(--grey-500); margin-top: 4px; }
-    .adherence-section { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+
+    /* Adherence section — ring + stat cards side by side */
+    .adherence-section { margin-bottom: 24px; }
+    .adherence-inner { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; }
+    .stat-cards-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; flex: 1; min-width: 240px; }
     .stat-card { background: var(--white); border-radius: var(--radius); padding: 20px; border: 1.5px solid var(--grey-300); text-align: center; }
     .stat-big { font-size: 2.8rem; font-weight: 900; }
     .stat-sub { font-size: 0.82rem; font-weight: 600; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
+
+    /* Ring card */
+    .ring-card-ui {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+      border: 1.5px solid var(--grey-300);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .ring-card-ui .rc-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #B0BEC5;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .ring-card-ui .rc-sublabel {
+      font-size: 10px;
+      color: #B0BEC5;
+      font-weight: 600;
+      text-align: center;
+      margin-top: -6px;
+    }
+    .ring-wrap-ui {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .ring-wrap-ui svg { transform: rotate(-90deg); display: block; }
+    .ring-bg-ui { fill: none; stroke: #EEF1F5; }
+    .ring-fill-ui {
+      fill: none;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1), stroke 0.4s ease;
+    }
+    .ring-center-ui {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+    }
+    .ring-pct-ui { font-weight: 900; color: #1A2D3D; line-height: 1; letter-spacing: -1px; }
+    .ring-sub-ui { font-size: 9px; color: #B0BEC5; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+
     .medicines-section { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--grey-300); overflow: hidden; margin-bottom: 24px; }
     .section-heading { font-size: 0.9rem; font-weight: 800; color: var(--deep-teal); padding: 16px 20px; border-bottom: 1px solid var(--grey-100); text-transform: uppercase; letter-spacing: 0.5px; }
     .med-row { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--grey-100); }
@@ -45,7 +101,10 @@
     .disclaimer strong { font-weight: 700; }
     .error-msg { color: var(--danger); font-weight: 700; text-align: center; }
     footer { background: var(--deep-teal); color: rgba(255,255,255,0.6); text-align: center; padding: 24px 20px; font-size: 0.82rem; margin-top: 60px; }
-    @media (max-width: 500px) { .adherence-section { grid-template-columns: 1fr; } }
+    @media (max-width: 500px) {
+      .adherence-inner { flex-direction: column; }
+      .stat-cards-col { grid-template-columns: 1fr; }
+    }
   </style>
   <!-- PostHog Analytics -->
   <script>
@@ -65,8 +124,24 @@
   </div>
 </nav>
 
+<!-- PIN GATE -->
+<div id="pin-gate" style="position:fixed;inset:0;background:linear-gradient(135deg,#0D3347 0%,#028090 55%,#02C39A 100%);display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:#fff;border-radius:20px;padding:48px 40px;width:400px;max-width:92vw;box-shadow:0 32px 80px rgba(13,51,71,.35);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <div style="width:42px;height:42px;background:linear-gradient(135deg,#028090,#02C39A);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:900;">C</div>
+      <div style="font-size:20px;font-weight:800;color:#0D3347;">Carely <span style="color:#028090;">Doctor Portal</span></div>
+    </div>
+    <div style="font-size:13px;color:#6b8fa3;margin-bottom:28px;">Patient adherence reports for licensed healthcare providers</div>
+    <label style="display:block;font-size:11px;font-weight:700;color:#6b8fa3;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;">Access Code</label>
+    <input type="password" id="pin-input" placeholder="Enter access code" style="width:100%;padding:11px 14px;border:1.5px solid #e0eaf0;border-radius:9px;font-size:14px;color:#0d3347;background:#f8fbfc;outline:none;font-family:inherit;" />
+    <div id="pin-err" style="display:none;color:#e53e3e;font-size:13px;margin-top:8px;">Invalid access code. Please try again.</div>
+    <button onclick="doUnlock()" style="width:100%;margin-top:20px;padding:14px;background:linear-gradient(135deg,#028090,#02C39A);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;">View Patient Report</button>
+    <div style="margin-top:14px;font-size:12px;color:#6b8fa3;text-align:center;">Access code: <strong>272727</strong></div>
+  </div>
+</div>
+
 <main>
-  <div class="loading" id="loading">
+  <div class="loading" id="loading" style="display:none;">
     <div class="spinner"></div>
     <p style="color:var(--grey-500);">Loading patient report...</p>
   </div>
@@ -89,6 +164,123 @@
   var API = 'https://carely-backend-production.up.railway.app';
   var token = new URLSearchParams(window.location.search).get('token');
 
+  // ── Ring System (self-contained for doctor-portal) ──────────────────────────
+  var _ringIdCounter = 0;
+
+  function ringColor(pct) {
+    return pct >= 80 ? '#00C896' : pct >= 50 ? '#FF8800' : '#FF3B3B';
+  }
+
+  var RING_SIZES = {
+    md: { wrap: 120, r: 50, sw: 10, C: 314.2, pctSize: 26 }
+  };
+
+  function makeRing(pct, size, label, sublabel) {
+    var s = RING_SIZES[size] || RING_SIZES.md;
+    var id = 'ring-' + (++_ringIdCounter);
+    var pctId = 'pct-' + _ringIdCounter;
+
+    var card = document.createElement('div');
+    card.className = 'ring-card-ui';
+    card.dataset.ringId = id;
+    card.dataset.pctId = pctId;
+    card.dataset.targetPct = pct;
+
+    if (label) {
+      var lbl = document.createElement('div');
+      lbl.className = 'rc-label';
+      lbl.textContent = label;
+      card.appendChild(lbl);
+    }
+
+    var wrap = document.createElement('div');
+    wrap.className = 'ring-wrap-ui';
+    wrap.style.width = s.wrap + 'px';
+    wrap.style.height = s.wrap + 'px';
+
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', s.wrap);
+    svg.setAttribute('height', s.wrap);
+    svg.setAttribute('viewBox', '0 0 ' + s.wrap + ' ' + s.wrap);
+
+    var cx = s.wrap / 2;
+    var cy = s.wrap / 2;
+
+    var bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    bgCircle.setAttribute('cx', cx);
+    bgCircle.setAttribute('cy', cy);
+    bgCircle.setAttribute('r', s.r);
+    bgCircle.setAttribute('class', 'ring-bg-ui');
+    bgCircle.setAttribute('stroke-width', s.sw);
+
+    var fillCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    fillCircle.setAttribute('id', id);
+    fillCircle.setAttribute('cx', cx);
+    fillCircle.setAttribute('cy', cy);
+    fillCircle.setAttribute('r', s.r);
+    fillCircle.setAttribute('class', 'ring-fill-ui');
+    fillCircle.setAttribute('stroke-width', s.sw);
+    fillCircle.setAttribute('stroke-dasharray', s.C);
+    fillCircle.setAttribute('stroke-dashoffset', s.C);
+    fillCircle.setAttribute('stroke', ringColor(pct));
+
+    svg.appendChild(bgCircle);
+    svg.appendChild(fillCircle);
+    wrap.appendChild(svg);
+
+    var center = document.createElement('div');
+    center.className = 'ring-center-ui';
+
+    var pctEl = document.createElement('span');
+    pctEl.id = pctId;
+    pctEl.className = 'ring-pct-ui';
+    pctEl.style.fontSize = s.pctSize + 'px';
+    pctEl.textContent = '0%';
+    center.appendChild(pctEl);
+
+    var subEl = document.createElement('span');
+    subEl.className = 'ring-sub-ui';
+    subEl.textContent = 'adherence';
+    center.appendChild(subEl);
+
+    wrap.appendChild(center);
+    card.appendChild(wrap);
+
+    if (sublabel) {
+      var sub = document.createElement('div');
+      sub.className = 'rc-sublabel';
+      sub.textContent = sublabel;
+      card.appendChild(sub);
+    }
+
+    return card;
+  }
+
+  function animateRing(card, pct) {
+    var id = card.dataset.ringId;
+    var pctId = card.dataset.pctId;
+    var s = RING_SIZES.md;
+    var circle = document.getElementById(id);
+    var label = document.getElementById(pctId);
+    if (!circle || !label) return;
+
+    var offset = s.C * (1 - pct / 100);
+    circle.style.strokeDashoffset = offset;
+    circle.style.stroke = ringColor(pct);
+
+    var from = 0;
+    var start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / 1300, 1);
+      var e = 1 - Math.pow(1 - p, 3);
+      label.textContent = Math.round(from + (pct - from) * e) + '%';
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  // ── End Ring System ──────────────────────────────────────────────────────────
+
   function adherenceColor(pct) {
     if (pct === null || pct === undefined) return '#7A9490';
     if (pct >= 80) return '#02C39A';
@@ -104,117 +296,112 @@
     return el;
   }
 
-  if (!token) {
-    var loading = document.getElementById('loading');
-    loading.textContent = '';
-    var err = document.createElement('p');
-    err.className = 'error-msg';
-    err.textContent = 'No access token. Check the link in your email.';
-    loading.appendChild(err);
-  } else {
-    fetch(API + '/b2b/doctor-portal?token=' + encodeURIComponent(token))
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('portal').style.display = 'block';
+  var DEMO_DATA = {
+    patient: { firstName: 'Margaret', lastName: 'Thompson' },
+    doctor: { name: 'Dr. Sarah Chen' },
+    adherence: { last30Days: 87, today: 100, takenToday: 3, totalToday: 3 },
+    medicines: [
+      { name: 'Metformin', nickname: 'Diabetes pill', colourTag: '#028090', schedule: { times: ['8:00 AM', '6:00 PM'] } },
+      { name: 'Lisinopril', nickname: 'Blood pressure', colourTag: '#02C39A', schedule: { times: ['9:00 AM'] } },
+      { name: 'Atorvastatin', nickname: 'Cholesterol', colourTag: '#FF8800', schedule: { times: ['9:00 PM'] } }
+    ]
+  };
 
-        var patient = data.patient;
-        var doctor = data.doctor;
-        var adherence = data.adherence;
-        var medicines = data.medicines || [];
+  function doUnlock() {
+    var pin = document.getElementById('pin-input').value.trim();
+    if (pin !== '272727') {
+      document.getElementById('pin-err').style.display = 'block';
+      return;
+    }
+    document.getElementById('pin-gate').style.display = 'none';
+    renderDemoReport(DEMO_DATA);
+  }
+  document.getElementById('pin-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doUnlock();
+  });
 
-        // Report header
-        var header = document.getElementById('report-header');
-        addText(header, 'div', 'Patient Adherence Report', 'report-label');
-        addText(header, 'div', patient.firstName, 'report-patient');
-        var meta = document.createElement('div');
-        meta.className = 'report-meta';
-        meta.textContent = 'Prepared for ' + doctor.name;
-        if (doctor.lastReportSentAt) {
-          meta.textContent += ' · Report generated ' + new Date().toLocaleDateString();
-        }
-        header.appendChild(meta);
+  function renderDemoReport(data) {
+    document.getElementById('portal').style.display = 'block';
+    var patient = data.patient;
+    var doctor = data.doctor;
+    var adherence = data.adherence;
+    var medicines = data.medicines;
 
-        // Adherence cards
-        var section = document.getElementById('adherence-section');
+    var header = document.getElementById('report-header');
+    addText(header, 'div', 'Patient Adherence Report — Demo', 'report-label');
+    addText(header, 'div', patient.firstName + ' ' + patient.lastName, 'report-patient');
+    var meta = document.createElement('div');
+    meta.className = 'report-meta';
+    meta.textContent = 'Prepared for ' + doctor.name + ' · Report generated ' + new Date().toLocaleDateString();
+    header.appendChild(meta);
 
-        var card30 = document.createElement('div');
-        card30.className = 'stat-card';
-        var val30 = document.createElement('div');
-        val30.className = 'stat-big';
-        val30.style.color = adherenceColor(adherence.last30Days);
-        val30.textContent = adherence.last30Days !== null ? adherence.last30Days + '%' : '—';
-        addText(card30, 'div', '30-day adherence', 'stat-sub');
-        card30.insertBefore(val30, card30.firstChild);
-        section.appendChild(card30);
+    var section = document.getElementById('adherence-section');
+    var inner = document.createElement('div');
+    inner.className = 'adherence-inner';
 
-        var cardToday = document.createElement('div');
-        cardToday.className = 'stat-card';
-        var valToday = document.createElement('div');
-        valToday.className = 'stat-big';
-        valToday.style.color = adherenceColor(adherence.today);
-        valToday.textContent = adherence.today !== null ? adherence.today + '%' : '—';
-        var subToday = document.createElement('div');
-        subToday.className = 'stat-sub';
-        subToday.textContent = "Today (" + adherence.takenToday + "/" + adherence.totalToday + " doses)";
-        cardToday.appendChild(valToday);
-        cardToday.appendChild(subToday);
-        section.appendChild(cardToday);
+    var pct30 = adherence.last30Days;
+    var ringCard = makeRing(pct30, 'md', '30-Day', 'adherence rate');
+    inner.appendChild(ringCard);
 
-        // Medicines
-        var medsSection = document.getElementById('medicines-section');
-        addText(medsSection, 'div', 'Current medicines (' + medicines.length + ')', 'section-heading');
+    var statCol = document.createElement('div');
+    statCol.className = 'stat-cards-col';
 
-        if (!medicines.length) {
-          var empty = document.createElement('div');
-          empty.style.cssText = 'padding:24px;text-align:center;color:var(--grey-500);';
-          empty.textContent = 'No active medicines recorded.';
-          medsSection.appendChild(empty);
-        } else {
-          medicines.forEach(function(m) {
-            var row = document.createElement('div');
-            row.className = 'med-row';
+    var card30 = document.createElement('div');
+    card30.className = 'stat-card';
+    var val30 = document.createElement('div');
+    val30.className = 'stat-big';
+    val30.style.color = adherenceColor(adherence.last30Days);
+    val30.textContent = adherence.last30Days + '%';
+    addText(card30, 'div', '30-day adherence', 'stat-sub');
+    card30.insertBefore(val30, card30.firstChild);
+    statCol.appendChild(card30);
 
-            var dot = document.createElement('div');
-            dot.className = 'med-dot';
-            dot.style.backgroundColor = m.colourTag || '#028090';
+    var cardToday = document.createElement('div');
+    cardToday.className = 'stat-card';
+    var valToday = document.createElement('div');
+    valToday.className = 'stat-big';
+    valToday.style.color = adherenceColor(adherence.today);
+    valToday.textContent = adherence.today + '%';
+    var subToday = document.createElement('div');
+    subToday.className = 'stat-sub';
+    subToday.textContent = 'Today (' + adherence.takenToday + '/' + adherence.totalToday + ' doses)';
+    cardToday.appendChild(valToday);
+    cardToday.appendChild(subToday);
+    statCol.appendChild(cardToday);
 
-            var info = document.createElement('div');
-            info.style.flex = '1';
-            var nameEl = document.createElement('div');
-            nameEl.className = 'med-name';
-            nameEl.textContent = m.name;
-            info.appendChild(nameEl);
-            if (m.nickname && m.nickname !== m.name) {
-              var nickEl = document.createElement('div');
-              nickEl.className = 'med-nick';
-              nickEl.textContent = '"' + m.nickname + '"';
-              info.appendChild(nickEl);
-            }
+    inner.appendChild(statCol);
+    section.appendChild(inner);
 
-            var sched = document.createElement('div');
-            sched.className = 'med-sched';
-            if (m.schedule && m.schedule.times && m.schedule.times.length) {
-              sched.textContent = m.schedule.times.join(', ');
-            } else {
-              sched.textContent = m.schedule ? m.schedule.frequency : '';
-            }
+    var medsSection = document.getElementById('medicines-section');
+    addText(medsSection, 'div', 'Current medicines (' + medicines.length + ')', 'section-heading');
+    medicines.forEach(function(m) {
+      var row = document.createElement('div');
+      row.className = 'med-row';
+      var dot = document.createElement('div');
+      dot.className = 'med-dot';
+      dot.style.backgroundColor = m.colourTag || '#028090';
+      var info = document.createElement('div');
+      info.style.flex = '1';
+      var nameEl = document.createElement('div');
+      nameEl.className = 'med-name';
+      nameEl.textContent = m.name;
+      info.appendChild(nameEl);
+      if (m.nickname && m.nickname !== m.name) {
+        var nickEl = document.createElement('div');
+        nickEl.className = 'med-nick';
+        nickEl.textContent = '"' + m.nickname + '"';
+        info.appendChild(nickEl);
+      }
+      var sched = document.createElement('div');
+      sched.className = 'med-sched';
+      sched.textContent = m.schedule && m.schedule.times ? m.schedule.times.join(', ') : '';
+      row.appendChild(dot);
+      row.appendChild(info);
+      row.appendChild(sched);
+      medsSection.appendChild(row);
+    });
 
-            row.appendChild(dot);
-            row.appendChild(info);
-            row.appendChild(sched);
-            medsSection.appendChild(row);
-          });
-        }
-      })
-      .catch(function(err) {
-        var loading = document.getElementById('loading');
-        loading.textContent = '';
-        var msg = document.createElement('p');
-        msg.className = 'error-msg';
-        msg.textContent = err.message || 'Could not load report.';
-        loading.appendChild(msg);
-      });
+    setTimeout(function() { animateRing(ringCard, pct30); }, 300);
   }
 </script>
 <!-- GDPR / CASL Cookie Consent Banner -->
