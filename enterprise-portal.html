@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carely Enterprise — Institutional Dashboard</title>
+<style>
+:root {
+  --teal:#028090; --deep:#0D3347; --mint:#02C39A; --sea:#00A896;
+  --bg:#f2f6f9; --card:#fff; --border:#e0eaf0; --text:#0d3347;
+  --muted:#6b8fa3; --red:#e53e3e; --orange:#dd6b20; --green:#38a169; --amber:#d97706;
+  --sidebar:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* LOGIN */
+#login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#0D3347 0%,#028090 55%,#02C39A 100%);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.lc{background:#fff;border-radius:20px;padding:48px 40px;width:420px;max-width:94vw;box-shadow:0 32px 80px rgba(13,51,71,.35);animation:su .5s cubic-bezier(.22,.68,0,1.2);}
+@keyframes su{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.lc-logo{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.lc-icon{width:42px;height:42px;background:linear-gradient(135deg,#028090,#02C39A);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:900;}
+.lc-name{font-size:22px;font-weight:800;color:#0D3347;}.lc-name span{color:#028090;}
+.lc-sub{font-size:13px;color:var(--muted);margin-bottom:28px;}
+.lc label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;margin-top:14px;}
+.lc input,.lc select{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;color:var(--text);background:#f8fbfc;outline:none;font-family:inherit;transition:border .2s;}
+.lc input:focus,.lc select:focus{border-color:var(--teal);}
+.lc-btn{width:100%;margin-top:20px;padding:14px;background:linear-gradient(135deg,#028090,#02C39A);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;}
+.lc-err{display:none;color:var(--red);font-size:13px;margin-top:8px;}
+.lc-hint{margin-top:16px;font-size:12px;color:var(--muted);text-align:center;}
+
+/* APP SHELL */
+#app{display:none;}
+.app-layout{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+aside{width:var(--sidebar);background:var(--deep);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;transition:transform .25s;}
+.sb-top{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
+.sb-brand{font-size:18px;font-weight:800;color:#fff;}.sb-brand span{color:#02C39A;}
+.sb-org{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-type-badge{display:inline-block;margin-top:6px;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.4px;}
+.badge-senior{background:rgba(2,192,154,.18);color:#02C39A;}
+.badge-pharmacy{background:rgba(2,128,144,.18);color:#44c9d8;}
+.badge-clinic{background:rgba(217,119,6,.18);color:#f59e0b;}
+nav.sb-nav{flex:1;padding:12px 0;overflow-y:auto;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 20px;color:rgba(255,255,255,.55);font-size:13.5px;font-weight:500;cursor:pointer;transition:all .15s;border-left:3px solid transparent;}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,.05);}
+.nav-item.active{color:#fff;background:rgba(2,192,154,.12);border-left-color:#02C39A;}
+.nav-icon{font-size:16px;width:20px;text-align:center;}
+.sb-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.3);}
+.sb-logout{color:rgba(255,255,255,.4);cursor:pointer;font-size:12px;margin-top:4px;}
+.sb-logout:hover{color:#fff;}
+
+/* MAIN */
+.main-area{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{background:#fff;border-bottom:1.5px solid var(--border);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;box-shadow:0 2px 10px rgba(13,51,71,.05);}
+.topbar-title{font-size:17px;font-weight:800;color:var(--deep);}
+.topbar-right{display:flex;align-items:center;gap:14px;}
+.alert-dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.topbar-help{font-size:13px;color:var(--teal);cursor:pointer;font-weight:600;}
+main{flex:1;padding:28px;max-width:1300px;width:100%;}
+
+/* TAB PANES */
+.pane{display:none;animation:fi .25s ease;}
+.pane.active{display:block;}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+/* METRIC CARDS */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:24px;}
+.mc{background:var(--card);border-radius:14px;padding:20px;border:1.5px solid var(--border);box-shadow:0 2px 8px rgba(13,51,71,.04);}
+.mc-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:8px;}
+.mc-val{font-size:30px;font-weight:900;color:var(--deep);line-height:1;}
+.mc-sub{font-size:12px;color:var(--muted);margin-top:5px;}
+.mc-trend{font-size:12px;font-weight:700;margin-top:3px;}
+.up{color:var(--green);}.down{color:var(--red);}
+
+/* CARDS */
+.card{background:var(--card);border-radius:14px;padding:22px;border:1.5px solid var(--border);box-shadow:0 2px 8px rgba(13,51,71,.04);margin-bottom:20px;}
+.card-title{font-size:15px;font-weight:800;color:var(--deep);margin-bottom:16px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:720px){.grid2{grid-template-columns:1fr}}
+
+/* BAR CHART */
+.bars{display:flex;align-items:flex-end;gap:6px;height:80px;}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.bar{width:100%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#02C39A,#028090);}
+.bar-lbl{font-size:10px;color:var(--muted);font-weight:600;}
+
+/* DONUT */
+.donut-wrap{display:flex;align-items:center;gap:24px;}
+.legend{display:flex;flex-direction:column;gap:10px;}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:13px;}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+/* TABLE */
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.search{padding:9px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:#f8fbfc;outline:none;width:220px;}
+.search:focus{border-color:var(--teal);}
+.fsel{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:#f8fbfc;outline:none;}
+.tbtn{padding:9px 16px;background:var(--deep);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-left:auto;}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:10px 14px;text-align:left;background:#f4f8fa;border-bottom:1.5px solid var(--border);}
+td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:13.5px;color:var(--text);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#f8fbfc;cursor:pointer;}
+.pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+.p-green{background:#e6f9f3;color:var(--green);}
+.p-orange{background:#fff3e8;color:var(--orange);}
+.p-red{background:#fdecea;color:var(--red);}
+
+/* ── RING SYSTEM ── */
+/* Standalone ring card (for overview, analytics, panel) */
+.ring-card-ui {
+  background:#fff;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.07),0 1px 4px rgba(0,0,0,0.04);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+}
+.ring-card-ui .rc-label {
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+  color:#B0BEC5;
+  text-transform:uppercase;
+  text-align:center;
+}
+.ring-card-ui .rc-sublabel {
+  font-size:10px;
+  color:#B0BEC5;
+  font-weight:600;
+  text-align:center;
+  margin-top:-8px;
+}
+.ring-wrap-ui {
+  position:relative;
+  flex-shrink:0;
+}
+.ring-wrap-ui svg {
+  transform:rotate(-90deg);
+  display:block;
+}
+.ring-bg-ui { fill:none; stroke:#EEF1F5; }
+.ring-fill-ui {
+  fill:none;
+  stroke-linecap:round;
+  transition:stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1), stroke 0.4s ease;
+}
+.ring-center-ui {
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1px;
+}
+.ring-pct-ui {
+  font-weight:900;
+  color:#1A2D3D;
+  line-height:1;
+  letter-spacing:-1px;
+}
+.ring-sub-ui {
+  font-size:9px;
+  color:#B0BEC5;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+/* Inline ring (for table cells — no card wrapper) */
+.ring-inline-wrap {
+  position:relative;
+  flex-shrink:0;
+}
+.ring-inline-wrap svg { transform:rotate(-90deg); display:block; }
+.ring-inline-center {
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.ring-inline-pct {
+  font-size:11px;
+  font-weight:900;
+  color:#1A2D3D;
+  line-height:1;
+}
+
+/* Overview ring cluster */
+.overview-ring-section {
+  display:flex;
+  gap:20px;
+  align-items:flex-start;
+  flex-wrap:wrap;
+  margin-bottom:24px;
+  background:#fff;
+  border-radius:16px;
+  padding:28px;
+  border:1.5px solid var(--border);
+  box-shadow:0 2px 8px rgba(13,51,71,.04);
+}
+.org-hero-ring {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
+}
+.org-hero-ring .hero-label {
+  font-size:11px;
+  font-weight:800;
+  color:#B0BEC5;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.org-hero-ring .hero-sub {
+  font-size:11px;
+  color:var(--muted);
+  text-align:center;
+  margin-top:-8px;
+}
+.band-rings {
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  align-items:center;
+  flex:1;
+}
+.divider-v {
+  width:1px;
+  background:var(--border);
+  align-self:stretch;
+  margin:0 8px;
+}
+
+/* Analytics ring cluster */
+.analytics-rings-row {
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+
+/* Trend indicator */
+.trend-indicator {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:#fff;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.07);
+  min-width:90px;
+}
+.trend-arrow {
+  font-size:36px;
+  font-weight:900;
+  line-height:1;
+}
+.trend-arrow.up { color:#00C896; }
+.trend-arrow.down { color:#FF3B3B; }
+.trend-label {
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:#B0BEC5;
+}
+.trend-val {
+  font-size:14px;
+  font-weight:800;
+  color:#1A2D3D;
+}
+
+/* PATIENT DETAIL PANEL */
+#pt-panel{position:fixed;top:0;right:-440px;width:420px;height:100vh;background:#fff;box-shadow:-4px 0 30px rgba(13,51,71,.12);z-index:200;transition:right .3s cubic-bezier(.22,.68,0,1);display:flex;flex-direction:column;}
+#pt-panel.open{right:0;}
+.pnl-head{padding:20px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.pnl-name{font-size:17px;font-weight:800;color:var(--deep);}
+.pnl-close{font-size:22px;color:var(--muted);cursor:pointer;line-height:1;}
+.pnl-body{flex:1;overflow-y:auto;padding:20px;}
+
+/* Panel ring + stats row */
+.pnl-ring-stats {
+  display:flex;
+  gap:16px;
+  align-items:center;
+  margin-bottom:20px;
+}
+.pnl-stats-col {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  flex:1;
+}
+.pnl-s{flex:1;background:var(--bg);border-radius:10px;padding:14px;text-align:center;}
+.pnl-sv{font-size:22px;font-weight:900;color:var(--teal);}
+.pnl-sl{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* Panel heatmap */
+.pnl-heatmap-section { margin-bottom:18px; }
+.pnl-section-label { font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px; }
+.pnl-heatmap-grid {
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+  margin-bottom:8px;
+}
+.pnl-day-headers {
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+  margin-bottom:5px;
+}
+.pnl-day-hdr {
+  text-align:center;
+  font-size:8px;
+  font-weight:800;
+  color:#C5CDD8;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+}
+.heat-cell {
+  aspect-ratio:1;
+  border-radius:5px;
+  cursor:default;
+  transition:transform 0.15s ease;
+}
+.heat-cell:hover { transform:scale(1.2); }
+.heat-cell.perfect { background:#00C896; }
+.heat-cell.good    { background:#6EDFC0; }
+.heat-cell.partial { background:#FF8800; }
+.heat-cell.miss    { background:#FF3B3B; }
+.heat-cell.future  { background:#EEF1F5; }
+.heatmap-legend-sm {
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:6px;
+}
+.legend-item-sm {
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-size:8px;
+  color:#8A9BB0;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+}
+.legend-dot-sm {
+  width:8px; height:8px; border-radius:2px; flex-shrink:0;
+}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:18px;}
+.cal-day{width:100%;padding-top:100%;border-radius:4px;position:relative;}
+.cal-day span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;}
+.d-taken{background:#02C39A;color:#fff;}
+.d-missed{background:#fdecea;color:#e53e3e;}
+.d-partial{background:#fff3e8;color:#dd6b20;}
+.d-empty{background:#f0f4f7;}
+.med-list{display:flex;flex-direction:column;gap:8px;}
+.med-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:8px;}
+.med-dot{width:10px;height:10px;border-radius:50%;}
+.med-name{font-size:13px;font-weight:600;flex:1;}
+.med-time{font-size:12px;color:var(--muted);}
+.pnl-actions{padding:16px 20px;border-top:1.5px solid var(--border);display:flex;gap:10px;}
+.pnl-btn{flex:1;padding:11px;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;}
+.pnl-btn-teal{background:var(--teal);color:#fff;}
+.pnl-btn-ghost{background:var(--bg);color:var(--text);border:1.5px solid var(--border);}
+
+/* ROI SECTION */
+.roi-hero{background:linear-gradient(135deg,#0D3347,#028090);border-radius:16px;padding:32px;color:#fff;margin-bottom:24px;position:relative;overflow:hidden;}
+.roi-hero::after{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:rgba(2,192,154,.15);border-radius:50%;}
+.roi-headline{font-size:22px;font-weight:900;margin-bottom:6px;}
+.roi-sub{font-size:14px;color:rgba(255,255,255,.65);}
+.roi-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px;}
+.roi-num{text-align:center;}
+.roi-val{font-size:32px;font-weight:900;color:#02C39A;}
+.roi-lbl{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px;}
+.roi-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:20px;}
+.roi-card{background:var(--card);border-radius:14px;padding:22px;border:1.5px solid var(--border);}
+.roi-card-icon{font-size:28px;margin-bottom:10px;}
+.roi-card-title{font-size:14px;font-weight:800;color:var(--deep);margin-bottom:6px;}
+.roi-card-val{font-size:26px;font-weight:900;color:var(--teal);}
+.roi-card-desc{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6;}
+.roi-calc{background:var(--card);border-radius:14px;padding:24px;border:1.5px solid var(--border);}
+.roi-slider-wrap{margin-bottom:16px;}
+.roi-slider-label{display:flex;justify-content:space-between;font-size:13px;color:var(--text);margin-bottom:6px;}
+.roi-slider-label span{font-weight:700;color:var(--teal);}
+input[type=range]{width:100%;accent-color:var(--teal);}
+.roi-result{background:linear-gradient(135deg,#f0faf9,#e8f7f5);border:1.5px solid #02C39A;border-radius:10px;padding:16px;display:flex;align-items:center;justify-content:space-between;}
+.roi-result-label{font-size:14px;color:var(--text);}
+.roi-result-val{font-size:28px;font-weight:900;color:var(--teal);}
+
+/* ALERTS */
+.alert-row{display:flex;align-items:center;gap:14px;padding:14px;border:1.5px solid var(--border);border-radius:10px;margin-bottom:10px;background:#fff;}
+.ai{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ai-red{background:#fdecea;}.ai-orange{background:#fff3e8;}
+.ai-info{flex:1;}
+.ai-name{font-size:14px;font-weight:700;color:var(--deep);}
+.ai-detail{font-size:12px;color:var(--muted);margin-top:2px;}
+.ai-btn{padding:7px 14px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;}
+
+/* REPORTS */
+.rpt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:20px;}
+.rpt-opt{background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:all .2s;}
+.rpt-opt:hover,.rpt-opt.sel{border-color:var(--teal);background:#f0faf9;}
+.rpt-title{font-size:13.5px;font-weight:700;color:var(--deep);}
+.rpt-desc{font-size:12px;color:var(--muted);margin-top:4px;}
+.gen-btn{width:100%;padding:14px;background:linear-gradient(135deg,#028090,#02C39A);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;}
+
+/* FEEDBACK */
+.fb-note{background:linear-gradient(135deg,#f0faf9,#e8f7f5);border:1.5px solid #02C39A;border-radius:12px;padding:18px;margin-bottom:20px;}
+.fb-note-title{font-size:13px;font-weight:800;color:var(--teal);margin-bottom:6px;}
+.fb-note-body{font-size:13px;color:var(--muted);line-height:1.7;}
+.fb-form label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;margin-top:14px;}
+.fb-form input,.fb-form select,.fb-form textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;color:var(--text);background:#f8fbfc;outline:none;font-family:inherit;transition:border .2s;}
+.fb-form input:focus,.fb-form select:focus,.fb-form textarea:focus{border-color:var(--teal);}
+.fb-form textarea{resize:vertical;min-height:90px;}
+.fb-submit{margin-top:18px;padding:13px 28px;background:linear-gradient(135deg,#028090,#02C39A);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;}
+.fb-ok{display:none;background:#e6f9f3;border:1.5px solid #38a169;border-radius:10px;padding:14px 18px;color:#276749;font-size:14px;font-weight:600;margin-top:14px;}
+.stars{display:flex;gap:6px;margin-top:8px;}
+.star{font-size:24px;cursor:pointer;color:#e2edf2;transition:color .15s;}
+.star.lit{color:#f59e0b;}
+
+/* OVERLAY */
+#overlay{display:none;position:fixed;inset:0;background:rgba(13,51,71,.3);z-index:150;}
+#overlay.show{display:block;}
+
+/* MOBILE */
+@media(max-width:768px){
+  aside{transform:translateX(-100%);}
+  aside.open{transform:translateX(0);}
+  .main-area{margin-left:0;}
+  .metrics{grid-template-columns:1fr 1fr;}
+  .roi-nums{grid-template-columns:1fr 1fr;}
+  #pt-panel{width:100%;}
+  .overview-ring-section{flex-direction:column;}
+  .band-rings{flex-direction:row;}
+  .divider-v{display:none;}
+  .analytics-rings-row{justify-content:center;}
+}
+.mob-menu{display:none;}
+@media(max-width:768px){.mob-menu{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:none;background:transparent;cursor:pointer;font-size:20px;}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="lc">
+    <div class="lc-logo">
+      <div class="lc-icon">C</div>
+      <div class="lc-name">Care<span>ly</span> Enterprise</div>
+    </div>
+    <div class="lc-sub">Institutional medication adherence platform</div>
+    <label>Organization Name</label>
+    <input type="text" id="l-org" placeholder="e.g. Sunrise Senior Living">
+    <label>Organization Type</label>
+    <select id="l-type">
+      <option value="senior">Senior Living / Care Home</option>
+      <option value="pharmacy">Pharmacy</option>
+      <option value="clinic">Medical Clinic / Hospital</option>
+    </select>
+    <label>Access Code</label>
+    <input type="password" id="l-code" placeholder="Enter your access code">
+    <div class="lc-err" id="l-err">Invalid access code. Please try again.</div>
+    <button class="lc-btn" onclick="doLogin()">Access Dashboard</button>
+    <div class="lc-hint">Access code: <strong>272727</strong> &nbsp;·&nbsp; <span style="cursor:pointer;color:var(--teal);" onclick="document.getElementById('l-code').value='272727'">Click to auto-fill</span></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+      <div class="sb-top">
+        <div class="sb-brand">Care<span>ly</span></div>
+        <div class="sb-org" id="sb-org-name">Organization</div>
+        <span class="sb-type-badge badge-senior" id="sb-type-badge">Senior Living</span>
+      </div>
+      <nav class="sb-nav">
+        <div class="nav-item active" onclick="nav('overview',this)"><span class="nav-icon">&#9632;</span><span id="n-overview">Overview</span></div>
+        <div class="nav-item" onclick="nav('patients',this)"><span class="nav-icon">&#128101;</span><span id="n-patients">Residents</span></div>
+        <div class="nav-item" onclick="nav('analytics',this)"><span class="nav-icon">&#128202;</span>Analytics</div>
+        <div class="nav-item" onclick="nav('roi',this)"><span class="nav-icon">&#128176;</span>ROI &amp; Potential</div>
+        <div class="nav-item" onclick="nav('alerts',this)"><span class="nav-icon">&#128276;</span>Alerts <span id="alert-ct" style="background:#e53e3e;color:#fff;border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:4px;">3</span></div>
+        <div class="nav-item" onclick="nav('reports',this)"><span class="nav-icon">&#128196;</span>Reports</div>
+        <div class="nav-item" onclick="nav('feedback',this)"><span class="nav-icon">&#128172;</span>Feedback</div>
+      </nav>
+      <div class="sb-footer">
+        <div>hello@carely.fit</div>
+        <div class="sb-logout" onclick="doLogout()">Sign out</div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main-area">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <button class="mob-menu" onclick="toggleSidebar()">&#9776;</button>
+          <span class="topbar-title" id="page-title">Overview</span>
+        </div>
+        <div class="topbar-right">
+          <div class="alert-dot"></div>
+          <span style="font-size:13px;color:var(--muted);">3 at-risk</span>
+          <span class="topbar-help" onclick="nav('feedback',document.querySelector('.nav-item:last-of-type'))">Need help?</span>
+        </div>
+      </div>
+
+      <main>
+
+        <!-- OVERVIEW -->
+        <div class="pane active" id="pane-overview">
+
+          <!-- ORG ADHERENCE RING CLUSTER -->
+          <div class="overview-ring-section" id="overview-ring-section"></div>
+
+          <div class="metrics" id="overview-metrics"></div>
+          <div class="grid2">
+            <div class="card">
+              <div class="card-title">7-Day Adherence Trend</div>
+              <div class="bars" id="trend-bars"></div>
+            </div>
+            <div class="card">
+              <div class="card-title">Adherence Distribution</div>
+              <div class="donut-wrap">
+                <svg width="120" height="120" viewBox="0 0 42 42">
+                  <circle cx="21" cy="21" r="15.9" fill="none" stroke="#e2edf2" stroke-width="5"/>
+                  <circle cx="21" cy="21" r="15.9" fill="none" stroke="#02C39A" stroke-width="5" stroke-dasharray="59 41" stroke-dashoffset="25" style="transform-origin:center;transform:rotate(-90deg)"/>
+                  <circle cx="21" cy="21" r="15.9" fill="none" stroke="#028090" stroke-width="5" stroke-dasharray="25 75" stroke-dashoffset="-34" style="transform-origin:center;transform:rotate(-90deg)"/>
+                  <circle cx="21" cy="21" r="15.9" fill="none" stroke="#e53e3e" stroke-width="5" stroke-dasharray="16 84" stroke-dashoffset="-59" style="transform-origin:center;transform:rotate(-90deg)"/>
+                  <text x="21" y="19" text-anchor="middle" font-size="5.5" font-weight="900" fill="#0D3347">84%</text>
+                  <text x="21" y="24" text-anchor="middle" font-size="3.2" fill="#6b8fa3">avg</text>
+                </svg>
+                <div class="legend">
+                  <div class="leg-item"><div class="leg-dot" style="background:#02C39A"></div><span id="leg-high">High (80%+) — 84 pts</span></div>
+                  <div class="leg-item"><div class="leg-dot" style="background:#028090"></div><span id="leg-mod">Moderate (60–79%) — 47 pts</span></div>
+                  <div class="leg-item"><div class="leg-dot" style="background:#e53e3e"></div><span id="leg-risk">At Risk (&lt;60%) — 11 pts</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <div class="card-title" style="margin:0;">Recent Alerts</div>
+              <span style="font-size:13px;color:var(--teal);cursor:pointer;font-weight:600;" onclick="nav('alerts',document.querySelectorAll('.nav-item')[4])">View all</span>
+            </div>
+            <div class="alert-row"><div class="ai ai-red">&#9888;</div><div class="ai-info"><div class="ai-name" id="al1-name">Margaret K. — Room 14B</div><div class="ai-detail">Missed 3 consecutive doses (Metformin 500mg) · 2h ago</div></div><button class="ai-btn" onclick="this.textContent='Sent'">Alert Caregiver</button></div>
+            <div class="alert-row"><div class="ai ai-orange">&#128276;</div><div class="ai-info"><div class="ai-name">Robert H. — Room 22A</div><div class="ai-detail">Adherence dropped from 91% to 61% this week</div></div><button class="ai-btn" onclick="this.textContent='Sent'">Alert Caregiver</button></div>
+          </div>
+        </div>
+
+        <!-- PATIENTS -->
+        <div class="pane" id="pane-patients">
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div style="padding:18px 20px;">
+              <div class="toolbar">
+                <input type="text" class="search" id="pt-search" placeholder="Search..." oninput="filterPt()">
+                <select class="fsel" id="pt-fil" onchange="filterPt()">
+                  <option value="all">All</option>
+                  <option value="high">High (80%+)</option>
+                  <option value="moderate">Moderate (60–79%)</option>
+                  <option value="atrisk">At Risk</option>
+                </select>
+                <button class="tbtn" onclick="exportCSV()">Export CSV</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr>
+                  <th id="th-name">Name</th><th>Age</th><th>Condition</th><th>Adherence</th><th>Streak</th><th>Status</th><th>Last Dose</th>
+                </tr></thead>
+                <tbody id="pt-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANALYTICS -->
+        <div class="pane" id="pane-analytics">
+          <!-- Ring cluster at top -->
+          <div class="analytics-rings-row" id="analytics-rings-row"></div>
+
+          <div class="grid2">
+            <div class="card">
+              <div class="card-title">30-Day Adherence Trend</div>
+              <div id="monthly-bars" style="display:flex;align-items:flex-end;gap:3px;height:90px;"></div>
+            </div>
+            <div class="card">
+              <div class="card-title">Best Days of Week</div>
+              <div id="dow-bars" style="display:flex;align-items:flex-end;gap:8px;height:90px;"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Cohort Breakdown</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">
+              <div style="background:var(--bg);border-radius:10px;padding:16px;text-align:center;border:1.5px solid var(--border);"><div style="font-size:26px;font-weight:900;color:var(--teal);">91%</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">Caregiver-Linked</div></div>
+              <div style="background:var(--bg);border-radius:10px;padding:16px;text-align:center;border:1.5px solid var(--border);"><div style="font-size:26px;font-weight:900;color:var(--teal);">94%</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">AI Reminders On</div></div>
+              <div style="background:var(--bg);border-radius:10px;padding:16px;text-align:center;border:1.5px solid var(--border);"><div style="font-size:26px;font-weight:900;color:var(--teal);">67%</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">No AI Reminders</div></div>
+              <div style="background:var(--bg);border-radius:10px;padding:16px;text-align:center;border:1.5px solid var(--border);"><div style="font-size:26px;font-weight:900;color:var(--teal);">82%</div><div style="font-size:12px;color:var(--muted);margin-top:4px;" id="cohort-label4">Chronic Conditions</div></div>
+              <div style="background:var(--bg);border-radius:10px;padding:16px;text-align:center;border:1.5px solid var(--border);"><div style="font-size:26px;font-weight:900;color:var(--teal);">76%</div><div style="font-size:12px;color:var(--muted);margin-top:4px;" id="cohort-label5">Solo Patients</div></div>
+              <div style="background:var(--bg);border-radius:10px;padding:16px;text-align:center;border:1.5px solid var(--border);"><div style="font-size:26px;font-weight:900;color:var(--teal);">89%</div><div style="font-size:12px;color:var(--muted);margin-top:4px;" id="cohort-label6">Enrolled Program</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Medication Category Breakdown</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;align-items:center;gap:12px;"><span style="width:140px;font-size:13px;color:var(--text);">Cardiovascular</span><div style="flex:1;height:8px;background:#e2edf2;border-radius:4px;"><div style="width:91%;height:100%;background:var(--mint);border-radius:4px;"></div></div><span style="font-size:13px;font-weight:700;color:var(--deep);width:36px;text-align:right;">91%</span></div>
+              <div style="display:flex;align-items:center;gap:12px;"><span style="width:140px;font-size:13px;color:var(--text);">Diabetes</span><div style="flex:1;height:8px;background:#e2edf2;border-radius:4px;"><div style="width:79%;height:100%;background:var(--teal);border-radius:4px;"></div></div><span style="font-size:13px;font-weight:700;color:var(--deep);width:36px;text-align:right;">79%</span></div>
+              <div style="display:flex;align-items:center;gap:12px;"><span style="width:140px;font-size:13px;color:var(--text);">Thyroid</span><div style="flex:1;height:8px;background:#e2edf2;border-radius:4px;"><div style="width:88%;height:100%;background:var(--mint);border-radius:4px;"></div></div><span style="font-size:13px;font-weight:700;color:var(--deep);width:36px;text-align:right;">88%</span></div>
+              <div style="display:flex;align-items:center;gap:12px;"><span style="width:140px;font-size:13px;color:var(--text);">Neurological</span><div style="flex:1;height:8px;background:#e2edf2;border-radius:4px;"><div style="width:72%;height:100%;background:var(--orange);border-radius:4px;"></div></div><span style="font-size:13px;font-weight:700;color:var(--deep);width:36px;text-align:right;">72%</span></div>
+              <div style="display:flex;align-items:center;gap:12px;"><span style="width:140px;font-size:13px;color:var(--text);">Respiratory</span><div style="flex:1;height:8px;background:#e2edf2;border-radius:4px;"><div style="width:65%;height:100%;background:var(--orange);border-radius:4px;"></div></div><span style="font-size:13px;font-weight:700;color:var(--deep);width:36px;text-align:right;">65%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROI & POTENTIAL -->
+        <div class="pane" id="pane-roi">
+          <div class="roi-hero">
+            <div class="roi-headline" id="roi-headline">Your residents are saving your staff 14 hours every week</div>
+            <div class="roi-sub" id="roi-sub">Based on 142 enrolled residents and current adherence data</div>
+            <div class="roi-nums">
+              <div class="roi-num"><div class="roi-val" id="roi-v1">14h</div><div class="roi-lbl" id="roi-l1">Staff hours saved/week</div></div>
+              <div class="roi-num"><div class="roi-val" id="roi-v2">$2,240</div><div class="roi-lbl" id="roi-l2">Estimated monthly savings</div></div>
+              <div class="roi-num"><div class="roi-val" id="roi-v3">11</div><div class="roi-lbl" id="roi-l3">Incidents prevented this month</div></div>
+            </div>
+          </div>
+          <div class="roi-cards" id="roi-cards"></div>
+          <div class="roi-calc card">
+            <div class="card-title" id="roi-calc-title">Calculate Your Potential Savings</div>
+            <div class="roi-slider-wrap">
+              <div class="roi-slider-label"><span id="slider-label">Number of residents</span><span id="slider-val">80</span></div>
+              <input type="range" min="10" max="500" value="80" id="roi-slider" oninput="calcROI()">
+            </div>
+            <div class="roi-result">
+              <div class="roi-result-label" id="roi-result-label">Estimated monthly value</div>
+              <div class="roi-result-val" id="roi-result-val">$1,280</div>
+            </div>
+            <div style="font-size:12px;color:var(--muted);margin-top:10px;" id="roi-result-note">Based on 2 min/resident/day saved at $20/hr average staff wage</div>
+          </div>
+        </div>
+
+        <!-- ALERTS -->
+        <div class="pane" id="pane-alerts">
+          <div class="card">
+            <div class="card-title">At-Risk — Immediate Action Required</div>
+            <div id="alerts-list"></div>
+          </div>
+        </div>
+
+        <!-- REPORTS -->
+        <div class="pane" id="pane-reports">
+          <div class="card">
+            <div class="card-title">Generate Report</div>
+            <div class="rpt-grid" id="rpt-opts"></div>
+            <button class="gen-btn" onclick="genReport()">Generate &amp; Download Report</button>
+            <div id="rpt-status" style="margin-top:14px;font-size:13px;color:var(--muted);display:none;"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Scheduled Auto-Reports</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg);border-radius:10px;border:1.5px solid var(--border);"><div><div style="font-size:13.5px;font-weight:600;">Weekly Summary — Every Monday 7AM</div><div style="font-size:12px;color:var(--muted);">Sent to director@yourorg.com</div></div><span style="font-size:11px;font-weight:700;color:var(--green);background:#e6f9f3;padding:3px 9px;border-radius:20px;">Active</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg);border-radius:10px;border:1.5px solid var(--border);"><div><div style="font-size:13.5px;font-weight:600;">At-Risk Alert — Immediate</div><div style="font-size:12px;color:var(--muted);">Triggers when adherence drops below 60%</div></div><span style="font-size:11px;font-weight:700;color:var(--green);background:#e6f9f3;padding:3px 9px;border-radius:20px;">Active</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg);border-radius:10px;border:1.5px solid var(--border);"><div><div style="font-size:13.5px;font-weight:600;">Monthly Analytics PDF — 1st of month</div><div style="font-size:12px;color:var(--muted);">Full 30-day breakdown for admin records</div></div><span style="font-size:11px;font-weight:700;color:var(--green);background:#e6f9f3;padding:3px 9px;border-radius:20px;">Active</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FEEDBACK -->
+        <div class="pane" id="pane-feedback">
+          <div class="fb-note">
+            <div class="fb-note-title">Powered by Hermes AI</div>
+            <div class="fb-note-body">Your feedback is reviewed by Hermes, Carely's AI operating system. When patterns emerge across multiple organizations (3+ similar requests), Hermes generates a proposal for our founders. Approved proposals ship in the next release. You will see results.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Submit Feedback or Feature Request</div>
+            <form class="fb-form" id="fb-form" onsubmit="submitFb(event)">
+              <label>Organization Name</label>
+              <input type="text" id="fb-org" placeholder="Your organization" required>
+              <label>Contact Email</label>
+              <input type="email" id="fb-email" placeholder="your@organization.com">
+              <label>Category</label>
+              <select id="fb-cat">
+                <option value="feature_request">Feature Request</option>
+                <option value="suggestion">Suggestion / Improvement</option>
+                <option value="ux_issue">UX / Usability Issue</option>
+                <option value="missing_feature">Missing Feature</option>
+                <option value="praise">Praise — What's Working</option>
+                <option value="bug">Bug Report</option>
+              </select>
+              <label>Your Feedback</label>
+              <textarea id="fb-msg" placeholder="Describe your feedback in detail..." required></textarea>
+              <label>Rating</label>
+              <div class="stars" id="stars">
+                <span class="star" onclick="setStar(1)">&#9733;</span>
+                <span class="star" onclick="setStar(2)">&#9733;</span>
+                <span class="star" onclick="setStar(3)">&#9733;</span>
+                <span class="star" onclick="setStar(4)">&#9733;</span>
+                <span class="star" onclick="setStar(5)">&#9733;</span>
+              </div>
+              <button type="submit" class="fb-submit">Submit Feedback</button>
+            </form>
+            <div class="fb-ok" id="fb-ok">Thank you — your feedback goes directly to our team and Hermes AI. We review everything and ship the most-requested features first.</div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- PATIENT DETAIL PANEL -->
+<div id="overlay" onclick="closePanel()"></div>
+<div id="pt-panel">
+  <div class="pnl-head">
+    <div class="pnl-name" id="pnl-name">Patient Name</div>
+    <span class="pnl-close" onclick="closePanel()">&#215;</span>
+  </div>
+  <div class="pnl-body" id="pnl-body">
+    <!-- Populated dynamically -->
+  </div>
+  <div class="pnl-actions">
+    <button class="pnl-btn pnl-btn-teal" onclick="alertCaregiver()">Alert Caregiver</button>
+    <button class="pnl-btn pnl-btn-ghost" onclick="genPatientReport()">Generate Report</button>
+  </div>
+</div>
+
+<script>
+// ── Ring System ──────────────────────────────────────────────────────────────
+
+var RING_SIZES = {
+  lg:  { wrap: 180, r: 74,  sw: 12, C: 464.9, pctSize: 40, subSize: 9 },
+  md:  { wrap: 120, r: 50,  sw: 10, C: 314.2, pctSize: 26, subSize: 8 },
+  sm:  { wrap: 80,  r: 32,  sw: 8,  C: 201.1, pctSize: 18, subSize: 7 },
+  xs:  { wrap: 64,  r: 26,  sw: 7,  C: 163.4, pctSize: 14, subSize: 0 }
+};
+
+var _ringIdCounter = 0;
+
+function ringColor(pct) {
+  return pct >= 80 ? '#00C896' : pct >= 50 ? '#FF8800' : '#FF3B3B';
+}
+
+// Full ring card (standalone — with white card wrapper, shadow, label)
+function makeRing(pct, size, label, sublabel) {
+  var s = RING_SIZES[size] || RING_SIZES.md;
+  var id = 'ring-' + (++_ringIdCounter);
+  var pctId = 'pct-' + _ringIdCounter;
+
+  var card = document.createElement('div');
+  card.className = 'ring-card-ui';
+  card.dataset.ringId = id;
+  card.dataset.pctId = pctId;
+  card.dataset.targetPct = pct;
+  card.dataset.size = size;
+
+  if (label) {
+    var lbl = document.createElement('div');
+    lbl.className = 'rc-label';
+    lbl.textContent = label;
+    card.appendChild(lbl);
+  }
+
+  var wrap = document.createElement('div');
+  wrap.className = 'ring-wrap-ui';
+  wrap.style.width = s.wrap + 'px';
+  wrap.style.height = s.wrap + 'px';
+
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('width', s.wrap);
+  svg.setAttribute('height', s.wrap);
+  svg.setAttribute('viewBox', '0 0 ' + s.wrap + ' ' + s.wrap);
+
+  var cx = s.wrap / 2;
+  var cy = s.wrap / 2;
+
+  var bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  bgCircle.setAttribute('cx', cx);
+  bgCircle.setAttribute('cy', cy);
+  bgCircle.setAttribute('r', s.r);
+  bgCircle.setAttribute('class', 'ring-bg-ui');
+  bgCircle.setAttribute('stroke-width', s.sw);
+
+  var fillCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  fillCircle.setAttribute('id', id);
+  fillCircle.setAttribute('cx', cx);
+  fillCircle.setAttribute('cy', cy);
+  fillCircle.setAttribute('r', s.r);
+  fillCircle.setAttribute('class', 'ring-fill-ui');
+  fillCircle.setAttribute('stroke-width', s.sw);
+  fillCircle.setAttribute('stroke-dasharray', s.C);
+  fillCircle.setAttribute('stroke-dashoffset', s.C);
+  fillCircle.setAttribute('stroke', ringColor(pct));
+
+  svg.appendChild(bgCircle);
+  svg.appendChild(fillCircle);
+  wrap.appendChild(svg);
+
+  var center = document.createElement('div');
+  center.className = 'ring-center-ui';
+
+  var pctEl = document.createElement('span');
+  pctEl.id = pctId;
+  pctEl.className = 'ring-pct-ui';
+  pctEl.style.fontSize = s.pctSize + 'px';
+  pctEl.textContent = '0%';
+  center.appendChild(pctEl);
+
+  if (s.subSize > 0) {
+    var subEl = document.createElement('span');
+    subEl.className = 'ring-sub-ui';
+    subEl.style.fontSize = s.subSize + 'px';
+    subEl.textContent = 'adherence';
+    center.appendChild(subEl);
+  }
+
+  wrap.appendChild(center);
+  card.appendChild(wrap);
+
+  if (sublabel) {
+    var sub = document.createElement('div');
+    sub.className = 'rc-sublabel';
+    sub.textContent = sublabel;
+    card.appendChild(sub);
+  }
+
+  return card;
+}
+
+// Inline ring (for table cells — no card wrapper)
+function makeRingInline(pct, size) {
+  var s = RING_SIZES[size] || RING_SIZES.xs;
+  var id = 'ring-' + (++_ringIdCounter);
+  var pctId = 'pct-' + _ringIdCounter;
+
+  var wrap = document.createElement('div');
+  wrap.className = 'ring-inline-wrap';
+  wrap.style.width = s.wrap + 'px';
+  wrap.style.height = s.wrap + 'px';
+  wrap.dataset.ringId = id;
+  wrap.dataset.pctId = pctId;
+  wrap.dataset.targetPct = pct;
+
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('width', s.wrap);
+  svg.setAttribute('height', s.wrap);
+  svg.setAttribute('viewBox', '0 0 ' + s.wrap + ' ' + s.wrap);
+
+  var cx = s.wrap / 2;
+  var cy = s.wrap / 2;
+
+  var bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  bgCircle.setAttribute('cx', cx);
+  bgCircle.setAttribute('cy', cy);
+  bgCircle.setAttribute('r', s.r);
+  bgCircle.setAttribute('fill', 'none');
+  bgCircle.setAttribute('stroke', '#EEF1F5');
+  bgCircle.setAttribute('stroke-width', s.sw);
+
+  var fillCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  fillCircle.setAttribute('id', id);
+  fillCircle.setAttribute('cx', cx);
+  fillCircle.setAttribute('cy', cy);
+  fillCircle.setAttribute('r', s.r);
+  fillCircle.setAttribute('fill', 'none');
+  fillCircle.setAttribute('stroke-linecap', 'round');
+  fillCircle.setAttribute('stroke-width', s.sw);
+  fillCircle.setAttribute('stroke-dasharray', s.C);
+  fillCircle.setAttribute('stroke-dashoffset', s.C);
+  fillCircle.setAttribute('stroke', ringColor(pct));
+  fillCircle.style.transition = 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1), stroke 0.4s ease';
+
+  svg.appendChild(bgCircle);
+  svg.appendChild(fillCircle);
+  wrap.appendChild(svg);
+
+  var center = document.createElement('div');
+  center.className = 'ring-inline-center';
+
+  var pctEl = document.createElement('span');
+  pctEl.id = pctId;
+  pctEl.className = 'ring-inline-pct';
+  pctEl.textContent = pct + '%';
+  center.appendChild(pctEl);
+
+  wrap.appendChild(center);
+  return wrap;
+}
+
+function animateRing(ringEl, pct) {
+  // ringEl can be a .ring-card-ui or .ring-inline-wrap
+  var ringId = ringEl.dataset.ringId;
+  var pctId = ringEl.dataset.pctId;
+  var size = ringEl.dataset.size;
+  var s = RING_SIZES[size] || RING_SIZES.xs;
+
+  var circle = document.getElementById(ringId);
+  var label = document.getElementById(pctId);
+  if (!circle || !label) return;
+
+  var offset = s.C * (1 - pct / 100);
+  circle.style.strokeDashoffset = offset;
+  circle.style.stroke = ringColor(pct);
+
+  var from = parseInt(label.textContent) || 0;
+  var start = null;
+  function step(ts) {
+    if (!start) start = ts;
+    var p = Math.min((ts - start) / 1300, 1);
+    var e = 1 - Math.pow(1 - p, 3);
+    label.textContent = Math.round(from + (pct - from) * e) + '%';
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function animateAllRings(container) {
+  var cards = (container || document).querySelectorAll('[data-ring-id]');
+  cards.forEach(function(el) {
+    var pct = parseInt(el.dataset.targetPct) || 0;
+    animateRing(el, pct);
+  });
+}
+
+// ── Heatmap ──────────────────────────────────────────────────────────────────
+function makeHeatmap(states28) {
+  var wrap = document.createElement('div');
+
+  var headers = document.createElement('div');
+  headers.className = 'pnl-day-headers';
+  ['M','T','W','T','F','S','S'].forEach(function(d) {
+    var h = document.createElement('div');
+    h.className = 'pnl-day-hdr';
+    h.textContent = d;
+    headers.appendChild(h);
+  });
+  wrap.appendChild(headers);
+
+  var grid = document.createElement('div');
+  grid.className = 'pnl-heatmap-grid';
+  states28.forEach(function(s) {
+    var cell = document.createElement('div');
+    cell.className = 'heat-cell ' + s;
+    grid.appendChild(cell);
+  });
+  wrap.appendChild(grid);
+
+  var legend = document.createElement('div');
+  legend.className = 'heatmap-legend-sm';
+  [
+    {color:'#00C896', label:'All taken'},
+    {color:'#6EDFC0', label:'Most'},
+    {color:'#FF8800', label:'Partial'},
+    {color:'#FF3B3B', label:'Missed'},
+    {color:'#EEF1F5', label:'Future'},
+  ].forEach(function(item) {
+    var li = document.createElement('div');
+    li.className = 'legend-item-sm';
+    var dot = document.createElement('div');
+    dot.className = 'legend-dot-sm';
+    dot.style.background = item.color;
+    var txt = document.createElement('span');
+    txt.textContent = item.label;
+    li.appendChild(dot);
+    li.appendChild(txt);
+    legend.appendChild(li);
+  });
+  wrap.appendChild(legend);
+
+  return wrap;
+}
+
+function generateHeatmapStates(adhPct) {
+  // Generate a plausible 28-cell heatmap from an adherence %
+  var states = [];
+  for (var i = 0; i < 21; i++) {
+    var r = Math.random();
+    var threshold = adhPct / 100;
+    var state;
+    if (r < threshold * 0.7)       state = 'perfect';
+    else if (r < threshold * 0.9)  state = 'good';
+    else if (r < threshold)        state = 'partial';
+    else                           state = 'miss';
+    states.push(state);
+  }
+  for (var j = 21; j < 28; j++) states.push('future');
+  return states;
+}
+
+// ── State ────────────────────────────────────────────────────────────────────
+var ORG_TYPE = 'senior';
+var STAR_RATING = 0;
+var _overviewRingsRendered = false;
+var _analyticsRingsRendered = false;
+
+var PATIENTS = [
+  {name:'Margaret K.',room:'14B',age:81,cond:'Type 2 Diabetes',adh:41,streak:2,status:'atrisk',last:'2h ago',meds:[{name:'Metformin 500mg',time:'8AM, 8PM',color:'#028090'},{name:'Lisinopril 10mg',time:'8AM',color:'#02C39A'}]},
+  {name:'Robert H.',room:'22A',age:74,cond:'Hypertension',adh:61,streak:5,status:'moderate',last:'4h ago',meds:[{name:'Amlodipine 5mg',time:'9AM',color:'#028090'},{name:'Warfarin 2.5mg',time:'6PM',color:'#e53e3e'}]},
+  {name:'Dorothy P.',room:'8C',age:79,cond:'Atrial Fibrillation',adh:38,streak:0,status:'atrisk',last:'4d ago',meds:[{name:'Apixaban 5mg',time:'8AM, 8PM',color:'#e53e3e'}]},
+  {name:'James W.',room:'3A',age:68,cond:'Hypertension',adh:92,streak:41,status:'high',last:'1h ago',meds:[{name:'Ramipril 5mg',time:'7AM',color:'#02C39A'}]},
+  {name:'Helen M.',room:'11B',age:82,cond:'Osteoporosis',adh:88,streak:29,status:'high',last:'30m ago',meds:[{name:'Alendronate 70mg',time:'Mon 7AM',color:'#028090'},{name:'Calcium 500mg',time:'8AM, 4PM',color:'#02C39A'}]},
+  {name:'Frank B.',room:'6D',age:71,cond:'COPD',adh:75,streak:14,status:'moderate',last:'3h ago',meds:[{name:'Tiotropium inhaler',time:'8AM',color:'#028090'}]},
+  {name:'Gloria S.',room:'9A',age:76,cond:'Heart Failure',adh:95,streak:62,status:'high',last:'45m ago',meds:[{name:'Furosemide 40mg',time:'8AM',color:'#02C39A'},{name:'Carvedilol 12.5mg',time:'8AM, 8PM',color:'#028090'}]},
+  {name:'Charles N.',room:'17C',age:69,cond:'Type 2 Diabetes',adh:83,streak:18,status:'high',last:'2h ago',meds:[{name:'Metformin 1000mg',time:'8AM, 8PM',color:'#028090'}]},
+  {name:'Irene T.',room:'4B',age:84,cond:"Parkinson's",adh:89,streak:35,status:'high',last:'1h ago',meds:[{name:'Levodopa 100mg',time:'7AM, 12PM, 6PM',color:'#028090'}]},
+  {name:'Harold J.',room:'20A',age:72,cond:'Hypothyroidism',adh:67,streak:8,status:'moderate',last:'6h ago',meds:[{name:'Levothyroxine 75mcg',time:'7AM',color:'#02C39A'}]},
+];
+
+var ORG_CONFIG = {
+  senior:{
+    label:'Senior Living', badgeClass:'badge-senior',
+    patientsLabel:'Residents', patientLabel:'Resident', roomLabel:'Room',
+    metrics:[
+      {label:'Total Residents',val:'142',sub:'enrolled on Carely',trend:'+8 this month',up:true},
+      {label:'Avg Adherence',val:'84%',sub:'facility average',trend:'+3% vs last week',up:true},
+      {label:'At Risk',val:'11',sub:'below 60% adherence',trend:'3 critical',up:false,red:true},
+      {label:'Doses Today',val:'438',sub:'of 521 scheduled',trend:'84% on track',up:true},
+      {label:'Avg Streak',val:'19d',sub:'days consistent',trend:'+2d vs last week',up:true},
+      {label:'Reports Sent',val:'38',sub:'to doctors this week',trend:'auto-generated',up:true},
+    ],
+    roi:{
+      headline:'Your residents are saving your staff 14 hours every week',
+      sub:'Based on 142 enrolled residents and current adherence data',
+      v1:'14h',l1:'Staff hours saved/week',
+      v2:'$2,240',l2:'Est. monthly savings',
+      v3:'11',l3:'Incidents prevented',
+      cards:[
+        {icon:'⏱',title:'Staff Time Recovered',val:'14h/week',desc:'Automated reminders replace manual medication rounds. At $20/hr that\'s $280/week back to your team.'},
+        {icon:'⚖',title:'Liability Risk Reduced',val:'91% documented',desc:'Every dose taken or missed is logged with timestamp. Full audit trail for inspections and family inquiries.'},
+        {icon:'📞',title:'Family Calls Reduced',val:'~60% fewer',desc:'Family members see real-time adherence from their own phone. Fewer anxious calls to your front desk.'},
+        {icon:'📋',title:'Inspection Readiness',val:'Always ready',desc:'30-day medication adherence logs available instantly. No more scrambling before inspections.'},
+      ],
+      sliderLabel:'Number of residents',
+      resultLabel:'Estimated monthly value',
+      resultNote:'Based on 2 min/resident/day saved at $20/hr average staff wage',
+      calc:function(n){return '$'+Math.round(n*2/60*20*30).toLocaleString();}
+    },
+    alerts:[
+      {name:'Margaret K. — Room 14B',detail:'Missed 3 consecutive doses (Metformin 500mg + Lisinopril 10mg) · Adherence: 41% this week',sev:'red'},
+      {name:'Dorothy P. — Room 8C',detail:'No app activity for 4 days · Adherence: 38% — Warfarin dose critical',sev:'red'},
+      {name:'Robert H. — Room 22A',detail:'Adherence dropped from 91% to 61% this week — Warfarin included',sev:'orange'},
+    ],
+    reports:['Weekly Adherence Summary (all residents)','At-Risk Resident Report','Monthly Analytics PDF','Doctor Auto-Send (individual PDFs)','Family Caregiver Digest'],
+  },
+  pharmacy:{
+    label:'Pharmacy', badgeClass:'badge-pharmacy',
+    patientsLabel:'Customers', patientLabel:'Customer', roomLabel:'ID',
+    metrics:[
+      {label:'Enrolled Customers',val:'284',sub:'in adherence program',trend:'+22 this month',up:true},
+      {label:'Avg Adherence',val:'79%',sub:'program average',trend:'+5% vs last month',up:true},
+      {label:'Refill Alerts Sent',val:'47',sub:'this week',trend:'automated',up:true},
+      {label:'Revenue at Risk',val:'$3,820',sub:'non-adherent customers',trend:'this month',up:false,red:true},
+      {label:'Refills Triggered',val:'38',sub:'by Carely alerts this week',trend:'+12 vs manual',up:true},
+      {label:'Avg Streak',val:'22d',sub:'days consistent',trend:'+4d vs last month',up:true},
+    ],
+    roi:{
+      headline:'38 refills last week triggered by Carely alerts — $3,420 recovered revenue',
+      sub:'Based on 284 enrolled customers and average refill value of $90',
+      v1:'$3,420',l1:'Revenue recovered/month',
+      v2:'38',l2:'Refills triggered/week',
+      v3:'$90',l3:'Average refill value',
+      cards:[
+        {icon:'💊',title:'Refill Revenue Recovered',val:'$3,420/mo',desc:'Customers who get Carely reminders refill 34% more consistently. At $90 average refill value, that\'s direct revenue recovered.'},
+        {icon:'📉',title:'Revenue at Risk (Non-Adherent)',val:'$3,820/mo',desc:'284 customers × 16% non-adherent × $90 refill value. This is what you\'re currently losing. Carely reduces this by 60-70%.'},
+        {icon:'🤝',title:'Customer Retention',val:'+28%',desc:'Patients who use Carely stay with your pharmacy longer. Reminders build habit — and habit means loyalty.'},
+        {icon:'⭐',title:'Differentiation',val:'Only you offer this',desc:'No other pharmacy in your area offers an AI medication reminder. This is a genuine competitive advantage for acquisition and retention.'},
+      ],
+      sliderLabel:'Number of enrolled customers',
+      resultLabel:'Estimated monthly revenue recovered',
+      resultNote:'Based on 16% non-adherence rate and average $90 refill value per customer',
+      calc:function(n){return '$'+Math.round(n*0.16*90*0.65).toLocaleString();}
+    },
+    alerts:[
+      {name:'Patricia L. — Customer #4821',detail:'Atorvastatin refill 8 days overdue · Last picked up Feb 14',sev:'red'},
+      {name:'David M. — Customer #2934',detail:'Metformin adherence dropped to 45% this week',sev:'red'},
+      {name:'Susan K. — Customer #7102',detail:'Warfarin refill due in 2 days — high priority',sev:'orange'},
+    ],
+    reports:['Weekly Adherence Summary','Non-Adherent Customer Report','Revenue Recovery Analysis','Refill Prediction Forecast','Monthly ROI Report'],
+  },
+  clinic:{
+    label:'Medical Clinic', badgeClass:'badge-clinic',
+    patientsLabel:'Patients', patientLabel:'Patient', roomLabel:'Dr.',
+    metrics:[
+      {label:'Active Patients',val:'318',sub:'on Carely',trend:'+31 this month',up:true},
+      {label:'Avg Adherence',val:'81%',sub:'patient average',trend:'+4% vs last quarter',up:true},
+      {label:'At Risk',val:'29',sub:'below 60% adherence',trend:'needs follow-up',up:false,red:true},
+      {label:'Pre-Visit Summaries',val:'12',sub:'sent this week',trend:'auto-generated',up:true},
+      {label:'Reports to Doctors',val:'318',sub:'weekly auto-PDF',trend:'every Monday',up:true},
+      {label:'Avg Streak',val:'16d',sub:'days consistent',trend:'+3d vs last month',up:true},
+    ],
+    roi:{
+      headline:'29 patients arrived at their last appointments with low adherence — now you know in advance',
+      sub:'Based on 318 enrolled patients across all conditions',
+      v1:'81%',l1:'Avg adherence (up from 67%)',
+      v2:'29',l2:'At-risk flagged before appointments',
+      v3:'$0',l3:'Extra staff time required',
+      cards:[
+        {icon:'📋',title:'Pre-Appointment Intelligence',val:'Per patient',desc:'Every patient\'s 30-day adherence summary lands in your inbox before their appointment. No more guessing — you know exactly what to ask.'},
+        {icon:'🏥',title:'Readmission Risk Reduced',val:'Est. 23% fewer',desc:'Patients who take medications as prescribed have significantly fewer emergency visits. Carely keeps them on track between appointments.'},
+        {icon:'📊',title:'Population Health Visibility',val:'Full cohort',desc:'See your entire diabetic patient population\'s HbA1c-linked adherence at once. Identify which patients need urgent follow-up.'},
+        {icon:'⏱',title:'Visit Efficiency',val:'Save 8 min/visit',desc:'Doctors who know adherence history before the visit spend less time recapping and more time treating. Faster, better appointments.'},
+      ],
+      sliderLabel:'Number of patients enrolled',
+      resultLabel:'Estimated readmissions prevented/year',
+      resultNote:'Based on 5% readmission rate reduction at avg $15,000 readmission cost',
+      calc:function(n){return Math.round(n*0.05*0.23)+' events';}
+    },
+    alerts:[
+      {name:'David R. — Dr. Chen',detail:'Metformin adherence: 31% — appointment in 3 days. HbA1c likely elevated.',sev:'red'},
+      {name:'Sarah M. — Dr. Patel',detail:'Blood pressure medication missed 5 of last 7 days. Uncontrolled hypertension risk.',sev:'red'},
+      {name:'James T. — Dr. Williams',detail:'Post-surgery adherence dropped to 58% — wound healing protocol at risk.',sev:'orange'},
+    ],
+    reports:['Weekly Patient Adherence Summary','Pre-Appointment Briefing Pack','At-Risk Patient Report','Chronic Disease Cohort Analysis','Monthly Outcomes Report'],
+  },
+};
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+function doLogin(){
+  var org=document.getElementById('l-org').value.trim();
+  var type=document.getElementById('l-type').value;
+  var code=document.getElementById('l-code').value.trim();
+  var err=document.getElementById('l-err');
+  if(code!=='272727'){err.style.display='block';return;}
+  err.style.display='none';
+  ORG_TYPE=type;
+  applyOrgType(org||'Demo Organization');
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  initCharts();
+  renderPt();
+  renderROI();
+  renderAlerts();
+  renderReports();
+  renderOverviewRings();
+  renderAnalyticsRings();
+}
+document.getElementById('l-code').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+function doLogout(){document.getElementById('login-screen').style.display='flex';document.getElementById('app').style.display='none';}
+
+function applyOrgType(org){
+  var c=ORG_CONFIG[ORG_TYPE];
+  document.getElementById('sb-org-name').textContent=org;
+  var badge=document.getElementById('sb-type-badge');
+  badge.textContent=c.label;
+  badge.className='sb-type-badge '+c.badgeClass;
+  document.getElementById('n-patients').textContent=c.patientsLabel;
+  var th=document.getElementById('th-name');
+  if(th)th.textContent=c.patientLabel;
+  var al1=document.getElementById('al1-name');
+  if(al1)al1.textContent=c.alerts[0].name;
+  // metrics
+  var mGrid=document.getElementById('overview-metrics');
+  mGrid.innerHTML='';
+  c.metrics.forEach(function(m){
+    var d=document.createElement('div');d.className='mc';
+    var inner='<div class="mc-label">'+m.label+'</div><div class="mc-val'+(m.red?' mc-val-red":"")+'">'+m.val+'</div>';
+    if(m.sub)inner+='<div class="mc-sub">'+m.sub+'</div>';
+    if(m.trend)inner+='<div class="mc-trend '+(m.up?'up':'down')+'">'+m.trend+'</div>';
+    d.innerHTML=inner;
+    if(m.red)d.querySelector('.mc-val').style.color='var(--red)';
+    mGrid.appendChild(d);
+  });
+}
+
+// ── Nav ──────────────────────────────────────────────────────────────────────
+function nav(id,el){
+  document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+  document.getElementById('pane-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  var titles={overview:'Overview',patients:ORG_CONFIG[ORG_TYPE].patientsLabel,analytics:'Analytics',roi:'ROI & Potential',alerts:'Alerts',reports:'Reports',feedback:'Feedback'};
+  document.getElementById('page-title').textContent=titles[id]||id;
+  if(window.innerWidth<=768)document.getElementById('sidebar').classList.remove('open');
+}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
+
+// ── Overview Ring Cluster ────────────────────────────────────────────────────
+function renderOverviewRings() {
+  var section = document.getElementById('overview-ring-section');
+  section.innerHTML = '';
+
+  // Hero org ring
+  var heroWrap = document.createElement('div');
+  heroWrap.className = 'org-hero-ring';
+
+  var heroLabelEl = document.createElement('div');
+  heroLabelEl.className = 'hero-label';
+  heroLabelEl.textContent = 'Org-Wide Adherence';
+  heroWrap.appendChild(heroLabelEl);
+
+  var heroRing = makeRing(84, 'lg', null, null);
+  heroWrap.appendChild(heroRing);
+
+  var heroSubEl = document.createElement('div');
+  heroSubEl.className = 'hero-sub';
+  heroSubEl.textContent = 'All patients this week';
+  heroWrap.appendChild(heroSubEl);
+
+  section.appendChild(heroWrap);
+
+  var divider = document.createElement('div');
+  divider.className = 'divider-v';
+  section.appendChild(divider);
+
+  // Band rings
+  var bandWrap = document.createElement('div');
+  bandWrap.className = 'band-rings';
+
+  var bands = [
+    { pct: 59, label: 'High Adherence', sub: '59% of patients', size: 'sm' },
+    { pct: 33, label: 'Moderate',       sub: '33% of patients', size: 'sm' },
+    { pct: 8,  label: 'At Risk',        sub: '8% of patients',  size: 'sm' },
+  ];
+
+  bands.forEach(function(b) {
+    var ringCard = makeRing(b.pct, b.size, b.label, b.sub);
+    bandWrap.appendChild(ringCard);
+  });
+
+  section.appendChild(bandWrap);
+
+  // Animate after short delay
+  setTimeout(function() {
+    animateAllRings(section);
+  }, 300);
+}
+
+// ── Analytics Ring Cluster ───────────────────────────────────────────────────
+function renderAnalyticsRings() {
+  var row = document.getElementById('analytics-rings-row');
+  row.innerHTML = '';
+
+  // Compute from chart data (consistent with bar charts)
+  var weekVals = [79, 82, 80, 86, 88, 84, 87];
+  var base30 = [74,76,78,75,80,82,79,83,81,84,86,82,85,84,87,83,88,85,89,86,84,87,85,88,86,84,87,85,84,87];
+  var thisWeekAvg = Math.round(weekVals.reduce(function(a,b){return a+b;},0) / weekVals.length);
+  var lastWeekAvg = 81; // consistent slightly lower
+  var thirtyDayAvg = Math.round(base30.reduce(function(a,b){return a+b;},0) / base30.length);
+  var trend = thisWeekAvg - lastWeekAvg;
+
+  var analyticsRings = [
+    { pct: thisWeekAvg,  label: 'This Week',   sub: 'Avg all patients', size: 'md' },
+    { pct: lastWeekAvg,  label: 'Last Week',   sub: 'Previous 7 days',  size: 'md' },
+    { pct: thirtyDayAvg, label: '30-Day Avg',  sub: 'Rolling average',  size: 'md' },
+  ];
+
+  analyticsRings.forEach(function(r) {
+    var card = makeRing(r.pct, r.size, r.label, r.sub);
+    row.appendChild(card);
+  });
+
+  // Trend indicator
+  var trendEl = document.createElement('div');
+  trendEl.className = 'trend-indicator';
+
+  var arrowEl = document.createElement('div');
+  arrowEl.className = 'trend-arrow ' + (trend >= 0 ? 'up' : 'down');
+  arrowEl.textContent = trend >= 0 ? '↑' : '↓';
+
+  var trendValEl = document.createElement('div');
+  trendValEl.className = 'trend-val';
+  trendValEl.textContent = (trend >= 0 ? '+' : '') + trend + '%';
+
+  var trendLblEl = document.createElement('div');
+  trendLblEl.className = 'trend-label';
+  trendLblEl.textContent = 'vs last week';
+
+  trendEl.appendChild(arrowEl);
+  trendEl.appendChild(trendValEl);
+  trendEl.appendChild(trendLblEl);
+  row.appendChild(trendEl);
+
+  setTimeout(function() {
+    animateAllRings(row);
+  }, 300);
+}
+
+// ── Charts ───────────────────────────────────────────────────────────────────
+function initCharts(){
+  var days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],vals=[79,82,80,86,88,84,87];
+  var el=document.getElementById('trend-bars');el.innerHTML='';
+  days.forEach(function(d,i){
+    var col=document.createElement('div');col.className='bar-col';
+    var bar=document.createElement('div');bar.className='bar';bar.style.height=Math.round((vals[i]-62)*2.2)+'px';
+    var lbl=document.createElement('div');lbl.className='bar-lbl';lbl.textContent=d;
+    col.appendChild(bar);col.appendChild(lbl);el.appendChild(col);
+  });
+  var mb=document.getElementById('monthly-bars');mb.innerHTML='';
+  var base=[74,76,78,75,80,82,79,83,81,84,86,82,85,84,87,83,88,85,89,86,84,87,85,88,86,84,87,85,84,87];
+  base.forEach(function(v){
+    var col=document.createElement('div');col.style.flex='1';col.style.display='flex';col.style.flexDirection='column';col.style.alignItems='center';col.style.gap='2px';
+    var bar=document.createElement('div');bar.style.width='100%';bar.style.height=Math.round((v-65)*1.3)+'px';bar.style.background='linear-gradient(180deg,#02C39A,#028090)';bar.style.borderRadius='2px 2px 0 0';
+    col.appendChild(bar);mb.appendChild(col);
+  });
+  var dow=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],dv=[88,86,83,87,85,76,74];
+  var db=document.getElementById('dow-bars');db.innerHTML='';
+  dow.forEach(function(d,i){
+    var col=document.createElement('div');col.className='bar-col';
+    var bar=document.createElement('div');bar.className='bar';bar.style.height=Math.round((dv[i]-60)*1.5)+'px';
+    var lbl=document.createElement('div');lbl.className='bar-lbl';lbl.textContent=d;
+    col.appendChild(bar);col.appendChild(lbl);db.appendChild(col);
+  });
+}
+
+// ── Patients ─────────────────────────────────────────────────────────────────
+function renderPt(data){
+  data = data || PATIENTS;
+  var tbody = document.getElementById('pt-tbody');
+  tbody.innerHTML = '';
+  var ringsToAnimate = [];
+
+  data.forEach(function(p){
+    var tr = document.createElement('tr');
+    tr.onclick = function(){ openPanel(p); };
+
+    // Name cell
+    var tdName = document.createElement('td');
+    tdName.textContent = p.name;
+    tr.appendChild(tdName);
+
+    // Age
+    var tdAge = document.createElement('td');
+    tdAge.textContent = p.age;
+    tr.appendChild(tdAge);
+
+    // Condition
+    var tdCond = document.createElement('td');
+    tdCond.textContent = p.cond;
+    tr.appendChild(tdCond);
+
+    // Adherence — xs inline ring
+    var tdAdh = document.createElement('td');
+    var ringWrap = makeRingInline(p.adh, 'xs');
+    tdAdh.appendChild(ringWrap);
+    tr.appendChild(tdAdh);
+    ringsToAnimate.push(ringWrap);
+
+    // Streak
+    var tdStreak = document.createElement('td');
+    tdStreak.textContent = p.streak + 'd';
+    tr.appendChild(tdStreak);
+
+    // Status pill
+    var tdStatus = document.createElement('td');
+    var pill = document.createElement('span');
+    if (p.status === 'high') {
+      pill.className = 'pill p-green';
+      pill.textContent = 'On Track';
+    } else if (p.status === 'moderate') {
+      pill.className = 'pill p-orange';
+      pill.textContent = 'Moderate';
+    } else {
+      pill.className = 'pill p-red';
+      pill.textContent = 'At Risk';
+    }
+    tdStatus.appendChild(pill);
+    tr.appendChild(tdStatus);
+
+    // Last dose
+    var tdLast = document.createElement('td');
+    tdLast.style.color = 'var(--muted)';
+    tdLast.textContent = p.last;
+    tr.appendChild(tdLast);
+
+    tbody.appendChild(tr);
+  });
+
+  // Animate table rings
+  setTimeout(function() {
+    ringsToAnimate.forEach(function(el) {
+      var pct = parseInt(el.dataset.targetPct) || 0;
+      var ringId = el.dataset.ringId;
+      var s = RING_SIZES['xs'];
+      var circle = document.getElementById(ringId);
+      if (!circle) return;
+      var offset = s.C * (1 - pct / 100);
+      circle.style.strokeDashoffset = offset;
+      circle.style.stroke = ringColor(pct);
+    });
+  }, 300);
+}
+
+function filterPt(){
+  var q=document.getElementById('pt-search').value.toLowerCase();
+  var f=document.getElementById('pt-fil').value;
+  renderPt(PATIENTS.filter(function(p){
+    return (!q||p.name.toLowerCase().includes(q)||p.cond.toLowerCase().includes(q))&&(f==='all'||p.status===f);
+  }));
+}
+function exportCSV(){
+  var rows=[['Name','Age','Condition','Adherence%','Streak','Status','LastDose']];
+  PATIENTS.forEach(function(p){rows.push([p.name,p.age,p.cond,p.adh,p.streak,p.status,p.last]);});
+  var a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows.map(function(r){return r.join(',');}).join('\n'));
+  a.download='carely-patients.csv';a.click();
+}
+
+// ── Patient Panel ─────────────────────────────────────────────────────────────
+function openPanel(p){
+  document.getElementById('pnl-name').textContent = p.name + (p.room ? ' — ' + (ORG_CONFIG[ORG_TYPE].roomLabel || 'Room') + ' ' + p.room : '');
+
+  var body = document.getElementById('pnl-body');
+  body.innerHTML = '';
+
+  // Ring + stats row
+  var ringStatsRow = document.createElement('div');
+  ringStatsRow.className = 'pnl-ring-stats';
+
+  var mainRing = makeRing(p.adh, 'md', null, null);
+  ringStatsRow.appendChild(mainRing);
+
+  var statsCol = document.createElement('div');
+  statsCol.className = 'pnl-stats-col';
+
+  var statItems = [
+    { val: p.adh + '%',                          label: 'Adherence' },
+    { val: p.streak + 'd',                        label: 'Streak' },
+    { val: String(Math.round((1 - p.adh/100)*30)), label: 'Missed (30d)' },
+  ];
+  statItems.forEach(function(item) {
+    var s = document.createElement('div');
+    s.className = 'pnl-s';
+    var sv = document.createElement('div');
+    sv.className = 'pnl-sv';
+    sv.textContent = item.val;
+    var sl = document.createElement('div');
+    sl.className = 'pnl-sl';
+    sl.textContent = item.label;
+    s.appendChild(sv);
+    s.appendChild(sl);
+    statsCol.appendChild(s);
+  });
+  ringStatsRow.appendChild(statsCol);
+  body.appendChild(ringStatsRow);
+
+  // 28-day heatmap
+  var heatSection = document.createElement('div');
+  heatSection.className = 'pnl-heatmap-section';
+
+  var heatLabel = document.createElement('div');
+  heatLabel.className = 'pnl-section-label';
+  heatLabel.textContent = '28-Day Heatmap';
+  heatSection.appendChild(heatLabel);
+
+  var states = generateHeatmapStates(p.adh);
+  var heatmapEl = makeHeatmap(states);
+  heatSection.appendChild(heatmapEl);
+  body.appendChild(heatSection);
+
+  // 30-Day Calendar (existing style, numbered)
+  var calLabel = document.createElement('div');
+  calLabel.className = 'pnl-section-label';
+  calLabel.textContent = '30-Day Calendar';
+  body.appendChild(calLabel);
+
+  var calGrid = document.createElement('div');
+  calGrid.className = 'cal-grid';
+  for (var i = 0; i < 30; i++) {
+    var r = Math.random();
+    var cls = r > 0.85 ? 'd-missed' : r > 0.75 ? 'd-partial' : 'd-taken';
+    if (p.adh < 50 && Math.random() > 0.4) cls = 'd-missed';
+    var dayEl = document.createElement('div');
+    dayEl.className = 'cal-day ' + cls;
+    var sp = document.createElement('span');
+    sp.textContent = i + 1;
+    dayEl.appendChild(sp);
+    calGrid.appendChild(dayEl);
+  }
+  body.appendChild(calGrid);
+
+  // Medications
+  var medLabel = document.createElement('div');
+  medLabel.className = 'pnl-section-label';
+  medLabel.style.margin = '16px 0 8px';
+  medLabel.textContent = 'Medications';
+  body.appendChild(medLabel);
+
+  var medList = document.createElement('div');
+  medList.className = 'med-list';
+  var meds = p.meds || [{name:'Medication data loading...',time:'',color:'#028090'}];
+  meds.forEach(function(m) {
+    var row = document.createElement('div');
+    row.className = 'med-row';
+    var dot = document.createElement('div');
+    dot.className = 'med-dot';
+    dot.style.background = m.color;
+    var nameEl = document.createElement('div');
+    nameEl.className = 'med-name';
+    nameEl.textContent = m.name;
+    var timeEl = document.createElement('div');
+    timeEl.className = 'med-time';
+    timeEl.textContent = m.time;
+    row.appendChild(dot);
+    row.appendChild(nameEl);
+    row.appendChild(timeEl);
+    medList.appendChild(row);
+  });
+  body.appendChild(medList);
+
+  document.getElementById('pt-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+
+  // Animate the panel ring
+  setTimeout(function() {
+    animateRing(mainRing, p.adh);
+  }, 200);
+}
+
+function closePanel(){
+  document.getElementById('pt-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+function alertCaregiver(){var b=document.querySelector('.pnl-btn-teal');b.textContent='Alert Sent';b.style.background='#38a169';}
+function genPatientReport(){var b=document.querySelector('.pnl-btn-ghost');b.textContent='Generating...';}
+
+// ── ROI ───────────────────────────────────────────────────────────────────────
+function renderROI(){
+  var c=ORG_CONFIG[ORG_TYPE].roi;
+  document.getElementById('roi-headline').textContent=c.headline;
+  document.getElementById('roi-sub').textContent=c.sub;
+  document.getElementById('roi-v1').textContent=c.v1;document.getElementById('roi-l1').textContent=c.l1;
+  document.getElementById('roi-v2').textContent=c.v2;document.getElementById('roi-l2').textContent=c.l2;
+  document.getElementById('roi-v3').textContent=c.v3;document.getElementById('roi-l3').textContent=c.l3;
+  document.getElementById('slider-label').textContent=c.sliderLabel;
+  document.getElementById('roi-result-label').textContent=c.resultLabel;
+  document.getElementById('roi-result-note').textContent=c.resultNote;
+  var cards=document.getElementById('roi-cards');cards.innerHTML='';
+  c.cards.forEach(function(card){
+    var d=document.createElement('div');d.className='roi-card';
+    d.innerHTML='<div class="roi-card-icon">'+card.icon+'</div><div class="roi-card-title">'+card.title+'</div><div class="roi-card-val">'+card.val+'</div><div class="roi-card-desc">'+card.desc+'</div>';
+    cards.appendChild(d);
+  });
+  calcROI();
+}
+function calcROI(){
+  var n=parseInt(document.getElementById('roi-slider').value);
+  document.getElementById('slider-val').textContent=n;
+  var c=ORG_CONFIG[ORG_TYPE].roi;
+  document.getElementById('roi-result-val').textContent=c.calc(n);
+}
+
+// ── Alerts ────────────────────────────────────────────────────────────────────
+function renderAlerts(){
+  var list=document.getElementById('alerts-list');list.innerHTML='';
+  ORG_CONFIG[ORG_TYPE].alerts.forEach(function(a){
+    var row=document.createElement('div');row.className='alert-row';
+    var icon=a.sev==='red'?'&#9888;':'&#128276;';
+    var cls=a.sev==='red'?'ai-red':'ai-orange';
+    row.innerHTML='<div class="ai '+cls+'">'+icon+'</div><div class="ai-info"><div class="ai-name">'+a.name+'</div><div class="ai-detail">'+a.detail+'</div></div><button class="ai-btn" onclick="this.textContent=\'Sent\'">Alert Caregiver</button>';
+    list.appendChild(row);
+  });
+}
+
+// ── Reports ───────────────────────────────────────────────────────────────────
+function renderReports(){
+  var opts=document.getElementById('rpt-opts');opts.innerHTML='';
+  ORG_CONFIG[ORG_TYPE].reports.forEach(function(r,i){
+    var d=document.createElement('div');d.className='rpt-opt'+(i===0?' sel':'');
+    d.innerHTML='<div class="rpt-title">'+r+'</div>';
+    d.onclick=function(){document.querySelectorAll('.rpt-opt').forEach(function(o){o.classList.remove('sel');});d.classList.add('sel');};
+    opts.appendChild(d);
+  });
+}
+function genReport(){
+  var s=document.getElementById('rpt-status');s.style.display='block';s.textContent='Generating report...';
+  setTimeout(function(){s.textContent='Report ready. Download will start in production environment.';},1500);
+}
+
+// ── Feedback ──────────────────────────────────────────────────────────────────
+function setStar(n){
+  STAR_RATING=n;
+  document.querySelectorAll('.star').forEach(function(s,i){s.classList.toggle('lit',i<n);});
+}
+function submitFb(e){
+  e.preventDefault();
+  fetch('https://carely-backend-production.up.railway.app/feedback',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      source:'b2b',
+      category:document.getElementById('fb-cat').value,
+      message:document.getElementById('fb-msg').value,
+      orgName:document.getElementById('fb-org').value,
+      email:document.getElementById('fb-email').value,
+      rating:STAR_RATING||undefined,
+    }),
+  }).catch(function(){});
+  document.getElementById('fb-form').style.display='none';
+  document.getElementById('fb-ok').style.display='block';
+}
+</script>
+</body>
+</html>
