@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Partner Dashboard — Carely</title>
-  <link rel="icon" type="image/png" href="carely-icon.png" />
+  <link rel="icon" type="image/png" href="elara-3d-new.png" />
+  <link rel="apple-touch-icon" href="elara-3d-new.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
@@ -50,18 +51,33 @@
     .error-msg { color: var(--danger); font-weight: 700; text-align: center; }
     footer { background: var(--deep-teal); color: rgba(255,255,255,0.6); text-align: center; padding: 24px 20px; font-size: 0.82rem; margin-top: 60px; }
   </style>
-  <!-- PostHog Analytics -->
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
     posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
-    document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="carely.fit/#"],a.nav-cta,a.hero-cta,a.cta-btn').forEach(function(el){el.addEventListener('click',function(){posthog.capture('cta_clicked',{text:el.textContent.trim(),href:el.getAttribute('href'),page:location.pathname});});});});
   </script>
 </head>
 <body>
+
+<!-- PIN GATE -->
+<div id="pin-gate" style="position:fixed;inset:0;background:linear-gradient(135deg,#0D3347 0%,#028090 55%,#02C39A 100%);display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:#fff;border-radius:20px;padding:48px 40px;width:400px;max-width:92vw;box-shadow:0 32px 80px rgba(13,51,71,.35);">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+      <img src="elara-bot-logo.png" alt="Carely" style="height:42px;width:auto;">
+      <div style="font-size:20px;font-weight:800;color:#0D3347;">Carely <span style="color:#028090;">Partner Portal</span></div>
+    </div>
+    <div style="font-size:13px;color:#6b8fa3;margin-bottom:28px;">Track your referrals and earnings</div>
+    <label style="display:block;font-size:11px;font-weight:700;color:#6b8fa3;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;">Access Code</label>
+    <input type="password" id="pin-input" placeholder="Enter access code" style="width:100%;padding:11px 14px;border:1.5px solid #e0eaf0;border-radius:9px;font-size:14px;color:#0d3347;background:#f8fbfc;outline:none;font-family:inherit;" />
+    <div id="pin-err" style="display:none;color:#e53e3e;font-size:13px;margin-top:8px;">Invalid access code. Please try again.</div>
+    <button onclick="doUnlock()" style="width:100%;margin-top:20px;padding:14px;background:linear-gradient(135deg,#028090,#02C39A);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;">View Partner Dashboard</button>
+    <div style="margin-top:14px;font-size:12px;color:#6b8fa3;text-align:center;">Access code: <strong>272727</strong></div>
+  </div>
+</div>
+
 <nav>
   <div class="nav-inner">
     <a href="/" class="logo">
-      <img src="carely-icon.png" alt="Carely" style="height:32px;width:auto;" />
+      <img src="elara-bot-logo.png" alt="Carely" style="height:32px;width:auto;" />
       Carely Partner
     </a>
     <span id="partner-name-nav" style="font-weight:600;font-size:0.9rem;color:var(--teal);"></span>
@@ -69,7 +85,7 @@
 </nav>
 
 <main>
-  <div class="loading" id="loading">
+  <div class="loading" id="loading" style="display:none;">
     <div class="spinner"></div>
     <p style="color:var(--grey-500);">Loading your dashboard...</p>
   </div>
@@ -84,7 +100,7 @@
       <h2>Your referral link</h2>
       <div class="referral-url" id="referral-url"></div>
       <button class="copy-btn" id="copy-btn">Copy link</button>
-      <p class="referral-note">Share this link with patients. When they subscribe, you earn <span id="commission-pct">20</span>% of their monthly plan.</p>
+      <p class="referral-note">Share this link with patients. When they subscribe, you earn <span id="commission-pct">20</span>% of their monthly plan — paid monthly.</p>
     </div>
 
     <div class="table-wrap">
@@ -102,13 +118,23 @@
 </footer>
 
 <script>
-  var API = 'https://carely-backend-production.up.railway.app';
-  var params = new URLSearchParams(window.location.search);
-  var token = params.get('token');
+  var DEMO = {
+    partner: { name: 'Sunrise Pharmacy', referralUrl: 'https://carely.fit/?ref=sunrise-pharmacy', commissionPct: 20 },
+    stats: { totalReferrals: 14, payingUsers: 9, monthlyRevenueGenerated: 89.91, yourMonthlyEarning: 17.98 },
+    referrals: [
+      { email: 'm***@gmail.com', referredAt: '2026-04-12T00:00:00Z', plan: 'monthly', converted: true },
+      { email: 'r***@hotmail.com', referredAt: '2026-04-18T00:00:00Z', plan: 'annual', converted: true },
+      { email: 'd***@yahoo.com', referredAt: '2026-04-22T00:00:00Z', plan: 'founding', converted: true },
+      { email: 'h***@gmail.com', referredAt: '2026-05-01T00:00:00Z', plan: 'trial', converted: false },
+      { email: 'e***@gmail.com', referredAt: '2026-05-03T00:00:00Z', plan: 'monthly', converted: true },
+      { email: 'w***@icloud.com', referredAt: '2026-05-07T00:00:00Z', plan: 'trial', converted: false },
+      { email: 'p***@gmail.com', referredAt: '2026-05-09T00:00:00Z', plan: 'monthly', converted: true }
+    ]
+  };
 
-  function setText(id, value) {
+  function setText(id, val) {
     var el = document.getElementById(id);
-    if (el) el.textContent = String(value);
+    if (el) el.textContent = String(val);
   }
 
   function makeStatCard(value, label, highlight) {
@@ -128,7 +154,6 @@
   function buildTable(referrals) {
     var container = document.getElementById('table-container');
     container.textContent = '';
-
     if (!referrals.length) {
       var empty = document.createElement('div');
       empty.className = 'empty-state';
@@ -136,7 +161,6 @@
       container.appendChild(empty);
       return;
     }
-
     var table = document.createElement('table');
     var thead = document.createElement('thead');
     var hrow = document.createElement('tr');
@@ -147,83 +171,54 @@
     });
     thead.appendChild(hrow);
     table.appendChild(thead);
-
     var tbody = document.createElement('tbody');
     referrals.forEach(function(r) {
       var row = document.createElement('tr');
-
-      var emailCell = document.createElement('td');
-      emailCell.textContent = r.email;
-      var dateCell = document.createElement('td');
-      dateCell.textContent = new Date(r.referredAt).toLocaleDateString();
-      var planCell = document.createElement('td');
-      planCell.textContent = r.plan || '—';
+      var emailCell = document.createElement('td'); emailCell.textContent = r.email;
+      var dateCell = document.createElement('td'); dateCell.textContent = new Date(r.referredAt).toLocaleDateString();
+      var planCell = document.createElement('td'); planCell.textContent = r.plan || '—';
       var statusCell = document.createElement('td');
       var badge = document.createElement('span');
       badge.className = r.converted ? 'badge badge-green' : 'badge badge-grey';
       badge.textContent = r.converted ? 'Paying' : 'Trial';
       statusCell.appendChild(badge);
-
-      row.appendChild(emailCell);
-      row.appendChild(dateCell);
-      row.appendChild(planCell);
-      row.appendChild(statusCell);
+      row.appendChild(emailCell); row.appendChild(dateCell); row.appendChild(planCell); row.appendChild(statusCell);
       tbody.appendChild(row);
     });
     table.appendChild(tbody);
     container.appendChild(table);
   }
 
-  if (!token) {
-    var loading = document.getElementById('loading');
-    loading.textContent = '';
-    var msg = document.createElement('p');
-    msg.className = 'error-msg';
-    msg.textContent = 'No access token. Check your partner link.';
-    loading.appendChild(msg);
-  } else {
-    fetch(API + '/affiliate/dashboard?token=' + encodeURIComponent(token))
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (!data.partner) throw new Error(data.message || 'Invalid token');
+  function doUnlock() {
+    var pin = document.getElementById('pin-input').value.trim();
+    if (pin !== '272727') { document.getElementById('pin-err').style.display = 'block'; return; }
+    document.getElementById('pin-gate').style.display = 'none';
+    renderDemo(DEMO);
+  }
+  document.getElementById('pin-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') doUnlock(); });
 
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('portal').style.display = 'block';
-
-        var partner = data.partner;
-        var stats = data.stats;
-        var referrals = data.referrals || [];
-
-        setText('portal-title', partner.name + ' Dashboard');
-        setText('partner-name-nav', partner.name);
-        setText('referral-url', partner.referralUrl);
-        setText('commission-pct', partner.commissionPct);
-        setText('referred-count', referrals.length + ' users');
-
-        var grid = document.getElementById('stats-grid');
-        grid.textContent = '';
-        grid.appendChild(makeStatCard(stats.totalReferrals, 'Total referrals', false));
-        grid.appendChild(makeStatCard(stats.payingUsers, 'Paying subscribers', true));
-        grid.appendChild(makeStatCard('$' + stats.monthlyRevenueGenerated, 'Monthly revenue generated', false));
-        grid.appendChild(makeStatCard('$' + stats.yourMonthlyEarning, 'Your monthly earning', true));
-
-        buildTable(referrals);
-
-        document.getElementById('copy-btn').addEventListener('click', function() {
-          navigator.clipboard.writeText(partner.referralUrl).then(function() {
-            document.getElementById('copy-btn').textContent = 'Copied!';
-            setTimeout(function() { document.getElementById('copy-btn').textContent = 'Copy link'; }, 2000);
-          });
-        });
-      })
-      .catch(function(err) {
-        var loading = document.getElementById('loading');
-        loading.textContent = '';
-        var msg = document.createElement('p');
-        msg.className = 'error-msg';
-        msg.textContent = err.message || 'Could not load dashboard.';
-        loading.appendChild(msg);
+  function renderDemo(data) {
+    document.getElementById('portal').style.display = 'block';
+    var partner = data.partner;
+    var stats = data.stats;
+    setText('portal-title', partner.name + ' — Partner Dashboard');
+    setText('partner-name-nav', partner.name);
+    setText('referral-url', partner.referralUrl);
+    setText('commission-pct', partner.commissionPct);
+    setText('referred-count', data.referrals.length + ' users');
+    var grid = document.getElementById('stats-grid');
+    grid.textContent = '';
+    grid.appendChild(makeStatCard(stats.totalReferrals, 'Total referrals', false));
+    grid.appendChild(makeStatCard(stats.payingUsers, 'Paying subscribers', true));
+    grid.appendChild(makeStatCard('$' + stats.monthlyRevenueGenerated.toFixed(2), 'Monthly revenue generated', false));
+    grid.appendChild(makeStatCard('$' + stats.yourMonthlyEarning.toFixed(2), 'Your monthly earning', true));
+    buildTable(data.referrals);
+    document.getElementById('copy-btn').addEventListener('click', function() {
+      navigator.clipboard.writeText(partner.referralUrl).then(function() {
+        document.getElementById('copy-btn').textContent = 'Copied!';
+        setTimeout(function() { document.getElementById('copy-btn').textContent = 'Copy link'; }, 2000);
       });
+    });
   }
 </script>
 <!-- GDPR / CASL Cookie Consent Banner -->
@@ -239,16 +234,8 @@
   var b = document.getElementById('cookie-banner');
   if (!localStorage.getItem('cookie_consent')) { b.style.display = 'flex'; }
 })();
-function cookieAccept() {
-  localStorage.setItem('cookie_consent', 'accepted');
-  document.getElementById('cookie-banner').style.display = 'none';
-}
-function cookieDecline() {
-  localStorage.setItem('cookie_consent', 'declined');
-  document.getElementById('cookie-banner').style.display = 'none';
-  if (window.posthog) { posthog.opt_out_capturing(); }
-}
+function cookieAccept() { localStorage.setItem('cookie_consent','accepted'); document.getElementById('cookie-banner').style.display='none'; }
+function cookieDecline() { localStorage.setItem('cookie_consent','declined'); document.getElementById('cookie-banner').style.display='none'; if(window.posthog){posthog.opt_out_capturing();} }
 </script>
-
 </body>
 </html>
