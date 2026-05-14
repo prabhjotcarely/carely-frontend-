@@ -1313,13 +1313,13 @@
       <!-- MONTHLY (regular) -->
       <div class="plan-card">
         <span class="plan-name">Monthly</span>
-        <p class="plan-desc">Full access after founding spots fill. No commitment.</p>
+        <p class="plan-desc">Full access. Cancel anytime. 7-day free trial.</p>
         <div class="plan-price" style="margin-top:8px">
           <sup class="curr-sym" style="font-size:1.1rem;color:var(--ink);font-weight:700;align-self:flex-start;margin-top:9px;">$</sup>
           <span class="plan-amt curr-regular" style="color:var(--ink);">9.99</span>
           <sub style="font-size:0.85rem;color:var(--inks)">/month</sub>
         </div>
-        <div style="font-size:0.78rem;color:var(--inks);margin-bottom:20px;">After 200 founding spots are claimed</div>
+        <div style="font-size:0.78rem;color:var(--inks);margin-bottom:20px;">7-day free trial — no credit card needed upfront</div>
         <div class="plan-feats">
           <div class="plan-feat"><span class="c">✓</span> Full Elara AI caretaker</div>
           <div class="plan-feat"><span class="c">✓</span> Unlimited medications tracked</div>
@@ -1329,8 +1329,7 @@
           <div class="plan-feat"><span class="c">✓</span> Health trend tracking</div>
           <div class="plan-feat"><span class="c">✓</span> 10 language support</div>
         </div>
-        <input style="width:100%;padding:11px 16px;border-radius:100px;border:1.5px solid var(--bor);background:var(--off);color:var(--ink);font-size:0.88rem;font-family:inherit;outline:none;margin-bottom:10px;" id="monthlyEmail" type="email" placeholder="Your email address" autocomplete="email">
-        <button class="plan-btn plan-btn-outline" onclick="claimPlan('monthly')">Join Waitlist — <sup class="curr-sym">$</sup><span class="curr-regular">9.99</span>/mo</button>
+        <button class="plan-btn plan-btn-outline" onclick="claimPlan('monthly')">Start Free Trial — <sup class="curr-sym">$</sup><span class="curr-regular">9.99</span>/mo</button>
       </div>
 
       <!-- ANNUAL -->
@@ -1343,7 +1342,7 @@
           <span class="plan-amt curr-annual" style="color:var(--ink);">90</span>
           <sub style="font-size:0.85rem;color:var(--inks)">/year</sub>
         </div>
-        <div style="font-size:0.78rem;color:var(--inks);margin-bottom:20px;">That's <sup class="curr-sym">$</sup><span class="curr-annual-mo">7.50</span>/month — always on</div>
+        <div style="font-size:0.78rem;color:var(--inks);margin-bottom:20px;">That's <sup class="curr-sym">$</sup><span class="curr-annual-mo">7.50</span>/month — 7-day free trial included</div>
         <div class="plan-feats">
           <div class="plan-feat"><span class="c">✓</span> Full Elara AI caretaker</div>
           <div class="plan-feat"><span class="c">✓</span> Unlimited medications tracked</div>
@@ -1353,8 +1352,7 @@
           <div class="plan-feat"><span class="c">✓</span> Health trend tracking</div>
           <div class="plan-feat"><span class="c">✓</span> 10 language support</div>
         </div>
-        <input style="width:100%;padding:11px 16px;border-radius:100px;border:1.5px solid var(--bor);background:var(--off);color:var(--ink);font-size:0.88rem;font-family:inherit;outline:none;margin-bottom:10px;" id="annualEmail" type="email" placeholder="Your email address" autocomplete="email">
-        <button class="plan-btn plan-btn-outline" onclick="claimPlan('annual')">Get Annual Plan — <sup class="curr-sym">$</sup><span class="curr-annual">90</span>/yr</button>
+        <button class="plan-btn plan-btn-outline" onclick="claimPlan('annual')">Start Free Trial — <sup class="curr-sym">$</sup><span class="curr-annual">90</span>/yr</button>
       </div>
     </div>
 
@@ -1608,20 +1606,18 @@ async function joinWaitlist(e) {
 
 /* ── Plan checkout ── */
 async function claimPlan(plan) {
-  const emailMap = { monthly:'monthlyEmail', annual:'annualEmail', solo:'soloEmail', ext:'extEmail' };
-  const inp = document.getElementById(emailMap[plan] || 'monthlyEmail');
-  if(!inp) return;
-  const email = inp.value.trim();
-  if(!email||!email.includes('@')) {
-    inp.style.borderColor='#e55'; inp.focus(); setTimeout(()=>inp.style.borderColor='',2000); return;
-  }
-  inp.disabled = true;
+  const btn = event && event.target ? event.target : null;
+  const origText = btn ? btn.textContent : '';
+  if(btn){ btn.textContent = 'Redirecting...'; btn.disabled = true; }
   try {
-    const res = await fetch('https://carely-backend-production.up.railway.app/subscription/buy-founding',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email, plan})});
+    const res = await fetch('https://carely-backend-production.up.railway.app/subscription/buy-founding',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan})});
     const {url} = await res.json();
-    if(url){ if(window.posthog)posthog.capture('founding_checkout_started',{email,currency:curr,plan}); window.location.href=url; }
+    if(url){ if(window.posthog)posthog.capture('checkout_started',{currency:curr,plan}); window.location.href=url; }
     else throw new Error();
-  } catch { inp.disabled=false; alert('Something went wrong. Email hello@carely.fit'); }
+  } catch {
+    if(btn){ btn.textContent=origText; btn.disabled=false; }
+    alert('Something went wrong. Email hello@carely.fit');
+  }
 }
 
 /* ── Founding checkout ── */
