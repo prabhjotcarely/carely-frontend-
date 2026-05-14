@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carely Enterprise — Institutional Dashboard</title>
+<style>
+  :root {
+    --teal: #028090;
+    --deep: #0D3347;
+    --mint: #02C39A;
+    --seafoam: #00A896;
+    --bg: #f4f8fa;
+    --card: #ffffff;
+    --border: #e2edf2;
+    --text: #0d3347;
+    --muted: #6b8fa3;
+    --red: #e53e3e;
+    --orange: #dd6b20;
+    --green: #38a169;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ── Login Screen ── */
+  #login-screen {
+    position: fixed; inset: 0; background: linear-gradient(135deg, #0D3347 0%, #028090 60%, #02C39A 100%);
+    display: flex; align-items: center; justify-content: center; z-index: 9999;
+  }
+  .login-card {
+    background: #fff; border-radius: 20px; padding: 48px 40px; width: 400px; max-width: 92vw;
+    box-shadow: 0 32px 80px rgba(13,51,71,0.35);
+    animation: slideUp 0.5s cubic-bezier(.22,.68,0,1.2);
+  }
+  @keyframes slideUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: translateY(0); } }
+  .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+  .login-logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg,#028090,#02C39A); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; font-weight: 900; }
+  .login-logo-text { font-size: 22px; font-weight: 800; color: #0D3347; }
+  .login-logo-text span { color: #028090; }
+  .login-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 6px; }
+  .login-input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 15px; color: var(--text); background: #f9fbfc; outline: none; margin-bottom: 16px; transition: border .2s; }
+  .login-input:focus { border-color: var(--teal); }
+  .login-btn { width: 100%; padding: 14px; background: linear-gradient(135deg,#028090,#02C39A); color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity .2s; }
+  .login-btn:hover { opacity: .9; }
+  .login-hint { margin-top: 20px; font-size: 12px; color: var(--muted); text-align: center; }
+  .login-err { color: var(--red); font-size: 13px; margin-bottom: 10px; display: none; }
+
+  /* ── App Shell ── */
+  #app { display: none; flex-direction: column; min-height: 100vh; }
+
+  /* ── Header ── */
+  header {
+    background: #fff; border-bottom: 1.5px solid var(--border);
+    padding: 0 28px; height: 60px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(13,51,71,0.06);
+  }
+  .hdr-left { display: flex; align-items: center; gap: 14px; }
+  .hdr-logo { font-size: 18px; font-weight: 800; color: var(--deep); }
+  .hdr-logo span { color: var(--teal); }
+  .hdr-badge { background: linear-gradient(90deg,#028090,#02C39A); color: #fff; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; letter-spacing: .5px; }
+  .hdr-right { display: flex; align-items: center; gap: 16px; }
+  .hdr-org { font-size: 13px; font-weight: 600; color: var(--muted); }
+  .hdr-logout { font-size: 13px; color: var(--teal); cursor: pointer; font-weight: 600; }
+
+  /* ── Nav Tabs ── */
+  nav { background: #fff; border-bottom: 1.5px solid var(--border); padding: 0 28px; display: flex; gap: 0; overflow-x: auto; }
+  .nav-tab { padding: 14px 20px; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all .2s; white-space: nowrap; }
+  .nav-tab:hover { color: var(--teal); }
+  .nav-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+  /* ── Main ── */
+  main { flex: 1; padding: 28px; max-width: 1280px; width: 100%; margin: 0 auto; }
+
+  /* ── Tab Content ── */
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ── Metric Cards ── */
+  .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .metric-card { background: var(--card); border-radius: 14px; padding: 20px; border: 1.5px solid var(--border); box-shadow: 0 2px 10px rgba(13,51,71,0.05); }
+  .metric-card .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--muted); margin-bottom: 8px; }
+  .metric-card .value { font-size: 32px; font-weight: 900; color: var(--deep); line-height: 1; }
+  .metric-card .sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .metric-card .trend { font-size: 12px; font-weight: 700; margin-top: 4px; }
+  .trend.up { color: var(--green); }
+  .trend.down { color: var(--red); }
+
+  /* ── Section Header ── */
+  .sec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .sec-title { font-size: 16px; font-weight: 800; color: var(--deep); }
+  .sec-action { font-size: 13px; color: var(--teal); cursor: pointer; font-weight: 600; }
+
+  /* ── Cards ── */
+  .card { background: var(--card); border-radius: 14px; padding: 22px; border: 1.5px solid var(--border); box-shadow: 0 2px 10px rgba(13,51,71,0.05); margin-bottom: 20px; }
+
+  /* ── Trend Bar Chart ── */
+  .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 80px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .bar { width: 100%; background: linear-gradient(180deg,#02C39A,#028090); border-radius: 4px 4px 0 0; transition: height .8s cubic-bezier(.22,.68,0,1.1); min-height: 4px; }
+  .bar-label { font-size: 10px; color: var(--muted); font-weight: 600; }
+
+  /* ── SVG Ring ── */
+  .ring-wrap { display: flex; align-items: center; gap: 28px; }
+  .ring-legend { display: flex; flex-direction: column; gap: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── Patients Table ── */
+  .table-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .search-input { padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--text); background: #f9fbfc; outline: none; width: 240px; }
+  .search-input:focus { border-color: var(--teal); }
+  .filter-select { padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--text); background: #f9fbfc; outline: none; }
+  .export-btn { margin-left: auto; padding: 9px 16px; background: var(--deep); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); padding: 10px 14px; text-align: left; background: #f4f8fa; border-bottom: 1.5px solid var(--border); }
+  td { padding: 13px 14px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f9fbfc; }
+  .adh-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .adh-bar-track { flex: 1; height: 6px; background: #e2edf2; border-radius: 3px; min-width: 70px; }
+  .adh-bar-fill { height: 100%; border-radius: 3px; }
+  .status-pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .pill-green { background: #e6f9f3; color: var(--green); }
+  .pill-orange { background: #fff3e8; color: var(--orange); }
+  .pill-red { background: #fdecea; color: var(--red); }
+
+  /* ── Analytics Bars ── */
+  .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .analytics-grid { grid-template-columns: 1fr; } }
+  .day-bars { display: flex; gap: 10px; align-items: flex-end; height: 100px; }
+  .day-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .day-bar { width: 100%; border-radius: 4px 4px 0 0; background: linear-gradient(180deg,#02C39A,#028090); }
+  .day-label { font-size: 10px; color: var(--muted); font-weight: 600; }
+
+  /* ── Cohort Grid ── */
+  .cohort-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+  .cohort-card { background: var(--bg); border-radius: 10px; padding: 16px; border: 1.5px solid var(--border); text-align: center; }
+  .cohort-value { font-size: 28px; font-weight: 900; color: var(--teal); }
+  .cohort-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* ── Alerts ── */
+  .alert-item { display: flex; align-items: center; gap: 14px; padding: 14px; border: 1.5px solid var(--border); border-radius: 10px; margin-bottom: 10px; background: #fff; }
+  .alert-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .alert-red { background: #fdecea; }
+  .alert-orange { background: #fff3e8; }
+  .alert-info { flex: 1; }
+  .alert-name { font-size: 14px; font-weight: 700; color: var(--deep); }
+  .alert-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .alert-action { padding: 7px 14px; background: var(--teal); color: #fff; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+  /* ── Reports ── */
+  .report-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .report-opt { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; padding: 18px; cursor: pointer; transition: all .2s; }
+  .report-opt:hover, .report-opt.selected { border-color: var(--teal); background: #f0faf9; }
+  .report-opt-title { font-size: 14px; font-weight: 700; color: var(--deep); }
+  .report-opt-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .generate-btn { width: 100%; padding: 14px; background: linear-gradient(135deg,#028090,#02C39A); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
+
+  /* ── Feedback Form ── */
+  .fb-form label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; margin-top: 16px; }
+  .fb-form input, .fb-form select, .fb-form textarea { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 14px; color: var(--text); background: #f9fbfc; outline: none; font-family: inherit; }
+  .fb-form input:focus, .fb-form select:focus, .fb-form textarea:focus { border-color: var(--teal); }
+  .fb-form textarea { resize: vertical; min-height: 90px; }
+  .fb-submit { margin-top: 20px; padding: 13px 28px; background: linear-gradient(135deg,#028090,#02C39A); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .fb-success { display: none; background: #e6f9f3; border: 1.5px solid #38a169; border-radius: 10px; padding: 14px 18px; color: #276749; font-size: 14px; font-weight: 600; margin-top: 16px; }
+  .hermes-note { background: linear-gradient(135deg,#f0faf9,#e8f7f5); border: 1.5px solid #02C39A; border-radius: 10px; padding: 16px 18px; margin-bottom: 20px; }
+  .hermes-note-title { font-size: 13px; font-weight: 800; color: var(--teal); margin-bottom: 6px; }
+  .hermes-note-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    main { padding: 16px; }
+    header { padding: 0 16px; }
+    nav { padding: 0 16px; }
+    .nav-tab { padding: 12px 14px; font-size: 13px; }
+    .metrics-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Login ── -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">C</div>
+      <div class="login-logo-text">Care<span>ly</span> Enterprise</div>
+    </div>
+    <div class="login-err" id="login-err">Invalid credentials. Try again.</div>
+    <div class="login-label">Organization Name</div>
+    <input type="text" class="login-input" id="login-org" placeholder="e.g. Sunrise Senior Living" autocomplete="organization">
+    <div class="login-label">Access Code</div>
+    <input type="password" class="login-input" id="login-code" placeholder="Enter your access code" autocomplete="current-password">
+    <button class="login-btn" onclick="doLogin()">Access Dashboard</button>
+    <div class="login-hint">Demo: any org name · code <strong>carely2026</strong></div>
+  </div>
+</div>
+
+<!-- ── App ── -->
+<div id="app">
+  <header>
+    <div class="hdr-left">
+      <div class="hdr-logo">Care<span>ly</span></div>
+      <div class="hdr-badge">ENTERPRISE</div>
+    </div>
+    <div class="hdr-right">
+      <span class="hdr-org" id="org-name-display">CareDemo Health</span>
+      <span class="hdr-logout" onclick="doLogout()">Sign Out</span>
+    </div>
+  </header>
+
+  <nav>
+    <div class="nav-tab active" onclick="switchTab('overview',this)">Overview</div>
+    <div class="nav-tab" onclick="switchTab('patients',this)">Patients</div>
+    <div class="nav-tab" onclick="switchTab('analytics',this)">Analytics</div>
+    <div class="nav-tab" onclick="switchTab('alerts',this)">Alerts <span id="alert-badge" style="background:#e53e3e;color:#fff;border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:4px;">3</span></div>
+    <div class="nav-tab" onclick="switchTab('reports',this)">Reports</div>
+    <div class="nav-tab" onclick="switchTab('feedback',this)">Feedback</div>
+  </nav>
+
+  <main>
+
+    <!-- ── Overview ── -->
+    <div class="tab-pane active" id="tab-overview">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="label">Total Patients</div>
+          <div class="value">142</div>
+          <div class="trend up">+8 this month</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Avg Adherence</div>
+          <div class="value">84%</div>
+          <div class="trend up">+3% vs last week</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">At Risk</div>
+          <div class="value" style="color:var(--red)">11</div>
+          <div class="trend down">Below 60% adherence</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Doses Today</div>
+          <div class="value">438</div>
+          <div class="sub">of 521 scheduled</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Avg Streak</div>
+          <div class="value">19d</div>
+          <div class="trend up">+2d vs last week</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Reports Sent</div>
+          <div class="value">38</div>
+          <div class="sub">to doctors this week</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <!-- Trend Bars -->
+        <div class="card">
+          <div class="sec-header"><span class="sec-title">7-Day Adherence Trend</span></div>
+          <div class="bar-chart" id="trend-bars"></div>
+        </div>
+
+        <!-- Distribution Ring -->
+        <div class="card">
+          <div class="sec-header"><span class="sec-title">Adherence Distribution</span></div>
+          <div class="ring-wrap">
+            <svg width="130" height="130" viewBox="0 0 42 42" style="flex-shrink:0;">
+              <circle cx="21" cy="21" r="15.9" fill="none" stroke="#e2edf2" stroke-width="5"/>
+              <circle cx="21" cy="21" r="15.9" fill="none" stroke="#02C39A" stroke-width="5"
+                stroke-dasharray="59 41" stroke-dashoffset="25" stroke-linecap="round"
+                style="transform-origin:center;transform:rotate(-90deg)"/>
+              <circle cx="21" cy="21" r="15.9" fill="none" stroke="#028090" stroke-width="5"
+                stroke-dasharray="25 75" stroke-dashoffset="-34" stroke-linecap="round"
+                style="transform-origin:center;transform:rotate(-90deg)"/>
+              <circle cx="21" cy="21" r="15.9" fill="none" stroke="#e53e3e" stroke-width="5"
+                stroke-dasharray="16 84" stroke-dashoffset="-59" stroke-linecap="round"
+                style="transform-origin:center;transform:rotate(-90deg)"/>
+              <text x="21" y="19" text-anchor="middle" font-size="5.5" font-weight="900" fill="#0D3347">84%</text>
+              <text x="21" y="24" text-anchor="middle" font-size="3.5" fill="#6b8fa3">avg</text>
+            </svg>
+            <div class="ring-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:#02C39A"></div>High (80%+) — 84 pts</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#028090"></div>Moderate (60-79%) — 47 pts</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#e53e3e"></div>At Risk (&lt;60%) — 11 pts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Alerts -->
+      <div class="card">
+        <div class="sec-header">
+          <span class="sec-title">Recent Alerts</span>
+          <span class="sec-action" onclick="switchTab('alerts',document.querySelector('[onclick*=alerts]'))">View all</span>
+        </div>
+        <div class="alert-item">
+          <div class="alert-icon alert-red">&#9888;</div>
+          <div class="alert-info"><div class="alert-name">Margaret K. — Room 14B</div><div class="alert-detail">Missed 3 consecutive doses (Metformin 500mg) · 2h ago</div></div>
+          <button class="alert-action">Alert Caregiver</button>
+        </div>
+        <div class="alert-item">
+          <div class="alert-icon alert-orange">&#128276;</div>
+          <div class="alert-info"><div class="alert-name">Robert H. — Room 22A</div><div class="alert-detail">Adherence dropped from 91% to 61% this week</div></div>
+          <button class="alert-action">Alert Caregiver</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Patients ── -->
+    <div class="tab-pane" id="tab-patients">
+      <div class="table-toolbar">
+        <input type="text" class="search-input" placeholder="Search patients..." id="pt-search" oninput="filterPatients()">
+        <select class="filter-select" id="pt-filter" onchange="filterPatients()">
+          <option value="all">All Patients</option>
+          <option value="high">High Adherence (80%+)</option>
+          <option value="moderate">Moderate (60-79%)</option>
+          <option value="atrisk">At Risk (&lt;60%)</option>
+        </select>
+        <button class="export-btn" onclick="exportCSV()">Export CSV</button>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="table-wrap">
+          <table id="patients-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Condition</th>
+                <th>Adherence</th>
+                <th>Streak</th>
+                <th>Status</th>
+                <th>Last Dose</th>
+              </tr>
+            </thead>
+            <tbody id="pt-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Analytics ── -->
+    <div class="tab-pane" id="tab-analytics">
+      <div class="analytics-grid">
+        <div class="card">
+          <div class="sec-title" style="margin-bottom:16px;">30-Day Adherence Trend</div>
+          <div id="monthly-bars" style="display:flex;align-items:flex-end;gap:3px;height:100px;"></div>
+        </div>
+        <div class="card">
+          <div class="sec-title" style="margin-bottom:16px;">Best Days of Week</div>
+          <div class="day-bars" id="day-bars"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec-title" style="margin-bottom:16px;">Cohort Breakdown</div>
+        <div class="cohort-grid">
+          <div class="cohort-card"><div class="cohort-value">89%</div><div class="cohort-label">Pharmacy Pickups</div></div>
+          <div class="cohort-card"><div class="cohort-value">82%</div><div class="cohort-label">Chronic Conditions</div></div>
+          <div class="cohort-card"><div class="cohort-value">91%</div><div class="cohort-label">Caregiver-Linked</div></div>
+          <div class="cohort-card"><div class="cohort-value">76%</div><div class="cohort-label">Solo Patients</div></div>
+          <div class="cohort-card"><div class="cohort-value">94%</div><div class="cohort-label">AI Reminders On</div></div>
+          <div class="cohort-card"><div class="cohort-value">67%</div><div class="cohort-label">No AI Reminders</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Alerts ── -->
+    <div class="tab-pane" id="tab-alerts">
+      <div class="card">
+        <div class="sec-header"><span class="sec-title">At-Risk Patients (3)</span></div>
+        <div class="alert-item">
+          <div class="alert-icon alert-red" style="font-size:18px;">&#9888;</div>
+          <div class="alert-info">
+            <div class="alert-name">Margaret K. — Room 14B</div>
+            <div class="alert-detail">Missed 3 consecutive doses (Metformin 500mg + Lisinopril 10mg) · Adherence: 41% this week</div>
+          </div>
+          <button class="alert-action" onclick="this.textContent='Sent!'">Alert Caregiver</button>
+        </div>
+        <div class="alert-item">
+          <div class="alert-icon alert-red" style="font-size:18px;">&#9888;</div>
+          <div class="alert-info">
+            <div class="alert-name">Dorothy P. — Room 8C</div>
+            <div class="alert-detail">No app activity for 4 days · Adherence: 38% this week</div>
+          </div>
+          <button class="alert-action" onclick="this.textContent='Sent!'">Alert Caregiver</button>
+        </div>
+        <div class="alert-item">
+          <div class="alert-icon alert-orange" style="font-size:18px;">&#128276;</div>
+          <div class="alert-info">
+            <div class="alert-name">Robert H. — Room 22A</div>
+            <div class="alert-detail">Adherence dropped from 91% to 61% this week · Warfarin included</div>
+          </div>
+          <button class="alert-action" onclick="this.textContent='Sent!'">Alert Caregiver</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Reports ── -->
+    <div class="tab-pane" id="tab-reports">
+      <div class="card">
+        <div class="sec-title" style="margin-bottom:16px;">Generate Report</div>
+        <div class="report-options" id="report-opts">
+          <div class="report-opt selected" onclick="selectReport(this)">
+            <div class="report-opt-title">Weekly Adherence Summary</div>
+            <div class="report-opt-desc">All patients, 7-day view, auto-sent to doctors</div>
+          </div>
+          <div class="report-opt" onclick="selectReport(this)">
+            <div class="report-opt-title">At-Risk Patient Report</div>
+            <div class="report-opt-desc">Patients below 60% adherence this week</div>
+          </div>
+          <div class="report-opt" onclick="selectReport(this)">
+            <div class="report-opt-title">Monthly Analytics PDF</div>
+            <div class="report-opt-desc">Full 30-day breakdown for admin review</div>
+          </div>
+          <div class="report-opt" onclick="selectReport(this)">
+            <div class="report-opt-title">Doctor Auto-Send</div>
+            <div class="report-opt-desc">Send individual PDF reports to each patient's doctor via email</div>
+          </div>
+          <div class="report-opt" onclick="selectReport(this)">
+            <div class="report-opt-title">Caregiver Digest</div>
+            <div class="report-opt-desc">Summary for family caregivers of each resident</div>
+          </div>
+        </div>
+        <button class="generate-btn" onclick="generateReport()">Generate &amp; Download Report</button>
+        <div id="report-status" style="margin-top:14px;font-size:13px;color:var(--muted);display:none;"></div>
+      </div>
+    </div>
+
+    <!-- ── Feedback ── -->
+    <div class="tab-pane" id="tab-feedback">
+      <div class="hermes-note">
+        <div class="hermes-note-title">Powered by Hermes AI</div>
+        <div class="hermes-note-body">Your feedback is read by Hermes, Carely's AI operating system. When patterns emerge (3+ similar requests), Hermes generates an improvement proposal and sends it to the Carely founders for approval. You'll see results in future releases.</div>
+      </div>
+      <div class="card">
+        <div class="sec-title" style="margin-bottom:4px;">Submit Feedback or Feature Request</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:8px;">From pharmacies, senior homes, hospitals, or clinics.</div>
+        <form class="fb-form" id="fb-form" onsubmit="submitFeedback(event)">
+          <label>Organization Name</label>
+          <input type="text" id="fb-org" placeholder="e.g. Sunrise Senior Living" required>
+          <label>Contact Email</label>
+          <input type="email" id="fb-email" placeholder="your@organization.com">
+          <label>Category</label>
+          <select id="fb-cat">
+            <option value="feature_request">Feature Request</option>
+            <option value="suggestion">Suggestion / Improvement</option>
+            <option value="ux_issue">UX / Usability Issue</option>
+            <option value="missing_feature">Missing Feature</option>
+            <option value="bug">Bug Report</option>
+            <option value="praise">Praise / What's Working</option>
+          </select>
+          <label>Your Feedback</label>
+          <textarea id="fb-msg" placeholder="Describe your feedback, feature request, or suggestion in detail..." required></textarea>
+          <label>Rating (optional)</label>
+          <select id="fb-rating">
+            <option value="">No rating</option>
+            <option value="5">5 — Excellent</option>
+            <option value="4">4 — Good</option>
+            <option value="3">3 — Neutral</option>
+            <option value="2">2 — Needs work</option>
+            <option value="1">1 — Poor</option>
+          </select>
+          <button type="submit" class="fb-submit">Submit Feedback</button>
+        </form>
+        <div class="fb-success" id="fb-success">Thank you — your feedback goes directly to our team and Hermes AI. We review everything.</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── Auth ──────────────────────────────────────────────────────────────────────
+function doLogin() {
+  var org = document.getElementById('login-org').value.trim();
+  var code = document.getElementById('login-code').value.trim();
+  var err = document.getElementById('login-err');
+  if (!org || code !== 'carely2026') {
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+  document.getElementById('org-name-display').textContent = org;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('app').style.flexDirection = 'column';
+  initCharts();
+  renderPatients();
+}
+document.getElementById('login-code').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+function doLogout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+
+// ── Tabs ─────────────────────────────────────────────────────────────────────
+function switchTab(id, el) {
+  document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('tab-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+// ── Charts ───────────────────────────────────────────────────────────────────
+function initCharts() {
+  // 7-day trend
+  var days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  var vals = [79, 82, 80, 86, 88, 84, 87];
+  var html = '';
+  for (var i = 0; i < days.length; i++) {
+    html += '<div class="bar-col"><div class="bar" style="height:' + (vals[i] - 60) + 'px;"></div><div class="bar-label">' + days[i] + '</div></div>';
+  }
+  document.getElementById('trend-bars').innerHTML = html;
+
+  // 30-day monthly bars
+  var monthly = '';
+  var base = [74,76,78,75,80,82,79,83,81,84,86,82,85,84,87,83,88,85,89,86,84,87,85,88,86,84,87,85,84,87];
+  for (var j = 0; j < 30; j++) {
+    var h = Math.round((base[j] - 65) * 1.2);
+    monthly += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;"><div style="width:100%;height:' + h + 'px;background:linear-gradient(180deg,#02C39A,#028090);border-radius:2px 2px 0 0;"></div></div>';
+  }
+  document.getElementById('monthly-bars').innerHTML = monthly;
+
+  // Day of week bars
+  var dow = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  var dowVals = [88, 86, 83, 87, 85, 76, 74];
+  var dowHtml = '';
+  for (var k = 0; k < dow.length; k++) {
+    dowHtml += '<div class="day-col"><div class="day-bar" style="height:' + Math.round((dowVals[k]-60)*1.4) + 'px;"></div><div class="day-label">' + dow[k] + '</div></div>';
+  }
+  document.getElementById('day-bars').innerHTML = dowHtml;
+}
+
+// ── Patients ─────────────────────────────────────────────────────────────────
+var PATIENTS = [
+  { name:'Margaret K.', age:81, condition:'Type 2 Diabetes', adh:41, streak:2, status:'atrisk', last:'2h ago' },
+  { name:'Robert H.', age:74, condition:'Hypertension', adh:61, streak:5, status:'moderate', last:'4h ago' },
+  { name:'Dorothy P.', age:79, condition:'Atrial Fibrillation', adh:38, streak:0, status:'atrisk', last:'4d ago' },
+  { name:'James W.', age:68, condition:'Hypertension', adh:92, streak:41, status:'high', last:'1h ago' },
+  { name:'Helen M.', age:82, condition:'Osteoporosis', adh:88, streak:29, status:'high', last:'30m ago' },
+  { name:'Frank B.', age:71, condition:'COPD', adh:75, streak:14, status:'moderate', last:'3h ago' },
+  { name:'Gloria S.', age:76, condition:'Heart Failure', adh:95, streak:62, status:'high', last:'45m ago' },
+  { name:'Charles N.', age:69, condition:'Type 2 Diabetes', adh:83, streak:18, status:'high', last:'2h ago' },
+  { name:'Irene T.', age:84, condition:'Parkinson\'s', adh:89, streak:35, status:'high', last:'1h ago' },
+  { name:'Harold J.', age:72, condition:'Hypothyroidism', adh:67, streak:8, status:'moderate', last:'6h ago' },
+];
+function renderPatients(filtered) {
+  var data = filtered || PATIENTS;
+  var tbody = document.getElementById('pt-tbody');
+  var html = '';
+  for (var i = 0; i < data.length; i++) {
+    var p = data[i];
+    var color = p.adh >= 80 ? '#38a169' : p.adh >= 60 ? '#dd6b20' : '#e53e3e';
+    var pill = p.status === 'high' ? '<span class="status-pill pill-green">On Track</span>' :
+               p.status === 'moderate' ? '<span class="status-pill pill-orange">Moderate</span>' :
+               '<span class="status-pill pill-red">At Risk</span>';
+    html += '<tr><td>' + p.name + '</td><td>' + p.age + '</td><td>' + p.condition + '</td>';
+    html += '<td><div class="adh-bar-wrap"><div class="adh-bar-track"><div class="adh-bar-fill" style="width:' + p.adh + '%;background:' + color + ';height:100%;border-radius:3px;"></div></div><span style="font-size:13px;font-weight:700;color:' + color + ';">' + p.adh + '%</span></div></td>';
+    html += '<td>' + p.streak + 'd</td><td>' + pill + '</td><td style="color:var(--muted);">' + p.last + '</td></tr>';
+  }
+  tbody.innerHTML = html;
+}
+function filterPatients() {
+  var q = document.getElementById('pt-search').value.toLowerCase();
+  var f = document.getElementById('pt-filter').value;
+  var filtered = PATIENTS.filter(function(p) {
+    var matchQ = !q || p.name.toLowerCase().includes(q) || p.condition.toLowerCase().includes(q);
+    var matchF = f === 'all' || p.status === f;
+    return matchQ && matchF;
+  });
+  renderPatients(filtered);
+}
+function exportCSV() {
+  var rows = [['Name','Age','Condition','Adherence%','Streak','Status','LastDose']];
+  PATIENTS.forEach(function(p) { rows.push([p.name,p.age,p.condition,p.adh,p.streak,p.status,p.last]); });
+  var csv = rows.map(function(r) { return r.join(','); }).join('\n');
+  var a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'carely-patients.csv';
+  a.click();
+}
+
+// ── Reports ───────────────────────────────────────────────────────────────────
+function selectReport(el) {
+  document.querySelectorAll('.report-opt').forEach(function(r) { r.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+function generateReport() {
+  var s = document.getElementById('report-status');
+  s.style.display = 'block';
+  s.textContent = 'Generating report...';
+  setTimeout(function() { s.textContent = 'Report generated. Download would start in production.'; }, 1500);
+}
+
+// ── Feedback ─────────────────────────────────────────────────────────────────
+function submitFeedback(e) {
+  e.preventDefault();
+  var body = {
+    source: 'b2b',
+    category: document.getElementById('fb-cat').value,
+    message: document.getElementById('fb-msg').value,
+    orgName: document.getElementById('fb-org').value,
+    email: document.getElementById('fb-email').value,
+    rating: document.getElementById('fb-rating').value ? parseInt(document.getElementById('fb-rating').value) : undefined,
+  };
+  var apiBase = 'https://carely-backend-production.up.railway.app';
+  fetch(apiBase + '/feedback', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).catch(function() {});
+  document.getElementById('fb-form').style.display = 'none';
+  document.getElementById('fb-success').style.display = 'block';
+}
+</script>
+</body>
+</html>
