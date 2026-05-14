@@ -339,23 +339,33 @@
     .midcta-light .midcta-btn { background: var(--t3); }
     .midcta-light .midcta-btn:hover { background: var(--t4); }
 
-    /* ── DEMO ── */
+    /* ── DEMO / SLIDESHOW ── */
     .demo { padding: 88px 24px; background: var(--w); }
     .demo-inner { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
-    .sec-tag { font-size: 0.7rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: var(--t2); display: block; margin-bottom: 12px; }
-    .demo-copy h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 3.5vw, 3rem); letter-spacing: -0.025em; color: var(--ink); margin-bottom: 16px; line-height: 1.08; }
-    .demo-copy p { font-size: 1rem; color: var(--inkm); line-height: 1.78; margin-bottom: 24px; }
-    .demo-bullets { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
-    .demo-b { display: flex; align-items: center; gap: 10px; font-size: 0.92rem; color: var(--inkm); }
-    .demo-b-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--t2); flex-shrink: 0; }
-    /* Demo Phone */
-    .demo-screens { position: relative; display: flex; justify-content: center; align-items: flex-start; }
-    .demo-phone { width: 240px; background: #0a1a22; border-radius: 40px; padding: 12px; box-shadow: 0 40px 80px rgba(13,43,56,0.35), 0 0 0 1.5px rgba(68,171,173,0.15), inset 0 1px 0 rgba(255,255,255,0.08); flex-shrink: 0; }
+    .slideshow-wrap { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .slide-tabs { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+    .slide-tab { padding: 7px 14px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; border: 1.5px solid var(--bor); background: #fff; color: var(--inkm); cursor: pointer; transition: all 0.18s; white-space: nowrap; }
+    .slide-tab:hover { border-color: var(--t2); color: var(--t2); }
+    .slide-tab.active { background: var(--t3); border-color: var(--t3); color: #fff; }
+    .slide-phone-wrap { position: relative; width: 260px; }
+    .demo-phone { width: 260px; background: #0a1a22; border-radius: 40px; padding: 12px; box-shadow: 0 40px 80px rgba(13,43,56,0.35), 0 0 0 1.5px rgba(68,171,173,0.15), inset 0 1px 0 rgba(255,255,255,0.08); }
     .phone-notch-bar { width: 60px; height: 5px; background: #1a2e38; border-radius: 3px; margin: 0 auto 8px; }
-    .demo-phone-screen { border-radius: 26px; overflow: hidden; background: var(--off); }
+    .demo-phone-screen { border-radius: 26px; overflow: hidden; background: var(--off); min-height: 420px; }
+    .slide-panel { display: none; animation: slideIn 0.35s ease; }
+    .slide-panel.active { display: block; }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .slide-dots { display: flex; gap: 6px; }
+    .slide-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bor); cursor: pointer; transition: all 0.18s; }
+    .slide-dot.active { background: var(--t3); width: 22px; border-radius: 4px; }
+    .slide-caption { font-size: 0.82rem; color: var(--inkm); text-align: center; max-width: 260px; line-height: 1.55; min-height: 36px; }
+    /* Screen content styles */
     .s-dash-header { background: var(--dark-grad); padding: 14px 14px 18px; }
     .s-dash-time { font-size: 0.6rem; color: rgba(255,255,255,0.65); margin-bottom: 3px; }
     .s-dash-greet { font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: #fff; }
+    .s-stat-row { display: flex; gap: 6px; margin-top: 10px; }
+    .s-stat { flex: 1; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 6px; text-align: center; }
+    .s-stat-n { font-size: 0.85rem; font-weight: 900; color: #fff; }
+    .s-stat-l { font-size: 0.5rem; color: rgba(255,255,255,0.6); }
     .s-dash-body { padding: 12px; }
     .s-med-card { background: #fff; border-radius: 10px; padding: 9px 11px; margin-bottom: 7px; display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 6px rgba(13,43,56,0.07); border: 1px solid var(--bor); }
     .s-med-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
@@ -367,16 +377,51 @@
     .s-elara-bubble { background: rgba(30,96,112,0.07); border: 1px solid rgba(68,171,173,0.2); border-radius: 10px 10px 10px 3px; padding: 8px 10px; }
     .s-elara-from { font-size: 0.52rem; font-weight: 900; letter-spacing: 0.07em; text-transform: uppercase; color: var(--t2); margin-bottom: 2px; }
     .s-elara-text { font-size: 0.64rem; color: var(--inkm); line-height: 1.5; }
-    /* Floating chat */
-    .demo-chat-float { position: absolute; right: -20px; bottom: 30px; width: 210px; background: #fff; border: 1.5px solid var(--bor); border-radius: 16px; overflow: hidden; box-shadow: 0 16px 48px rgba(13,43,56,0.18); }
-    @media(max-width:840px){
-      .demo-inner { grid-template-columns: 1fr; }
-      .demo-screens { flex-direction: column; align-items: center; }
-      .demo-phone { width: 100%; max-width: 300px; }
-      .demo-chat-float { position: static; width: 100%; max-width: 300px; margin-top: 16px; border-radius: 16px; }
-    }
+    /* Elara chat screen */
+    .s-chat-header { background: var(--dark-grad); padding: 14px; display: flex; align-items: center; gap: 10px; }
+    .s-chat-av { width: 30px; height: 30px; border-radius: 50%; background: var(--t2); color: #fff; font-size: 0.75rem; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .s-chat-name { font-size: 0.82rem; font-weight: 700; color: #fff; }
+    .s-chat-sub { font-size: 0.55rem; color: rgba(255,255,255,0.6); }
+    .s-chat-body { padding: 12px; display: flex; flex-direction: column; gap: 7px; background: #F4F7F9; min-height: 340px; }
+    .s-msg { padding: 8px 11px; border-radius: 12px; font-size: 0.68rem; line-height: 1.5; max-width: 85%; }
+    .s-msg.bot { background: #fff; color: var(--ink); border: 1px solid var(--bor); border-bottom-left-radius: 3px; align-self: flex-start; }
+    .s-msg.usr { background: var(--t3); color: #fff; border-bottom-right-radius: 3px; align-self: flex-end; }
+    /* Progress screen */
+    .s-prog-header { background: var(--dark-grad); padding: 14px; }
+    .s-prog-title { font-size: 0.85rem; font-weight: 900; color: #fff; margin-bottom: 4px; }
+    .s-prog-sub { font-size: 0.58rem; color: rgba(255,255,255,0.65); }
+    .s-ring-wrap { display: flex; flex-direction: column; align-items: center; padding: 14px; background: #F4F7F9; }
+    .s-ring { width: 90px; height: 90px; border-radius: 50%; border: 9px solid #e0e0e0; border-top-color: var(--t1); border-right-color: var(--t1); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+    .s-ring-pct { font-size: 1.1rem; font-weight: 900; color: var(--t2); }
+    .s-streak-row { display: flex; gap: 8px; width: 100%; margin-bottom: 10px; }
+    .s-streak-card { flex: 1; background: #fff; border-radius: 10px; padding: 8px; text-align: center; border: 1px solid var(--bor); }
+    .s-streak-val { font-size: 1rem; font-weight: 900; color: var(--ink); }
+    .s-streak-lab { font-size: 0.52rem; color: var(--inks); }
+    .s-badge-row { display: flex; gap: 6px; justify-content: center; }
+    .s-badge { font-size: 1.2rem; width: 34px; height: 34px; background: var(--t1); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .s-badge.dim { background: #e0e0e0; filter: grayscale(1); opacity: 0.5; }
+    /* Vitals screen */
+    .s-vit-header { background: var(--dark-grad); padding: 14px; }
+    .s-vit-title { font-size: 0.85rem; font-weight: 900; color: #fff; }
+    .s-vit-body { padding: 12px; background: #F4F7F9; }
+    .s-vit-card { background: #fff; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; border: 1px solid var(--bor); }
+    .s-vit-label { font-size: 0.55rem; font-weight: 800; color: var(--t2); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+    .s-vit-val { font-size: 1.1rem; font-weight: 900; color: var(--ink); }
+    .s-vit-unit { font-size: 0.6rem; color: var(--inks); margin-left: 3px; }
+    .s-vit-trend { font-size: 0.55rem; color: var(--t1); margin-top: 2px; }
+    .s-watch-banner { background: rgba(114,46,209,0.08); border: 1px solid rgba(114,46,209,0.2); border-radius: 10px; padding: 8px 10px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+    .s-watch-text { font-size: 0.6rem; color: #531DAB; font-weight: 600; }
+    /* Caregiver screen */
+    .s-care-header { background: var(--dark-grad); padding: 14px; }
+    .s-care-title { font-size: 0.85rem; font-weight: 900; color: #fff; }
+    .s-care-sub { font-size: 0.58rem; color: rgba(255,255,255,0.65); margin-top: 2px; }
+    .s-care-body { padding: 12px; background: #F4F7F9; }
+    .s-person-card { background: #fff; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; border: 1px solid var(--bor); display: flex; align-items: center; gap: 8px; }
+    .s-person-av { width: 28px; height: 28px; border-radius: 50%; background: var(--t3); color: #fff; font-size: 0.65rem; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .s-person-name { font-size: 0.68rem; font-weight: 700; color: var(--ink); }
+    .s-person-status { font-size: 0.57rem; color: var(--inks); }
+    .s-person-dot { width: 7px; height: 7px; border-radius: 50%; margin-left: auto; flex-shrink: 0; }
     /* Chat Preview */
-    .elara-chat-preview { background: #fff; border: 1.5px solid var(--bor); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(13,43,56,0.12); }
     .ecp-header { background: var(--dark-grad); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
     .ecp-av { width: 36px; height: 36px; border-radius: 50%; background: var(--t2); color: #fff; font-weight: 900; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .ecp-name { font-size: 0.9rem; font-weight: 700; color: #fff; }
@@ -386,12 +431,10 @@
     .ecp-msg { padding: 10px 14px; border-radius: 14px; font-size: 0.85rem; line-height: 1.55; max-width: 88%; }
     .ecp-msg.bot { background: #fff; color: var(--ink); border: 1px solid var(--bor); border-bottom-left-radius: 4px; align-self: flex-start; box-shadow: 0 1px 4px rgba(13,43,56,0.06); }
     .ecp-msg.usr { background: var(--t3); color: #fff; border-bottom-right-radius: 4px; align-self: flex-end; }
-    .ecp-ts { font-size: 0.65rem; color: var(--inks); }
-    .ecp-alert-row { display: flex; flex-direction: column; gap: 6px; padding: 14px 20px; background: #fff; border-top: 1px solid var(--bor); }
-    .ecp-alert { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; font-weight: 600; padding: 7px 12px; border-radius: 8px; }
-    .ecp-alert.red { background: rgba(229,85,85,0.07); color: #c44; }
-    .ecp-alert.green { background: rgba(68,171,173,0.08); color: var(--t2); }
-    @media(max-width:840px){ .demo-inner { grid-template-columns: 1fr; } }
+    @media(max-width:900px){
+      .demo-inner { grid-template-columns: 1fr; }
+      .slideshow-wrap { width: 100%; }
+    }
 
     /* ── FEATURES ── */
     .features { background: var(--dark-grad); padding: 88px 24px; position: relative; overflow: hidden; }
@@ -414,6 +457,7 @@
     .feat-ico { font-size: 1.1rem; line-height: 1; flex-shrink: 0; }
     .feat h3 { font-size: 0.88rem; font-weight: 700; color: #fff; margin: 0; }
     .feat p { display: none; }
+    .feat-sub { display: none; }
 
     /* ── WHO IT'S FOR ── */
     .wifor { padding: 88px 24px; background: var(--w); }
@@ -824,46 +868,165 @@
     <div class="demo-copy reveal">
       <span class="sec-tag">See it in action</span>
       <h2 class="sec-h">Your family's health,<br>visible every day.</h2>
-      <p>Elara checks in every morning, logs doses, spots patterns, and keeps your whole family informed — automatically.</p>
+      <p>Elara is always there — greeting you in the morning, logging doses, watching vitals, and keeping your whole family informed automatically.</p>
       <div class="demo-bullets">
-        <div class="demo-b"><span class="demo-b-dot"></span>Daily medication dashboard for your loved one</div>
-        <div class="demo-b"><span class="demo-b-dot"></span>Elara messages — real conversations, not just pings</div>
-        <div class="demo-b"><span class="demo-b-dot"></span>Missed dose? Whole family gets alerted instantly</div>
-        <div class="demo-b"><span class="demo-b-dot"></span>Weekly reports sent to connected doctors</div>
+        <div class="demo-b"><span class="demo-b-dot"></span>Elara greets and checks in every single morning</div>
+        <div class="demo-b"><span class="demo-b-dot"></span>Real-time medication dashboard + streaks & badges</div>
+        <div class="demo-b"><span class="demo-b-dot"></span>Vitals tracking with Apple Watch + wearable sync</div>
+        <div class="demo-b"><span class="demo-b-dot"></span>Missed dose? Family alerted. Doctor reports auto-sent.</div>
+        <div class="demo-b"><span class="demo-b-dot"></span>Caregivers see a live view — without being in the way</div>
       </div>
       <button class="hero-cta" onclick="goto('founding')" style="margin-top:28px">Get Early Access →</button>
     </div>
-    <div class="demo-screens reveal" style="transition-delay:0.15s">
-      <!-- Phone with dashboard -->
-      <div class="demo-phone">
-        <div class="phone-notch-bar"></div>
-        <div class="demo-phone-screen">
-          <div class="s-dash-header">
-            <div class="s-dash-time">Monday, May 30 · 9:41 AM</div>
-            <div class="s-dash-greet">Good morning, Margaret 👋</div>
-          </div>
-          <div class="s-dash-body">
-            <div style="font-size:0.6rem;font-weight:900;letter-spacing:0.07em;text-transform:uppercase;color:var(--inks);margin-bottom:8px;">Today's Medications</div>
-            <div class="s-med-card"><div class="s-med-dot green"></div><div><div class="s-med-name">Blood Pressure Med</div><div class="s-med-time">8:00 AM · Confirmed ✓</div></div><span class="s-med-status green">Taken</span></div>
-            <div class="s-med-card"><div class="s-med-dot amber"></div><div><div class="s-med-name">Diabetes Med</div><div class="s-med-time">12:00 PM · Upcoming</div></div><span class="s-med-status amber">Due soon</span></div>
-            <div class="s-med-card"><div class="s-med-dot red"></div><div><div class="s-med-name">Cholesterol Med</div><div class="s-med-time">Yesterday 9:00 PM</div></div><span class="s-med-status red">Missed</span></div>
-            <div class="s-elara-bubble" style="margin-top:8px"><div class="s-elara-from">Elara</div><div class="s-elara-text">Good morning! I noticed a missed dose last night — Sarah has been notified. How are you feeling today?</div></div>
+    <div class="slideshow-wrap reveal" style="transition-delay:0.15s">
+      <!-- Tab buttons -->
+      <div class="slide-tabs">
+        <button class="slide-tab active" onclick="showSlide(0)">🏠 Dashboard</button>
+        <button class="slide-tab" onclick="showSlide(1)">🤖 Elara Chat</button>
+        <button class="slide-tab" onclick="showSlide(2)">📈 Progress</button>
+        <button class="slide-tab" onclick="showSlide(3)">❤️ Vitals</button>
+        <button class="slide-tab" onclick="showSlide(4)">👨‍👩‍👧 Care Team</button>
+      </div>
+
+      <!-- Phone frame -->
+      <div class="slide-phone-wrap">
+        <div class="demo-phone">
+          <div class="phone-notch-bar"></div>
+          <div class="demo-phone-screen">
+
+            <!-- Slide 0: Dashboard -->
+            <div class="slide-panel active" id="slide-0">
+              <div class="s-dash-header">
+                <div class="s-dash-time">Thursday, May 30 · 8:42 AM</div>
+                <div class="s-dash-greet">Good morning, Margaret 👋</div>
+                <div class="s-stat-row">
+                  <div class="s-stat"><div class="s-stat-n">2</div><div class="s-stat-l">Taken</div></div>
+                  <div class="s-stat"><div class="s-stat-n">1</div><div class="s-stat-l">Pending</div></div>
+                  <div class="s-stat"><div class="s-stat-n">87%</div><div class="s-stat-l">Today</div></div>
+                </div>
+              </div>
+              <div class="s-dash-body">
+                <div style="font-size:0.55rem;font-weight:900;letter-spacing:0.07em;text-transform:uppercase;color:var(--inks);margin-bottom:8px;">Today's Schedule</div>
+                <div class="s-med-card"><div class="s-med-dot green"></div><div><div class="s-med-name">Lisinopril</div><div class="s-med-time">8:00 AM · Confirmed ✓</div></div><span class="s-med-status green">Taken</span></div>
+                <div class="s-med-card"><div class="s-med-dot amber"></div><div><div class="s-med-name">Metformin</div><div class="s-med-time">12:00 PM · Upcoming</div></div><span class="s-med-status amber">Due soon</span></div>
+                <div class="s-med-card"><div class="s-med-dot green"></div><div><div class="s-med-name">Vitamin D</div><div class="s-med-time">8:00 AM · Morning</div></div><span class="s-med-status green">Taken</span></div>
+                <div class="s-elara-bubble" style="margin-top:8px"><div class="s-elara-from">Elara</div><div class="s-elara-text">Great start! 2 of 3 done. Your Metformin is due at noon — I'll remind you. How are you feeling? 💙</div></div>
+              </div>
+            </div>
+
+            <!-- Slide 1: Elara Chat -->
+            <div class="slide-panel" id="slide-1">
+              <div class="s-chat-header">
+                <div class="s-chat-av">E</div>
+                <div>
+                  <div class="s-chat-name">Elara · AI Caretaker</div>
+                  <div class="s-chat-sub">● Always available</div>
+                </div>
+              </div>
+              <div class="s-chat-body">
+                <div class="s-msg bot">Good morning Margaret! 🌅 Your blood pressure reading from yesterday looks elevated. How are you feeling today?</div>
+                <div class="s-msg usr">A bit dizzy this morning</div>
+                <div class="s-msg bot">I've logged that. Dizziness + elevated BP can be related. Please sit down and rest. I've noted this in your health log and alerted Sarah. 💙</div>
+                <div class="s-msg usr">Should I take my BP med now?</div>
+                <div class="s-msg bot">Yes, your Lisinopril is scheduled for 8 AM — right on time. Take it with water. If dizziness persists, call Dr. Patel. I've prepared a summary for your next visit.</div>
+              </div>
+            </div>
+
+            <!-- Slide 2: Progress -->
+            <div class="slide-panel" id="slide-2">
+              <div class="s-prog-header">
+                <div class="s-prog-title">Your Progress</div>
+                <div class="s-prog-sub">🔥 23-day streak · 89% this week</div>
+              </div>
+              <div class="s-ring-wrap">
+                <div class="s-ring"><span class="s-ring-pct">89%</span></div>
+                <div class="s-streak-row">
+                  <div class="s-streak-card"><div class="s-streak-val">23</div><div class="s-streak-lab">day streak</div></div>
+                  <div class="s-streak-card"><div class="s-streak-val">142</div><div class="s-streak-lab">doses taken</div></div>
+                  <div class="s-streak-card"><div class="s-streak-val">85%</div><div class="s-streak-lab">last week</div></div>
+                </div>
+                <div style="font-size:0.55rem;font-weight:800;color:var(--inks);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Achievements</div>
+                <div class="s-badge-row">
+                  <div class="s-badge">🌱</div>
+                  <div class="s-badge">⚡</div>
+                  <div class="s-badge">🔥</div>
+                  <div class="s-badge dim">💎</div>
+                  <div class="s-badge dim">🏆</div>
+                </div>
+                <div class="s-elara-bubble" style="margin-top:10px;width:100%"><div class="s-elara-from">Elara insight</div><div class="s-elara-text">You're 4% better than last week — Tuesday is your strongest day. Keep it up!</div></div>
+              </div>
+            </div>
+
+            <!-- Slide 3: Vitals -->
+            <div class="slide-panel" id="slide-3">
+              <div class="s-vit-header">
+                <div class="s-vit-title">Vitals Tracker</div>
+              </div>
+              <div class="s-vit-body">
+                <div class="s-watch-banner">
+                  <span style="font-size:1rem;">⌚</span>
+                  <div class="s-watch-text">Apple Watch synced · 2 min ago · HR: 72 bpm</div>
+                </div>
+                <div class="s-vit-card">
+                  <div class="s-vit-label">❤️ Blood Pressure</div>
+                  <div><span class="s-vit-val">124/78</span><span class="s-vit-unit">mmHg · Morning</span></div>
+                  <div class="s-vit-trend">↓ Improved from 131/82 last week</div>
+                </div>
+                <div class="s-vit-card">
+                  <div class="s-vit-label">🍬 Blood Sugar</div>
+                  <div><span class="s-vit-val">5.8</span><span class="s-vit-unit">mmol/L · After meal</span></div>
+                  <div class="s-vit-trend">✓ Within target range</div>
+                </div>
+                <div class="s-vit-card">
+                  <div class="s-vit-label">🫀 Heart Rate</div>
+                  <div><span class="s-vit-val">72</span><span class="s-vit-unit">bpm · Resting</span></div>
+                  <div class="s-vit-trend">→ Stable over past 7 days</div>
+                </div>
+                <div class="s-elara-bubble"><div class="s-elara-from">Elara</div><div class="s-elara-text">Your BP is trending down — great progress! I'll include this in Friday's report to Dr. Patel.</div></div>
+              </div>
+            </div>
+
+            <!-- Slide 4: Care Team -->
+            <div class="slide-panel" id="slide-4">
+              <div class="s-care-header">
+                <div class="s-care-title">Care Team</div>
+                <div class="s-care-sub">Caregivers · Doctor · Pharmacy</div>
+              </div>
+              <div class="s-care-body">
+                <div style="font-size:0.55rem;font-weight:800;color:var(--inks);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Caregivers</div>
+                <div class="s-person-card">
+                  <div class="s-person-av">SJ</div>
+                  <div><div class="s-person-name">Sarah Johnson</div><div class="s-person-status">Last seen · Today 8:30 AM</div></div>
+                  <div class="s-person-dot" style="background:var(--t1)"></div>
+                </div>
+                <div class="s-person-card">
+                  <div class="s-person-av" style="background:#8B5CF6;">RT</div>
+                  <div><div class="s-person-name">Robert Thompson</div><div class="s-person-status">Active · Gets alerts</div></div>
+                  <div class="s-person-dot" style="background:var(--t1)"></div>
+                </div>
+                <div style="font-size:0.55rem;font-weight:800;color:var(--inks);text-transform:uppercase;letter-spacing:0.07em;margin:8px 0 6px;">Doctor</div>
+                <div class="s-person-card">
+                  <div class="s-person-av" style="background:#028090;">DP</div>
+                  <div><div class="s-person-name">Dr. Patel</div><div class="s-person-status">Weekly reports · Connected ✓</div></div>
+                  <div class="s-person-dot" style="background:var(--t1)"></div>
+                </div>
+                <div class="s-elara-bubble" style="margin-top:8px"><div class="s-elara-from">Elara</div><div class="s-elara-text">Sarah was notified about last night's missed dose. Dr. Patel's weekly report goes out Sunday.</div></div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
-      <!-- Floating chat preview -->
-      <div class="demo-chat-float">
-        <div class="ecp-header" style="padding:12px 16px;border-radius:16px 16px 0 0;">
-          <div class="ecp-av" style="width:28px;height:28px;font-size:0.8rem;">E</div>
-          <div><div class="ecp-name" style="font-size:0.82rem;">Elara</div><div class="ecp-status">● Active</div></div>
-          <div class="ecp-badge">CHAT</div>
-        </div>
-        <div class="ecp-msgs" style="padding:12px;gap:5px;">
-          <div class="ecp-msg bot" style="font-size:0.78rem;padding:8px 11px;">Good morning 🌅 Your Blood Pressure Med is due. How are you feeling?</div>
-          <div class="ecp-msg usr" style="font-size:0.78rem;padding:8px 11px;">A bit dizzy today</div>
-          <div class="ecp-msg bot" style="font-size:0.78rem;padding:8px 11px;">I've logged this and notified Sarah. Please sit if unsteady. 💙</div>
-        </div>
+
+      <!-- Dots -->
+      <div class="slide-dots">
+        <div class="slide-dot active" onclick="showSlide(0)"></div>
+        <div class="slide-dot" onclick="showSlide(1)"></div>
+        <div class="slide-dot" onclick="showSlide(2)"></div>
+        <div class="slide-dot" onclick="showSlide(3)"></div>
+        <div class="slide-dot" onclick="showSlide(4)"></div>
       </div>
+      <p class="slide-caption" id="slide-caption">Elara greets Margaret every morning and tracks her daily medication schedule automatically.</p>
     </div>
   </div>
 </section>
@@ -877,17 +1040,18 @@
       <p class="sec-sub-light reveal" style="transition-delay:0.2s">Elara doesn't just ping — she observes, converses, tracks, alerts, and reports. Available 24/7, without burning out.</p>
     </div>
     <div class="feat-grid">
-      <div class="feat reveal" style="transition-delay:0.05s"><div class="feat-ico">💊</div><h3>Smart Medication Reminders</h3></div>
-      <div class="feat reveal" style="transition-delay:0.08s"><div class="feat-ico">💬</div><h3>Daily AI Check-ins</h3></div>
-      <div class="feat reveal" style="transition-delay:0.11s"><div class="feat-ico">🔔</div><h3>Real-Time Family Alerts</h3></div>
-      <div class="feat reveal" style="transition-delay:0.14s"><div class="feat-ico">📊</div><h3>Health Trend Tracking</h3></div>
-      <div class="feat reveal" style="transition-delay:0.17s"><div class="feat-ico">📄</div><h3>Doctor Reports — Weekly, Bi-Weekly or Monthly</h3></div>
-      <div class="feat reveal" style="transition-delay:0.2s"><div class="feat-ico">📋</div><h3>Health Summary Reports</h3></div>
-      <div class="feat reveal" style="transition-delay:0.23s"><div class="feat-ico">🌐</div><h3>10 Languages</h3></div>
-      <div class="feat reveal" style="transition-delay:0.26s"><div class="feat-ico">🔒</div><h3>End-to-End Encrypted</h3></div>
-      <div class="feat reveal" style="transition-delay:0.32s"><div class="feat-ico">👨‍👩‍👧</div><h3>Multi-Family Member Access</h3></div>
-      <div class="feat reveal" style="transition-delay:0.35s"><div class="feat-ico">🩺</div><h3>Doctor Report Sharing</h3></div>
-      <div class="feat reveal" style="transition-delay:0.38s"><div class="feat-ico">🌍</div><h3>Works Anywhere in the World</h3></div>
+      <div class="feat reveal" style="transition-delay:0.05s"><div class="feat-ico">💊</div><h3>Smart Medication Reminders</h3><p class="feat-sub">Lock screen confirmations — no need to open the app</p></div>
+      <div class="feat reveal" style="transition-delay:0.08s"><div class="feat-ico">💬</div><h3>Daily AI Check-ins with Elara</h3><p class="feat-sub">Conversational, warm, and health-aware every morning</p></div>
+      <div class="feat reveal" style="transition-delay:0.11s"><div class="feat-ico">🔔</div><h3>Real-Time Family Alerts</h3><p class="feat-sub">Instant notification if a dose is missed or something's off</p></div>
+      <div class="feat reveal" style="transition-delay:0.14s"><div class="feat-ico">❤️</div><h3>Vitals Tracking</h3><p class="feat-sub">Blood pressure, heart rate, weight, glucose — all in one place</p></div>
+      <div class="feat reveal" style="transition-delay:0.17s"><div class="feat-ico">📄</div><h3>Doctor Reports — Weekly, Bi-Weekly or Monthly</h3><p class="feat-sub">Auto-generated, shareable as PDF or email</p></div>
+      <div class="feat reveal" style="transition-delay:0.2s"><div class="feat-ico">🔥</div><h3>Streak & Badge System</h3><p class="feat-sub">Rewards based on consistency — not how many pills you take</p></div>
+      <div class="feat reveal" style="transition-delay:0.23s"><div class="feat-ico">🏆</div><h3>Health League</h3><p class="feat-sub">Compete with family and friends on consistency streaks</p></div>
+      <div class="feat reveal" style="transition-delay:0.26s"><div class="feat-ico">👁️</div><h3>Family Dashboard</h3><p class="feat-sub">Caregivers see a real-time view of a loved one's doses and streak</p></div>
+      <div class="feat reveal" style="transition-delay:0.29s"><div class="feat-ico">🏥</div><h3>Caregiver Connect Code</h3><p class="feat-sub">Share a 6-digit code — they see your schedule, get weekly reports</p></div>
+      <div class="feat reveal" style="transition-delay:0.32s"><div class="feat-ico">📊</div><h3>Per-Medicine Analytics</h3><p class="feat-sub">See adherence breakdown per medication, weekly and monthly</p></div>
+      <div class="feat reveal" style="transition-delay:0.35s"><div class="feat-ico">🌐</div><h3>10 Languages</h3><p class="feat-sub">English, French, Spanish, Hindi, Punjabi, Arabic, and more</p></div>
+      <div class="feat reveal" style="transition-delay:0.38s"><div class="feat-ico">🔒</div><h3>End-to-End Encrypted</h3><p class="feat-sub">Your health data is never sold — you own it, delete it anytime</p></div>
     </div>
   </div>
 </section>
@@ -962,9 +1126,11 @@
           <tr><td>Medication reminders</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk">✓</span></td><td><span class="chk-partial">Sometimes</span></td></tr>
           <tr><td>Daily conversational check-ins</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-partial">If available</span></td></tr>
           <tr><td>Instant family alerts</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-partial">Manually</span></td></tr>
-          <tr><td>Health trend tracking</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-no">✗</span></td></tr>
+          <tr><td>Vitals tracking (BP, HR, weight, glucose)</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-partial">Separately</span></td></tr>
+          <tr><td>Auto doctor reports (PDF + email)</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-no">✗</span></td></tr>
+          <tr><td>Streak badges &amp; Health League</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-no">✗</span></td></tr>
+          <tr><td>Caregiver real-time dashboard</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-partial">In person</span></td></tr>
           <tr><td>Drug interaction alerts</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-no">✗</span></td></tr>
-          <tr><td>Auto doctor reports</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td><td><span class="chk-no">✗</span></td></tr>
           <tr><td>Available 24/7</td><td class="td-carely"><span class="chk">✓</span></td><td><span class="chk">✓</span></td><td><span class="chk-no">✗</span></td></tr>
           <tr><td>Monthly cost</td><td class="td-carely" style="font-weight:900;color:var(--t2) !important">from $5/mo</td><td>$0–20/mo</td><td>$1,500–4,000/mo</td></tr>
         </tbody>
@@ -1180,7 +1346,7 @@
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">When does the app launch?<span class="faq-arr">+</span></button><div class="faq-a"><p>Carely launches May 30, 2026 for iOS and Android. Founding members get early access before the public launch and their rate locked before prices go up.</p></div></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I cancel anytime?<span class="faq-arr">+</span></button><div class="faq-a"><p>Yes — no contracts, no lock-ins, no cancellation fees. Cancel from inside the app at any time or email hello@carely.fit and we'll handle it within 24 hours.</p></div></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is my family's health data private?<span class="faq-arr">+</span></button><div class="faq-a"><p>Absolutely. All health data is encrypted in transit and at rest. We never sell personal data. You control exactly who can see what — family members only see what you grant access to.</p></div></div>
-      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What health data does Elara track?<span class="faq-arr">+</span></button><div class="faq-a"><p>Elara tracks medication adherence (which doses were taken, when, and any missed doses), daily mood and wellness check-ins, and any symptoms reported during conversations. Weekly summaries are automatically sent to any connected doctor.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What health data does Elara track?<span class="faq-arr">+</span></button><div class="faq-a"><p>Elara tracks medication adherence (doses taken, skipped, or missed), daily mood and wellness check-ins, vitals (blood pressure, heart rate, weight, glucose), and any symptoms reported during conversations. Your consistency streak and per-medicine adherence are tracked in real time. Weekly summaries and doctor-ready PDF reports are generated automatically and can be shared with any connected doctor or caregiver.</p></div></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Who is Carely for?<span class="faq-arr">+</span></button><div class="faq-a"><p>Carely is for anyone managing medications — elderly people living independently, adult caregivers watching a parent from a distance, or someone managing their own chronic condition. If missing a dose matters, Elara is for you.</p></div></div>
     </div>
   </div>
@@ -1250,6 +1416,29 @@
 <script>
 /* ── Nav scroll ── */
 function goto(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
+
+/* ── Slideshow ── */
+const SLIDE_CAPTIONS = [
+  'Elara greets Margaret every morning and tracks her daily medication schedule automatically.',
+  'Elara holds real conversations — answering health questions, logging symptoms, and alerting family when needed.',
+  'Streaks, badges, and predictive insights keep adherence high and make health feel rewarding.',
+  'Vitals sync from Apple Watch automatically. Elara spots trends before your next doctor visit.',
+  'Caregivers and doctors stay connected through Elara — without being intrusive or overwhelming.',
+];
+let slideIndex = 0;
+let slideTimer = null;
+function showSlide(i) {
+  clearInterval(slideTimer);
+  document.querySelectorAll('.slide-panel').forEach((p,j) => p.classList.toggle('active', j===i));
+  document.querySelectorAll('.slide-tab').forEach((t,j) => t.classList.toggle('active', j===i));
+  document.querySelectorAll('.slide-dot').forEach((d,j) => d.classList.toggle('active', j===i));
+  document.getElementById('slide-caption').textContent = SLIDE_CAPTIONS[i];
+  slideIndex = i;
+  slideTimer = setInterval(() => showSlide((slideIndex + 1) % 5), 5000);
+}
+document.addEventListener('DOMContentLoaded', () => {
+  slideTimer = setInterval(() => showSlide((slideIndex + 1) % 5), 5000);
+});
 window.addEventListener('scroll', () => document.getElementById('navWrap').classList.toggle('up', scrollY > 50), {passive:true});
 
 /* ── IntersectionObserver — smooth scroll reveals, zero CDN dependency ── */
