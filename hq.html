@@ -4251,6 +4251,7 @@ var BRAIN_TOPIC_META = {
 };
 
 function loadBrain() {
+  initBrainConstellation();
   var grid   = document.getElementById('brain-grid');
   var status = document.getElementById('brain-status');
   if (!grid) return;
@@ -4263,7 +4264,7 @@ function loadBrain() {
       // Brain returns { entries: [{topic, content, updatedAt, updatedBy, version}] }
       var canvas = document.getElementById('brain-canvas');
       grid.style.display = 'grid';
-      if (_brainAnim) { cancelAnimationFrame(_brainAnim); _brainAnim = null; }
+      // constellation keeps running
 
       var topics = {};
       (d.entries || []).forEach(function(e) { topics[e.topic] = e; });
