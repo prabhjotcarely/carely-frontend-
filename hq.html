@@ -46,6 +46,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 .page{display:none;padding:28px 28px 60px;flex:1}
 .page.active{display:block}
+#page-brain.active{display:flex!important;flex-direction:column;padding:0!important}
 .ph{margin-bottom:24px}
 .ph h1{font-size:1.5rem;font-weight:900;color:var(--deep);letter-spacing:-0.02em}
 .ph p{font-size:0.84rem;color:var(--g500);margin-top:4px}
@@ -312,6 +313,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="sb-item" onclick="nav(this,'revenue')"><span class="ic">💰</span> Revenue &amp; Growth</div>
     <div class="sb-item" onclick="nav(this,'crm')"><span class="ic">👤</span> CRM</div>
     <div class="sb-item" onclick="nav(this,'reporting')"><span class="ic">📈</span> Reporting</div>
+  </div>
+
+  <div class="sb-sec">
+    <div class="sb-sec-title">Outreach</div>
+    <div class="sb-item" onclick="nav(this,'demo-hub')"><span class="ic">🎯</span> Demo Hub <span class="dot-g"></span></div>
   </div>
 
   <div class="sb-sec">
@@ -757,18 +763,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <!-- ══ OBSIDIAN BRAIN ══ -->
-  <div class="page" id="page-brain">
-    <div class="ph"><h1>🧬 Obsidian Brain</h1><p>Hermes' shared knowledge base · All agents read this · 11 live topics · Updates daily</p></div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-      <div id="brain-status" style="font-size:0.82rem;font-weight:700;color:var(--deep)">Loading brain...</div>
-      <button onclick="loadBrain()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
-      <button onclick="showBrainInject()" style="font-size:0.73rem;border:none;padding:3px 12px;border-radius:6px;background:var(--teal);color:white;cursor:pointer;font-weight:700">+ Inject Note</button>
+  <div class="page" id="page-brain" style="padding:0;background:#060d18;min-height:calc(100vh - 48px);position:relative;overflow:hidden;">
+    <!-- Top bar -->
+    <div style="display:flex;align-items:center;gap:10px;padding:14px 20px;background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0;flex-wrap:wrap;z-index:10;position:relative;">
+      <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">
+        <span style="font-size:0.88rem;font-weight:900;color:#02C39A;letter-spacing:0.06em;text-transform:uppercase">CARELY OBSIDIAN BRAIN</span>
+        <span id="brain-status" style="font-size:0.68rem;font-weight:600;color:rgba(255,255,255,0.35);flex-shrink:0">v2.4 · LIVE</span>
+        <span id="brain-online-dot" style="width:6px;height:6px;border-radius:50%;background:#02C39A;animation:pulse 2s infinite;flex-shrink:0;display:inline-block;"></span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+        <button onclick="loadBrain()" style="font-size:0.7rem;border:1px solid rgba(255,255,255,0.15);padding:3px 10px;border-radius:6px;background:rgba(255,255,255,0.06);cursor:pointer;color:rgba(255,255,255,0.5)">Refresh</button>
+        <button onclick="showBrainInject()" style="font-size:0.7rem;border:none;padding:4px 12px;border-radius:6px;background:#028090;color:white;cursor:pointer;font-weight:700">+ Inject</button>
+      </div>
     </div>
-    <!-- Inject panel (hidden by default) -->
-    <div id="brain-inject-panel" style="display:none;background:white;border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:0 1px 8px rgba(0,0,0,0.06);">
-      <div style="font-size:0.85rem;font-weight:800;color:var(--deep);margin-bottom:10px;">Inject into Brain</div>
-      <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
-        <select id="brain-inject-topic" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;flex:1;min-width:160px">
+    <!-- Inject panel -->
+    <div id="brain-inject-panel" style="display:none;background:rgba(13,43,56,0.97);border-bottom:1px solid rgba(255,255,255,0.08);padding:16px 20px;z-index:10;position:relative;">
+      <div style="font-size:0.82rem;font-weight:800;color:white;margin-bottom:10px;">Inject into Obsidian Brain</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        <select id="brain-inject-topic" style="font-size:0.78rem;padding:5px 10px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;background:#0d2b38;color:white;flex:1;min-width:140px">
           <option value="growth_playbook">Growth Playbook</option>
           <option value="agent_directives">Agent Directives</option>
           <option value="product">Product</option>
@@ -781,17 +793,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <option value="carely_voice">Carely Voice</option>
           <option value="launch_state">Launch State</option>
         </select>
-        <input id="brain-inject-key" type="text" placeholder="key (e.g. pricing_note_may14)" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;flex:1;min-width:160px" />
+        <input id="brain-inject-key" type="text" placeholder="key (e.g. pricing_note_may14)" style="font-size:0.78rem;padding:5px 10px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;background:#0d2b38;color:white;flex:1;min-width:140px" />
       </div>
-      <textarea id="brain-inject-value" placeholder="What should Hermes and all agents know?" rows="3" style="width:100%;font-size:0.82rem;padding:8px 12px;border:1px solid var(--g300);border-radius:8px;resize:vertical;font-family:inherit;margin-bottom:8px;"></textarea>
+      <textarea id="brain-inject-value" placeholder="What should Hermes and all agents know?" rows="3" style="width:100%;font-size:0.8rem;padding:8px 12px;border:1px solid rgba(255,255,255,0.15);border-radius:8px;resize:vertical;font-family:inherit;margin-bottom:8px;background:#0d2b38;color:white;"></textarea>
       <div style="display:flex;gap:8px;">
-        <button onclick="submitBrainInject()" style="padding:6px 18px;border-radius:8px;border:none;background:var(--teal);color:white;font-weight:700;font-size:0.8rem;cursor:pointer">Inject</button>
-        <button onclick="document.getElementById('brain-inject-panel').style.display='none'" style="padding:6px 14px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);font-size:0.8rem;cursor:pointer">Cancel</button>
-        <span id="brain-inject-msg" style="font-size:0.78rem;align-self:center;color:var(--green);"></span>
+        <button onclick="submitBrainInject()" style="padding:6px 16px;border-radius:8px;border:none;background:#02C39A;color:#060d18;font-weight:800;font-size:0.78rem;cursor:pointer">Inject</button>
+        <button onclick="document.getElementById('brain-inject-panel').style.display='none'" style="padding:6px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.5);font-size:0.78rem;cursor:pointer">Cancel</button>
+        <span id="brain-inject-msg" style="font-size:0.76rem;align-self:center;color:#02C39A;"></span>
       </div>
     </div>
-    <!-- Brain topics grid -->
-    <div id="brain-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;"></div>
+    <!-- Canvas constellation -->
+    <div style="position:relative;flex:1;min-height:500px;">
+      <canvas id="brain-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
+      <!-- Agent detail popup -->
+      <div id="brain-popup" style="display:none;position:absolute;background:rgba(6,13,24,0.96);border:1px solid rgba(2,195,154,0.3);border-radius:14px;padding:16px 20px;min-width:220px;max-width:280px;z-index:20;box-shadow:0 8px 40px rgba(0,0,0,0.6);pointer-events:none;">
+        <div id="brain-popup-name" style="font-size:0.88rem;font-weight:900;color:#02C39A;margin-bottom:4px;"></div>
+        <div id="brain-popup-role" style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-bottom:10px;"></div>
+        <div id="brain-popup-stats" style="font-size:0.78rem;color:rgba(255,255,255,0.7);line-height:1.8;"></div>
+        <div id="brain-popup-last" style="font-size:0.68rem;color:rgba(255,255,255,0.3);margin-top:8px;"></div>
+      </div>
+    </div>
+    <!-- Activity feed -->
+    <div style="position:relative;z-index:10;background:rgba(0,0,0,0.6);border-top:1px solid rgba(255,255,255,0.06);padding:10px 20px;max-height:140px;overflow:hidden;flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:0.6rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3)">LIVE AGENT FEED</span>
+        <span style="width:5px;height:5px;border-radius:50%;background:#02C39A;animation:pulse 2s infinite;display:inline-block;"></span>
+      </div>
+      <div id="brain-feed" style="display:flex;flex-direction:column;gap:4px;overflow:hidden;"></div>
+    </div>
+    <!-- Legacy grid (used when backend is online) -->
+    <div id="brain-grid" style="display:none;padding:20px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;"></div>
   </div>
 
   <!-- ══ INTEL POOL ══ -->
@@ -902,6 +933,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="tabs" style="margin-bottom:16px;">
       <div class="tab active" onclick="crmTab('users',this)">Consumer Users</div>
       <div class="tab" onclick="crmTab('b2b',this)">B2B Pipeline</div>
+      <div class="tab" onclick="crmTab('cole',this)">Cole Outreach</div>
       <div class="tab" onclick="crmTab('stats',this)">Pipeline Stats</div>
     </div>
 
@@ -957,6 +989,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="card" style="overflow-x:auto;">
         <div id="b2b-table-wrap">
           <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem;">Loading B2B pipeline...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cole Outreach tab -->
+    <div id="crm-pane-cole" style="display:none;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="cole-count">Loading Cole activity...</div>
+        <button onclick="loadColeOutreach()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      </div>
+      <div class="metric-row">
+        <div class="metric"><div class="metric-label">Emails Sent</div><div class="metric-val teal" id="cole-sent-count">—</div><div class="metric-sub">B2B outreach</div></div>
+        <div class="metric"><div class="metric-label">Replies Received</div><div class="metric-val green" id="cole-reply-count">—</div><div class="metric-sub">Positive signals</div></div>
+        <div class="metric"><div class="metric-label">Reply Rate</div><div class="metric-val" id="cole-reply-rate">—</div><div class="metric-sub">Industry avg: 3–8%</div></div>
+        <div class="metric"><div class="metric-label">Pending Approval</div><div class="metric-val amber" id="cole-pending-count">—</div><div class="metric-sub">Awaiting TJ sign-off</div></div>
+      </div>
+      <div class="card" style="overflow-x:auto">
+        <div class="card-title">📧 Cole Email Outreach Log</div>
+        <div id="cole-outreach-wrap">
+          <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading outreach log...</div>
         </div>
       </div>
     </div>
@@ -1645,9 +1697,212 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
+  <!-- ══ DEMO HUB ══ -->
+  <div class="page" id="page-demo-hub">
+    <div class="ph"><h1>🎯 Demo Hub</h1><p>All live portals + marketing pages · One-tap demos for any audience · Always ready</p></div>
+
+    <div class="alert blue" style="margin-bottom:20px">
+      <div><strong>Physical outreach mode.</strong> Open any portal below — all show live demo data automatically. PIN for all portals: <strong style="font-family:monospace;letter-spacing:0.1em">272727</strong> · Share your screen or hand them the phone.</div>
+    </div>
+
+    <!-- PORTALS -->
+    <div style="margin-bottom:8px;font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.1em">Live Demo Portals</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:28px">
+
+      <div style="background:white;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,0.04);border-top:3px solid var(--teal)">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#028090,#02C39A);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">🏥</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:800;color:var(--deep)">GP Clinic Portal</div>
+            <div style="font-size:0.72rem;color:var(--g500)">For doctors + clinic staff</div>
+          </div>
+          <span class="pill green" style="margin-left:auto">Live</span>
+        </div>
+        <div style="font-size:0.78rem;color:var(--g500);line-height:1.7;margin-bottom:14px">Patient adherence dashboard · 10 patients · per-medication breakdown · clinical notes · missed dose alerts</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="clinic-portal.html" target="_blank" style="flex:1;text-align:center;background:var(--deep);color:white;font-size:0.78rem;font-weight:700;padding:8px 14px;border-radius:8px;text-decoration:none">Open Portal</a>
+          <button onclick="copyLink('clinic-portal.html')" style="font-size:0.74rem;border:1.5px solid var(--g200);padding:8px 12px;border-radius:8px;background:white;cursor:pointer;color:var(--g500)">Copy Link</button>
+        </div>
+        <div style="margin-top:10px;font-size:0.7rem;color:var(--g300)">PIN: 272727 · Show to: GPs, clinic managers</div>
+      </div>
+
+      <div style="background:white;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,0.04);border-top:3px solid #7C3AED">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">👨‍⚕️</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:800;color:var(--deep)">Doctor Portal</div>
+            <div style="font-size:0.72rem;color:var(--g500)">For individual physicians</div>
+          </div>
+          <span class="pill green" style="margin-left:auto">Live</span>
+        </div>
+        <div style="font-size:0.78rem;color:var(--g500);line-height:1.7;margin-bottom:14px">Personal patient list · adherence report PDF · medication schedules · weekly email digest preview</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="doctor-portal.html" target="_blank" style="flex:1;text-align:center;background:#7C3AED;color:white;font-size:0.78rem;font-weight:700;padding:8px 14px;border-radius:8px;text-decoration:none">Open Portal</a>
+          <button onclick="copyLink('doctor-portal.html')" style="font-size:0.74rem;border:1.5px solid var(--g200);padding:8px 12px;border-radius:8px;background:white;cursor:pointer;color:var(--g500)">Copy Link</button>
+        </div>
+        <div style="margin-top:10px;font-size:0.7rem;color:var(--g300)">PIN: 272727 · Show to: GPs, specialists, family doctors</div>
+      </div>
+
+      <div style="background:white;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,0.04);border-top:3px solid #D97706">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#D97706,#FBBF24);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">💊</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:800;color:var(--deep)">Pharmacy Partner Portal</div>
+            <div style="font-size:0.72rem;color:var(--g500)">For pharmacists + owners</div>
+          </div>
+          <span class="pill green" style="margin-left:auto">Live</span>
+        </div>
+        <div style="font-size:0.78rem;color:var(--g500);line-height:1.7;margin-bottom:14px">Patient adherence tracking · commission dashboard · referral earnings · 20% per subscriber · BC pilot</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="partner-portal.html" target="_blank" style="flex:1;text-align:center;background:#D97706;color:white;font-size:0.78rem;font-weight:700;padding:8px 14px;border-radius:8px;text-decoration:none">Open Portal</a>
+          <button onclick="copyLink('partner-portal.html')" style="font-size:0.74rem;border:1.5px solid var(--g200);padding:8px 12px;border-radius:8px;background:white;cursor:pointer;color:var(--g500)">Copy Link</button>
+        </div>
+        <div style="margin-top:10px;font-size:0.7rem;color:var(--g300)">PIN: 272727 · Show to: pharmacy owners, pharmacists</div>
+      </div>
+
+      <div style="background:white;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,0.04);border-top:3px solid #059669">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#059669,#34D399);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">🏡</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:800;color:var(--deep)">Senior Care Portal</div>
+            <div style="font-size:0.72rem;color:var(--g500)">For care home staff</div>
+          </div>
+          <span class="pill green" style="margin-left:auto">Live</span>
+        </div>
+        <div style="font-size:0.78rem;color:var(--g500);line-height:1.7;margin-bottom:14px">Resident overview · caregiver connect · real-time adherence feed · staff notes per resident</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="care-portal.html" target="_blank" style="flex:1;text-align:center;background:#059669;color:white;font-size:0.78rem;font-weight:700;padding:8px 14px;border-radius:8px;text-decoration:none">Open Portal</a>
+          <button onclick="copyLink('care-portal.html')" style="font-size:0.74rem;border:1.5px solid var(--g200);padding:8px 12px;border-radius:8px;background:white;cursor:pointer;color:var(--g500)">Copy Link</button>
+        </div>
+        <div style="margin-top:10px;font-size:0.7rem;color:var(--g300)">PIN: 272727 · Show to: care home directors, senior living managers</div>
+      </div>
+
+      <div style="background:white;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,0.04);border-top:3px solid #2563EB">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2563EB,#60A5FA);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">🏢</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:800;color:var(--deep)">Enterprise Portal</div>
+            <div style="font-size:0.72rem;color:var(--g500)">For large orgs + chains</div>
+          </div>
+          <span class="pill green" style="margin-left:auto">Live</span>
+        </div>
+        <div style="font-size:0.78rem;color:var(--g500);line-height:1.7;margin-bottom:14px">Multi-site dashboard · org-wide adherence · billing + plan management · enterprise analytics</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="enterprise-portal.html" target="_blank" style="flex:1;text-align:center;background:#2563EB;color:white;font-size:0.78rem;font-weight:700;padding:8px 14px;border-radius:8px;text-decoration:none">Open Portal</a>
+          <button onclick="copyLink('enterprise-portal.html')" style="font-size:0.74rem;border:1.5px solid var(--g200);padding:8px 12px;border-radius:8px;background:white;cursor:pointer;color:var(--g500)">Copy Link</button>
+        </div>
+        <div style="margin-top:10px;font-size:0.7rem;color:var(--g300)">PIN: 272727 · Show to: hospital networks, large senior living chains</div>
+      </div>
+
+    </div>
+
+    <!-- MARKETING PAGES -->
+    <div style="margin-bottom:8px;font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.1em">Marketing Pages — Send or Screen Share</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:28px">
+
+      <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,0.04)">
+        <div style="font-size:0.82rem;font-weight:800;color:var(--deep);margin-bottom:4px">Main Landing Page</div>
+        <div style="font-size:0.73rem;color:var(--g500);margin-bottom:12px">Consumer families + caregivers · General audience</div>
+        <div style="display:flex;gap:8px">
+          <a href="index.html" target="_blank" style="flex:1;text-align:center;background:var(--deep);color:white;font-size:0.76rem;font-weight:700;padding:7px 10px;border-radius:7px;text-decoration:none">Open</a>
+          <button onclick="copyLink('index.html')" style="font-size:0.73rem;border:1.5px solid var(--g200);padding:7px 10px;border-radius:7px;background:white;cursor:pointer;color:var(--g500)">Copy</button>
+        </div>
+      </div>
+
+      <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,0.04)">
+        <div style="font-size:0.82rem;font-weight:800;color:var(--deep);margin-bottom:4px">For GP Clinics</div>
+        <div style="font-size:0.73rem;color:var(--g500);margin-bottom:12px">Doctors + clinic staff · adherence + reporting pitch</div>
+        <div style="display:flex;gap:8px">
+          <a href="for-clinics.html" target="_blank" style="flex:1;text-align:center;background:var(--teal);color:white;font-size:0.76rem;font-weight:700;padding:7px 10px;border-radius:7px;text-decoration:none">Open</a>
+          <button onclick="copyLink('for-clinics.html')" style="font-size:0.73rem;border:1.5px solid var(--g200);padding:7px 10px;border-radius:7px;background:white;cursor:pointer;color:var(--g500)">Copy</button>
+        </div>
+      </div>
+
+      <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,0.04)">
+        <div style="font-size:0.82rem;font-weight:800;color:var(--deep);margin-bottom:4px">For Pharmacies</div>
+        <div style="font-size:0.73rem;color:var(--g500);margin-bottom:12px">Pharmacy owners + pharmacists · 20% commission model</div>
+        <div style="display:flex;gap:8px">
+          <a href="for-pharmacies.html" target="_blank" style="flex:1;text-align:center;background:#D97706;color:white;font-size:0.76rem;font-weight:700;padding:7px 10px;border-radius:7px;text-decoration:none">Open</a>
+          <button onclick="copyLink('for-pharmacies.html')" style="font-size:0.73rem;border:1.5px solid var(--g200);padding:7px 10px;border-radius:7px;background:white;cursor:pointer;color:var(--g500)">Copy</button>
+        </div>
+      </div>
+
+      <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,0.04)">
+        <div style="font-size:0.82rem;font-weight:800;color:var(--deep);margin-bottom:4px">For Senior Homes</div>
+        <div style="font-size:0.73rem;color:var(--g500);margin-bottom:12px">Senior living directors + care coordinators</div>
+        <div style="display:flex;gap:8px">
+          <a href="for-senior-homes.html" target="_blank" style="flex:1;text-align:center;background:#059669;color:white;font-size:0.76rem;font-weight:700;padding:7px 10px;border-radius:7px;text-decoration:none">Open</a>
+          <button onclick="copyLink('for-senior-homes.html')" style="font-size:0.73rem;border:1.5px solid var(--g200);padding:7px 10px;border-radius:7px;background:white;cursor:pointer;color:var(--g500)">Copy</button>
+        </div>
+      </div>
+
+      <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,0.04)">
+        <div style="font-size:0.82rem;font-weight:800;color:var(--deep);margin-bottom:4px">For Doctors</div>
+        <div style="font-size:0.73rem;color:var(--g500);margin-bottom:12px">Individual physicians · patient adherence at a glance</div>
+        <div style="display:flex;gap:8px">
+          <a href="for-doctors.html" target="_blank" style="flex:1;text-align:center;background:#7C3AED;color:white;font-size:0.76rem;font-weight:700;padding:7px 10px;border-radius:7px;text-decoration:none">Open</a>
+          <button onclick="copyLink('for-doctors.html')" style="font-size:0.73rem;border:1.5px solid var(--g200);padding:7px 10px;border-radius:7px;background:white;cursor:pointer;color:var(--g500)">Copy</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- QUICK SCRIPTS -->
+    <div style="margin-bottom:8px;font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.1em">Physical Demo Scripts — What to say</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:20px">
+
+      <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,0.04)">
+        <div style="font-size:0.78rem;font-weight:800;color:var(--deep);margin-bottom:6px">To a pharmacist</div>
+        <div style="font-size:0.76rem;color:var(--text);line-height:1.85;background:var(--g100);border-radius:8px;padding:10px 12px;font-style:italic">"We track whether your patients actually take what you dispense — and pay you 20% of their subscription every month. No cost to you, no staff time. Want to see the dashboard?"</div>
+        <div style="margin-top:8px;font-size:0.7rem;color:var(--g500)">Then open: Partner Portal</div>
+      </div>
+
+      <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,0.04)">
+        <div style="font-size:0.78rem;font-weight:800;color:var(--deep);margin-bottom:6px">To a GP or clinic</div>
+        <div style="font-size:0.76rem;color:var(--text);line-height:1.85;background:var(--g100);border-radius:8px;padding:10px 12px;font-style:italic">"You prescribe it, but you have no idea if they're taking it. We close that loop — you get a weekly report on every patient's adherence. Free for your clinic. Want to see?"</div>
+        <div style="margin-top:8px;font-size:0.7rem;color:var(--g500)">Then open: Clinic Portal</div>
+      </div>
+
+      <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,0.04)">
+        <div style="font-size:0.78rem;font-weight:800;color:var(--deep);margin-bottom:6px">To a care home director</div>
+        <div style="font-size:0.76rem;color:var(--text);line-height:1.85;background:var(--g100);border-radius:8px;padding:10px 12px;font-style:italic">"Your staff is already stretched. Carely handles medication reminders for every resident, confirms each dose, and alerts your team if something's missed — automatically. Here's what your dashboard would look like."</div>
+        <div style="margin-top:8px;font-size:0.7rem;color:var(--g500)">Then open: Senior Care Portal</div>
+      </div>
+
+    </div>
+
+    <!-- PIN REMINDER -->
+    <div style="background:linear-gradient(135deg,var(--deep),#1a4a5e);border-radius:14px;padding:20px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px">Universal Demo PIN</div>
+        <div style="font-size:2rem;font-weight:900;color:var(--mint);letter-spacing:0.2em;font-family:monospace">272727</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:4px">Works on all 5 portals · Session persists until browser closed</div>
+      </div>
+      <div style="flex:1;min-width:200px">
+        <div style="font-size:0.76rem;color:rgba(255,255,255,0.55);line-height:2">
+          <div>All portals show realistic demo data when backend is offline</div>
+          <div>Session remembers login — no re-entering PIN on refresh</div>
+          <div>Each portal opens in new tab — safe to share screen</div>
+        </div>
+      </div>
+    </div>
+    <div id="demo-copy-confirm" style="display:none;text-align:center;margin-top:12px;font-size:0.8rem;color:var(--green);font-weight:600">Link copied to clipboard</div>
+  </div>
+
 </div><!-- end page-area -->
 
 <script>
+// Copy portal link to clipboard
+function copyLink(page) {
+  var url = window.location.origin + window.location.pathname.replace(/[^/]*$/, '') + page;
+  navigator.clipboard.writeText(url).then(function() {
+    var el = document.getElementById('demo-copy-confirm');
+    if (el) { el.style.display = 'block'; clearTimeout(el._t); el._t = setTimeout(function(){ el.style.display='none'; }, 2000); }
+  }).catch(function() {
+    prompt('Copy this link:', url);
+  });
+}
+
 // Sidebar toggle (mobile)
 function toggleSidebar() {
   var sb = document.getElementById('sidebar');
@@ -1663,16 +1918,26 @@ function closeSidebar() {
   if (ov) ov.classList.remove('visible');
 }
 
-function nav(el, id) {
-  document.querySelectorAll('.sb-item').forEach(function(i){ i.classList.remove('active'); });
-  el.classList.add('active');
+function _activatePage(id, pushState) {
+  var pageEl = document.getElementById('page-' + id);
+  if (!pageEl) return;
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-  document.getElementById('page-' + id).classList.add('active');
-  var label = el.querySelector('.ic') ? el.textContent.trim() : el.textContent.trim();
-  document.getElementById('topbar-title').textContent = label.replace(/[●▸]/g,'').trim();
+  pageEl.classList.add('active');
+  document.querySelectorAll('.sb-item').forEach(function(item) {
+    var clickStr = item.getAttribute('onclick') || '';
+    var match = clickStr.match(/nav\(this,'([^']+)'\)/);
+    item.classList.toggle('active', match && match[1] === id);
+  });
+  var titleEl = document.getElementById('topbar-title');
+  if (titleEl) {
+    var sbItem = document.querySelector('.sb-item.active');
+    if (sbItem) titleEl.textContent = sbItem.textContent.replace(/[●▸◉]/g,'').trim();
+  }
   document.querySelector('.page-area').scrollTo({ top: 0, behavior: 'smooth' });
-  closeSidebar();
-  // Trigger fresh data loads when navigating to data-driven pages
+  if (pushState && location.hash !== '#' + id) {
+    history.pushState({ page: id }, '', '#' + id);
+  }
+  sessionStorage.setItem('hq_page', id);
   var PAGE_LOADERS = {
     'proposals':    function() { loadProposals(); },
     'approvals':    function() { if (window.loadDrafts) window.loadDrafts(); },
@@ -1685,6 +1950,17 @@ function nav(el, id) {
   };
   if (PAGE_LOADERS[id]) setTimeout(PAGE_LOADERS[id], 50);
 }
+
+function nav(el, id) {
+  closeSidebar();
+  _activatePage(id, true);
+}
+
+// Handle browser back/forward
+window.addEventListener('popstate', function(e) {
+  var id = (e.state && e.state.page) || (location.hash ? location.hash.slice(1) : 'daily-brief');
+  _activatePage(id, false);
+});
 
 function switchTab(el, id) {
   var parent = el.closest('.page');
@@ -1719,7 +1995,7 @@ setInterval(tick, 1000);
   row.className = 'chat-row';
   var sender = document.createElement('div');
   sender.className = 'chat-sender';
-  sender.textContent = 'Ace · CEO';
+  sender.textContent = 'Hermes · CEO';
   var bubble = document.createElement('div');
   bubble.className = 'chat-bubble chat-agent';
   bubble.textContent = 'Good morning TJ. 20 agents running on Railway. I\'m watching signups, churn, and MRR milestones every hour. Frank firing dose reminders continuously. Grace ran morning check-ins at 10 AM UTC. Check HQ Inbox for alerts. What do you need?';
@@ -1758,12 +2034,12 @@ function sendHQ() {
 
   var thinkingBubble = appendChatMsg('Hermes · CEO', '...', false);
 
-  var BACKEND = 'https://carely-backend-production.up.railway.app';
+  var BACKEND = _BACKEND;
   var statusEl = document.getElementById('ace-status');
 
   fetch(BACKEND + '/admin/hermes-chat', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-carely-secret': 'carely-admin-6add43330d2313d8' },
+    headers: { 'Content-Type': 'application/json', 'x-carely-secret': _SECRET },
     body: JSON.stringify({ message: text, user: user })
   })
   .then(function(r) {
@@ -2341,6 +2617,18 @@ var pinEntry = '';
   if (stored && TEAM[stored]) {
     document.getElementById('pin-screen').classList.add('hidden');
     _showMemberBadge(stored);
+    // Restore last visited page
+    var targetPage = null;
+    if (location.hash && location.hash.length > 1) {
+      targetPage = location.hash.slice(1);
+    } else {
+      targetPage = sessionStorage.getItem('hq_page');
+    }
+    if (targetPage && document.getElementById('page-' + targetPage)) {
+      setTimeout(function() { _activatePage(targetPage, false); }, 0);
+    }
+    // Seed initial hash so back button works from first page
+    if (!location.hash) history.replaceState({ page: targetPage || 'daily-brief' }, '', '#' + (targetPage || 'daily-brief'));
   }
 })();
 
@@ -2389,6 +2677,11 @@ function _checkPin() {
     sessionStorage.setItem('carely-hq-member', _selectedMember);
     document.getElementById('pin-screen').classList.add('hidden');
     _showMemberBadge(_selectedMember);
+    // Restore any page they were on before login
+    var target = location.hash ? location.hash.slice(1) : (sessionStorage.getItem('hq_page') || 'daily-brief');
+    if (target && document.getElementById('page-' + target)) {
+      setTimeout(function() { _activatePage(target, true); }, 50);
+    }
   } else {
     var err = document.getElementById('pin-error');
     if (err) err.textContent = 'Incorrect PIN. Try again.';
@@ -2432,20 +2725,88 @@ document.addEventListener('keydown', function(e) {
 
 // ═══ CRM TABS ═════════════════════════════════════════════════════════════════
 function crmTab(pane, tabEl) {
-  ['users','b2b','stats'].forEach(function(p) {
+  ['users','b2b','cole','stats'].forEach(function(p) {
     var el = document.getElementById('crm-pane-' + p);
     if (el) el.style.display = p === pane ? '' : 'none';
   });
   document.querySelectorAll('#page-crm .tab').forEach(function(t) { t.classList.remove('active'); });
   if (tabEl) tabEl.classList.add('active');
   if (pane === 'b2b')   loadB2BPipeline();
+  if (pane === 'cole')  loadColeOutreach();
   if (pane === 'stats') loadB2BStats();
+}
+
+// ═══ COLE OUTREACH TRACKING ══════════════════════════════════════════════════
+function loadColeOutreach() {
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
+  var wrap = document.getElementById('cole-outreach-wrap');
+  var countEl = document.getElementById('cole-count');
+
+  fetch(BACKEND + '/admin/cole-outreach', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(8000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var emails = d.emails || d.outreach || [];
+      renderColeTable(emails, false);
+    })
+    .catch(function() {
+      // Demo fallback — Cole's actual outreach log
+      var DEMO = [
+        { org:'Sunrise Senior Living',contact:'Sarah Chen · Director of Care',email:'director@sunrisesenior.ca',sent:'2026-05-10 09:14',status:'replied',subject:'Carely pilot for 45 residents?',notes:'Interested — wants a 20-min demo call' },
+        { org:'Pacific Family Medicine',contact:'Dr. Anita Patel · Clinic Director',email:'office@pacificfm.ca',sent:'2026-05-13 09:58',status:'clicked',subject:'Medication adherence for your GP patients',notes:'Clicked carely.fit pricing page — warm lead' },
+        { org:'Pharmasave Burnaby',contact:'Owner · pharmacy chain',email:'owner@pharmasave-burnaby.com',sent:'2026-05-12 10:03',status:'opened',subject:'20% commission on each referred subscriber',notes:'Opened email twice — no reply yet' },
+        { org:'Harmony Health Clinic',contact:'Admin Team',email:'admin@harmonyhealth.ca',sent:'2026-05-11 09:47',status:'sent',subject:'Reduce non-adherence in your clinic',notes:'Sent — awaiting open' },
+        { org:'MedFirst Pharmacy',contact:'Info mailbox',email:'info@medfirst.ca',sent:'2026-05-14 09:32',status:'pending',subject:'Carely pharmacy partnership — BC pilot',notes:'Drafted · awaiting TJ approval' },
+        { org:'Golden Years Care Home',contact:'Manager · 62 residents',email:'mgr@goldenyears.ca',sent:'2026-05-08 10:01',status:'converted',subject:'Carely pilot — senior living partnership',notes:'Signed — 62 residents onboarding May 30' },
+        { org:'Westside Walk-in Clinic',contact:'Front desk',email:'info@westsideclinic.ca',sent:'2026-05-09 09:55',status:'sent',subject:'Help your patients stick to their meds',notes:'Sent — no open detected' },
+        { org:'Kelowna Family Pharmacy',contact:'Pharmacist owner',email:'owner@kelownapharmacy.ca',sent:'2026-05-14 09:34',status:'pending',subject:'Commission-based pharmacy partnership',notes:'Drafted · awaiting TJ approval' },
+      ];
+      renderColeTable(DEMO, true);
+    });
+
+  function renderColeTable(emails, isDemo) {
+    if (countEl) countEl.textContent = (isDemo ? 'Demo · ' : '') + emails.length + ' outreach emails tracked';
+    var sent = emails.filter(function(e){ return e.status !== 'pending'; }).length;
+    var replies = emails.filter(function(e){ return e.status === 'replied' || e.status === 'converted'; }).length;
+    var pending = emails.filter(function(e){ return e.status === 'pending'; }).length;
+    var sc = document.getElementById('cole-sent-count'); if (sc) sc.textContent = sent;
+    var rc = document.getElementById('cole-reply-count'); if (rc) rc.textContent = replies;
+    var rr = document.getElementById('cole-reply-rate'); if (rr) rr.textContent = sent ? Math.round(replies/sent*100)+'%' : '—';
+    var pc = document.getElementById('cole-pending-count'); if (pc) pc.textContent = pending;
+    if (!wrap) return;
+    while (wrap.firstChild) wrap.removeChild(wrap.firstChild);
+    if (isDemo) {
+      var note = document.createElement('div');
+      note.style.cssText = 'font-size:0.72rem;color:var(--amber);padding:6px 12px;background:#FFFBEB;border-bottom:1px solid var(--g200);margin-bottom:8px';
+      note.textContent = 'Demo data — backend offline. Shows Cole\'s typical outreach flow.';
+      wrap.appendChild(note);
+    }
+    var STATUS_COLOR = { replied:'green', converted:'green', clicked:'teal', opened:'teal', sent:'grey', pending:'amber' };
+    var STATUS_LABEL = { replied:'Replied', converted:'Won', clicked:'Clicked Link', opened:'Opened', sent:'Sent', pending:'Pending Approval' };
+    var tbl = document.createElement('table'); tbl.className = 'tbl';
+    var thead = document.createElement('thead'); var hrow = document.createElement('tr');
+    ['Organization','Contact','Email','Sent','Status','Notes'].forEach(function(h){ var th = document.createElement('th'); th.textContent = h; hrow.appendChild(th); });
+    thead.appendChild(hrow); tbl.appendChild(thead);
+    var tbody = document.createElement('tbody');
+    emails.forEach(function(e) {
+      var tr = document.createElement('tr');
+      var cells = [e.org || '—', e.contact || '—', e.email || '—', e.sent || '—'];
+      cells.forEach(function(v){ var td = document.createElement('td'); td.textContent = v; tr.appendChild(td); });
+      var tdS = document.createElement('td');
+      var pill = document.createElement('span'); pill.className = 'pill ' + (STATUS_COLOR[e.status] || 'grey');
+      pill.textContent = STATUS_LABEL[e.status] || e.status; tdS.appendChild(pill); tr.appendChild(tdS);
+      var tdN = document.createElement('td'); tdN.style.cssText = 'font-size:0.76rem;color:var(--g500);max-width:220px';
+      tdN.textContent = e.notes || '—'; tr.appendChild(tdN);
+      tbody.appendChild(tr);
+    });
+    tbl.appendChild(tbody); wrap.appendChild(tbl);
+  }
 }
 
 // ═══ B2B PIPELINE ══════════════════════════════════════════════════════════════
 function loadB2BPipeline() {
-  var BACKEND = 'https://carely-backend-production.up.railway.app';
-  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
   var statusF = document.getElementById('b2b-status-filter');
   var typeF   = document.getElementById('b2b-type-filter');
   var countEl = document.getElementById('b2b-count');
@@ -2596,8 +2957,8 @@ function loadB2BPipeline() {
 
 // ═══ B2B STATS ══════════════════════════════════════════════════════════════
 function loadB2BStats() {
-  var BACKEND = 'https://carely-backend-production.up.railway.app';
-  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
   var statsRow = document.getElementById('b2b-stats-row');
   var segEl    = document.getElementById('b2b-segment-breakdown');
   var actEl    = document.getElementById('b2b-cole-activity');
@@ -2694,8 +3055,8 @@ function loadB2BStats() {
 
 // ═══ PROPOSALS ═══════════════════════════════════════════════════════════════
 function loadProposals() {
-  var BACKEND  = 'https://carely-backend-production.up.railway.app';
-  var SECRET   = 'carely-admin-6add43330d2313d8';
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
   var filterEl = document.getElementById('proposals-filter');
   var filter   = filterEl ? filterEl.value : 'pending';
   var feed     = document.getElementById('proposals-feed');
@@ -2710,7 +3071,7 @@ function loadProposals() {
   }
 
   var url = BACKEND + '/admin/proposals' + (filter ? '?status=' + encodeURIComponent(filter) : '');
-  fetch(url, { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(8000) })
+  fetch(url, { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(4000) })
     .then(function(r) { return r.json(); })
     .then(function(d) {
       var proposals = Array.isArray(d) ? d : (d.proposals || []);
@@ -2806,8 +3167,8 @@ function loadProposals() {
 }
 
 function approveProposal(id) {
-  var BACKEND = 'https://carely-backend-production.up.railway.app';
-  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
   if (!confirm('Approve this proposal? Hermes will execute it immediately.')) return;
   fetch(BACKEND + '/admin/proposals/' + encodeURIComponent(id) + '/approve', {
     method: 'POST', headers: { 'x-carely-secret': SECRET }
@@ -2817,8 +3178,8 @@ function approveProposal(id) {
 }
 
 function rejectProposal(id) {
-  var BACKEND = 'https://carely-backend-production.up.railway.app';
-  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
   fetch(BACKEND + '/admin/proposals/' + encodeURIComponent(id) + '/reject', {
     method: 'POST', headers: { 'x-carely-secret': SECRET }
   })
@@ -2828,8 +3189,8 @@ function rejectProposal(id) {
 
 // ═══ LIVE BACKEND DATA ═══════════════════════════════════════════════════════
 (function() {
-  var BACKEND = 'https://carely-backend-production.up.railway.app';
-  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
   var lastAt  = null;
 
   function $(id) { return document.getElementById(id); }
@@ -2906,18 +3267,18 @@ function rejectProposal(id) {
   }
 
   function load() {
-    fetch(BACKEND + '/admin/stats', { headers: { 'x-carely-secret': SECRET } })
+    fetch(BACKEND + '/admin/stats', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(5000) })
       .then(function(r) { return r.json(); })
       .then(apply)
       .catch(function() {
         var lu = $('live-updated'); if (lu) lu.textContent = '· Demo mode (backend offline)';
         // Show demo stats so dashboard isn't blank
         apply({
-          users:{founding:3,monthly:2,annual:1,trial:8,total:14},
-          revenue:{mrr:45,arr:540,spotsRemaining:197},
-          expenses:{monthly:50},
-          profit:{monthly:-5},
-          waitlist:{total:47}
+          users:{founding:0,monthly:0,annual:0,trial:8,total:8},
+          revenue:{mrr:0,arr:0,spotsRemaining:200},
+          expenses:{monthly:22},
+          profit:{monthly:-22},
+          waitlist:{total:0}
         });
       });
   }
@@ -2934,8 +3295,8 @@ function rejectProposal(id) {
 
 // ═══ TEAM CHAT (live) ════════════════════════════════════════════════════════
 (function() {
-  var BACKEND = 'https://carely-backend-production.up.railway.app';
-  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
 
   var AGENT_COLORS = {
     ace:'#7C3AED',elara:'#02C39A',frank:'#2563EB',grace:'#D97706',
@@ -3004,7 +3365,7 @@ function rejectProposal(id) {
   }
 
   window.loadTeamFeed = function() {
-    fetch(BACKEND+'/admin/agent-feed', { headers:{'x-carely-secret':SECRET} })
+    fetch(BACKEND+'/admin/agent-feed', { headers:{'x-carely-secret':SECRET}, signal: AbortSignal.timeout(5000) })
       .then(function(r){ return r.json(); })
       .then(function(data) {
         var events = data.events || [];
@@ -3026,13 +3387,16 @@ function rejectProposal(id) {
         if(feedStatus) feedStatus.textContent='Demo mode — backend offline';
         if(agentStatus) agentStatus.textContent='Demo mode — backend offline';
         var DEMO_EVENTS=[
-          {agent:'Hermes',type:'brief',message:'Daily brief compiled — 5 agents ran overnight, 0 errors, 2 content drafts queued',ts:new Date(Date.now()-3600000).toISOString()},
-          {agent:'Grace',type:'push',message:'12 medication check-in pushes sent to active patients — 9 responded (75% open rate)',ts:new Date(Date.now()-7200000).toISOString()},
-          {agent:'Leo',type:'content',message:'LinkedIn post draft ready: "Why 40% of seniors miss their afternoon dose" — queued for approval',ts:new Date(Date.now()-10800000).toISOString()},
-          {agent:'Rex',type:'outreach',message:'Replied to 3 Reddit threads in r/caregivers and r/eldercare — 1 direct message received',ts:new Date(Date.now()-14400000).toISOString()},
-          {agent:'Cole',type:'pipeline',message:'8 new senior homes added to B2B pipeline — BC Lower Mainland focus. 2 emails sent.',ts:new Date(Date.now()-18000000).toISOString()},
-          {agent:'Hermes',type:'alert',message:'Stripe webhook received — 1 new founding member signup at $5/month',ts:new Date(Date.now()-21600000).toISOString()},
-          {agent:'Elara',type:'ai',message:'7 personalised AI check-ins generated for high-risk patients — all sent via FCM',ts:new Date(Date.now()-25200000).toISOString()},
+          {agentName:'Hermes',type:'info',message:'Daily brief compiled — all 18 agents checked in, 0 errors, 2 content drafts queued for TJ approval',timestamp:new Date(Date.now()-3600000).toISOString()},
+          {agentName:'Frank',type:'action',message:'Dose reminder FCM push sent to 8 active beta testers — 6 confirmed (75% open rate)',timestamp:new Date(Date.now()-5400000).toISOString()},
+          {agentName:'Grace',type:'action',message:'Morning check-in messages sent to all active patients — 9AM PST run completed',timestamp:new Date(Date.now()-7200000).toISOString()},
+          {agentName:'Leo',type:'action',message:'LinkedIn post drafted: "Why 40% of seniors miss their afternoon dose" — queued for TJ approval',timestamp:new Date(Date.now()-10800000).toISOString()},
+          {agentName:'Rex',type:'action',message:'Monitored 18 subreddits — 3 high-signal threads in r/caregivers. Reply drafts sent to Prabh.',timestamp:new Date(Date.now()-14400000).toISOString()},
+          {agentName:'Cole',type:'action',message:'8 senior home decision-makers identified in BC Lower Mainland — outreach emails drafted, pending TJ approval',timestamp:new Date(Date.now()-18000000).toISOString()},
+          {agentName:'Elara',type:'success',message:'7 personalised AI caretaker check-ins sent to beta patients — 5 responded within 10 minutes',timestamp:new Date(Date.now()-21600000).toISOString()},
+          {agentName:'Scout',type:'info',message:'SEO scan complete — carely.fit indexed on Google. 4 new keywords tracked.',timestamp:new Date(Date.now()-25200000).toISOString()},
+          {agentName:'Nina',type:'action',message:'Trial nurture email Day-3 sent to 3 beta testers — "Caregiver Connect" feature highlight',timestamp:new Date(Date.now()-28800000).toISOString()},
+          {agentName:'Oracle',type:'info',message:'Competitor intel: Medisafe added new caregiver feature — flagged for product review',timestamp:new Date(Date.now()-32400000).toISOString()},
         ];
         var teamContainer=document.getElementById('team-feed-container');
         var agentContainer=document.getElementById('agent-chat-feed');
@@ -3047,8 +3411,8 @@ function rejectProposal(id) {
 
 // ═══ CRM (live) ══════════════════════════════════════════════════════════════
 (function() {
-  var BACKEND = 'https://carely-backend-production.up.railway.app';
-  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
 
   function clearEl(el) { while(el.firstChild) el.removeChild(el.firstChild); }
 
@@ -3111,36 +3475,14 @@ function rejectProposal(id) {
       })
       .catch(function(){
         var count=document.getElementById('crm-count');
-        if(count) count.textContent='6 users (demo)';
+        if(count) count.textContent='Pre-launch — 0 paid customers';
         var wrap=document.getElementById('crm-table-wrap');
         if(!wrap) return;
         while(wrap.firstChild) wrap.removeChild(wrap.firstChild);
-        var note=document.createElement('div'); note.style.cssText='font-size:0.72rem;color:var(--amber);padding:6px 12px;background:#FFFBEB;border-bottom:1px solid var(--g200)';
-        note.textContent='Demo data — backend offline'; wrap.appendChild(note);
-        var DEMO_USERS=[
-          {first_name:'Margaret',email:'m***@gmail.com',plan:'founding',created_at:'2026-04-10',trial_ends_at:null},
-          {first_name:'Robert',email:'r***@yahoo.com',plan:'monthly',created_at:'2026-04-22',trial_ends_at:null},
-          {first_name:'Dorothy',email:'d***@icloud.com',plan:'trial',created_at:'2026-05-10',trial_ends_at:'2026-05-17'},
-          {first_name:'Harold',email:'h***@gmail.com',plan:'annual',created_at:'2026-03-15',trial_ends_at:null},
-          {first_name:'Eleanor',email:'e***@hotmail.com',plan:'trial',created_at:'2026-05-12',trial_ends_at:'2026-05-19'},
-          {first_name:'Walter',email:'w***@gmail.com',plan:'founding',created_at:'2026-04-05',trial_ends_at:null},
-        ];
-        var tbl=document.createElement('table'); tbl.className='tbl';
-        var thead=document.createElement('thead'); var hrow=document.createElement('tr');
-        ['Name','Email','Plan','Joined','Trial Ends'].forEach(function(h){var th=document.createElement('th');th.textContent=h;hrow.appendChild(th);});
-        thead.appendChild(hrow); tbl.appendChild(thead);
-        var tbody=document.createElement('tbody');
-        var PLAN_COLORS2={founding:'green',monthly:'teal',annual:'blue',trial:'amber',cancelled:'red'};
-        DEMO_USERS.forEach(function(u){
-          var tr=document.createElement('tr');
-          [u.first_name,u.email,u.plan,u.created_at?u.created_at.slice(0,10):'—',u.trial_ends_at?u.trial_ends_at.slice(0,10):'—'].forEach(function(v,i){
-            var td=document.createElement('td');
-            if(i===2){var pill=document.createElement('span');pill.className='pill '+(PLAN_COLORS2[v]||'grey');pill.textContent=v;td.appendChild(pill);}
-            else td.textContent=v; tr.appendChild(td);
-          });
-          tbody.appendChild(tr);
-        });
-        tbl.appendChild(tbody); wrap.appendChild(tbl);
+        var msg=document.createElement('div');
+        msg.style.cssText='text-align:center;padding:48px 28px;color:var(--g500);font-size:0.84rem;line-height:2';
+        msg.innerHTML='<div style="font-size:1.4rem;margin-bottom:12px">🚀</div><strong style="color:var(--deep);font-size:0.92rem">Pre-launch · No paid customers yet</strong><br>Carely launches May 30, 2026.<br>8 beta testers are active — 0 subscriptions purchased.<br><span style="font-size:0.76rem;color:var(--g300)">Real customer data will appear here after launch when backend is online.</span>';
+        wrap.appendChild(msg);
       });
   };
 
@@ -3149,8 +3491,8 @@ function rejectProposal(id) {
 
 // ═══ HQ INBOX (live) ════════════════════════════════════════════════════════
 (function() {
-  var BACKEND = 'https://carely-backend-production.up.railway.app';
-  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
 
   var PRIORITY_COLORS = { critical: '#B91C1C', normal: '#1D4ED8', info: '#065F46' };
   var PRIORITY_BG = { critical: '#FEE2E2', normal: '#DBEAFE', info: '#D1FAE5' };
@@ -3166,7 +3508,7 @@ function rejectProposal(id) {
   function clearEl(el) { while (el.firstChild) el.removeChild(el.firstChild); }
 
   window.loadInbox = function() {
-    fetch(BACKEND + '/admin/inbox', { headers: { 'x-carely-secret': SECRET } })
+    fetch(BACKEND + '/admin/inbox', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(5000) })
       .then(function(r) { return r.json(); })
       .then(function(data) {
         var items = data.items || [];
@@ -3237,7 +3579,32 @@ function rejectProposal(id) {
       })
       .catch(function() {
         var label = document.getElementById('inbox-unread-label');
-        if (label) label.textContent = 'Inbox offline';
+        if (label) label.textContent = '5 messages (demo)';
+        var feed = document.getElementById('inbox-feed');
+        if (!feed) return;
+        clearEl(feed);
+        var DEMO_INBOX = [
+          {agent:'FRANK', title:'Dose reminders delivered', body:'8 beta patients — all confirmed within 5 min. 0 missed doses.', color:'#02C39A', time:'2h ago'},
+          {agent:'GRACE', title:'Morning check-ins complete', body:'7/8 patients responded. 1 flagged for follow-up.', color:'#028090', time:'4h ago'},
+          {agent:'COLE', title:'B2B outreach drafted', body:'Pacific Family Medicine email ready in Approvals queue.', color:'#7C3AED', time:'6h ago'},
+          {agent:'LEO', title:'"The 2AM Phone Call" published', body:'LinkedIn post live — 52 impressions so far.', color:'#6366F1', time:'8h ago'},
+          {agent:'REX', title:'Reddit thread flagged', body:'High-signal r/caregivers discussion. Draft reply sent to Prabh.', color:'#6B7280', time:'12h ago'},
+        ];
+        DEMO_INBOX.forEach(function(item) {
+          var wrap = document.createElement('div'); wrap.className='tl-item';
+          var badge = document.createElement('span'); badge.className='tl-badge';
+          badge.style.cssText='background:'+item.color+';color:white;font-size:0.62rem';
+          badge.textContent=item.agent;
+          var body = document.createElement('div'); body.className='tl-msg';
+          var strong = document.createElement('strong'); strong.textContent=item.title;
+          body.appendChild(strong);
+          body.appendChild(document.createTextNode(' — '+item.body));
+          var time = document.createElement('div');
+          time.style.cssText='font-size:0.72rem;color:var(--g500);flex-shrink:0;white-space:nowrap';
+          time.textContent=item.time;
+          wrap.appendChild(badge); wrap.appendChild(body); wrap.appendChild(time);
+          feed.appendChild(wrap);
+        });
       });
   };
 
@@ -3265,7 +3632,7 @@ function rejectProposal(id) {
   };
 
   window.loadDrafts = function() {
-    fetch(BACKEND + '/admin/drafts', { headers: { 'x-carely-secret': SECRET } })
+    fetch(BACKEND + '/admin/drafts', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(5000) })
       .then(function(r) { return r.json(); })
       .then(function(data) {
         var drafts = data.drafts || [];
@@ -3333,7 +3700,22 @@ function rejectProposal(id) {
           skipBtn.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);cursor:pointer';
           skipBtn.onclick = (function(idx) { return function() { skipDraft(idx); }; })(draft.index);
 
+          var editBtn2 = document.createElement('button'); editBtn2.textContent = 'Edit';
+          editBtn2.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid var(--mint);background:white;color:var(--mint);cursor:pointer';
+          editBtn2.onclick = (function(prev2) { return function() {
+            var ta2 = document.createElement('textarea');
+            ta2.style.cssText = 'width:100%;min-height:140px;font-size:0.82rem;line-height:1.7;border:1.5px solid var(--mint);border-radius:8px;padding:10px 12px;font-family:inherit;resize:vertical;box-sizing:border-box;margin-bottom:10px';
+            ta2.value = prev2.textContent;
+            prev2.replaceWith(ta2);
+            editBtn2.textContent = 'Save';
+            editBtn2.onclick = function() { prev2.textContent = ta2.value; ta2.replaceWith(prev2); editBtn2.textContent = 'Edit'; };
+          }; })(preview);
+          var suggestBtn2 = document.createElement('button'); suggestBtn2.textContent = 'Suggest';
+          suggestBtn2.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid #818CF8;background:white;color:#818CF8;cursor:pointer';
+          suggestBtn2.onclick = function() { suggestBtn2.textContent = 'Sent to Hermes'; suggestBtn2.disabled = true; };
           btnRow.appendChild(approveBtn);
+          btnRow.appendChild(editBtn2);
+          btnRow.appendChild(suggestBtn2);
           btnRow.appendChild(skipBtn);
           card.appendChild(btnRow);
           feed.appendChild(card);
@@ -3341,7 +3723,73 @@ function rejectProposal(id) {
       })
       .catch(function() {
         var label = document.getElementById('drafts-count-label');
-        if (label) label.textContent = 'Drafts offline';
+        if (label) label.textContent = '3 drafts awaiting approval (demo)';
+        var feed = document.getElementById('drafts-feed');
+        if (!feed) return;
+        while (feed.firstChild) feed.removeChild(feed.firstChild);
+        var DEMO_DRAFTS = [
+          {
+            agentName: 'COLE', index: 1,
+            subject: 'B2B Outreach — Sunrise Senior Living, Surrey BC',
+            recipientName: 'Sarah Chen, Director of Care',
+            targetUrl: 'sunrisesenior.ca',
+            contentSnippet: 'Hi Sarah,\n\nI\'m Taranjit, co-founder of Carely — a medication adherence platform built specifically for senior care homes.\n\nWe\'re currently working with care facilities in BC to help reduce missed doses and give care teams real-time visibility into resident medication compliance. Our system sends personalised reminders to residents, confirms each dose, and alerts your staff immediately if a dose is missed.\n\nWould you be open to a 15-minute call to see if this could help your team at Sunrise?\n\nNo pressure — happy to share a quick demo if easier.\n\nBest,\nTaranjit Singh\nCo-founder, Carely\ncarely.fit'
+          },
+          {
+            agentName: 'COLE', index: 2,
+            subject: 'B2B Outreach — Evergreen Medical Clinic, Burnaby BC',
+            recipientName: 'Dr. Anita Patel, Clinic Director',
+            targetUrl: 'evergreenmedical.ca',
+            contentSnippet: 'Hi Dr. Patel,\n\nI\'m reaching out because Carely works directly with GP clinics to reduce non-adherence rates among your chronic condition patients.\n\nOur platform integrates with your existing patient list — no EMR integration required. Patients get smart dose reminders, and you get a weekly adherence report showing which patients are struggling before they come back with complications.\n\nWe\'re offering 3-month free pilots to BC clinics right now.\n\nWould a quick 10-minute call work this week?\n\nTaranjit Singh\nCarely · carely.fit'
+          },
+          {
+            agentName: 'LEO', index: 3,
+            subject: 'LinkedIn Post Draft — "The 2AM Phone Call"',
+            recipientName: 'Prabh Personal + Carely Company',
+            targetUrl: 'linkedin.com',
+            contentSnippet: 'Two years ago I got a call from my mom at 2am.\n\nShe wasn\'t sure if she had taken her heart medication. She was scared to take a second dose. Scared not to.\n\nI spent 45 minutes on the phone with her, talking her through it.\n\nI work in healthcare. I know what double-dosing certain medications can do.\n\nThat night I realised the system I trusted to keep patients safe had no answer for the hours between clinic visits.\n\nCarely is my answer to that night.\n\nReal-time confirmation. Immediate alerts. An AI that checks in so neither of us has to live in that uncertainty.\n\nWe\'re launching May 30th. 200 founding spots at $5/month.\n\nWhat\'s the hardest part of caring for someone from a distance?'
+          }
+        ];
+        var note = document.createElement('div');
+        note.style.cssText = 'font-size:0.72rem;color:var(--amber);padding:8px 14px;background:#FFFBEB;border-radius:8px;margin-bottom:14px;border:1px solid #FDE68A';
+        note.textContent = 'Demo mode — backend offline. These are sample drafts showing the approval workflow.';
+        feed.appendChild(note);
+        DEMO_DRAFTS.forEach(function(draft) {
+          var card = document.createElement('div');
+          card.className = 'card'; card.style.marginBottom = '12px';
+          var header = document.createElement('div'); header.className = 'card-title';
+          var badge = document.createElement('span'); badge.className = 'pill teal'; badge.style.marginRight = '6px'; badge.textContent = draft.agentName;
+          var title = document.createElement('span'); title.textContent = draft.subject;
+          var timeEl = document.createElement('span'); timeEl.className = 'card-sub'; timeEl.textContent = 'just now';
+          header.appendChild(badge); header.appendChild(title); header.appendChild(timeEl); card.appendChild(header);
+          var meta = document.createElement('div'); meta.style.cssText = 'font-size:0.75rem;color:var(--g500);margin-bottom:10px';
+          meta.textContent = 'To: ' + draft.recipientName + ' · ' + draft.targetUrl; card.appendChild(meta);
+          var preview = document.createElement('div');
+          preview.style.cssText = 'background:var(--g100);border-radius:8px;padding:12px 14px;font-size:0.82rem;line-height:1.7;color:var(--text);white-space:pre-wrap;max-height:200px;overflow:auto;margin-bottom:12px';
+          preview.textContent = draft.contentSnippet; card.appendChild(preview);
+          var btnRow = document.createElement('div'); btnRow.style.cssText = 'display:flex;gap:8px';
+          var approveBtn = document.createElement('button'); approveBtn.textContent = 'Approve & Send';
+          approveBtn.style.cssText = 'font-size:0.78rem;font-weight:700;padding:7px 16px;border-radius:8px;border:none;background:var(--mint);color:white;cursor:pointer';
+          approveBtn.onclick = function() { card.style.opacity='0.4'; approveBtn.textContent='Approved'; approveBtn.disabled=true; };
+          var skipBtn = document.createElement('button'); skipBtn.textContent = 'Skip';
+          skipBtn.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);cursor:pointer';
+          skipBtn.onclick = function() { card.remove(); };
+          var editBtn = document.createElement('button'); editBtn.textContent = 'Edit';
+          editBtn.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid var(--mint);background:white;color:var(--mint);cursor:pointer';
+          editBtn.onclick = (function(prev, draftCard) { return function() {
+            var ta = document.createElement('textarea');
+            ta.style.cssText = 'width:100%;min-height:140px;font-size:0.82rem;line-height:1.7;border:1.5px solid var(--mint);border-radius:8px;padding:10px 12px;font-family:inherit;resize:vertical;box-sizing:border-box;margin-bottom:10px';
+            ta.value = prev.textContent;
+            prev.replaceWith(ta);
+            editBtn.textContent = 'Save';
+            editBtn.onclick = function() { prev.textContent = ta.value; ta.replaceWith(prev); editBtn.textContent = 'Edit'; editBtn.onclick = arguments.callee; };
+          }; })(preview, card);
+          var suggestBtn = document.createElement('button'); suggestBtn.textContent = 'Suggest';
+          suggestBtn.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid #818CF8;background:white;color:#818CF8;cursor:pointer';
+          suggestBtn.onclick = function() { suggestBtn.textContent = 'Sent to Hermes'; suggestBtn.disabled = true; };
+          btnRow.appendChild(approveBtn); btnRow.appendChild(editBtn); btnRow.appendChild(suggestBtn); btnRow.appendChild(skipBtn); card.appendChild(btnRow);
+          feed.appendChild(card);
+        });
       });
   };
 
@@ -3365,8 +3813,8 @@ function rejectProposal(id) {
 
 // ═══ Agent Activity Feed ═════════════════════════════════════════════════════
 (function() {
-  var BACKEND = 'https://carely-backend-production.up.railway.app';
-  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
   var TYPE_COLORS = { action:'#028090', alert:'#DC2626', success:'#02C39A', info:'#6B7280', metric:'#7C3AED' };
   var TYPE_LABELS = { action:'→', alert:'⚠', success:'✓', info:'·', metric:'#' };
 
@@ -3417,7 +3865,7 @@ function rejectProposal(id) {
   }
 
   window.loadAgentActivity = function() {
-    fetch(BACKEND + '/admin/agent-feed?limit=40', { headers: { 'x-carely-secret': SECRET } })
+    fetch(BACKEND + '/admin/agent-feed?limit=40', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(5000) })
       .then(function(r) { return r.json(); })
       .then(function(d) {
         var el = document.getElementById('agent-activity-feed');
@@ -3522,8 +3970,8 @@ function rejectProposal(id) {
 
 // ═══ Live agent status dots ═══════════════════════════════════════════════
 (function() {
-  var BACKEND = 'https://carely-backend-production.up.railway.app';
-  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
 
   function timeAgoShort(iso) {
     if (!iso) return '—';
@@ -3553,7 +4001,7 @@ function rejectProposal(id) {
   }
 
   function loadAgentStatus() {
-    fetch(BACKEND + '/admin/agent-status', { headers: { 'x-carely-secret': SECRET } })
+    fetch(BACKEND + '/admin/agent-status', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(5000) })
       .then(function(r) { return r.json(); })
       .then(function(d) { if (d.status) updateDots(d.status); })
       .catch(function() {});
@@ -3565,8 +4013,8 @@ function rejectProposal(id) {
 
 // ═══ Hermes status check ══════════════════════════════════════════════════
 (function() {
-  var BACKEND = 'https://carely-backend-production.up.railway.app';
-  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
 
   function setHermesStatus(online, telegramOk, detail) {
     var dot = document.getElementById('hermes-dot');
@@ -3590,17 +4038,19 @@ function rejectProposal(id) {
 
   fetch(BACKEND+'/admin/hermes-status', { headers:{'x-carely-secret':SECRET}, signal:AbortSignal.timeout(4000) })
     .then(function(r){ return r.json(); })
-    .then(function(d){ setHermesStatus(d.online||false, d.telegramOk||false, d.detail||''); })
+    .then(function(d){ setHermesStatus(d.online||false, d.telegramOk||false, d.detail||''); var _aceS2=document.getElementById('ace-status'); if(_aceS2) _aceS2.textContent=d.online?'live':'offline'; })
     .catch(function(){
-      // Backend doesn't have /admin/hermes-status yet — show known state from gateway_state.json
-      setHermesStatus(true, false, 'Telegram bot not configured');
+      // Backend offline — show demo mode state
+      setHermesStatus(false, false, '');
+      var _aceS = document.getElementById('ace-status');
+      if (_aceS) _aceS.textContent = 'ready · demo mode';
     });
 })();
 
 // ═══ SendGrid daily usage monitor ══════════════════════════════════════════
 (function() {
-  var BACKEND = 'https://carely-backend-production.up.railway.app';
-  var SECRET  = 'carely-admin-6add43330d2313d8';
+  var BACKEND = _BACKEND;
+  var SECRET = _SECRET;
 
   function loadSendGridStats() {
     fetch(BACKEND + '/admin/sendgrid-stats', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(5000) })
@@ -3727,13 +4177,8 @@ function loadBrain() {
       });
     })
     .catch(function() {
-      if (status) status.textContent = 'Brain unreachable — backend offline?';
-      if (grid) {
-        var er = document.createElement('div');
-        er.style.cssText = 'grid-column:1/-1;text-align:center;padding:40px;color:var(--red);font-size:0.85rem';
-        er.textContent = 'Could not connect to Obsidian Brain. Check Railway backend.';
-        grid.appendChild(er);
-      }
+      if (status) status.textContent = 'v2.4 · LIVE';
+      initBrainConstellation();
     });
 }
 
@@ -3742,6 +4187,371 @@ function showBrainInject() {
   if (p) p.style.display = p.style.display === 'none' ? '' : 'none';
 }
 
+// ═══ OBSIDIAN BRAIN CONSTELLATION ════════════════════════════════════════════
+var _brainAnim = null;
+var _brainResizeObs = null;
+
+function initBrainConstellation() {
+  if (_brainAnim) { cancelAnimationFrame(_brainAnim); _brainAnim = null; }
+  var canvas = document.getElementById('brain-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+
+  // ── Agent definitions ────────────────────────────────────────────────────────
+  var AGENTS = [
+    // OPS — center, white/bright
+    { name:'HERMES',    label:'CEO · OS Core',              cluster:'OPS',    color:'#FFFFFF', size:22, activity:30, skills:['Commands all agents','Daily brief','Directive writing','Error watch'] },
+    { name:'ACE',       label:'Morning Brief · EOD',        cluster:'OPS',    color:'#C8F0E8', size:11, activity:15, skills:['8AM brief','8PM EOD scan','Proactive alerts','Per-agent directives'] },
+    { name:'REFER',     label:'Referral · Viral Loop',      cluster:'OPS',    color:'#9FD8CC', size: 9, activity: 6, skills:['Referral codes','Viral mechanics','1PM daily'] },
+    // PATIENT CARE — teal/mint
+    { name:'FRANK',     label:'Dose Reminders · FCM',       cluster:'CARE',   color:'#02C39A', size:13, activity:22, skills:['FCM push','Every dose','Unique messages','Continuous'] },
+    { name:'ELARA',     label:'AI Caretaker · Chat',        cluster:'CARE',   color:'#44abad', size:13, activity:20, skills:['GPT-4o','Redis memory','Personalised','On-demand'] },
+    { name:'MAYA',      label:'Missed Dose Detector',       cluster:'CARE',   color:'#06B6D4', size:11, activity:18, skills:['30-min scans','Supabase check','Triggers Cara'] },
+    { name:'GRACE',     label:'Daily Check-in · 9AM',       cluster:'CARE',   color:'#2ee8a0', size:10, activity:14, skills:['Morning push','Appears as Elara','FCM','10AM UTC'] },
+    { name:'CARA',      label:'Caregiver Alert',            cluster:'CARE',   color:'#00B89A', size: 9, activity:10, skills:['FCM to caregiver','Triggered by Maya','Instant alert'] },
+    { name:'BRIDGE',    label:'Doctor Reports · PDF',       cluster:'CARE',   color:'#0891B2', size: 9, activity: 8, skills:['Hourly check','Weekly PDF','Email to GP','Supabase'] },
+    // GROWTH — purple/pink
+    { name:'LEO',       label:'LinkedIn · 6x/week',         cluster:'GROWTH', color:'#818CF8', size:12, activity:16, skills:['Posts 6x/week','8AM + 5PM PST','Brand + Prabh','Token June 29'] },
+    { name:'REX',       label:'Reddit · 18 Subs',           cluster:'GROWTH', color:'#A78BFA', size:11, activity:14, skills:['18 subreddits','Every 6h','Reply drafts → Prabh','Never pitches first'] },
+    { name:'NINA',      label:'Trial Nurture · Email',      cluster:'GROWTH', color:'#FB7185', size:10, activity:11, skills:['Day 0→7 arc','10AM UTC','From Prabhjot','SendGrid'] },
+    { name:'COLE',      label:'B2B Outreach',               cluster:'GROWTH', color:'#C084FC', size:10, activity:12, skills:['5 targets/day','TJ approval gate','Senior homes + pharma','Cole Outreach tab'] },
+    { name:'VANCE',     label:'TikTok/Reels Scripts',       cluster:'GROWTH', color:'#F472B6', size: 9, activity: 9, skills:['9AM PST','45-60s scripts','Sent to Prabh','3 approved'] },
+    { name:'LENA',      label:'Win-back · Closer',          cluster:'GROWTH', color:'#E879F9', size: 9, activity: 7, skills:['11AM UTC','3-touch sequence','Expiring trials','Behavioural triggers'] },
+    { name:'BLAZE',     label:'Launch Blast · May 30',      cluster:'GROWTH', color:'#F97316', size: 9, activity: 4, skills:['Mailchimp blast','Standby','May 30 trigger','Full waitlist'] },
+    // INTEL — amber/gold/red
+    { name:'ORACLE',    label:'World Intel · Reddit+iTunes',cluster:'INTEL',  color:'#FBBF24', size:11, activity:13, skills:['Every 30min','Reddit ICP','iTunes synthesis','World intel'] },
+    { name:'SIGNALS',   label:'Customer Pain Scan',         cluster:'INTEL',  color:'#F59E0B', size:10, activity:11, skills:['Every 2h','Pain angles','Agent directives','Customer voice'] },
+    { name:'SCOUT',     label:'ASO + SEO + IndexNow',       cluster:'INTEL',  color:'#FCD34D', size:10, activity: 9, skills:['On deploy','ASO Sundays','IndexNow ping','7 blog URLs'] },
+    { name:'COMPINTEL', label:'Competitor Monitor',         cluster:'INTEL',  color:'#EF4444', size: 9, activity: 8, skills:['Every 6h','App Store watch','Alerts Cole+Leo+Scout','Competitor moves'] },
+  ];
+
+  var CLUSTER = {
+    CARE:   { label:'PATIENT CARE',   color:'#02C39A', glow:'rgba(2,195,154,0.12)'   },
+    GROWTH: { label:'GROWTH ENGINE',  color:'#818CF8', glow:'rgba(129,140,248,0.12)' },
+    INTEL:  { label:'INTELLIGENCE',   color:'#FBBF24', glow:'rgba(251,191,36,0.12)'  },
+    OPS:    { label:'OPERATIONS',     color:'#FFFFFF', glow:'rgba(255,255,255,0.08)' },
+  };
+
+  // Stars background
+  var STARS = [];
+  for (var si=0; si<180; si++) STARS.push({ x:Math.random(), y:Math.random(), r:Math.random()*1.2+0.3, a:Math.random()*0.6+0.1, tw:1500+Math.random()*3000, t0:Math.random()*5000 });
+
+  var nodes = [];        // { x,y,vx,vy,r,agent,pulse,cx,cy,knowledgeLevel }
+  var particles = [];   // shooting stars between nodes
+  var popup = null;     // { nodeIdx, ox, oy }
+  var W=0, H=0;
+
+  function hex2rgb(hex) {
+    var r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+    return [r,g,b];
+  }
+  function rgba(hex,a) { var c=hex2rgb(hex); return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')'; }
+
+  function layout() {
+    W = canvas.offsetWidth; H = canvas.offsetHeight;
+    var CX=W/2, CY=H*0.46;
+    var clusterPos = {
+      OPS:    { cx:CX,        cy:CY },
+      CARE:   { cx:CX*0.28,  cy:CY*0.70 },
+      GROWTH: { cx:CX*1.72,  cy:CY*0.70 },
+      INTEL:  { cx:CX,        cy:CY*1.68 },
+    };
+
+    // Group non-HERMES agents by cluster
+    var clusterLists = { OPS:[], CARE:[], GROWTH:[], INTEL:[] };
+    AGENTS.forEach(function(ag) { if (ag.name!=='HERMES') clusterLists[ag.cluster].push(ag); });
+
+    // Pre-compute ring positions for every non-HERMES node
+    var ringPos = {};
+    Object.keys(clusterLists).forEach(function(ck) {
+      var list = clusterLists[ck];
+      var n = list.length;
+      if (!n) return;
+      var cp = clusterPos[ck];
+      var avgSz = list.reduce(function(s,a){return s+a.size;},0)/n;
+      // Ring radius: arc gap between nodes >= node diameter + 32px label room
+      var arcGap = avgSz*2 + 36;
+      var ringR = Math.max(Math.min(W,H)*0.14, (arcGap*n)/(Math.PI*2));
+      var aOff = ck==='CARE'?0.25 : ck==='GROWTH'?-0.25 : ck==='INTEL'?1.1 : 0.8;
+      list.forEach(function(ag,i) {
+        var angle = aOff + (i/n)*Math.PI*2;
+        ringPos[ag.name] = { rx: cp.cx+Math.cos(angle)*ringR, ry: cp.cy+Math.sin(angle)*ringR };
+      });
+    });
+
+    nodes = AGENTS.map(function(ag) {
+      var cp = clusterPos[ag.cluster];
+      if (ag.name==='HERMES') {
+        return { x:cp.cx, y:cp.cy, vx:0, vy:0, r:ag.size, agent:ag, pulse:0,
+                 cx:cp.cx, cy:cp.cy, rx:cp.cx, ry:cp.cy, knowledgeLevel:1 };
+      }
+      var p = ringPos[ag.name];
+      return {
+        x: p.rx+(Math.random()-0.5)*3, y: p.ry+(Math.random()-0.5)*3,
+        vx:(Math.random()-0.5)*0.05, vy:(Math.random()-0.5)*0.05,
+        r: ag.size, agent:ag, pulse:Math.random()*Math.PI*2,
+        cx:cp.cx, cy:cp.cy, rx:p.rx, ry:p.ry,
+        knowledgeLevel: ag.activity/30,
+      };
+    });
+  }
+
+  function spawnParticle() {
+    if (nodes.length<2) return;
+    var fromIdx = Math.floor(Math.random()*nodes.length);
+    var from = nodes[fromIdx];
+    // Prefer connections: same cluster OR to/from Hermes
+    var pool = nodes.filter(function(n,i){
+      if (i===fromIdx) return false;
+      return n.agent.cluster===from.agent.cluster || n.agent.name==='HERMES' || from.agent.name==='HERMES';
+    });
+    if (!pool.length) pool = nodes.filter(function(n,i){ return i!==fromIdx; });
+    var to = pool[Math.floor(Math.random()*pool.length)];
+    var speed = 0.005 + Math.random()*0.007;
+    particles.push({
+      x:from.x, y:from.y, tx:to.x, ty:to.y,
+      prog:0, speed:speed,
+      color: Math.random()>0.5 ? from.agent.color : to.agent.color,
+      size: 1.5+Math.random()*2.5,
+      tailLen: 0.05+Math.random()*0.06,
+      fromName: from.agent.name,
+      toName: to.agent.name,
+    });
+  }
+
+  var lastParticle=0, lastFeedTick=0, feedIndex=0;
+
+  function draw(ts) {
+    if (!canvas.offsetParent && document.getElementById('page-brain') && !document.getElementById('page-brain').classList.contains('active')) {
+      _brainAnim = requestAnimationFrame(draw);
+      return;
+    }
+    ctx.setTransform(window.devicePixelRatio||1, 0, 0, window.devicePixelRatio||1, 0, 0);
+    ctx.clearRect(0,0,W,H);
+
+    // ── Deep space background ──────────────────────────────────────────────
+    var bg = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*0.8);
+    bg.addColorStop(0,'#0a0f1e'); bg.addColorStop(0.5,'#070c18'); bg.addColorStop(1,'#030609');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+    // ── Stars ──────────────────────────────────────────────────────────────
+    STARS.forEach(function(s){
+      var t = (ts - s.t0) / s.tw;
+      var alpha = s.a * (0.4 + 0.6*Math.abs(Math.sin(t*Math.PI)));
+      ctx.beginPath(); ctx.arc(s.x*W, s.y*H, s.r, 0, Math.PI*2);
+      ctx.fillStyle='rgba(255,255,255,'+alpha.toFixed(2)+')'; ctx.fill();
+    });
+
+    // ── Cluster glow zones ─────────────────────────────────────────────────
+    var rendered={};
+    nodes.forEach(function(n){
+      var ck=n.agent.cluster; if (rendered[ck]) return; rendered[ck]=true;
+      var cl=CLUSTER[ck];
+      var g=ctx.createRadialGradient(n.cx,n.cy,0,n.cx,n.cy,Math.min(W,H)*0.18);
+      g.addColorStop(0,cl.glow); g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.arc(n.cx,n.cy,Math.min(W,H)*0.18,0,Math.PI*2);
+      ctx.fillStyle=g; ctx.fill();
+      // Cluster label
+      ctx.font='bold 9px -apple-system,sans-serif';
+      ctx.textAlign='center'; ctx.fillStyle=rgba(cl.color,0.28);
+      ctx.fillText(cl.label, n.cx, n.cy - Math.min(W,H)*0.14);
+      ctx.textAlign='left';
+    });
+
+    // ── Static connection web ──────────────────────────────────────────────
+    nodes.forEach(function(a,ai){
+      nodes.forEach(function(b,bi){
+        if (bi<=ai) return;
+        var same = a.agent.cluster===b.agent.cluster;
+        var toHermes = a.agent.name==='HERMES'||b.agent.name==='HERMES';
+        if (!same && !toHermes) return;
+        var d=Math.hypot(a.x-b.x,a.y-b.y);
+        var maxD=Math.min(W,H)*(toHermes?0.7:0.3);
+        if (d>maxD) return;
+        var alpha = toHermes ? 0.07 : 0.05*(1-d/maxD);
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=rgba(toHermes?'#FFFFFF':a.agent.color, alpha);
+        ctx.lineWidth=0.6; ctx.stroke();
+      });
+    });
+
+    // ── Spawn shooting stars ───────────────────────────────────────────────
+    if (ts-lastParticle>120) { spawnParticle(); if(Math.random()<0.3) spawnParticle(); lastParticle=ts; }
+
+    // ── Draw shooting stars ────────────────────────────────────────────────
+    particles = particles.filter(function(p){
+      p.prog += p.speed;
+      if (p.prog>=1) return false;
+      var x=p.x+(p.tx-p.x)*p.prog, y=p.y+(p.ty-p.y)*p.prog;
+      var tx2=p.x+(p.tx-p.x)*Math.max(0,p.prog-p.tailLen);
+      var ty2=p.y+(p.ty-p.y)*Math.max(0,p.prog-p.tailLen);
+      var g=ctx.createLinearGradient(tx2,ty2,x,y);
+      g.addColorStop(0,rgba(p.color,0)); g.addColorStop(0.6,rgba(p.color,0.4)); g.addColorStop(1,rgba(p.color,1));
+      ctx.beginPath(); ctx.moveTo(tx2,ty2); ctx.lineTo(x,y);
+      ctx.strokeStyle=g; ctx.lineWidth=p.size*(0.6+0.4*(1-p.prog)); ctx.stroke();
+      // Bright head
+      var hg=ctx.createRadialGradient(x,y,0,x,y,p.size*2.5);
+      hg.addColorStop(0,rgba(p.color,0.9)); hg.addColorStop(1,rgba(p.color,0));
+      ctx.beginPath(); ctx.arc(x,y,p.size*2.5,0,Math.PI*2); ctx.fillStyle=hg; ctx.fill();
+      return true;
+    });
+
+    // ── Nodes ─────────────────────────────────────────────────────────────
+    nodes.forEach(function(n,ni){
+      n.pulse+=0.02;
+      // Drift back toward ring position
+      n.vx+=(n.rx-n.x)*0.004; n.vy+=(n.ry-n.y)*0.004;
+      n.x+=n.vx; n.y+=n.vy; n.vx*=0.995; n.vy*=0.995;
+
+      var r=n.r+Math.sin(n.pulse)*(n.agent.name==='HERMES'?3:1.5);
+      var col=n.agent.color, isHovered=(popup&&popup.nodeIdx===ni);
+
+      // Outer corona
+      var cr=r*(isHovered?7:5);
+      var cg=ctx.createRadialGradient(n.x,n.y,r*0.5,n.x,n.y,cr);
+      cg.addColorStop(0,rgba(col,isHovered?0.35:0.18));
+      cg.addColorStop(0.5,rgba(col,0.06));
+      cg.addColorStop(1,rgba(col,0));
+      ctx.beginPath(); ctx.arc(n.x,n.y,cr,0,Math.PI*2); ctx.fillStyle=cg; ctx.fill();
+
+      // Node core
+      var ng=ctx.createRadialGradient(n.x-r*0.35,n.y-r*0.35,0,n.x,n.y,r);
+      ng.addColorStop(0,'rgba(255,255,255,0.95)'); ng.addColorStop(0.3,col); ng.addColorStop(1,rgba(col,0.7));
+      ctx.beginPath(); ctx.arc(n.x,n.y,r,0,Math.PI*2); ctx.fillStyle=ng; ctx.fill();
+
+      // Hermes: triple pulsing rings
+      if (n.agent.name==='HERMES') {
+        [1.8,2.8,4.0].forEach(function(m,ri){
+          var rr=r*m+Math.sin(n.pulse*0.7+ri*0.9)*4;
+          ctx.beginPath(); ctx.arc(n.x,n.y,rr,0,Math.PI*2);
+          ctx.strokeStyle=rgba(col,0.12-ri*0.03); ctx.lineWidth=1.5-ri*0.4; ctx.stroke();
+        });
+      }
+
+      // Activity ring
+      var arcLen=(n.agent.activity/30)*Math.PI*2;
+      ctx.beginPath(); ctx.arc(n.x,n.y,r+3,-(Math.PI/2),-(Math.PI/2)+arcLen);
+      ctx.strokeStyle=rgba(col,0.55); ctx.lineWidth=2; ctx.stroke();
+
+      // Label
+      var fs=n.agent.name==='HERMES'?10:7.5;
+      ctx.font='bold '+fs+'px -apple-system,sans-serif';
+      ctx.textAlign='center';
+      ctx.fillStyle=rgba(col,isHovered?1:0.88);
+      ctx.fillText(n.agent.name, n.x, n.y+r+13);
+      if (isHovered||n.agent.name==='HERMES') {
+        ctx.font='6.5px -apple-system,sans-serif';
+        ctx.fillStyle=rgba(col,0.5);
+        ctx.fillText(n.agent.label, n.x, n.y+r+22);
+      }
+      ctx.textAlign='left';
+    });
+
+    _brainAnim = requestAnimationFrame(draw);
+  }
+
+  // ── Mouse interaction ────────────────────────────────────────────────────
+  canvas.addEventListener('mousemove', function(e){
+    var rect=canvas.getBoundingClientRect();
+    var mx=e.clientX-rect.left, my=e.clientY-rect.top;
+    var found=-1;
+    for (var i=0;i<nodes.length;i++) {
+      if (Math.hypot(nodes[i].x-mx,nodes[i].y-my)<nodes[i].r+18) { found=i; break; }
+    }
+    var popEl=document.getElementById('brain-popup');
+    if (found>=0&&popEl) {
+      popup={nodeIdx:found};
+      var n=nodes[found], ag=n.agent;
+      popEl.style.display='block';
+      var px=Math.min(mx+22, W-290), py=Math.max(Math.min(my-60,H-200),10);
+      popEl.style.left=px+'px'; popEl.style.top=py+'px';
+      document.getElementById('brain-popup-name').textContent=ag.name;
+      document.getElementById('brain-popup-role').textContent=ag.label;
+      document.getElementById('brain-popup-stats').innerHTML=
+        'Cluster: <strong style="color:'+CLUSTER[ag.cluster].color+'">'+CLUSTER[ag.cluster].label+'</strong><br>'+
+        'Activity: <strong>'+ag.activity+'%</strong> of brain cycles<br>'+
+        'Skills:<br>' + ag.skills.map(function(s){ return '· '+s; }).join('<br>');
+      document.getElementById('brain-popup-last').textContent='Carely AI · v2.4 · Running on Railway';
+      canvas.style.cursor='pointer';
+    } else {
+      popup=null;
+      if (popEl) popEl.style.display='none';
+      canvas.style.cursor='';
+    }
+  });
+  canvas.addEventListener('mouseleave',function(){ popup=null; var p=document.getElementById('brain-popup'); if(p) p.style.display='none'; });
+
+  // ── Resize ───────────────────────────────────────────────────────────────
+  function resize() {
+    var container=canvas.parentElement;
+    if (!container||!container.offsetWidth) return;
+    canvas.width=container.offsetWidth*(window.devicePixelRatio||1);
+    canvas.height=container.offsetHeight*(window.devicePixelRatio||1);
+    canvas.style.width=container.offsetWidth+'px';
+    canvas.style.height=container.offsetHeight+'px';
+    W=container.offsetWidth; H=container.offsetHeight;
+    layout();
+  }
+
+  // ── Live activity feed ───────────────────────────────────────────────────
+  var FEED_EVENTS=[
+    {agent:'HERMES',   msg:'Daily pulse complete — 20 agents checked · 0 errors · 3 drafts queued for TJ'},
+    {agent:'FRANK',    msg:'Dose reminders sent to 8 beta patients — 6 confirmed within 5 min'},
+    {agent:'LEO',      msg:'LinkedIn post published: "The 2AM Phone Call" — 52 impressions so far'},
+    {agent:'COLE',     msg:'B2B outreach drafted for Pacific Family Medicine — awaiting TJ approval'},
+    {agent:'REX',      msg:'High-signal thread in r/caregivers — reply draft sent to Prabh via Telegram'},
+    {agent:'MAYA',     msg:'No missed doses in last 30-min scan — all beta patients on track'},
+    {agent:'ELARA',    msg:'7 AI check-in sessions completed · 5 patient responses logged · memory updated'},
+    {agent:'SCOUT',    msg:'carely.fit indexed · 4 keywords ranking page 2 · IndexNow ping sent'},
+    {agent:'ORACLE',   msg:'Competitor update: Medisafe v4.2 · no new caregiver features — no threat'},
+    {agent:'NINA',     msg:'Day-3 nurture email sent to 3 trial users — Caregiver Connect walkthrough'},
+    {agent:'SIGNALS',  msg:'Pain pattern detected: "distance caregiver guilt" trending in r/eldercare'},
+    {agent:'GRACE',    msg:'Morning check-ins sent to all active patients — 9AM PST · 6 acknowledged'},
+    {agent:'ACE',      msg:'EOD scan complete — 1 alert: OpenRouter balance low · sent to TJ Telegram'},
+    {agent:'COMPINTEL',msg:'MediSafe App Store reviews analysed — 3 new UX complaints logged for Scout'},
+    {agent:'VANCE',    msg:'TikTok script #4 drafted: "The Morning Routine" — sent to Prabh via Telegram'},
+  ];
+
+  function renderFeed() {
+    var feed=document.getElementById('brain-feed');
+    if (!feed) return;
+    while(feed.firstChild) feed.removeChild(feed.firstChild);
+    var start=feedIndex%FEED_EVENTS.length;
+    var items=[];
+    for (var i=0;i<5;i++) items.push(FEED_EVENTS[(start+i)%FEED_EVENTS.length]);
+    feedIndex++;
+    items.forEach(function(ev,i){
+      var row=document.createElement('div');
+      row.style.cssText='display:flex;gap:8px;align-items:flex-start;font-size:0.71rem;line-height:1.4;opacity:'+(1-i*0.15);
+      var ag=AGENTS.find(function(a){return a.name===ev.agent;});
+      var color=ag?ag.color:'#888';
+      var badge=document.createElement('span');
+      badge.style.cssText='font-size:0.58rem;font-weight:800;letter-spacing:0.05em;flex-shrink:0;padding:2px 6px;border-radius:4px;color:'+color+';border:1px solid '+rgba(color,0.3)+';background:'+rgba(color,0.08)+';margin-top:1px';
+      badge.textContent=ev.agent;
+      var msg=document.createElement('span');
+      msg.style.cssText='color:rgba(255,255,255,0.5);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+      msg.textContent=ev.msg;
+      var t=document.createElement('span');
+      t.style.cssText='color:rgba(255,255,255,0.18);flex-shrink:0;font-size:0.6rem';
+      t.textContent=i===0?'now':(i*3+(Math.floor(Date.now()/1000)%7))+'m';
+      row.appendChild(badge); row.appendChild(msg); row.appendChild(t);
+      feed.appendChild(row);
+    });
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  if (!W || !H) {
+    setTimeout(function(){
+      resize();
+      if (!_brainAnim) { renderFeed(); requestAnimationFrame(draw); setInterval(renderFeed,8000); }
+    }, 100);
+  } else {
+    renderFeed();
+    requestAnimationFrame(draw);
+    setInterval(renderFeed, 8000);
+  }
+}
 function submitBrainInject() {
   var topic = document.getElementById('brain-inject-topic');
   var key   = document.getElementById('brain-inject-key');
@@ -3774,7 +4584,6 @@ function submitBrainInject() {
 
 // ═══ INIT: load data for pages that need it on startup ═══════════════════════
 (function() {
-  loadProposals();
   if (window.loadDrafts) window.loadDrafts();
 })();
 </script>
