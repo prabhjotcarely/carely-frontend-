@@ -3399,6 +3399,48 @@ function rejectProposal(id) {
 
   function clearEl(el) { while(el.firstChild) el.removeChild(el.firstChild); }
 
+  function humanizeMessage(agentName, msg) {
+    if (!msg) return msg;
+    // Strip [AutoCEO] prefix
+    msg = msg.replace(/^\[AutoCEO\]\s*/i, '');
+    // Parse pipe-separated trigger_agent(...) blocks
+    if (msg.indexOf('trigger_agent(') !== -1) {
+      var done = [], pending = [];
+      msg.split('|').forEach(function(part) {
+        part = part.trim();
+        var m = part.match(/trigger_agent\(([^)]+)\):\s*(.+)/);
+        if (!m) return;
+        var taskName = m[1].replace(/_/g,' ');
+        var status = m[2].toLowerCase();
+        if (status.indexOf('already triggered') !== -1) {
+          done.push(taskName);
+        } else if (status.indexOf('triggered') !== -1) {
+          pending.push(taskName + ' — started');
+        } else {
+          done.push(taskName + ' (' + m[2] + ')');
+        }
+      });
+      var parts = [];
+      if (done.length) parts.push('Already done today: ' + done.map(function(t){ return t.charAt(0).toUpperCase()+t.slice(1); }).join(', ') + '.');
+      if (pending.length) parts.push(pending.join(', ') + '.');
+      return parts.length ? parts.join(' ') : msg;
+    }
+    // Parse Health N/100 | MRR $N | N paid | N trials
+    if (msg.match(/Health \d+\/100/)) {
+      var h = (msg.match(/Health (\d+)\/100/) || [])[1];
+      var mrr = (msg.match(/MRR \$([0-9,]+)/) || [])[1];
+      var paid = (msg.match(/(\d+) paid/) || [])[1];
+      var trials = (msg.match(/(\d+) trials/) || [])[1];
+      var out = 'Status update — ';
+      if (mrr !== undefined) out += 'Revenue this month: $' + mrr + '. ';
+      if (paid !== undefined) out += paid + ' paying customers. ';
+      if (trials !== undefined) out += trials + ' on free trial. ';
+      if (h !== undefined) out += 'System health: ' + h + '/100.';
+      return out;
+    }
+    return msg;
+  }
+
   function buildFeedRow(ev) {
     var color = AGENT_COLORS[(ev.agentName||'').toLowerCase()] || '#6B7280';
     var row = document.createElement('div');
@@ -3422,7 +3464,7 @@ function rejectProposal(id) {
     header.appendChild(nameEl);header.appendChild(typeEl);header.appendChild(timeEl);
     var msg = document.createElement('div');
     msg.style.cssText='font-size:0.82rem;color:var(--text);line-height:1.4';
-    msg.textContent=ev.message;
+    msg.textContent=humanizeMessage(ev.agentName, ev.message);
     body.appendChild(header);body.appendChild(msg);
     row.appendChild(avatar);row.appendChild(body);
     return row;
@@ -3590,8 +3632,16 @@ function rejectProposal(id) {
       .then(function(r) { return r.json(); })
       .then(function(data) {
         clearTimeout(_inboxTimer);
-        var items = data.items || [];
-        var unread = data.unread || 0;
+        var rawItems = data.items || [];
+        // Deduplicate: keep only the most recent item per title
+        var seen = {};
+        var items = rawItems.filter(function(item) {
+          var key = (item.title||'').trim();
+          if (seen[key]) return false;
+          seen[key] = true;
+          return true;
+        });
+        var unread = items.filter(function(i){ return !i.read; }).length;
         var feed = document.getElementById('inbox-feed');
         var label = document.getElementById('inbox-unread-label');
         var sbItem = document.querySelector('.sb-item[onclick*="my-inbox"]');
@@ -3765,10 +3815,23 @@ function rejectProposal(id) {
             card.appendChild(meta);
           }
 
+          var fullText = draft.fullContent || draft.body || draft.content || draft.contentSnippet || '(no preview)';
           var preview = document.createElement('div');
-          preview.style.cssText = 'background:var(--g100);border-radius:8px;padding:12px 14px;font-size:0.82rem;line-height:1.7;color:var(--text);white-space:pre-wrap;max-height:180px;overflow:auto;margin-bottom:12px';
-          preview.textContent = draft.contentSnippet || draft.fullContent || draft.body || draft.content || '(no preview)';
+          preview.style.cssText = 'background:var(--g100);border-radius:8px;padding:12px 14px;font-size:0.82rem;line-height:1.7;color:var(--text);white-space:pre-wrap;margin-bottom:8px;max-height:120px;overflow:hidden;cursor:pointer;position:relative';
+          preview.textContent = fullText;
+          // Expand toggle
+          var expanded = false;
+          var expandBtn = document.createElement('button');
+          expandBtn.textContent = 'Read full draft ↓';
+          expandBtn.style.cssText = 'font-size:0.72rem;font-weight:700;color:var(--teal);background:none;border:none;cursor:pointer;padding:0 0 10px 0;display:block';
+          expandBtn.onclick = function() {
+            expanded = !expanded;
+            preview.style.maxHeight = expanded ? 'none' : '120px';
+            preview.style.overflow = expanded ? 'visible' : 'hidden';
+            expandBtn.textContent = expanded ? 'Collapse ↑' : 'Read full draft ↓';
+          };
           card.appendChild(preview);
+          card.appendChild(expandBtn);
 
           var btnRow = document.createElement('div');
           btnRow.style.cssText = 'display:flex;gap:8px';
@@ -4198,6 +4261,11 @@ function loadBrain() {
     .then(function(r) { return r.json(); })
     .then(function(d) {
       // Brain returns { entries: [{topic, content, updatedAt, updatedBy, version}] }
+      var canvas = document.getElementById('brain-canvas');
+      if (canvas) canvas.style.display = 'none';
+      grid.style.display = 'grid';
+      if (_brainAnim) { cancelAnimationFrame(_brainAnim); _brainAnim = null; }
+
       var topics = {};
       (d.entries || []).forEach(function(e) { topics[e.topic] = e; });
       var keys = Object.keys(topics);
