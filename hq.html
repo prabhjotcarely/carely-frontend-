@@ -2545,14 +2545,52 @@ function loadB2BPipeline() {
       }
     })
     .catch(function() {
-      if (wrap) {
-        wrap.textContent = '';
-        var er = document.createElement('div');
-        er.style.cssText = 'text-align:center;padding:28px;color:var(--red);font-size:0.82rem';
-        er.textContent = 'Could not load pipeline — backend unreachable.';
-        wrap.appendChild(er);
+      var DEMO_PIPELINE = [
+        {org_name:'Sunrise Senior Living',org_type:'senior_home',region:'BC, Canada',status:'replied',last_contacted_at:'2026-05-10',emails_sent:3,contact_email:'director@sunrisesenior.ca',website:'sunrisesenior.ca',notes:'Interested in pilot for 45 residents'},
+        {org_name:'Pharmasave Burnaby',org_type:'pharmacy',region:'BC, Canada',status:'opened',last_contacted_at:'2026-05-12',emails_sent:2,contact_email:'owner@pharmasave-burnaby.com',website:'pharmasave.com',notes:'Opened email twice — follow up'},
+        {org_name:'Harmony Health Clinic',org_type:'clinic',region:'ON, Canada',status:'sent',last_contacted_at:'2026-05-11',emails_sent:1,contact_email:'admin@harmonyhealth.ca',website:'harmonyhealth.ca',notes:'GP clinic, 8 doctors'},
+        {org_name:'Golden Years Care Home',org_type:'senior_home',region:'AB, Canada',status:'converted',last_contacted_at:'2026-05-08',emails_sent:4,contact_email:'mgr@goldenyears.ca',website:'goldenyears.ca',notes:'Signed — 62 residents onboarding'},
+        {org_name:'MedFirst Pharmacy',org_type:'pharmacy',region:'BC, Canada',status:'pending',last_contacted_at:null,emails_sent:0,contact_email:'info@medfirst.ca',website:'medfirst.ca',notes:'Cole identified — not yet contacted'},
+        {org_name:'Pacific Family Medicine',org_type:'clinic',region:'BC, Canada',status:'clicked',last_contacted_at:'2026-05-13',emails_sent:2,contact_email:'office@pacificfm.ca',website:'pacificfm.ca',notes:'Clicked pricing link — hot lead'},
+      ];
+      if (countEl) countEl.textContent = DEMO_PIPELINE.length + ' orgs (demo)';
+      if (summary) {
+        summary.textContent = '';
+        var STAGE_LABELS2 = { pending:'Prospecting', sent:'Contacted', opened:'Opened', clicked:'Clicked', replied:'Replied', converted:'Won' };
+        var cnts = {}; DEMO_PIPELINE.forEach(function(t) { cnts[t.status]=(cnts[t.status]||0)+1; });
+        Object.keys(STAGE_LABELS2).forEach(function(s) {
+          if (!cnts[s]) return;
+          var m=document.createElement('div'); m.className='metric';
+          var lbl=document.createElement('div'); lbl.className='metric-label'; lbl.textContent=STAGE_LABELS2[s]; m.appendChild(lbl);
+          var val=document.createElement('div'); val.className='metric-val teal'; val.textContent=cnts[s]; m.appendChild(val);
+          summary.appendChild(m);
+        });
       }
-      if (countEl) countEl.textContent = 'Error';
+      if (wrap) {
+        wrap.textContent='';
+        var note=document.createElement('div'); note.style.cssText='font-size:0.72rem;color:var(--amber);padding:6px 12px;background:#FFFBEB;border-bottom:1px solid var(--g200)';
+        note.textContent='Demo data — backend offline'; wrap.appendChild(note);
+        var tbl=document.createElement('table'); tbl.className='tbl';
+        var thead=document.createElement('thead'); var hrow=document.createElement('tr');
+        ['Organization','Type','Region','Status','Last Contact','Emails','Actions'].forEach(function(h){var th=document.createElement('th');th.textContent=h;hrow.appendChild(th);});
+        thead.appendChild(hrow); tbl.appendChild(thead);
+        var tbody=document.createElement('tbody');
+        var SC2={pending:'amber',sent:'',opened:'teal',clicked:'teal',replied:'green',converted:'green'};
+        DEMO_PIPELINE.forEach(function(t){
+          var tr=document.createElement('tr');
+          [t.org_name,(t.org_type||'').replace(/_/g,' '),t.region,t.status,t.last_contacted_at||'—',String(t.emails_sent)].forEach(function(v,i){
+            var td=document.createElement('td');
+            if(i===3){var pill=document.createElement('span');pill.className='pill '+(SC2[t.status]||'');pill.textContent=v;td.appendChild(pill);}
+            else td.textContent=v; tr.appendChild(td);
+          });
+          var tdA=document.createElement('td'); var btn=document.createElement('button');
+          btn.style.cssText='font-size:0.7rem;border:1px solid var(--g300);padding:2px 8px;border-radius:5px;background:white;cursor:pointer;color:var(--g500)';
+          btn.textContent='Details';
+          (function(org){btn.onclick=function(){alert('Org: '+org.org_name+'\nEmail: '+(org.contact_email||'—')+'\nWebsite: '+(org.website||'—')+'\nNote: '+(org.notes||'—'));};})(t);
+          tdA.appendChild(btn); tr.appendChild(tdA); tbody.appendChild(tr);
+        });
+        tbl.appendChild(tbody); wrap.appendChild(tbl);
+      }
     });
 }
 
@@ -2626,9 +2664,30 @@ function loadB2BStats() {
       }
     })
     .catch(function() {
+      var DS = {total:24,contacted:18,replies:4,won:2,replyRate:22,unsub:1};
       if (statsRow) {
-        var er = document.createElement('div'); er.style.cssText='color:var(--red);font-size:0.82rem;padding:8px';
-        er.textContent = 'Could not load stats.'; statsRow.appendChild(er);
+        [['Total Orgs',DS.total,''],['Contacted',DS.contacted,'teal'],['Replied',DS.replies,'green'],['Won',DS.won,'green'],['Reply Rate',DS.replyRate+'%','green'],['Unsubscribed',DS.unsub,'red']].forEach(function(row){
+          var m=document.createElement('div'); m.className='metric';
+          var lbl=document.createElement('div'); lbl.className='metric-label'; lbl.textContent=row[0]; m.appendChild(lbl);
+          var val=document.createElement('div'); val.className='metric-val '+row[2]; val.textContent=row[1]; m.appendChild(val);
+          statsRow.appendChild(m);
+        });
+        var note=document.createElement('div'); note.style.cssText='font-size:0.7rem;color:var(--amber);margin-top:4px'; note.textContent='Demo data'; statsRow.appendChild(note);
+      }
+      if (segEl) {
+        segEl.textContent='';
+        [['Senior Home',10],['Pharmacy',7],['Clinic',5],['Other',2]].forEach(function(row){
+          var r=document.createElement('div'); r.style.cssText='display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;padding:5px 0;border-bottom:1px solid var(--g100)';
+          var lbl=document.createElement('span'); lbl.textContent=row[0]; r.appendChild(lbl);
+          var cnt=document.createElement('span'); cnt.style.fontWeight='700'; cnt.textContent=row[1]; r.appendChild(cnt);
+          segEl.appendChild(r);
+        });
+      }
+      if (actEl) {
+        actEl.textContent='';
+        ['Pipeline built: 24 orgs discovered','Emails sent to: 18 orgs','Reply rate: 22% (4 replies)','Converted / won: 2 orgs','Unsubscribes honoured: 1'].forEach(function(a){
+          var row=document.createElement('div'); row.style.cssText='font-size:0.8rem;padding:5px 0;border-bottom:1px solid var(--g100)'; row.textContent='· '+a; actEl.appendChild(row);
+        });
       }
     });
 }
@@ -2713,14 +2772,36 @@ function loadProposals() {
       });
     })
     .catch(function() {
+      var DEMO_PROPS = [
+        {id:'d1',title:'TikTok Series: "One Pill at a Time" — 7-day storytelling arc',category:'Content',status:'pending',description:'7-part TikTok series showing real caregiver moments. Each video 45–60s, organic hook. Targets r/caregivers sentiment. Estimated 50K+ reach if consistent.',impact:'High',effort:'Medium'},
+        {id:'d2',title:'Reddit AMA in r/eldercare — TJ as founder',category:'Growth',status:'pending',description:'Position TJ as a founder who built this for his family. Genuine story, no sales pitch. Answer questions about medication management, AI, privacy. Goal: 5 signups minimum.',impact:'High',effort:'Low'},
+        {id:'d3',title:'Pharmacy partner outreach — BC Lower Mainland first',category:'B2B',status:'approved',description:'Target 15 independent pharmacies in Greater Vancouver. Warm email from Cole. Offer 20% referral commission + free pilot for their top 5 at-risk patients.',impact:'High',effort:'Low'},
+        {id:'d4',title:'Instagram Reels: Behind-the-scenes Carely build',category:'Content',status:'pending',description:'Prabh films 3x30s reels showing the app in real use. Target: family caregiver accounts, age 35–55. No ads, purely organic engagement via hashtag strategy.',impact:'Medium',effort:'Low'},
+      ];
+      if (countLbl) countLbl.textContent = DEMO_PROPS.filter(function(p){return p.status===filter||!filter||filter==='all';}).length + ' proposals (demo)';
       if (feed) {
-        feed.textContent = '';
-        var er = document.createElement('div'); er.className = 'card';
-        er.style.cssText = 'text-align:center;padding:28px;color:var(--red);font-size:0.82rem';
-        er.textContent = 'Could not load proposals — backend unreachable.';
-        feed.appendChild(er);
+        feed.textContent='';
+        var banner=document.createElement('div'); banner.style.cssText='font-size:0.72rem;color:var(--amber);padding:6px 12px;background:#FFFBEB;border-radius:8px;margin-bottom:10px';
+        banner.textContent='Demo data — backend offline. Real proposals will appear here when connected.'; feed.appendChild(banner);
+        var SC={pending:'amber',approved:'green',rejected:'red'};
+        DEMO_PROPS.forEach(function(p){
+          var card=document.createElement('div'); card.className='card';
+          var hdr=document.createElement('div'); hdr.style.cssText='display:flex;align-items:flex-start;gap:10px;margin-bottom:12px';
+          var iconEl=document.createElement('div'); iconEl.style.cssText='font-size:1.4rem;flex-shrink:0'; iconEl.textContent='🧠'; hdr.appendChild(iconEl);
+          var info=document.createElement('div'); info.style.flex='1';
+          var titleEl=document.createElement('div'); titleEl.style.cssText='font-size:0.9rem;font-weight:800;color:var(--deep)'; titleEl.textContent=p.title; info.appendChild(titleEl);
+          var metaEl=document.createElement('div'); metaEl.style.cssText='font-size:0.72rem;color:var(--g500);margin-top:2px'; metaEl.textContent=p.category+' · Demo'; info.appendChild(metaEl);
+          hdr.appendChild(info);
+          var pillEl=document.createElement('span'); pillEl.className='pill '+(SC[p.status]||''); pillEl.textContent=p.status; hdr.appendChild(pillEl);
+          card.appendChild(hdr);
+          var desc=document.createElement('div'); desc.style.cssText='font-size:0.82rem;color:var(--text);margin-bottom:12px;line-height:1.6;background:var(--g100);padding:10px 12px;border-radius:8px'; desc.textContent=p.description; card.appendChild(desc);
+          var badges=document.createElement('div'); badges.style.cssText='display:flex;gap:10px;margin-bottom:12px';
+          var ip=document.createElement('span'); ip.className='pill green'; ip.textContent='Impact: '+p.impact; badges.appendChild(ip);
+          var ep=document.createElement('span'); ep.className='pill amber'; ep.textContent='Effort: '+p.effort; badges.appendChild(ep);
+          card.appendChild(badges);
+          feed.appendChild(card);
+        });
       }
-      if (countLbl) countLbl.textContent = 'Error';
     });
 }
 
@@ -2829,7 +2910,15 @@ function rejectProposal(id) {
       .then(function(r) { return r.json(); })
       .then(apply)
       .catch(function() {
-        var lu = $('live-updated'); if (lu) lu.textContent = '· Offline';
+        var lu = $('live-updated'); if (lu) lu.textContent = '· Demo mode (backend offline)';
+        // Show demo stats so dashboard isn't blank
+        apply({
+          users:{founding:3,monthly:2,annual:1,trial:8,total:14},
+          revenue:{mrr:45,arr:540,spotsRemaining:197},
+          expenses:{monthly:50},
+          profit:{monthly:-5},
+          waitlist:{total:47}
+        });
       });
   }
 
@@ -2934,8 +3023,21 @@ function rejectProposal(id) {
       .catch(function() {
         var feedStatus=document.getElementById('feed-status');
         var agentStatus=document.getElementById('agent-feed-status');
-        if(feedStatus) feedStatus.textContent='Team feed offline';
-        if(agentStatus) agentStatus.textContent='Agent feed offline';
+        if(feedStatus) feedStatus.textContent='Demo mode — backend offline';
+        if(agentStatus) agentStatus.textContent='Demo mode — backend offline';
+        var DEMO_EVENTS=[
+          {agent:'Hermes',type:'brief',message:'Daily brief compiled — 5 agents ran overnight, 0 errors, 2 content drafts queued',ts:new Date(Date.now()-3600000).toISOString()},
+          {agent:'Grace',type:'push',message:'12 medication check-in pushes sent to active patients — 9 responded (75% open rate)',ts:new Date(Date.now()-7200000).toISOString()},
+          {agent:'Leo',type:'content',message:'LinkedIn post draft ready: "Why 40% of seniors miss their afternoon dose" — queued for approval',ts:new Date(Date.now()-10800000).toISOString()},
+          {agent:'Rex',type:'outreach',message:'Replied to 3 Reddit threads in r/caregivers and r/eldercare — 1 direct message received',ts:new Date(Date.now()-14400000).toISOString()},
+          {agent:'Cole',type:'pipeline',message:'8 new senior homes added to B2B pipeline — BC Lower Mainland focus. 2 emails sent.',ts:new Date(Date.now()-18000000).toISOString()},
+          {agent:'Hermes',type:'alert',message:'Stripe webhook received — 1 new founding member signup at $5/month',ts:new Date(Date.now()-21600000).toISOString()},
+          {agent:'Elara',type:'ai',message:'7 personalised AI check-ins generated for high-risk patients — all sent via FCM',ts:new Date(Date.now()-25200000).toISOString()},
+        ];
+        var teamContainer=document.getElementById('team-feed-container');
+        var agentContainer=document.getElementById('agent-chat-feed');
+        if(teamContainer) fillContainer(teamContainer, DEMO_EVENTS);
+        if(agentContainer) fillContainer(agentContainer, DEMO_EVENTS);
       });
   };
 
@@ -3009,7 +3111,36 @@ function rejectProposal(id) {
       })
       .catch(function(){
         var count=document.getElementById('crm-count');
-        if(count) count.textContent='CRM offline';
+        if(count) count.textContent='6 users (demo)';
+        var wrap=document.getElementById('crm-table-wrap');
+        if(!wrap) return;
+        while(wrap.firstChild) wrap.removeChild(wrap.firstChild);
+        var note=document.createElement('div'); note.style.cssText='font-size:0.72rem;color:var(--amber);padding:6px 12px;background:#FFFBEB;border-bottom:1px solid var(--g200)';
+        note.textContent='Demo data — backend offline'; wrap.appendChild(note);
+        var DEMO_USERS=[
+          {first_name:'Margaret',email:'m***@gmail.com',plan:'founding',created_at:'2026-04-10',trial_ends_at:null},
+          {first_name:'Robert',email:'r***@yahoo.com',plan:'monthly',created_at:'2026-04-22',trial_ends_at:null},
+          {first_name:'Dorothy',email:'d***@icloud.com',plan:'trial',created_at:'2026-05-10',trial_ends_at:'2026-05-17'},
+          {first_name:'Harold',email:'h***@gmail.com',plan:'annual',created_at:'2026-03-15',trial_ends_at:null},
+          {first_name:'Eleanor',email:'e***@hotmail.com',plan:'trial',created_at:'2026-05-12',trial_ends_at:'2026-05-19'},
+          {first_name:'Walter',email:'w***@gmail.com',plan:'founding',created_at:'2026-04-05',trial_ends_at:null},
+        ];
+        var tbl=document.createElement('table'); tbl.className='tbl';
+        var thead=document.createElement('thead'); var hrow=document.createElement('tr');
+        ['Name','Email','Plan','Joined','Trial Ends'].forEach(function(h){var th=document.createElement('th');th.textContent=h;hrow.appendChild(th);});
+        thead.appendChild(hrow); tbl.appendChild(thead);
+        var tbody=document.createElement('tbody');
+        var PLAN_COLORS2={founding:'green',monthly:'teal',annual:'blue',trial:'amber',cancelled:'red'};
+        DEMO_USERS.forEach(function(u){
+          var tr=document.createElement('tr');
+          [u.first_name,u.email,u.plan,u.created_at?u.created_at.slice(0,10):'—',u.trial_ends_at?u.trial_ends_at.slice(0,10):'—'].forEach(function(v,i){
+            var td=document.createElement('td');
+            if(i===2){var pill=document.createElement('span');pill.className='pill '+(PLAN_COLORS2[v]||'grey');pill.textContent=v;td.appendChild(pill);}
+            else td.textContent=v; tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        tbl.appendChild(tbody); wrap.appendChild(tbl);
       });
   };
 
@@ -3306,10 +3437,19 @@ function rejectProposal(id) {
         var el = document.getElementById('agent-activity-feed');
         if (!el) return;
         while (el.firstChild) el.removeChild(el.firstChild);
-        var err = document.createElement('div');
-        err.style.cssText = 'color:#9CA3AF;font-size:0.82rem;padding:12px';
-        err.textContent = 'Could not load activity.';
-        el.appendChild(err);
+        var DEMO_ACTIVITY=[
+          {agent:'Hermes',type:'brief',message:'Daily ops brief compiled and sent to TJ + Prabh via Telegram',ts:new Date(Date.now()-3600000).toISOString()},
+          {agent:'Grace',type:'push',message:'Morning medication reminders sent — 12 patients, 75% open rate',ts:new Date(Date.now()-7200000).toISOString()},
+          {agent:'Leo',type:'content',message:'LinkedIn post scheduled: "Medication adherence gap in senior care"',ts:new Date(Date.now()-10800000).toISOString()},
+          {agent:'Rex',type:'outreach',message:'Monitored r/caregivers — replied to 2 threads, 1 DM received',ts:new Date(Date.now()-14400000).toISOString()},
+          {agent:'Cole',type:'pipeline',message:'Discovered 8 new senior homes in BC — added to outreach pipeline',ts:new Date(Date.now()-18000000).toISOString()},
+          {agent:'Elara',type:'ai',message:'7 personalised AI check-ins generated for high-risk patients',ts:new Date(Date.now()-21600000).toISOString()},
+          {agent:'Zara',type:'support',message:'Reviewed 3 AppStore reviews — 1 flagged for founder response',ts:new Date(Date.now()-25200000).toISOString()},
+          {agent:'Hermes',type:'system',message:'All 18 agents healthy — no errors in last 24h cycle',ts:new Date(Date.now()-28800000).toISOString()},
+        ];
+        var note=document.createElement('div'); note.style.cssText='color:var(--amber);font-size:0.72rem;padding:6px 12px;background:#FFFBEB;border-radius:6px;margin-bottom:8px';
+        note.textContent='Demo data — backend offline'; el.appendChild(note);
+        DEMO_ACTIVITY.forEach(function(e){ el.appendChild(makeEventEl(e)); });
       });
   };
 
@@ -3482,7 +3622,12 @@ function rejectProposal(id) {
           pill.textContent = 'Online'; pill.className = 'pill green';
         }
       })
-      .catch(function() {});
+      .catch(function() {
+        var pill=document.getElementById('sg-pill');
+        var usage=document.getElementById('sg-usage');
+        if(pill){ pill.textContent='Offline'; pill.className='pill amber'; }
+        if(usage) usage.textContent='0/100 today (demo)';
+      });
   }
 
   loadSendGridStats();
