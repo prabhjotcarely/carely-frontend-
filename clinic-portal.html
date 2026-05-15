@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clinic Dashboard — Carely</title>
+  <link rel="icon" type="image/png" href="elara-3d-new.png" />
+  <link rel="apple-touch-icon" href="elara-3d-new.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #028090; --deep-teal: #0D3347; --mint: #02C39A;
+      --off-white: #F7FBFA; --grey-100: #F1F5F4; --grey-300: #C8D6D3;
+      --grey-500: #7A9490; --text: #0D2B24; --white: #fff;
+      --radius: 16px; --danger: #EF4444; --warning: #F59E0B; --accent: #6366f1;
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--off-white); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(247,251,250,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(200,214,211,0.5); padding: 0 20px; }
+    .nav-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: var(--deep-teal); text-decoration: none; }
+    .nav-pill { background: #e0fdf4; color: #065f46; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid #a7f3d0; }
+
+    main { max-width: 1040px; margin: 0 auto; padding: 40px 20px 80px; }
+    #portal { display: none; }
+
+    .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+    .page-title { font-size: 2rem; font-weight: 900; color: var(--deep-teal); letter-spacing: -0.03em; margin-bottom: 4px; }
+    .page-subtitle { font-size: 0.95rem; color: var(--grey-500); }
+    .last-updated { font-size: 0.8rem; color: var(--grey-500); background: var(--grey-100); padding: 6px 12px; border-radius: 8px; align-self: flex-start; margin-top: 6px; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .stat-card { background: var(--white); border-radius: var(--radius); padding: 22px 20px; border: 1.5px solid var(--grey-300); position: relative; overflow: hidden; }
+    .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--teal)); }
+    .stat-card.alert-card::before { background: linear-gradient(90deg, var(--danger), var(--warning)); }
+    .stat-value { font-size: 2.2rem; font-weight: 900; color: var(--deep-teal); line-height: 1; margin-bottom: 6px; }
+    .stat-value.green { color: var(--mint); }
+    .stat-value.red { color: var(--danger); }
+    .stat-value.amber { color: var(--warning); }
+    .stat-label { font-size: 0.78rem; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .section-title { font-size: 1.05rem; font-weight: 800; color: var(--deep-teal); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .section-count { font-size: 0.8rem; font-weight: 600; color: var(--grey-500); background: var(--grey-100); padding: 2px 10px; border-radius: 20px; }
+
+    .alert-banner { background: linear-gradient(135deg, #fef3c7, #fff7ed); border: 1.5px solid #fcd34d; border-radius: var(--radius); padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 12px; }
+    .alert-banner-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 1px; }
+    .alert-banner h4 { font-size: 0.95rem; font-weight: 700; color: #92400e; margin-bottom: 4px; }
+    .alert-banner p { font-size: 0.85rem; color: #b45309; }
+
+    .table-wrap { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--grey-300); overflow: hidden; margin-bottom: 28px; }
+    .table-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--grey-300); }
+    .table-title { font-size: 1rem; font-weight: 800; color: var(--deep-teal); }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: var(--off-white); padding: 10px 16px; font-size: 0.75rem; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; text-align: left; }
+    td { padding: 13px 16px; font-size: 0.875rem; color: var(--text); border-top: 1px solid var(--grey-100); vertical-align: middle; }
+    tr:hover td { background: #fafffe; }
+
+    .adherence-bar-wrap { display: flex; align-items: center; gap: 10px; }
+    .adherence-bar-bg { flex: 1; height: 8px; background: var(--grey-100); border-radius: 4px; overflow: hidden; min-width: 80px; }
+    .adherence-bar-fill { height: 100%; border-radius: 4px; }
+    .adherence-pct { font-size: 0.82rem; font-weight: 700; min-width: 36px; text-align: right; }
+
+    .badge { display: inline-flex; align-items: center; border-radius: 8px; padding: 3px 10px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+    .badge-green { background: #D1FAE5; color: #065F46; }
+    .badge-red { background: #FEE2E2; color: #991B1B; }
+
+    .condition-tag { display: inline-block; background: #f0f9ff; color: #0369a1; border: 1px solid #bae6fd; border-radius: 6px; padding: 2px 8px; font-size: 0.72rem; font-weight: 600; margin-right: 4px; margin-bottom: 2px; }
+
+    .missed-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .missed-item { background: var(--white); border: 1.5px solid var(--grey-300); border-radius: 12px; padding: 16px 18px; display: flex; align-items: flex-start; gap: 12px; border-left: 4px solid var(--danger); }
+    .missed-item.amber { border-left-color: var(--warning); }
+    .missed-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+    .missed-body h4 { font-size: 0.9rem; font-weight: 700; color: var(--deep-teal); margin-bottom: 3px; }
+    .missed-body p { font-size: 0.82rem; color: var(--grey-500); }
+    .missed-time { font-size: 0.75rem; color: var(--grey-500); margin-left: auto; white-space: nowrap; padding-top: 3px; }
+
+    .demo-note { background: #fef9c3; border: 1px solid #fde68a; border-radius: 10px; padding: 10px 16px; font-size: 0.8rem; color: #92400e; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+
+    footer { background: var(--deep-teal); color: rgba(255,255,255,0.6); text-align: center; padding: 24px 20px; font-size: 0.82rem; margin-top: 60px; }
+
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .page-header { flex-direction: column; }
+      td, th { padding: 10px 12px; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
+    posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
+  </script>
+</head>
+<body>
+
+<!-- PIN GATE -->
+<div id="pin-gate" style="position:fixed;inset:0;background:linear-gradient(135deg,#0D3347 0%,#028090 55%,#02C39A 100%);display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:#fff;border-radius:20px;padding:48px 40px;width:420px;max-width:92vw;box-shadow:0 32px 80px rgba(13,51,71,.35);">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+      <img src="elara-bot-logo.png" alt="Carely" style="height:42px;width:auto;">
+      <div style="font-size:20px;font-weight:800;color:#0D3347;">Carely <span style="color:#028090;">Clinic Portal</span></div>
+    </div>
+    <div style="font-size:13px;color:#6b8fa3;margin-bottom:28px;">Patient adherence overview for your practice</div>
+    <label style="display:block;font-size:11px;font-weight:700;color:#6b8fa3;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;">Access Code</label>
+    <input type="password" id="pin-input" placeholder="Enter access code" style="width:100%;padding:11px 14px;border:1.5px solid #e0eaf0;border-radius:9px;font-size:14px;color:#0d3347;background:#f8fbfc;outline:none;font-family:inherit;" />
+    <div id="pin-err" style="display:none;color:#e53e3e;font-size:13px;margin-top:8px;">Invalid access code. Please try again.</div>
+    <button onclick="doUnlock()" style="width:100%;margin-top:20px;padding:14px;background:linear-gradient(135deg,#028090,#02C39A);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;">View Clinic Dashboard</button>
+    <div style="margin-top:14px;font-size:12px;color:#6b8fa3;text-align:center;">Access code: <strong>272727</strong></div>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <img src="elara-bot-logo.png" alt="Carely" style="height:32px;width:auto;" />
+      Carely Clinic
+    </a>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span id="clinic-name-nav" style="font-weight:600;font-size:0.9rem;color:var(--teal);"></span>
+      <span class="nav-pill">Adherence Overview</span>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div id="portal">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title" id="portal-title">Clinic Dashboard</h1>
+        <p class="page-subtitle" id="portal-subtitle">Consented patients only</p>
+      </div>
+      <div class="last-updated">Updated today at 8:47 AM</div>
+    </div>
+
+    <div class="demo-note">
+      <span>Demo data — showing sample adherence data. Connect backend to display real patient data.</span>
+    </div>
+
+    <div id="alert-banner-wrap"></div>
+    <div class="stats-grid" id="stats-grid"></div>
+
+    <div class="table-wrap">
+      <div class="table-header">
+        <span class="table-title">Consented patients on Carely</span>
+        <span style="font-size:0.8rem;color:var(--grey-500);" id="patient-count"></span>
+      </div>
+      <div id="patients-table-container"></div>
+    </div>
+
+    <p class="section-title">Recent missed dose alerts <span class="section-count" id="alert-count"></span></p>
+    <ul class="missed-list" id="missed-list"></ul>
+  </div>
+</main>
+
+<footer>
+  <span>© 2026 Carely · Clinic Partner Program · Data shown only for patients who have consented to share</span>
+</footer>
+
+<script>
+  var DEMO = {
+    clinic: { name: 'Westside Family Medicine', gp: 'Dr. Sarah Chen', location: 'Vancouver, BC' },
+    stats: { totalPatients: 18, activeThisWeek: 15, avgAdherence: 82, atRisk: 3, dosesToday: 47, dosesConfirmedToday: 39 },
+    patients: [
+      { initials: 'M.W.', age: 72, conditions: ['Hypertension', 'Type 2 Diabetes'], meds: 4, adherence30: 91, lastActive: '2026-05-14', status: 'on-track' },
+      { initials: 'R.P.', age: 68, conditions: ['High Cholesterol'], meds: 2, adherence30: 88, lastActive: '2026-05-14', status: 'on-track' },
+      { initials: 'D.L.', age: 81, conditions: ['Hypertension', 'Thyroid'], meds: 3, adherence30: 76, lastActive: '2026-05-13', status: 'on-track' },
+      { initials: 'H.K.', age: 65, conditions: ['Type 2 Diabetes'], meds: 3, adherence30: 58, lastActive: '2026-05-12', status: 'at-risk' },
+      { initials: 'E.O.', age: 77, conditions: ['Hypertension'], meds: 2, adherence30: 94, lastActive: '2026-05-14', status: 'on-track' },
+      { initials: 'W.T.', age: 70, conditions: ['COPD', 'Hypertension'], meds: 5, adherence30: 45, lastActive: '2026-05-10', status: 'at-risk' },
+      { initials: 'P.N.', age: 59, conditions: ['Type 2 Diabetes', 'High Cholesterol'], meds: 3, adherence30: 87, lastActive: '2026-05-14', status: 'on-track' },
+      { initials: 'G.M.', age: 74, conditions: ['Heart Failure'], meds: 6, adherence30: 52, lastActive: '2026-05-11', status: 'at-risk' },
+      { initials: 'J.B.', age: 63, conditions: ['Hypertension'], meds: 2, adherence30: 95, lastActive: '2026-05-14', status: 'on-track' },
+      { initials: 'F.S.', age: 69, conditions: ['Type 2 Diabetes', 'Thyroid'], meds: 4, adherence30: 83, lastActive: '2026-05-13', status: 'on-track' }
+    ],
+    alerts: [
+      { initials: 'W.T.', age: 70, medication: 'Salbutamol inhaler', missedAt: '2026-05-14T07:00:00Z', severity: 'high', note: 'Third missed dose this week' },
+      { initials: 'G.M.', age: 74, medication: 'Furosemide', missedAt: '2026-05-14T08:00:00Z', severity: 'high', note: 'Heart failure patient — family notified' },
+      { initials: 'H.K.', age: 65, medication: 'Metformin', missedAt: '2026-05-13T20:00:00Z', severity: 'medium', note: 'Second missed dose this week' },
+      { initials: 'D.L.', age: 81, medication: 'Levothyroxine', missedAt: '2026-05-13T07:00:00Z', severity: 'medium', note: 'Elara sent follow-up check-in' }
+    ]
+  };
+
+  function setText(id, val) { var el = document.getElementById(id); if (el) el.textContent = String(val); }
+
+  function el(tag, cls, txt) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (txt !== undefined) e.textContent = txt;
+    return e;
+  }
+
+  function makeStatCard(value, label, colorClass, isAlert) {
+    var card = el('div', isAlert ? 'stat-card alert-card' : 'stat-card');
+    var v = el('div', colorClass ? 'stat-value ' + colorClass : 'stat-value', String(value));
+    var l = el('div', 'stat-label', label);
+    card.appendChild(v); card.appendChild(l);
+    return card;
+  }
+
+  function barColor(pct) {
+    if (pct >= 80) return '#02C39A';
+    if (pct >= 60) return '#F59E0B';
+    return '#EF4444';
+  }
+
+  function buildPatientsTable(patients) {
+    var container = document.getElementById('patients-table-container');
+    container.textContent = '';
+    var table = el('table');
+    var thead = el('thead');
+    var hrow = el('tr');
+    ['Patient', 'Conditions', 'Meds', '30-Day Adherence', 'Last Active', 'Status'].forEach(function(h) {
+      hrow.appendChild(el('th', null, h));
+    });
+    thead.appendChild(hrow);
+    table.appendChild(thead);
+    var tbody = el('tbody');
+    patients.forEach(function(p) {
+      var row = el('tr');
+
+      // Patient cell
+      var nameCell = el('td');
+      var strong = el('strong', null, p.initials);
+      var ageSpan = el('span', null, ' · ' + p.age + 'y');
+      ageSpan.style.color = 'var(--grey-500)';
+      ageSpan.style.fontSize = '0.8rem';
+      nameCell.appendChild(strong);
+      nameCell.appendChild(ageSpan);
+
+      // Conditions
+      var condCell = el('td');
+      p.conditions.forEach(function(c) {
+        condCell.appendChild(el('span', 'condition-tag', c));
+      });
+
+      // Meds
+      var medsCell = el('td', null, p.meds + ' medication' + (p.meds !== 1 ? 's' : ''));
+
+      // Adherence bar
+      var adhCell = el('td');
+      var wrap = el('div', 'adherence-bar-wrap');
+      var bg = el('div', 'adherence-bar-bg');
+      var fill = el('div', 'adherence-bar-fill');
+      fill.style.width = p.adherence30 + '%';
+      fill.style.background = barColor(p.adherence30);
+      bg.appendChild(fill);
+      var pctSpan = el('span', 'adherence-pct', p.adherence30 + '%');
+      pctSpan.style.color = barColor(p.adherence30);
+      wrap.appendChild(bg); wrap.appendChild(pctSpan);
+      adhCell.appendChild(wrap);
+
+      // Last active
+      var lastCell = el('td');
+      var d = new Date(p.lastActive);
+      var today = new Date('2026-05-14');
+      var diff = Math.round((today - d) / 86400000);
+      lastCell.textContent = diff === 0 ? 'Today' : diff === 1 ? 'Yesterday' : diff + ' days ago';
+      lastCell.style.color = diff > 3 ? 'var(--danger)' : 'var(--grey-500)';
+      lastCell.style.fontSize = '0.85rem';
+
+      // Status badge
+      var statusCell = el('td');
+      var badge = el('span', p.status === 'on-track' ? 'badge badge-green' : 'badge badge-red', p.status === 'on-track' ? 'On track' : 'At risk');
+      statusCell.appendChild(badge);
+
+      row.appendChild(nameCell); row.appendChild(condCell); row.appendChild(medsCell);
+      row.appendChild(adhCell); row.appendChild(lastCell); row.appendChild(statusCell);
+      tbody.appendChild(row);
+    });
+    table.appendChild(tbody);
+    container.appendChild(table);
+  }
+
+  function buildAlerts(alerts) {
+    var list = document.getElementById('missed-list');
+    list.textContent = '';
+    setText('alert-count', alerts.length);
+    alerts.forEach(function(a) {
+      var li = el('li', a.severity === 'high' ? 'missed-item' : 'missed-item amber');
+      var icon = el('span', 'missed-icon', a.severity === 'high' ? '🔴' : '🟡');
+      var body = el('div', 'missed-body');
+      var h4 = el('h4', null, a.initials + ' (age ' + a.age + ') — ' + a.medication);
+      var p = el('p', null, a.note);
+      body.appendChild(h4); body.appendChild(p);
+      var d = new Date(a.missedAt);
+      var time = el('span', 'missed-time', d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + ' · ' + d.toLocaleDateString());
+      li.appendChild(icon); li.appendChild(body); li.appendChild(time);
+      list.appendChild(li);
+    });
+  }
+
+  function doUnlock() {
+    var pin = document.getElementById('pin-input').value.trim();
+    if (pin !== '272727') { document.getElementById('pin-err').style.display = 'block'; return; }
+    document.getElementById('pin-gate').style.display = 'none';
+    renderDemo(DEMO);
+  }
+  document.getElementById('pin-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') doUnlock(); });
+
+  function renderDemo(data) {
+    document.getElementById('portal').style.display = 'block';
+    var c = data.clinic; var s = data.stats;
+    setText('portal-title', c.name + ' — Adherence Overview');
+    setText('portal-subtitle', c.gp + ' · ' + c.location + ' · Consented patients only');
+    setText('clinic-name-nav', c.name);
+    setText('patient-count', data.patients.length + ' patients');
+
+    if (s.atRisk > 0) {
+      var bannerWrap = document.getElementById('alert-banner-wrap');
+      var banner = el('div', 'alert-banner');
+      var bIcon = el('span', 'alert-banner-icon', '⚠️');
+      var bText = el('div');
+      var bH4 = el('h4', null, s.atRisk + ' patients below 60% adherence — review recommended');
+      var bP = el('p', null, 'These patients have missed a significant number of doses in the last 30 days. Consider a follow-up call or appointment.');
+      bText.appendChild(bH4); bText.appendChild(bP);
+      banner.appendChild(bIcon); banner.appendChild(bText);
+      bannerWrap.appendChild(banner);
+    }
+
+    var grid = document.getElementById('stats-grid');
+    grid.textContent = '';
+    grid.appendChild(makeStatCard(s.totalPatients, 'Patients on Carely', '', false));
+    grid.appendChild(makeStatCard(s.activeThisWeek, 'Active this week', 'green', false));
+    grid.appendChild(makeStatCard(s.avgAdherence + '%', 'Avg 30-day adherence', s.avgAdherence >= 80 ? 'green' : 'amber', false));
+    grid.appendChild(makeStatCard(s.atRisk, 'At-risk patients (<60%)', 'red', true));
+    grid.appendChild(makeStatCard(s.dosesConfirmedToday + '/' + s.dosesToday, 'Doses confirmed today', '', false));
+
+    buildPatientsTable(data.patients);
+    buildAlerts(data.alerts);
+  }
+</script>
+
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;color:#e2e8f0;padding:16px 24px;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -2px 12px rgba(0,0,0,.3);">
+  <span>We use cookies to improve your experience and measure usage. See our <a href="/privacy.html" style="color:#818cf8;text-decoration:underline;">Privacy Policy</a>.</span>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="cookieDecline()" style="background:transparent;border:1px solid #4b5563;color:#9ca3af;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;">Decline</button>
+    <button onclick="cookieAccept()" style="background:#6366f1;border:none;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">Accept</button>
+  </div>
+</div>
+<script>
+(function(){ var b=document.getElementById('cookie-banner'); if(!localStorage.getItem('cookie_consent')){b.style.display='flex';} })();
+function cookieAccept(){localStorage.setItem('cookie_consent','accepted');document.getElementById('cookie-banner').style.display='none';}
+function cookieDecline(){localStorage.setItem('cookie_consent','declined');document.getElementById('cookie-banner').style.display='none';if(window.posthog){posthog.opt_out_capturing();}}
+</script>
+</body>
+</html>
