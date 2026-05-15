@@ -3062,18 +3062,12 @@ function loadProposals() {
   var feed     = document.getElementById('proposals-feed');
   var countLbl = document.getElementById('proposals-count-label');
 
-  if (feed) {
-    feed.textContent = '';
-    var ld = document.createElement('div');
-    ld.style.cssText = 'text-align:center;padding:28px;color:var(--g500);font-size:0.82rem';
-    ld.textContent = 'Loading proposals...';
-    feed.appendChild(ld);
-  }
-
   var url = BACKEND + '/admin/proposals' + (filter ? '?status=' + encodeURIComponent(filter) : '');
-  fetch(url, { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(4000) })
+  var _propTimer = setTimeout(function() { _showProposalDemo(feed, countLbl, filter); }, 0);
+  fetch(url, { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(15000) })
     .then(function(r) { return r.json(); })
     .then(function(d) {
+      clearTimeout(_propTimer);
       var proposals = Array.isArray(d) ? d : (d.proposals || []);
       if (countLbl) countLbl.textContent = proposals.length + ' proposal' + (proposals.length !== 1 ? 's' : '');
       if (!feed) return;
@@ -3132,38 +3126,37 @@ function loadProposals() {
         feed.appendChild(card);
       });
     })
-    .catch(function() {
-      var DEMO_PROPS = [
-        {id:'d1',title:'TikTok Series: "One Pill at a Time" — 7-day storytelling arc',category:'Content',status:'pending',description:'7-part TikTok series showing real caregiver moments. Each video 45–60s, organic hook. Targets r/caregivers sentiment. Estimated 50K+ reach if consistent.',impact:'High',effort:'Medium'},
-        {id:'d2',title:'Reddit AMA in r/eldercare — TJ as founder',category:'Growth',status:'pending',description:'Position TJ as a founder who built this for his family. Genuine story, no sales pitch. Answer questions about medication management, AI, privacy. Goal: 5 signups minimum.',impact:'High',effort:'Low'},
-        {id:'d3',title:'Pharmacy partner outreach — BC Lower Mainland first',category:'B2B',status:'approved',description:'Target 15 independent pharmacies in Greater Vancouver. Warm email from Cole. Offer 20% referral commission + free pilot for their top 5 at-risk patients.',impact:'High',effort:'Low'},
-        {id:'d4',title:'Instagram Reels: Behind-the-scenes Carely build',category:'Content',status:'pending',description:'Prabh films 3x30s reels showing the app in real use. Target: family caregiver accounts, age 35–55. No ads, purely organic engagement via hashtag strategy.',impact:'Medium',effort:'Low'},
-      ];
-      if (countLbl) countLbl.textContent = DEMO_PROPS.filter(function(p){return p.status===filter||!filter||filter==='all';}).length + ' proposals (demo)';
-      if (feed) {
-        feed.textContent='';
-        var banner=document.createElement('div'); banner.style.cssText='font-size:0.72rem;color:var(--amber);padding:6px 12px;background:#FFFBEB;border-radius:8px;margin-bottom:10px';
-        banner.textContent='Demo data — backend offline. Real proposals will appear here when connected.'; feed.appendChild(banner);
-        var SC={pending:'amber',approved:'green',rejected:'red'};
-        DEMO_PROPS.forEach(function(p){
-          var card=document.createElement('div'); card.className='card';
-          var hdr=document.createElement('div'); hdr.style.cssText='display:flex;align-items:flex-start;gap:10px;margin-bottom:12px';
-          var iconEl=document.createElement('div'); iconEl.style.cssText='font-size:1.4rem;flex-shrink:0'; iconEl.textContent='🧠'; hdr.appendChild(iconEl);
-          var info=document.createElement('div'); info.style.flex='1';
-          var titleEl=document.createElement('div'); titleEl.style.cssText='font-size:0.9rem;font-weight:800;color:var(--deep)'; titleEl.textContent=p.title; info.appendChild(titleEl);
-          var metaEl=document.createElement('div'); metaEl.style.cssText='font-size:0.72rem;color:var(--g500);margin-top:2px'; metaEl.textContent=p.category+' · Demo'; info.appendChild(metaEl);
-          hdr.appendChild(info);
-          var pillEl=document.createElement('span'); pillEl.className='pill '+(SC[p.status]||''); pillEl.textContent=p.status; hdr.appendChild(pillEl);
-          card.appendChild(hdr);
-          var desc=document.createElement('div'); desc.style.cssText='font-size:0.82rem;color:var(--text);margin-bottom:12px;line-height:1.6;background:var(--g100);padding:10px 12px;border-radius:8px'; desc.textContent=p.description; card.appendChild(desc);
-          var badges=document.createElement('div'); badges.style.cssText='display:flex;gap:10px;margin-bottom:12px';
-          var ip=document.createElement('span'); ip.className='pill green'; ip.textContent='Impact: '+p.impact; badges.appendChild(ip);
-          var ep=document.createElement('span'); ep.className='pill amber'; ep.textContent='Effort: '+p.effort; badges.appendChild(ep);
-          card.appendChild(badges);
-          feed.appendChild(card);
-        });
-      }
-    });
+    .catch(function() { clearTimeout(_propTimer); _showProposalDemo(feed, countLbl, filter); });
+}
+
+function _showProposalDemo(feed, countLbl, filter) {
+  var DEMO_PROPS = [
+    {id:'d1',title:'TikTok Series: "One Pill at a Time" — 7-day storytelling arc',category:'Content',status:'pending',description:'7-part TikTok series showing real caregiver moments. Each video 45–60s, organic hook. Targets r/caregivers sentiment. Estimated 50K+ reach if consistent.',impact:'High',effort:'Medium'},
+    {id:'d2',title:'Reddit AMA in r/eldercare — TJ as founder',category:'Growth',status:'pending',description:'Position TJ as a founder who built this for his family. Genuine story, no sales pitch. Answer questions about medication management, AI, privacy. Goal: 5 signups minimum.',impact:'High',effort:'Low'},
+    {id:'d3',title:'Pharmacy partner outreach — BC Lower Mainland first',category:'B2B',status:'approved',description:'Target 15 independent pharmacies in Greater Vancouver. Warm email from Cole. Offer 20% referral commission + free pilot for their top 5 at-risk patients.',impact:'High',effort:'Low'},
+    {id:'d4',title:'Instagram Reels: Behind-the-scenes Carely build',category:'Content',status:'pending',description:'Prabh films 3x30s reels showing the app in real use. Target: family caregiver accounts, age 35–55. No ads, purely organic engagement via hashtag strategy.',impact:'Medium',effort:'Low'},
+  ];
+  if (countLbl) countLbl.textContent = DEMO_PROPS.filter(function(p){return p.status===filter||!filter||filter==='all';}).length + ' proposals (demo)';
+  if (!feed) return;
+  feed.textContent='';
+  var SC={pending:'amber',approved:'green',rejected:'red'};
+  DEMO_PROPS.forEach(function(p){
+    var card=document.createElement('div'); card.className='card';
+    var hdr=document.createElement('div'); hdr.style.cssText='display:flex;align-items:flex-start;gap:10px;margin-bottom:12px';
+    var iconEl=document.createElement('div'); iconEl.style.cssText='font-size:1.4rem;flex-shrink:0'; iconEl.textContent='🧠'; hdr.appendChild(iconEl);
+    var info=document.createElement('div'); info.style.flex='1';
+    var titleEl=document.createElement('div'); titleEl.style.cssText='font-size:0.9rem;font-weight:800;color:var(--deep)'; titleEl.textContent=p.title; info.appendChild(titleEl);
+    var metaEl=document.createElement('div'); metaEl.style.cssText='font-size:0.72rem;color:var(--g500);margin-top:2px'; metaEl.textContent=p.category+' · Demo'; info.appendChild(metaEl);
+    hdr.appendChild(info);
+    var pillEl=document.createElement('span'); pillEl.className='pill '+(SC[p.status]||''); pillEl.textContent=p.status; hdr.appendChild(pillEl);
+    card.appendChild(hdr);
+    var desc=document.createElement('div'); desc.style.cssText='font-size:0.82rem;color:var(--text);margin-bottom:12px;line-height:1.6;background:var(--g100);padding:10px 12px;border-radius:8px'; desc.textContent=p.description; card.appendChild(desc);
+    var badges=document.createElement('div'); badges.style.cssText='display:flex;gap:10px;margin-bottom:12px';
+    var ip=document.createElement('span'); ip.className='pill green'; ip.textContent='Impact: '+p.impact; badges.appendChild(ip);
+    var ep=document.createElement('span'); ep.className='pill amber'; ep.textContent='Effort: '+p.effort; badges.appendChild(ep);
+    card.appendChild(badges);
+    feed.appendChild(card);
+  });
 }
 
 function approveProposal(id) {
@@ -3508,9 +3501,11 @@ function rejectProposal(id) {
   function clearEl(el) { while (el.firstChild) el.removeChild(el.firstChild); }
 
   window.loadInbox = function() {
-    fetch(BACKEND + '/admin/inbox', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(5000) })
+    var _inboxTimer = setTimeout(function() { _showInboxDemo(); }, 0);
+    fetch(BACKEND + '/admin/inbox', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(15000) })
       .then(function(r) { return r.json(); })
       .then(function(data) {
+        clearTimeout(_inboxTimer);
         var items = data.items || [];
         var unread = data.unread || 0;
         var feed = document.getElementById('inbox-feed');
@@ -3577,13 +3572,15 @@ function rejectProposal(id) {
           feed.appendChild(wrap);
         });
       })
-      .catch(function() {
-        var label = document.getElementById('inbox-unread-label');
-        if (label) label.textContent = '5 messages (demo)';
-        var feed = document.getElementById('inbox-feed');
-        if (!feed) return;
-        clearEl(feed);
-        var DEMO_INBOX = [
+      .catch(function() { clearTimeout(_inboxTimer); _showInboxDemo(); });
+
+  function _showInboxDemo() {
+    var label = document.getElementById('inbox-unread-label');
+    if (label) label.textContent = '5 messages (demo)';
+    var feed = document.getElementById('inbox-feed');
+    if (!feed) return;
+    clearEl(feed);
+    var DEMO_INBOX = [
           {agent:'FRANK', title:'Dose reminders delivered', body:'8 beta patients — all confirmed within 5 min. 0 missed doses.', color:'#02C39A', time:'2h ago'},
           {agent:'GRACE', title:'Morning check-ins complete', body:'7/8 patients responded. 1 flagged for follow-up.', color:'#028090', time:'4h ago'},
           {agent:'COLE', title:'B2B outreach drafted', body:'Pacific Family Medicine email ready in Approvals queue.', color:'#7C3AED', time:'6h ago'},
@@ -3605,7 +3602,7 @@ function rejectProposal(id) {
           wrap.appendChild(badge); wrap.appendChild(body); wrap.appendChild(time);
           feed.appendChild(wrap);
         });
-      });
+  }
   };
 
   window.markInboxRead = function(id) {
@@ -3632,9 +3629,11 @@ function rejectProposal(id) {
   };
 
   window.loadDrafts = function() {
-    fetch(BACKEND + '/admin/drafts', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(5000) })
+    var _draftsTimer = setTimeout(function() { _showDraftsDemo(); }, 0);
+    fetch(BACKEND + '/admin/drafts', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(15000) })
       .then(function(r) { return r.json(); })
       .then(function(data) {
+        clearTimeout(_draftsTimer);
         var drafts = data.drafts || [];
         var feed = document.getElementById('drafts-feed');
         var label = document.getElementById('drafts-count-label');
@@ -3721,12 +3720,14 @@ function rejectProposal(id) {
           feed.appendChild(card);
         });
       })
-      .catch(function() {
-        var label = document.getElementById('drafts-count-label');
-        if (label) label.textContent = '3 drafts awaiting approval (demo)';
-        var feed = document.getElementById('drafts-feed');
-        if (!feed) return;
-        while (feed.firstChild) feed.removeChild(feed.firstChild);
+      .catch(function() { clearTimeout(_draftsTimer); _showDraftsDemo(); });
+
+  function _showDraftsDemo() {
+    var label = document.getElementById('drafts-count-label');
+    if (label) label.textContent = '3 drafts awaiting approval (demo)';
+    var feed = document.getElementById('drafts-feed');
+    if (!feed) return;
+    while (feed.firstChild) feed.removeChild(feed.firstChild);
         var DEMO_DRAFTS = [
           {
             agentName: 'COLE', index: 1,
@@ -3790,7 +3791,7 @@ function rejectProposal(id) {
           btnRow.appendChild(approveBtn); btnRow.appendChild(editBtn); btnRow.appendChild(suggestBtn); btnRow.appendChild(skipBtn); card.appendChild(btnRow);
           feed.appendChild(card);
         });
-      });
+  }
   };
 
   window.approveDraft = function(index) {
