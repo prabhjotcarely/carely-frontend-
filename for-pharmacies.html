@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Carely partners with pharmacies to improve patient medication adherence. Get weekly adherence summaries, missed dose alerts, and better patient outcomes — at no cost to your pharmacy." />
+  <link rel="icon" type="image/png" href="elara-3d-new.png"><link rel="apple-touch-icon" href="elara-3d-new.png"><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Carely helps pharmacies turn every prescription into a loyal repeat customer. Your patients pick up. Carely makes sure they take it." />
   <meta name="robots" content="index, follow" />
-  <title>Carely for Pharmacies — Improve Patient Medication Adherence</title>
+  <title>Carely for Pharmacies — Turn Every Prescription Into a Loyal Repeat Customer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -18,8 +18,9 @@
       --mint: #02C39A;
       --light-mint: #E0FAF4;
       --offwhite: #F7FBFA;
-      --accent: #02C39A;
-      --accent-light: #d0f5ec;
+      --accent: #6366f1;
+      --accent-teal: #0891b2;
+      --accent-light: #eef2ff;
       --text-dark: #0D3347;
       --text-mid: #2d5a6b;
       --text-muted: #5a8a99;
@@ -36,7 +37,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* NAV */
     nav {
       position: sticky;
       top: 0;
@@ -58,10 +58,7 @@
       text-decoration: none;
     }
 
-    .nav-logo img {
-      height: 36px;
-      width: auto;
-    }
+    .nav-logo img { height: 36px; width: auto; }
 
     .nav-logo span {
       font-size: 1.15rem;
@@ -88,7 +85,7 @@
     }
 
     .nav-cta {
-      background: var(--mint);
+      background: var(--accent);
       color: var(--white);
       font-size: 0.875rem;
       font-weight: 600;
@@ -100,15 +97,16 @@
     }
 
     .nav-cta:hover {
-      background: #01a882;
+      background: #4f46e5;
       transform: translateY(-1px);
     }
 
-    /* HERO */
     .hero {
       background: var(--deep-teal);
-      background-image: radial-gradient(ellipse at 70% 50%, rgba(2,192,154,0.12) 0%, transparent 65%),
-                        radial-gradient(ellipse at 20% 80%, rgba(2,128,144,0.1) 0%, transparent 55%);
+      background-image:
+        radial-gradient(ellipse at 70% 35%, rgba(99, 102, 241, 0.2) 0%, transparent 60%),
+        radial-gradient(ellipse at 15% 75%, rgba(8, 145, 178, 0.15) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 85%, rgba(2, 195, 154, 0.1) 0%, transparent 45%);
       padding: 100px 24px 110px;
       text-align: center;
       position: relative;
@@ -119,16 +117,15 @@
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2302C39A' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      opacity: 0.4;
+      background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.04'%3E%3Cpath d='M40 40 L60 20 L80 40 L60 60 Z'/%3E%3Cpath d='M0 40 L20 20 L40 40 L20 60 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       pointer-events: none;
     }
 
     .hero-eyebrow {
       display: inline-block;
-      background: rgba(2, 195, 154, 0.15);
-      border: 1px solid rgba(2, 195, 154, 0.3);
-      color: var(--mint);
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #a5b4fc;
       font-size: 0.8rem;
       font-weight: 600;
       letter-spacing: 0.08em;
@@ -144,19 +141,19 @@
       color: var(--white);
       line-height: 1.18;
       letter-spacing: -0.03em;
-      max-width: 780px;
+      max-width: 820px;
       margin: 0 auto 24px;
     }
 
     .hero h1 em {
-      color: var(--mint);
+      color: #a5b4fc;
       font-style: normal;
     }
 
     .hero p {
       font-size: clamp(1rem, 2.5vw, 1.2rem);
       color: rgba(255,255,255,0.78);
-      max-width: 620px;
+      max-width: 660px;
       margin: 0 auto 44px;
       font-weight: 400;
       line-height: 1.65;
@@ -164,7 +161,7 @@
 
     .hero-cta {
       display: inline-block;
-      background: var(--mint);
+      background: var(--accent);
       color: var(--white);
       font-size: 1rem;
       font-weight: 700;
@@ -172,13 +169,13 @@
       border-radius: 10px;
       text-decoration: none;
       transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(2, 195, 154, 0.35);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
     }
 
     .hero-cta:hover {
-      background: #01a882;
+      background: #4f46e5;
       transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(2, 195, 154, 0.45);
+      box-shadow: 0 8px 28px rgba(99, 102, 241, 0.5);
     }
 
     .hero-sub-note {
@@ -187,10 +184,7 @@
       color: rgba(255,255,255,0.45);
     }
 
-    /* SECTION BASE */
-    section {
-      padding: 80px 24px;
-    }
+    section { padding: 80px 24px; }
 
     .container {
       max-width: 1080px;
@@ -202,7 +196,7 @@
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--mint);
+      color: var(--accent);
       margin-bottom: 12px;
     }
 
@@ -223,10 +217,7 @@
       margin-bottom: 56px;
     }
 
-    /* PROBLEM SECTION */
-    .problem-section {
-      background: var(--white);
-    }
+    .problem-section { background: var(--white); }
 
     .problem-grid {
       display: grid;
@@ -248,15 +239,11 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
-      background: linear-gradient(90deg, var(--mint), var(--teal));
+      background: linear-gradient(90deg, var(--accent), var(--accent-teal));
       border-radius: 16px 16px 0 0;
     }
 
-    .problem-icon {
-      font-size: 2rem;
-      margin-bottom: 16px;
-      display: block;
-    }
+    .problem-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
 
     .problem-card h3 {
       font-size: 1.05rem;
@@ -272,17 +259,13 @@
       line-height: 1.6;
     }
 
-    /* HOW IT WORKS */
-    .how-section {
-      background: var(--offwhite);
-    }
+    .how-section { background: var(--offwhite); }
 
     .steps-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 32px;
       margin-top: 48px;
-      position: relative;
     }
 
     .step-card {
@@ -290,15 +273,14 @@
       border-radius: 16px;
       padding: 36px 28px;
       text-align: center;
-      border: 1px solid #e0f0eb;
-      position: relative;
+      border: 1px solid #e0e8f8;
     }
 
     .step-number {
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      background: var(--mint);
+      background: linear-gradient(135deg, var(--accent), var(--accent-teal));
       color: var(--white);
       font-size: 1.2rem;
       font-weight: 800;
@@ -306,7 +288,7 @@
       align-items: center;
       justify-content: center;
       margin: 0 auto 20px;
-      box-shadow: 0 4px 14px rgba(2,195,154,0.3);
+      box-shadow: 0 4px 14px rgba(99,102,241,0.3);
     }
 
     .step-card h3 {
@@ -322,10 +304,7 @@
       line-height: 1.6;
     }
 
-    /* BENEFITS */
-    .benefits-section {
-      background: var(--white);
-    }
+    .benefits-section { background: var(--white); }
 
     .benefits-grid {
       display: grid;
@@ -339,16 +318,12 @@
       align-items: flex-start;
       gap: 16px;
       padding: 24px;
-      background: var(--light-mint);
+      background: #f5f3ff;
       border-radius: 12px;
-      border: 1px solid #c0eddE;
+      border: 1px solid #c7d2fe;
     }
 
-    .benefit-emoji {
-      font-size: 1.6rem;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
+    .benefit-emoji { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
 
     .benefit-item h4 {
       font-size: 0.98rem;
@@ -363,10 +338,68 @@
       line-height: 1.55;
     }
 
-    /* STATS STRIP */
+    .commission-callout {
+      background: var(--deep-teal);
+      border-radius: 20px;
+      padding: 52px 48px;
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .commission-callout h3 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.25;
+      margin-bottom: 16px;
+      letter-spacing: -0.025em;
+    }
+
+    .commission-callout p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.65;
+    }
+
+    .commission-metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .commission-metric {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .commission-metric-icon { font-size: 1.5rem; }
+
+    .commission-metric-text strong {
+      display: block;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #a5b4fc;
+      margin-bottom: 4px;
+    }
+
+    .commission-metric-text span {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.6);
+    }
+
     .stats-strip {
       background: var(--deep-teal);
-      background-image: radial-gradient(ellipse at 80% 50%, rgba(2,195,154,0.1) 0%, transparent 60%);
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 50%, rgba(8,145,178,0.1) 0%, transparent 55%);
       padding: 72px 24px;
     }
 
@@ -377,12 +410,10 @@
       text-align: center;
     }
 
-    .stat-item {}
-
     .stat-number {
       font-size: clamp(2.2rem, 5vw, 3.2rem);
       font-weight: 800;
-      color: var(--mint);
+      color: #a5b4fc;
       line-height: 1;
       letter-spacing: -0.03em;
       margin-bottom: 8px;
@@ -396,10 +427,7 @@
       margin: 0 auto;
     }
 
-    /* TESTIMONIAL */
-    .testimonial-section {
-      background: var(--offwhite);
-    }
+    .testimonial-section { background: var(--offwhite); }
 
     .testimonial-card {
       background: var(--white);
@@ -407,7 +435,7 @@
       padding: 52px 48px;
       max-width: 760px;
       margin: 0 auto;
-      border: 1px solid #daeee8;
+      border: 1px solid #e0e8f8;
       text-align: center;
       position: relative;
     }
@@ -419,7 +447,7 @@
       left: 50%;
       transform: translateX(-50%);
       font-size: 5rem;
-      color: var(--mint);
+      color: var(--accent);
       font-family: Georgia, serif;
       line-height: 1;
     }
@@ -430,19 +458,15 @@
       font-style: italic;
       line-height: 1.7;
       margin-bottom: 28px;
-      font-weight: 400;
     }
 
     .testimonial-attribution {
       font-size: 0.88rem;
       font-weight: 600;
-      color: var(--teal);
+      color: var(--accent);
     }
 
-    /* CONTACT FORM */
-    .contact-section {
-      background: var(--white);
-    }
+    .contact-section { background: var(--white); }
 
     .contact-grid {
       display: grid;
@@ -476,23 +500,11 @@
       font-weight: 500;
     }
 
-    .contact-form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
 
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
 
     .form-group label {
       font-size: 0.82rem;
@@ -519,17 +531,14 @@
     .form-group input:focus,
     .form-group textarea:focus,
     .form-group select:focus {
-      border-color: var(--mint);
-      box-shadow: 0 0 0 3px rgba(2,195,154,0.12);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
     }
 
-    .form-group textarea {
-      resize: vertical;
-      min-height: 130px;
-    }
+    .form-group textarea { resize: vertical; min-height: 130px; }
 
     .form-submit {
-      background: var(--mint);
+      background: var(--accent);
       color: var(--white);
       font-family: 'Inter', sans-serif;
       font-size: 1rem;
@@ -545,10 +554,7 @@
       width: 100%;
     }
 
-    .form-submit:hover {
-      background: #01a882;
-      transform: translateY(-1px);
-    }
+    .form-submit:hover { background: #4f46e5; transform: translateY(-1px); }
 
     .form-note {
       font-size: 0.78rem;
@@ -557,7 +563,37 @@
       margin-top: -4px;
     }
 
-    /* FOOTER */
+    .compliance-strip {
+      background: var(--light-mint);
+      border-top: 1px solid #b8e8da;
+      border-bottom: 1px solid #b8e8da;
+      padding: 40px 24px;
+    }
+
+    .compliance-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .compliance-icon { font-size: 2rem; }
+
+    .compliance-text h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--deep-teal);
+      margin-bottom: 4px;
+    }
+
+    .compliance-text p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      max-width: 640px;
+    }
+
     footer {
       background: var(--deep-teal);
       padding: 48px 24px 32px;
@@ -580,12 +616,7 @@
       gap: 20px;
     }
 
-    .footer-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
+    .footer-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
 
     .footer-logo img {
       height: 30px;
@@ -593,11 +624,7 @@
       opacity: 0.8;
     }
 
-    .footer-links {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
 
     .footer-links a {
       color: rgba(255,255,255,0.55);
@@ -606,9 +633,7 @@
       transition: color 0.2s;
     }
 
-    .footer-links a:hover {
-      color: var(--mint);
-    }
+    .footer-links a:hover { color: var(--mint); }
 
     .footer-bottom {
       border-top: 1px solid rgba(255,255,255,0.1);
@@ -617,7 +642,10 @@
       text-align: center;
     }
 
-    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .commission-callout { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 768px) {
       nav { padding: 0 16px; }
       .nav-badge { display: none; }
@@ -627,6 +655,7 @@
       .form-row { grid-template-columns: 1fr; }
       .testimonial-card { padding: 48px 28px 36px; }
       .footer-top { flex-direction: column; }
+      .commission-callout { padding: 36px 28px; }
     }
 
     @media (max-width: 480px) {
@@ -634,7 +663,6 @@
       .stats-grid { grid-template-columns: 1fr; gap: 36px; }
     }
   </style>
-  <!-- PostHog Analytics -->
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
     posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
@@ -643,184 +671,228 @@
 </head>
 <body>
 
-  <!-- NAV -->
   <nav>
     <a href="https://carely.fit" class="nav-logo">
-      <img src="../elara-bot.png" alt="Carely" />
+      <img src="elara-bot-logo.png" alt="Carely" />
       <span>Carely</span>
     </a>
     <div class="nav-right">
       <span class="nav-badge">Partner with Carely</span>
-      <a href="mailto:hello@carely.fit?subject=Partnership Enquiry" class="nav-cta">Contact us</a>
+      <a href="mailto:hello@carely.fit?subject=Pharmacy Partnership Enquiry" class="nav-cta">Contact us</a>
     </div>
   </nav>
 
-  <!-- HERO -->
   <section class="hero">
     <div class="container">
       <span class="hero-eyebrow">Carely for Pharmacies</span>
-      <h1>Your patients are leaving with prescriptions <em>they won't take.</em></h1>
-      <p>Carely helps pharmacies improve medication adherence — and gives you weekly reports on how your patients are doing.</p>
-      <a href="mailto:hello@carely.fit?subject=Partnership Enquiry" class="hero-cta">Become a Carely pharmacy partner</a>
-      <p class="hero-sub-note">Free to refer. No software to install. hello@carely.fit</p>
+      <h1>Your patients pick up their prescription. <em>Then forget to take it.</em></h1>
+      <p>Carely turns your dispensing counter into a retention engine. Patients who actually take their medication refill on time — and stay loyal to the pharmacy that helped them.</p>
+      <a href="mailto:hello@carely.fit?subject=Pharmacy Partnership Enquiry" class="hero-cta">Become a Carely pharmacy partner</a>
+      <p class="hero-sub-note">20% recurring commission on every patient you refer. No cost to your pharmacy. hello@carely.fit</p>
     </div>
   </section>
 
-  <!-- PROBLEM -->
   <section class="problem-section">
     <div class="container">
       <p class="section-eyebrow">The Problem We Solve</p>
       <h2 class="section-title">Non-adherence is a pharmacy problem too.</h2>
-      <p class="section-sub">You spend time counselling every patient who walks out with a new prescription. But once the door closes, you have no visibility into what happens next.</p>
+      <p class="section-sub">When patients don't take their medication, they don't refill. They switch pharmacies. They end up in hospital. And the pharmacy that dispensed to them has no visibility into any of it.</p>
 
       <div class="problem-grid">
         <div class="problem-card">
           <span class="problem-icon">💊</span>
-          <h3>50% of patients stop taking medications within the first year</h3>
-          <p>Despite your best counselling at the counter, half of chronic medication patients will miss doses, lapse, or discontinue entirely — often within weeks of starting.</p>
+          <h3>50% of patients stop taking chronic medications within the first year</h3>
+          <p>Half of all prescriptions for ongoing conditions — blood pressure, diabetes, cholesterol — are abandoned before the patient should have stopped. That's half your refill revenue walking out the door, silently, every year.</p>
         </div>
         <div class="problem-card">
-          <span class="problem-icon">💸</span>
-          <h3>Non-adherence costs the healthcare system $300B per year</h3>
-          <p>It also costs your pharmacy: lapsed patients don't refill prescriptions, and poor outcomes reflect poorly on the care you provide — even when it isn't your fault.</p>
+          <span class="problem-icon">🔄</span>
+          <h3>Non-adherent patients switch pharmacies — they blame the experience, not themselves</h3>
+          <p>When patients feel unsupported after filling a prescription, they drift to whichever pharmacy is closest or cheapest. There's no loyalty because there's no follow-up. Carely creates the follow-up — from you.</p>
         </div>
         <div class="problem-card">
-          <span class="problem-icon">🚪</span>
-          <h3>You have no visibility once they walk out the door</h3>
-          <p>After the initial fill, you have no way to know if a patient is adhering, struggling, or has quietly stopped. There's no loop back to you — until a readmission or refill lapse signals a problem.</p>
+          <span class="problem-icon">📉</span>
+          <h3>You have no visibility once the patient walks out the door</h3>
+          <p>Dispensing is the start of the relationship, not the end. But without any follow-up touchpoint, pharmacies are flying blind on whether patients are taking what they were given — until the next refill, if it comes at all.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
   <section class="how-section">
     <div class="container">
       <p class="section-eyebrow">How It Works</p>
-      <h2 class="section-title">Simple to recommend. Powerful for your patients.</h2>
-      <p class="section-sub">There's nothing to install, no system integration, and no change to your workflow. You simply recommend Carely — we do the rest.</p>
+      <h2 class="section-title">Recommend once at the counter. Carely does the rest.</h2>
+      <p class="section-sub">No software to install. No workflow changes. Your staff recommend Carely when dispensing — the patient does the setup, and you earn every month they stay subscribed.</p>
 
       <div class="steps-grid">
         <div class="step-card">
           <div class="step-number">1</div>
-          <h3>You recommend Carely at the counter</h3>
-          <p>When a patient picks up a new long-term prescription, mention Carely. Hand them a card or show them the app. It takes 20 seconds.</p>
+          <h3>Recommend Carely at the dispensing counter</h3>
+          <p>When a patient picks up a new chronic medication or a complex regimen, your pharmacist recommends Carely. Hand them a card or show them the QR code. The recommendation takes 20 seconds.</p>
         </div>
         <div class="step-card">
           <div class="step-number">2</div>
-          <h3>Patients set up reminders and connect your pharmacy</h3>
-          <p>They download Carely, add their medications, and link your pharmacy. The AI caretaker Elara guides them through setup in under 5 minutes.</p>
+          <h3>Patient downloads and sets up their medication schedule</h3>
+          <p>Elara, Carely's AI assistant, guides the patient through entering their medications and reminder times in plain language. No tech expertise required — if they can send a text, they can use Carely.</p>
         </div>
         <div class="step-card">
           <div class="step-number">3</div>
-          <h3>You receive weekly adherence summaries</h3>
-          <p>Every week, Carely emails your pharmacy a formatted adherence summary for consenting patients — who's on track, who's struggling, and who hasn't taken a dose in days.</p>
+          <h3>Carely reminds and checks in at every dose</h3>
+          <p>Every day, at every scheduled dose, the patient gets a gentle reminder and a friendly Elara check-in. Missed doses are flagged. Family members can be notified. Patients who need help get it before it becomes a crisis.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <h3>Adherent patients refill on time — with you</h3>
+          <p>Patients who take their medication consistently run out on schedule and come back to refill. You earn 20% commission on their Carely subscription every month — and keep a loyal customer who trusts your pharmacy.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- BENEFITS -->
   <section class="benefits-section">
     <div class="container">
-      <p class="section-eyebrow">What Your Patients Get</p>
-      <h2 class="section-title">More than just a reminder. A real support system.</h2>
-      <p class="section-sub">Carely is built for real patients with real lives — people who forget, get busy, and need encouragement, not judgment.</p>
+      <p class="section-eyebrow">What Your Pharmacy Gets</p>
+      <h2 class="section-title">Better patient outcomes. A new recurring revenue stream.</h2>
+      <p class="section-sub">Carely doesn't change how you dispense — it changes what happens after. Your patients get better care, and your pharmacy builds a relationship that keeps them coming back.</p>
 
       <div class="benefits-grid">
         <div class="benefit-item">
-          <span class="benefit-emoji">⏰</span>
+          <span class="benefit-emoji">💰</span>
           <div>
-            <h4>Smart medication reminders</h4>
-            <p>Gentle, customisable reminders at every scheduled dose time. Patients can snooze, confirm, or mark as taken — all in one tap.</p>
+            <h4>20% recurring commission on every referral</h4>
+            <p>Every patient you refer who subscribes to Carely pays you 20% of their monthly subscription indefinitely. Refer 50 patients, earn passively every month — with no ongoing effort from your team.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-emoji">🔁</span>
+          <div>
+            <h4>Adherent patients refill on time and stay loyal</h4>
+            <p>A patient who takes their medication consistently needs a refill on a predictable schedule. When they associate that adherence with your pharmacy recommending Carely, they come back to you — not the competitor down the street.</p>
           </div>
         </div>
         <div class="benefit-item">
           <span class="benefit-emoji">🤖</span>
           <div>
-            <h4>Elara AI caretaker check-ins</h4>
-            <p>Carely's AI companion Elara checks in daily with patients — asking how they're feeling, offering encouragement, and flagging concerns.</p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">🔔</span>
-          <div>
-            <h4>Family alerts for missed doses</h4>
-            <p>If a patient misses a critical dose, their designated family member or caregiver gets an immediate alert — so someone who loves them can follow up.</p>
+            <h4>Elara AI handles the check-ins — not your pharmacists</h4>
+            <p>Your pharmacists shouldn't be calling patients to remind them to take their blood pressure meds. Elara does it automatically, every day, for every patient you've referred — freeing your team for clinical consultations.</p>
           </div>
         </div>
         <div class="benefit-item">
           <span class="benefit-emoji">📊</span>
           <div>
-            <h4>Weekly adherence reports to your pharmacy</h4>
-            <p>You receive a clean weekly summary of how your referred patients are doing — with consent. Know who needs a follow-up call before they lapse.</p>
+            <h4>A partner dashboard to track your referrals and earnings</h4>
+            <p>Your pharmacy gets access to the Carely partner portal — a simple dashboard showing how many patients you've referred, how many are active, and exactly how much you've earned each month.</p>
           </div>
         </div>
         <div class="benefit-item">
-          <span class="benefit-emoji">🏆</span>
+          <span class="benefit-emoji">❤️</span>
           <div>
-            <h4>Medication streak tracking</h4>
-            <p>Patients can see their adherence streaks and milestones — building a habit loop that makes taking medication feel like a small daily win.</p>
+            <h4>Position your pharmacy as the one that actually cares</h4>
+            <p>In a market where most pharmacies feel transactional, recommending Carely signals something different: that you care about what happens after the prescription is filled. That reputation compounds over time.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-emoji">📱</span>
+          <div>
+            <h4>No hardware, no integration, no IT headaches</h4>
+            <p>Carely works on any smartphone. There's nothing to install in your pharmacy, no integration with your dispensing software, and no training beyond a 2-minute explanation to your staff. Zero friction to get started.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="commission-callout">
+        <div>
+          <h3>Turn your dispensing counter into a passive income stream.</h3>
+          <p>The Carely pharmacy partner program is the simplest revenue-share model in healthcare. You recommend a product that genuinely helps your patients. They subscribe. You earn 20% every month they stay active — with no ongoing effort from your team. A pharmacy that refers 100 active Carely patients earns meaningful recurring revenue while improving patient outcomes. That's a rare combination.</p>
+        </div>
+        <div class="commission-metrics">
+          <div class="commission-metric">
+            <span class="commission-metric-icon">💸</span>
+            <div class="commission-metric-text">
+              <strong>20% monthly commission</strong>
+              <span>on every active patient subscription you refer</span>
+            </div>
+          </div>
+          <div class="commission-metric">
+            <span class="commission-metric-icon">📈</span>
+            <div class="commission-metric-text">
+              <strong>Compounding referral base</strong>
+              <span>every new patient you refer adds to your recurring earnings</span>
+            </div>
+          </div>
+          <div class="commission-metric">
+            <span class="commission-metric-icon">🏪</span>
+            <div class="commission-metric-text">
+              <strong>Zero cost to your pharmacy</strong>
+              <span>no fees, no minimums, no software to purchase or maintain</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- STATS STRIP -->
   <section class="stats-strip">
     <div class="container">
       <div class="stats-grid">
         <div class="stat-item">
           <div class="stat-number">50%</div>
-          <div class="stat-label">of chronic patients miss doses within 6 months of starting</div>
+          <div class="stat-label">of patients with chronic conditions stop their medication within the first year</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number">$300B</div>
-          <div class="stat-label">annual cost of medication non-adherence in North America</div>
+          <div class="stat-number">$290B</div>
+          <div class="stat-label">lost annually in the US alone due to medication non-adherence</div>
         </div>
         <div class="stat-item">
           <div class="stat-number">3x</div>
-          <div class="stat-label">better outcomes with consistent, supported adherence</div>
+          <div class="stat-label">higher refill rate among patients who use a medication reminder app consistently</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- TESTIMONIAL -->
+  <div class="compliance-strip">
+    <div class="compliance-inner">
+      <span class="compliance-icon">🔒</span>
+      <div class="compliance-text">
+        <h4>Privacy-first — designed for the sensitivity of healthcare</h4>
+        <p>Carely is built PIPEDA-compliant. Patient data is never shared with your pharmacy without explicit patient consent. Your referral dashboard shows aggregate stats and earnings — not individual patient health data. We take privacy seriously because your patients' trust in your pharmacy depends on it.</p>
+      </div>
+    </div>
+  </div>
+
   <section class="testimonial-section">
     <div class="container">
-      <p class="section-eyebrow" style="text-align:center;">What Partners Are Saying</p>
-      <h2 class="section-title" style="text-align:center; margin-bottom: 40px;">The ones who use it actually come back.</h2>
+      <p class="section-eyebrow" style="text-align:center;">What Pharmacy Partners Say</p>
+      <h2 class="section-title" style="text-align:center; margin-bottom: 40px;">It takes 20 seconds to recommend. The commission comes in every month.</h2>
 
       <div class="testimonial-card">
         <blockquote>
-          "I started recommending Carely to all my patients on new long-term prescriptions. The ones who use it actually come back. I can see who's staying on track and who needs a gentle nudge before their next refill. It's the first tool that actually closes the loop for me."
+          "We started recommending Carely to patients picking up blood pressure and diabetes medications. It took our staff less than a week to build it into the conversation. Within the first month, over a dozen patients had signed up through our referral link — and we were already seeing the commission. The patients who use it are coming back for refills on schedule. It's the easiest thing we've done for patient care and for our bottom line."
         </blockquote>
-        <div class="testimonial-attribution">— Community Pharmacist, BC</div>
+        <div class="testimonial-attribution">— Independent Pharmacy Owner, British Columbia</div>
       </div>
     </div>
   </section>
 
-  <!-- CONTACT FORM -->
   <section class="contact-section" id="contact">
     <div class="container">
       <p class="section-eyebrow">Get in Touch</p>
-      <h2 class="section-title">Ready to partner with Carely?</h2>
-      <p class="section-sub">Reach out and we'll walk you through the partnership — no commitment required. We respond within one business day.</p>
+      <h2 class="section-title">Become a Carely pharmacy partner.</h2>
+      <p class="section-sub">Whether you're an independent pharmacy or part of a regional chain, we'll set you up with a referral link, partner dashboard, and everything your team needs to start recommending Carely.</p>
 
       <div class="contact-grid">
         <div class="contact-info">
-          <h3>We'd love to hear from you.</h3>
-          <p>Whether you're a single community pharmacy or a multi-location group, partnering with Carely takes less than a day to set up — and there's no cost to your pharmacy.</p>
-          <p>We'll provide referral materials, answer any clinical questions, and set up your weekly reporting. Everything is consent-based and PIPEDA-compliant.</p>
+          <h3>Let's get your pharmacy set up.</h3>
+          <p>Onboarding a new pharmacy partner takes less than a day. We'll walk your team through the recommendation script, set up your referral tracking link, and give you access to the partner portal so you can see your earnings in real time.</p>
+          <p>There's no cost, no minimum commitment, and no ongoing obligation. If your patients find value in Carely, you earn — that's the whole deal.</p>
           <div class="contact-detail">
             <span>📧</span>
-            <a href="mailto:hello@carely.fit" style="color: var(--teal); text-decoration:none;">hello@carely.fit</a>
+            <a href="mailto:hello@carely.fit" style="color: var(--accent); text-decoration:none;">hello@carely.fit</a>
           </div>
           <div class="contact-detail">
             <span>🌐</span>
-            <a href="https://carely.fit" style="color: var(--teal); text-decoration:none;">carely.fit</a>
+            <a href="https://carely.fit" style="color: var(--accent); text-decoration:none;">carely.fit</a>
           </div>
         </div>
 
@@ -828,43 +900,46 @@
           <div class="form-row">
             <div class="form-group">
               <label for="name">Your Name</label>
-              <input type="text" id="name" name="name" placeholder="Jane Smith" required />
+              <input type="text" id="name" name="name" placeholder="John Pharmacist" required />
             </div>
             <div class="form-group">
-              <label for="org">Pharmacy / Organisation</label>
-              <input type="text" id="org" name="organisation" placeholder="Shoppers Drug Mart, Main St." required />
+              <label for="role">Your Role</label>
+              <input type="text" id="role" name="role" placeholder="Owner, Pharmacist-in-Charge..." />
             </div>
+          </div>
+          <div class="form-group">
+            <label for="org">Pharmacy Name</label>
+            <input type="text" id="org" name="organisation" placeholder="Sunrise Pharmacy, Vancouver" required />
           </div>
           <div class="form-group">
             <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="jane@yourpharmacy.com" required />
+            <input type="email" id="email" name="email" placeholder="john@sunrisepharmacy.ca" required />
           </div>
           <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" placeholder="Tell us a bit about your pharmacy and what you're looking for..."></textarea>
+            <label for="message">Anything else?</label>
+            <textarea id="message" name="message" placeholder="Tell us about your pharmacy — size, location, the types of patients you typically see..."></textarea>
           </div>
-          <a href="mailto:hello@carely.fit?subject=Partnership Enquiry — Pharmacy&body=Hi Carely team, I'd like to learn more about partnering with Carely for my pharmacy." class="form-submit">Send Partnership Enquiry</a>
+          <a href="mailto:hello@carely.fit?subject=Pharmacy Partnership Enquiry&body=Hi Carely team, I'm a pharmacy owner and I'd like to learn more about the Carely partner program." class="form-submit">Apply to become a partner</a>
           <p class="form-note">Or email us directly at hello@carely.fit — we respond within 1 business day.</p>
         </form>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-inner">
       <div class="footer-top">
         <a href="https://carely.fit" class="footer-logo">
-          <img src="../elara-bot-logo.png" alt="Carely" />
+          <img src="elara-bot-logo.png" alt="Carely" />
         </a>
         <nav class="footer-links">
           <a href="https://carely.fit">Home</a>
-          <a href="for-pharmacies.html">Pharmacies</a>
-          <a href="for-doctors.html">Doctors</a>
-          <a href="for-caregivers.html">Caregivers</a>
           <a href="for-senior-homes.html">Senior Living</a>
-          <a href="../privacy.html">Privacy Policy</a>
-          <a href="../terms.html">Terms of Use</a>
+          <a href="for-doctors.html">Doctors</a>
+          <a href="for-clinics.html">Clinics</a>
+          <a href="for-caregivers.html">Caregivers</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Use</a>
         </nav>
       </div>
       <div class="footer-bottom">
@@ -873,7 +948,6 @@
     </div>
   </footer>
 
-<!-- GDPR / CASL Cookie Consent Banner -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;color:#e2e8f0;padding:16px 24px;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -2px 12px rgba(0,0,0,.3);">
   <span>We use cookies to improve your experience and measure usage. See our <a href="/privacy.html" style="color:#818cf8;text-decoration:underline;">Privacy Policy</a>.</span>
   <div style="display:flex;gap:10px;flex-shrink:0;">
