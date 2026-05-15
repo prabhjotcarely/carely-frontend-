@@ -1179,7 +1179,7 @@ function applyOrgType(org){
   mGrid.innerHTML='';
   c.metrics.forEach(function(m){
     var d=document.createElement('div');d.className='mc';
-    var inner='<div class="mc-label">'+m.label+'</div><div class="mc-val'+(m.red?' mc-val-red":"")+'">'+m.val+'</div>';
+    var inner='<div class="mc-label">'+m.label+'</div><div class="mc-val'+(m.red?' mc-val-red':'')+'">'+m.val+'</div>';
     if(m.sub)inner+='<div class="mc-sub">'+m.sub+'</div>';
     if(m.trend)inner+='<div class="mc-trend '+(m.up?'up':'down')+'">'+m.trend+'</div>';
     d.innerHTML=inner;
