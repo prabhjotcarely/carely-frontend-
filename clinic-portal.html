@@ -88,6 +88,34 @@
     @media (max-width: 480px) {
       .stats-grid { grid-template-columns: 1fr; }
     }
+
+    /* PATIENT DETAIL MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(13,43,36,0.55); backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: var(--white); border-radius: 20px; width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; box-shadow: 0 40px 100px rgba(13,43,36,0.25); }
+    .modal-header { background: var(--deep-teal); border-radius: 20px 20px 0 0; padding: 28px 32px 24px; position: relative; }
+    .modal-header h2 { font-size: 1.4rem; font-weight: 900; color: var(--white); margin-bottom: 4px; letter-spacing: -0.02em; }
+    .modal-header p { font-size: 0.9rem; color: rgba(255,255,255,0.65); }
+    .modal-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.12); border: none; color: var(--white); width: 32px; height: 32px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .modal-body { padding: 28px 32px; }
+    .modal-stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+    .modal-stat { background: var(--off-white); border-radius: 12px; padding: 16px; text-align: center; border: 1px solid var(--grey-300); }
+    .modal-stat .val { font-size: 1.6rem; font-weight: 900; color: var(--deep-teal); }
+    .modal-stat .lbl { font-size: 0.72rem; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+    .modal-section-title { font-size: 0.8rem; font-weight: 800; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 12px; margin-top: 20px; }
+    .med-row { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--grey-100); }
+    .med-row:last-child { border-bottom: none; }
+    .med-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .med-info { flex: 1; }
+    .med-name { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+    .med-dose { font-size: 0.8rem; color: var(--grey-500); margin-top: 2px; }
+    .med-adh { font-size: 0.82rem; font-weight: 700; text-align: right; }
+    .notes-area { width: 100%; font-family: inherit; font-size: 0.88rem; color: var(--text); background: var(--off-white); border: 1.5px solid var(--grey-300); border-radius: 10px; padding: 12px 14px; resize: vertical; min-height: 100px; outline: none; margin-top: 8px; }
+    .notes-area:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(2,128,144,0.1); }
+    .notes-save-btn { margin-top: 10px; background: var(--teal); color: var(--white); border: none; border-radius: 8px; padding: 9px 20px; font-size: 0.85rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .notes-saved { font-size: 0.78rem; color: var(--mint); margin-left: 10px; display: none; }
+    tr.clickable { cursor: pointer; }
+    tr.clickable:hover td { background: #f0fdf9; }
   </style>
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
@@ -95,6 +123,28 @@
   </script>
 </head>
 <body>
+
+<!-- PATIENT DETAIL MODAL -->
+<div id="patient-modal" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="modal-patient-name">Patient</h2>
+      <p id="modal-patient-sub">Loading...</p>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-stat-row" id="modal-stats"></div>
+      <p class="modal-section-title">Current Medications</p>
+      <div id="modal-meds"></div>
+      <p class="modal-section-title">Clinical Notes</p>
+      <textarea class="notes-area" id="modal-notes" placeholder="Add clinical notes for this patient — observations, follow-up reminders, medication concerns..."></textarea>
+      <div>
+        <button class="notes-save-btn" onclick="saveNotes()">Save Notes</button>
+        <span class="notes-saved" id="notes-saved-msg">Saved</span>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- PIN GATE -->
 <div id="pin-gate" style="position:fixed;inset:0;background:linear-gradient(135deg,#0D3347 0%,#028090 55%,#02C39A 100%);display:flex;align-items:center;justify-content:center;z-index:9999;">
@@ -206,6 +256,66 @@
     return '#EF4444';
   }
 
+  var MED_COLORS = ['#02C39A','#6366f1','#F59E0B','#0891b2','#EF4444','#8b5cf6'];
+  var MED_DETAILS = {
+    'M.W.': [{name:'Metformin 500mg',dose:'8:00 AM, 6:00 PM',adh:90},{name:'Lisinopril 10mg',dose:'9:00 AM',adh:95},{name:'Atorvastatin 20mg',dose:'9:00 PM',adh:88},{name:'Aspirin 81mg',dose:'8:00 AM',adh:92}],
+    'R.P.': [{name:'Atorvastatin 40mg',dose:'9:00 PM',adh:90},{name:'Rosuvastatin 10mg',dose:'9:00 AM',adh:86}],
+    'D.L.': [{name:'Amlodipine 5mg',dose:'9:00 AM',adh:74},{name:'Levothyroxine 50mcg',dose:'7:00 AM',adh:78},{name:'Perindopril 4mg',dose:'9:00 AM',adh:76}],
+    'H.K.': [{name:'Metformin 1000mg',dose:'8:00 AM, 8:00 PM',adh:55},{name:'Sitagliptin 50mg',dose:'8:00 AM',adh:60},{name:'Insulin Glargine',dose:'10:00 PM',adh:58}],
+    'E.O.': [{name:'Ramipril 5mg',dose:'9:00 AM',adh:96},{name:'Hydrochlorothiazide 12.5mg',dose:'9:00 AM',adh:92}],
+    'W.T.': [{name:'Salbutamol inhaler',dose:'As needed',adh:42},{name:'Tiotropium inhaler',dose:'8:00 AM',adh:48},{name:'Amlodipine 10mg',dose:'9:00 AM',adh:50},{name:'Furosemide 20mg',dose:'8:00 AM',adh:44},{name:'Prednisolone 5mg',dose:'8:00 AM',adh:46}],
+    'P.N.': [{name:'Metformin 500mg',dose:'8:00 AM, 6:00 PM',adh:88},{name:'Atorvastatin 20mg',dose:'9:00 PM',adh:84},{name:'Empagliflozin 10mg',dose:'8:00 AM',adh:90}],
+    'G.M.': [{name:'Furosemide 40mg',dose:'8:00 AM',adh:50},{name:'Ramipril 10mg',dose:'9:00 AM',adh:55},{name:'Bisoprolol 5mg',dose:'9:00 AM',adh:52},{name:'Spironolactone 25mg',dose:'9:00 AM',adh:48},{name:'Digoxin 62.5mcg',dose:'9:00 AM',adh:54},{name:'Warfarin 3mg',dose:'6:00 PM',adh:51}],
+    'J.B.': [{name:'Amlodipine 5mg',dose:'9:00 AM',adh:96},{name:'Losartan 50mg',dose:'9:00 AM',adh:94}],
+    'F.S.': [{name:'Metformin 850mg',dose:'8:00 AM, 6:00 PM',adh:85},{name:'Levothyroxine 75mcg',dose:'7:00 AM',adh:82},{name:'Sitagliptin 100mg',dose:'8:00 AM',adh:80},{name:'Atorvastatin 10mg',dose:'9:00 PM',adh:84}]
+  };
+
+  var currentPatientKey = null;
+
+  function openModal(patient) {
+    currentPatientKey = patient.initials;
+    document.getElementById('modal-patient-name').textContent = patient.initials + ' · Age ' + patient.age;
+    document.getElementById('modal-patient-sub').textContent = patient.conditions.join(' · ') + ' · ' + patient.meds + ' medications';
+    var statsDiv = document.getElementById('modal-stats');
+    statsDiv.textContent = '';
+    var s1 = el('div','modal-stat'); var v1=el('div','val',patient.adherence30+'%'); var l1=el('div','lbl','30-Day Adherence'); v1.style.color=barColor(patient.adherence30); s1.appendChild(v1); s1.appendChild(l1); statsDiv.appendChild(s1);
+    var s2 = el('div','modal-stat'); var v2=el('div','val',patient.meds+''); var l2=el('div','lbl','Medications'); s2.appendChild(v2); s2.appendChild(l2); statsDiv.appendChild(s2);
+    var d=new Date(patient.lastActive); var today=new Date('2026-05-14'); var diff=Math.round((today-d)/86400000);
+    var s3 = el('div','modal-stat'); var v3=el('div','val',diff===0?'Today':diff===1?'Yest.':diff+'d ago'); var l3=el('div','lbl','Last Active'); v3.style.color=diff>3?'var(--danger)':'var(--teal)'; s3.appendChild(v3); s3.appendChild(l3); statsDiv.appendChild(s3);
+    var medsDiv = document.getElementById('modal-meds');
+    medsDiv.textContent = '';
+    var meds = MED_DETAILS[patient.initials] || [{name:'Medication data not available',dose:'—',adh:patient.adherence30}];
+    meds.forEach(function(m, i) {
+      var row = el('div','med-row');
+      var dot = el('div','med-dot'); dot.style.background = MED_COLORS[i % MED_COLORS.length];
+      var info = el('div','med-info');
+      var name = el('div','med-name',m.name);
+      var dose = el('div','med-dose',m.dose);
+      info.appendChild(name); info.appendChild(dose);
+      var adh = el('div','med-adh',m.adh+'%'); adh.style.color = barColor(m.adh);
+      row.appendChild(dot); row.appendChild(info); row.appendChild(adh);
+      medsDiv.appendChild(row);
+    });
+    var notesKey = 'carely_notes_' + patient.initials;
+    document.getElementById('modal-notes').value = localStorage.getItem(notesKey) || '';
+    document.getElementById('notes-saved-msg').style.display = 'none';
+    document.getElementById('patient-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('patient-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function saveNotes() {
+    var key = 'carely_notes_' + currentPatientKey;
+    localStorage.setItem(key, document.getElementById('modal-notes').value);
+    var msg = document.getElementById('notes-saved-msg');
+    msg.style.display = 'inline';
+    setTimeout(function(){ msg.style.display = 'none'; }, 2000);
+  }
+
   function buildPatientsTable(patients) {
     var container = document.getElementById('patients-table-container');
     container.textContent = '';
@@ -219,7 +329,9 @@
     table.appendChild(thead);
     var tbody = el('tbody');
     patients.forEach(function(p) {
-      var row = el('tr');
+      var row = el('tr', 'clickable');
+      row.title = 'Click to view ' + p.initials + ' full profile';
+      row.addEventListener('click', function(){ openModal(p); });
 
       // Patient cell
       var nameCell = el('td');
@@ -295,10 +407,15 @@
   function doUnlock() {
     var pin = document.getElementById('pin-input').value.trim();
     if (pin !== '272727') { document.getElementById('pin-err').style.display = 'block'; return; }
+    sessionStorage.setItem('carely_auth', '1');
     document.getElementById('pin-gate').style.display = 'none';
     renderDemo(DEMO);
   }
   document.getElementById('pin-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') doUnlock(); });
+  if (sessionStorage.getItem('carely_auth') === '1') {
+    document.getElementById('pin-gate').style.display = 'none';
+    renderDemo(DEMO);
+  }
 
   function renderDemo(data) {
     document.getElementById('portal').style.display = 'block';

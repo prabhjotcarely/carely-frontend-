@@ -1137,6 +1137,9 @@ function doLogin(){
   if(code!=='272727'){err.style.display='block';return;}
   err.style.display='none';
   ORG_TYPE=type;
+  sessionStorage.setItem('carely_auth','1');
+  sessionStorage.setItem('carely_org', org||'Demo Organization');
+  sessionStorage.setItem('carely_type', type||'senior');
   applyOrgType(org||'Demo Organization');
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='block';
@@ -1149,6 +1152,15 @@ function doLogin(){
   renderAnalyticsRings();
 }
 document.getElementById('l-code').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+(function(){
+  if(sessionStorage.getItem('carely_auth')==='1'){
+    ORG_TYPE=sessionStorage.getItem('carely_type')||'senior';
+    applyOrgType(sessionStorage.getItem('carely_org')||'Demo Organization');
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    initCharts(); renderPt(); renderROI(); renderAlerts(); renderReports(); renderOverviewRings(); renderAnalyticsRings();
+  }
+})();
 function doLogout(){document.getElementById('login-screen').style.display='flex';document.getElementById('app').style.display='none';}
 
 function applyOrgType(org){

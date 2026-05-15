@@ -658,12 +658,17 @@
       document.getElementById('pin-err').style.display = 'block';
       return;
     }
+    sessionStorage.setItem('carely_auth', '1');
     document.getElementById('pin-gate').style.display = 'none';
     renderDemoPortal(DEMO_ORG);
   }
   document.getElementById('pin-input').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') doUnlock();
   });
+  if (sessionStorage.getItem('carely_auth') === '1') {
+    document.getElementById('pin-gate').style.display = 'none';
+    renderDemoPortal(DEMO_ORG);
+  }
 
   function renderDemoPortal(data) {
     document.getElementById('portal').style.display = 'block';
