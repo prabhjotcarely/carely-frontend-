@@ -2171,17 +2171,44 @@ function loadDailyBoard() {
       document.getElementById('gp-done').textContent = s.done || 0;
       document.getElementById('gp-pending').textContent = s.pending || 0;
       document.getElementById('gp-postponed').textContent = s.postponed || 0;
-      var html = '';
-      d.tasks.forEach(function(t) {
-        var icon = t.status==='done'?'✅':t.status==='postponed'?'⏩':'⏳';
-        var col = t.status==='done'?'#16a34a':t.status==='postponed'?'#dc2626':'#ca8a04';
-        html += '<div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--g100)">';
-        html += '<span style="flex-shrink:0">' + icon + '</span>';
-        html += '<div style="flex:1"><div style="font-weight:700;color:'+col+';font-size:0.7rem;text-transform:uppercase">' + t.agentName + '</div>';
-        html += '<div style="color:var(--deep);line-height:1.4;font-size:0.78rem">' + t.task + '</div>';
-        if (t.notes) html += '<div style="font-size:0.68rem;color:var(--g400)">' + t.notes + '</div>';
-        html += '</div><div style="flex-shrink:0;font-size:0.65rem;color:var(--g400);white-space:nowrap">' + t.scheduledFor + '</div></div>';
-      });
+
+      // Phase + focus banner
+      var banner = '';
+      if (d.launchPhase) {
+        banner += '<div style="background:#1e293b;color:#94a3b8;font-size:0.68rem;font-weight:700;padding:6px 10px;border-radius:6px;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em">';
+        banner += d.launchPhase.replace(/-/g,' ');
+        if (d.founderFocus) banner += ' · ' + d.founderFocus;
+        banner += '</div>';
+      }
+
+      var assigneeColors = { tj: '#6366f1', prabh: '#ec4899', agent: '#ca8a04' };
+      var assigneeLabels = { tj: 'TJ', prabh: 'PRABH', agent: null };
+
+      // Group: TJ → Prabh → Agents
+      var groups = { tj: [], prabh: [], agent: [] };
+      d.tasks.forEach(function(t) { var a = t.assignee || 'agent'; if (groups[a]) groups[a].push(t); else groups.agent.push(t); });
+
+      function renderSection(label, tasks, accentColor) {
+        if (!tasks.length) return '';
+        var out = '<div style="font-size:0.65rem;font-weight:800;color:'+accentColor+';text-transform:uppercase;letter-spacing:0.08em;padding:8px 0 4px">'+label+'</div>';
+        tasks.forEach(function(t) {
+          var icon = t.status==='done'?'✅':t.status==='postponed'?'⏩':'⏳';
+          var nameCol = t.status==='done'?'#16a34a':t.status==='postponed'?'#dc2626':accentColor;
+          var priorityBadge = (t.priority==='high') ? '<span style="background:#fef2f2;color:#dc2626;font-size:0.6rem;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:5px">HIGH</span>' : '';
+          out += '<div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--g100)">';
+          out += '<span style="flex-shrink:0;margin-top:1px">'+icon+'</span>';
+          out += '<div style="flex:1"><div style="font-weight:700;color:'+nameCol+';font-size:0.68rem;text-transform:uppercase">'+t.agentName+priorityBadge+'</div>';
+          out += '<div style="color:var(--deep);line-height:1.4;font-size:0.78rem">'+t.task+'</div>';
+          if (t.notes) out += '<div style="font-size:0.68rem;color:var(--g400)">'+t.notes+'</div>';
+          out += '</div><div style="flex-shrink:0;font-size:0.65rem;color:var(--g400);white-space:nowrap">'+t.scheduledFor+'</div></div>';
+        });
+        return out;
+      }
+
+      var html = banner;
+      html += renderSection('TJ — CEO', groups.tj, '#6366f1');
+      html += renderSection('PRABH — COO+CMO', groups.prabh, '#ec4899');
+      html += renderSection('AI AGENTS', groups.agent, '#ca8a04');
       document.getElementById('gp-board-tasks').innerHTML = html;
     }).catch(function(){document.getElementById('gp-board-tasks').innerHTML='<div style="color:var(--g400);text-align:center;padding:20px">Backend loading...</div>';});
 }
