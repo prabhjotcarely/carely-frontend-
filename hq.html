@@ -2139,6 +2139,7 @@ function nav(el, id) {
 // ── Growth Plan ──────────────────────────────────────────────────────────────
 var GP_TARGETS = {5:100,6:5000,7:20000,8:50000,9:80000,10:83333};
 function loadGrowthPlan() {
+  var BACKEND = _BACKEND; var SECRET = _SECRET;
   var now = new Date();
   var month = now.getMonth() + 1;
   var daysLeft = Math.ceil((new Date('2026-10-31') - now) / 86400000);
@@ -2162,6 +2163,7 @@ function loadGrowthPlan() {
     }).catch(function(){});
 }
 function loadDailyBoard() {
+  var BACKEND = _BACKEND; var SECRET = _SECRET;
   fetch(BACKEND + '/admin/daily-board', {headers:{'x-carely-secret':SECRET}})
     .then(function(r){return r.json();}).then(function(d) {
       if (!d || !d.tasks) { document.getElementById('gp-board-tasks').innerHTML = '<div style="color:var(--g400);text-align:center;padding:20px">No board yet today.</div>'; return; }
