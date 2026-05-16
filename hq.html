@@ -83,11 +83,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   .metric-row{grid-template-columns:repeat(2,1fr)}
   .metric-val{font-size:1.4rem}
   .agent-grid{grid-template-columns:1fr}
-  .tbl{font-size:0.74rem}
+  .tbl{font-size:0.74rem;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
   .tbl th,.tbl td{padding:6px 7px}
   .chat-area{max-height:220px}
   .sidebar-overlay{display:block!important;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:99;opacity:0;pointer-events:none;transition:opacity 0.25s}
   .sidebar-overlay.visible{opacity:1;pointer-events:auto}
+  /* Growth Plan grids */
+  #gp-stats-grid{grid-template-columns:repeat(2,1fr)!important}
+  #gp-milestones{grid-template-columns:repeat(3,1fr)!important}
+  #gp-board-summary{grid-template-columns:repeat(3,1fr)!important}
+  /* Card grids — all single column on mobile */
+  .ph h1{font-size:1.2rem}
+  .card{padding:14px}
+  /* Prevent horizontal overflow everywhere */
+  .page *{max-width:100%;box-sizing:border-box}
+  input,select,textarea{max-width:100%!important}
+  /* Tables scroll horizontally instead of breaking */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap}
 }
 @media(min-width:721px){
   .hamburger{display:none!important}
@@ -1988,7 +2000,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div style="font-size:0.65rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;opacity:0.6;margin-bottom:6px">THE GOAL</div>
       <div style="font-size:1.6rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:4px">$1,000,000 ARR</div>
       <div style="font-size:0.85rem;opacity:0.75;margin-bottom:20px">October 31, 2026 · Zero ad spend · TJ + Prabh + AI only</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+      <div id="gp-stats-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
         <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:12px;text-align:center">
           <div style="font-size:1.2rem;font-weight:900" id="gp-mrr">$0</div>
           <div style="font-size:0.65rem;opacity:0.65;margin-top:2px">Current MRR</div>
@@ -2013,7 +2025,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
 
     <div style="font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px">Monthly Milestones</div>
-    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:24px">
+    <div id="gp-milestones" style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:24px">
       <div class="gp-mile" data-month="5"><div class="gp-mile-month">May</div><div class="gp-mile-mrr">$100</div><div class="gp-mile-users">10 users</div></div>
       <div class="gp-mile" data-month="6"><div class="gp-mile-month">Jun</div><div class="gp-mile-mrr">$5K</div><div class="gp-mile-users">500 users</div></div>
       <div class="gp-mile" data-month="7"><div class="gp-mile-month">Jul</div><div class="gp-mile-mrr">$20K</div><div class="gp-mile-users">2K users</div></div>
