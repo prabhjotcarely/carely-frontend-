@@ -59,6 +59,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .metric-sub{font-size:0.7rem;color:var(--g500);margin-top:3px}
 
 .card{background:white;border-radius:14px;padding:20px;margin-bottom:14px;box-shadow:0 1px 8px rgba(0,0,0,0.04)}
+.gp-mile{background:white;border-radius:12px;padding:12px;text-align:center;box-shadow:0 1px 6px rgba(0,0,0,0.05);border-top:3px solid var(--g200);transition:border-color 0.3s}
+.gp-mile.current{border-top-color:var(--mint);box-shadow:0 2px 12px rgba(2,195,154,0.15)}
+.gp-mile.past{border-top-color:#22c55e;opacity:0.7}
+.gp-mile-month{font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--g400);margin-bottom:4px}
+.gp-mile-mrr{font-size:1rem;font-weight:900;color:var(--deep)}
+.gp-mile-users{font-size:0.65rem;color:var(--g400);margin-top:2px}
 .card-title{font-size:0.88rem;font-weight:800;color:var(--deep);margin-bottom:14px;display:flex;align-items:center;gap:7px}
 .card-sub{font-size:0.7rem;color:var(--g500);margin-left:auto;font-weight:500}
 
@@ -292,6 +298,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="sb-sec">
     <div class="sb-sec-title">Growth</div>
+    <div class="sb-item" onclick="nav(this,'growth-plan')"><span class="ic">🚀</span> Growth Plan</div>
     <div class="sb-item" onclick="nav(this,'proposals')"><span class="ic">🧠</span> Proposals <span class="dot-a" id="proposals-dot"></span></div>
     <div class="sb-item" onclick="nav(this,'content-hub')"><span class="ic">🎬</span> Content Hub <span class="dot-g"></span></div>
     <div class="sb-item" onclick="nav(this,'approvals')"><span class="ic">✅</span> Approvals <span class="dot-a"></span></div>
@@ -1973,6 +1980,175 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div id="demo-copy-confirm" style="display:none;text-align:center;margin-top:12px;font-size:0.8rem;color:var(--green);font-weight:600">Link copied to clipboard</div>
   </div>
 
+  <!-- ══ GROWTH PLAN ══ -->
+  <div class="page" id="page-growth-plan">
+    <div class="ph"><h1>🚀 Growth Plan</h1><p>$1M ARR by Oct 31, 2026 · Phase tracker · Monthly milestones · Weekly cadence · Live execution board</p></div>
+
+    <!-- GOAL PULSE -->
+    <div style="background:linear-gradient(135deg,#0D3347,#028090);border-radius:16px;padding:24px;margin-bottom:20px;color:white">
+      <div style="font-size:0.65rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;opacity:0.6;margin-bottom:6px">THE GOAL</div>
+      <div style="font-size:1.6rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:4px">$1,000,000 ARR</div>
+      <div style="font-size:0.85rem;opacity:0.75;margin-bottom:20px">October 31, 2026 · Zero ad spend · TJ + Prabh + AI only</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+        <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:1.2rem;font-weight:900" id="gp-mrr">$0</div>
+          <div style="font-size:0.65rem;opacity:0.65;margin-top:2px">Current MRR</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:1.2rem;font-weight:900" id="gp-target">$100</div>
+          <div style="font-size:0.65rem;opacity:0.65;margin-top:2px">Month Target</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:1.2rem;font-weight:900" id="gp-days">—</div>
+          <div style="font-size:0.65rem;opacity:0.65;margin-top:2px">Days to Oct 31</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:1.2rem;font-weight:900" id="gp-pct">0%</div>
+          <div style="font-size:0.65rem;opacity:0.65;margin-top:2px">To Target</div>
+        </div>
+      </div>
+      <div style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;font-size:0.7rem;opacity:0.65;margin-bottom:6px"><span>Progress to monthly target</span><span id="gp-bar-label">0%</span></div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:6px;height:8px"><div id="gp-bar" style="background:#02C39A;border-radius:6px;height:8px;width:0%;transition:width 0.8s"></div></div>
+      </div>
+    </div>
+
+    <!-- MONTHLY MILESTONES -->
+    <div style="font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px">Monthly Milestones</div>
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:24px" id="gp-milestones">
+      <div class="gp-mile" data-month="5" data-target="100" data-users="10" data-driver="Launch blast + Reddit">
+        <div class="gp-mile-month">May</div><div class="gp-mile-mrr">$100</div><div class="gp-mile-users">10 users</div>
+      </div>
+      <div class="gp-mile" data-month="6" data-target="5000" data-users="500" data-driver="TikTok + trial conversion">
+        <div class="gp-mile-month">Jun</div><div class="gp-mile-mrr">$5K</div><div class="gp-mile-users">500 users</div>
+      </div>
+      <div class="gp-mile" data-month="7" data-target="20000" data-users="2000" data-driver="B2B + referrals">
+        <div class="gp-mile-month">Jul</div><div class="gp-mile-mrr">$20K</div><div class="gp-mile-users">2K users</div>
+      </div>
+      <div class="gp-mile" data-month="8" data-target="50000" data-users="5000" data-driver="ASO + B2B pipeline">
+        <div class="gp-mile-month">Aug</div><div class="gp-mile-mrr">$50K</div><div class="gp-mile-users">5K users</div>
+      </div>
+      <div class="gp-mile" data-month="9" data-target="80000" data-users="8000" data-driver="Retention flywheel">
+        <div class="gp-mile-month">Sep</div><div class="gp-mile-mrr">$80K</div><div class="gp-mile-users">8K users</div>
+      </div>
+      <div class="gp-mile" data-month="10" data-target="83333" data-users="8333" data-driver="Hold + compound">
+        <div class="gp-mile-month">Oct</div><div class="gp-mile-mrr">$83K</div><div class="gp-mile-users">8,333 users</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+
+      <!-- TODAY'S EXECUTION BOARD -->
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div class="card-title">Today's Execution Board</div>
+          <button onclick="loadDailyBoard()" style="font-size:0.68rem;background:var(--deep);color:white;border:none;padding:4px 10px;border-radius:6px;cursor:pointer">Refresh</button>
+        </div>
+        <div id="gp-board-summary" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
+          <div style="text-align:center;background:#f0fdf4;border-radius:8px;padding:10px">
+            <div style="font-size:1.4rem;font-weight:900;color:#16a34a" id="gp-done">—</div>
+            <div style="font-size:0.65rem;color:var(--g500)">Done</div>
+          </div>
+          <div style="text-align:center;background:#fefce8;border-radius:8px;padding:10px">
+            <div style="font-size:1.4rem;font-weight:900;color:#ca8a04" id="gp-pending">—</div>
+            <div style="font-size:0.65rem;color:var(--g500)">Pending</div>
+          </div>
+          <div style="text-align:center;background:#fef2f2;border-radius:8px;padding:10px">
+            <div style="font-size:1.4rem;font-weight:900;color:#dc2626" id="gp-postponed">—</div>
+            <div style="font-size:0.65rem;color:var(--g500)">Carried</div>
+          </div>
+        </div>
+        <div id="gp-board-tasks" style="font-size:0.78rem;max-height:320px;overflow-y:auto">
+          <div style="color:var(--g400);text-align:center;padding:20px">Loading board...</div>
+        </div>
+      </div>
+
+      <!-- WEEKLY CONTENT CADENCE -->
+      <div class="card">
+        <div class="card-title" style="margin-bottom:14px">Weekly Content Cadence</div>
+        <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">TikTok — 5/week (Vance scripts, Prabh films)</div>
+        <div style="font-size:0.78rem;line-height:1.9;margin-bottom:14px;color:var(--deep)">
+          Mon: Personal story / emotional hook<br>
+          Tue: Product demo ("How Carely works")<br>
+          Wed: Caregiver empathy (no pitch)<br>
+          Thu: User win or behind the scenes<br>
+          Fri: Founder life / building in public
+        </div>
+        <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">LinkedIn — 3/week (Leo writes as Prabh)</div>
+        <div style="font-size:0.78rem;line-height:1.9;margin-bottom:14px;color:var(--deep)">
+          Mon: Thought piece (caregiving stats, eldercare)<br>
+          Wed: Carely milestone + real numbers<br>
+          Fri: Personal story connecting to why we built this
+        </div>
+        <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Reddit — 5 comments + 1 post/week (Rex)</div>
+        <div style="font-size:0.78rem;line-height:1.9;color:var(--deep)">
+          Answer real caregiver pain — never pitch<br>
+          1 original post/week, no product mention<br>
+          Subreddits: r/caregiving r/AgingParents r/dementia
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE PLAN -->
+    <div style="font-size:0.7rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px">Launch Phase Plan</div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px">
+      <div class="card" style="border-left:3px solid #02C39A">
+        <div style="font-size:0.72rem;font-weight:800;color:#02C39A;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Week 1 · May 15–22 · IGNITION</div>
+        <div style="font-size:0.78rem;line-height:1.8;color:var(--deep)">
+          Blaze fires launch email to full waitlist<br>
+          Nina: day-0 onboarding on every signup<br>
+          Rex: 3 Reddit replies/day (no pitch)<br>
+          Cole: first 5 B2B emails to pharmacies<br>
+          Leo: founding story on LinkedIn
+        </div>
+        <div style="margin-top:10px;font-size:0.72rem;font-weight:700;color:var(--g500)">Milestone: 3 paying customers</div>
+      </div>
+      <div class="card" style="border-left:3px solid #028090">
+        <div style="font-size:0.72rem;font-weight:800;color:#028090;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Week 2 · May 22–29 · LEARN FAST</div>
+        <div style="font-size:0.78rem;line-height:1.8;color:var(--deep)">
+          Rex doubles down on subreddits driving clicks<br>
+          Lena rewrites if trial conversion &lt; 20%<br>
+          Cole follows up on any pharmacy reply<br>
+          TikTok: 5 videos published this week
+        </div>
+        <div style="margin-top:10px;font-size:0.72rem;font-weight:700;color:var(--g500)">Milestone: 7 paying customers</div>
+      </div>
+      <div class="card" style="border-left:3px solid #0D3347">
+        <div style="font-size:0.72rem;font-weight:800;color:#0D3347;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Week 3 · May 29–Jun 5 · PRESS GAS</div>
+        <div style="font-size:0.78rem;line-height:1.8;color:var(--deep)">
+          Lena: 3-touch aggressive if &lt; 30% conversion<br>
+          Cole: personal follow-up to any opener<br>
+          Leo: 50 LinkedIn connections/week<br>
+          Rex surfaces viral caregiver posts to TikTok
+        </div>
+        <div style="margin-top:10px;font-size:0.72rem;font-weight:700;color:var(--g500)">Milestone: 15 customers, $150 MRR</div>
+      </div>
+      <div class="card" style="border-left:3px solid #7C3AED">
+        <div style="font-size:0.72rem;font-weight:800;color:#7C3AED;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Week 4 · Jun 5–12 · CLOSE MONTH 1</div>
+        <div style="font-size:0.78rem;line-height:1.8;color:var(--deep)">
+          Full agent self-reflection Sunday<br>
+          Best channel gets 2x agent attention in June<br>
+          Founding spots: if &lt; 150 left → urgency post<br>
+          June plan locked based on what worked
+        </div>
+        <div style="margin-top:10px;font-size:0.72rem;font-weight:700;color:var(--g500)">Milestone: 20 customers, $200 MRR</div>
+      </div>
+    </div>
+
+    <!-- COMPOUNDING INTELLIGENCE -->
+    <div class="card">
+      <div class="card-title" style="margin-bottom:12px">What Compounds Automatically Each Month</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:0.78rem">
+        <div style="background:#f0fdf4;border-radius:8px;padding:12px"><strong style="color:#16a34a">Elara</strong><br><span style="color:var(--g600);line-height:1.7">Learns each user's patterns → retention up, churn down → compounding MRR every month</span></div>
+        <div style="background:#eff6ff;border-radius:8px;padding:12px"><strong style="color:#2563eb">Rex</strong><br><span style="color:var(--g600);line-height:1.7">Learns which Reddit posts get clicks → reach grows without more effort</span></div>
+        <div style="background:#fef3c7;border-radius:8px;padding:12px"><strong style="color:#d97706">Nina + Lena</strong><br><span style="color:var(--g600);line-height:1.7">A/B winners stack up each week → email conversion rate climbs automatically</span></div>
+        <div style="background:#fdf4ff;border-radius:8px;padding:12px"><strong style="color:#9333ea">Cole</strong><br><span style="color:var(--g600);line-height:1.7">Learns which B2B orgs reply → outreach gets sharper, reply rate improves</span></div>
+        <div style="background:#fff1f2;border-radius:8px;padding:12px"><strong style="color:#e11d48">Daily Board</strong><br><span style="color:var(--g600);line-height:1.7">7-day execution trend feeds into every agent's morning context → team urgency compounds</span></div>
+        <div style="background:#f0f9ff;border-radius:8px;padding:12px"><strong style="color:#0284c7">Scout + ASO</strong><br><span style="color:var(--g600);line-height:1.7">Each keyword rank improvement compounds → App Store organic becomes main acquisition by Aug</span></div>
+      </div>
+    </div>
+  </div>
+
 </div><!-- end page-area -->
 
 <script>
@@ -2038,6 +2214,68 @@ function _activatePage(id, pushState) {
 function nav(el, id) {
   closeSidebar();
   _activatePage(id, true);
+  if (id === 'growth-plan') { loadGrowthPlan(); loadDailyBoard(); }
+}
+
+// ── Growth Plan ──────────────────────────────────────────────────────────────
+var GP_MONTHLY_TARGETS = {5:100,6:5000,7:20000,8:50000,9:80000,10:83333};
+
+function loadGrowthPlan() {
+  var now = new Date();
+  var month = now.getMonth() + 1;
+  var daysLeft = Math.ceil((new Date('2026-10-31') - now) / 86400000);
+  document.getElementById('gp-days').textContent = daysLeft + 'd';
+
+  // Highlight current milestone month
+  document.querySelectorAll('.gp-mile').forEach(function(el) {
+    var m = parseInt(el.dataset.month);
+    el.classList.remove('current','past');
+    if (m === month) el.classList.add('current');
+    else if (m < month) el.classList.add('past');
+  });
+
+  var target = GP_MONTHLY_TARGETS[month] || 83333;
+  document.getElementById('gp-target').textContent = target >= 1000 ? '$' + (target/1000).toFixed(0) + 'K' : '$' + target;
+
+  // Pull live MRR from backend
+  fetch(BACKEND + '/admin/stats', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+      var mrr = (d.mrr || 0);
+      document.getElementById('gp-mrr').textContent = '$' + mrr.toLocaleString();
+      var pct = target > 0 ? Math.min(100, Math.round(mrr / target * 100)) : 0;
+      document.getElementById('gp-pct').textContent = pct + '%';
+      document.getElementById('gp-bar').style.width = pct + '%';
+      document.getElementById('gp-bar-label').textContent = pct + '%  ($' + mrr.toLocaleString() + ' / $' + target.toLocaleString() + ')';
+    }).catch(function(){});
+}
+
+function loadDailyBoard() {
+  fetch(BACKEND + '/admin/daily-board', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+      if (!d || !d.tasks) { document.getElementById('gp-board-tasks').innerHTML = '<div style="color:var(--g400);text-align:center;padding:20px">No board for today yet.</div>'; return; }
+      var s = d.summary || {};
+      document.getElementById('gp-done').textContent = s.done || 0;
+      document.getElementById('gp-pending').textContent = s.pending || 0;
+      document.getElementById('gp-postponed').textContent = s.postponed || 0;
+
+      var html = '';
+      d.tasks.forEach(function(t) {
+        var icon = t.status === 'done' ? '✅' : t.status === 'postponed' ? '⏩' : '⏳';
+        var color = t.status === 'done' ? '#16a34a' : t.status === 'postponed' ? '#dc2626' : '#ca8a04';
+        html += '<div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--g100)">';
+        html += '<span style="flex-shrink:0;margin-top:1px">' + icon + '</span>';
+        html += '<div style="flex:1;min-width:0">';
+        html += '<div style="font-weight:600;color:' + color + ';font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">' + t.agentName + '</div>';
+        html += '<div style="color:var(--deep);line-height:1.4">' + t.task + '</div>';
+        if (t.notes) html += '<div style="font-size:0.7rem;color:var(--g400);margin-top:2px">' + t.notes + '</div>';
+        html += '</div>';
+        html += '<div style="flex-shrink:0;font-size:0.65rem;color:var(--g400);white-space:nowrap;margin-top:2px">' + t.scheduledFor + '</div>';
+        html += '</div>';
+      });
+      document.getElementById('gp-board-tasks').innerHTML = html || '<div style="color:var(--g400);text-align:center;padding:20px">No tasks yet.</div>';
+    }).catch(function(){ document.getElementById('gp-board-tasks').innerHTML = '<div style="color:var(--g400);text-align:center;padding:20px">Could not load board.</div>'; });
 }
 
 // Handle browser back/forward
@@ -3399,6 +3637,48 @@ function rejectProposal(id) {
 
   function clearEl(el) { while(el.firstChild) el.removeChild(el.firstChild); }
 
+  function humanizeMessage(agentName, msg) {
+    if (!msg) return msg;
+    // Strip [AutoCEO] prefix
+    msg = msg.replace(/^\[AutoCEO\]\s*/i, '');
+    // Parse pipe-separated trigger_agent(...) blocks
+    if (msg.indexOf('trigger_agent(') !== -1) {
+      var done = [], pending = [];
+      msg.split('|').forEach(function(part) {
+        part = part.trim();
+        var m = part.match(/trigger_agent\(([^)]+)\):\s*(.+)/);
+        if (!m) return;
+        var taskName = m[1].replace(/_/g,' ');
+        var status = m[2].toLowerCase();
+        if (status.indexOf('already triggered') !== -1) {
+          done.push(taskName);
+        } else if (status.indexOf('triggered') !== -1) {
+          pending.push(taskName + ' — started');
+        } else {
+          done.push(taskName + ' (' + m[2] + ')');
+        }
+      });
+      var parts = [];
+      if (done.length) parts.push('Already done today: ' + done.map(function(t){ return t.charAt(0).toUpperCase()+t.slice(1); }).join(', ') + '.');
+      if (pending.length) parts.push(pending.join(', ') + '.');
+      return parts.length ? parts.join(' ') : msg;
+    }
+    // Parse Health N/100 | MRR $N | N paid | N trials
+    if (msg.match(/Health \d+\/100/)) {
+      var h = (msg.match(/Health (\d+)\/100/) || [])[1];
+      var mrr = (msg.match(/MRR \$([0-9,]+)/) || [])[1];
+      var paid = (msg.match(/(\d+) paid/) || [])[1];
+      var trials = (msg.match(/(\d+) trials/) || [])[1];
+      var out = 'Status update — ';
+      if (mrr !== undefined) out += 'Revenue this month: $' + mrr + '. ';
+      if (paid !== undefined) out += paid + ' paying customers. ';
+      if (trials !== undefined) out += trials + ' on free trial. ';
+      if (h !== undefined) out += 'System health: ' + h + '/100.';
+      return out;
+    }
+    return msg;
+  }
+
   function buildFeedRow(ev) {
     var color = AGENT_COLORS[(ev.agentName||'').toLowerCase()] || '#6B7280';
     var row = document.createElement('div');
@@ -3422,7 +3702,7 @@ function rejectProposal(id) {
     header.appendChild(nameEl);header.appendChild(typeEl);header.appendChild(timeEl);
     var msg = document.createElement('div');
     msg.style.cssText='font-size:0.82rem;color:var(--text);line-height:1.4';
-    msg.textContent=ev.message;
+    msg.textContent=humanizeMessage(ev.agentName, ev.message);
     body.appendChild(header);body.appendChild(msg);
     row.appendChild(avatar);row.appendChild(body);
     return row;
@@ -3590,8 +3870,16 @@ function rejectProposal(id) {
       .then(function(r) { return r.json(); })
       .then(function(data) {
         clearTimeout(_inboxTimer);
-        var items = data.items || [];
-        var unread = data.unread || 0;
+        var rawItems = data.items || [];
+        // Deduplicate: keep only the most recent item per title
+        var seen = {};
+        var items = rawItems.filter(function(item) {
+          var key = (item.title||'').trim();
+          if (seen[key]) return false;
+          seen[key] = true;
+          return true;
+        });
+        var unread = items.filter(function(i){ return !i.read; }).length;
         var feed = document.getElementById('inbox-feed');
         var label = document.getElementById('inbox-unread-label');
         var sbItem = document.querySelector('.sb-item[onclick*="my-inbox"]');
@@ -3765,10 +4053,23 @@ function rejectProposal(id) {
             card.appendChild(meta);
           }
 
+          var fullText = draft.fullContent || draft.body || draft.content || draft.contentSnippet || '(no preview)';
           var preview = document.createElement('div');
-          preview.style.cssText = 'background:var(--g100);border-radius:8px;padding:12px 14px;font-size:0.82rem;line-height:1.7;color:var(--text);white-space:pre-wrap;max-height:180px;overflow:auto;margin-bottom:12px';
-          preview.textContent = draft.contentSnippet || draft.fullContent || draft.body || draft.content || '(no preview)';
+          preview.style.cssText = 'background:var(--g100);border-radius:8px;padding:12px 14px;font-size:0.82rem;line-height:1.7;color:var(--text);white-space:pre-wrap;margin-bottom:8px;max-height:120px;overflow:hidden;cursor:pointer;position:relative';
+          preview.textContent = fullText;
+          // Expand toggle
+          var expanded = false;
+          var expandBtn = document.createElement('button');
+          expandBtn.textContent = 'Read full draft ↓';
+          expandBtn.style.cssText = 'font-size:0.72rem;font-weight:700;color:var(--teal);background:none;border:none;cursor:pointer;padding:0 0 10px 0;display:block';
+          expandBtn.onclick = function() {
+            expanded = !expanded;
+            preview.style.maxHeight = expanded ? 'none' : '120px';
+            preview.style.overflow = expanded ? 'visible' : 'hidden';
+            expandBtn.textContent = expanded ? 'Collapse ↑' : 'Read full draft ↓';
+          };
           card.appendChild(preview);
+          card.appendChild(expandBtn);
 
           var btnRow = document.createElement('div');
           btnRow.style.cssText = 'display:flex;gap:8px';
@@ -4198,6 +4499,11 @@ function loadBrain() {
     .then(function(r) { return r.json(); })
     .then(function(d) {
       // Brain returns { entries: [{topic, content, updatedAt, updatedBy, version}] }
+      var canvas = document.getElementById('brain-canvas');
+      if (canvas) canvas.style.display = 'none';
+      grid.style.display = 'grid';
+      if (_brainAnim) { cancelAnimationFrame(_brainAnim); _brainAnim = null; }
+
       var topics = {};
       (d.entries || []).forEach(function(e) { topics[e.topic] = e; });
       var keys = Object.keys(topics);
