@@ -551,6 +551,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="tab" onclick="switchTab(this,'ch-instagram');chRenderInstagram()">Instagram</div>
       <div class="tab" style="color:var(--mint);font-weight:800" onclick="switchTab(this,'ch-approved');chRenderApproved('all')">✓ Approved</div>
       <div class="tab" onclick="switchTab(this,'ch-platform-intel')">Platform Intel</div>
+      <div class="tab" onclick="switchTab(this,'ch-community-intel');chRenderCommunityIntel()">Community Intel</div>
       <div class="tab" onclick="switchTab(this,'ch-rules')">Rules</div>
     </div>
 
@@ -733,6 +734,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="card">
         <div class="card-title">📅 Today's Optimal Schedule</div>
         <div id="todays-schedule" style="font-size:0.82rem;color:var(--text);line-height:2"></div>
+      </div>
+    </div>
+
+    <!-- ══ Community Intel tab — what Rex knows about each community ══ -->
+    <div class="tab-panel" id="ch-community-intel">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+        <div style="font-size:0.82rem;font-weight:700;color:var(--deep)">What Rex knows about each community before writing</div>
+        <button onclick="chRenderCommunityIntel()" style="font-size:0.72rem;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer;margin-left:auto">Refresh</button>
+      </div>
+      <!-- Subreddit selector -->
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px" id="ci-sub-btns"></div>
+      <!-- Fingerprint display -->
+      <div id="ci-display">
+        <div class="card" style="text-align:center;padding:40px;color:var(--g500);font-size:0.84rem">Select a community above to see Rex's intel</div>
       </div>
     </div>
 
@@ -3462,6 +3477,149 @@ window.chRenderInstagram = function() {
     feed.appendChild(card);
   });
 };
+
+// ── Community Intel tab ────────────────────────────────────────────────────────
+var CI_SUBREDDITS = [
+  'caregivers','eldercare','AgingParents','dementia','diabetes','thyroid',
+  'ADHD','ChronicPain','HeartDisease','bipolar','depression','epilepsy',
+  'MultipleSclerosis','ABCDesis','punjabi','NewParents','Supplements','longevity'
+];
+var _ciActive = 'caregivers';
+
+window.chRenderCommunityIntel = function() {
+  var btnBar = document.getElementById('ci-sub-btns');
+  if (btnBar && !btnBar.hasChildNodes()) {
+    CI_SUBREDDITS.forEach(function(sub) {
+      var btn = document.createElement('button');
+      btn.id = 'ci-btn-' + sub;
+      btn.textContent = 'r/' + sub;
+      btn.style.cssText = 'font-size:0.72rem;font-weight:600;padding:4px 10px;border-radius:20px;border:1.5px solid var(--g300);background:white;color:var(--g500);cursor:pointer;transition:all 0.15s';
+      btn.onclick = function() { _ciLoadSub(sub); };
+      btnBar.appendChild(btn);
+    });
+  }
+  _ciLoadSub(_ciActive);
+};
+
+function _ciSetActiveBtn(sub) {
+  CI_SUBREDDITS.forEach(function(s) {
+    var b = document.getElementById('ci-btn-' + s);
+    if (!b) return;
+    if (s === sub) {
+      b.style.background = 'var(--teal)'; b.style.color = 'white'; b.style.borderColor = 'var(--teal)'; b.style.fontWeight = '700';
+    } else {
+      b.style.background = 'white'; b.style.color = 'var(--g500)'; b.style.borderColor = 'var(--g300)'; b.style.fontWeight = '600';
+    }
+  });
+}
+
+function _ciLoadSub(sub) {
+  _ciActive = sub;
+  _ciSetActiveBtn(sub);
+  var display = document.getElementById('ci-display');
+  if (!display) return;
+  display.innerHTML = '<div class="card" style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading r/' + sub + ' intel...</div>';
+
+  var BACKEND = _BACKEND, SECRET = _SECRET;
+  fetch(BACKEND + '/admin/community-fingerprint/' + sub, { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(12000) })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var fp = data.fingerprint;
+      if (!fp) { display.innerHTML = '<div class="card" style="padding:28px;color:var(--amber)">Not scanned yet — server will scan on next startup. <button onclick="_ciRefresh(\'' + sub + '\')" style="margin-left:8px;font-size:0.76rem;padding:4px 10px;border-radius:6px;border:1px solid var(--amber);background:white;color:var(--amber);cursor:pointer">Scan Now</button></div>'; return; }
+      display.innerHTML = '';
+      display.appendChild(_ciBuildCard(fp, sub));
+    })
+    .catch(function() {
+      display.innerHTML = '<div class="card" style="padding:20px;color:var(--red);font-size:0.82rem">Backend offline or scan not ready.</div>';
+    });
+}
+
+window._ciRefresh = function(sub) {
+  var display = document.getElementById('ci-display');
+  if (display) display.innerHTML = '<div class="card" style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Scanning r/' + sub + ' — reading top posts and analyzing culture... (takes ~20s)</div>';
+  var BACKEND = _BACKEND, SECRET = _SECRET;
+  fetch(BACKEND + '/admin/community-fingerprint/' + sub + '/refresh', {
+    method: 'POST', headers: { 'x-carely-secret': SECRET }
+  }).then(function() { _ciLoadSub(sub); }).catch(function() {
+    if (display) display.innerHTML = '<div class="card" style="padding:20px;color:var(--red)">Scan failed — check backend logs.</div>';
+  });
+};
+
+function _ciBuildCard(fp, sub) {
+  var wrap = document.createElement('div');
+
+  // Header card
+  var header = document.createElement('div');
+  header.className = 'card';
+  header.style.cssText = 'margin-bottom:12px;border-left:3px solid #FF4500';
+  header.innerHTML = [
+    '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">',
+      '<span style="font-size:1rem;font-weight:900;color:var(--deep)">r/' + sub + '</span>',
+      '<span class="pill" style="background:#FF4500;color:white;font-size:0.68rem">' + (fp.memberCount ? fp.memberCount.toLocaleString() + ' members' : 'Reddit') + '</span>',
+      '<span class="pill ' + (fp.recommendMentionCarely ? 'green' : 'red') + '" style="font-size:0.68rem">Carely mention: ' + (fp.recommendMentionCarely ? 'YES' : 'NO') + '</span>',
+      '<span class="pill amber" style="font-size:0.68rem">Promotion: ' + fp.promotionTolerance + '</span>',
+      '<button onclick="_ciRefresh(\'' + sub + '\')" style="font-size:0.68rem;padding:2px 8px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer;margin-left:auto">Refresh scan</button>',
+    '</div>',
+    '<div style="font-size:0.78rem;color:var(--g500);font-style:italic;margin-bottom:6px">' + fp.communityMood + '</div>',
+    '<div style="font-size:0.72rem;color:var(--g400)">Based on ' + fp.basedOnPosts + ' posts · Last scanned ' + (fp.fetchedAt ? new Date(fp.fetchedAt).toLocaleDateString() : 'unknown') + ' · Fresh until ' + (fp.freshUntil ? new Date(fp.freshUntil).toLocaleDateString() : '?') + '</div>',
+  ].join('');
+  wrap.appendChild(header);
+
+  // Two-column grid
+  var grid = document.createElement('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px';
+
+  function makeSection(title, color, items) {
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.style.cssText = 'border-left:3px solid ' + color + ';margin:0';
+    var t = document.createElement('div');
+    t.style.cssText = 'font-size:0.72rem;font-weight:800;color:' + color + ';text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px';
+    t.textContent = title;
+    card.appendChild(t);
+    (Array.isArray(items) ? items : [items]).forEach(function(item) {
+      var li = document.createElement('div');
+      li.style.cssText = 'font-size:0.78rem;color:var(--text);line-height:1.6;margin-bottom:4px';
+      li.textContent = item;
+      card.appendChild(li);
+    });
+    return card;
+  }
+
+  grid.appendChild(makeSection('What works', '#02C39A', fp.successPatterns || []));
+  grid.appendChild(makeSection('What gets removed', '#DC2626', fp.redFlags || []));
+  wrap.appendChild(grid);
+
+  var grid2 = document.createElement('div');
+  grid2.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px';
+  grid2.appendChild(makeSection('Top themes', '#0A66C2', fp.topThemes || []));
+  grid2.appendChild(makeSection('Avoid', '#F59E0B', (fp.avoidTopics || []).concat(fp.avoidTone ? [fp.avoidTone] : [])));
+  wrap.appendChild(grid2);
+
+  // Tone full-width
+  var toneCard = document.createElement('div');
+  toneCard.className = 'card';
+  toneCard.style.cssText = 'margin-bottom:12px;border-left:3px solid #7C3AED';
+  toneCard.innerHTML = '<div style="font-size:0.72rem;font-weight:800;color:#7C3AED;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">COMMUNITY TONE</div><div style="font-size:0.82rem;line-height:1.7;color:var(--text)">' + (fp.tone || '') + '</div>';
+  wrap.appendChild(toneCard);
+
+  // Carely strategy card
+  var carelyColor = fp.recommendMentionCarely ? '#02C39A' : '#DC2626';
+  var carelyCard = document.createElement('div');
+  carelyCard.className = 'card';
+  carelyCard.style.cssText = 'border-left:3px solid ' + carelyColor;
+  carelyCard.innerHTML = [
+    '<div style="font-size:0.72rem;font-weight:800;color:' + carelyColor + ';text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">CARELY STRATEGY FOR THIS COMMUNITY</div>',
+    '<div style="font-size:0.78rem;color:var(--g500);margin-bottom:6px"><strong>Relevance:</strong> ' + (fp.carelyRelevance || '') + '</div>',
+    '<div style="font-size:0.78rem;color:var(--text);margin-bottom:6px"><strong>Mention Carely:</strong> ' + (fp.recommendMentionCarely ? 'Yes' : 'No') + '</div>',
+    '<div style="font-size:0.82rem;line-height:1.7;color:var(--text);background:var(--g100);border-radius:8px;padding:10px 12px"><strong>How to approach:</strong><br>' + (fp.suggestedAngleForCarely || '') + '</div>',
+    '<div style="font-size:0.78rem;color:var(--g500);margin-top:8px"><strong>Best posting angle:</strong> ' + (fp.bestPostingAngle || '') + '</div>',
+    '<div style="font-size:0.72rem;color:var(--g400);margin-top:4px">Links in top posts: ' + (fp.linksInTopPosts ? 'Yes' : 'No') + ' · Self-disclosure: ' + (fp.selfDisclosureNorm || '') + ' · Formats: ' + (fp.dominantFormats || []).join(', ') + '</div>',
+  ].join('');
+  wrap.appendChild(carelyCard);
+
+  return wrap;
+}
 
 function contentAction(id, action) {
   var card = document.getElementById(id);
