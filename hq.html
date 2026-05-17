@@ -545,8 +545,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="ph"><h1>🎬 Content Hub</h1><p>Brand @carely · Personal Prabh · 3 at a time · Approved archive</p></div>
     <div class="tabs">
       <div class="tab active" onclick="switchTab(this,'ch-tiktok');chRender('tiktok')">TikTok</div>
-      <div class="tab" onclick="switchTab(this,'ch-linkedin');chRender('linkedin')">LinkedIn</div>
-      <div class="tab" onclick="switchTab(this,'ch-reddit');chRender('reddit')">Reddit</div>
+      <div class="tab" onclick="switchTab(this,'ch-linkedin');chRenderLive('linkedin')">LinkedIn</div>
+      <div class="tab" onclick="switchTab(this,'ch-reddit');chRenderLive('reddit')">Reddit</div>
+      <div class="tab" onclick="switchTab(this,'ch-community');chRenderLive('community')">Community</div>
+      <div class="tab" onclick="switchTab(this,'ch-instagram');chRenderInstagram()">Instagram</div>
       <div class="tab" style="color:var(--mint);font-weight:800" onclick="switchTab(this,'ch-approved');chRenderApproved('all')">✓ Approved</div>
       <div class="tab" onclick="switchTab(this,'ch-platform-intel')">Platform Intel</div>
       <div class="tab" onclick="switchTab(this,'ch-rules')">Rules</div>
@@ -586,15 +588,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div id="ch-reddit-feed"></div>
     </div>
 
+    <div class="tab-panel" id="ch-community">
+      <div class="ch-acc-bar">
+        <span class="ch-acc-label">Community posts — Rex</span>
+        <button onclick="chRenderLive('community')" style="font-size:0.72rem;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer;margin-left:auto">Refresh</button>
+      </div>
+      <div id="ch-community-feed"><div class="ch-queue-note">Loading community drafts...</div></div>
+    </div>
+
+    <div class="tab-panel" id="ch-instagram">
+      <div class="ch-acc-bar" style="flex-wrap:wrap;gap:6px">
+        <span class="ch-acc-label">Account:</span>
+        <button class="ch-acc-btn active" id="ig-btn-brand" onclick="chSwitchIgType('ugc')">🎬 UGC Videos</button>
+        <button class="ch-acc-btn" id="ig-btn-poster" onclick="chSwitchIgType('poster')">🖼 Brand Posters</button>
+        <button class="ch-acc-btn" id="ig-btn-carousel" onclick="chSwitchIgType('carousel')">📑 Carousel Scripts</button>
+        <button onclick="chRenderInstagram()" style="font-size:0.72rem;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer;margin-left:auto">Refresh</button>
+      </div>
+      <div id="ch-instagram-feed"><div class="ch-queue-note">Loading Instagram ideas...</div></div>
+    </div>
+
     <div class="tab-panel" id="ch-approved">
       <div class="ch-acc-bar">
         <span class="ch-acc-label">Filter:</span>
         <button class="ch-acc-btn active" id="ap-btn-all" onclick="chRenderApproved('all');chApvBtn(this)">All</button>
-        <button class="ch-acc-btn" onclick="chRenderApproved('brand');chApvBtn(this)">Brand</button>
-        <button class="ch-acc-btn" onclick="chRenderApproved('personal');chApvBtn(this)">Personal</button>
         <button class="ch-acc-btn" onclick="chRenderApproved('tiktok');chApvBtn(this)">TikTok</button>
         <button class="ch-acc-btn" onclick="chRenderApproved('linkedin');chApvBtn(this)">LinkedIn</button>
         <button class="ch-acc-btn" onclick="chRenderApproved('reddit');chApvBtn(this)">Reddit</button>
+        <button class="ch-acc-btn" onclick="chRenderApproved('community');chApvBtn(this)">Community</button>
+        <button class="ch-acc-btn" onclick="chRenderApproved('instagram');chApvBtn(this)">Instagram</button>
       </div>
       <div id="ch-approved-feed">
         <div style="text-align:center;padding:60px;color:var(--g500);font-size:0.84rem">No approved posts yet. Approve content from TikTok, LinkedIn, or Reddit tabs.</div>
@@ -750,43 +771,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-  <!-- ══ APPROVALS ══ -->
+  <!-- ══ APPROVALS / POOL ══ -->
   <div class="page" id="page-approvals">
-    <div class="ph"><h1>✅ Approvals</h1><p>Agent drafts awaiting sign-off · Approve · Reject · Edit before sending</p></div>
-
-    <!-- Tab bar -->
-    <div style="display:flex;gap:0;margin-bottom:18px;border-bottom:2px solid var(--g200)">
-      <button id="tab-btn-pending" onclick="switchApprovalsTab('pending')" style="font-size:0.82rem;font-weight:700;padding:8px 20px;border:none;border-bottom:2px solid var(--teal);margin-bottom:-2px;background:none;color:var(--teal);cursor:pointer">Pending <span id="drafts-pending-badge" style="display:inline-block;background:var(--teal);color:white;border-radius:10px;font-size:0.68rem;padding:1px 6px;margin-left:4px;vertical-align:middle"></span></button>
-      <button id="tab-btn-pool" onclick="switchApprovalsTab('pool')" style="font-size:0.82rem;font-weight:600;padding:8px 20px;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;background:none;color:var(--g500);cursor:pointer">Pool</button>
-    </div>
-
-    <!-- Pending tab -->
-    <div id="approvals-tab-pending">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-        <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="drafts-count-label">Loading drafts...</div>
-        <button onclick="loadDrafts()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
-      </div>
-      <div id="drafts-feed">
-        <div class="card" style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading...</div>
+    <div class="ph"><h1>📋 Pool</h1><p>Outreach emails · B2B proposals · Agent action requests — content lives in Content Hub</p></div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+      <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="pool-count-label">Loading...</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-left:auto">
+        <button onclick="filterPool('all')" id="pool-filter-all" style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:6px;border:none;background:var(--teal);color:white;cursor:pointer">All</button>
+        <button onclick="filterPool('email')" id="pool-filter-email" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Email</button>
+        <button onclick="filterPool('outreach')" id="pool-filter-outreach" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Outreach</button>
+        <button onclick="filterPool('blog')" id="pool-filter-blog" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Blog</button>
+        <button onclick="loadPool()" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Refresh</button>
       </div>
     </div>
-
-    <!-- Pool tab -->
-    <div id="approvals-tab-pool" style="display:none">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px">
-        <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="pool-count-label">Loading pool...</div>
-        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-left:auto">
-          <button onclick="filterPool('all')" id="pool-filter-all" style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:6px;border:none;background:var(--teal);color:white;cursor:pointer">All</button>
-          <button onclick="filterPool('reddit_reply')" id="pool-filter-reddit" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Reddit</button>
-          <button onclick="filterPool('linkedin')" id="pool-filter-linkedin" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">LinkedIn</button>
-          <button onclick="filterPool('community')" id="pool-filter-community" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Community</button>
-          <button onclick="filterPool('email')" id="pool-filter-email" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Email</button>
-          <button onclick="loadPool()" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Refresh</button>
-        </div>
-      </div>
-      <div id="pool-feed">
-        <div class="card" style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading pool...</div>
-      </div>
+    <div id="pool-feed">
+      <div class="card" style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading pool...</div>
     </div>
   </div>
 
@@ -2221,7 +2220,7 @@ function _activatePage(id, pushState) {
   sessionStorage.setItem('hq_page', id);
   var PAGE_LOADERS = {
     'proposals':    function() { loadProposals(); },
-    'approvals':    function() { if (window.loadDrafts) window.loadDrafts(); if (window.loadPool) window.loadPool(); },
+    'approvals':    function() { if (window.loadPool) window.loadPool(); },
     'crm':          function() { if (window.loadCRM) window.loadCRM(); },
     'my-inbox':     function() { if (window.loadInbox) window.loadInbox(); },
     'team-chat':    function() { if (window.loadTeamFeed) window.loadTeamFeed(); },
@@ -3249,6 +3248,220 @@ function _updateApvCount() {
 }
 
 (function(){ _chLoad(); setTimeout(function(){ chRender('tiktok'); _updateApvCount(); }, 150); })();
+
+// ── Live content drafts from backend (LinkedIn / Reddit / Community) ───────────
+var _BACKEND_CH = (function(){ var s = document.querySelector('script[data-backend]'); return s ? s.getAttribute('data-backend') : window._BACKEND; })();
+var _SECRET_CH = (function(){ var s = document.querySelector('script[data-secret]'); return s ? s.getAttribute('data-secret') : window._SECRET; })();
+
+function _chContentCard(draft, platform) {
+  var BACKEND = _BACKEND, SECRET = _SECRET;
+  var platformColor = { reddit:'#FF4500', linkedin:'#0A66C2', community:'#7C3AED', instagram:'#E1306C' }[platform] || 'var(--g400)';
+
+  var card = document.createElement('div');
+  card.className = 'card';
+  card.style.cssText = 'margin-bottom:14px;border-left:3px solid ' + platformColor;
+
+  var hdr = document.createElement('div');
+  hdr.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap';
+  var agBadge = document.createElement('span');
+  agBadge.className = 'pill teal';
+  agBadge.style.cssText = 'font-size:0.66rem;margin:0';
+  agBadge.textContent = (draft.agentName || 'AGENT').toUpperCase();
+  hdr.appendChild(agBadge);
+  if (draft.metadata && (draft.metadata.page || draft.metadata.community)) {
+    var metaBadge = document.createElement('span');
+    metaBadge.style.cssText = 'font-size:0.7rem;color:var(--g500)';
+    metaBadge.textContent = draft.metadata.page || draft.metadata.community;
+    hdr.appendChild(metaBadge);
+  }
+  var timeEl = document.createElement('span');
+  timeEl.style.cssText = 'font-size:0.7rem;color:var(--g400);margin-left:auto';
+  timeEl.textContent = (function(ts){
+    var s = Math.round((Date.now() - new Date(ts).getTime()) / 1000);
+    if (s < 60) return s + 's ago';
+    if (s < 3600) return Math.round(s/60) + 'm ago';
+    if (s < 86400) return Math.round(s/3600) + 'h ago';
+    return Math.round(s/86400) + 'd ago';
+  })(draft.timestamp);
+  hdr.appendChild(timeEl);
+  card.appendChild(hdr);
+
+  var fullText = draft.fullContent || draft.contentSnippet || '';
+  var preview = document.createElement('div');
+  preview.style.cssText = 'background:var(--g100);border-radius:8px;padding:12px 14px;font-size:0.82rem;line-height:1.7;white-space:pre-wrap;max-height:110px;overflow:hidden;margin-bottom:10px';
+  preview.textContent = fullText;
+  card.appendChild(preview);
+
+  var btns = document.createElement('div');
+  btns.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap';
+
+  function makeBtn(label, bg, color, border) {
+    var b = document.createElement('button');
+    b.textContent = label;
+    b.style.cssText = 'font-size:0.76rem;font-weight:700;padding:6px 12px;border-radius:8px;border:' + (border||'none') + ';background:' + bg + ';color:' + color + ';cursor:pointer';
+    return b;
+  }
+
+  var appBtn = makeBtn('Approve', '#02C39A', 'white', 'none');
+  appBtn.onclick = function() {
+    appBtn.textContent = 'Approving...'; appBtn.disabled = true;
+    fetch(BACKEND + '/admin/content-drafts/' + draft.index + '/approve', {
+      method:'POST', headers:{'x-carely-secret':SECRET,'Content-Type':'application/json'}, body:JSON.stringify({actor:'TJ'})
+    }).then(function(){ card.style.opacity='0.4'; appBtn.textContent='✓ Approved'; btns.querySelectorAll('button').forEach(function(b){b.disabled=true;}); chRenderLive(platform); });
+  };
+  btns.appendChild(appBtn);
+
+  var rejBtn = makeBtn('Reject', '#DC2626', 'white', 'none');
+  rejBtn.onclick = function() {
+    rejBtn.textContent = 'Rejecting...'; rejBtn.disabled = true;
+    fetch(BACKEND + '/admin/content-drafts/' + draft.index + '/skip', {
+      method:'POST', headers:{'x-carely-secret':SECRET,'Content-Type':'application/json'}, body:JSON.stringify({actor:'TJ',feedback:'rejected'})
+    }).then(function(){ card.style.opacity='0.4'; rejBtn.textContent='✗ Rejected'; btns.querySelectorAll('button').forEach(function(b){b.disabled=true;}); chRenderLive(platform); });
+  };
+  btns.appendChild(rejBtn);
+
+  var readBtn = makeBtn('Read', 'white', 'var(--g500)', '1.5px solid var(--g300)');
+  var expanded = false;
+  readBtn.onclick = function() {
+    expanded = !expanded;
+    preview.style.maxHeight = expanded ? 'none' : '110px';
+    preview.style.overflow = expanded ? 'visible' : 'hidden';
+    readBtn.textContent = expanded ? 'Collapse' : 'Read';
+  };
+  btns.appendChild(readBtn);
+
+  var copyBtn = makeBtn('Copy', 'white', 'var(--g500)', '1.5px solid var(--g300)');
+  copyBtn.onclick = function() {
+    navigator.clipboard.writeText(fullText).then(function(){ copyBtn.textContent='Copied!'; setTimeout(function(){ copyBtn.textContent='Copy'; }, 1500); });
+  };
+  btns.appendChild(copyBtn);
+
+  card.appendChild(btns);
+  return card;
+}
+
+window.chRenderLive = function(platform) {
+  var BACKEND = _BACKEND, SECRET = _SECRET;
+  var feedId = 'ch-' + platform + '-feed';
+  var feed = document.getElementById(feedId);
+  if (!feed) return;
+  feed.innerHTML = '<div class="ch-queue-note">Loading ' + platform + ' drafts...</div>';
+
+  fetch(BACKEND + '/admin/content-drafts?platform=' + platform, { headers: {'x-carely-secret': SECRET}, signal: AbortSignal.timeout(12000) })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var drafts = data.drafts || [];
+      while (feed.firstChild) feed.removeChild(feed.firstChild);
+      if (drafts.length === 0) {
+        var note = document.createElement('div');
+        note.className = 'ch-queue-note';
+        note.textContent = 'Queue empty — agents generate fresh drafts each cycle. Review Content Hub regularly.';
+        feed.appendChild(note);
+        return;
+      }
+      var label = document.createElement('div');
+      label.style.cssText = 'font-size:0.78rem;font-weight:700;color:var(--g500);margin-bottom:10px';
+      label.textContent = drafts.length + ' draft' + (drafts.length!==1?'s':'') + ' in queue · agents pause above 3';
+      feed.appendChild(label);
+      drafts.slice(0, 3).forEach(function(d){ feed.appendChild(_chContentCard(d, platform)); });
+      if (drafts.length > 3) {
+        var more = document.createElement('div');
+        more.className = 'ch-queue-note';
+        more.textContent = (drafts.length - 3) + ' more waiting — approve or reject above to see next batch.';
+        feed.appendChild(more);
+      }
+    })
+    .catch(function(){
+      feed.innerHTML = '<div class="ch-queue-note" style="color:var(--amber)">Could not reach backend. Check Railway.</div>';
+    });
+};
+
+// ── Instagram ideas tab ────────────────────────────────────────────────────────
+var _igType = 'ugc';
+
+window.chSwitchIgType = function(type) {
+  _igType = type;
+  ['ugc','poster','carousel'].forEach(function(t){
+    var btn = document.getElementById('ig-btn-' + t);
+    if (btn) btn.classList.toggle('active', t === type);
+  });
+  chRenderInstagram();
+};
+
+var IG_IDEAS = {
+  ugc: [
+    { title: '"Did she take it?" — 30s face-cam', hook: 'Open with Prabh at work, phone buzzing. Cut to her mom. Pure emotion, no product.', script: 'Hook (0–3s): "Last Tuesday at 3am my phone rang."\n\nBody (3–25s): Prabh describes the panic of not knowing if her mum took her heart meds. Healthcare worker. Still helpless.\n\nTurn (25–28s): "So my husband and I built the thing that would have stopped that call."\n\nClose (28–30s): App notification: ✅ Mum took her 8pm dose.' },
+    { title: '"One year of missed doses" — stat story', hook: 'Start with a shocking number. End with a human moment.', script: 'Hook: "1 in 2 patients don\'t take their medication correctly."\n\nBody: Prabh walking through a hospital corridor. "I see what that number looks like in real life every single day."\n\nTurn: "We couldn\'t fix the system. So we fixed the gap at home."\n\nClose: Carely app — simple, warm, real.' },
+    { title: '"App setup in 60 seconds" — screen demo', hook: 'Pure product. Show not tell. Zero words until the "wow" moment.', script: 'No voiceover.\n\nPrabh sets up her dad on Carely. Name → medication → time → confirm.\n\nFirst reminder fires. Dad confirms with one tap.\n\nPrabh gets the notification: ✅ Dad confirmed.\n\nText overlay: "60 seconds. Peace of mind for years."' },
+  ],
+  poster: [
+    { title: '"What if you always knew?" — Founding poster', concept: 'Dark teal background. White headline. Carely logo bottom centre. Clean, premium.', copy: 'Headline: "What if you always knew your parent took their meds?"\n\nSub: "200 founding spots · $5/month · carely.fit"\n\nVisual: A phone screen showing a green checkmark. No clutter.' },
+    { title: '"Built for the 2AM call" — Emotional poster', concept: 'Night scene. Phone glow. Warm + anxious feeling.', copy: 'Headline: "Built for the 2AM call you never want to get."\n\nSub: "Real-time medication confirmations for families who care from a distance."\n\nCTA: "carely.fit — Founding plan $5/month"' },
+    { title: '"Your parent. Our watchful eye." — Trust poster', concept: 'Split image. Elderly parent at home. Adult child at work. Connected by Carely.', copy: 'Headline: "They\'re independent. You\'re in the loop."\n\nSub: "Carely confirms every dose — no nagging, no guessing, no 2AM panic."\n\nCTA: carely.fit' },
+  ],
+  carousel: [
+    { title: '"5 signs your parent is struggling with their meds" — Education carousel', slides: '1. Cover: "5 signs your parent is silently struggling with medication" (hook slide)\n2. "They can\'t remember if they took it — so they skip, or double-dose."\n3. "Their refill prescription is running out too fast — or barely moving."\n4. "They say they\'re fine, but their numbers are getting worse."\n5. "You find pills scattered in random places around the house."\n6. "They\'re afraid to tell the doctor they\'ve been missing doses."\n7. CTA: "Carely solves all 5. One tap confirmation. Real-time alerts. carely.fit"' },
+    { title: '"From worried to in-the-loop" — Story carousel', slides: '1. Cover: "What our founding members told us." (social proof hook)\n2. "\'I live 3 hours from my dad. I checked my phone every hour.\'" \n3. "\'My mom was doubling her blood pressure meds because she couldn\'t remember.\'" \n4. "\'The hospital called. Again. Third time that year.\'" \n5. "\'Now I get a confirmation every morning. I actually sleep through the night.\'" \n6. CTA: Founding plan — $5/month. 200 spots. carely.fit' },
+    { title: '"Carely vs. pill dispensers" — Comparison carousel', slides: '1. Cover: "Why a smart pill dispenser isn\'t enough." \n2. "Dispenser: alerts you if it\'s not opened. Carely: confirms the dose was actually taken."\n3. "Dispenser: no family alerts. Carely: real-time notification to every family member."\n4. "Dispenser: $200-500 hardware. Carely: $5/month, any phone."\n5. "Dispenser: your parent has to learn new hardware. Carely: one tap, done."\n6. CTA: carely.fit — try free, founding plan $5/month.' },
+  ],
+};
+
+window.chRenderInstagram = function() {
+  var feed = document.getElementById('ch-instagram-feed');
+  if (!feed) return;
+  while (feed.firstChild) feed.removeChild(feed.firstChild);
+  var ideas = IG_IDEAS[_igType] || [];
+  ideas.forEach(function(idea) {
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.style.cssText = 'margin-bottom:14px;border-left:3px solid #E1306C';
+
+    var hdr = document.createElement('div');
+    hdr.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:8px';
+    var badge = document.createElement('span');
+    badge.className = 'pill';
+    badge.style.cssText = 'font-size:0.66rem;background:#E1306C;color:white;margin:0';
+    badge.textContent = _igType === 'ugc' ? 'UGC VIDEO' : _igType === 'poster' ? 'POSTER' : 'CAROUSEL';
+    hdr.appendChild(badge);
+    var titleEl = document.createElement('span');
+    titleEl.style.cssText = 'font-size:0.84rem;font-weight:800;color:var(--deep)';
+    titleEl.textContent = idea.title;
+    hdr.appendChild(titleEl);
+    card.appendChild(hdr);
+
+    if (idea.hook || idea.concept) {
+      var desc = document.createElement('div');
+      desc.style.cssText = 'font-size:0.78rem;color:var(--g500);margin-bottom:10px;font-style:italic';
+      desc.textContent = idea.hook || idea.concept;
+      card.appendChild(desc);
+    }
+
+    var content = idea.script || idea.copy || idea.slides || '';
+    var pre = document.createElement('div');
+    pre.style.cssText = 'background:var(--g100);border-radius:8px;padding:12px 14px;font-size:0.8rem;line-height:1.7;white-space:pre-wrap;max-height:120px;overflow:hidden;margin-bottom:10px';
+    pre.textContent = content;
+    card.appendChild(pre);
+
+    var btns = document.createElement('div');
+    btns.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap';
+
+    var readBtn = document.createElement('button');
+    readBtn.textContent = 'Read Full';
+    readBtn.style.cssText = 'font-size:0.76rem;font-weight:600;padding:6px 12px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);cursor:pointer';
+    var exp = false;
+    readBtn.onclick = function(){ exp=!exp; pre.style.maxHeight=exp?'none':'120px'; pre.style.overflow=exp?'visible':'hidden'; readBtn.textContent=exp?'Collapse':'Read Full'; };
+    btns.appendChild(readBtn);
+
+    var copyBtn = document.createElement('button');
+    copyBtn.textContent = 'Copy Script';
+    copyBtn.style.cssText = 'font-size:0.76rem;font-weight:600;padding:6px 12px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);cursor:pointer';
+    copyBtn.onclick = function(){ navigator.clipboard.writeText(content).then(function(){ copyBtn.textContent='Copied!'; setTimeout(function(){ copyBtn.textContent='Copy Script'; },1500); }); };
+    btns.appendChild(copyBtn);
+
+    card.appendChild(btns);
+    feed.appendChild(card);
+  });
+};
 
 function contentAction(id, action) {
   var card = document.getElementById(id);
@@ -4640,10 +4853,10 @@ function rejectProposal(id) {
 
   window.filterPool = function(type) {
     _poolFilter = type;
-    ['all','reddit','linkedin','community','email'].forEach(function(f) {
+    ['all','email','outreach','blog'].forEach(function(f) {
       var btn = document.getElementById('pool-filter-' + f);
       if (!btn) return;
-      var active = (f === type) || (f === 'all' && type === 'all');
+      var active = f === type;
       btn.style.background = active ? 'var(--teal)' : 'white';
       btn.style.color = active ? 'white' : 'var(--g500)';
       btn.style.border = active ? 'none' : '1px solid var(--g300)';
@@ -4679,7 +4892,7 @@ function rejectProposal(id) {
 
     var filtered = drafts.filter(function(d) {
       if (_poolFilter === 'all') return true;
-      var t = (d.contentType || d.type || '').toLowerCase();
+      var t = ((d.contentType || d.type || '') + ' ' + (d.agentName || '')).toLowerCase();
       return t.includes(_poolFilter);
     });
 
@@ -4900,14 +5113,9 @@ function rejectProposal(id) {
   };
 
   window.loadInbox();
-  window.loadDrafts();
   window.loadPool();
   setInterval(window.loadInbox, 60000);
-  setInterval(window.loadDrafts, 60000);
-  setInterval(function() {
-    var poolVisible = document.getElementById('approvals-tab-pool');
-    if (poolVisible && poolVisible.style.display !== 'none') window.loadPool();
-  }, 30000);
+  setInterval(window.loadPool, 30000);
 })();
 
 // ═══ Agent Activity Feed ═════════════════════════════════════════════════════
