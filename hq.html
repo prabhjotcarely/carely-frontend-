@@ -329,6 +329,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <div class="sb-sec">
+    <div class="sb-sec-title">V12 Engine</div>
+    <div class="sb-item" onclick="nav(this,'ceo-review')"><span class="ic">🧠</span> CEO Weekly Review</div>
+    <div class="sb-item" onclick="nav(this,'conversion-intel')"><span class="ic">📡</span> Conversion Intel</div>
+    <div class="sb-item" onclick="nav(this,'experiments')"><span class="ic">🔬</span> A/B Experiments</div>
+    <div class="sb-item" onclick="nav(this,'axel-creative')"><span class="ic">🎨</span> Axel Creative</div>
+  </div>
+
+  <div class="sb-sec">
     <div class="sb-sec-title">Analytics</div>
     <div class="sb-item" onclick="nav(this,'app-metrics')"><span class="ic">📊</span> App Metrics</div>
     <div class="sb-item" onclick="nav(this,'revenue')"><span class="ic">💰</span> Revenue &amp; Growth</div>
@@ -343,7 +351,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="sb-sec">
     <div class="sb-sec-title">System</div>
-    <div class="sb-item" onclick="nav(this,'all-agents')"><span class="ic">🧠</span> All 18 Agents</div>
+    <div class="sb-item" onclick="nav(this,'all-agents')"><span class="ic">🧠</span> All 22 Agents</div>
     <div class="sb-item" onclick="nav(this,'org-chart')"><span class="ic">🏗️</span> Org Chart</div>
     <div class="sb-item" onclick="nav(this,'health')"><span class="ic">❤️</span> Health &amp; Timeline</div>
     <div class="sb-item" onclick="nav(this,'api-keys')"><span class="ic">⏱</span> API Keys <span class="dot-a"></span></div>
@@ -373,7 +381,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- ══ DAILY BRIEF ══ -->
   <div class="page active" id="page-daily-brief">
     <div class="ph"><h1>📋 Daily Brief</h1><p>What the business needs today · Agent network status · Open issues</p></div>
-    <div class="alert green">✅ <div><strong>May 14, 2026 — T-16 days to launch (May 30).</strong> All 18 agents running. Persona Intelligence System live on Railway. <span style="color:#dc2626;font-weight:700">BLOCKERS: OpenRouter $0 (top up now) · Reddit creds missing · iOS not submitted</span></div></div>
+    <div class="alert green">✅ <div><strong>May 17, 2026 — T-13 days to launch (May 30).</strong> All 22 agents running. V12 Compounding Engine live on Railway. <span style="color:#dc2626;font-weight:700">BLOCKERS: OpenRouter credits (add tonight) · iOS EAS build not submitted (urgent)</span></div></div>
     <div class="metric-row">
       <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber" id="db-paid">—</div><div class="metric-sub">Live from Stripe</div></div>
       <div class="metric"><div class="metric-label">Beta Testers</div><div class="metric-val teal" id="db-trial">—</div><div class="metric-sub">Active trial users</div></div>
@@ -413,7 +421,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <tr><td><strong>Lena</strong></td><td>Win-back + closer</td><td>11 AM PST</td><td id="brief-last-lena">—</td><td><span id="brief-pill-lena" class="pill green">Running</span></td></tr>
           <tr><td><strong>Blaze</strong></td><td>Launch email blast</td><td>May 30 launch day</td><td id="brief-last-blaze">—</td><td><span id="brief-pill-blaze" class="pill amber">Standby</span></td></tr>
           <tr><td><strong>Leo</strong></td><td>LinkedIn 6x/week</td><td>Mon/Wed/Fri 8AM · Tue/Thu/Sat 5PM</td><td id="brief-last-leo">—</td><td><span id="brief-pill-leo" class="pill green">Running</span></td></tr>
-          <tr><td><strong>Rex</strong></td><td>Reddit monitor 18 subs</td><td>Every 6 hours</td><td id="brief-last-rex">—</td><td><span id="brief-pill-rex" class="pill green">Running</span></td></tr>
+          <tr><td><strong>Rex</strong></td><td>Reddit · Quora · YouTube · Instagram · Community</td><td>Reddit 6h · Instagram 10AM · Quora 11AM · YouTube 1PM · Nurture 9AM+5PM</td><td id="brief-last-rex">—</td><td><span id="brief-pill-rex" class="pill green">Running</span></td></tr>
           <tr><td><strong>Cole</strong></td><td>B2B outreach</td><td>Research 9 AM · Outreach 10 AM</td><td id="brief-last-cole">—</td><td><span id="brief-pill-cole" class="pill green">Running</span></td></tr>
           <tr><td><strong>Vance</strong></td><td>TikTok/Reels scripts for Prabh</td><td>9 AM PST</td><td id="brief-last-vance">—</td><td><span id="brief-pill-vance" class="pill green">Running</span></td></tr>
           <tr><td><strong>Scout</strong></td><td>ASO + SEO + IndexNow</td><td>Deploy + Sundays 9 AM</td><td id="brief-last-scout">—</td><td><span id="brief-pill-scout" class="pill green">Running</span></td></tr>
@@ -430,7 +438,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="card-title">⚠️ Open Issues</div>
       <div class="list-item"><span>🟡</span><div class="name">Outreach drafts require TJ approval before sending — check HQ Inbox</div><span class="pill amber">Approval needed</span></div>
       <div class="list-item"><span>🟡</span><div class="name">Google Play upload key reset — pending Google approval</div><span class="pill amber">Pending</span></div>
-      <div class="list-item"><span>🟡</span><div class="name">iOS build — waiting on Apple D-U-N-S for Lumina Path</div><span class="pill amber">Pending</span></div>
+      <div class="list-item"><span>🔴</span><div class="name">iOS build — EAS production build not submitted. Run: eas build --platform ios --profile production</div><span class="pill red" style="background:#dc2626;color:#fff">Urgent</span></div>
       <div class="list-item"><span>🟡</span><div class="name">TikTok account — not set up yet</div><span class="pill amber">Pending</span></div>
       <div class="list-item"><span>🟡</span><div class="name">New logo from TJ — will update app + website when received</div><span class="pill amber">Pending</span></div>
     </div>
@@ -458,7 +466,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="card">
         <div class="card-title">📱 Platform Status</div>
         <div class="list-item"><span>🤖</span><div class="name">Android (Google Play)</div><span class="pill amber">Closed Testing</span></div>
-        <div class="list-item"><span>🍎</span><div class="name">iOS (App Store)</div><span class="pill grey">Waiting D-U-N-S</span></div>
+        <div class="list-item"><span>🍎</span><div class="name">iOS (App Store)</div><span class="pill red" style="background:#dc2626;color:#fff">EAS Build Needed</span></div>
         <div class="list-item"><span>🌐</span><div class="name">carely.fit (Cloudflare Pages)</div><span class="pill green">Live</span></div>
         <div class="list-item"><span>🛤️</span><div class="name">Backend (Railway)</div><span class="pill green">Live</span></div>
         <div class="list-item"><span>🗄️</span><div class="name">Database (Supabase)</div><span class="pill green">Live</span></div>
@@ -836,9 +844,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ APPROVALS ══ -->
   <div class="page" id="page-approvals">
-    <div class="ph"><h1>✅ Approvals</h1><p>Outreach emails · B2B proposals · Agent action requests — content lives in Content Hub</p></div>
+    <div class="ph"><h1>✅ Approvals</h1><p>Ready to Post · Outreach emails · B2B proposals · Agent action requests</p></div>
+
+    <!-- ══ Today's Posting Schedule ══ -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div style="font-size:0.78rem;font-weight:800;color:var(--deep);text-transform:uppercase;letter-spacing:0.06em">Today's Schedule</div>
+      <button onclick="loadCalendar()" style="font-size:0.7rem;font-weight:600;padding:2px 8px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer;margin-left:auto">Refresh</button>
+    </div>
+    <div id="cal-feed" style="margin-bottom:22px">
+      <div class="card" style="text-align:center;padding:16px;color:var(--g500);font-size:0.82rem">Loading today's schedule...</div>
+    </div>
+
+    <!-- ══ Ready to Post Queue ══ -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div style="font-size:0.78rem;font-weight:800;color:var(--deep);text-transform:uppercase;letter-spacing:0.06em">Ready to Post</div>
+      <span id="rtp-count-badge" style="font-size:0.68rem;font-weight:700;background:#FF4500;color:white;padding:1px 7px;border-radius:10px;display:none">0</span>
+      <button onclick="loadReadyToPost()" style="font-size:0.7rem;font-weight:600;padding:2px 8px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer;margin-left:auto">Refresh</button>
+    </div>
+    <div id="rtp-feed" style="margin-bottom:22px">
+      <div class="card" style="text-align:center;padding:20px;color:var(--g500);font-size:0.82rem">Loading ready-to-post queue...</div>
+    </div>
+
+    <!-- ══ Pending Approvals Queue ══ -->
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px">
-      <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="pool-count-label">Loading...</div>
+      <div style="font-size:0.78rem;font-weight:800;color:var(--deep);text-transform:uppercase;letter-spacing:0.06em" id="pool-count-label">Pending Review</div>
       <div style="display:flex;gap:4px;flex-wrap:wrap;margin-left:auto">
         <button onclick="filterPool('all')" id="pool-filter-all" style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:6px;border:none;background:var(--teal);color:white;cursor:pointer">All</button>
         <button onclick="filterPool('email')" id="pool-filter-email" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Email</button>
@@ -1596,9 +1625,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
       <div class="agent-card red">
         <div class="agent-name">Rex</div>
-        <div class="agent-role">Reddit + Community · 18 subreddits · Every 6 hours</div>
-        <div class="agent-status"><span class="dot-on" id="agent-dot-rex"></span> Running · Prabh approves before posting</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Monitors caregiver threads. Drafts empathetic replies as Prabh. 3x/week original posts. Never pitches cold.</div>
+        <div class="agent-role">Organic Content Engine · Reddit · Quora · YouTube · Instagram · Community</div>
+        <div class="agent-status"><span class="dot-on" id="agent-dot-rex"></span> Running · All drafts go to Prabh for approval before posting</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Reddit monitor 18 subs (every 6h) · Quora answers (11AM PST) · YouTube comments (1PM PST) · Instagram Reels/Carousels/Stories (10AM PST) · Community drafts (3PM UTC) · Reddit account nurture (9AM+5PM PST)</div>
       </div>
       <div class="agent-card amber">
         <div class="agent-name">Cole</div>
@@ -2232,6 +2261,118 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
+  <!-- ══ V12: CEO WEEKLY REVIEW ══ -->
+  <div class="page" id="page-ceo-review">
+    <div class="ph"><h1>🧠 CEO Weekly Review</h1><p>Hermes reads Scout + Axel + Conversion every Monday 7AM PST and writes the business review</p></div>
+    <div class="metric-row">
+      <div class="metric"><div class="metric-label">Runs</div><div class="metric-val teal">Mon 7AM PST</div><div class="metric-sub">Weekly cadence</div></div>
+      <div class="metric"><div class="metric-label">Sources</div><div class="metric-val">3 streams</div><div class="metric-sub">Scout + Axel + Conversion</div></div>
+      <div class="metric"><div class="metric-label">Output</div><div class="metric-val">Telegram</div><div class="metric-sub">CEO briefing memo</div></div>
+    </div>
+    <div class="cols">
+      <div class="card" style="flex:2">
+        <div class="card-title">Latest CEO Review</div>
+        <div id="ceo-review-content" style="font-size:0.85rem;line-height:1.7;color:var(--g600)">Loading...</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Weekly Cadence</div>
+        <div class="list-item"><span>Sat</span><div class="name">8AM PST — Axel runs creative review</div><span class="pill teal">Auto</span></div>
+        <div class="list-item"><span>Sun</span><div class="name">6AM PST — Conversion report built</div><span class="pill teal">Auto</span></div>
+        <div class="list-item"><span>Sun</span><div class="name">7AM PST — A/B experiments evaluated</div><span class="pill teal">Auto</span></div>
+        <div class="list-item"><span>Mon</span><div class="name">7AM PST — CEO review (reads all 3)</div><span class="pill green">Hermes</span></div>
+        <div class="list-item"><span>Mon</span><div class="name">9AM PST — Scout algorithm scan</div><span class="pill teal">Auto</span></div>
+        <div class="list-item"><span>Mon</span><div class="name">9:05AM PST — Unified brief fires to all agents</div><span class="pill green">All</span></div>
+      </div>
+    </div>
+    <div style="margin-top:12px">
+      <button onclick="triggerCEOReview()" style="background:#0D3347;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:700;font-size:0.85rem">Trigger CEO Review Now</button>
+      <span id="ceo-review-msg" style="margin-left:12px;font-size:0.8rem;color:var(--g500)"></span>
+    </div>
+  </div>
+
+  <!-- ══ V12: CONVERSION INTEL ══ -->
+  <div class="page" id="page-conversion-intel">
+    <div class="ph"><h1>📡 Conversion Intel</h1><p>Two-layer attribution — UTM source tracking + time-correlation. Every signup traced to platform and content.</p></div>
+    <div class="metric-row">
+      <div class="metric"><div class="metric-label">Total Signups</div><div class="metric-val teal" id="conv-total">—</div><div class="metric-sub">All time</div></div>
+      <div class="metric"><div class="metric-label">This Week</div><div class="metric-val" id="conv-week">—</div><div class="metric-sub">Last 7 days</div></div>
+      <div class="metric"><div class="metric-label">Top Source</div><div class="metric-val amber" id="conv-top">—</div><div class="metric-sub">By attributed signups</div></div>
+    </div>
+    <div class="cols">
+      <div class="card" style="flex:2">
+        <div class="card-title">Conversion Report</div>
+        <div id="conversion-report-content" style="font-size:0.85rem;line-height:1.7;color:var(--g600)">Loading...</div>
+      </div>
+      <div class="card">
+        <div class="card-title">How Attribution Works</div>
+        <div style="font-size:0.82rem;line-height:1.8;color:var(--g600)">
+          <strong>Layer 1 — UTM:</strong> Every content post includes ?ref=platform link. Signup recorded with source.<br><br>
+          <strong>Layer 2 — Time-correlation:</strong> When no UTM, Hermes correlates signup time to recent content posts (within 48h window).<br><br>
+          <strong>Output:</strong> Sunday 6AM — Hermes writes weekly conversion report with platform rankings and winning angles.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ V12: A/B EXPERIMENTS ══ -->
+  <div class="page" id="page-experiments">
+    <div class="ph"><h1>🔬 A/B Experiments</h1><p>Hermes proposes, runs, evaluates and compounds weekly experiments. 8-week learning history.</p></div>
+    <div class="metric-row">
+      <div class="metric"><div class="metric-label">Active</div><div class="metric-val teal" id="exp-active-count">—</div><div class="metric-sub">Running now</div></div>
+      <div class="metric"><div class="metric-label">Concluded</div><div class="metric-val" id="exp-done-count">—</div><div class="metric-sub">With learnings logged</div></div>
+      <div class="metric"><div class="metric-label">Next Eval</div><div class="metric-val amber">Sun 7AM PST</div><div class="metric-sub">Weekly evaluation</div></div>
+    </div>
+    <div class="cols">
+      <div class="card" style="flex:2">
+        <div class="card-title">Active Experiments</div>
+        <div id="experiments-content" style="font-size:0.85rem;line-height:1.7;color:var(--g600)">Loading...</div>
+      </div>
+      <div class="card">
+        <div class="card-title">User-Count Gates</div>
+        <div style="font-size:0.82rem;line-height:1.8;color:var(--g600)">
+          <strong>Content experiments:</strong> Run always (0+ users)<br>
+          <strong>Onboarding tests:</strong> 10+ active trials needed<br>
+          <strong>Pricing tests:</strong> 50+ active trials needed<br>
+          <strong>Positioning tests:</strong> 50+ active trials needed<br><br>
+          Gates prevent noisy data at low user counts.
+        </div>
+        <div style="margin-top:12px">
+          <button onclick="triggerExperiments()" style="background:#0D3347;color:white;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:700;font-size:0.82rem">Trigger Eval Now</button>
+          <span id="exp-trigger-msg" style="display:block;margin-top:6px;font-size:0.78rem;color:var(--g500)"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ V12: AXEL CREATIVE ══ -->
+  <div class="page" id="page-axel-creative">
+    <div class="ph"><h1>🎨 Axel Creative</h1><p>Creative Director agent. Saturday 8AM PST — competitor reviews, 8-week concept history, ranked proposals.</p></div>
+    <div class="metric-row">
+      <div class="metric"><div class="metric-label">Runs</div><div class="metric-val teal">Sat 8AM PST</div><div class="metric-sub">Weekly</div></div>
+      <div class="metric"><div class="metric-label">Memory</div><div class="metric-val">8 weeks</div><div class="metric-sub">Creative history</div></div>
+      <div class="metric"><div class="metric-label">Sources</div><div class="metric-val amber">App Store reviews</div><div class="metric-sub">1-2 star competitor pain</div></div>
+    </div>
+    <div class="cols">
+      <div class="card" style="flex:2">
+        <div class="card-title">This Week's Concepts</div>
+        <div id="axel-concepts-content" style="font-size:0.85rem;line-height:1.7;color:var(--g600)">Loading...</div>
+      </div>
+      <div class="card">
+        <div class="card-title">How Axel Works</div>
+        <div style="font-size:0.82rem;line-height:1.8;color:var(--g600)">
+          <strong>Step 1:</strong> Reads competitor App Store 1-2 star reviews to find pain gaps.<br><br>
+          <strong>Step 2:</strong> Reviews 8 weeks of concept performance (approved + converted).<br><br>
+          <strong>Step 3:</strong> Generates 5-8 ranked concepts with predictedConversionScore.<br><br>
+          <strong>Step 4:</strong> Feeds into Monday CEO review and unified agent brief.
+        </div>
+        <div style="margin-top:12px">
+          <button onclick="triggerAxel()" style="background:#0D3347;color:white;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:700;font-size:0.82rem">Trigger Axel Now</button>
+          <span id="axel-trigger-msg" style="display:block;margin-top:6px;font-size:0.78rem;color:var(--g500)"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div><!-- end page-area -->
 
 <script>
@@ -2283,7 +2424,7 @@ function _activatePage(id, pushState) {
   sessionStorage.setItem('hq_page', id);
   var PAGE_LOADERS = {
     'proposals':    function() { loadProposals(); },
-    'approvals':    function() { if (window.loadPool) window.loadPool(); },
+    'approvals':    function() { if (window.loadPool) window.loadPool(); if (window.loadReadyToPost) window.loadReadyToPost(); if (window.loadCalendar) window.loadCalendar(); },
     'crm':          function() { if (window.loadCRM) window.loadCRM(); },
     'my-inbox':     function() { if (window.loadInbox) window.loadInbox(); },
     'team-chat':    function() { if (window.loadTeamFeed) window.loadTeamFeed(); },
@@ -2305,7 +2446,10 @@ function _activatePage(id, pushState) {
 function nav(el, id) {
   closeSidebar();
   _activatePage(id, true);
-  if (id === 'growth-plan') { loadGrowthPlan(); loadDailyBoard(); }
+  if (id === 'growth-plan')       { loadGrowthPlan(); loadDailyBoard(); }
+  if (id === 'conversion-intel')  { loadConversionIntel(); }
+  if (id === 'experiments')       { loadExperiments(); }
+  if (id === 'axel-creative')     { loadAxelCreative(); }
 }
 
 // ── Growth Plan ──────────────────────────────────────────────────────────────
@@ -5459,10 +5603,125 @@ function rejectProposal(id) {
       });
   };
 
+  var PLATFORM_COLORS_RTP = { reddit:'#FF4500', linkedin:'#0A66C2', instagram:'#E1306C', quora:'#B92B27', youtube:'#FF0000', facebook:'#1877F2', tiktok:'#010101', community:'#7C3AED' };
+  var PLATFORM_EMOJI = { reddit:'🔴', linkedin:'💼', instagram:'📸', quora:'❓', youtube:'▶️', facebook:'👥', tiktok:'🎵', community:'🌐' };
+
+  window.loadCalendar = function() {
+    fetch(BACKEND + '/admin/content-calendar/today', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(10000) })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var slots = data.schedule || [];
+        var feed = document.getElementById('cal-feed');
+        if (!feed) return;
+        while (feed.firstChild) feed.removeChild(feed.firstChild);
+        if (slots.length === 0) {
+          var empty = document.createElement('div');
+          empty.className = 'card';
+          empty.style.cssText = 'text-align:center;padding:16px;color:var(--g500);font-size:0.82rem';
+          empty.textContent = 'No scheduled windows today.';
+          feed.appendChild(empty);
+          return;
+        }
+        var grid = document.createElement('div');
+        grid.style.cssText = 'display:flex;flex-direction:column;gap:6px';
+        slots.forEach(function(slot) {
+          var color = PLATFORM_COLORS_RTP[slot.platform] || '#888';
+          var emoji = PLATFORM_EMOJI[slot.platform] || '📅';
+          var row = document.createElement('div');
+          row.className = 'card';
+          row.style.cssText = 'display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-left:3px solid ' + color;
+          row.innerHTML = '<div style="font-size:1rem;flex-shrink:0">' + emoji + '</div>'
+            + '<div style="flex:1;min-width:0">'
+            + '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
+            + '<span style="font-size:0.8rem;font-weight:700;color:' + color + '">' + slot.label + '</span>'
+            + '<span style="font-size:0.72rem;color:var(--g400);font-weight:600">' + slot.time + '</span>'
+            + '</div>'
+            + '<div style="font-size:0.75rem;color:var(--g500);margin-top:2px"><strong>Post type:</strong> ' + slot.contentType + '</div>'
+            + '<div style="font-size:0.72rem;color:var(--g400);margin-top:2px">' + slot.algoReason + '</div>'
+            + '</div>';
+          grid.appendChild(row);
+        });
+        feed.appendChild(grid);
+      })
+      .catch(function() {
+        var feed = document.getElementById('cal-feed');
+        if (feed) { feed.innerHTML = '<div class="card" style="text-align:center;padding:16px;color:var(--g500);font-size:0.82rem">Could not load schedule.</div>'; }
+      });
+  };
+
+  window.loadReadyToPost = function() {
+    fetch(BACKEND + '/admin/content-drafts/ready-to-post', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(10000) })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var drafts = data.drafts || [];
+        var feed = document.getElementById('rtp-feed');
+        var badge = document.getElementById('rtp-count-badge');
+        if (!feed) return;
+        if (badge) { badge.textContent = drafts.length; badge.style.display = drafts.length > 0 ? '' : 'none'; }
+        while (feed.firstChild) feed.removeChild(feed.firstChild);
+        if (drafts.length === 0) {
+          var empty = document.createElement('div');
+          empty.className = 'card';
+          empty.style.cssText = 'text-align:center;padding:20px;color:var(--g500);font-size:0.82rem';
+          empty.textContent = 'Nothing pending — all caught up.';
+          feed.appendChild(empty);
+          return;
+        }
+        drafts.forEach(function(d) {
+          var card = document.createElement('div');
+          card.className = 'card';
+          card.style.marginBottom = '10px';
+          var pColor = PLATFORM_COLORS_RTP[d.platform] || '#6B7280';
+          var timeAgo = d.resolvedAt ? Math.round((Date.now() - new Date(d.resolvedAt).getTime()) / 60000) + 'm ago' : '';
+          var content = d.fullContent || '';
+          card.innerHTML = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">'
+            + '<span style="font-size:0.7rem;font-weight:800;padding:2px 8px;border-radius:10px;background:' + pColor + ';color:white;text-transform:uppercase">' + d.platform + '</span>'
+            + '<span style="font-size:0.72rem;color:var(--g500)">Draft #' + d.index + ' · approved ' + timeAgo + '</span>'
+            + '</div>'
+            + '<div style="font-size:0.78rem;color:var(--mint);font-weight:700;margin-bottom:4px">Best time: ' + (d.bestPostTime || 'Check platform intel') + '</div>'
+            + '<div style="font-size:0.8rem;color:var(--g600);line-height:1.5;max-height:80px;overflow:hidden;margin-bottom:10px">' + content.slice(0, 300).replace(/</g,'&lt;').replace(/\n/g,'<br>') + (content.length > 300 ? '...' : '') + '</div>'
+            + '<div style="display:flex;gap:8px;flex-wrap:wrap">'
+            + (d.postUrl ? '<a href="' + d.postUrl + '" target="_blank" style="font-size:0.72rem;font-weight:700;padding:4px 12px;border-radius:6px;background:var(--teal);color:white;text-decoration:none">Open ' + d.platform + '</a>' : '')
+            + '<button onclick="rtpCopy(' + d.index + ',this)" data-content="' + encodeURIComponent(content) + '" style="font-size:0.72rem;font-weight:700;padding:4px 12px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g600);cursor:pointer">Copy Content</button>'
+            + '<button onclick="rtpMarkPosted(' + d.index + ',this)" style="font-size:0.72rem;font-weight:700;padding:4px 12px;border-radius:6px;border:none;background:#16a34a;color:white;cursor:pointer">Mark as Posted</button>'
+            + '</div>';
+          feed.appendChild(card);
+        });
+      })
+      .catch(function() {
+        var feed = document.getElementById('rtp-feed');
+        if (feed) feed.innerHTML = '<div class="card" style="text-align:center;padding:20px;color:var(--g500);font-size:0.82rem">Could not load ready-to-post queue.</div>';
+      });
+  };
+
+  window.rtpCopy = function(index, btn) {
+    var content = decodeURIComponent(btn.getAttribute('data-content'));
+    navigator.clipboard.writeText(content).then(function() {
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = 'Copy Content'; }, 2000);
+    });
+  };
+
+  window.rtpMarkPosted = function(index, btn) {
+    btn.textContent = 'Marking...';
+    btn.disabled = true;
+    fetch(BACKEND + '/admin/content-drafts/' + index + '/mark-posted', {
+      method: 'POST',
+      headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ actor: 'TJ' })
+    }).then(function(r) { return r.json(); })
+      .then(function() { window.loadReadyToPost(); })
+      .catch(function() { btn.textContent = 'Error'; btn.disabled = false; });
+  };
+
   window.loadInbox();
   window.loadPool();
+  window.loadReadyToPost();
+  window.loadCalendar();
   setInterval(window.loadInbox, 60000);
   setInterval(window.loadPool, 30000);
+  setInterval(window.loadReadyToPost, 30000);
+  setInterval(window.loadCalendar, 60 * 60 * 1000); // refresh once per hour
 })();
 
 // ═══ Agent Activity Feed ═════════════════════════════════════════════════════
@@ -6239,6 +6498,129 @@ function submitBrainInject() {
       setTimeout(function() { loadBrain(); if (msg) msg.textContent = ''; }, 800);
     })
     .catch(function() { if (msg) { msg.textContent = 'Inject failed — check backend.'; msg.style.color = 'var(--red)'; } });
+}
+
+// ═══ V12 ENGINE FUNCTIONS ════════════════════════════════════════════════════
+var BACKEND = (typeof BRAIN_BACKEND !== 'undefined') ? BRAIN_BACKEND : 'https://carely-backend-production.up.railway.app';
+var SECRET  = (typeof BRAIN_SECRET  !== 'undefined') ? BRAIN_SECRET  : 'carely-admin-6add43330d2313d8';
+
+function loadConversionIntel() {
+  fetch(BACKEND + '/admin/conversion/weekly', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var el = document.getElementById('conversion-report-content');
+      if (!el) return;
+      if (d && d.report) {
+        el.innerHTML = '<pre style="white-space:pre-wrap;font-size:0.82rem;color:var(--g700)">' + JSON.stringify(d.report, null, 2) + '</pre>';
+        var totalEl = document.getElementById('conv-total');
+        var weekEl  = document.getElementById('conv-week');
+        var topEl   = document.getElementById('conv-top');
+        if (totalEl && d.report.totalSignups !== undefined) totalEl.textContent = d.report.totalSignups;
+        if (weekEl  && d.report.thisWeek    !== undefined) weekEl.textContent  = d.report.thisWeek;
+        if (topEl   && d.report.topSource   !== undefined) topEl.textContent   = d.report.topSource;
+      } else {
+        el.innerHTML = '<span style="color:var(--g400)">No conversion report yet — first report runs Sunday 6AM PST after content is posted with ?ref= links.</span>';
+      }
+    }).catch(function() {
+      var el = document.getElementById('conversion-report-content');
+      if (el) el.innerHTML = '<span style="color:var(--red)">Failed to load — backend may be starting up.</span>';
+    });
+}
+
+function loadExperiments() {
+  fetch(BACKEND + '/admin/experiments', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var el = document.getElementById('experiments-content');
+      var activeEl = document.getElementById('exp-active-count');
+      var doneEl   = document.getElementById('exp-done-count');
+      if (!el) return;
+      var exps = d.active || [];
+      if (activeEl) activeEl.textContent = exps.length;
+      if (doneEl)   doneEl.textContent   = d.concluded || 0;
+      if (exps.length === 0) {
+        el.innerHTML = '<span style="color:var(--g400)">No active experiments. Hermes will propose experiments on Sunday after user gates are met.</span>';
+        return;
+      }
+      var html = '';
+      exps.forEach(function(e) {
+        html += '<div style="border:1px solid var(--g200);border-radius:8px;padding:12px;margin-bottom:10px">'
+          + '<div style="font-weight:700;font-size:0.88rem;margin-bottom:4px">' + e.id + ' · ' + e.type + '</div>'
+          + '<div style="font-size:0.8rem;color:var(--g600);margin-bottom:6px">' + e.hypothesis + '</div>'
+          + '<div style="font-size:0.78rem;color:var(--g500)"><strong>Control:</strong> ' + e.control + ' · <strong>Variant:</strong> ' + e.variant + '</div>'
+          + '<div style="font-size:0.78rem;color:var(--g500);margin-top:4px"><strong>Success:</strong> ' + e.successMetric + ' ≥ ' + e.successTarget + ' · Gate: ' + e.userCountGate + '+ trials</div>'
+          + '</div>';
+      });
+      el.innerHTML = html;
+    }).catch(function() {
+      var el = document.getElementById('experiments-content');
+      if (el) el.innerHTML = '<span style="color:var(--red)">Failed to load experiments.</span>';
+    });
+}
+
+function loadAxelCreative() {
+  fetch(BACKEND + '/admin/axel/brief', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var el = document.getElementById('axel-concepts-content');
+      if (!el) return;
+      var brief = d.brief;
+      if (!brief || !brief.concepts || brief.concepts.length === 0) {
+        el.innerHTML = '<span style="color:var(--g400)">No Axel brief yet — runs Saturday 8AM PST. First run generates creative concepts from competitor App Store reviews.</span>';
+        return;
+      }
+      var html = '<div style="font-size:0.8rem;color:var(--g500);margin-bottom:10px">Week of ' + brief.weekOf + ' · ' + brief.concepts.length + ' concepts generated</div>';
+      brief.concepts.forEach(function(c, i) {
+        html += '<div style="border:1px solid var(--g200);border-radius:8px;padding:12px;margin-bottom:10px">'
+          + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+          + '<div style="font-weight:700;font-size:0.88rem">#' + (i+1) + ' · ' + c.title + '</div>'
+          + '<div style="font-size:0.78rem;background:#f0fdf4;color:#16a34a;padding:3px 8px;border-radius:6px;font-weight:700">Score: ' + (c.predictedConversionScore || '—') + '</div>'
+          + '</div>'
+          + '<div style="font-size:0.82rem;font-style:italic;color:var(--g700);margin-bottom:4px">"' + c.hook + '"</div>'
+          + '<div style="font-size:0.78rem;color:var(--g500)"><strong>Angle:</strong> ' + c.angle + ' · <strong>Format:</strong> ' + c.format + ' · <strong>Platform:</strong> ' + c.platform + '</div>'
+          + (c.competitorOpportunity ? '<div style="font-size:0.75rem;color:var(--amber);margin-top:4px">Competitor gap: ' + c.competitorOpportunity + '</div>' : '')
+          + '</div>';
+      });
+      if (brief.creativeDirectorNote) {
+        html += '<div style="background:#fef3c7;border-radius:8px;padding:12px;font-size:0.82rem;color:#92400e;margin-top:4px"><strong>Axel note:</strong> ' + brief.creativeDirectorNote + '</div>';
+      }
+      el.innerHTML = html;
+    }).catch(function() {
+      var el = document.getElementById('axel-concepts-content');
+      if (el) el.innerHTML = '<span style="color:var(--red)">Failed to load Axel brief.</span>';
+    });
+}
+
+function triggerAxel() {
+  var msg = document.getElementById('axel-trigger-msg');
+  if (msg) msg.textContent = 'Triggering Axel...';
+  fetch(BACKEND + '/admin/trigger/axel', { method: 'POST', headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      if (msg) msg.textContent = 'Axel triggered. Check Telegram in ~2 min for results.';
+      setTimeout(loadAxelCreative, 90000);
+    }).catch(function() { if (msg) msg.textContent = 'Failed to trigger.'; });
+}
+
+function triggerExperiments() {
+  var msg = document.getElementById('exp-trigger-msg');
+  if (msg) msg.textContent = 'Triggering experiment evaluation...';
+  fetch(BACKEND + '/admin/trigger/experiments', { method: 'POST', headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      if (msg) msg.textContent = 'Done. Refreshing in 5s...';
+      setTimeout(loadExperiments, 5000);
+    }).catch(function() { if (msg) msg.textContent = 'Failed.'; });
+}
+
+function triggerCEOReview() {
+  var msg = document.getElementById('ceo-review-msg');
+  if (msg) msg.textContent = 'Triggering CEO weekly review...';
+  fetch(BACKEND + '/admin/hermes/weekly', { method: 'POST', headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      if (msg) msg.textContent = 'Triggered. Check Telegram for CEO review memo.';
+    }).catch(function() { if (msg) msg.textContent = 'Failed to trigger — check backend.'; });
 }
 
 // ═══ INIT: load data for pages that need it on startup ═══════════════════════
