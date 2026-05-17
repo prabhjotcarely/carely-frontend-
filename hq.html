@@ -752,13 +752,41 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ APPROVALS ══ -->
   <div class="page" id="page-approvals">
-    <div class="ph"><h1>✅ Approvals</h1><p>Agent drafts pending TJ sign-off · Approve to send · Skip to discard</p></div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-      <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="drafts-count-label">Loading drafts...</div>
-      <button onclick="loadDrafts()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+    <div class="ph"><h1>✅ Approvals</h1><p>Agent drafts awaiting sign-off · Approve · Reject · Edit before sending</p></div>
+
+    <!-- Tab bar -->
+    <div style="display:flex;gap:0;margin-bottom:18px;border-bottom:2px solid var(--g200)">
+      <button id="tab-btn-pending" onclick="switchApprovalsTab('pending')" style="font-size:0.82rem;font-weight:700;padding:8px 20px;border:none;border-bottom:2px solid var(--teal);margin-bottom:-2px;background:none;color:var(--teal);cursor:pointer">Pending <span id="drafts-pending-badge" style="display:inline-block;background:var(--teal);color:white;border-radius:10px;font-size:0.68rem;padding:1px 6px;margin-left:4px;vertical-align:middle"></span></button>
+      <button id="tab-btn-pool" onclick="switchApprovalsTab('pool')" style="font-size:0.82rem;font-weight:600;padding:8px 20px;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;background:none;color:var(--g500);cursor:pointer">Pool</button>
     </div>
-    <div id="drafts-feed">
-      <div class="card" style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading...</div>
+
+    <!-- Pending tab -->
+    <div id="approvals-tab-pending">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="drafts-count-label">Loading drafts...</div>
+        <button onclick="loadDrafts()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      </div>
+      <div id="drafts-feed">
+        <div class="card" style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Pool tab -->
+    <div id="approvals-tab-pool" style="display:none">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+        <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="pool-count-label">Loading pool...</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-left:auto">
+          <button onclick="filterPool('all')" id="pool-filter-all" style="font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:6px;border:none;background:var(--teal);color:white;cursor:pointer">All</button>
+          <button onclick="filterPool('reddit_reply')" id="pool-filter-reddit" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Reddit</button>
+          <button onclick="filterPool('linkedin')" id="pool-filter-linkedin" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">LinkedIn</button>
+          <button onclick="filterPool('community')" id="pool-filter-community" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Community</button>
+          <button onclick="filterPool('email')" id="pool-filter-email" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Email</button>
+          <button onclick="loadPool()" style="font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Refresh</button>
+        </div>
+      </div>
+      <div id="pool-feed">
+        <div class="card" style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading pool...</div>
+      </div>
     </div>
   </div>
 
@@ -2193,7 +2221,7 @@ function _activatePage(id, pushState) {
   sessionStorage.setItem('hq_page', id);
   var PAGE_LOADERS = {
     'proposals':    function() { loadProposals(); },
-    'approvals':    function() { if (window.loadDrafts) window.loadDrafts(); },
+    'approvals':    function() { if (window.loadDrafts) window.loadDrafts(); if (window.loadPool) window.loadPool(); },
     'crm':          function() { if (window.loadCRM) window.loadCRM(); },
     'my-inbox':     function() { if (window.loadInbox) window.loadInbox(); },
     'team-chat':    function() { if (window.loadTeamFeed) window.loadTeamFeed(); },
@@ -4560,19 +4588,326 @@ function rejectProposal(id) {
   window.approveDraft = function(index) {
     fetch(BACKEND + '/admin/drafts/' + index + '/approve', {
       method: 'POST', headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' }, body: '{}'
-    }).then(function() { window.loadDrafts(); window.loadInbox(); });
+    }).then(function() { window.loadDrafts(); window.loadPool(); window.loadInbox(); });
   };
 
   window.skipDraft = function(index) {
     fetch(BACKEND + '/admin/drafts/' + index + '/skip', {
       method: 'POST', headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' }, body: '{}'
-    }).then(function() { window.loadDrafts(); window.loadInbox(); });
+    }).then(function() { window.loadDrafts(); window.loadPool(); window.loadInbox(); });
+  };
+
+  window.rejectDraft = function(index) {
+    fetch(BACKEND + '/admin/drafts/' + index + '/skip', {
+      method: 'POST',
+      headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ actor: 'TJ', feedback: 'rejected' })
+    }).then(function() { window.loadDrafts(); window.loadPool(); window.loadInbox(); });
+  };
+
+  // ── Pool tab switcher ────────────────────────────────────────────────────────
+  window.switchApprovalsTab = function(tab) {
+    var pending = document.getElementById('approvals-tab-pending');
+    var pool = document.getElementById('approvals-tab-pool');
+    var btnPending = document.getElementById('tab-btn-pending');
+    var btnPool = document.getElementById('tab-btn-pool');
+    if (tab === 'pool') {
+      pending.style.display = 'none';
+      pool.style.display = '';
+      btnPending.style.borderBottomColor = 'transparent';
+      btnPending.style.color = 'var(--g500)';
+      btnPending.style.fontWeight = '600';
+      btnPool.style.borderBottomColor = 'var(--teal)';
+      btnPool.style.color = 'var(--teal)';
+      btnPool.style.fontWeight = '700';
+      window.loadPool();
+    } else {
+      pool.style.display = 'none';
+      pending.style.display = '';
+      btnPool.style.borderBottomColor = 'transparent';
+      btnPool.style.color = 'var(--g500)';
+      btnPool.style.fontWeight = '600';
+      btnPending.style.borderBottomColor = 'var(--teal)';
+      btnPending.style.color = 'var(--teal)';
+      btnPending.style.fontWeight = '700';
+      window.loadDrafts();
+    }
+  };
+
+  // ── Pool loader ─────────────────────────────────────────────────────────────
+  var _poolFilter = 'all';
+  var _poolAllDrafts = [];
+
+  window.filterPool = function(type) {
+    _poolFilter = type;
+    ['all','reddit','linkedin','community','email'].forEach(function(f) {
+      var btn = document.getElementById('pool-filter-' + f);
+      if (!btn) return;
+      var active = (f === type) || (f === 'all' && type === 'all');
+      btn.style.background = active ? 'var(--teal)' : 'white';
+      btn.style.color = active ? 'white' : 'var(--g500)';
+      btn.style.border = active ? 'none' : '1px solid var(--g300)';
+      btn.style.fontWeight = active ? '700' : '600';
+    });
+    _renderPool(_poolAllDrafts);
+  };
+
+  function _poolTypeColor(type) {
+    if (!type) return 'var(--g400)';
+    var t = type.toLowerCase();
+    if (t.includes('reddit')) return '#FF4500';
+    if (t.includes('linkedin')) return '#0A66C2';
+    if (t.includes('community')) return '#7C3AED';
+    if (t.includes('email')) return '#028090';
+    return 'var(--g400)';
+  }
+
+  function _poolTypeName(type) {
+    if (!type) return 'DRAFT';
+    var t = type.toLowerCase();
+    if (t.includes('reddit')) return 'REDDIT';
+    if (t.includes('linkedin')) return 'LINKEDIN';
+    if (t.includes('community')) return 'COMMUNITY';
+    if (t.includes('email')) return 'EMAIL';
+    return (type || 'DRAFT').toUpperCase().slice(0, 12);
+  }
+
+  function _renderPool(drafts) {
+    var feed = document.getElementById('pool-feed');
+    var label = document.getElementById('pool-count-label');
+    if (!feed) return;
+
+    var filtered = drafts.filter(function(d) {
+      if (_poolFilter === 'all') return true;
+      var t = (d.contentType || d.type || '').toLowerCase();
+      return t.includes(_poolFilter);
+    });
+
+    if (label) label.textContent = filtered.length === 0
+      ? 'No drafts in pool'
+      : filtered.length + ' draft' + (filtered.length !== 1 ? 's' : '') + ' in pool';
+
+    while (feed.firstChild) feed.removeChild(feed.firstChild);
+
+    if (filtered.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'card';
+      empty.style.cssText = 'text-align:center;padding:40px';
+      var emptyMsg = document.createElement('div');
+      emptyMsg.style.cssText = 'color:var(--g500);font-size:0.84rem';
+      emptyMsg.textContent = _poolFilter === 'all' ? 'Pool is empty — agents are quiet.' : 'No ' + _poolFilter + ' drafts right now.';
+      empty.appendChild(emptyMsg);
+      feed.appendChild(empty);
+      return;
+    }
+
+    filtered.forEach(function(draft) {
+      var card = document.createElement('div');
+      card.className = 'card';
+      card.style.cssText = 'margin-bottom:14px;border-left:3px solid ' + _poolTypeColor(draft.contentType || draft.type);
+
+      // ── Header ──
+      var header = document.createElement('div');
+      header.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap';
+
+      var typeBadge = document.createElement('span');
+      typeBadge.style.cssText = 'font-size:0.66rem;font-weight:800;padding:2px 7px;border-radius:10px;color:white;background:' + _poolTypeColor(draft.contentType || draft.type);
+      typeBadge.textContent = _poolTypeName(draft.contentType || draft.type);
+      header.appendChild(typeBadge);
+
+      var agentBadge = document.createElement('span');
+      agentBadge.className = 'pill teal';
+      agentBadge.style.cssText = 'font-size:0.66rem;margin:0';
+      agentBadge.textContent = (draft.agentName || 'AGENT').toUpperCase();
+      header.appendChild(agentBadge);
+
+      var titleSpan = document.createElement('span');
+      titleSpan.style.cssText = 'font-size:0.82rem;font-weight:700;color:var(--deep);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+      titleSpan.textContent = draft.subject || draft.contentType || 'Draft #' + draft.index;
+      header.appendChild(titleSpan);
+
+      var timeSpan = document.createElement('span');
+      timeSpan.style.cssText = 'font-size:0.72rem;color:var(--g400);flex-shrink:0;margin-left:auto';
+      timeSpan.textContent = timeAgo(draft.timestamp || draft.createdAt);
+      header.appendChild(timeSpan);
+      card.appendChild(header);
+
+      // ── Telegram sync indicator ──
+      if (draft.telegramMsgIds && (draft.telegramMsgIds.tj || draft.telegramMsgIds.prabh)) {
+        var syncBar = document.createElement('div');
+        syncBar.style.cssText = 'font-size:0.7rem;color:var(--g400);margin-bottom:8px;display:flex;gap:8px';
+        if (draft.telegramMsgIds.tj) {
+          var tjDot = document.createElement('span');
+          tjDot.style.cssText = 'display:inline-flex;align-items:center;gap:3px';
+          tjDot.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:#02C39A;display:inline-block"></span> TJ notified';
+          syncBar.appendChild(tjDot);
+        }
+        if (draft.telegramMsgIds.prabh) {
+          var prabhDot = document.createElement('span');
+          prabhDot.style.cssText = 'display:inline-flex;align-items:center;gap:3px';
+          prabhDot.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:#818CF8;display:inline-block"></span> Prabh notified';
+          syncBar.appendChild(prabhDot);
+        }
+        card.appendChild(syncBar);
+      }
+
+      // ── Content preview ──
+      var fullText = draft.fullContent || draft.body || draft.content || draft.contentSnippet || '(no preview)';
+      var preview = document.createElement('div');
+      preview.style.cssText = 'background:var(--g100);border-radius:8px;padding:12px 14px;font-size:0.8rem;line-height:1.7;color:var(--text);white-space:pre-wrap;max-height:100px;overflow:hidden;margin-bottom:10px;transition:max-height 0.2s ease';
+      preview.textContent = fullText;
+      card.appendChild(preview);
+
+      // ── Action buttons ──
+      var btnRow = document.createElement('div');
+      btnRow.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap';
+
+      // Approve
+      var approveBtn = document.createElement('button');
+      approveBtn.textContent = 'Approve';
+      approveBtn.style.cssText = 'font-size:0.76rem;font-weight:700;padding:6px 14px;border-radius:8px;border:none;background:#02C39A;color:white;cursor:pointer';
+      approveBtn.onclick = (function(idx, c) { return function() {
+        approveBtn.textContent = 'Approving...'; approveBtn.disabled = true;
+        fetch(BACKEND + '/admin/drafts/' + idx + '/approve', {
+          method: 'POST', headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ actor: 'TJ' })
+        }).then(function() {
+          c.style.opacity = '0.45';
+          c.style.borderLeftColor = '#02C39A';
+          approveBtn.textContent = '✓ Approved';
+          btnRow.querySelectorAll('button').forEach(function(b) { if (b !== approveBtn) b.disabled = true; });
+          window.loadDrafts(); window.loadInbox();
+        }).catch(function() { approveBtn.textContent = 'Approve'; approveBtn.disabled = false; });
+      }; })(draft.index, card);
+      btnRow.appendChild(approveBtn);
+
+      // Reject
+      var rejectBtn = document.createElement('button');
+      rejectBtn.textContent = 'Reject';
+      rejectBtn.style.cssText = 'font-size:0.76rem;font-weight:700;padding:6px 14px;border-radius:8px;border:none;background:#DC2626;color:white;cursor:pointer';
+      rejectBtn.onclick = (function(idx, c) { return function() {
+        rejectBtn.textContent = 'Rejecting...'; rejectBtn.disabled = true;
+        fetch(BACKEND + '/admin/drafts/' + idx + '/skip', {
+          method: 'POST', headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ actor: 'TJ', feedback: 'rejected' })
+        }).then(function() {
+          c.style.opacity = '0.45';
+          c.style.borderLeftColor = '#DC2626';
+          rejectBtn.textContent = '✗ Rejected';
+          btnRow.querySelectorAll('button').forEach(function(b) { if (b !== rejectBtn) b.disabled = true; });
+          window.loadDrafts(); window.loadInbox();
+        }).catch(function() { rejectBtn.textContent = 'Reject'; rejectBtn.disabled = false; });
+      }; })(draft.index, card);
+      btnRow.appendChild(rejectBtn);
+
+      // Skip
+      var skipBtn2 = document.createElement('button');
+      skipBtn2.textContent = 'Skip';
+      skipBtn2.style.cssText = 'font-size:0.76rem;font-weight:600;padding:6px 12px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);cursor:pointer';
+      skipBtn2.onclick = (function(idx, c) { return function() {
+        skipBtn2.textContent = 'Skipping...'; skipBtn2.disabled = true;
+        fetch(BACKEND + '/admin/drafts/' + idx + '/skip', {
+          method: 'POST', headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' }, body: '{}'
+        }).then(function() {
+          c.style.opacity = '0.45';
+          skipBtn2.textContent = 'Skipped';
+          btnRow.querySelectorAll('button').forEach(function(b) { if (b !== skipBtn2) b.disabled = true; });
+          window.loadDrafts(); window.loadInbox();
+        }).catch(function() { skipBtn2.textContent = 'Skip'; skipBtn2.disabled = false; });
+      }; })(draft.index, card);
+      btnRow.appendChild(skipBtn2);
+
+      // Edit
+      var editBtn3 = document.createElement('button');
+      editBtn3.textContent = 'Edit';
+      editBtn3.style.cssText = 'font-size:0.76rem;font-weight:600;padding:6px 12px;border-radius:8px;border:1.5px solid var(--teal);background:white;color:var(--teal);cursor:pointer';
+      var editing3 = false;
+      editBtn3.onclick = function() {
+        if (!editing3) {
+          editing3 = true;
+          var ta3 = document.createElement('textarea');
+          ta3.style.cssText = 'width:100%;min-height:150px;font-size:0.8rem;line-height:1.7;border:1.5px solid var(--teal);border-radius:8px;padding:10px 12px;font-family:inherit;resize:vertical;box-sizing:border-box;margin-bottom:8px';
+          ta3.value = fullText;
+          card.insertBefore(ta3, btnRow);
+          preview.style.display = 'none';
+          editBtn3.textContent = 'Save';
+          editBtn3.style.background = 'var(--teal)';
+          editBtn3.style.color = 'white';
+        } else {
+          editing3 = false;
+          var ta3 = card.querySelector('textarea');
+          if (ta3) { fullText = ta3.value; preview.textContent = fullText; ta3.remove(); }
+          preview.style.display = '';
+          editBtn3.textContent = 'Edit';
+          editBtn3.style.background = 'white';
+          editBtn3.style.color = 'var(--teal)';
+        }
+      };
+      btnRow.appendChild(editBtn3);
+
+      // Read / Collapse
+      var readBtn = document.createElement('button');
+      readBtn.textContent = 'Read';
+      readBtn.style.cssText = 'font-size:0.76rem;font-weight:600;padding:6px 12px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);cursor:pointer';
+      var expanded3 = false;
+      readBtn.onclick = function() {
+        expanded3 = !expanded3;
+        preview.style.maxHeight = expanded3 ? 'none' : '100px';
+        preview.style.overflow = expanded3 ? 'visible' : 'hidden';
+        readBtn.textContent = expanded3 ? 'Collapse' : 'Read';
+      };
+      btnRow.appendChild(readBtn);
+
+      // Copy
+      var copyBtn = document.createElement('button');
+      copyBtn.textContent = 'Copy';
+      copyBtn.style.cssText = 'font-size:0.76rem;font-weight:600;padding:6px 12px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);cursor:pointer';
+      copyBtn.onclick = function() {
+        navigator.clipboard.writeText(fullText).then(function() {
+          copyBtn.textContent = 'Copied!';
+          setTimeout(function() { copyBtn.textContent = 'Copy'; }, 1500);
+        });
+      };
+      btnRow.appendChild(copyBtn);
+
+      card.appendChild(btnRow);
+      feed.appendChild(card);
+    });
+  }
+
+  window.loadPool = function() {
+    fetch(BACKEND + '/admin/drafts', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(15000) })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        _poolAllDrafts = data.drafts || [];
+        var badge = document.getElementById('drafts-pending-badge');
+        if (badge) badge.textContent = _poolAllDrafts.length > 0 ? _poolAllDrafts.length : '';
+        _renderPool(_poolAllDrafts);
+      })
+      .catch(function() {
+        var feed = document.getElementById('pool-feed');
+        var label = document.getElementById('pool-count-label');
+        if (label) label.textContent = 'Backend offline';
+        if (feed) {
+          while (feed.firstChild) feed.removeChild(feed.firstChild);
+          var errCard = document.createElement('div');
+          errCard.className = 'card';
+          errCard.style.cssText = 'text-align:center;padding:28px;color:var(--g500);font-size:0.82rem';
+          errCard.textContent = 'Could not reach backend.';
+          feed.appendChild(errCard);
+        }
+      });
   };
 
   window.loadInbox();
   window.loadDrafts();
+  window.loadPool();
   setInterval(window.loadInbox, 60000);
   setInterval(window.loadDrafts, 60000);
+  setInterval(function() {
+    var poolVisible = document.getElementById('approvals-tab-pool');
+    if (poolVisible && poolVisible.style.display !== 'none') window.loadPool();
+  }, 30000);
 })();
 
 // ═══ Agent Activity Feed ═════════════════════════════════════════════════════
