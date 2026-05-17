@@ -938,9 +938,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="page" id="page-seo">
     <div class="ph"><h1>🔍 SEO</h1><p>Content hierarchy · Keyword targets · Page status · Scout coverage</p></div>
     <div class="metric-row">
-      <div class="metric"><div class="metric-label">Blog Pages Live</div><div class="metric-val teal">33</div><div class="metric-sub">carely.fit/blog/ — indexed</div></div>
+      <div class="metric"><div class="metric-label">Blog Pages Live</div><div class="metric-val teal" id="seo-blogs">—</div><div class="metric-sub">carely.fit/blog/ — indexed</div></div>
       <div class="metric"><div class="metric-label">Landing Pages</div><div class="metric-val teal">8</div><div class="metric-sub">Core + B2B + Caregiver</div></div>
-      <div class="metric"><div class="metric-label">Total SEO Pages</div><div class="metric-val teal">41</div><div class="metric-sub">All live on Cloudflare</div></div>
+      <div class="metric"><div class="metric-label">Total SEO Pages</div><div class="metric-val teal" id="seo-total">—</div><div class="metric-sub">All live on Cloudflare</div></div>
     </div>
 
     <div class="card">
@@ -1238,10 +1238,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="page" id="page-app-metrics">
     <div class="ph"><h1>📊 App Metrics</h1><p>Usage · Retention · Check-in rates · Beta data · Build status</p></div>
     <div class="metric-row">
-      <div class="metric"><div class="metric-label">Beta Testers</div><div class="metric-val teal">12</div><div class="metric-sub">Active closed testing</div></div>
-      <div class="metric"><div class="metric-label">DAU</div><div class="metric-val">—</div><div class="metric-sub">Post-launch tracking</div></div>
-      <div class="metric"><div class="metric-label">Check-in Rate</div><div class="metric-val">—</div><div class="metric-sub">Post-launch tracking</div></div>
-      <div class="metric"><div class="metric-label">Avg Streak</div><div class="metric-val">—</div><div class="metric-sub">Post-launch tracking</div></div>
+      <div class="metric"><div class="metric-label">Total Users</div><div class="metric-val teal" id="am-users">—</div><div class="metric-sub">All accounts</div></div>
+      <div class="metric"><div class="metric-label">Trial Users</div><div class="metric-val" id="am-trials">—</div><div class="metric-sub">Active free trials</div></div>
+      <div class="metric"><div class="metric-label">Dose Logs</div><div class="metric-val" id="am-doses">—</div><div class="metric-sub">Total recorded</div></div>
+      <div class="metric"><div class="metric-label">Active Medicines</div><div class="metric-val" id="am-meds">—</div><div class="metric-sub">Across all users</div></div>
     </div>
     <div class="cols">
       <div class="card">
@@ -1645,7 +1645,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- ══ API KEYS ══ -->
   <div class="page" id="page-api-keys">
     <div class="ph"><h1>⏱ API Keys &amp; Tokens</h1><p>Track every token · Know before they expire · Never lose a connection mid-growth</p></div>
-    <div class="alert amber">⚠️ <strong>LinkedIn token expires ~June 29, 2026 (55 days).</strong> Renew before then or posting will stop.</div>
+    <div class="alert amber" id="ak-li-alert">⚠️ <strong>LinkedIn token expiry loading...</strong></div>
 
     <div class="token-card">
       <div class="token-icon">💼</div>
@@ -2204,7 +2204,10 @@ function _activatePage(id, pushState) {
     'business-pulse': function() { loadBusinessPulse(); },
     'revenue':        function() { loadRevenue(); },
     'health':         function() { loadHealth(); },
-    'reporting':      function() { loadReporting(); }
+    'reporting':      function() { loadReporting(); },
+    'app-metrics':    function() { loadAppMetrics(); },
+    'seo':            function() { loadSEOMetrics(); },
+    'api-keys':       function() { loadAPIKeys(); }
   };
   if (PAGE_LOADERS[id]) setTimeout(PAGE_LOADERS[id], 50);
 }
@@ -2290,6 +2293,62 @@ function loadDailyBoard() {
       html += renderSection('AI AGENTS', groups.agent, '#ca8a04');
       document.getElementById('gp-board-tasks').innerHTML = html;
     }).catch(function(){document.getElementById('gp-board-tasks').innerHTML='<div style="color:var(--g400);text-align:center;padding:20px">Backend loading...</div>';});
+}
+
+// ── App Metrics ──────────────────────────────────────────────────────────────
+function loadAppMetrics() {
+  var BACKEND = _BACKEND; var SECRET = _SECRET;
+  fetch(BACKEND + '/admin/stats', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var el;
+      el = document.getElementById('am-users');  if(el) el.textContent = d.users.total || 0;
+      el = document.getElementById('am-trials'); if(el) el.textContent = d.users.trial || 0;
+      el = document.getElementById('am-doses');  if(el) el.textContent = (d.product && d.product.totalDoseLogs) ? d.product.totalDoseLogs.toLocaleString() : '—';
+      el = document.getElementById('am-meds');   if(el) el.textContent = (d.product && d.product.activeMedicines) ? d.product.activeMedicines : '—';
+    })
+    .catch(function() {});
+}
+
+// ── SEO Metrics ───────────────────────────────────────────────────────────────
+function loadSEOMetrics() {
+  var BACKEND = _BACKEND; var SECRET = _SECRET;
+  fetch(BACKEND + '/admin/intel-pool', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var blogs = (d.blogCoverage && d.blogCoverage.published) ? d.blogCoverage.published : '—';
+      var total = blogs !== '—' ? blogs + 8 : '—';
+      var el;
+      el = document.getElementById('seo-blogs'); if(el) el.textContent = blogs;
+      el = document.getElementById('seo-total'); if(el) el.textContent = total;
+    })
+    .catch(function() {});
+}
+
+// ── API Keys ──────────────────────────────────────────────────────────────────
+function loadAPIKeys() {
+  var BACKEND = _BACKEND; var SECRET = _SECRET;
+  fetch(BACKEND + '/admin/stats', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var days = d.tokens && d.tokens.linkedinDaysLeft;
+      var alert = document.getElementById('ak-li-alert');
+      var expiry = document.getElementById('linkedin-expiry');
+      if (days === null || days === undefined) {
+        if(alert) alert.innerHTML = '⚠️ <strong>LinkedIn token expiry unknown — check Railway.</strong>';
+        if(expiry) expiry.textContent = '? days';
+      } else if (days <= 7) {
+        if(alert) { alert.className = 'alert red'; alert.innerHTML = '🚨 <strong>LinkedIn token expires in ' + days + ' days — renew NOW or Leo stops posting.</strong>'; }
+        if(expiry) { expiry.textContent = days + ' days'; expiry.className = 'token-expiry danger'; }
+      } else if (days <= 21) {
+        if(alert) { alert.className = 'alert amber'; alert.innerHTML = '⚠️ <strong>LinkedIn token expires in ' + days + ' days.</strong> Renew before then or posting will stop.'; }
+        if(expiry) { expiry.textContent = days + ' days'; expiry.className = 'token-expiry warn'; }
+      } else {
+        if(alert) { alert.className = 'alert'; alert.innerHTML = '✅ <strong>LinkedIn token valid — ' + days + ' days remaining.</strong>'; }
+        if(expiry) { expiry.textContent = days + ' days'; expiry.className = 'token-expiry ok'; }
+      }
+    })
+    .catch(function() {});
 }
 
 // ── Reporting ────────────────────────────────────────────────────────────────
