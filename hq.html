@@ -548,7 +548,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="tab" onclick="switchTab(this,'ch-linkedin');chRenderLive('linkedin')">LinkedIn</div>
       <div class="tab" onclick="switchTab(this,'ch-reddit');chRenderLive('reddit')">Reddit</div>
       <div class="tab" onclick="switchTab(this,'ch-community');chRenderLive('community')">Community</div>
-      <div class="tab" onclick="switchTab(this,'ch-instagram');chRenderInstagram()">Instagram</div>
+      <div class="tab" onclick="switchTab(this,'ch-instagram');chRenderLive('instagram');chRenderInstagram()">Instagram</div>
       <div class="tab" onclick="switchTab(this,'ch-quora');chRenderLive('quora')">Quora</div>
       <div class="tab" onclick="switchTab(this,'ch-youtube');chRenderLive('youtube')">YouTube</div>
       <div class="tab" style="color:var(--mint);font-weight:800" onclick="switchTab(this,'ch-approved');chRenderApproved('all')">✓ Approved</div>
@@ -601,14 +601,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
 
     <div class="tab-panel" id="ch-instagram">
-      <div class="ch-acc-bar" style="flex-wrap:wrap;gap:6px">
-        <span class="ch-acc-label">Account:</span>
-        <button class="ch-acc-btn active" id="ig-btn-brand" onclick="chSwitchIgType('ugc')">🎬 UGC Videos</button>
-        <button class="ch-acc-btn" id="ig-btn-poster" onclick="chSwitchIgType('poster')">🖼 Brand Posters</button>
-        <button class="ch-acc-btn" id="ig-btn-carousel" onclick="chSwitchIgType('carousel')">📑 Carousel Scripts</button>
-        <button onclick="chRenderInstagram()" style="font-size:0.72rem;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer;margin-left:auto">Refresh</button>
+      <div class="ch-acc-bar">
+        <span class="ch-acc-label">@prabh — Prabh's account</span>
+        <span style="font-size:0.82rem;color:var(--g500)">Reels scripts · Carousels · Story sequences — agent generates daily</span>
+        <button onclick="chRenderLive('instagram')" style="font-size:0.72rem;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer;margin-left:auto">Refresh</button>
+        <button onclick="chTrigger('instagram')" style="font-size:0.72rem;padding:3px 10px;border-radius:6px;border:none;background:var(--mint);color:white;cursor:pointer" id="ig-gen-btn">+ Generate</button>
       </div>
-      <div id="ch-instagram-feed"><div class="ch-queue-note">Loading Instagram ideas...</div></div>
+      <div id="ch-instagram-feed"><div class="ch-queue-note">Loading Instagram drafts...</div></div>
+      <div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--g200)">
+        <div style="font-size:0.72rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px">Ideas Bank — Reference scripts for Prabh</div>
+        <div class="ch-acc-bar" style="flex-wrap:wrap;gap:6px;margin-bottom:10px">
+          <button class="ch-acc-btn active" id="ig-btn-ugc" onclick="chSwitchIgType('ugc')">🎬 UGC Videos</button>
+          <button class="ch-acc-btn" id="ig-btn-poster" onclick="chSwitchIgType('poster')">🖼 Brand Posters</button>
+          <button class="ch-acc-btn" id="ig-btn-carousel" onclick="chSwitchIgType('carousel')">📑 Carousel Scripts</button>
+        </div>
+        <div id="ch-instagram-ideas"></div>
+      </div>
     </div>
 
     <div class="tab-panel" id="ch-quora">
@@ -3310,7 +3318,7 @@ var _SECRET_CH = (function(){ var s = document.querySelector('script[data-secret
 
 function _chContentCard(draft, platform) {
   var BACKEND = _BACKEND, SECRET = _SECRET;
-  var platformColor = { reddit:'#FF4500', linkedin:'#0A66C2', community:'#7C3AED', instagram:'#E1306C' }[platform] || 'var(--g400)';
+  var platformColor = { reddit:'#FF4500', linkedin:'#0A66C2', community:'#7C3AED', instagram:'#E1306C', quora:'#B92B27', youtube:'#FF0000', facebook:'#1877F2', tiktok:'#010101' }[platform] || 'var(--g400)';
 
   var card = document.createElement('div');
   card.className = 'card';
@@ -3462,7 +3470,7 @@ var IG_IDEAS = {
 };
 
 window.chRenderInstagram = function() {
-  var feed = document.getElementById('ch-instagram-feed');
+  var feed = document.getElementById('ch-instagram-ideas');
   if (!feed) return;
   while (feed.firstChild) feed.removeChild(feed.firstChild);
   var ideas = IG_IDEAS[_igType] || [];
@@ -3662,11 +3670,9 @@ function _ciBuildCard(fp, sub) {
 }
 
 // ── Platform Intel tab ─────────────────────────────────────────────────────────
-var _pi2Loaded = false;
 var PLATFORM_COLORS = { facebook:'#1877F2', quora:'#B92B27', youtube:'#FF0000', instagram:'#E1306C', linkedin:'#0A66C2', tiktok:'#010101', reddit:'#FF4500' };
 
 window.chRenderPlatformIntel = function() {
-  if (_pi2Loaded) return;
   var feed = document.getElementById('pi2-feed');
   if (!feed) return;
   var BACKEND = _BACKEND, SECRET = _SECRET;
@@ -3737,7 +3743,6 @@ window.chRenderPlatformIntel = function() {
 
         feed.appendChild(card);
       });
-      _pi2Loaded = true;
     })
     .catch(function() {
       feed.innerHTML = '<div class="card" style="padding:20px;color:var(--amber)">Could not load platform intel — backend may be starting up.</div>';
@@ -3780,10 +3785,29 @@ window.chTrigger = function(platform) {
   var BACKEND = _BACKEND, SECRET = _SECRET;
   var validPlatforms = ['quora', 'youtube', 'instagram'];
   if (!validPlatforms.includes(platform)) return;
-  fetch(BACKEND + '/admin/trigger/' + platform, { method:'POST', headers:{'x-carely-secret':SECRET}, signal: AbortSignal.timeout(30000) })
+
+  // Update button to show loading state
+  var btnId = platform === 'instagram' ? 'ig-gen-btn' : null;
+  var btn = btnId ? document.getElementById(btnId) : null;
+  var feed = document.getElementById('ch-' + platform + '-feed');
+
+  if (btn) { btn.textContent = 'Generating...'; btn.disabled = true; }
+  if (feed) feed.innerHTML = '<div class="ch-queue-note" style="color:var(--mint)">Agent is writing — this takes 10–15 seconds...</div>';
+
+  fetch(BACKEND + '/admin/trigger/' + platform, { method:'POST', headers:{'x-carely-secret':SECRET}, signal: AbortSignal.timeout(45000) })
     .then(function(r) { return r.json(); })
-    .then(function(d) { if (d.ok) { setTimeout(function(){ chRenderLive(platform); }, 3000); } })
-    .catch(function(){});
+    .then(function(d) {
+      if (btn) { btn.textContent = '+ Generate'; btn.disabled = false; }
+      if (d.ok) {
+        setTimeout(function(){ chRenderLive(platform); }, 5000);
+      } else {
+        if (feed) feed.innerHTML = '<div class="ch-queue-note" style="color:var(--amber)">Generation failed — check backend logs.</div>';
+      }
+    })
+    .catch(function(){
+      if (btn) { btn.textContent = '+ Generate'; btn.disabled = false; }
+      if (feed) feed.innerHTML = '<div class="ch-queue-note" style="color:var(--amber)">Could not reach backend. Check Railway.</div>';
+    });
 };
 
 function contentAction(id, action) {
