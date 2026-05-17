@@ -1336,10 +1336,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="page" id="page-reporting">
     <div class="ph"><h1>📈 Reporting</h1><p>Agent execution · Platform stats · AI usage · Infrastructure costs</p></div>
     <div class="metric-row">
-      <div class="metric"><div class="metric-label">Beta Accounts</div><div class="metric-val teal">12</div><div class="metric-sub">Active testers</div></div>
-      <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber">0</div><div class="metric-sub">Launch day</div></div>
-      <div class="metric"><div class="metric-label">MRR</div><div class="metric-val">$0</div><div class="metric-sub">Monthly recurring</div></div>
-      <div class="metric"><div class="metric-label">Monthly Burn</div><div class="metric-val">~$22</div><div class="metric-sub">All infra</div></div>
+      <div class="metric"><div class="metric-label">Total Users</div><div class="metric-val teal" id="rp-users">—</div><div class="metric-sub">All accounts</div></div>
+      <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber" id="rp-paid">—</div><div class="metric-sub">Active subscriptions</div></div>
+      <div class="metric"><div class="metric-label">MRR</div><div class="metric-val" id="rp-mrr">—</div><div class="metric-sub">Monthly recurring</div></div>
+      <div class="metric"><div class="metric-label">Monthly Burn</div><div class="metric-val" id="rp-burn">—</div><div class="metric-sub">All infra</div></div>
     </div>
     <div class="tabs">
       <div class="tab active" onclick="switchTab(this,'rp-log')">⚡ Execution Log</div>
@@ -2198,13 +2198,13 @@ function _activatePage(id, pushState) {
     'my-inbox':     function() { if (window.loadInbox) window.loadInbox(); },
     'team-chat':    function() { if (window.loadTeamFeed) window.loadTeamFeed(); },
     'agent-chat':   function() { if (window.loadTeamFeed) window.loadTeamFeed(); if (window.loadAgentActivity) window.loadAgentActivity(); },
-    'all-agents':   function() { if (window.loadAgentActivity) window.loadAgentActivity(); },
+    'all-agents':     function() { loadAllAgentsStatus(); if (window.loadAgentActivity) window.loadAgentActivity(); },
     'brain':          function() { loadBrain(); },
     'intel-pool':     function() { loadIntelPool(); },
     'business-pulse': function() { loadBusinessPulse(); },
     'revenue':        function() { loadRevenue(); },
     'health':         function() { loadHealth(); },
-    'all-agents':     function() { loadAllAgentsStatus(); if (window.loadAgentActivity) window.loadAgentActivity(); }
+    'reporting':      function() { loadReporting(); }
   };
   if (PAGE_LOADERS[id]) setTimeout(PAGE_LOADERS[id], 50);
 }
@@ -2290,6 +2290,22 @@ function loadDailyBoard() {
       html += renderSection('AI AGENTS', groups.agent, '#ca8a04');
       document.getElementById('gp-board-tasks').innerHTML = html;
     }).catch(function(){document.getElementById('gp-board-tasks').innerHTML='<div style="color:var(--g400);text-align:center;padding:20px">Backend loading...</div>';});
+}
+
+// ── Reporting ────────────────────────────────────────────────────────────────
+function loadReporting() {
+  var BACKEND = _BACKEND; var SECRET = _SECRET;
+  fetch(BACKEND + '/admin/stats', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var paid = (d.users.founding||0) + (d.users.monthly||0) + (d.users.annual||0);
+      var el;
+      el = document.getElementById('rp-users'); if(el) el.textContent = d.users.total || 0;
+      el = document.getElementById('rp-paid');  if(el) el.textContent = paid;
+      el = document.getElementById('rp-mrr');   if(el) el.textContent = '$' + (d.revenue.mrr||0).toFixed(2);
+      el = document.getElementById('rp-burn');  if(el) el.textContent = '$' + (d.expenses.total||0).toFixed(0) + '/mo';
+    })
+    .catch(function() {});
 }
 
 // ── Business Pulse ───────────────────────────────────────────────────────────
@@ -2389,7 +2405,8 @@ function loadHealth() {
   }
 
   // Fetch backend health
-  fetch(BACKEND + '/health', { signal: AbortSignal.timeout(6000) })
+  var hlCtrl = new AbortController(); setTimeout(function(){hlCtrl.abort();},6000);
+  fetch(BACKEND + '/health', { signal: hlCtrl.signal })
     .then(function(r) { return r.json(); })
     .then(function(h) {
       var online = h.status === 'ok';
