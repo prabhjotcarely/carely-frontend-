@@ -549,9 +549,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="tab" onclick="switchTab(this,'ch-reddit');chRenderLive('reddit')">Reddit</div>
       <div class="tab" onclick="switchTab(this,'ch-community');chRenderLive('community')">Community</div>
       <div class="tab" onclick="switchTab(this,'ch-instagram');chRenderInstagram()">Instagram</div>
+      <div class="tab" onclick="switchTab(this,'ch-quora');chRenderLive('quora')">Quora</div>
+      <div class="tab" onclick="switchTab(this,'ch-youtube');chRenderLive('youtube')">YouTube</div>
       <div class="tab" style="color:var(--mint);font-weight:800" onclick="switchTab(this,'ch-approved');chRenderApproved('all')">✓ Approved</div>
-      <div class="tab" onclick="switchTab(this,'ch-platform-intel')">Platform Intel</div>
-      <div class="tab" onclick="switchTab(this,'ch-community-intel');chRenderCommunityIntel()">Community Intel</div>
+      <div class="tab" onclick="switchTab(this,'ch-community-intel');chRenderCommunityIntel()">Reddit Intel</div>
+      <div class="tab" onclick="switchTab(this,'ch-platform-intel2');chRenderPlatformIntel()">Platform Intel</div>
+      <div class="tab" onclick="switchTab(this,'ch-pacing');chRenderPacing()">Pacing</div>
       <div class="tab" onclick="switchTab(this,'ch-rules')">Rules</div>
     </div>
 
@@ -608,6 +611,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div id="ch-instagram-feed"><div class="ch-queue-note">Loading Instagram ideas...</div></div>
     </div>
 
+    <div class="tab-panel" id="ch-quora">
+      <div class="ch-acc-bar">
+        <span class="ch-acc-label">Platform:</span>
+        <span style="font-size:0.82rem;color:var(--g500)">Prabh answers as a nurse + personal caregiver. One carely.fit mention per answer.</span>
+        <button onclick="chRenderLive('quora')" style="font-size:0.72rem;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer;margin-left:auto">Refresh</button>
+        <button onclick="chTrigger('quora')" style="font-size:0.72rem;padding:3px 10px;border-radius:6px;border:none;background:var(--mint);color:white;cursor:pointer">+ Generate</button>
+      </div>
+      <div id="ch-quora-feed"><div class="ch-queue-note">Loading Quora drafts...</div></div>
+    </div>
+
+    <div class="tab-panel" id="ch-youtube">
+      <div class="ch-acc-bar">
+        <span class="ch-acc-label">Platform:</span>
+        <span style="font-size:0.82rem;color:var(--g500)">Prabh adds value to caregiving videos. No Carely mention in comments — profile bio handles it.</span>
+        <button onclick="chRenderLive('youtube')" style="font-size:0.72rem;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer;margin-left:auto">Refresh</button>
+        <button onclick="chTrigger('youtube')" style="font-size:0.72rem;padding:3px 10px;border-radius:6px;border:none;background:var(--mint);color:white;cursor:pointer">+ Generate</button>
+      </div>
+      <div id="ch-youtube-feed"><div class="ch-queue-note">Loading YouTube drafts...</div></div>
+    </div>
+
     <div class="tab-panel" id="ch-approved">
       <div class="ch-acc-bar">
         <span class="ch-acc-label">Filter:</span>
@@ -617,6 +640,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <button class="ch-acc-btn" onclick="chRenderApproved('reddit');chApvBtn(this)">Reddit</button>
         <button class="ch-acc-btn" onclick="chRenderApproved('community');chApvBtn(this)">Community</button>
         <button class="ch-acc-btn" onclick="chRenderApproved('instagram');chApvBtn(this)">Instagram</button>
+        <button class="ch-acc-btn" onclick="chRenderApproved('quora');chApvBtn(this)">Quora</button>
+        <button class="ch-acc-btn" onclick="chRenderApproved('youtube');chApvBtn(this)">YouTube</button>
       </div>
       <div id="ch-approved-feed">
         <div style="text-align:center;padding:60px;color:var(--g500);font-size:0.84rem">No approved posts yet. Approve content from TikTok, LinkedIn, or Reddit tabs.</div>
@@ -737,6 +762,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
     </div>
 
+    <!-- ══ Platform Intel tab — what all agents know about each platform ══ -->
+    <div class="tab-panel" id="ch-platform-intel2">
+      <div style="font-size:0.82rem;font-weight:700;color:var(--deep);margin-bottom:14px">What every agent knows about each platform before writing</div>
+      <div id="pi2-feed"><div class="card" style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading platform intel...</div></div>
+    </div>
+
     <!-- ══ Community Intel tab — what Rex knows about each community ══ -->
     <div class="tab-panel" id="ch-community-intel">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap">
@@ -749,6 +780,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div id="ci-display">
         <div class="card" style="text-align:center;padding:40px;color:var(--g500);font-size:0.84rem">Select a community above to see Rex's intel</div>
       </div>
+    </div>
+
+    <div class="tab-panel" id="ch-pacing">
+      <div class="ch-acc-bar">
+        <span class="ch-acc-label">Posting Pace</span>
+        <span style="font-size:0.82rem;color:var(--g500)">Max 7/day · Max 1/hour · Per platform</span>
+        <button onclick="chRenderPacing()" style="font-size:0.72rem;padding:3px 10px;border-radius:6px;border:1px solid var(--g300);background:white;color:var(--g500);cursor:pointer;margin-left:auto">Refresh</button>
+      </div>
+      <div id="ch-pacing-feed"><div class="ch-queue-note">Loading pacing data...</div></div>
     </div>
 
     <div class="tab-panel" id="ch-rules">
@@ -3620,6 +3660,131 @@ function _ciBuildCard(fp, sub) {
 
   return wrap;
 }
+
+// ── Platform Intel tab ─────────────────────────────────────────────────────────
+var _pi2Loaded = false;
+var PLATFORM_COLORS = { facebook:'#1877F2', quora:'#B92B27', youtube:'#FF0000', instagram:'#E1306C', linkedin:'#0A66C2', tiktok:'#010101', reddit:'#FF4500' };
+
+window.chRenderPlatformIntel = function() {
+  if (_pi2Loaded) return;
+  var feed = document.getElementById('pi2-feed');
+  if (!feed) return;
+  var BACKEND = _BACKEND, SECRET = _SECRET;
+
+  fetch(BACKEND + '/admin/platform-intel', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(12000) })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var platforms = data.platforms || [];
+      while (feed.firstChild) feed.removeChild(feed.firstChild);
+      if (platforms.length === 0) {
+        feed.innerHTML = '<div class="card" style="padding:28px;text-align:center;color:var(--g500)">No platform intel loaded yet — restart backend to warm.</div>';
+        return;
+      }
+      platforms.forEach(function(p) {
+        var color = PLATFORM_COLORS[p.platform.toLowerCase()] || 'var(--g400)';
+        var card = document.createElement('div');
+        card.className = 'card';
+        card.style.cssText = 'margin-bottom:14px;border-left:3px solid ' + color;
+
+        // Header
+        var hdr = document.createElement('div');
+        hdr.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap';
+        hdr.innerHTML = '<span style="font-size:0.88rem;font-weight:900;color:var(--deep)">' + p.platform + '</span>'
+          + '<span style="font-size:0.72rem;color:var(--g500)">' + p.target + '</span>'
+          + '<span class="pill ' + (p.recommendMentionCarely ? 'green' : 'red') + '" style="font-size:0.66rem;margin-left:auto">Carely: ' + (p.recommendMentionCarely ? 'mention ok' : 'build trust first') + '</span>'
+          + '<span class="pill amber" style="font-size:0.66rem">Promo: ' + p.promotionTolerance + '</span>';
+        card.appendChild(hdr);
+
+        // Culture
+        var culture = document.createElement('div');
+        culture.style.cssText = 'font-size:0.78rem;color:var(--text);line-height:1.6;margin-bottom:10px;font-style:italic';
+        culture.textContent = p.culture;
+        card.appendChild(culture);
+
+        // Grid: works / avoid
+        var grid = document.createElement('div');
+        grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px';
+
+        function piSection(title, color2, items) {
+          var d = document.createElement('div');
+          d.style.cssText = 'background:var(--g100);border-radius:8px;padding:10px 12px';
+          var t = document.createElement('div');
+          t.style.cssText = 'font-size:0.68rem;font-weight:800;color:' + color2 + ';text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px';
+          t.textContent = title; d.appendChild(t);
+          (Array.isArray(items) ? items : [items]).slice(0, 4).forEach(function(item) {
+            var li = document.createElement('div');
+            li.style.cssText = 'font-size:0.76rem;color:var(--text);line-height:1.5;margin-bottom:3px';
+            li.textContent = '• ' + item; d.appendChild(li);
+          });
+          return d;
+        }
+
+        grid.appendChild(piSection('Best formats', '#02C39A', p.bestFormats));
+        grid.appendChild(piSection('Avoid', '#DC2626', p.avoidPatterns));
+        card.appendChild(grid);
+
+        // Algorithm + timing
+        var meta = document.createElement('div');
+        meta.style.cssText = 'font-size:0.76rem;color:var(--g500);line-height:1.6;margin-bottom:8px';
+        meta.innerHTML = '<strong>Best times:</strong> ' + p.bestTimes + '<br><strong>Algorithm:</strong> ' + p.algorithmSignals;
+        card.appendChild(meta);
+
+        // Carely angle
+        var carelyBox = document.createElement('div');
+        carelyBox.style.cssText = 'background:' + (p.recommendMentionCarely ? '#ECFDF5' : '#FEF2F2') + ';border-radius:8px;padding:10px 12px;font-size:0.78rem;color:var(--text);line-height:1.6';
+        carelyBox.innerHTML = '<strong style="color:' + (p.recommendMentionCarely ? '#065F46' : '#991B1B') + '">Carely strategy:</strong> ' + p.carelyAngle;
+        card.appendChild(carelyBox);
+
+        feed.appendChild(card);
+      });
+      _pi2Loaded = true;
+    })
+    .catch(function() {
+      feed.innerHTML = '<div class="card" style="padding:20px;color:var(--amber)">Could not load platform intel — backend may be starting up.</div>';
+    });
+};
+
+// ── Pacing status tab ─────────────────────────────────────────────────────────
+window.chRenderPacing = function() {
+  var feed = document.getElementById('ch-pacing-feed');
+  if (!feed) return;
+  var BACKEND = _BACKEND, SECRET = _SECRET;
+  feed.innerHTML = '<div class="ch-queue-note">Loading...</div>';
+
+  fetch(BACKEND + '/admin/content-pacing', { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(8000) })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var pacing = data.pacing || {};
+      var limits = data.limits || { daily: 7, hourly: 1 };
+      var html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:4px 0">';
+      var PLATFORM_ICONS = { reddit:'🔴', linkedin:'💼', facebook:'👥', quora:'❓', youtube:'▶️', instagram:'📸', tiktok:'🎵', community:'🌐' };
+      Object.keys(pacing).forEach(function(p) {
+        var d = pacing[p].daily, h = pacing[p].hourly;
+        var dPct = Math.round((d / limits.daily) * 100);
+        var dColor = dPct >= 100 ? '#DC2626' : dPct >= 70 ? '#D97706' : '#02C39A';
+        html += '<div class="card" style="padding:14px;border-left:3px solid ' + dColor + '">'
+          + '<div style="font-size:0.72rem;font-weight:800;color:var(--g500);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">' + (PLATFORM_ICONS[p] || '●') + ' ' + p + '</div>'
+          + '<div style="font-size:1.4rem;font-weight:900;color:var(--deep)">' + d + '<span style="font-size:0.76rem;font-weight:400;color:var(--g500)">/' + limits.daily + ' today</span></div>'
+          + '<div style="background:var(--g100);border-radius:4px;height:6px;margin:6px 0"><div style="background:' + dColor + ';border-radius:4px;height:100%;width:' + Math.min(dPct,100) + '%"></div></div>'
+          + '<div style="font-size:0.72rem;color:var(--g500)">' + (h >= limits.hourly ? '⏸ Hourly cap hit' : '✓ ' + (limits.hourly - h) + ' left this hour') + '</div>'
+          + '</div>';
+      });
+      html += '</div>';
+      feed.innerHTML = html;
+    })
+    .catch(function() { feed.innerHTML = '<div class="ch-queue-note">Could not load pacing data.</div>'; });
+};
+
+// ── Manual trigger for new platforms ─────────────────────────────────────────
+window.chTrigger = function(platform) {
+  var BACKEND = _BACKEND, SECRET = _SECRET;
+  var validPlatforms = ['quora', 'youtube', 'instagram'];
+  if (!validPlatforms.includes(platform)) return;
+  fetch(BACKEND + '/admin/trigger/' + platform, { method:'POST', headers:{'x-carely-secret':SECRET}, signal: AbortSignal.timeout(30000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) { if (d.ok) { setTimeout(function(){ chRenderLive(platform); }, 3000); } })
+    .catch(function(){});
+};
 
 function contentAction(id, action) {
   var card = document.getElementById(id);
