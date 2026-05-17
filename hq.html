@@ -438,14 +438,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ BUSINESS PULSE ══ -->
   <div class="page" id="page-business-pulse">
-    <div class="ph"><h1>💓 Business Pulse</h1><p>Real-time snapshot across all dimensions of the business</p></div>
+    <div class="ph" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div><h1>💓 Business Pulse</h1><p>Real-time snapshot across all dimensions of the business</p></div>
+      <div style="display:flex;align-items:center;gap:8px;padding-top:4px">
+        <span id="bp-dot" style="width:10px;height:10px;border-radius:50%;background:#6b7280;display:inline-block"></span>
+        <span id="bp-ts" style="font-size:0.75rem;color:var(--g400)">Loading...</span>
+        <button onclick="loadBusinessPulse()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      </div>
+    </div>
     <div class="metric-row">
-      <div class="metric"><div class="metric-label">MRR</div><div class="metric-val">$0</div><div class="metric-sub">Monthly recurring</div></div>
-      <div class="metric"><div class="metric-label">ARR</div><div class="metric-val">$0</div><div class="metric-sub">Annual run rate</div></div>
-      <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber">0</div><div class="metric-sub">Active subscriptions</div></div>
-      <div class="metric"><div class="metric-label">Founding Spots</div><div class="metric-val teal">200</div><div class="metric-sub">Left at $5/mo founding price</div></div>
-      <div class="metric"><div class="metric-label">Monthly Burn</div><div class="metric-val">~$22</div><div class="metric-sub">All infrastructure</div></div>
-      <div class="metric"><div class="metric-label">Agents Running</div><div class="metric-val green">20</div><div class="metric-sub">All green on Railway</div></div>
+      <div class="metric"><div class="metric-label">MRR</div><div class="metric-val" id="bp-mrr">—</div><div class="metric-sub">Monthly recurring</div></div>
+      <div class="metric"><div class="metric-label">ARR</div><div class="metric-val" id="bp-arr">—</div><div class="metric-sub">Annual run rate</div></div>
+      <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber" id="bp-paid">—</div><div class="metric-sub">Active subscriptions</div></div>
+      <div class="metric"><div class="metric-label">Founding Spots Left</div><div class="metric-val teal" id="bp-spots">—</div><div class="metric-sub">At $5/mo founding price</div></div>
+      <div class="metric"><div class="metric-label">Monthly Burn</div><div class="metric-val" id="bp-burn">—</div><div class="metric-sub">All infrastructure</div></div>
+      <div class="metric"><div class="metric-label">Trial Users</div><div class="metric-val green" id="bp-trials">—</div><div class="metric-sub">Active free trials</div></div>
     </div>
     <div class="cols">
       <div class="card">
@@ -1262,14 +1269,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ REVENUE & GROWTH ══ -->
   <div class="page" id="page-revenue">
-    <div class="ph"><h1>💰 Revenue &amp; Growth</h1><p>MRR · ARR · Founding tier velocity · Customer journey · P&amp;L</p></div>
+    <div class="ph" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div><h1>💰 Revenue &amp; Growth</h1><p>MRR · ARR · Founding tier velocity · Customer journey · P&amp;L</p></div>
+      <div style="display:flex;align-items:center;gap:8px;padding-top:4px">
+        <span id="rv-dot" style="width:10px;height:10px;border-radius:50%;background:#6b7280;display:inline-block"></span>
+        <span id="rv-ts" style="font-size:0.75rem;color:var(--g400)">Loading...</span>
+        <button onclick="loadRevenue()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      </div>
+    </div>
     <div class="metric-row">
-      <div class="metric"><div class="metric-label">MRR</div><div class="metric-val">$0</div><div class="metric-sub">Monthly recurring</div></div>
-      <div class="metric"><div class="metric-label">ARR</div><div class="metric-val">$0</div><div class="metric-sub">Annual run rate</div></div>
-      <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber">0</div><div class="metric-sub">Active subscriptions</div></div>
-      <div class="metric"><div class="metric-label">Founding Spots</div><div class="metric-val teal">200</div><div class="metric-sub">Left at $5/mo</div></div>
-      <div class="metric"><div class="metric-label">Churn</div><div class="metric-val green">0%</div><div class="metric-sub">Post-launch</div></div>
-      <div class="metric"><div class="metric-label">LTV (est.)</div><div class="metric-val">$0</div><div class="metric-sub">12mo avg</div></div>
+      <div class="metric"><div class="metric-label">MRR</div><div class="metric-val" id="rv-mrr">—</div><div class="metric-sub">Monthly recurring</div></div>
+      <div class="metric"><div class="metric-label">ARR</div><div class="metric-val" id="rv-arr">—</div><div class="metric-sub">Annual run rate</div></div>
+      <div class="metric"><div class="metric-label">Paid Customers</div><div class="metric-val amber" id="rv-paid">—</div><div class="metric-sub">Active subscriptions</div></div>
+      <div class="metric"><div class="metric-label">Founding Spots</div><div class="metric-val teal" id="rv-spots">—</div><div class="metric-sub">Left at $5/mo</div></div>
+      <div class="metric"><div class="metric-label">Monthly Profit</div><div class="metric-val green" id="rv-profit">—</div><div class="metric-sub">Revenue minus burn</div></div>
+      <div class="metric"><div class="metric-label">LTV (est.)</div><div class="metric-val" id="rv-ltv">—</div><div class="metric-sub">12mo avg per customer</div></div>
     </div>
     <div class="cols">
       <div class="card">
@@ -1583,44 +1597,48 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ HEALTH & TIMELINE ══ -->
   <div class="page" id="page-health">
-    <div class="ph"><h1>❤️ Health &amp; Timeline</h1><p>Backend health · Railway status · Agent uptime · Live activity</p></div>
+    <div class="ph" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div><h1>❤️ Health &amp; Timeline</h1><p>Backend health · Railway status · Agent uptime · Live activity</p></div>
+      <div style="display:flex;align-items:center;gap:8px;padding-top:4px">
+        <span id="hl-dot" style="width:10px;height:10px;border-radius:50%;background:#6b7280;display:inline-block"></span>
+        <span id="hl-ts" style="font-size:0.75rem;color:var(--g400)">Loading...</span>
+        <button onclick="loadHealth()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      </div>
+    </div>
     <div class="metric-row">
-      <div class="metric"><div class="metric-label">Backend</div><div class="metric-val green" style="font-size:1.1rem">Online</div><div class="metric-sub">Railway</div></div>
-      <div class="metric"><div class="metric-label">Database</div><div class="metric-val green" style="font-size:1.1rem">Online</div><div class="metric-sub">Supabase PostgreSQL</div></div>
-      <div class="metric"><div class="metric-label">Cache</div><div class="metric-val green" style="font-size:1.1rem">Online</div><div class="metric-sub">Upstash Redis</div></div>
-      <div class="metric"><div class="metric-label">Landing</div><div class="metric-val green" style="font-size:1.1rem">Online</div><div class="metric-sub">Cloudflare Pages</div></div>
+      <div class="metric"><div class="metric-label">Backend</div><div class="metric-val" id="hl-backend" style="font-size:1.1rem">—</div><div class="metric-sub">Railway</div></div>
+      <div class="metric"><div class="metric-label">Database</div><div class="metric-val" id="hl-db" style="font-size:1.1rem">—</div><div class="metric-sub">Supabase PostgreSQL</div></div>
+      <div class="metric"><div class="metric-label">Cache</div><div class="metric-val" id="hl-cache" style="font-size:1.1rem">—</div><div class="metric-sub">Upstash Redis</div></div>
+      <div class="metric"><div class="metric-label">Uptime</div><div class="metric-val green" id="hl-uptime" style="font-size:1.1rem">—</div><div class="metric-sub">Backend process</div></div>
     </div>
     <div class="cols">
       <div class="card">
         <div class="card-title">🖥️ Server Status</div>
-        <div class="list-item"><span>🛤️</span><div class="name">Railway Backend</div><span class="pill green">Online</span></div>
+        <div class="list-item"><span>🛤️</span><div class="name">Railway Backend</div><span id="hl-pill-railway" class="pill">—</span></div>
         <div class="list-item"><span>🌐</span><div class="name">carely.fit (Cloudflare Pages)</div><span class="pill green">Online</span></div>
-        <div class="list-item"><span>🗄️</span><div class="name">Supabase PostgreSQL</div><span class="pill green">Online</span></div>
-        <div class="list-item"><span>🔴</span><div class="name">Upstash Redis (Elara memory)</div><span class="pill green">Online</span></div>
+        <div class="list-item"><span>🗄️</span><div class="name">Supabase PostgreSQL</div><span id="hl-pill-db" class="pill">—</span></div>
+        <div class="list-item"><span>🔴</span><div class="name">Upstash Redis (Elara memory)</div><span id="hl-pill-redis" class="pill">—</span></div>
         <div class="list-item"><span>🔥</span><div class="name">Firebase FCM</div><span class="pill green">Online</span></div>
         <div class="list-item"><span>📧</span><div class="name">SendGrid Email</div><span id="sg-pill" class="pill green">Online</span><span id="sg-usage" style="font-size:0.7rem;color:var(--g500);margin-left:6px">—/100</span></div>
       </div>
       <div class="card">
         <div class="card-title">⚠️ Known Issues</div>
-        <div class="list-item"><span>🟢</span><div class="name">TELEGRAM_TJ_CHAT_ID set in Railway — TJ receiving alerts</div><span class="pill green">Fixed</span></div>
         <div class="list-item"><span>🟡</span><div class="name">Google Play upload key reset — pending Google</div><span class="pill amber">Pending</span></div>
         <div class="list-item"><span>🟡</span><div class="name">iOS build — waiting Apple D-U-N-S</div><span class="pill amber">Pending</span></div>
         <div class="list-item"><span>🟡</span><div class="name">TikTok account — not set up</div><span class="pill amber">Pending</span></div>
+        <div class="list-item"><span>🟢</span><div class="name">4 Telegram bots active — TJ + Prabh company + personal Hermes</div><span class="pill green">Fixed May 16</span></div>
+        <div class="list-item"><span>🟢</span><div class="name">Intel Pool live — all agents reading + writing world signals</div><span class="pill green">Fixed May 16</span></div>
         <div class="list-item"><span>🟢</span><div class="name">sitemap.xml now serving as application/xml</div><span class="pill green">Fixed May 5</span></div>
-        <div class="list-item"><span>🟢</span><div class="name">TypeScript build — referrals.ts + weekOfYear plugin fixed</div><span class="pill green">Fixed May 5</span></div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">📜 Live Activity Timeline</div>
-      <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#991B1B">BLAZE</span><div class="tl-msg">Launch email blast fired to Mailchimp waitlist</div><span class="tl-time">8:00 AM today</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#1D4ED8;color:white">LEO</span><div class="tl-msg">LinkedIn post published — Carely company page + Prabh personal</div><span class="tl-time">8:00 AM today</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#EDE9FE;color:#5B21B6">GRACE</span><div class="tl-msg">Daily "are you okay?" push sent to active patients (appears as Elara)</div><span class="tl-time">10:00 AM UTC</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#DBEAFE;color:#1D4ED8">NINA</span><div class="tl-msg">Email nurture sequence triggered for new signups (from Prabhjot)</div><span class="tl-time">10:00 AM UTC</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#EC4899;color:white">LENA</span><div class="tl-msg">Win-back check — trials expiring in 48h reviewed</div><span class="tl-time">11:00 AM UTC</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#B91C1C">REX</span><div class="tl-msg">Reddit monitor cycle — 18 subreddits · 3 drafts → Prabh's Telegram</div><span class="tl-time">Every 6h</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#D1FAE5;color:#065F46">SCOUT</span><div class="tl-msg">SEO: sitemap + 7 blog URLs pinged to Google IndexNow</div><span class="tl-time">Last deploy</span></div>
-      <div class="tl-item"><span class="tl-badge" style="background:#D1FAE5;color:#065F46">DEPLOY</span><div class="tl-msg">TypeScript build fixed — referrals.ts + scheduler weekOfYear plugin — Backend green on Railway</div><span class="tl-time">May 5</span></div>
-      <div class="tl-item" style="border:none"><span class="tl-badge" style="background:#D1FAE5;color:#065F46">DEPLOY</span><div class="tl-msg">sitemap.xml + robots.txt live on carely.fit — all 7 blog pages submitted to Google Search Console</div><span class="tl-time">May 5</span></div>
+      <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
+        📜 Live Activity Timeline
+        <button onclick="loadHealth()" style="font-size:0.7rem;border:1px solid var(--g300);padding:2px 8px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      </div>
+      <div id="hl-timeline" style="display:flex;flex-direction:column;gap:2px">
+        <div style="color:var(--g400);font-size:0.82rem;padding:12px">Loading activity...</div>
+      </div>
     </div>
   </div>
 
@@ -2181,8 +2199,12 @@ function _activatePage(id, pushState) {
     'team-chat':    function() { if (window.loadTeamFeed) window.loadTeamFeed(); },
     'agent-chat':   function() { if (window.loadTeamFeed) window.loadTeamFeed(); if (window.loadAgentActivity) window.loadAgentActivity(); },
     'all-agents':   function() { if (window.loadAgentActivity) window.loadAgentActivity(); },
-    'brain':        function() { loadBrain(); },
-    'intel-pool':   function() { loadIntelPool(); }
+    'brain':          function() { loadBrain(); },
+    'intel-pool':     function() { loadIntelPool(); },
+    'business-pulse': function() { loadBusinessPulse(); },
+    'revenue':        function() { loadRevenue(); },
+    'health':         function() { loadHealth(); },
+    'all-agents':     function() { loadAllAgentsStatus(); if (window.loadAgentActivity) window.loadAgentActivity(); }
   };
   if (PAGE_LOADERS[id]) setTimeout(PAGE_LOADERS[id], 50);
 }
@@ -2268,6 +2290,173 @@ function loadDailyBoard() {
       html += renderSection('AI AGENTS', groups.agent, '#ca8a04');
       document.getElementById('gp-board-tasks').innerHTML = html;
     }).catch(function(){document.getElementById('gp-board-tasks').innerHTML='<div style="color:var(--g400);text-align:center;padding:20px">Backend loading...</div>';});
+}
+
+// ── Business Pulse ───────────────────────────────────────────────────────────
+function loadBusinessPulse() {
+  var BACKEND = _BACKEND; var SECRET = _SECRET;
+  document.getElementById('bp-dot').style.background = '#f59e0b';
+  document.getElementById('bp-ts').textContent = 'Fetching...';
+  fetch(BACKEND + '/admin/stats', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      document.getElementById('bp-dot').style.background = '#22c55e';
+      document.getElementById('bp-ts').textContent = 'Updated ' + new Date().toLocaleTimeString();
+      var mrr = d.revenue.mrr, arr = d.revenue.arr;
+      var paid = (d.users.founding||0) + (d.users.monthly||0) + (d.users.annual||0);
+      document.getElementById('bp-mrr').textContent   = '$' + mrr.toFixed(2);
+      document.getElementById('bp-arr').textContent   = arr >= 1000 ? '$' + (arr/1000).toFixed(1) + 'K' : '$' + arr.toFixed(0);
+      document.getElementById('bp-paid').textContent  = paid;
+      document.getElementById('bp-spots').textContent = d.revenue.spotsRemaining;
+      document.getElementById('bp-burn').textContent  = '$' + d.expenses.total.toFixed(0) + '/mo';
+      document.getElementById('bp-trials').textContent = d.users.trial || 0;
+      // Progress bars
+      var pct10 = Math.min(100, Math.round(paid/10*100));
+      var pct100 = Math.min(100, Math.round(paid/100*100));
+      var pctMRR = Math.min(100, Math.round(mrr/1000*100));
+      var pct1M  = Math.min(100, parseFloat(((arr/1000000)*100).toFixed(2)));
+      var pb10p = document.getElementById('pb-10-pill');   if(pb10p) pb10p.textContent = paid + ' / 10';
+      var pb10b = document.getElementById('pb-10-bar');    if(pb10b) pb10b.style.width = pct10 + '%';
+      var pb100p= document.getElementById('pb-100-pill');  if(pb100p) pb100p.textContent = paid + ' / 100';
+      var pb100b= document.getElementById('pb-100-bar');   if(pb100b) pb100b.style.width = pct100 + '%';
+      var pbMp  = document.getElementById('pb-mrr-pill');  if(pbMp) pbMp.textContent = '$' + mrr.toFixed(0) + ' / $1,000';
+      var pbMb  = document.getElementById('pb-mrr-bar');   if(pbMb) pbMb.style.width = pctMRR + '%';
+      var pb1Mp = document.getElementById('pb-1m-pill');   if(pb1Mp) pb1Mp.textContent = pct1M.toFixed(2) + '%';
+      var pb1Mb = document.getElementById('pb-1m-bar');    if(pb1Mb) pb1Mb.style.width = Math.min(100,pct1M) + '%';
+    })
+    .catch(function() {
+      document.getElementById('bp-dot').style.background = '#ef4444';
+      document.getElementById('bp-ts').textContent = 'Failed';
+    });
+}
+
+// ── Revenue & Growth ─────────────────────────────────────────────────────────
+function loadRevenue() {
+  var BACKEND = _BACKEND; var SECRET = _SECRET;
+  document.getElementById('rv-dot').style.background = '#f59e0b';
+  document.getElementById('rv-ts').textContent = 'Fetching...';
+  fetch(BACKEND + '/admin/stats', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      document.getElementById('rv-dot').style.background = '#22c55e';
+      document.getElementById('rv-ts').textContent = 'Updated ' + new Date().toLocaleTimeString();
+      var mrr = d.revenue.mrr, arr = d.revenue.arr;
+      var paid = (d.users.founding||0) + (d.users.monthly||0) + (d.users.annual||0);
+      var ltv  = paid > 0 ? (mrr * 12 / paid).toFixed(0) : '—';
+      document.getElementById('rv-mrr').textContent    = '$' + mrr.toFixed(2);
+      document.getElementById('rv-arr').textContent    = arr >= 1000 ? '$' + (arr/1000).toFixed(1) + 'K' : '$' + arr.toFixed(0);
+      document.getElementById('rv-paid').textContent   = paid;
+      document.getElementById('rv-spots').textContent  = d.revenue.spotsRemaining;
+      var profit = d.profit ? d.profit.monthly : (mrr - d.expenses.total);
+      document.getElementById('rv-profit').textContent = (profit >= 0 ? '+' : '') + '$' + profit.toFixed(2);
+      document.getElementById('rv-ltv').textContent    = ltv === '—' ? '—' : '$' + ltv;
+      // Founding velocity bar
+      var foundingPct = Math.min(100, Math.round((d.users.founding||0)/200*100));
+      var fpill = document.getElementById('pb-founding-pill'); if(fpill) fpill.textContent = (d.users.founding||0) + ' / 200 spots';
+      var fbar  = document.getElementById('pb-founding-bar');  if(fbar) fbar.style.width = foundingPct + '%';
+      var mpill = document.getElementById('pb-monthly-pill');  if(mpill) mpill.textContent = (d.users.monthly||0) + ' sold';
+      var apill = document.getElementById('pb-annual-pill');   if(apill) apill.textContent = (d.users.annual||0) + ' sold';
+      // P&L revenue + net
+      var plRev = document.getElementById('v-pl-revenue'); if(plRev) plRev.textContent = '+$' + mrr.toFixed(2);
+      var plNet = document.getElementById('v-pl-net');     if(plNet) plNet.textContent = (profit>=0?'+':'-') + '$' + Math.abs(profit).toFixed(2) + '/mo';
+      // ARR progress bar to $200K
+      var arrPct = Math.min(100, parseFloat(((arr/200000)*100).toFixed(2)));
+      var ab = document.getElementById('pb-arr-bar');    if(ab) ab.style.width = arrPct + '%';
+      var at = document.getElementById('pb-arr-text');   if(at) at.textContent = arrPct.toFixed(2) + '% of $200K — $' + Math.max(0,200000-arr).toLocaleString() + ' remaining';
+      // Customer funnel
+      var fw = document.getElementById('fv-waitlist'); if(fw) fw.textContent = (d.waitlist && d.waitlist.total) ? d.waitlist.total : '—';
+      var fp = document.getElementById('fv-paid');     if(fp) fp.textContent = paid;
+    })
+    .catch(function() {
+      document.getElementById('rv-dot').style.background = '#ef4444';
+      document.getElementById('rv-ts').textContent = 'Failed';
+    });
+}
+
+// ── Health & Timeline ────────────────────────────────────────────────────────
+function loadHealth() {
+  var BACKEND = _BACKEND; var SECRET = _SECRET;
+  document.getElementById('hl-dot').style.background = '#f59e0b';
+  document.getElementById('hl-ts').textContent = 'Checking...';
+
+  function setMetric(id, val, cls) {
+    var el = document.getElementById(id); if (!el) return;
+    el.textContent = val; el.className = 'metric-val ' + cls;
+  }
+  function setPill(id, val, cls) {
+    var el = document.getElementById(id); if (!el) return;
+    el.textContent = val; el.className = 'pill ' + cls;
+  }
+
+  // Fetch backend health
+  fetch(BACKEND + '/health', { signal: AbortSignal.timeout(6000) })
+    .then(function(r) { return r.json(); })
+    .then(function(h) {
+      var online = h.status === 'ok';
+      document.getElementById('hl-dot').style.background = online ? '#22c55e' : '#f59e0b';
+      document.getElementById('hl-ts').textContent = 'Updated ' + new Date().toLocaleTimeString();
+      setMetric('hl-backend', online ? 'Online' : 'Degraded', online ? 'green' : 'amber');
+      setMetric('hl-db', h.db === 'ok' ? 'Online' : 'Error', h.db === 'ok' ? 'green' : 'red');
+      setMetric('hl-cache', 'Online', 'green');
+      var upMin = Math.floor((h.uptime||0) / 60);
+      var upH   = Math.floor(upMin / 60);
+      setMetric('hl-uptime', upH + 'h ' + (upMin % 60) + 'm', 'green');
+      setPill('hl-pill-railway', online ? 'Online' : 'Degraded', online ? 'green' : 'amber');
+      setPill('hl-pill-db', h.db === 'ok' ? 'Online' : 'Error', h.db === 'ok' ? 'green' : 'red');
+      setPill('hl-pill-redis', 'Online', 'green');
+    })
+    .catch(function() {
+      document.getElementById('hl-dot').style.background = '#ef4444';
+      document.getElementById('hl-ts').textContent = 'Backend unreachable';
+      setMetric('hl-backend', 'Offline', 'red');
+      setPill('hl-pill-railway', 'Offline', 'red');
+    });
+
+  // Fetch live agent feed for timeline
+  fetch(BACKEND + '/admin/agent-feed?limit=12', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var events = d.events || d || [];
+      var tl = document.getElementById('hl-timeline');
+      if (!events.length) { tl.innerHTML = '<div style="color:var(--g400);font-size:0.82rem;padding:12px">No activity yet — agents will populate this as they run.</div>'; return; }
+      var COLORS = { hermes:'#0B2D3D','frank':'#F59E0B','maya':'#F97316','cara':'#EF4444','grace':'#8B5CF6','elara':'#8B5CF6','nina':'#3B82F6','lena':'#EC4899','leo':'#2563EB','rex':'#DC2626','cole':'#D97706','blaze':'#EF4444','scout':'#10B981','vance':'#06B6D4','oracle':'#FBBF24','signals':'#F59E0B','ace':'#7C3AED','comp intel':'#EF4444' };
+      tl.innerHTML = events.map(function(ev) {
+        var name = (ev.agentName||'').toLowerCase();
+        var bg   = COLORS[name] || '#6B7280';
+        var ts   = ev.timestamp ? new Date(ev.timestamp).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '';
+        return '<div class="tl-item"><span class="tl-badge" style="background:' + bg + ';color:white">' + (ev.agentName||'').toUpperCase() + '</span><div class="tl-msg">' + (ev.message||'').slice(0,120) + '</div><span class="tl-time">' + ts + '</span></div>';
+      }).join('');
+    })
+    .catch(function() {});
+}
+
+// ── All Agents — update status dots from watchdog ────────────────────────────
+var AGENT_DOT_MAP = {
+  frank:'agent-dot-frank', maya:'agent-dot-maya', cara:'agent-dot-cara',
+  grace:'agent-dot-grace', elara:'agent-dot-elara', 'dr. bridge':'agent-dot-dr-bridge',
+  nina:'agent-dot-nina', lena:'agent-dot-lena', leo:'agent-dot-leo',
+  rex:'agent-dot-rex', cole:'agent-dot-cole', scout:'agent-dot-scout',
+  vance:'agent-dot-vance', oracle:'agent-dot-oracle', signals:'agent-dot-signals',
+  'comp intel':'agent-dot-comp-intel', ace:'agent-dot-ace'
+};
+function loadAllAgentsStatus() {
+  var BACKEND = _BACKEND; var SECRET = _SECRET;
+  fetch(BACKEND + '/admin/agent-status', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var status = d.status || {};
+      Object.keys(AGENT_DOT_MAP).forEach(function(agent) {
+        var dotId = AGENT_DOT_MAP[agent];
+        var el = document.getElementById(dotId); if (!el) return;
+        var info = status[agent];
+        el.className = (info && info.alive) ? 'dot-on' : 'dot-off';
+        if (info && info.lastRun) {
+          var mins = Math.round((Date.now() - new Date(info.lastRun).getTime()) / 60000);
+          el.title = 'Last run: ' + (mins < 60 ? mins + 'm ago' : Math.floor(mins/60) + 'h ago');
+        }
+      });
+    })
+    .catch(function() {});
 }
 
 // ── Intel Pool ───────────────────────────────────────────────────────────────
