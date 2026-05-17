@@ -100,6 +100,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   input,select,textarea{max-width:100%!important}
   /* Tables scroll horizontally instead of breaking */
   table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap}
+  /* Intel Pool two-col grid → single col on mobile */
+  .ip-two-col{grid-template-columns:1fr!important}
 }
 @media(min-width:721px){
   .hamburger{display:none!important}
@@ -846,30 +848,72 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ INTEL POOL ══ -->
   <div class="page" id="page-intel-pool">
-    <div class="ph"><h1>🎯 Intel Pool</h1><p>Competitor moves · Caregiver pain points from Reddit · App Store signals</p></div>
-    <div class="metric-row">
-      <div class="metric"><div class="metric-label">Subreddits Monitored</div><div class="metric-val teal">18</div><div class="metric-sub">Every 6 hours</div></div>
-      <div class="metric"><div class="metric-label">Drafts This Week</div><div class="metric-val teal">3</div><div class="metric-sub">Sent to Prabh via Telegram</div></div>
-      <div class="metric"><div class="metric-label">Top Channel</div><div class="metric-val" style="font-size:1rem">r/caregivers</div><div class="metric-sub">Highest engagement</div></div>
+    <div class="ph" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div>
+        <h1>🎯 Intel Pool</h1>
+        <p>Live intelligence — updates automatically as agents scan Reddit, App Store, and user signals</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding-top:4px">
+        <span id="ip-status-dot" style="width:10px;height:10px;border-radius:50%;background:#6b7280;display:inline-block"></span>
+        <span id="ip-last-fetch" style="font-size:0.75rem;color:var(--g400)">Loading...</span>
+        <button onclick="loadIntelPool()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      </div>
     </div>
-    <div class="card">
-      <div class="card-title">🔴 Top Reddit Pain Points</div>
-      <div class="list-item"><span>🔥</span><div class="name">"My mom keeps forgetting her blood pressure medication and I live 3 hours away" — r/caregivers</div><span class="pill red">High signal</span></div>
-      <div class="list-item"><span>🔥</span><div class="name">"Best apps for tracking elderly parent medications?" — r/eldercare</div><span class="pill red">High signal</span></div>
-      <div class="list-item"><span>🔥</span><div class="name">"I feel guilty I can't be there to watch my dad take his meds every day" — r/AgingParents</div><span class="pill amber">Strong signal</span></div>
-      <div class="list-item"><span>🔥</span><div class="name">"Pill organizers don't work when you can't see your parent" — r/dementia</div><span class="pill amber">Strong signal</span></div>
+
+    <!-- Metrics row — live counts -->
+    <div class="metric-row" id="ip-metrics">
+      <div class="metric"><div class="metric-label">World Intel Age</div><div class="metric-val teal" id="ip-oracle-age">—</div><div class="metric-sub">Last Oracle cycle</div></div>
+      <div class="metric"><div class="metric-label">Customer Signals Age</div><div class="metric-val teal" id="ip-signals-age">—</div><div class="metric-sub">Last Reddit ICP scan</div></div>
+      <div class="metric"><div class="metric-label">Competitors Tracked</div><div class="metric-val teal" id="ip-comp-count">—</div><div class="metric-sub">App Store snapshots</div></div>
+      <div class="metric"><div class="metric-label">User Feedback</div><div class="metric-val teal" id="ip-feedback-count">—</div><div class="metric-sub">In queue</div></div>
     </div>
-    <div class="card">
-      <div class="card-title">⚔️ Competitor Intel</div>
-      <table class="tbl">
-        <thead><tr><th>Competitor</th><th>Weakness</th><th>Carely Advantage</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Medisafe</strong></td><td>No caregiver alerts, no AI chat</td><td>Elara AI + real-time caregiver alerts</td></tr>
-          <tr><td><strong>CareZone</strong></td><td>Discontinued Android version</td><td>Both iOS + Android, actively maintained</td></tr>
-          <tr><td><strong>Pillboxie</strong></td><td>iOS only, basic UI, no family feature</td><td>Cross-platform, AI check-ins, caregiver connect</td></tr>
-          <tr><td><strong>Roundhealth</strong></td><td>No caregiver feature at all</td><td>Full 6-char caregiver connect code system</td></tr>
-        </tbody>
-      </table>
+
+    <!-- World Intel Card -->
+    <div class="card" id="ip-card-world">
+      <div class="card-title" style="display:flex;align-items:center;gap:8px">
+        🌐 World Intel — Oracle Briefing
+        <span id="ip-oracle-freshness" class="pill" style="font-size:0.68rem"></span>
+      </div>
+      <div id="ip-world-briefing" style="font-size:0.85rem;line-height:1.6;color:var(--g600);white-space:pre-wrap">Loading...</div>
+      <div id="ip-world-topics" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px"></div>
+    </div>
+
+    <!-- Customer Signals Card -->
+    <div class="card" id="ip-card-signals">
+      <div class="card-title" style="display:flex;align-items:center;gap:8px">
+        🔴 Customer Pain Signals — ICP Reddit
+        <span id="ip-signals-freshness" class="pill" style="font-size:0.68rem"></span>
+      </div>
+      <div id="ip-signals-briefing" style="font-size:0.85rem;line-height:1.6;color:var(--g600);white-space:pre-wrap">Loading...</div>
+      <div id="ip-signals-titles" style="margin-top:12px;display:flex;flex-direction:column;gap:6px"></div>
+    </div>
+
+    <!-- Competitor Intel Card -->
+    <div class="card" id="ip-card-comp">
+      <div class="card-title" style="display:flex;align-items:center;gap:8px">
+        ⚔️ Competitor Intel — App Store
+        <span id="ip-comp-freshness" class="pill" style="font-size:0.68rem"></span>
+      </div>
+      <div id="ip-comp-analysis" style="font-size:0.85rem;line-height:1.6;color:var(--g600);white-space:pre-wrap;margin-bottom:12px">Loading...</div>
+      <div id="ip-comp-table-wrap" style="overflow-x:auto">
+        <table class="tbl" id="ip-comp-table">
+          <thead><tr><th>Competitor</th><th>Rating</th><th>Version</th><th>Alert</th></tr></thead>
+          <tbody id="ip-comp-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Winning Angles + Feedback row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px" class="ip-two-col">
+      <div class="card">
+        <div class="card-title">✅ Winning Content Angles</div>
+        <div id="ip-winning-list" style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">Loading...</div>
+      </div>
+      <div class="card">
+        <div class="card-title">💬 User Feedback Queue</div>
+        <div id="ip-feedback-cats" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px"></div>
+        <div id="ip-feedback-list" style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">Loading...</div>
+      </div>
     </div>
   </div>
 
@@ -2137,7 +2181,8 @@ function _activatePage(id, pushState) {
     'team-chat':    function() { if (window.loadTeamFeed) window.loadTeamFeed(); },
     'agent-chat':   function() { if (window.loadTeamFeed) window.loadTeamFeed(); if (window.loadAgentActivity) window.loadAgentActivity(); },
     'all-agents':   function() { if (window.loadAgentActivity) window.loadAgentActivity(); },
-    'brain':        function() { loadBrain(); }
+    'brain':        function() { loadBrain(); },
+    'intel-pool':   function() { loadIntelPool(); }
   };
   if (PAGE_LOADERS[id]) setTimeout(PAGE_LOADERS[id], 50);
 }
@@ -2224,6 +2269,127 @@ function loadDailyBoard() {
       document.getElementById('gp-board-tasks').innerHTML = html;
     }).catch(function(){document.getElementById('gp-board-tasks').innerHTML='<div style="color:var(--g400);text-align:center;padding:20px">Backend loading...</div>';});
 }
+
+// ── Intel Pool ───────────────────────────────────────────────────────────────
+var _ipRefreshTimer = null;
+function loadIntelPool() {
+  var BACKEND = _BACKEND; var SECRET = _SECRET;
+
+  function ageLabel(iso) {
+    if (!iso) return '—';
+    var mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+    if (mins < 60)  return mins + 'm ago';
+    if (mins < 1440) return Math.floor(mins / 60) + 'h ago';
+    return Math.floor(mins / 1440) + 'd ago';
+  }
+  function freshnessPill(iso) {
+    if (!iso) return { label: 'No data', cls: 'red' };
+    var mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+    if (mins < 60)  return { label: 'Fresh · ' + mins + 'm ago', cls: 'green' };
+    if (mins < 360) return { label: 'Recent · ' + Math.floor(mins/60) + 'h ago', cls: 'amber' };
+    return { label: 'Stale · ' + Math.floor(mins/60) + 'h ago', cls: 'red' };
+  }
+  function setPill(id, iso) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = freshnessPill(iso);
+    el.textContent = p.label;
+    el.className = 'pill ' + p.cls;
+  }
+
+  document.getElementById('ip-status-dot').style.background = '#f59e0b';
+  document.getElementById('ip-last-fetch').textContent = 'Fetching...';
+
+  fetch(BACKEND + '/admin/intel-pool', { headers: { 'x-carely-secret': SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      document.getElementById('ip-status-dot').style.background = '#22c55e';
+      document.getElementById('ip-last-fetch').textContent = 'Updated ' + new Date().toLocaleTimeString();
+
+      // Metrics
+      document.getElementById('ip-oracle-age').textContent  = d.worldIntel    ? ageLabel(d.worldIntel.generatedAt)    : '—';
+      document.getElementById('ip-signals-age').textContent = d.customerSignals? ageLabel(d.customerSignals.generatedAt): '—';
+      document.getElementById('ip-comp-count').textContent  = d.competitorIntel? d.competitorIntel.snapshots.length : '—';
+      document.getElementById('ip-feedback-count').textContent = d.userFeedback ? d.userFeedback.total : '—';
+
+      // World Intel
+      setPill('ip-oracle-freshness', d.worldIntel && d.worldIntel.generatedAt);
+      document.getElementById('ip-world-briefing').textContent = d.worldIntel ? d.worldIntel.briefing : 'No data yet — Oracle runs every 30 minutes.';
+      var topicsEl = document.getElementById('ip-world-topics');
+      topicsEl.innerHTML = '';
+      if (d.worldIntel && d.worldIntel.topTopics) {
+        d.worldIntel.topTopics.forEach(function(t) {
+          var s = document.createElement('span');
+          s.className = 'pill amber';
+          s.style.fontSize = '0.72rem';
+          s.textContent = t.length > 70 ? t.slice(0,70)+'…' : t;
+          topicsEl.appendChild(s);
+        });
+      }
+
+      // Customer Signals
+      setPill('ip-signals-freshness', d.customerSignals && d.customerSignals.generatedAt);
+      document.getElementById('ip-signals-briefing').textContent = d.customerSignals ? d.customerSignals.signals : 'No data yet — Signals agent runs every 2 hours.';
+      var titlesEl = document.getElementById('ip-signals-titles');
+      titlesEl.innerHTML = '';
+      if (d.customerSignals && d.customerSignals.topTitles) {
+        d.customerSignals.topTitles.forEach(function(t) {
+          titlesEl.innerHTML += '<div class="list-item"><span>🔥</span><div class="name" style="font-size:0.83rem">' + t + '</div><span class="pill red" style="font-size:0.68rem">Signal</span></div>';
+        });
+      }
+
+      // Competitor Intel
+      setPill('ip-comp-freshness', d.competitorIntel && d.competitorIntel.generatedAt);
+      document.getElementById('ip-comp-analysis').textContent = d.competitorIntel ? d.competitorIntel.analysis : 'No data yet — CompIntel runs every 6 hours.';
+      var compBody = document.getElementById('ip-comp-tbody');
+      compBody.innerHTML = '';
+      if (d.competitorIntel && d.competitorIntel.snapshots) {
+        d.competitorIntel.snapshots.forEach(function(s) {
+          var delta = d.competitorIntel.deltas.find(function(dlt) { return dlt.name === s.name; });
+          var alert = delta ? '<span class="pill red" style="font-size:0.68rem">Changed</span>' : '<span class="pill green" style="font-size:0.68rem">Stable</span>';
+          compBody.innerHTML += '<tr><td><strong>' + s.name + '</strong></td><td>' + (s.rating||0).toFixed(1) + '★</td><td>v' + (s.version||'?') + '</td><td>' + alert + '</td></tr>';
+        });
+      }
+      if (!compBody.innerHTML) compBody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--g400)">No snapshots yet</td></tr>';
+
+      // Winning Angles
+      var winEl = document.getElementById('ip-winning-list');
+      if (!d.winningAngles || !d.winningAngles.length) {
+        winEl.innerHTML = '<div style="color:var(--g400);font-size:0.82rem">No approved angles yet — agents learn from your approvals.</div>';
+      } else {
+        winEl.innerHTML = d.winningAngles.map(function(w) {
+          return '<div style="padding:8px;background:var(--g50);border-radius:6px;border-left:3px solid #22c55e"><div style="font-weight:600;color:var(--deep)">' + (w.agent||'Agent').toUpperCase() + ' · ' + (w.contentType||'') + '</div><div style="color:var(--g500);margin-top:2px">"' + (w.snippet||'').slice(0,120) + '"</div></div>';
+        }).join('');
+      }
+
+      // Feedback
+      var catEl = document.getElementById('ip-feedback-cats');
+      catEl.innerHTML = '';
+      if (d.userFeedback && d.userFeedback.byCategory) {
+        Object.entries(d.userFeedback.byCategory).forEach(function(e) {
+          catEl.innerHTML += '<span class="pill teal" style="font-size:0.7rem">' + e[0] + ' (' + e[1] + ')</span>';
+        });
+      }
+      var fbEl = document.getElementById('ip-feedback-list');
+      if (!d.userFeedback || !d.userFeedback.recent || !d.userFeedback.recent.length) {
+        fbEl.innerHTML = '<div style="color:var(--g400)">No feedback yet.</div>';
+      } else {
+        fbEl.innerHTML = d.userFeedback.recent.slice(0,5).map(function(f) {
+          return '<div style="padding:8px;background:var(--g50);border-radius:6px"><div style="font-size:0.7rem;color:var(--g400);margin-bottom:2px">' + (f.source||'') + ' · ' + (f.category||'') + '</div><div style="color:var(--g600)">' + (f.message||'').slice(0,120) + '</div></div>';
+        }).join('');
+      }
+    })
+    .catch(function() {
+      document.getElementById('ip-status-dot').style.background = '#ef4444';
+      document.getElementById('ip-last-fetch').textContent = 'Failed — backend unreachable';
+    });
+}
+// Auto-refresh Intel Pool every 60s when page is active
+if (_ipRefreshTimer) clearInterval(_ipRefreshTimer);
+_ipRefreshTimer = setInterval(function() {
+  var active = document.querySelector('.page.active');
+  if (active && active.id === 'page-intel-pool') loadIntelPool();
+}, 60000);
 
 // Handle browser back/forward
 window.addEventListener('popstate', function(e) {
