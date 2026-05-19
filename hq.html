@@ -388,6 +388,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="metric"><div class="metric-label">MRR</div><div class="metric-val" id="db-mrr">—</div><div class="metric-sub">Monthly recurring revenue</div></div>
       <div class="metric"><div class="metric-label">Monthly Burn</div><div class="metric-val amber">~$22</div><div class="metric-sub">Railway + OpenAI + domain</div></div>
       <div class="metric"><div class="metric-label">Churn Rate</div><div class="metric-val green" id="db-churn">0%</div><div class="metric-sub">Monthly · from Stripe</div></div>
+      <div class="metric"><div class="metric-label">Adherence (30d)</div><div class="metric-val green" id="db-adherence">—</div><div class="metric-sub">Doses taken / scheduled</div></div>
     </div>
     <div class="cols">
       <div class="card">
@@ -464,6 +465,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="metric"><div class="metric-label">Trial Users</div><div class="metric-val green" id="bp-trials">—</div><div class="metric-sub">Active free trials</div></div>
       <div class="metric"><div class="metric-label">Monthly Churn</div><div class="metric-val green" id="bp-churn">—</div><div class="metric-sub">Cancellations / active</div></div>
       <div class="metric"><div class="metric-label">Cancelled (Total)</div><div class="metric-val" id="bp-cancelled">—</div><div class="metric-sub">All-time from Stripe</div></div>
+    </div>
+    <!-- Product + Engagement metrics row -->
+    <div class="metric-row" style="margin-top:8px">
+      <div class="metric"><div class="metric-label">Adherence Rate (30d)</div><div class="metric-val green" id="bp-adherence">—</div><div class="metric-sub">Doses taken / logged</div></div>
+      <div class="metric"><div class="metric-label">Elara Users</div><div class="metric-val teal" id="bp-elara-users">—</div><div class="metric-sub">Used AI caretaker</div></div>
+      <div class="metric"><div class="metric-label">Elara Engagement</div><div class="metric-val" id="bp-elara-rate">—</div><div class="metric-sub">% of users opened Elara</div></div>
+      <div class="metric"><div class="metric-label">Deep Elara Sessions</div><div class="metric-val" id="bp-elara-deep">—</div><div class="metric-sub">5+ sessions (loyal users)</div></div>
+    </div>
+    <!-- Onboarding funnel card -->
+    <div class="card" style="margin-top:8px">
+      <div class="card-title">🔽 Onboarding Funnel</div>
+      <div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px"><span>Signed up</span><span class="pill grey" id="fn-signup">—</span></div>
+        <div class="prog-bar"><div class="prog-fill" id="fn-signup-bar" style="width:100%;background:#02C39A"></div></div>
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px"><span>Added medicine</span><span class="pill grey" id="fn-medicine">—</span></div>
+        <div class="prog-bar"><div class="prog-fill" id="fn-medicine-bar" style="width:0%"></div></div>
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px"><span>Logged first dose</span><span class="pill grey" id="fn-dose">—</span></div>
+        <div class="prog-bar"><div class="prog-fill" id="fn-dose-bar" style="width:0%"></div></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px"><span>Converted to paid</span><span class="pill grey" id="fn-paid">—</span></div>
+        <div class="prog-bar"><div class="prog-fill" id="fn-paid-bar" style="width:0%"></div></div>
+      </div>
     </div>
     <div class="cols">
       <div class="card">
@@ -2627,6 +2655,34 @@ function loadBusinessPulse() {
       var churnEl = document.getElementById('bp-churn');
       if (churnEl) { churnEl.textContent = churnRate; churnEl.className = 'metric-val ' + (cancelled === 0 ? 'green' : parseFloat(churnRate) < 5 ? 'amber' : 'red'); }
       var cancelEl = document.getElementById('bp-cancelled'); if (cancelEl) cancelEl.textContent = cancelled;
+
+      // Adherence
+      var adherence = d.product && d.product.adherenceRate30d !== null ? d.product.adherenceRate30d + '%' : 'N/A';
+      var adherEl = document.getElementById('bp-adherence');
+      if (adherEl) { adherEl.textContent = adherence; adherEl.className = 'metric-val ' + (d.product && d.product.adherenceRate30d >= 80 ? 'green' : d.product && d.product.adherenceRate30d >= 60 ? 'amber' : ''); }
+
+      // Elara engagement
+      var eu = (d.elara && d.elara.usersTotal) || 0;
+      var euDeep = (d.elara && d.elara.usersDeep) || 0;
+      var euRate = (d.elara && d.elara.engagementRate) || 0;
+      var euEl = document.getElementById('bp-elara-users');       if (euEl) euEl.textContent = eu;
+      var euRateEl = document.getElementById('bp-elara-rate');    if (euRateEl) { euRateEl.textContent = euRate + '%'; euRateEl.className = 'metric-val ' + (euRate >= 60 ? 'green' : euRate >= 30 ? 'amber' : ''); }
+      var euDeepEl = document.getElementById('bp-elara-deep');    if (euDeepEl) euDeepEl.textContent = euDeep;
+
+      // Onboarding funnel
+      var fnSignup   = (d.funnel && d.funnel.signedUp)        || 0;
+      var fnMed      = (d.funnel && d.funnel.addedMedicine)   || 0;
+      var fnDose     = (d.funnel && d.funnel.loggedFirstDose) || 0;
+      var fnPaid     = (d.funnel && d.funnel.converted)       || 0;
+      var base = fnSignup > 0 ? fnSignup : 1;
+      var fns = document.getElementById('fn-signup');   if (fns) fns.textContent = fnSignup;
+      var fnm = document.getElementById('fn-medicine'); if (fnm) fnm.textContent = fnMed + ' (' + Math.round(fnMed/base*100) + '%)';
+      var fnd = document.getElementById('fn-dose');     if (fnd) fnd.textContent = fnDose + ' (' + Math.round(fnDose/base*100) + '%)';
+      var fnp = document.getElementById('fn-paid');     if (fnp) fnp.textContent = fnPaid + ' (' + Math.round(fnPaid/base*100) + '%)';
+      var fnmb = document.getElementById('fn-medicine-bar'); if (fnmb) fnmb.style.width = Math.round(fnMed/base*100) + '%';
+      var fndb = document.getElementById('fn-dose-bar');     if (fndb) fndb.style.width = Math.round(fnDose/base*100) + '%';
+      var fnpb = document.getElementById('fn-paid-bar');     if (fnpb) fnpb.style.width = Math.round(fnPaid/base*100) + '%';
+
       // Progress bars
       var pct10 = Math.min(100, Math.round(paid/10*100));
       var pct100 = Math.min(100, Math.round(paid/100*100));
@@ -4697,6 +4753,12 @@ function rejectProposal(id) {
     var dbCancelled = u.cancelled || 0;
     var dbChurnRate = (paid + dbCancelled) > 0 ? ((dbCancelled / (paid + dbCancelled)) * 100).toFixed(1) + '%' : '0%';
     var dbChurnEl = $('db-churn'); if (dbChurnEl) { dbChurnEl.textContent = dbChurnRate; dbChurnEl.className = 'metric-val ' + (dbCancelled === 0 ? 'green' : parseFloat(dbChurnRate) < 5 ? 'amber' : 'red'); }
+
+    // Adherence rate (30d) — shown in Daily Brief if element exists
+    if (d.product && d.product.adherenceRate30d !== null && d.product.adherenceRate30d !== undefined) {
+      var dbAdherEl = $('db-adherence');
+      if (dbAdherEl) { dbAdherEl.textContent = d.product.adherenceRate30d + '%'; dbAdherEl.className = 'metric-val ' + (d.product.adherenceRate30d >= 80 ? 'green' : 'amber'); }
+    }
 
     lastAt = Date.now();
     var lu = $('live-updated'); if (lu) lu.textContent = '· Updated just now';
