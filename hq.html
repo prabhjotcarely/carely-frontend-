@@ -387,6 +387,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="metric"><div class="metric-label">Beta Testers</div><div class="metric-val teal" id="db-trial">—</div><div class="metric-sub">Active trial users</div></div>
       <div class="metric"><div class="metric-label">MRR</div><div class="metric-val" id="db-mrr">—</div><div class="metric-sub">Monthly recurring revenue</div></div>
       <div class="metric"><div class="metric-label">Monthly Burn</div><div class="metric-val amber">~$22</div><div class="metric-sub">Railway + OpenAI + domain</div></div>
+      <div class="metric"><div class="metric-label">Churn Rate</div><div class="metric-val green" id="db-churn">0%</div><div class="metric-sub">Monthly · from Stripe</div></div>
     </div>
     <div class="cols">
       <div class="card">
@@ -461,6 +462,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="metric"><div class="metric-label">Founding Spots Left</div><div class="metric-val teal" id="bp-spots">—</div><div class="metric-sub">At $5/mo founding price</div></div>
       <div class="metric"><div class="metric-label">Monthly Burn</div><div class="metric-val" id="bp-burn">—</div><div class="metric-sub">All infrastructure</div></div>
       <div class="metric"><div class="metric-label">Trial Users</div><div class="metric-val green" id="bp-trials">—</div><div class="metric-sub">Active free trials</div></div>
+      <div class="metric"><div class="metric-label">Monthly Churn</div><div class="metric-val green" id="bp-churn">—</div><div class="metric-sub">Cancellations / active</div></div>
+      <div class="metric"><div class="metric-label">Cancelled (Total)</div><div class="metric-val" id="bp-cancelled">—</div><div class="metric-sub">All-time from Stripe</div></div>
     </div>
     <div class="cols">
       <div class="card">
@@ -2619,6 +2622,11 @@ function loadBusinessPulse() {
       document.getElementById('bp-spots').textContent = d.revenue.spotsRemaining;
       document.getElementById('bp-burn').textContent  = '$' + d.expenses.total.toFixed(0) + '/mo';
       document.getElementById('bp-trials').textContent = d.users.trial || 0;
+      var cancelled = d.users.cancelled || 0;
+      var churnRate = (paid + cancelled) > 0 ? ((cancelled / (paid + cancelled)) * 100).toFixed(1) + '%' : '0%';
+      var churnEl = document.getElementById('bp-churn');
+      if (churnEl) { churnEl.textContent = churnRate; churnEl.className = 'metric-val ' + (cancelled === 0 ? 'green' : parseFloat(churnRate) < 5 ? 'amber' : 'red'); }
+      var cancelEl = document.getElementById('bp-cancelled'); if (cancelEl) cancelEl.textContent = cancelled;
       // Progress bars
       var pct10 = Math.min(100, Math.round(paid/10*100));
       var pct100 = Math.min(100, Math.round(paid/100*100));
@@ -4686,6 +4694,9 @@ function rejectProposal(id) {
     var dbPaid = $('db-paid'); if (dbPaid) { dbPaid.textContent = paid; dbPaid.className = 'metric-val ' + (paid > 0 ? 'green' : 'amber'); }
     var dbTrial = $('db-trial'); if (dbTrial) dbTrial.textContent = u.trial || 0;
     var dbMrr = $('db-mrr'); if (dbMrr) { dbMrr.textContent = '$' + (+(rev.mrr)||0).toFixed(0); dbMrr.className = 'metric-val ' + (rev.mrr > 0 ? 'green' : ''); }
+    var dbCancelled = u.cancelled || 0;
+    var dbChurnRate = (paid + dbCancelled) > 0 ? ((dbCancelled / (paid + dbCancelled)) * 100).toFixed(1) + '%' : '0%';
+    var dbChurnEl = $('db-churn'); if (dbChurnEl) { dbChurnEl.textContent = dbChurnRate; dbChurnEl.className = 'metric-val ' + (dbCancelled === 0 ? 'green' : parseFloat(dbChurnRate) < 5 ? 'amber' : 'red'); }
 
     lastAt = Date.now();
     var lu = $('live-updated'); if (lu) lu.textContent = '· Updated just now';
