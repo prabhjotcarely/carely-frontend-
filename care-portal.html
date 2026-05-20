@@ -818,7 +818,7 @@
       var a = document.createElement('a'); a.className = 'pb-btn pb-btn-outline'; a.href = 'mailto:hello@carely.fit?subject=Billing%20Help'; a.textContent = 'Billing Support'; return a;
     })());
     billingCard.appendChild(btns);
-    var note = document.createElement('div'); note.className = 'pb-note'; note.textContent = 'Billed monthly at $7 CAD / $5 USD per resident. Count updates as you add residents. Questions? hello@carely.fit';
+    var note = document.createElement('div'); note.className = 'pb-note'; note.textContent = 'Billed monthly at $5/resident. Stripe shows your local currency at checkout. Count updates as you add residents. Questions? hello@carely.fit';
     billingCard.appendChild(note);
     grid.appendChild(billingCard);
     section.appendChild(grid);
@@ -878,7 +878,7 @@
 
   function initDemoData() {
     renderDemoPortal(DEMO_ORG);
-    renderProfileBilling({ org_name: 'Sunrise Senior Living', contact_name: 'Jennifer Park', email: 'j.park@sunrisesenior.ca', invite_code: 'SNRLV', activated_at: '2026-03-15T00:00:00Z', country: 'CA' }, { billing: { hasSubscription: true, status: 'active', plan: 'Care Home Plan — $7 CAD/resident/month', currency: 'CAD', isCareHome: true }, commission: null, residents: { linked: 24, monthlyBilledCents: 16800, formatted: '$168.00' } }, '');
+    renderProfileBilling({ org_name: 'Sunrise Senior Living', contact_name: 'Jennifer Park', email: 'j.park@sunrisesenior.ca', invite_code: 'SNRLV', activated_at: '2026-03-15T00:00:00Z', country: 'CA' }, { billing: { hasSubscription: true, status: 'active', plan: 'Care Home Plan — $5/resident/month', currency: 'CAD', isCareHome: true }, commission: null, residents: { linked: 24, monthlyBilledCents: 12000, formatted: '$120.00' } }, '');
   }
 
   checkAuth();
