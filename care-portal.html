@@ -189,6 +189,20 @@
       .org-ring-hero { flex-direction: column; }
       .org-ring-right { min-width: unset; width: 100%; }
     }
+    .pb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .pb-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--grey-300); overflow: hidden; }
+    .pb-card-head { padding: 14px 20px; border-bottom: 1px solid var(--grey-100); font-size: 0.88rem; font-weight: 800; color: var(--deep-teal); text-transform: uppercase; letter-spacing: 0.5px; }
+    .pb-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 20px; border-bottom: 1px solid var(--grey-100); font-size: 0.875rem; }
+    .pb-row:last-child { border-bottom: none; }
+    .pb-label { color: var(--grey-500); font-weight: 600; }
+    .pb-val { color: var(--deep-teal); font-weight: 700; }
+    .pb-code { background: var(--off-white); border: 1.5px solid var(--grey-300); border-radius: 8px; padding: 3px 12px; font-size: 0.95rem; font-weight: 900; color: var(--teal); letter-spacing: 1px; }
+    .pb-btns { display: flex; gap: 10px; padding: 16px 20px; flex-wrap: wrap; }
+    .pb-btn { display: inline-block; padding: 10px 18px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; text-decoration: none; border: none; font-family: inherit; }
+    .pb-btn-primary { background: linear-gradient(135deg,#028090,#02C39A); color: #fff; }
+    .pb-btn-outline { background: transparent; border: 1.5px solid var(--teal); color: var(--teal); }
+    .pb-note { font-size: 0.75rem; color: var(--grey-500); padding: 0 20px 14px; line-height: 1.6; }
+    @media (max-width: 640px) { .pb-grid { grid-template-columns: 1fr; } }
   </style>
   <!-- PostHog Analytics -->
   <script>
@@ -240,6 +254,8 @@
 
     <div class="summary-row" id="summary-row"></div>
     <div class="patients-grid" id="patients-grid"></div>
+    <!-- Profile & Billing -->
+    <div id="profile-billing" style="display:none;margin-top:24px;"></div>
   </div>
 </main>
 
@@ -709,6 +725,56 @@
       });
   }
 
+  function fetchPartnerProfile(token) {
+    fetch(API + '/partner/me', { headers: { 'Authorization': 'Bearer ' + token } })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) { if (data && data.partner) renderProfileBilling(data.partner, null); })
+      .catch(function() {});
+  }
+
+  function renderProfileBilling(partner, patientCount) {
+    var section = document.getElementById('profile-billing');
+    if (!section) return;
+    section.textContent = '';
+    section.style.display = 'block';
+    var grid = document.createElement('div'); grid.className = 'pb-grid';
+
+    var profileCard = document.createElement('div'); profileCard.className = 'pb-card';
+    var ph = document.createElement('div'); ph.className = 'pb-card-head'; ph.textContent = 'My Profile';
+    profileCard.appendChild(ph);
+    [['Organisation', partner.org_name||'—'],['Contact', partner.contact_name||'—'],['Email', partner.email||'—'],['Country', partner.country||'—'],['Member since', partner.activated_at ? new Date(partner.activated_at).toLocaleDateString('en-CA',{year:'numeric',month:'short',day:'numeric'}) : '—']].forEach(function(p) {
+      var row = document.createElement('div'); row.className = 'pb-row';
+      var lbl = document.createElement('span'); lbl.className = 'pb-label'; lbl.textContent = p[0];
+      var val = document.createElement('span'); val.className = 'pb-val'; val.textContent = p[1];
+      row.appendChild(lbl); row.appendChild(val); profileCard.appendChild(row);
+    });
+    if (partner.invite_code) {
+      var codeRow = document.createElement('div'); codeRow.className = 'pb-row';
+      var codeLbl = document.createElement('span'); codeLbl.className = 'pb-label'; codeLbl.textContent = 'Invite Code';
+      var codePill = document.createElement('span'); codePill.className = 'pb-code'; codePill.textContent = partner.invite_code;
+      codeRow.appendChild(codeLbl); codeRow.appendChild(codePill); profileCard.appendChild(codeRow);
+    }
+    grid.appendChild(profileCard);
+
+    var billingCard = document.createElement('div'); billingCard.className = 'pb-card';
+    var bh = document.createElement('div'); bh.className = 'pb-card-head'; bh.textContent = 'Billing & Earnings';
+    billingCard.appendChild(bh);
+    [['Partner Plan','Carely B2B Partner'],['Commission Rate','20% per active referral'],['Est. Monthly Earnings', patientCount ? '$' + (patientCount * 2.99).toFixed(2) : 'Based on connected residents']].forEach(function(p) {
+      var row = document.createElement('div'); row.className = 'pb-row';
+      var lbl = document.createElement('span'); lbl.className = 'pb-label'; lbl.textContent = p[0];
+      var val = document.createElement('span'); val.className = 'pb-val'; val.textContent = p[1];
+      row.appendChild(lbl); row.appendChild(val); billingCard.appendChild(row);
+    });
+    var btns = document.createElement('div'); btns.className = 'pb-btns';
+    var manageBtn = document.createElement('a'); manageBtn.className = 'pb-btn pb-btn-primary'; manageBtn.href = 'https://billing.stripe.com/p/login/carely'; manageBtn.target = '_blank'; manageBtn.rel = 'noopener noreferrer'; manageBtn.textContent = 'Manage Billing';
+    var payoutBtn = document.createElement('a'); payoutBtn.className = 'pb-btn pb-btn-outline'; payoutBtn.href = 'mailto:hello@carely.fit?subject=Payout%20Setup'; payoutBtn.textContent = 'Payout Setup';
+    btns.appendChild(manageBtn); btns.appendChild(payoutBtn); billingCard.appendChild(btns);
+    var note = document.createElement('div'); note.className = 'pb-note'; note.textContent = 'Commissions are calculated monthly for all active referred subscribers. Questions? hello@carely.fit';
+    billingCard.appendChild(note);
+    grid.appendChild(billingCard);
+    section.appendChild(grid);
+  }
+
   function fetchLiveData(token) {
     fetch(API + '/portal/patients', {
       headers: { 'Authorization': 'Bearer ' + token },
@@ -724,11 +790,10 @@
       .then(function(data) {
         if (data && data.patients) {
           renderLivePatients(data.patients);
+          fetchPartnerProfile(token);
         }
       })
-      .catch(function() {
-        // network error — leave demo data in place
-      });
+      .catch(function() {});
   }
 
   function renderLivePatients(patients) {
@@ -764,6 +829,7 @@
 
   function initDemoData() {
     renderDemoPortal(DEMO_ORG);
+    renderProfileBilling({ org_name: 'Sunrise Senior Living', contact_name: 'Jennifer Park', email: 'j.park@sunrisesenior.ca', invite_code: 'SNRLV', activated_at: '2026-03-15T00:00:00Z', country: 'CA' }, 24);
   }
 
   checkAuth();
