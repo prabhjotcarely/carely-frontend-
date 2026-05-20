@@ -430,13 +430,40 @@
   }
 
   function fetchPartnerProfile(token) {
-    fetch(API + '/partner/me', { headers: { 'Authorization': 'Bearer ' + token } })
-      .then(function(r) { return r.ok ? r.json() : null; })
-      .then(function(data) { if (data && data.partner) renderProfileBilling(data.partner, null); })
-      .catch(function() {});
+    Promise.all([
+      fetch(API + '/partner/me', { headers: { 'Authorization': 'Bearer ' + token } }).then(function(r) { return r.ok ? r.json() : null; }),
+      fetch(API + '/partner/billing/status', { headers: { 'Authorization': 'Bearer ' + token } }).then(function(r) { return r.ok ? r.json() : null; }),
+    ]).then(function(results) {
+      var profile = results[0];
+      var billing = results[1];
+      if (profile && profile.partner) renderProfileBilling(profile.partner, billing, token);
+    }).catch(function() {});
   }
 
-  function renderProfileBilling(partner, patientCount) {
+  function openBillingPortal(token) {
+    var btn = document.getElementById('manage-billing-btn');
+    if (btn) btn.textContent = 'Opening...';
+    fetch(API + '/partner/billing/portal', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.url) window.open(data.url, '_blank');
+        else alert('Billing portal unavailable. Contact hello@carely.fit');
+      })
+      .catch(function() { alert('Could not open billing portal. Contact hello@carely.fit'); })
+      .finally(function() { if (btn) btn.textContent = 'Manage Billing'; });
+  }
+
+  function subscribeToPlan(token) {
+    fetch(API + '/partner/billing/subscribe', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.checkoutUrl) window.location.href = data.checkoutUrl;
+        else alert('Could not start checkout. Contact hello@carely.fit');
+      })
+      .catch(function() { alert('Could not start checkout. Contact hello@carely.fit'); });
+  }
+
+  function renderProfileBilling(partner, billing, token) {
     var section = document.getElementById('profile-billing');
     if (!section) return;
     section.textContent = '';
@@ -455,7 +482,7 @@
       ['Organisation', partner.org_name || '—'],
       ['Contact', partner.contact_name || '—'],
       ['Email', partner.email || '—'],
-      ['Country', partner.country || '—'],
+      ['Country', partner.country === 'CA' ? 'Canada' : partner.country === 'US' ? 'United States' : (partner.country || '—')],
       ['Member since', partner.activated_at ? new Date(partner.activated_at).toLocaleDateString('en-CA', {year:'numeric',month:'short',day:'numeric'}) : '—'],
     ];
     profileRows.forEach(function(pair) {
@@ -480,10 +507,20 @@
     var bh = document.createElement('div'); bh.className = 'pb-card-head'; bh.textContent = 'Billing & Earnings';
     billingCard.appendChild(bh);
 
+    var bStatus = (billing && billing.billing) ? billing.billing : null;
+    var bComm   = (billing && billing.commission) ? billing.commission : null;
+
+    var statusText = bStatus ? (bStatus.status === 'active' ? 'Active' : 'Not subscribed') : '—';
+    var planText   = bStatus ? bStatus.plan : 'Partner Portal ($30/month)';
+    var commText   = bComm  ? (bComm.formatted + '/month') : '—';
+    var payingText = bComm  ? (bComm.payingPatients + ' of ' + bComm.linkedPatients + ' patients paying') : '—';
+
     var billingRows = [
-      ['Partner Plan', 'Carely B2B Partner'],
+      ['Plan',            planText],
+      ['Status',          statusText],
       ['Commission Rate', '20% per active referral'],
-      ['Est. Monthly Earnings', patientCount ? '$' + (patientCount * 2.99).toFixed(2) : 'Based on connected patients'],
+      ['Paying Patients', payingText],
+      ['Monthly Earnings', commText],
     ];
     billingRows.forEach(function(pair) {
       var row = document.createElement('div'); row.className = 'pb-row';
@@ -494,21 +531,32 @@
     });
 
     var btns = document.createElement('div'); btns.className = 'pb-btns';
-    var manageBtn = document.createElement('a');
-    manageBtn.className = 'pb-btn pb-btn-primary';
-    manageBtn.href = 'https://billing.stripe.com/p/login/carely';
-    manageBtn.target = '_blank';
-    manageBtn.rel = 'noopener noreferrer';
-    manageBtn.textContent = 'Manage Billing';
+    var currentToken = token || sessionStorage.getItem(SESSION_KEY) || '';
+
+    if (bStatus && bStatus.hasSubscription) {
+      var manageBtn = document.createElement('button');
+      manageBtn.id = 'manage-billing-btn';
+      manageBtn.className = 'pb-btn pb-btn-primary';
+      manageBtn.textContent = 'Manage Billing';
+      manageBtn.onclick = function() { openBillingPortal(currentToken); };
+      btns.appendChild(manageBtn);
+    } else {
+      var subBtn = document.createElement('button');
+      subBtn.className = 'pb-btn pb-btn-primary';
+      subBtn.textContent = 'Subscribe Now — 14-day free trial';
+      subBtn.onclick = function() { subscribeToPlan(currentToken); };
+      btns.appendChild(subBtn);
+    }
+
     var payoutBtn = document.createElement('a');
     payoutBtn.className = 'pb-btn pb-btn-outline';
     payoutBtn.href = 'mailto:hello@carely.fit?subject=Payout%20Setup';
     payoutBtn.textContent = 'Payout Setup';
-    btns.appendChild(manageBtn); btns.appendChild(payoutBtn);
+    btns.appendChild(payoutBtn);
     billingCard.appendChild(btns);
 
     var note = document.createElement('div'); note.className = 'pb-note';
-    note.textContent = 'Commissions are calculated monthly for all active referred subscribers. Questions? hello@carely.fit';
+    note.textContent = 'Commissions calculated monthly for all active referred subscribers. Questions? hello@carely.fit';
     billingCard.appendChild(note);
 
     grid.appendChild(billingCard);
@@ -560,7 +608,7 @@
 
   function initDemoData() {
     renderDemoReport(DEMO_DATA);
-    renderProfileBilling({ org_name: 'Westview Medical Clinic', contact_name: 'Dr. Sarah Bridge', email: 'dr.bridge@westviewclinic.ca', invite_code: 'WVMED', activated_at: '2026-04-01T00:00:00Z', country: 'CA' }, 3);
+    renderProfileBilling({ org_name: 'Westview Medical Clinic', contact_name: 'Dr. Sarah Bridge', email: 'dr.bridge@westviewclinic.ca', invite_code: 'WVMED', activated_at: '2026-04-01T00:00:00Z', country: 'CA' }, { billing: { hasSubscription: true, status: 'active', plan: 'Partner Portal ($30 CAD/month)', currency: 'CAD' }, commission: { rate: 20, linkedPatients: 3, payingPatients: 2, commissionCents: 399, formatted: '$3.99' } }, '');
   }
 
   checkAuth();
