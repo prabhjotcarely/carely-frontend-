@@ -896,7 +896,7 @@
           </div>
         </div>
 
-        <form class="contact-form" action="mailto:hello@carely.fit" method="post" enctype="text/plain">
+        <form id="partner-form" class="contact-form" onsubmit="handleSubmit(event)">
           <div class="form-row">
             <div class="form-group">
               <label for="name">Your Name</label>
@@ -916,10 +916,14 @@
             <input type="email" id="email" name="email" placeholder="john@sunrisepharmacy.ca" required />
           </div>
           <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="+1 604 555 0123" required />
+          </div>
+          <div class="form-group">
             <label for="message">Anything else?</label>
             <textarea id="message" name="message" placeholder="Tell us about your pharmacy — size, location, the types of patients you typically see..."></textarea>
           </div>
-          <a href="mailto:hello@carely.fit?subject=Pharmacy Partnership Enquiry&body=Hi Carely team, I'm a pharmacy owner and I'd like to learn more about the Carely partner program." class="form-submit">Apply to become a partner</a>
+          <button type="submit" id="submit-btn" class="form-submit">Apply to Partner</button>
           <p class="form-note">Or email us directly at hello@carely.fit — we respond within 1 business day.</p>
         </form>
       </div>
@@ -968,6 +972,70 @@ function cookieDecline() {
   localStorage.setItem('cookie_consent', 'declined');
   document.getElementById('cookie-banner').style.display = 'none';
   if (window.posthog) { posthog.opt_out_capturing(); }
+}
+</script>
+
+<script>
+var API = 'https://carely-backend-production.up.railway.app';
+
+function handleSubmit(e) {
+  e.preventDefault();
+  var btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  var nameVal  = (document.getElementById('name')  || document.getElementById('contact_name') || {}).value || '';
+  var orgVal   = (document.getElementById('org')   || document.getElementById('org_name')     || {}).value || '';
+  var emailVal = (document.getElementById('email') || {}).value || '';
+  var phoneVal = (document.getElementById('phone') || {}).value || '';
+  var msgVal   = (document.getElementById('message') || document.getElementById('msg') || {}).value || '';
+
+  fetch(API + '/partner/apply', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      type:         'pharmacy',
+      org_name:     orgVal,
+      contact_name: nameVal,
+      email:        emailVal,
+      phone:        phoneVal,
+      country:      'CA',
+      message:      msgVal || undefined,
+    }),
+  })
+    .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+    .then(function(result) {
+      if (result.ok) {
+        document.getElementById('partner-form').style.display = 'none';
+        var success = document.createElement('div');
+        success.style.cssText = 'text-align:center;padding:32px 0;';
+        var h = document.createElement('h3');
+        h.textContent = 'Application received!';
+        h.style.cssText = 'color:#028090;font-size:1.3rem;font-weight:800;margin-bottom:12px;';
+        var p = document.createElement('p');
+        p.textContent = "We review each application personally and will be in touch within 2 business days.";
+        p.style.color = '#6b8fa3';
+        success.appendChild(h);
+        success.appendChild(p);
+        document.getElementById('partner-form').parentNode.insertBefore(success, document.getElementById('partner-form').nextSibling);
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Apply to Partner';
+        var errMsg = result.data.message || result.data.error || 'Something went wrong. Please try again.';
+        var errEl = document.getElementById('form-error');
+        if (!errEl) {
+          errEl = document.createElement('p');
+          errEl.id = 'form-error';
+          errEl.style.cssText = 'color:#e53e3e;font-size:0.85rem;margin-top:8px;';
+          document.getElementById('partner-form').appendChild(errEl);
+        }
+        errEl.textContent = errMsg;
+      }
+    })
+    .catch(function() {
+      btn.disabled = false;
+      btn.textContent = 'Apply to Partner';
+    });
 }
 </script>
 
