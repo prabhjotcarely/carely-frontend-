@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pharmacy Portal — Carely</title>
+  <link rel="icon" type="image/png" href="elara-3d-new.png" />
+  <link rel="apple-touch-icon" href="elara-3d-new.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #028090; --deep-teal: #0D3347; --mint: #02C39A;
+      --off-white: #F7FBFA; --grey-100: #F1F5F4; --grey-300: #C8D6D3;
+      --grey-500: #7A9490; --text: #0D2B24; --white: #fff;
+      --radius: 16px; --danger: #EF4444; --warning: #F59E0B;
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--off-white); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+    /* Nav */
+    nav { background: var(--deep-teal); padding: 0 20px; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 12px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: white; text-decoration: none; flex-shrink: 0; }
+    .nav-badge { background: rgba(2,195,154,0.25); color: var(--mint); font-size: 0.75rem; padding: 4px 12px; border-radius: 20px; font-weight: 700; flex-shrink: 0; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    #nav-org-name { font-size: 0.88rem; font-weight: 600; color: rgba(255,255,255,0.75); }
+    .logout-btn { background: rgba(255,255,255,0.12); border: none; color: rgba(255,255,255,0.8); padding: 7px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+    .logout-btn:hover { background: rgba(255,255,255,0.2); }
+
+    /* Tabs */
+    .tabs-bar { background: var(--white); border-bottom: 1.5px solid var(--grey-300); padding: 0 20px; }
+    .tabs-inner { max-width: 1040px; margin: 0 auto; display: flex; gap: 0; }
+    .tab-btn { background: none; border: none; font-family: inherit; font-size: 0.9rem; font-weight: 600; color: var(--grey-500); padding: 14px 20px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1.5px; transition: color 0.2s, border-color 0.2s; white-space: nowrap; }
+    .tab-btn:hover { color: var(--teal); }
+    .tab-btn.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+    /* Main layout */
+    main { max-width: 1040px; margin: 0 auto; padding: 36px 20px 100px; }
+
+    /* Loading */
+    .loading { display: flex; align-items: center; justify-content: center; min-height: 50vh; flex-direction: column; gap: 16px; }
+    .spinner { width: 40px; height: 40px; border: 3px solid var(--grey-300); border-top-color: var(--teal); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #portal { display: none; }
+
+    /* Stats grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: var(--white); border-radius: var(--radius); padding: 22px; border: 1.5px solid var(--grey-300); }
+    .stat-value { font-size: 2.2rem; font-weight: 900; color: var(--deep-teal); letter-spacing: -0.03em; }
+    .stat-value.teal { color: var(--teal); }
+    .stat-value.mint { color: var(--mint); }
+    .stat-value.code { font-size: 1.5rem; font-weight: 900; color: var(--teal); letter-spacing: 0.05em; font-family: 'Courier New', monospace; }
+    .stat-label { font-size: 0.8rem; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
+
+    /* Invite box */
+    .invite-box { background: var(--deep-teal); border-radius: var(--radius); padding: 28px; margin-bottom: 28px; }
+    .invite-box-title { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 16px; }
+    .invite-code-display { font-size: 2.4rem; font-weight: 900; color: var(--mint); letter-spacing: 0.1em; font-family: 'Courier New', monospace; margin-bottom: 8px; }
+    .invite-link-text { font-size: 0.9rem; color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.1); padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; word-break: break-all; }
+    .invite-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .invite-btn { background: var(--mint); color: var(--deep-teal); border: none; border-radius: 10px; padding: 10px 20px; font-weight: 700; font-size: 0.88rem; cursor: pointer; font-family: inherit; transition: opacity 0.2s; }
+    .invite-btn:hover { opacity: 0.85; }
+    .invite-btn-outline { background: transparent; border: 1.5px solid rgba(255,255,255,0.35); color: rgba(255,255,255,0.85); border-radius: 10px; padding: 9px 20px; font-weight: 700; font-size: 0.88rem; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+    .invite-btn-outline:hover { background: rgba(255,255,255,0.1); }
+    .invite-note { font-size: 0.78rem; color: rgba(255,255,255,0.45); margin-top: 14px; }
+
+    /* Orders section */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+    .section-title { font-size: 1.1rem; font-weight: 800; color: var(--deep-teal); }
+    .refresh-btn { background: var(--white); border: 1.5px solid var(--grey-300); color: var(--teal); border-radius: 10px; padding: 8px 16px; font-size: 0.82rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .refresh-btn:hover { background: var(--grey-100); }
+
+    /* Filter pills */
+    .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .filter-pill { background: var(--white); border: 1.5px solid var(--grey-300); color: var(--grey-500); border-radius: 20px; padding: 6px 16px; font-size: 0.82rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    .filter-pill:hover { border-color: var(--teal); color: var(--teal); }
+    .filter-pill.active { background: var(--teal); border-color: var(--teal); color: var(--white); }
+
+    /* Orders table */
+    .table-wrap { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--grey-300); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: var(--off-white); padding: 11px 16px; font-size: 0.75rem; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; text-align: left; white-space: nowrap; }
+    td { padding: 13px 16px; font-size: 0.875rem; color: var(--text); border-top: 1px solid var(--grey-100); vertical-align: middle; }
+    .patient-name { font-weight: 700; color: var(--deep-teal); }
+    .med-name { font-weight: 600; }
+    .type-badge { display: inline-flex; align-items: center; border-radius: 6px; padding: 2px 8px; font-size: 0.72rem; font-weight: 700; }
+    .type-refill { background: #EDE9FE; color: #5B21B6; }
+    .type-general { background: #FEF3C7; color: #92400E; }
+
+    /* Status badges */
+    .status-badge { display: inline-flex; align-items: center; border-radius: 8px; padding: 4px 12px; font-size: 0.78rem; font-weight: 700; }
+    .status-pending { background: #FEF3C7; color: #92400E; }
+    .status-received { background: #DBEAFE; color: #1E40AF; }
+    .status-ready { background: #D1FAE5; color: #065F46; }
+    .status-picked_up { background: var(--grey-100); color: var(--grey-500); }
+
+    /* Action buttons */
+    .action-btn { border: none; border-radius: 8px; padding: 7px 13px; font-size: 0.78rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: opacity 0.2s; white-space: nowrap; }
+    .action-btn:hover { opacity: 0.8; }
+    .action-btn-amber { background: #FEF3C7; color: #92400E; }
+    .action-btn-blue { background: #DBEAFE; color: #1E40AF; }
+    .action-btn-green { background: #D1FAE5; color: #065F46; }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 56px 20px; color: var(--grey-500); }
+    .empty-state-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .empty-state-msg { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+    .empty-state-sub { font-size: 0.85rem; }
+
+    /* Profile & Billing */
+    .profile-billing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--grey-300); padding: 28px; }
+    .card-title { font-size: 1rem; font-weight: 800; color: var(--deep-teal); margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--grey-100); }
+    .profile-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--grey-100); gap: 12px; }
+    .profile-row:last-child { border-bottom: none; }
+    .profile-key { font-size: 0.8rem; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; }
+    .profile-val { font-size: 0.9rem; font-weight: 600; color: var(--text); text-align: right; word-break: break-word; }
+    .profile-org { font-size: 1.5rem; font-weight: 900; color: var(--deep-teal); letter-spacing: -0.02em; margin-bottom: 20px; }
+    .code-pill { display: inline-block; background: rgba(2,128,144,0.12); color: var(--teal); border-radius: 8px; padding: 4px 14px; font-weight: 800; font-size: 0.95rem; font-family: 'Courier New', monospace; letter-spacing: 0.08em; }
+
+    .billing-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--grey-100); }
+    .billing-row:last-of-type { border-bottom: none; }
+    .billing-key { font-size: 0.88rem; color: var(--grey-500); font-weight: 500; }
+    .billing-val { font-size: 0.95rem; font-weight: 800; color: var(--deep-teal); }
+    .commission-badge { display: inline-flex; align-items: center; background: linear-gradient(135deg,#028090,#02C39A); color: var(--white); border-radius: 10px; padding: 7px 16px; font-size: 0.9rem; font-weight: 800; margin-bottom: 20px; }
+    .billing-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+    .billing-btn-teal { background: var(--teal); color: var(--white); border: none; border-radius: 10px; padding: 11px 20px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: inherit; text-align: center; text-decoration: none; display: block; transition: opacity 0.2s; }
+    .billing-btn-teal:hover { opacity: 0.85; }
+    .billing-btn-outline { background: transparent; border: 1.5px solid var(--grey-300); color: var(--teal); border-radius: 10px; padding: 10px 20px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: inherit; text-align: center; text-decoration: none; display: block; transition: background 0.2s; }
+    .billing-btn-outline:hover { background: var(--grey-100); }
+    .billing-fine-print { font-size: 0.75rem; color: var(--grey-500); margin-top: 14px; line-height: 1.6; }
+
+    footer { background: var(--deep-teal); color: rgba(255,255,255,0.6); text-align: center; padding: 24px 20px; font-size: 0.82rem; margin-top: 60px; }
+
+    @media (max-width: 680px) {
+      .profile-billing-grid { grid-template-columns: 1fr; }
+      .tabs-inner { overflow-x: auto; }
+      .tab-btn { padding: 14px 14px; font-size: 0.82rem; }
+      td, th { padding: 10px 10px; font-size: 0.78rem; }
+      .invite-code-display { font-size: 1.8rem; }
+    }
+  </style>
+  <!-- PostHog Analytics -->
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
+    posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
+  </script>
+</head>
+<body>
+
+<!-- LOGIN GATE -->
+<div id="login-gate" style="display:none; position:fixed; inset:0; background:rgba(13,51,71,0.88); z-index:1000; display:flex; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:20px; padding:40px 36px; width:380px; max-width:92vw; box-shadow:0 32px 80px rgba(0,0,0,0.4);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <img src="elara-bot-logo.png" alt="Carely" style="height:36px;width:auto;">
+      <div style="font-size:18px;font-weight:800;color:#0D3347;">Carely <span style="color:#028090;">Pharmacy Portal</span></div>
+    </div>
+    <h2 style="color:#0D3347; font-size:1.3rem; font-weight:800; margin-bottom:6px;">Partner Login</h2>
+    <p style="color:#6b8fa3; font-size:0.85rem; margin-bottom:24px;">Sign in to your pharmacy partner account</p>
+    <input type="email" id="login-email" placeholder="Email address" style="width:100%; padding:12px 14px; border:1.5px solid #e0eaf0; border-radius:10px; font-size:0.95rem; font-family:inherit; margin-bottom:12px; outline:none;" />
+    <input type="password" id="login-password" placeholder="Password" style="width:100%; padding:12px 14px; border:1.5px solid #e0eaf0; border-radius:10px; font-size:0.95rem; font-family:inherit; margin-bottom:16px; outline:none;" onkeydown="if(event.key==='Enter')doLogin();" />
+    <button onclick="doLogin()" style="width:100%; padding:13px; background:linear-gradient(135deg,#028090,#02C39A); color:#fff; border:none; border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer; font-family:inherit;">Sign In</button>
+    <p id="login-err" style="color:#e53e3e; font-size:0.82rem; margin-top:10px; display:none;"></p>
+    <p style="margin-top:16px; font-size:0.78rem; color:#b0c4ce; text-align:center;">Demo mode: add <code>?demo=true</code> to the URL</p>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <img src="elara-bot-logo.png" alt="Carely" style="height:32px;width:auto;filter:brightness(10);" />
+      Carely
+    </a>
+    <span class="nav-badge">Pharmacy Portal</span>
+    <div class="nav-right">
+      <span id="nav-org-name"></span>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<!-- TAB BAR -->
+<div class="tabs-bar">
+  <div class="tabs-inner">
+    <button class="tab-btn active" id="tab-btn-overview" onclick="showTab('overview')">Overview</button>
+    <button class="tab-btn" id="tab-btn-orders" onclick="showTab('orders')">Medicine Orders</button>
+    <button class="tab-btn" id="tab-btn-profile" onclick="showTab('profile')">Profile &amp; Billing</button>
+  </div>
+</div>
+
+<main>
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p style="color:var(--grey-500);">Loading your dashboard...</p>
+  </div>
+
+  <div id="portal">
+
+    <!-- OVERVIEW TAB -->
+    <div id="tab-overview">
+      <div class="stats-grid" id="stats-grid"></div>
+      <div class="invite-box" id="invite-box"></div>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div id="tab-orders" style="display:none;">
+      <div class="section-header">
+        <span class="section-title">Medicine Orders</span>
+        <button class="refresh-btn" onclick="refreshOrders()">Refresh</button>
+      </div>
+      <div class="filter-row" id="filter-row"></div>
+      <div class="table-wrap" id="orders-table-wrap"></div>
+    </div>
+
+    <!-- PROFILE & BILLING TAB -->
+    <div id="tab-profile" style="display:none;">
+      <div class="profile-billing-grid" id="profile-billing-grid"></div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <span>© 2026 Carely · Pharmacy Partner Portal</span>
+</footer>
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;color:#e2e8f0;padding:16px 24px;z-index:9999;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -2px 12px rgba(0,0,0,.3);">
+  <span>We use cookies to improve your experience and measure usage. See our <a href="/privacy.html" style="color:#818cf8;text-decoration:underline;">Privacy Policy</a>.</span>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="cookieDecline()" style="background:transparent;border:1px solid #4b5563;color:#9ca3af;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;">Decline</button>
+    <button onclick="cookieAccept()" style="background:#6366f1;border:none;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">Accept</button>
+  </div>
+</div>
+
+<!-- B2B CHAT WIDGET -->
+<div id="chat-bubble" onclick="toggleChat()" style="position:fixed;bottom:24px;right:24px;background:linear-gradient(135deg,#028090,#02C39A);border-radius:28px;display:flex;align-items:center;gap:8px;padding:12px 18px;cursor:pointer;box-shadow:0 6px 20px rgba(2,128,144,0.4);z-index:900;">
+  <span style="color:#fff;font-size:18px;">&#128172;</span>
+  <span style="color:#fff;font-size:0.85rem;font-weight:700;">Ask Carely AI</span>
+</div>
+
+<div id="chat-panel" style="display:none;position:fixed;bottom:90px;right:24px;width:340px;max-height:500px;background:#fff;border-radius:20px;box-shadow:0 16px 60px rgba(13,51,71,0.25);z-index:901;flex-direction:column;overflow:hidden;">
+  <div style="background:linear-gradient(135deg,#028090,#02C39A);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;">
+    <div>
+      <div style="color:#fff;font-weight:800;font-size:0.95rem;">Carely AI Support</div>
+      <div style="color:rgba(255,255,255,0.8);font-size:0.75rem;">Ask anything about your pharmacy portal</div>
+    </div>
+    <span onclick="toggleChat()" style="color:#fff;font-size:22px;cursor:pointer;line-height:1;">&#215;</span>
+  </div>
+  <div id="chat-messages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:200px;max-height:310px;"></div>
+  <div style="padding:12px 16px;border-top:1px solid #eaf0f4;display:flex;gap:8px;">
+    <input id="chat-input" type="text" placeholder="Ask a question..." maxlength="500" style="flex:1;padding:10px 12px;border:1.5px solid #e0eaf0;border-radius:10px;font-size:0.88rem;font-family:inherit;outline:none;" onkeydown="if(event.key==='Enter')sendChat();" />
+    <button onclick="sendChat()" style="padding:10px 14px;background:#028090;color:#fff;border:none;border-radius:10px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:inherit;">Send</button>
+  </div>
+</div>
+
+<script>
+var API = 'https://carely-backend-production.up.railway.app';
+var SESSION_KEY = 'carely_partner_token';
+
+var DEMO = {
+  partner: { org_name: 'Sunrise Pharmacy', contact_name: 'Priya Sharma', email: 'priya@sunrisepharmacy.ca', invite_code: 'SUNRX', activated_at: '2026-04-01T00:00:00Z', country: 'CA' },
+  patients: 12,
+  requests: [
+    { id: '1', request_type: 'refill', medication_name: 'Metformin 500mg', current_quantity: '5 pills left', preferred_date: '2026-05-22', notes: 'Running low', status: 'pending', created_at: '2026-05-20T09:00:00Z', patient: { first_name: 'Margaret', last_name: 'T' } },
+    { id: '2', request_type: 'refill', medication_name: 'Lisinopril 10mg', current_quantity: null, preferred_date: '2026-05-23', notes: null, status: 'received', created_at: '2026-05-19T14:00:00Z', patient: { first_name: 'Robert', last_name: 'K' } },
+    { id: '3', request_type: 'general', medication_name: 'Vitamin D', current_quantity: null, preferred_date: null, notes: 'Looking for 2000 IU', status: 'ready', created_at: '2026-05-18T11:00:00Z', patient: { first_name: 'Helen', last_name: 'M' } },
+    { id: '4', request_type: 'refill', medication_name: 'Atorvastatin 20mg', current_quantity: '2 weeks supply', preferred_date: '2026-05-20', notes: null, status: 'picked_up', created_at: '2026-05-15T10:00:00Z', patient: { first_name: 'James', last_name: 'O' } }
+  ]
+};
+
+var state = {
+  partner: null,
+  patientCount: 0,
+  requests: []
+};
+
+var currentTab = 'overview';
+var currentFilter = 'all';
+var chatOpen = false;
+
+// ── Utility: safely clear all children from a node ──────────────────────────
+function clearNode(el) {
+  while (el.firstChild) { el.removeChild(el.firstChild); }
+}
+
+// ── Auth helpers ─────────────────────────────────────────────────────────────
+
+function isDemo() {
+  return new URLSearchParams(location.search).get('demo') === 'true';
+}
+
+function checkAuth() {
+  if (isDemo()) {
+    document.getElementById('login-gate').style.display = 'none';
+    initDemoData();
+    return;
+  }
+  var token = sessionStorage.getItem(SESSION_KEY);
+  if (!token) {
+    document.getElementById('login-gate').style.display = 'flex';
+    document.getElementById('loading').style.display = 'none';
+    return;
+  }
+  document.getElementById('login-gate').style.display = 'none';
+  fetchLiveData(token);
+}
+
+function doLogin() {
+  var email = document.getElementById('login-email').value.trim();
+  var password = document.getElementById('login-password').value;
+  var err = document.getElementById('login-err');
+  err.style.display = 'none';
+
+  if (!email || !password) {
+    err.textContent = 'Please enter email and password.';
+    err.style.display = 'block';
+    return;
+  }
+
+  fetch(API + '/partner/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email, password: password })
+  })
+    .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+    .then(function(result) {
+      if (!result.ok) {
+        err.textContent = result.data.message || result.data.error || 'Login failed.';
+        err.style.display = 'block';
+        return;
+      }
+      sessionStorage.setItem(SESSION_KEY, result.data.token);
+      document.getElementById('login-gate').style.display = 'none';
+      fetchLiveData(result.data.token);
+    })
+    .catch(function() {
+      err.textContent = 'Network error. Please try again.';
+      err.style.display = 'block';
+    });
+}
+
+function doLogout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('portal').style.display = 'none';
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('login-gate').style.display = 'flex';
+}
+
+// ── Live data ────────────────────────────────────────────────────────────────
+
+function fetchLiveData(token) {
+  document.getElementById('loading').style.display = 'flex';
+
+  var headers = { 'Authorization': 'Bearer ' + token };
+
+  function handle401(r) {
+    if (r.status === 401) {
+      sessionStorage.removeItem(SESSION_KEY);
+      document.getElementById('login-gate').style.display = 'flex';
+      document.getElementById('loading').style.display = 'none';
+      return true;
+    }
+    return false;
+  }
+
+  var pMe = fetch(API + '/partner/me', { headers: headers })
+    .then(function(r) {
+      if (handle401(r)) return null;
+      return r.json();
+    });
+
+  var pRequests = fetch(API + '/portal/medicine-requests', { headers: headers })
+    .then(function(r) {
+      if (r.status === 401) return null;
+      return r.json();
+    });
+
+  var pPatients = fetch(API + '/portal/patients', { headers: headers })
+    .then(function(r) {
+      if (r.status === 401) return null;
+      return r.json();
+    });
+
+  Promise.all([pMe, pRequests, pPatients])
+    .then(function(results) {
+      var meData = results[0];
+      var reqData = results[1];
+      var patData = results[2];
+
+      if (meData && meData.partner) {
+        state.partner = meData.partner;
+      }
+      if (reqData && reqData.requests) {
+        state.requests = reqData.requests;
+      }
+      if (patData && patData.patients) {
+        state.patientCount = patData.patients.length;
+      }
+
+      document.getElementById('loading').style.display = 'none';
+      renderAll();
+    })
+    .catch(function() {
+      document.getElementById('loading').style.display = 'none';
+      renderAll();
+    });
+}
+
+// ── Demo init ────────────────────────────────────────────────────────────────
+
+function initDemoData() {
+  state.partner = DEMO.partner;
+  state.patientCount = DEMO.patients;
+  state.requests = DEMO.requests;
+  document.getElementById('loading').style.display = 'none';
+  renderAll();
+}
+
+// ── Render all ───────────────────────────────────────────────────────────────
+
+function renderAll() {
+  document.getElementById('portal').style.display = 'block';
+
+  if (state.partner) {
+    document.getElementById('nav-org-name').textContent = state.partner.org_name || '';
+  }
+
+  renderOverview();
+  renderOrders();
+  renderProfileBilling();
+  buildFilterPills();
+}
+
+// ── Tab system ───────────────────────────────────────────────────────────────
+
+function showTab(name) {
+  var tabs = ['overview', 'orders', 'profile'];
+  tabs.forEach(function(t) {
+    document.getElementById('tab-' + t).style.display = (t === name) ? 'block' : 'none';
+    var btn = document.getElementById('tab-btn-' + t);
+    if (btn) {
+      btn.className = (t === name) ? 'tab-btn active' : 'tab-btn';
+    }
+  });
+  currentTab = name;
+}
+
+// ── Overview ─────────────────────────────────────────────────────────────────
+
+function renderOverview() {
+  var grid = document.getElementById('stats-grid');
+  clearNode(grid);
+
+  var pendingCount = state.requests.filter(function(r) { return r.status === 'pending'; }).length;
+  var completedCount = state.requests.filter(function(r) { return r.status === 'picked_up'; }).length;
+  var inviteCode = (state.partner && state.partner.invite_code) ? state.partner.invite_code : '--';
+
+  var cards = [
+    { value: String(state.patientCount), label: 'Connected Patients', cls: 'stat-value teal' },
+    { value: String(pendingCount), label: 'Pending Orders', cls: 'stat-value' },
+    { value: String(completedCount), label: 'Completed This Month', cls: 'stat-value mint' },
+    { value: inviteCode, label: 'Your Invite Code', cls: 'stat-value code' }
+  ];
+
+  cards.forEach(function(c) {
+    var card = document.createElement('div');
+    card.className = 'stat-card';
+    var val = document.createElement('div');
+    val.className = c.cls;
+    val.textContent = c.value;
+    var lbl = document.createElement('div');
+    lbl.className = 'stat-label';
+    lbl.textContent = c.label;
+    card.appendChild(val);
+    card.appendChild(lbl);
+    grid.appendChild(card);
+  });
+
+  renderInviteBox();
+}
+
+function renderInviteBox() {
+  var box = document.getElementById('invite-box');
+  clearNode(box);
+
+  var inviteCode = (state.partner && state.partner.invite_code) ? state.partner.invite_code : '--';
+  var joinLink = 'https://carely.fit/join?ref=' + encodeURIComponent(inviteCode);
+
+  var title = document.createElement('div');
+  title.className = 'invite-box-title';
+  title.textContent = 'Share Your Invite Code';
+  box.appendChild(title);
+
+  var codeDisplay = document.createElement('div');
+  codeDisplay.className = 'invite-code-display';
+  codeDisplay.textContent = inviteCode;
+  box.appendChild(codeDisplay);
+
+  var linkText = document.createElement('div');
+  linkText.className = 'invite-link-text';
+  linkText.textContent = joinLink;
+  box.appendChild(linkText);
+
+  var actions = document.createElement('div');
+  actions.className = 'invite-actions';
+
+  var copyCodeBtn = document.createElement('button');
+  copyCodeBtn.className = 'invite-btn';
+  copyCodeBtn.textContent = 'Copy Code';
+  copyCodeBtn.addEventListener('click', function() {
+    navigator.clipboard.writeText(inviteCode).then(function() {
+      copyCodeBtn.textContent = 'Copied!';
+      setTimeout(function() { copyCodeBtn.textContent = 'Copy Code'; }, 2000);
+    });
+  });
+  actions.appendChild(copyCodeBtn);
+
+  var copyLinkBtn = document.createElement('button');
+  copyLinkBtn.className = 'invite-btn-outline';
+  copyLinkBtn.textContent = 'Copy Link';
+  copyLinkBtn.addEventListener('click', function() {
+    navigator.clipboard.writeText(joinLink).then(function() {
+      copyLinkBtn.textContent = 'Copied!';
+      setTimeout(function() { copyLinkBtn.textContent = 'Copy Link'; }, 2000);
+    });
+  });
+  actions.appendChild(copyLinkBtn);
+
+  box.appendChild(actions);
+
+  var note = document.createElement('div');
+  note.className = 'invite-note';
+  note.textContent = 'Share this code with patients so they can connect their Carely app to your pharmacy';
+  box.appendChild(note);
+}
+
+// ── Orders ───────────────────────────────────────────────────────────────────
+
+var FILTER_LABELS = [
+  { key: 'all', label: 'All' },
+  { key: 'pending', label: 'Pending' },
+  { key: 'received', label: 'Received' },
+  { key: 'ready', label: 'Ready' },
+  { key: 'picked_up', label: 'Picked Up' }
+];
+
+function buildFilterPills() {
+  var row = document.getElementById('filter-row');
+  clearNode(row);
+  FILTER_LABELS.forEach(function(f) {
+    var pill = document.createElement('button');
+    pill.className = 'filter-pill' + (f.key === currentFilter ? ' active' : '');
+    pill.setAttribute('data-filter', f.key);
+    pill.textContent = f.label;
+    pill.addEventListener('click', function() {
+      currentFilter = f.key;
+      document.querySelectorAll('.filter-pill').forEach(function(p) {
+        p.className = 'filter-pill' + (p.getAttribute('data-filter') === currentFilter ? ' active' : '');
+      });
+      renderOrders();
+    });
+    row.appendChild(pill);
+  });
+}
+
+function renderOrders() {
+  var wrap = document.getElementById('orders-table-wrap');
+  clearNode(wrap);
+
+  var filtered = currentFilter === 'all'
+    ? state.requests
+    : state.requests.filter(function(r) { return r.status === currentFilter; });
+
+  if (!filtered.length) {
+    var empty = document.createElement('div');
+    empty.className = 'empty-state';
+
+    var iconEl = document.createElement('div');
+    iconEl.className = 'empty-state-icon';
+    iconEl.textContent = String.fromCodePoint(0x1F4CB);
+    empty.appendChild(iconEl);
+
+    var msgEl = document.createElement('div');
+    msgEl.className = 'empty-state-msg';
+    msgEl.textContent = 'No orders found';
+    empty.appendChild(msgEl);
+
+    var subEl = document.createElement('div');
+    subEl.className = 'empty-state-sub';
+    subEl.textContent = currentFilter === 'all'
+      ? 'Medicine requests from your patients will appear here'
+      : 'No orders with this status';
+    empty.appendChild(subEl);
+
+    wrap.appendChild(empty);
+    return;
+  }
+
+  var table = document.createElement('table');
+
+  var thead = document.createElement('thead');
+  var headerRow = document.createElement('tr');
+  ['Patient', 'Medication', 'Type', 'Preferred Date', 'Notes', 'Status', 'Action'].forEach(function(h) {
+    var th = document.createElement('th');
+    th.textContent = h;
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+
+  var tbody = document.createElement('tbody');
+  filtered.forEach(function(req) {
+    var row = buildOrderRow(req);
+    tbody.appendChild(row);
+  });
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+}
+
+function buildOrderRow(req) {
+  var row = document.createElement('tr');
+  row.setAttribute('data-request-id', req.id);
+
+  // Patient
+  var tdPatient = document.createElement('td');
+  var nameEl = document.createElement('div');
+  nameEl.className = 'patient-name';
+  var firstName = (req.patient && req.patient.first_name) ? req.patient.first_name : '';
+  var lastName = (req.patient && req.patient.last_name) ? req.patient.last_name : '';
+  nameEl.textContent = firstName + ' ' + lastName + '.';
+  tdPatient.appendChild(nameEl);
+  row.appendChild(tdPatient);
+
+  // Medication
+  var tdMed = document.createElement('td');
+  var medEl = document.createElement('div');
+  medEl.className = 'med-name';
+  medEl.textContent = req.medication_name || '--';
+  tdMed.appendChild(medEl);
+  if (req.current_quantity) {
+    var qtyEl = document.createElement('div');
+    qtyEl.style.cssText = 'font-size:0.75rem;color:var(--grey-500);margin-top:2px;';
+    qtyEl.textContent = req.current_quantity;
+    tdMed.appendChild(qtyEl);
+  }
+  row.appendChild(tdMed);
+
+  // Type
+  var tdType = document.createElement('td');
+  var typeBadge = document.createElement('span');
+  typeBadge.className = 'type-badge ' + (req.request_type === 'refill' ? 'type-refill' : 'type-general');
+  typeBadge.textContent = req.request_type === 'refill' ? 'Refill' : 'General';
+  tdType.appendChild(typeBadge);
+  row.appendChild(tdType);
+
+  // Preferred Date
+  var tdDate = document.createElement('td');
+  tdDate.textContent = req.preferred_date ? formatDate(req.preferred_date) : '--';
+  row.appendChild(tdDate);
+
+  // Notes
+  var tdNotes = document.createElement('td');
+  tdNotes.style.cssText = 'max-width:160px;';
+  var notesEl = document.createElement('span');
+  notesEl.style.cssText = 'font-size:0.82rem;color:var(--grey-500);';
+  notesEl.textContent = req.notes || '--';
+  tdNotes.appendChild(notesEl);
+  row.appendChild(tdNotes);
+
+  // Status
+  var tdStatus = document.createElement('td');
+  var statusBadge = document.createElement('span');
+  statusBadge.className = 'status-badge status-' + req.status;
+  statusBadge.textContent = statusLabel(req.status);
+  tdStatus.appendChild(statusBadge);
+  row.appendChild(tdStatus);
+
+  // Action
+  var tdAction = document.createElement('td');
+  var nextStatus = nextStatusFor(req.status);
+  if (nextStatus) {
+    var actionBtn = document.createElement('button');
+    actionBtn.className = 'action-btn ' + actionBtnClass(req.status);
+    actionBtn.textContent = actionLabel(req.status);
+    (function(reqId, ns, btn) {
+      btn.addEventListener('click', function() {
+        patchRequestStatus(reqId, ns, btn);
+      });
+    })(req.id, nextStatus, actionBtn);
+    tdAction.appendChild(actionBtn);
+  }
+  row.appendChild(tdAction);
+
+  return row;
+}
+
+function statusLabel(status) {
+  if (status === 'pending') return 'Pending';
+  if (status === 'received') return 'Received';
+  if (status === 'ready') return 'Ready';
+  if (status === 'picked_up') return 'Picked Up';
+  return status;
+}
+
+function nextStatusFor(status) {
+  if (status === 'pending') return 'received';
+  if (status === 'received') return 'ready';
+  if (status === 'ready') return 'picked_up';
+  return null;
+}
+
+function actionLabel(status) {
+  if (status === 'pending') return 'Mark Received';
+  if (status === 'received') return 'Mark Ready';
+  if (status === 'ready') return 'Mark Picked Up';
+  return '';
+}
+
+function actionBtnClass(status) {
+  if (status === 'pending') return 'action-btn-amber';
+  if (status === 'received') return 'action-btn-blue';
+  if (status === 'ready') return 'action-btn-green';
+  return '';
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '--';
+  var d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
+  return d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function patchRequestStatus(id, newStatus, btn) {
+  if (isDemo()) {
+    state.requests.forEach(function(r) {
+      if (r.id === id) { r.status = newStatus; }
+    });
+    renderOrders();
+    renderOverview();
+    return;
+  }
+
+  var token = sessionStorage.getItem(SESSION_KEY);
+  if (!token) return;
+
+  btn.disabled = true;
+  btn.textContent = 'Updating...';
+
+  fetch(API + '/portal/medicine-request/' + encodeURIComponent(id), {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify({ status: newStatus })
+  })
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      state.requests.forEach(function(r) {
+        if (r.id === id) { r.status = newStatus; }
+      });
+      renderOrders();
+      renderOverview();
+    })
+    .catch(function() {
+      btn.disabled = false;
+      btn.textContent = actionLabel(id);
+    });
+}
+
+function refreshOrders() {
+  if (isDemo()) {
+    renderOrders();
+    return;
+  }
+  var token = sessionStorage.getItem(SESSION_KEY);
+  if (!token) return;
+
+  fetch(API + '/portal/medicine-requests', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data && data.requests) {
+        state.requests = data.requests;
+        renderOrders();
+        renderOverview();
+      }
+    })
+    .catch(function() {});
+}
+
+// ── Profile & Billing ────────────────────────────────────────────────────────
+
+function renderProfileBilling() {
+  var grid = document.getElementById('profile-billing-grid');
+  clearNode(grid);
+
+  var p = state.partner || {};
+  var inviteCode = p.invite_code || '--';
+  var memberSince = p.activated_at
+    ? new Date(p.activated_at).toLocaleDateString('en-CA', { month: 'long', year: 'numeric' })
+    : '--';
+  var countryLabel = p.country === 'CA' ? 'Canada' : (p.country || '--');
+
+  // --- Profile card ---
+  var profileCard = document.createElement('div');
+  profileCard.className = 'card';
+
+  var profileTitle = document.createElement('div');
+  profileTitle.className = 'card-title';
+  profileTitle.textContent = 'Pharmacy Profile';
+  profileCard.appendChild(profileTitle);
+
+  var orgName = document.createElement('div');
+  orgName.className = 'profile-org';
+  orgName.textContent = p.org_name || 'Your Pharmacy';
+  profileCard.appendChild(orgName);
+
+  var profileRows = [
+    { key: 'Contact Name', val: p.contact_name || '--' },
+    { key: 'Email', val: p.email || '--' },
+    { key: 'Country', val: countryLabel },
+    { key: 'Member Since', val: memberSince }
+  ];
+
+  profileRows.forEach(function(r) {
+    var rowEl = document.createElement('div');
+    rowEl.className = 'profile-row';
+    var keyEl = document.createElement('div');
+    keyEl.className = 'profile-key';
+    keyEl.textContent = r.key;
+    var valEl = document.createElement('div');
+    valEl.className = 'profile-val';
+    valEl.textContent = r.val;
+    rowEl.appendChild(keyEl);
+    rowEl.appendChild(valEl);
+    profileCard.appendChild(rowEl);
+  });
+
+  // Invite code row with pill
+  var codeRow = document.createElement('div');
+  codeRow.className = 'profile-row';
+  var codeKey = document.createElement('div');
+  codeKey.className = 'profile-key';
+  codeKey.textContent = 'Invite Code';
+  var codeValWrap = document.createElement('div');
+  var codePill = document.createElement('span');
+  codePill.className = 'code-pill';
+  codePill.textContent = inviteCode;
+  codeValWrap.appendChild(codePill);
+  codeRow.appendChild(codeKey);
+  codeRow.appendChild(codeValWrap);
+  profileCard.appendChild(codeRow);
+
+  grid.appendChild(profileCard);
+
+  // --- Billing card ---
+  var billingCard = document.createElement('div');
+  billingCard.className = 'card';
+
+  var billingTitle = document.createElement('div');
+  billingTitle.className = 'card-title';
+  billingTitle.textContent = 'Billing & Earnings';
+  billingCard.appendChild(billingTitle);
+
+  var commissionBadge = document.createElement('div');
+  commissionBadge.className = 'commission-badge';
+  commissionBadge.textContent = '20% Commission';
+  billingCard.appendChild(commissionBadge);
+
+  var estEarnings = (state.patientCount * 2.99).toFixed(2);
+
+  var billingRows = [
+    { key: 'Connected Patients', val: String(state.patientCount) },
+    { key: 'Est. Monthly Earnings', val: '$' + estEarnings }
+  ];
+
+  billingRows.forEach(function(r) {
+    var rowEl = document.createElement('div');
+    rowEl.className = 'billing-row';
+    var keyEl = document.createElement('div');
+    keyEl.className = 'billing-key';
+    keyEl.textContent = r.key;
+    var valEl = document.createElement('div');
+    valEl.className = 'billing-val';
+    valEl.textContent = r.val;
+    rowEl.appendChild(keyEl);
+    rowEl.appendChild(valEl);
+    billingCard.appendChild(rowEl);
+  });
+
+  var btnsWrap = document.createElement('div');
+  btnsWrap.className = 'billing-btns';
+
+  var manageBillingLink = document.createElement('a');
+  manageBillingLink.className = 'billing-btn-teal';
+  manageBillingLink.href = 'https://billing.stripe.com/p/login/test';
+  manageBillingLink.target = '_blank';
+  manageBillingLink.rel = 'noopener noreferrer';
+  manageBillingLink.textContent = 'Manage Billing';
+  btnsWrap.appendChild(manageBillingLink);
+
+  var payoutLink = document.createElement('a');
+  payoutLink.className = 'billing-btn-outline';
+  payoutLink.href = 'https://carely.fit/docs/partner-payouts';
+  payoutLink.target = '_blank';
+  payoutLink.rel = 'noopener noreferrer';
+  payoutLink.textContent = 'View Payout History';
+  btnsWrap.appendChild(payoutLink);
+
+  billingCard.appendChild(btnsWrap);
+
+  var finePrint = document.createElement('p');
+  finePrint.className = 'billing-fine-print';
+  finePrint.textContent = 'Commissions are paid monthly for all active referred subscribers. Questions? hello@carely.fit';
+  billingCard.appendChild(finePrint);
+
+  grid.appendChild(billingCard);
+}
+
+// ── Chat widget ──────────────────────────────────────────────────────────────
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById('chat-panel').style.display = chatOpen ? 'flex' : 'none';
+}
+
+function addChatMessage(text, isUser) {
+  var container = document.getElementById('chat-messages');
+  var bubble = document.createElement('div');
+  bubble.style.cssText = isUser
+    ? 'align-self:flex-end;background:#028090;color:#fff;border-radius:14px 14px 4px 14px;padding:10px 14px;font-size:0.85rem;max-width:82%;line-height:1.5;'
+    : 'align-self:flex-start;background:#f0faf9;color:#0D3347;border-radius:14px 14px 14px 4px;padding:10px 14px;font-size:0.85rem;max-width:82%;line-height:1.5;';
+  bubble.textContent = text;
+  container.appendChild(bubble);
+  container.scrollTop = container.scrollHeight;
+}
+
+function sendChat() {
+  var input = document.getElementById('chat-input');
+  var msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+
+  addChatMessage(msg, true);
+
+  var token = sessionStorage.getItem(SESSION_KEY);
+  if (!token && !isDemo()) {
+    addChatMessage('Please log in to use the support chat.', false);
+    return;
+  }
+
+  var thinking = document.createElement('div');
+  thinking.id = 'chat-thinking';
+  thinking.style.cssText = 'align-self:flex-start;color:#9ab8c4;font-size:0.82rem;padding:4px 0;';
+  thinking.textContent = 'Thinking...';
+  document.getElementById('chat-messages').appendChild(thinking);
+
+  var headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+
+  fetch(API + '/partner-chat/message', {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify({ message: msg, partnerType: 'pharmacy' })
+  })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var el = document.getElementById('chat-thinking');
+      if (el) el.remove();
+      addChatMessage(data.reply || 'For help, email hello@carely.fit', false);
+    })
+    .catch(function() {
+      var el = document.getElementById('chat-thinking');
+      if (el) el.remove();
+      addChatMessage('Network error. Email hello@carely.fit for help.', false);
+    });
+}
+
+// ── Cookie consent ───────────────────────────────────────────────────────────
+
+(function() {
+  var b = document.getElementById('cookie-banner');
+  if (!localStorage.getItem('cookie_consent')) { b.style.display = 'flex'; }
+})();
+
+function cookieAccept() {
+  localStorage.setItem('cookie_consent', 'accepted');
+  document.getElementById('cookie-banner').style.display = 'none';
+}
+
+function cookieDecline() {
+  localStorage.setItem('cookie_consent', 'declined');
+  document.getElementById('cookie-banner').style.display = 'none';
+  if (window.posthog) { posthog.opt_out_capturing(); }
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+checkAuth();
+</script>
+</body>
+</html>
