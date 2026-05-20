@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>You're invited to Carely</title>
+  <meta name="description" content="Your friend invited you to Carely — medication reminders with an AI caretaker. Your 2nd month is free." />
+  <link rel="icon" type="image/png" href="elara-3d-new.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(160deg, #0D3347 0%, #028090 55%, #02C39A 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .card { background: #fff; border-radius: 24px; padding: 48px 36px; width: 420px; max-width: 100%; box-shadow: 0 40px 100px rgba(13,51,71,.4); text-align: center; }
+    .logo-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 28px; }
+    .logo-row img { height: 44px; }
+    .logo-row span { font-size: 1.3rem; font-weight: 900; color: #0D3347; }
+    .from-badge { display: inline-block; background: #e0faf4; color: #028090; font-size: 0.82rem; font-weight: 700; border-radius: 20px; padding: 5px 14px; margin-bottom: 16px; }
+    h1 { font-size: 1.75rem; font-weight: 900; color: #0D3347; line-height: 1.2; margin-bottom: 8px; }
+    .sub { font-size: 0.95rem; color: #6b8fa3; line-height: 1.6; margin-bottom: 28px; }
+    .deal-box { background: #f0faf9; border-radius: 16px; padding: 20px; margin-bottom: 28px; text-align: left; }
+    .deal-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+    .deal-row:last-child { margin-bottom: 0; }
+    .deal-check { color: #028090; font-weight: 900; font-size: 1rem; margin-top: 1px; flex-shrink: 0; }
+    .deal-text { font-size: 0.88rem; color: #2d4a5a; line-height: 1.5; }
+    .deal-text strong { color: #028090; }
+    .cta-row { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+    .cta-btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px 24px; border-radius: 14px; font-size: 0.95rem; font-weight: 700; text-decoration: none; transition: opacity 0.2s; }
+    .cta-btn:hover { opacity: 0.9; }
+    .cta-apple { background: #0D3347; color: #fff; }
+    .cta-google { background: #028090; color: #fff; }
+    .fine-print { font-size: 0.75rem; color: #b0c4ce; line-height: 1.6; }
+    .generic-msg { font-size: 1rem; color: #0D3347; font-weight: 700; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo-row">
+    <img src="elara-bot-logo.png" alt="Carely" onerror="this.style.display='none'" />
+    <span>Carely</span>
+  </div>
+
+  <div id="invite-content" style="display:none">
+    <div class="from-badge" id="from-badge"></div>
+    <h1 id="invite-headline">Your 2nd month is free</h1>
+    <p class="sub">Carely is a medication reminder app with an AI caretaker that actually keeps people on track. Your friend thinks you'd love it.</p>
+    <div class="deal-box">
+      <div class="deal-row">
+        <span class="deal-check">1.</span>
+        <span class="deal-text">Download Carely and sign up</span>
+      </div>
+      <div class="deal-row">
+        <span class="deal-check">2.</span>
+        <span class="deal-text">Pay your first month ($9.99) — no free trial for invited friends</span>
+      </div>
+      <div class="deal-row">
+        <span class="deal-check">3.</span>
+        <span class="deal-text"><strong>Your second month is completely free</strong> — applied automatically</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="generic-content">
+    <h1>Never miss a dose again</h1>
+    <p class="sub" style="margin-bottom:28px;">Carely is a medication reminder app with an AI caretaker that keeps you and your loved ones on track.</p>
+  </div>
+
+  <div class="cta-row">
+    <a href="https://apps.apple.com/app/carely/id6771328455" class="cta-btn cta-apple">
+      Download on the App Store
+    </a>
+    <a href="https://play.google.com/store/apps/details?id=com.carely.app" class="cta-btn cta-google">
+      Get it on Google Play
+    </a>
+  </div>
+  <p class="fine-print" id="fine-print">Download the app, create your account, and your 2nd month discount applies automatically. This invitation expires in 7 days.</p>
+</div>
+
+<script>
+var API = 'https://carely-backend-production.up.railway.app';
+var params = new URLSearchParams(location.search);
+var refToken = params.get('ref');
+
+function showGeneric() {
+  document.getElementById('generic-content').style.display = 'block';
+  document.getElementById('fine-print').textContent = 'Download Carely and never miss a dose again.';
+}
+
+if (!refToken) {
+  showGeneric();
+} else {
+  fetch(API + '/referrals/validate-invite?token=' + encodeURIComponent(refToken))
+    .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+    .then(function(result) {
+      if (!result.ok || !result.data.valid) {
+        showGeneric();
+        return;
+      }
+      var inviterName = result.data.inviter_first_name || 'A friend';
+      document.getElementById('invite-content').style.display = 'block';
+      document.getElementById('generic-content').style.display = 'none';
+      var badge = document.getElementById('from-badge');
+      badge.textContent = inviterName + ' invited you';
+      var headline = document.getElementById('invite-headline');
+      headline.textContent = 'Your 2nd month is free';
+    })
+    .catch(function() {
+      showGeneric();
+    });
+}
+</script>
+</body>
+</html>
