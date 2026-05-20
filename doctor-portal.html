@@ -413,6 +413,18 @@
         td.textContent = String(val);
         row.appendChild(td);
       });
+
+      // Full Report button
+      var actionTd = document.createElement('td');
+      var reportBtn = document.createElement('a');
+      var partnerToken = sessionStorage.getItem(SESSION_KEY) || '';
+      reportBtn.href = 'adherence-report.html?userId=' + encodeURIComponent(p.id) + '&period=30';
+      reportBtn.target = '_blank';
+      reportBtn.textContent = 'Full Report';
+      reportBtn.style.cssText = 'display:inline-block;padding:5px 12px;background:linear-gradient(135deg,#028090,#02C39A);color:#fff;border-radius:7px;font-size:0.78rem;font-weight:700;text-decoration:none;white-space:nowrap;';
+      actionTd.appendChild(reportBtn);
+      row.appendChild(actionTd);
+
       container.appendChild(row);
     });
   }
