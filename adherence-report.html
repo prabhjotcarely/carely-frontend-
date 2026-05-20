@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adherence Report — Carely</title>
+  <link rel="icon" type="image/png" href="elara-3d-new.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #028090; --deep-teal: #0D3347; --mint: #02C39A;
+      --off-white: #F4F7F6; --white: #ffffff;
+      --grey-100: #F1F5F4; --grey-200: #E4ECEB; --grey-300: #C8D6D3; --grey-500: #7A9490; --grey-700: #4A6B65;
+      --text: #0D2B24; --text-light: #5A7A74;
+      --green: #059669; --green-bg: #ECFDF5; --green-border: #A7F3D0;
+      --amber: #D97706; --amber-bg: #FFFBEB; --amber-border: #FDE68A;
+      --red: #DC2626; --red-bg: #FEF2F2; --red-border: #FECACA;
+      --radius: 14px; --radius-sm: 8px;
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--off-white);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── Nav ─────────────────────────────────────────────────────────────────── */
+    nav { background: var(--deep-teal); padding: 0 24px; position: sticky; top: 0; z-index: 100; }
+    .nav-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; height: 60px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 800; font-size: 1.05rem; color: white; text-decoration: none;
+    }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-badge {
+      background: rgba(2,192,154,0.2); color: #02C39A;
+      font-size: 0.78rem; padding: 4px 12px; border-radius: 20px; font-weight: 700; letter-spacing: 0.4px;
+    }
+    .btn-print {
+      background: rgba(255,255,255,0.12); color: white;
+      border: 1px solid rgba(255,255,255,0.2); border-radius: var(--radius-sm);
+      padding: 7px 14px; font-size: 0.83rem; font-weight: 600; cursor: pointer; font-family: inherit;
+    }
+
+    /* ── Layout ──────────────────────────────────────────────────────────────── */
+    main { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+    .loading {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 60vh; flex-direction: column; gap: 16px;
+    }
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid var(--grey-300); border-top-color: var(--teal);
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #report { display: none; }
+
+    /* ── Cards ───────────────────────────────────────────────────────────────── */
+    .card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--grey-200); overflow: hidden; margin-bottom: 20px; }
+    .card-body { padding: 20px 24px; }
+    .section-title {
+      font-size: 0.88rem; font-weight: 800; color: var(--deep-teal);
+      text-transform: uppercase; letter-spacing: 0.6px;
+      padding: 14px 24px; border-bottom: 1px solid var(--grey-100);
+    }
+
+    /* ── Report header ───────────────────────────────────────────────────────── */
+    .report-header {
+      background: var(--deep-teal); border-radius: var(--radius);
+      margin-bottom: 20px; padding: 28px 28px 24px;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .report-header-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+    .report-confidential { font-size: 0.68rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(2,192,154,0.8); margin-bottom: 6px; }
+    .report-title { font-size: 1.65rem; font-weight: 900; color: white; letter-spacing: -0.02em; }
+    .report-patient-name { font-size: 1.15rem; font-weight: 700; color: #94D4DC; margin-top: 4px; }
+    .report-header-right { text-align: right; }
+    .report-period-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+    .report-period-val { font-size: 1.05rem; font-weight: 700; color: white; }
+    .report-generated { font-size: 0.72rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+    .report-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0; }
+    .report-meta-row { display: flex; gap: 32px; flex-wrap: wrap; }
+    .report-meta-label { font-size: 0.7rem; color: rgba(255,255,255,0.4); font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
+    .report-meta-val { font-size: 0.92rem; color: rgba(255,255,255,0.85); font-weight: 600; margin-top: 2px; }
+
+    /* ── Stat cards ──────────────────────────────────────────────────────────── */
+    .adherence-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+    .stat-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--grey-200); padding: 18px 16px; text-align: center; }
+    .stat-val { font-size: 2.4rem; font-weight: 900; line-height: 1; letter-spacing: -0.04em; }
+    .stat-lbl { font-size: 0.73rem; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.6px; margin-top: 6px; }
+    .stat-sub { font-size: 0.8rem; color: var(--grey-500); margin-top: 2px; }
+
+    /* ── Risk & trend ────────────────────────────────────────────────────────── */
+    .risk-badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 6px; padding: 3px 10px; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.5px; }
+    .risk-low      { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .risk-moderate { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+    .risk-high     { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .trend-improving { color: var(--green); }
+    .trend-declining { color: var(--red); }
+    .trend-stable    { color: var(--grey-500); }
+
+    /* ── Narrative ───────────────────────────────────────────────────────────── */
+    .narrative-box {
+      background: var(--grey-100); border-radius: var(--radius-sm); padding: 16px 18px;
+      font-size: 0.92rem; line-height: 1.75; color: var(--text);
+      border-left: 3px solid var(--teal);
+    }
+
+    /* ── Findings ────────────────────────────────────────────────────────────── */
+    .finding-row { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--grey-100); }
+    .finding-row:last-child { border-bottom: none; }
+    .finding-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+    .finding-text { font-size: 0.88rem; line-height: 1.6; color: var(--text); }
+
+    /* ── Calendar ────────────────────────────────────────────────────────────── */
+    .cal-header-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 4px; }
+    .cal-weekday { text-align: center; font-size: 0.68rem; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cal-day { aspect-ratio: 1; border-radius: 4px; cursor: default; position: relative; }
+    .cal-day:hover::after {
+      content: attr(data-tip);
+      position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+      background: var(--deep-teal); color: white;
+      font-size: 11px; font-weight: 600; white-space: nowrap;
+      padding: 4px 8px; border-radius: 6px; z-index: 10; pointer-events: none;
+    }
+    .cal-green { background: #BBFBDF; border: 1px solid #34D399; }
+    .cal-amber { background: #FDE68A; border: 1px solid #F59E0B; }
+    .cal-red   { background: #FECACA; border: 1px solid #F87171; }
+    .cal-gray  { background: var(--grey-100); border: 1px solid var(--grey-200); }
+    .cal-empty { background: transparent; border: none; }
+    .calendar-legend { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.77rem; color: var(--grey-500); font-weight: 600; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+    /* ── Medications ─────────────────────────────────────────────────────────── */
+    .med-row-r { display: flex; align-items: center; gap: 14px; padding: 14px 24px; border-bottom: 1px solid var(--grey-100); }
+    .med-row-r:last-child { border-bottom: none; }
+    .med-dot-r { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .med-info-r { flex: 1; min-width: 0; }
+    .med-name-r { font-size: 0.92rem; font-weight: 700; color: var(--deep-teal); }
+    .med-nick-r { font-size: 0.78rem; color: var(--grey-500); margin-top: 1px; }
+    .med-bar-col { width: 180px; }
+    .med-bar-track { height: 8px; background: var(--grey-100); border-radius: 4px; overflow: hidden; margin-bottom: 4px; }
+    .med-bar-fill { height: 100%; border-radius: 4px; }
+    .med-bar-lbl { font-size: 0.72rem; color: var(--grey-500); font-weight: 600; display: flex; justify-content: space-between; }
+    .med-pct { font-size: 1rem; font-weight: 800; width: 48px; text-align: right; flex-shrink: 0; }
+
+    /* ── Flags ───────────────────────────────────────────────────────────────── */
+    .flag-box { background: var(--amber-bg); border-left: 4px solid var(--amber); border-radius: var(--radius-sm); padding: 14px 18px; }
+    .flag-title { font-size: 0.78rem; font-weight: 800; color: #92400E; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .flag-subtitle { font-size: 0.72rem; color: #B45309; margin-bottom: 10px; line-height: 1.5; }
+    .flag-item { font-size: 0.85rem; color: #78350F; margin-bottom: 6px; line-height: 1.6; }
+
+    /* ── Disclaimer ──────────────────────────────────────────────────────────── */
+    .disclaimer-box {
+      background: var(--grey-100); border-radius: var(--radius);
+      padding: 16px 20px; font-size: 0.78rem; color: var(--grey-700);
+      line-height: 1.65; border: 1px solid var(--grey-200); margin-bottom: 20px;
+    }
+
+    footer { background: var(--deep-teal); color: rgba(255,255,255,0.5); text-align: center; padding: 20px; font-size: 0.78rem; }
+    .error-box { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: var(--radius); padding: 24px; text-align: center; color: var(--red); font-weight: 700; }
+
+    @media print {
+      nav, footer, .btn-print { display: none !important; }
+      body { background: white; }
+      main { padding: 0; max-width: 100%; }
+      .card { box-shadow: none; border-color: #ddd; page-break-inside: avoid; }
+      .adherence-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 680px) {
+      .adherence-grid { grid-template-columns: repeat(2, 1fr); }
+      .report-header-top { flex-direction: column; }
+      .report-header-right { text-align: left; }
+      .med-bar-col { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="elara-bot-logo.png" alt="Carely" style="height:30px;width:auto;filter:brightness(10);" />
+      Carely
+    </a>
+    <div class="nav-right">
+      <span class="nav-badge">Clinical Report</span>
+      <button class="btn-print" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p style="color:var(--grey-500);font-size:0.9rem;">Generating report...</p>
+  </div>
+  <div id="report"></div>
+</main>
+
+<footer>
+  <span>Carely &middot; carely.fit &middot; Confidential &mdash; For licensed healthcare providers only</span>
+</footer>
+
+<script>
+var API = 'https://carely-backend-production.up.railway.app';
+var SESSION_KEY = 'carely_partner_token';
+
+var params   = new URLSearchParams(location.search);
+var userId   = params.get('userId');
+var period   = params.get('period') || '30';
+var demoMode = params.get('demo') === 'true';
+
+function el(tag, cls, text) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = String(text);
+  return e;
+}
+
+function adherenceColor(pct) {
+  if (pct == null) return 'var(--grey-500)';
+  if (pct >= 80) return 'var(--green)';
+  if (pct >= 50) return 'var(--amber)';
+  return 'var(--red)';
+}
+
+function riskClass(level) {
+  return { low: 'risk-low', moderate: 'risk-moderate', high: 'risk-high' }[level] || 'risk-low';
+}
+
+function calClass(pct) {
+  if (pct == null) return 'cal-gray';
+  if (pct >= 80)   return 'cal-green';
+  if (pct >= 40)   return 'cal-amber';
+  return 'cal-red';
+}
+
+function trendLabel(trend, delta) {
+  var icon = trend === 'improving' ? '↑' : trend === 'declining' ? '↓' : '→';
+  var sign = delta > 0 ? '+' : '';
+  return icon + ' ' + sign + delta + '% vs prior week';
+}
+
+function formatDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function renderReport(data) {
+  document.getElementById('loading').style.display = 'none';
+  var root = document.getElementById('report');
+  root.style.display = 'block';
+
+  var patient = data.patient;
+  var meta    = data.reportMeta;
+  var adh     = data.adherence;
+  var clin    = data.clinical;
+  var meds    = data.medications;
+  var cal     = data.calendar;
+
+  var patientName = patient.firstName + ' ' + patient.lastInitial + '.';
+
+  // ── Report header ─────────────────────────────────────────────────────────────
+  var header = el('div', 'report-header');
+
+  var top = el('div', 'report-header-top');
+  var headerLeft = el('div');
+  headerLeft.appendChild(el('div', 'report-confidential', 'Confidential — For clinical use only'));
+  headerLeft.appendChild(el('div', 'report-title', 'Medication Adherence Report'));
+  headerLeft.appendChild(el('div', 'report-patient-name', patientName));
+  top.appendChild(headerLeft);
+
+  var headerRight = el('div', 'report-header-right');
+  headerRight.appendChild(el('div', 'report-period-label', 'Report period'));
+  headerRight.appendChild(el('div', 'report-period-val', meta.dateRange.from + ' – ' + meta.dateRange.to));
+  headerRight.appendChild(el('div', 'report-generated', 'Generated ' + formatDate(meta.generatedAt)));
+  top.appendChild(headerRight);
+  header.appendChild(top);
+
+  header.appendChild(el('hr', 'report-divider'));
+
+  var metaRow = el('div', 'report-meta-row');
+  [
+    ['Prepared for',  meta.partnerName ? 'Dr. ' + meta.partnerName : 'Treating physician'],
+    ['Platform',      'Carely — carely.fit'],
+    ['Data source',   'Patient self-reported'],
+    ['Period',        meta.period + ' days'],
+  ].forEach(function(pair) {
+    var item = el('div');
+    item.appendChild(el('div', 'report-meta-label', pair[0]));
+    item.appendChild(el('div', 'report-meta-val', pair[1]));
+    metaRow.appendChild(item);
+  });
+  header.appendChild(metaRow);
+  root.appendChild(header);
+
+  // ── Adherence summary cards ───────────────────────────────────────────────────
+  var grid = el('div', 'adherence-grid');
+
+  function statCard(val, lbl, sub, color) {
+    var card = el('div', 'stat-card');
+    var v = el('div', 'stat-val', val);
+    if (color) v.style.color = color;
+    card.appendChild(v);
+    card.appendChild(el('div', 'stat-lbl', lbl));
+    if (sub) card.appendChild(el('div', 'stat-sub', sub));
+    return card;
+  }
+
+  grid.appendChild(statCard(
+    adh.rate7d + '%', '7-Day Adherence',
+    adh.totalTaken7d + ' of ' + (adh.totalTaken7d + adh.totalMissed7d) + ' doses',
+    adherenceColor(adh.rate7d)
+  ));
+  grid.appendChild(statCard(
+    adh.rate30d + '%', '30-Day Adherence',
+    'Over ' + meta.period + ' days',
+    adherenceColor(adh.rate30d)
+  ));
+
+  var trendCard = statCard(trendLabel(adh.trend, adh.trendDelta), 'Weekly Trend', null, null);
+  trendCard.querySelector('.stat-val').className = 'stat-val trend-' + adh.trend;
+  trendCard.querySelector('.stat-val').style.fontSize = '1.1rem';
+  grid.appendChild(trendCard);
+
+  var riskCard = el('div', 'stat-card');
+  riskCard.appendChild(el('span', 'risk-badge ' + riskClass(clin.riskLevel), clin.riskLevel.toUpperCase() + ' RISK'));
+  riskCard.appendChild(el('div', 'stat-lbl', 'Adherence Risk'));
+  if (adh.consecutiveMissStreak >= 2) {
+    riskCard.appendChild(el('div', 'stat-sub', adh.consecutiveMissStreak + ' consecutive missed'));
+  }
+  grid.appendChild(riskCard);
+
+  root.appendChild(grid);
+
+  // ── Clinical narrative ────────────────────────────────────────────────────────
+  if (clin.narrative) {
+    var narCard = el('div', 'card');
+    narCard.appendChild(el('div', 'section-title', 'Clinical Summary'));
+    var narBody = el('div', 'card-body');
+    narBody.appendChild(el('div', 'narrative-box', clin.narrative));
+    narCard.appendChild(narBody);
+    root.appendChild(narCard);
+  }
+
+  // ── Key findings ──────────────────────────────────────────────────────────────
+  if (clin.keyFindings && clin.keyFindings.length) {
+    var findCard = el('div', 'card');
+    findCard.appendChild(el('div', 'section-title', 'Key Clinical Findings'));
+    var findBody = el('div', 'card-body');
+    findBody.style.paddingTop = '8px';
+    findBody.style.paddingBottom = '8px';
+    var dotColor = clin.riskLevel === 'high' ? 'var(--red)' : clin.riskLevel === 'moderate' ? 'var(--amber)' : 'var(--green)';
+    clin.keyFindings.forEach(function(f) {
+      var row = el('div', 'finding-row');
+      var dot = el('div', 'finding-dot');
+      dot.style.backgroundColor = dotColor;
+      row.appendChild(dot);
+      row.appendChild(el('div', 'finding-text', f));
+      findBody.appendChild(row);
+    });
+    findCard.appendChild(findBody);
+    root.appendChild(findCard);
+  }
+
+  // ── 30-day Calendar heatmap ───────────────────────────────────────────────────
+  var calCard = el('div', 'card');
+  calCard.appendChild(el('div', 'section-title', meta.period + '-Day Adherence Calendar'));
+  var calBody = el('div', 'card-body');
+
+  var dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var hdrRow = el('div', 'cal-header-row');
+  dayNames.forEach(function(d) { hdrRow.appendChild(el('div', 'cal-weekday', d)); });
+  calBody.appendChild(hdrRow);
+
+  var calGrid = el('div', 'calendar-grid');
+  if (cal.length > 0) {
+    var firstDow = new Date(cal[0].date + 'T12:00:00').getDay();
+    for (var i = 0; i < firstDow; i++) {
+      calGrid.appendChild(el('div', 'cal-day cal-empty'));
+    }
+    cal.forEach(function(day) {
+      var d = el('div', 'cal-day ' + calClass(day.pct));
+      var shortDate = new Date(day.date + 'T12:00:00').toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
+      var tip;
+      if (day.total === 0) {
+        tip = shortDate + ': No scheduled doses';
+      } else {
+        tip = shortDate + ': ' + day.taken + '/' + day.total + ' taken';
+        if (day.pct != null) tip += ' (' + day.pct + '%)';
+      }
+      d.setAttribute('data-tip', tip);
+      calGrid.appendChild(d);
+    });
+  }
+  calBody.appendChild(calGrid);
+
+  var legend = el('div', 'calendar-legend');
+  [['cal-green','>=80% taken'],['cal-amber','40-79%'],['cal-red','<40%'],['cal-gray','No data']].forEach(function(p) {
+    var item = el('div', 'legend-item');
+    item.appendChild(el('div', 'legend-dot ' + p[0]));
+    item.appendChild(el('span', null, p[1]));
+    legend.appendChild(item);
+  });
+  calBody.appendChild(legend);
+  calCard.appendChild(calBody);
+  root.appendChild(calCard);
+
+  // ── Per-medication breakdown ──────────────────────────────────────────────────
+  var medCard = el('div', 'card');
+  medCard.appendChild(el('div', 'section-title', 'Per-Medication (' + meta.period + ' days)'));
+  var MED_COLORS = ['#028090','#02C39A','#5B6EF8','#F59E0B','#8B5CF6','#EF4444','#10B981','#F97316'];
+  meds.forEach(function(med, idx) {
+    var row = el('div', 'med-row-r');
+    var dot = el('div', 'med-dot-r');
+    dot.style.backgroundColor = MED_COLORS[idx % MED_COLORS.length];
+    row.appendChild(dot);
+
+    var info = el('div', 'med-info-r');
+    info.appendChild(el('div', 'med-name-r', med.name));
+    var nickParts = [];
+    if (med.nickname && med.nickname !== med.name) nickParts.push('"' + med.nickname + '"');
+    if (med.dose) nickParts.push(med.dose);
+    if (nickParts.length) info.appendChild(el('div', 'med-nick-r', nickParts.join(' · ')));
+    row.appendChild(info);
+
+    var barCol = el('div', 'med-bar-col');
+    var track = el('div', 'med-bar-track');
+    var fill = el('div', 'med-bar-fill');
+    fill.style.width = (med.adherenceRate || 0) + '%';
+    fill.style.background = adherenceColor(med.adherenceRate);
+    track.appendChild(fill);
+    barCol.appendChild(track);
+    var barLbl = el('div', 'med-bar-lbl');
+    barLbl.appendChild(el('span', null, med.takenDoses + ' taken'));
+    var missedSpan = el('span', null, med.missedDoses + ' missed');
+    missedSpan.style.color = med.missedDoses > 0 ? 'var(--red)' : 'var(--grey-500)';
+    barLbl.appendChild(missedSpan);
+    barCol.appendChild(barLbl);
+    row.appendChild(barCol);
+
+    var pctEl = el('div', 'med-pct', med.adherenceRate != null ? med.adherenceRate + '%' : '—');
+    pctEl.style.color = adherenceColor(med.adherenceRate);
+    row.appendChild(pctEl);
+    medCard.appendChild(row);
+  });
+  root.appendChild(medCard);
+
+  // ── Medication interaction flags ──────────────────────────────────────────────
+  if (clin.interactionFlags && clin.interactionFlags.length) {
+    var flagCard = el('div', 'card');
+    flagCard.appendChild(el('div', 'section-title', 'Medication Combination Notes'));
+    var flagBody = el('div', 'card-body');
+    var box = el('div', 'flag-box');
+    box.appendChild(el('div', 'flag-title', 'Flagged for clinical awareness'));
+    box.appendChild(el('div', 'flag-subtitle',
+      'Detected from medication names only. Carely has no access to clinical records, lab values, or patient history. Clinical judgment required.'
+    ));
+    clin.interactionFlags.forEach(function(flag) {
+      var item = el('div', 'flag-item');
+      item.appendChild(document.createTextNode('• ' + flag));
+      box.appendChild(item);
+    });
+    flagBody.appendChild(box);
+    flagCard.appendChild(flagBody);
+    root.appendChild(flagCard);
+  }
+
+  // ── Refill warnings ───────────────────────────────────────────────────────────
+  if (clin.refillWarnings && clin.refillWarnings.length) {
+    var refillCard = el('div', 'card');
+    refillCard.appendChild(el('div', 'section-title', 'Refill Alerts'));
+    var refillBody = el('div', 'card-body');
+    refillBody.style.paddingTop = '8px';
+    refillBody.style.paddingBottom = '8px';
+    clin.refillWarnings.forEach(function(w) {
+      var row = el('div', 'finding-row');
+      var dot = el('div', 'finding-dot');
+      dot.style.backgroundColor = 'var(--amber)';
+      row.appendChild(dot);
+      row.appendChild(el('div', 'finding-text', w));
+      refillBody.appendChild(row);
+    });
+    refillCard.appendChild(refillBody);
+    root.appendChild(refillCard);
+  }
+
+  // ── Disclaimer ────────────────────────────────────────────────────────────────
+  var disc = el('div', 'disclaimer-box');
+  var strong = el('strong', null, 'Important clinical notice: ');
+  disc.appendChild(strong);
+  disc.appendChild(document.createTextNode(
+    'This report is generated by Carely (carely.fit), a patient-facing medication reminder app. ' +
+    'All adherence data is based exclusively on patient self-reported dose confirmations. ' +
+    'Carely does not verify actual medication consumption, has no access to clinical records, ' +
+    'lab values, or diagnostic information, and does not constitute a medical device. ' +
+    'This document is a supporting reference only and does not replace clinical judgment. ' +
+    'Report access is logged for audit compliance.'
+  ));
+  root.appendChild(disc);
+}
+
+function showError(msg) {
+  document.getElementById('loading').style.display = 'none';
+  var root = document.getElementById('report');
+  root.style.display = 'block';
+  root.appendChild(el('div', 'error-box', msg));
+}
+
+function loadReport(token) {
+  if (!userId) {
+    showError('Missing patient ID. Open this report from a patient row in the doctor portal.');
+    return;
+  }
+  fetch(API + '/portal/patient/' + encodeURIComponent(userId) + '/report?period=' + encodeURIComponent(period), {
+    headers: { 'Authorization': 'Bearer ' + token }
+  })
+    .then(function(r) {
+      if (r.status === 401) { sessionStorage.removeItem(SESSION_KEY); showError('Session expired. Log in again from the doctor portal.'); return null; }
+      if (!r.ok) return r.json().then(function(d) { throw new Error(d.message || 'Failed to load report'); });
+      return r.json();
+    })
+    .then(function(data) { if (data) renderReport(data); })
+    .catch(function(err) { showError(err.message || 'Could not load report. Please try again.'); });
+}
+
+function initDemo() {
+  renderReport({
+    patient: { id: 'demo', firstName: 'Margaret', lastInitial: 'T', lastActive: new Date().toISOString() },
+    reportMeta: {
+      period: 30, generatedAt: new Date().toISOString(),
+      dateRange: { from: 'Apr 21, 2026', to: 'May 20, 2026' },
+      partnerName: 'Bridge',
+    },
+    adherence: { rate7d: 79, rate30d: 84, trend: 'declining', trendDelta: -8, totalTaken7d: 17, totalMissed7d: 4, consecutiveMissStreak: 2 },
+    medications: [
+      { id: '1', name: 'Metformin', nickname: 'Diabetes pill', dose: '500mg', notes: null, takenDoses: 52, missedDoses: 8, totalDoses: 60, adherenceRate: 87 },
+      { id: '2', name: 'Lisinopril', nickname: 'Blood pressure', dose: '10mg', notes: null, takenDoses: 28, missedDoses: 2, totalDoses: 30, adherenceRate: 93 },
+      { id: '3', name: 'Atorvastatin', nickname: 'Cholesterol', dose: '20mg', notes: null, takenDoses: 24, missedDoses: 6, totalDoses: 30, adherenceRate: 80 },
+    ],
+    calendar: (function() {
+      var days = [];
+      for (var i = 29; i >= 0; i--) {
+        var d = new Date(); d.setDate(d.getDate() - i);
+        var dateStr = d.toISOString().slice(0,10);
+        var t = Math.random() > 0.15 ? Math.floor(Math.random() * 2) + 2 : Math.floor(Math.random() * 2);
+        days.push({ date: dateStr, taken: t, missed: 3 - t, total: 3, pct: Math.round((t/3)*100) });
+      }
+      return days;
+    }()),
+    clinical: {
+      narrative: '79% adherence over the past 7 days (17 of 21 doses taken), 84% over 30 days. Trend is declining (-8% week-over-week). Most-missed: Metformin (13% miss rate). Evening is the weakest adherence window (22% missed). 2 most recent doses were missed.',
+      keyFindings: [
+        'Adherence declining: down 8% vs prior week — warrants check-in',
+        '2 consecutive missed doses as of most recent data',
+        '"Metformin" has a 13% miss rate over 30 days — specific non-adherence pattern',
+        'Evening doses are consistently missed (22% miss rate) — consider schedule adjustment',
+      ],
+      riskLevel: 'moderate',
+      interactionFlags: ['NSAIDs may affect blood glucose control — patient is on both'],
+      refillWarnings: ['Metformin: refill due in ~5 days (May 25)'],
+      worstMedication: { name: 'Metformin', missRate: 13 },
+      worstTimeOfDay: { slot: 'evening', missRate: 22 },
+    },
+  });
+}
+
+if (demoMode) {
+  initDemo();
+} else {
+  var tok = sessionStorage.getItem(SESSION_KEY);
+  if (!tok) { showError('Not authenticated. Log in from the doctor portal first.'); }
+  else { loadReport(tok); }
+}
+</script>
+</body>
+</html>
