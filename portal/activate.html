@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Activate Partner Account — Carely</title>
+  <link rel="icon" type="image/png" href="../elara-3d-new.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0D3347 0%, #028090 60%, #02C39A 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .card { background: #fff; border-radius: 20px; padding: 48px 40px; width: 440px; max-width: 100%; box-shadow: 0 32px 80px rgba(13,51,71,.35); }
+    .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .logo img { height: 40px; }
+    .logo span { font-size: 1.2rem; font-weight: 800; color: #0D3347; }
+    h1 { font-size: 1.5rem; font-weight: 800; color: #0D3347; margin-bottom: 6px; margin-top: 24px; }
+    .subtitle { font-size: 0.9rem; color: #6b8fa3; margin-bottom: 32px; }
+    label { display: block; font-size: 0.78rem; font-weight: 700; color: #6b8fa3; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 5px; }
+    input[type="password"] { width: 100%; padding: 12px 14px; border: 1.5px solid #e0eaf0; border-radius: 10px; font-size: 0.95rem; color: #0d3347; background: #f8fbfc; outline: none; font-family: inherit; transition: border-color 0.2s; margin-bottom: 16px; }
+    input[type="password"]:focus { border-color: #028090; box-shadow: 0 0 0 3px rgba(2,128,144,0.1); }
+    .btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #028090, #02C39A); color: #fff; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 4px; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .error { color: #e53e3e; font-size: 0.85rem; margin-top: 10px; display: none; }
+    .success { display: none; text-align: center; }
+    .success h2 { font-size: 1.3rem; font-weight: 800; color: #0D3347; margin-bottom: 8px; }
+    .success p { font-size: 0.9rem; color: #6b8fa3; margin-bottom: 16px; }
+    .invite-code { background: #e0faf4; border: 1.5px solid #02C39A; border-radius: 10px; padding: 12px 16px; font-size: 1.2rem; font-weight: 800; color: #0D3347; text-align: center; letter-spacing: 0.05em; margin: 12px 0; }
+    .portal-btn { display: block; width: 100%; padding: 13px; background: #0D3347; color: #fff; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 700; cursor: pointer; text-decoration: none; text-align: center; font-family: inherit; }
+    .req-list { font-size: 0.8rem; color: #9ab8c4; margin-top: -8px; margin-bottom: 16px; line-height: 1.8; }
+    .token-error { text-align: center; padding: 20px 0; }
+    .token-error h2 { font-size: 1.2rem; color: #e53e3e; font-weight: 800; margin-bottom: 8px; }
+    .token-error p { font-size: 0.88rem; color: #6b8fa3; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <img src="../elara-bot-logo.png" alt="Carely" onerror="this.style.display='none'" />
+    <span>Carely</span>
+  </div>
+
+  <div id="loading">
+    <h1>Activating your account...</h1>
+    <p class="subtitle">Verifying your activation link.</p>
+  </div>
+
+  <div id="token-error" style="display:none" class="token-error">
+    <h2>Link expired or invalid</h2>
+    <p>This activation link has expired or already been used.<br/>
+       Email <a href="mailto:hello@carely.fit" style="color:#028090">hello@carely.fit</a> to request a new one.</p>
+  </div>
+
+  <div id="setup-form" style="display:none">
+    <h1>Set your password</h1>
+    <p class="subtitle" id="org-name-sub">Create a secure password for your Carely portal.</p>
+    <label for="pw1">Password</label>
+    <input type="password" id="pw1" placeholder="At least 10 characters" autocomplete="new-password" />
+    <label for="pw2">Confirm Password</label>
+    <input type="password" id="pw2" placeholder="Re-enter your password" autocomplete="new-password" />
+    <p class="req-list">Must be at least 10 characters</p>
+    <button class="btn" id="activate-btn" onclick="doActivate()">Activate My Account</button>
+    <p class="error" id="activate-err"></p>
+  </div>
+
+  <div id="success" class="success">
+    <img src="../elara-bot-logo.png" style="height:60px;margin-bottom:16px;" onerror="this.style.display='none'" alt="" />
+    <h2>You're in!</h2>
+    <p>Your Carely partner account is live. Share this invite code with patients so they can connect to you in the Carely app.</p>
+    <div class="invite-code" id="invite-code-display"></div>
+    <p style="font-size:0.8rem;color:#9ab8c4;margin-bottom:16px;">Patients enter this code under Profile &rsaquo; Connect with a Partner</p>
+    <a href="#" id="go-to-portal" class="portal-btn">Go to my portal</a>
+  </div>
+</div>
+
+<script>
+var API = 'https://carely-backend-production.up.railway.app';
+var params = new URLSearchParams(location.search);
+var token = params.get('token');
+
+if (!token) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('token-error').style.display = 'block';
+} else {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('setup-form').style.display = 'block';
+}
+
+function doActivate() {
+  var pw1 = document.getElementById('pw1').value;
+  var pw2 = document.getElementById('pw2').value;
+  var btn = document.getElementById('activate-btn');
+  var err = document.getElementById('activate-err');
+  err.style.display = 'none';
+
+  if (pw1.length < 10) {
+    err.textContent = 'Password must be at least 10 characters.';
+    err.style.display = 'block';
+    return;
+  }
+  if (pw1 !== pw2) {
+    err.textContent = 'Passwords do not match.';
+    err.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Activating...';
+
+  fetch(API + '/partner/activate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: token, password: pw1 }),
+  })
+    .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+    .then(function(result) {
+      if (!result.ok) {
+        err.textContent = result.data.message || result.data.error || 'Activation failed.';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Activate My Account';
+        return;
+      }
+      document.getElementById('setup-form').style.display = 'none';
+      var successEl = document.getElementById('success');
+      successEl.style.display = 'block';
+      var codeEl = document.getElementById('invite-code-display');
+      codeEl.textContent = result.data.invite_code || '';
+      var portalBtn = document.getElementById('go-to-portal');
+      if (result.data.portal_url) {
+        portalBtn.href = result.data.portal_url;
+      }
+    })
+    .catch(function() {
+      err.textContent = 'Network error. Please try again.';
+      err.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Activate My Account';
+    });
+}
+</script>
+</body>
+</html>
