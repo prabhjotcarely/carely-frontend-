@@ -372,6 +372,10 @@ function fetchLiveData(token) {
       return r.json();
     });
 
+  var pBilling = fetch(API + '/partner/billing/status', { headers: headers })
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .catch(function() { return null; });
+
   var pRequests = fetch(API + '/portal/medicine-requests', { headers: headers })
     .then(function(r) {
       if (r.status === 401) return null;
@@ -384,14 +388,18 @@ function fetchLiveData(token) {
       return r.json();
     });
 
-  Promise.all([pMe, pRequests, pPatients])
+  Promise.all([pMe, pBilling, pRequests, pPatients])
     .then(function(results) {
-      var meData = results[0];
-      var reqData = results[1];
-      var patData = results[2];
+      var meData  = results[0];
+      var bilData = results[1];
+      var reqData = results[2];
+      var patData = results[3];
 
       if (meData && meData.partner) {
         state.partner = meData.partner;
+      }
+      if (bilData) {
+        state.billing = bilData;
       }
       if (reqData && reqData.requests) {
         state.requests = reqData.requests;
@@ -415,6 +423,11 @@ function initDemoData() {
   state.partner = DEMO.partner;
   state.patientCount = DEMO.patients;
   state.requests = DEMO.requests;
+  state.billing = {
+    billing: { hasSubscription: true, status: 'active', plan: 'Partner Portal ($30 CAD/month)', currency: 'CAD', isCareHome: false },
+    commission: { rate: 20, linkedPatients: DEMO.patients, payingPatients: Math.floor(DEMO.patients * 0.6), commissionCents: Math.floor(DEMO.patients * 0.6 * 999 * 0.20), formatted: '$' + (DEMO.patients * 0.6 * 999 * 0.20 / 100).toFixed(2) },
+    residents: null,
+  };
   document.getElementById('loading').style.display = 'none';
   renderAll();
 }
@@ -795,16 +808,36 @@ function refreshOrders() {
 
 // ── Profile & Billing ────────────────────────────────────────────────────────
 
+function openBillingPortal() {
+  var token = sessionStorage.getItem(SESSION_KEY) || '';
+  fetch(API + '/partner/billing/portal', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } })
+    .then(function(r) { return r.json(); })
+    .then(function(data) { if (data.url) window.open(data.url, '_blank'); else alert('Contact hello@carely.fit'); })
+    .catch(function() { alert('Could not open billing portal. Contact hello@carely.fit'); });
+}
+
+function subscribeToPlan() {
+  var token = sessionStorage.getItem(SESSION_KEY) || '';
+  fetch(API + '/partner/billing/subscribe', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } })
+    .then(function(r) { return r.json(); })
+    .then(function(data) { if (data.checkoutUrl) window.location.href = data.checkoutUrl; else alert('Contact hello@carely.fit'); })
+    .catch(function() { alert('Could not start checkout. Contact hello@carely.fit'); });
+}
+
 function renderProfileBilling() {
   var grid = document.getElementById('profile-billing-grid');
   clearNode(grid);
 
   var p = state.partner || {};
+  var bil = state.billing || {};
+  var bStatus = bil.billing || null;
+  var bComm   = bil.commission || null;
+
   var inviteCode = p.invite_code || '--';
   var memberSince = p.activated_at
     ? new Date(p.activated_at).toLocaleDateString('en-CA', { month: 'long', year: 'numeric' })
     : '--';
-  var countryLabel = p.country === 'CA' ? 'Canada' : (p.country || '--');
+  var countryLabel = p.country === 'CA' ? 'Canada' : p.country === 'US' ? 'United States' : (p.country || '--');
 
   // --- Profile card ---
   var profileCard = document.createElement('div');
@@ -820,103 +853,82 @@ function renderProfileBilling() {
   orgName.textContent = p.org_name || 'Your Pharmacy';
   profileCard.appendChild(orgName);
 
-  var profileRows = [
+  [
     { key: 'Contact Name', val: p.contact_name || '--' },
     { key: 'Email', val: p.email || '--' },
     { key: 'Country', val: countryLabel },
-    { key: 'Member Since', val: memberSince }
-  ];
-
-  profileRows.forEach(function(r) {
+    { key: 'Member Since', val: memberSince },
+  ].forEach(function(r) {
     var rowEl = document.createElement('div');
     rowEl.className = 'profile-row';
-    var keyEl = document.createElement('div');
-    keyEl.className = 'profile-key';
-    keyEl.textContent = r.key;
-    var valEl = document.createElement('div');
-    valEl.className = 'profile-val';
-    valEl.textContent = r.val;
-    rowEl.appendChild(keyEl);
-    rowEl.appendChild(valEl);
+    var keyEl = document.createElement('div'); keyEl.className = 'profile-key'; keyEl.textContent = r.key;
+    var valEl = document.createElement('div'); valEl.className = 'profile-val'; valEl.textContent = r.val;
+    rowEl.appendChild(keyEl); rowEl.appendChild(valEl);
     profileCard.appendChild(rowEl);
   });
 
-  // Invite code row with pill
-  var codeRow = document.createElement('div');
-  codeRow.className = 'profile-row';
-  var codeKey = document.createElement('div');
-  codeKey.className = 'profile-key';
-  codeKey.textContent = 'Invite Code';
+  var codeRow = document.createElement('div'); codeRow.className = 'profile-row';
+  var codeKey = document.createElement('div'); codeKey.className = 'profile-key'; codeKey.textContent = 'Invite Code';
   var codeValWrap = document.createElement('div');
-  var codePill = document.createElement('span');
-  codePill.className = 'code-pill';
-  codePill.textContent = inviteCode;
-  codeValWrap.appendChild(codePill);
-  codeRow.appendChild(codeKey);
-  codeRow.appendChild(codeValWrap);
+  var codePill = document.createElement('span'); codePill.className = 'code-pill'; codePill.textContent = inviteCode;
+  codeValWrap.appendChild(codePill); codeRow.appendChild(codeKey); codeRow.appendChild(codeValWrap);
   profileCard.appendChild(codeRow);
-
   grid.appendChild(profileCard);
 
   // --- Billing card ---
   var billingCard = document.createElement('div');
   billingCard.className = 'card';
 
-  var billingTitle = document.createElement('div');
-  billingTitle.className = 'card-title';
-  billingTitle.textContent = 'Billing & Earnings';
+  var billingTitle = document.createElement('div'); billingTitle.className = 'card-title'; billingTitle.textContent = 'Billing & Earnings';
   billingCard.appendChild(billingTitle);
 
-  var commissionBadge = document.createElement('div');
-  commissionBadge.className = 'commission-badge';
-  commissionBadge.textContent = '20% Commission';
+  var commissionBadge = document.createElement('div'); commissionBadge.className = 'commission-badge'; commissionBadge.textContent = '20% Commission on Referrals';
   billingCard.appendChild(commissionBadge);
 
-  var estEarnings = (state.patientCount * 2.99).toFixed(2);
+  var planText    = bStatus ? bStatus.plan   : 'Partner Portal ($30/month)';
+  var statusText  = bStatus ? (bStatus.status === 'active' ? 'Active' : 'Not subscribed') : '—';
+  var payingText  = bComm   ? (bComm.payingPatients + ' of ' + bComm.linkedPatients + ' paying') : String(state.patientCount);
+  var earningText = bComm   ? bComm.formatted + '/month' : ('$' + (state.patientCount * 0.6 * 9.99 * 0.20).toFixed(2));
 
-  var billingRows = [
-    { key: 'Connected Patients', val: String(state.patientCount) },
-    { key: 'Est. Monthly Earnings', val: '$' + estEarnings }
-  ];
-
-  billingRows.forEach(function(r) {
-    var rowEl = document.createElement('div');
-    rowEl.className = 'billing-row';
-    var keyEl = document.createElement('div');
-    keyEl.className = 'billing-key';
-    keyEl.textContent = r.key;
-    var valEl = document.createElement('div');
-    valEl.className = 'billing-val';
-    valEl.textContent = r.val;
-    rowEl.appendChild(keyEl);
-    rowEl.appendChild(valEl);
+  [
+    { key: 'Plan',             val: planText },
+    { key: 'Status',           val: statusText },
+    { key: 'Connected Patients', val: payingText },
+    { key: 'Monthly Earnings', val: earningText },
+  ].forEach(function(r) {
+    var rowEl = document.createElement('div'); rowEl.className = 'billing-row';
+    var keyEl = document.createElement('div'); keyEl.className = 'billing-key'; keyEl.textContent = r.key;
+    var valEl = document.createElement('div'); valEl.className = 'billing-val'; valEl.textContent = r.val;
+    rowEl.appendChild(keyEl); rowEl.appendChild(valEl);
     billingCard.appendChild(rowEl);
   });
 
-  var btnsWrap = document.createElement('div');
-  btnsWrap.className = 'billing-btns';
+  var btnsWrap = document.createElement('div'); btnsWrap.className = 'billing-btns';
 
-  var manageBillingLink = document.createElement('a');
-  manageBillingLink.className = 'billing-btn-teal';
-  manageBillingLink.href = 'https://billing.stripe.com/p/login/test';
-  manageBillingLink.target = '_blank';
-  manageBillingLink.rel = 'noopener noreferrer';
-  manageBillingLink.textContent = 'Manage Billing';
-  btnsWrap.appendChild(manageBillingLink);
+  if (bStatus && bStatus.hasSubscription) {
+    var manageBillingBtn = document.createElement('button');
+    manageBillingBtn.className = 'billing-btn-teal';
+    manageBillingBtn.textContent = 'Manage Billing';
+    manageBillingBtn.onclick = openBillingPortal;
+    btnsWrap.appendChild(manageBillingBtn);
+  } else {
+    var subBtn = document.createElement('button');
+    subBtn.className = 'billing-btn-teal';
+    subBtn.textContent = 'Subscribe — 14-day free trial';
+    subBtn.onclick = subscribeToPlan;
+    btnsWrap.appendChild(subBtn);
+  }
 
   var payoutLink = document.createElement('a');
   payoutLink.className = 'billing-btn-outline';
-  payoutLink.href = 'https://carely.fit/docs/partner-payouts';
-  payoutLink.target = '_blank';
-  payoutLink.rel = 'noopener noreferrer';
-  payoutLink.textContent = 'View Payout History';
+  payoutLink.href = 'mailto:hello@carely.fit?subject=Payout%20History';
+  payoutLink.textContent = 'Payout History';
   btnsWrap.appendChild(payoutLink);
-
   billingCard.appendChild(btnsWrap);
 
   var finePrint = document.createElement('p');
   finePrint.className = 'billing-fine-print';
-  finePrint.textContent = 'Commissions are paid monthly for all active referred subscribers. Questions? hello@carely.fit';
+  finePrint.textContent = 'Your pharmacy earns 20% of every referred patient subscription, paid monthly. A pharmacy referring 15 paying patients earns ~$30/month in commissions — making your Carely subscription effectively free. Questions? hello@carely.fit';
   billingCard.appendChild(finePrint);
 
   grid.appendChild(billingCard);
