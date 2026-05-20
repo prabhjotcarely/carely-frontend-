@@ -726,13 +726,30 @@
   }
 
   function fetchPartnerProfile(token) {
-    fetch(API + '/partner/me', { headers: { 'Authorization': 'Bearer ' + token } })
-      .then(function(r) { return r.ok ? r.json() : null; })
-      .then(function(data) { if (data && data.partner) renderProfileBilling(data.partner, null); })
-      .catch(function() {});
+    Promise.all([
+      fetch(API + '/partner/me', { headers: { 'Authorization': 'Bearer ' + token } }).then(function(r) { return r.ok ? r.json() : null; }),
+      fetch(API + '/partner/billing/status', { headers: { 'Authorization': 'Bearer ' + token } }).then(function(r) { return r.ok ? r.json() : null; }),
+    ]).then(function(results) {
+      var profile = results[0]; var billing = results[1];
+      if (profile && profile.partner) renderProfileBilling(profile.partner, billing, token);
+    }).catch(function() {});
   }
 
-  function renderProfileBilling(partner, patientCount) {
+  function openBillingPortal(token) {
+    fetch(API + '/partner/billing/portal', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } })
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (data.url) window.open(data.url, '_blank'); else alert('Contact hello@carely.fit'); })
+      .catch(function() { alert('Could not open billing portal. Contact hello@carely.fit'); });
+  }
+
+  function subscribeToPlan(token) {
+    fetch(API + '/partner/billing/subscribe', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } })
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (data.checkoutUrl) window.location.href = data.checkoutUrl; else alert('Contact hello@carely.fit'); })
+      .catch(function() { alert('Could not start checkout. Contact hello@carely.fit'); });
+  }
+
+  function renderProfileBilling(partner, billing, token) {
     var section = document.getElementById('profile-billing');
     if (!section) return;
     section.textContent = '';
@@ -742,7 +759,13 @@
     var profileCard = document.createElement('div'); profileCard.className = 'pb-card';
     var ph = document.createElement('div'); ph.className = 'pb-card-head'; ph.textContent = 'My Profile';
     profileCard.appendChild(ph);
-    [['Organisation', partner.org_name||'—'],['Contact', partner.contact_name||'—'],['Email', partner.email||'—'],['Country', partner.country||'—'],['Member since', partner.activated_at ? new Date(partner.activated_at).toLocaleDateString('en-CA',{year:'numeric',month:'short',day:'numeric'}) : '—']].forEach(function(p) {
+    [
+      ['Organisation', partner.org_name||'—'],
+      ['Contact', partner.contact_name||'—'],
+      ['Email', partner.email||'—'],
+      ['Country', partner.country === 'CA' ? 'Canada' : partner.country === 'US' ? 'United States' : (partner.country||'—')],
+      ['Member since', partner.activated_at ? new Date(partner.activated_at).toLocaleDateString('en-CA',{year:'numeric',month:'short',day:'numeric'}) : '—'],
+    ].forEach(function(p) {
       var row = document.createElement('div'); row.className = 'pb-row';
       var lbl = document.createElement('span'); lbl.className = 'pb-label'; lbl.textContent = p[0];
       var val = document.createElement('span'); val.className = 'pb-val'; val.textContent = p[1];
@@ -757,19 +780,45 @@
     grid.appendChild(profileCard);
 
     var billingCard = document.createElement('div'); billingCard.className = 'pb-card';
-    var bh = document.createElement('div'); bh.className = 'pb-card-head'; bh.textContent = 'Billing & Earnings';
+    var bh = document.createElement('div'); bh.className = 'pb-card-head'; bh.textContent = 'Billing';
     billingCard.appendChild(bh);
-    [['Partner Plan','Carely B2B Partner'],['Commission Rate','20% per active referral'],['Est. Monthly Earnings', patientCount ? '$' + (patientCount * 2.99).toFixed(2) : 'Based on connected residents']].forEach(function(p) {
+
+    var bStatus   = (billing && billing.billing)   ? billing.billing   : null;
+    var bRes      = (billing && billing.residents) ? billing.residents : null;
+
+    var planText   = bStatus ? bStatus.plan   : 'Care Home Plan — $5/resident/month';
+    var statusText = bStatus ? (bStatus.status === 'active' ? 'Active' : 'Not subscribed') : '—';
+    var resCount   = bRes    ? bRes.linked    : '—';
+    var monthlyText = bRes ? bRes.formatted + '/month' : '—';
+
+    [
+      ['Plan',      planText],
+      ['Status',    statusText],
+      ['Residents', String(resCount)],
+      ['Monthly Bill', monthlyText],
+    ].forEach(function(p) {
       var row = document.createElement('div'); row.className = 'pb-row';
       var lbl = document.createElement('span'); lbl.className = 'pb-label'; lbl.textContent = p[0];
       var val = document.createElement('span'); val.className = 'pb-val'; val.textContent = p[1];
       row.appendChild(lbl); row.appendChild(val); billingCard.appendChild(row);
     });
+
     var btns = document.createElement('div'); btns.className = 'pb-btns';
-    var manageBtn = document.createElement('a'); manageBtn.className = 'pb-btn pb-btn-primary'; manageBtn.href = 'https://billing.stripe.com/p/login/carely'; manageBtn.target = '_blank'; manageBtn.rel = 'noopener noreferrer'; manageBtn.textContent = 'Manage Billing';
-    var payoutBtn = document.createElement('a'); payoutBtn.className = 'pb-btn pb-btn-outline'; payoutBtn.href = 'mailto:hello@carely.fit?subject=Payout%20Setup'; payoutBtn.textContent = 'Payout Setup';
-    btns.appendChild(manageBtn); btns.appendChild(payoutBtn); billingCard.appendChild(btns);
-    var note = document.createElement('div'); note.className = 'pb-note'; note.textContent = 'Commissions are calculated monthly for all active referred subscribers. Questions? hello@carely.fit';
+    var currentToken = token || sessionStorage.getItem(SESSION_KEY) || '';
+    if (bStatus && bStatus.hasSubscription) {
+      var manageBtn = document.createElement('button'); manageBtn.className = 'pb-btn pb-btn-primary'; manageBtn.textContent = 'Manage Billing';
+      manageBtn.onclick = function() { openBillingPortal(currentToken); };
+      btns.appendChild(manageBtn);
+    } else {
+      var subBtn = document.createElement('button'); subBtn.className = 'pb-btn pb-btn-primary'; subBtn.textContent = 'Subscribe — 14-day free trial';
+      subBtn.onclick = function() { subscribeToPlan(currentToken); };
+      btns.appendChild(subBtn);
+    }
+    btns.appendChild((function() {
+      var a = document.createElement('a'); a.className = 'pb-btn pb-btn-outline'; a.href = 'mailto:hello@carely.fit?subject=Billing%20Help'; a.textContent = 'Billing Support'; return a;
+    })());
+    billingCard.appendChild(btns);
+    var note = document.createElement('div'); note.className = 'pb-note'; note.textContent = 'Billed monthly at $5/resident. Resident count updates automatically as you add patients. Questions? hello@carely.fit';
     billingCard.appendChild(note);
     grid.appendChild(billingCard);
     section.appendChild(grid);
@@ -829,7 +878,7 @@
 
   function initDemoData() {
     renderDemoPortal(DEMO_ORG);
-    renderProfileBilling({ org_name: 'Sunrise Senior Living', contact_name: 'Jennifer Park', email: 'j.park@sunrisesenior.ca', invite_code: 'SNRLV', activated_at: '2026-03-15T00:00:00Z', country: 'CA' }, 24);
+    renderProfileBilling({ org_name: 'Sunrise Senior Living', contact_name: 'Jennifer Park', email: 'j.park@sunrisesenior.ca', invite_code: 'SNRLV', activated_at: '2026-03-15T00:00:00Z', country: 'CA' }, { billing: { hasSubscription: true, status: 'active', plan: 'Care Home Plan — $5 CAD/resident/month', currency: 'CAD', isCareHome: true }, commission: null, residents: { linked: 24, monthlyBilledCents: 12000, formatted: '$120.00' } }, '');
   }
 
   checkAuth();
