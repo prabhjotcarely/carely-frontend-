@@ -666,6 +666,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
       </div>
 
+      <!-- SCALE MILESTONES -->
+      <div class="card" style="margin-bottom:14px;border-left:4px solid #8b5cf6">
+        <div style="font-size:0.7rem;font-weight:800;color:#8b5cf6;letter-spacing:1.5px;margin-bottom:12px">🚀 SCALE — Fix as you grow (not now)</div>
+        <div class="list-item" id="pt-scale-10k" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>@10K</span>
+          <div class="name"><strong>AI rate limiting: per-IP → per-user-ID</strong><div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Shared networks exhaust the IP bucket — switch aiLimiter keyGenerator to req.userId</div></div>
+          <span class="pill" style="background:#f5f3ff;color:#8b5cf6;border:1px solid #ddd6fe">Future</span>
+        </div>
+        <div class="list-item" id="pt-scale-50k" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>@50K</span>
+          <div class="name"><strong>Railway replicas: 1 → 2+</strong><div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Settings → Replicas → 2. Redis already shared so all instances stay in sync</div></div>
+          <span class="pill" style="background:#f5f3ff;color:#8b5cf6;border:1px solid #ddd6fe">Future</span>
+        </div>
+        <div class="list-item" id="pt-scale-100k" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>@100K</span>
+          <div class="name"><strong>Supabase PgBouncer connection pooling</strong><div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Already built into Supabase — just enable it in Settings → Database → Connection Pooling</div></div>
+          <span class="pill" style="background:#f5f3ff;color:#8b5cf6;border:1px solid #ddd6fe">Future</span>
+        </div>
+        <div class="list-item" id="pt-scale-500k" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>@500K</span>
+          <div class="name"><strong>Supabase Pro upgrade ($25/mo)</strong><div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Higher connection limits — already planned for May 30 when real users start</div></div>
+          <span class="pill" style="background:#f5f3ff;color:#8b5cf6;border:1px solid #ddd6fe">Future</span>
+        </div>
+      </div>
+
       <!-- DONE THIS SESSION -->
       <div class="card" style="opacity:0.7;border-left:4px solid #d1d5db">
         <div style="font-size:0.7rem;font-weight:800;color:var(--g500);letter-spacing:1.5px;margin-bottom:12px">✅ DONE — May 20 Session</div>
