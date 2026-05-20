@@ -568,14 +568,116 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ MY INBOX ══ -->
   <div class="page" id="page-my-inbox">
-    <div class="ph"><h1>📥 My Inbox</h1><p>Agent alerts · Escalations · Metrics — live from HQ backend</p></div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-      <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="inbox-unread-label">Loading inbox...</div>
-      <button onclick="loadInbox()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
-      <button onclick="markAllInboxRead()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Mark all read</button>
+    <div class="ph"><h1>📥 My Inbox</h1><p>Agent alerts · Escalations · Pending tasks — live from HQ</p></div>
+
+    <!-- Inbox tabs -->
+    <div class="tabs" style="margin-bottom:16px">
+      <div class="tab active" onclick="switchTab(this,'inbox-alerts')">🔔 Alerts</div>
+      <div class="tab" onclick="switchTab(this,'inbox-pending')" id="inbox-pending-tab">✅ Pending Tasks <span id="pending-count-badge" style="background:#ef4444;color:white;font-size:0.65rem;font-weight:800;padding:1px 6px;border-radius:10px;margin-left:4px">7</span></div>
     </div>
-    <div class="card" id="inbox-feed">
-      <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading...</div>
+
+    <!-- ALERTS TAB -->
+    <div class="tab-panel active" id="inbox-alerts">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="inbox-unread-label">Loading inbox...</div>
+        <button onclick="loadInbox()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+        <button onclick="markAllInboxRead()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Mark all read</button>
+      </div>
+      <div class="card" id="inbox-feed">
+        <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading...</div>
+      </div>
+    </div>
+
+    <!-- PENDING TASKS TAB -->
+    <div class="tab-panel" id="inbox-pending">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+        <div style="font-size:0.82rem;font-weight:700;color:var(--deep)">TJ's open action items — updated each session</div>
+        <span style="font-size:0.72rem;color:var(--g500);margin-left:auto">May 20, 2026</span>
+      </div>
+
+      <!-- URGENT -->
+      <div class="card" style="margin-bottom:14px;border-left:4px solid #ef4444">
+        <div style="font-size:0.7rem;font-weight:800;color:#ef4444;letter-spacing:1.5px;margin-bottom:12px">🔴 URGENT — Blocking launch</div>
+        <div class="list-item" id="pt-ios" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>1.</span>
+          <div class="name">
+            <strong>iOS build</strong> — run <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:0.78rem">eas build --platform ios --profile production</code> then submit to App Store
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Apple review = 1–3 days. Every day you wait is a day off launch.</div>
+          </div>
+          <span class="pill" style="background:#fef2f2;color:#ef4444;border:1px solid #fecaca">Blocking</span>
+        </div>
+        <div class="list-item" id="pt-openrouter" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>2.</span>
+          <div class="name">
+            <strong>OpenRouter top-up</strong> — openrouter.ai/credits → add $20+
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Agents running rule-based only right now. No real AI until topped up.</div>
+          </div>
+          <span class="pill" style="background:#fef2f2;color:#ef4444;border:1px solid #fecaca">Blocking</span>
+        </div>
+        <div class="list-item" id="pt-gplay" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>3.</span>
+          <div class="name">
+            <strong>Google Play</strong> — check closed testing review status
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">play.google.com/console — check if approved yet</div>
+          </div>
+          <span class="pill amber">Pending</span>
+        </div>
+      </div>
+
+      <!-- HIGH -->
+      <div class="card" style="margin-bottom:14px;border-left:4px solid #f59e0b">
+        <div style="font-size:0.7rem;font-weight:800;color:#f59e0b;letter-spacing:1.5px;margin-bottom:12px">🟡 HIGH — Do this week</div>
+        <div class="list-item" id="pt-secrets" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>4.</span>
+          <div class="name">
+            <strong>Rotate all production secrets</strong> — .env was committed to git
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Supabase service key · JWT_SECRET · Stripe · SendGrid · OpenAI · OpenRouter · Telegram tokens · Elevenlabs</div>
+          </div>
+          <span class="pill" style="background:#fffbeb;color:#f59e0b;border:1px solid #fde68a">Security</span>
+        </div>
+        <div class="list-item" id="pt-linkedin" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>5.</span>
+          <div class="name">
+            <strong>LinkedIn Carely company page</strong> — create official page
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Leo agent is wired and ready to post — needs a company page to post from</div>
+          </div>
+          <span class="pill amber">Pending</span>
+        </div>
+      </div>
+
+      <!-- MEDIUM -->
+      <div class="card" style="margin-bottom:14px;border-left:4px solid #02C39A">
+        <div style="font-size:0.7rem;font-weight:800;color:#02C39A;letter-spacing:1.5px;margin-bottom:12px">🟢 MEDIUM — Pre-scale</div>
+        <div class="list-item" id="pt-supabase" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>6.</span>
+          <div class="name">
+            <strong>Supabase tables audit</strong> — verify all tables exist
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">medicines · dose_logs · vitals · journal_entries · checkins · doctor_connections · caregiver_links</div>
+          </div>
+          <span class="pill teal">Verify</span>
+        </div>
+        <div class="list-item" id="pt-apk" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>7.</span>
+          <div class="name">
+            <strong>Android APK build</strong> — <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:0.78rem">eas build --platform android --profile preview</code>
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">✅ In progress — May 20 3AM</div>
+          </div>
+          <span class="pill" style="background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0">In Progress</span>
+        </div>
+      </div>
+
+      <!-- DONE THIS SESSION -->
+      <div class="card" style="opacity:0.7;border-left:4px solid #d1d5db">
+        <div style="font-size:0.7rem;font-weight:800;color:var(--g500);letter-spacing:1.5px;margin-bottom:12px">✅ DONE — May 20 Session</div>
+        <div style="font-size:0.8rem;color:var(--g500);line-height:1.8">
+          Onboarding flow fixed (8 steps, correct order) · ReminderStyle inserted · Step labels corrected ·
+          Tutorial1 MEET FRANK → MEET ELARA · ElaraWelcomeModal deduped ·
+          SignUpScreen expo-localization import fixed · ShareReportSheet 4-button UI ·
+          agentGuard.ts created · circuitBreaker.ts built · startupGuard.ts built ·
+          Elara system prompt guardrails · Telegram webhook secret · push-context whitelist ·
+          GitHub pushed (both repos) · Railway deployed · Gold save created
+        </div>
+      </div>
     </div>
   </div>
 
@@ -2966,6 +3068,24 @@ function switchTab(el, id) {
   el.classList.add('active');
   parent.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
+}
+
+// Pending task toggle — click to mark done/undone
+function ptToggle(el) {
+  var done = el.classList.toggle('pt-done');
+  var badge = document.getElementById('pending-count-badge');
+  if (!badge) return;
+  var total = document.querySelectorAll('[id^="pt-"]').length;
+  var doneCount = document.querySelectorAll('[id^="pt-"].pt-done').length;
+  var remaining = total - doneCount;
+  badge.textContent = remaining;
+  badge.style.display = remaining === 0 ? 'none' : 'inline';
+  if (!document.getElementById('pt-done-style')) {
+    var s = document.createElement('style');
+    s.id = 'pt-done-style';
+    s.textContent = '.pt-done { opacity:0.45; text-decoration:line-through; }';
+    document.head.appendChild(s);
+  }
 }
 
 // Clock + Launch Countdown
