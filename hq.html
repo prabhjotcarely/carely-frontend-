@@ -573,7 +573,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <!-- Inbox tabs -->
     <div class="tabs" style="margin-bottom:16px">
       <div class="tab active" onclick="switchTab(this,'inbox-alerts')">🔔 Alerts</div>
-      <div class="tab" onclick="switchTab(this,'inbox-pending')" id="inbox-pending-tab">✅ Pending Tasks <span id="pending-count-badge" style="background:#ef4444;color:white;font-size:0.65rem;font-weight:800;padding:1px 6px;border-radius:10px;margin-left:4px">7</span></div>
+      <div class="tab" onclick="switchTab(this,'inbox-pending')" id="inbox-pending-tab">✅ Pending Tasks <span id="pending-count-badge" style="background:#ef4444;color:white;font-size:0.65rem;font-weight:800;padding:1px 6px;border-radius:10px;margin-left:4px">14</span></div>
     </div>
 
     <!-- ALERTS TAB -->
@@ -601,24 +601,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="list-item" id="pt-ios" style="cursor:pointer" onclick="ptToggle(this)">
           <span>1.</span>
           <div class="name">
-            <strong>iOS build</strong> — run <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:0.78rem">eas build --platform ios --profile production</code> then submit to App Store
-            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Apple review = 1–3 days. Every day you wait is a day off launch.</div>
+            <strong>iOS — in App Store review queue</strong> — Build 7aaa5154 submitted May 20
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Apple review = 1–3 days. Monitor status at appstoreconnect.apple.com · App ID 6771328455</div>
           </div>
-          <span class="pill" style="background:#fef2f2;color:#ef4444;border:1px solid #fecaca">Blocking</span>
+          <span class="pill" style="background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0">Submitted</span>
         </div>
         <div class="list-item" id="pt-openrouter" style="cursor:pointer" onclick="ptToggle(this)">
           <span>2.</span>
           <div class="name">
-            <strong>OpenRouter top-up</strong> — openrouter.ai/credits → add $20+
-            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Agents running rule-based only right now. No real AI until topped up.</div>
+            <strong>OpenRouter top-up</strong> — openrouter.ai/credits → add $50+
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">All AI agents dead without this. Hermes, Elara, Grace, Frank, Maya all stop. TJ said "I'll do it by this evening" — May 20.</div>
+          </div>
+          <span class="pill" style="background:#fef2f2;color:#ef4444;border:1px solid #fecaca">Blocking</span>
+        </div>
+        <div class="list-item" id="pt-railway" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>3.</span>
+          <div class="name">
+            <strong>Railway backend redeploy</strong> — GCP outage paused Hobby tier deploys
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Check: <code style="background:#f0f0f0;padding:1px 4px;border-radius:3px">curl https://carely-backend-production.up.railway.app/health</code> — if 502, dashboard → REMOVED "Security hardening" commit → Redeploy. ADMIN_SECRET already set correctly.</div>
           </div>
           <span class="pill" style="background:#fef2f2;color:#ef4444;border:1px solid #fecaca">Blocking</span>
         </div>
         <div class="list-item" id="pt-gplay" style="cursor:pointer" onclick="ptToggle(this)">
-          <span>3.</span>
+          <span>4.</span>
           <div class="name">
             <strong>Google Play</strong> — check closed testing review status
             <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">play.google.com/console — check if approved yet</div>
+          </div>
+          <span class="pill amber">Pending</span>
+        </div>
+        <div class="list-item" id="pt-android" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>5.</span>
+          <div class="name">
+            <strong>Android APK build</strong> — includes all May 20 fixes
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Run: <code style="background:#f0f0f0;padding:1px 4px;border-radius:3px">eas build --platform android --profile preview</code> — Google OAuth, Stripe Payment Sheet, 7-step onboarding, all icon fixes included.</div>
           </div>
           <span class="pill amber">Pending</span>
         </div>
@@ -627,16 +643,72 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <!-- HIGH -->
       <div class="card" style="margin-bottom:14px;border-left:4px solid #f59e0b">
         <div style="font-size:0.7rem;font-weight:800;color:#f59e0b;letter-spacing:1.5px;margin-bottom:12px">🟡 HIGH — Do this week</div>
-        <div class="list-item" id="pt-secrets" style="cursor:pointer" onclick="ptToggle(this)">
-          <span>4.</span>
+        <div class="list-item" id="pt-reddit-token" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>6.</span>
           <div class="name">
-            <strong>Rotate all production secrets</strong> — .env was committed to git
-            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Supabase service key · JWT_SECRET · Stripe · SendGrid · OpenAI · OpenRouter · Telegram tokens · Elevenlabs</div>
+            <strong>Reddit API OAuth token (CLI)</strong> — for agent posting
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">reddit_monitor reads fine but posts at 0% success — no OAuth refresh token. Go to reddit.com/prefs/apps → create "script" app → get client ID + secret → set REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_REFRESH_TOKEN in Railway Variables.</div>
+          </div>
+          <span class="pill" style="background:#fffbeb;color:#f59e0b;border:1px solid #fde68a">TJ Action</span>
+        </div>
+        <div class="list-item" id="pt-linkedin-api" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>7.</span>
+          <div class="name">
+            <strong>LinkedIn Community Management API token</strong>
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Leo agent + community management needs this. LinkedIn Developer Portal → create app → request Community Management API → get OAuth token → set in Railway Variables.</div>
+          </div>
+          <span class="pill" style="background:#fffbeb;color:#f59e0b;border:1px solid #fde68a">TJ Action</span>
+        </div>
+        <div class="list-item" id="pt-elara-linkedin" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>8.</span>
+          <div class="name">
+            <strong>Create Elara LinkedIn profile</strong> — "Elara from Carely"
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">OpenOutreach agent sends LinkedIn connection requests as Elara. Needs a real LinkedIn profile (personal or company page). Create at linkedin.com → set up professional profile for Elara AI Companion.</div>
+          </div>
+          <span class="pill" style="background:#fffbeb;color:#f59e0b;border:1px solid #fde68a">TJ/Prabh Action</span>
+        </div>
+        <div class="list-item" id="pt-openoutreach" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>9.</span>
+          <div class="name">
+            <strong>Deploy OpenOutreach to Railway</strong> — blocked on items 7+8
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Code is built at /Users/taran27/carely-os/openoutreach/. Once Elara LinkedIn profile + API token are ready, deploy as new Railway service.</div>
+          </div>
+          <span class="pill" style="background:#fef3c7;color:#92400e;border:1px solid #fde68a">Blocked</span>
+        </div>
+        <div class="list-item" id="pt-prabh-approvals" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>10.</span>
+          <div class="name">
+            <strong>Prabh — clear content approval queue</strong>
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">38+ drafts sitting in Approvals tab. Content pipeline is fully clogged. Prabh needs to go through HQ → Approvals and approve or skip each draft before agents can post.</div>
+          </div>
+          <span class="pill" style="background:#fffbeb;color:#f59e0b;border:1px solid #fde68a">Prabh Action</span>
+        </div>
+        <div class="list-item" id="pt-hermes-brief" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>11.</span>
+          <div class="name">
+            <strong>Brief Hermes once backend is live</strong>
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Run: <code style="background:#f0f0f0;padding:1px 4px;border-radius:3px">curl -X POST https://carely-backend-production.up.railway.app/admin/push-context -H "x-carely-secret: b00f4fc3fd0333847bbc9513a4c60ffb086f0e5332ef16983c921de115125657" -H "Content-Type: application/json" -d '{"message":"May 20: Google OAuth live, Stripe Payment Sheet live, iOS submitted, security hardened."}'</code></div>
+          </div>
+          <span class="pill amber">When backend live</span>
+        </div>
+        <div class="list-item" id="pt-secrets" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>12.</span>
+          <div class="name">
+            <strong>Rotate all production secrets</strong> — pre-launch security
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Supabase service key · JWT_SECRET · Stripe · SendGrid · OpenRouter · Telegram tokens. Rotate manually from each provider dashboard then update Railway Variables.</div>
           </div>
           <span class="pill" style="background:#fffbeb;color:#f59e0b;border:1px solid #fde68a">Security</span>
         </div>
+        <div class="list-item" id="pt-stripe-verify" style="cursor:pointer" onclick="ptToggle(this)">
+          <span>13.</span>
+          <div class="name">
+            <strong>Verify Stripe MRR — is "7 paid, $35 MRR" real?</strong>
+            <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Hermes reported this figure. Check Stripe dashboard → Customers → filter by live mode to confirm real paying customers vs test data.</div>
+          </div>
+          <span class="pill" style="background:#fffbeb;color:#f59e0b;border:1px solid #fde68a">Verify</span>
+        </div>
         <div class="list-item" id="pt-linkedin" style="cursor:pointer" onclick="ptToggle(this)">
-          <span>5.</span>
+          <span>14.</span>
           <div class="name">
             <strong>LinkedIn Carely company page</strong> — create official page
             <div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Leo agent is wired and ready to post — needs a company page to post from</div>
@@ -693,14 +765,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
       <!-- DONE THIS SESSION -->
       <div class="card" style="opacity:0.7;border-left:4px solid #d1d5db">
-        <div style="font-size:0.7rem;font-weight:800;color:var(--g500);letter-spacing:1.5px;margin-bottom:12px">✅ DONE — May 20 Session</div>
+        <div style="font-size:0.7rem;font-weight:800;color:var(--g500);letter-spacing:1.5px;margin-bottom:12px">✅ DONE — May 20 Session (full day)</div>
         <div style="font-size:0.8rem;color:var(--g500);line-height:1.8">
-          Onboarding flow fixed (8 steps, correct order) · ReminderStyle inserted · Step labels corrected ·
-          Tutorial1 MEET FRANK → MEET ELARA · ElaraWelcomeModal deduped ·
-          SignUpScreen expo-localization import fixed · ShareReportSheet 4-button UI ·
-          agentGuard.ts created · circuitBreaker.ts built · startupGuard.ts built ·
-          Elara system prompt guardrails · Telegram webhook secret · push-context whitelist ·
-          GitHub pushed (both repos) · Railway deployed · Gold save created
+          <strong>App:</strong> Google OAuth (expo-auth-session, all 3 client IDs, redirect URIs in Google Cloud, consent Published) ·
+          Stripe Payment Sheet (native, replaces browser checkout, SetupIntent → initPaymentSheet → presentPaymentSheet → createSubscription) ·
+          Splash animation squeeze-out · PillTypeScreen freeze fix + Next button + custom icons ·
+          DoseAmount merged into ScheduleScreen (7 steps total) · ReminderStyle white bg ·
+          ADHD emoji updated · Supplements/Vitamins added · All step badges updated to 7 ·
+          app.json scheme com.carely.app added · eas.json Google client IDs in preview+production ·
+          <strong>iOS build 7aaa5154 submitted to App Store ✅</strong>
+          <br><br>
+          <strong>Backend:</strong> ADMIN_SECRET 64-char hex set in Railway Variables ·
+          Elara output filter (strips leaked keys/JWTs/URLs) · All user data routes protected (requireAuth) ·
+          Admin routes use x-carely-secret header · Security audit complete ·
+          Pushed to GitHub main · Railway empty commit pushed to trigger redeploy post-GCP-outage
+          <br><br>
+          <strong>Google Cloud (carely-7dc39):</strong> Android + iOS + Web OAuth clients created ·
+          Redirect URIs added (@taran07/carely + @taran07/carely-app) · OAuth consent Published
         </div>
       </div>
     </div>
