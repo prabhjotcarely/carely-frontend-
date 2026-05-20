@@ -124,19 +124,20 @@
   </div>
 </nav>
 
-<!-- PIN GATE -->
-<div id="pin-gate" style="position:fixed;inset:0;background:linear-gradient(135deg,#0D3347 0%,#028090 55%,#02C39A 100%);display:flex;align-items:center;justify-content:center;z-index:9999;">
-  <div style="background:#fff;border-radius:20px;padding:48px 40px;width:400px;max-width:92vw;box-shadow:0 32px 80px rgba(13,51,71,.35);">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-      <img src="elara-bot-logo.png" alt="Carely" style="height:42px;width:auto;">
-      <div style="font-size:20px;font-weight:800;color:#0D3347;">Carely <span style="color:#028090;">Doctor Portal</span></div>
+<!-- LOGIN GATE -->
+<div id="login-gate" style="display:none; position:fixed; inset:0; background:rgba(13,51,71,0.85); z-index:1000; display:flex; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:20px; padding:40px 36px; width:360px; max-width:90vw; box-shadow:0 32px 80px rgba(0,0,0,0.4);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <img src="elara-bot-logo.png" alt="Carely" style="height:36px;width:auto;">
+      <div style="font-size:18px;font-weight:800;color:#0D3347;">Carely <span style="color:#028090;">Doctor Portal</span></div>
     </div>
-    <div style="font-size:13px;color:#6b8fa3;margin-bottom:28px;">Patient adherence reports for licensed healthcare providers</div>
-    <label style="display:block;font-size:11px;font-weight:700;color:#6b8fa3;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;">Access Code</label>
-    <input type="password" id="pin-input" placeholder="Enter access code" style="width:100%;padding:11px 14px;border:1.5px solid #e0eaf0;border-radius:9px;font-size:14px;color:#0d3347;background:#f8fbfc;outline:none;font-family:inherit;" />
-    <div id="pin-err" style="display:none;color:#e53e3e;font-size:13px;margin-top:8px;">Invalid access code. Please try again.</div>
-    <button onclick="doUnlock()" style="width:100%;margin-top:20px;padding:14px;background:linear-gradient(135deg,#028090,#02C39A);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;">View Patient Report</button>
-    <div style="margin-top:14px;font-size:12px;color:#6b8fa3;text-align:center;">Access code: <strong>272727</strong></div>
+    <h2 style="color:#0D3347; font-size:1.3rem; font-weight:800; margin-bottom:6px;">Partner Login</h2>
+    <p style="color:#6b8fa3; font-size:0.85rem; margin-bottom:24px;">Sign in to your Carely partner account</p>
+    <input type="email" id="login-email" placeholder="Email address" style="width:100%; padding:12px 14px; border:1.5px solid #e0eaf0; border-radius:10px; font-size:0.95rem; font-family:inherit; margin-bottom:12px; outline:none;" />
+    <input type="password" id="login-password" placeholder="Password" style="width:100%; padding:12px 14px; border:1.5px solid #e0eaf0; border-radius:10px; font-size:0.95rem; font-family:inherit; margin-bottom:16px; outline:none;" />
+    <button onclick="doLogin()" style="width:100%; padding:13px; background:linear-gradient(135deg,#028090,#02C39A); color:#fff; border:none; border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer; font-family:inherit;">Sign In</button>
+    <p id="login-err" style="color:#e53e3e; font-size:0.82rem; margin-top:10px; display:none;"></p>
+    <p style="margin-top:16px; font-size:0.78rem; color:#b0c4ce; text-align:center;">Demo mode: add <code>?demo=true</code> to the URL</p>
   </div>
 </div>
 
@@ -307,23 +308,120 @@
     ]
   };
 
-  function doUnlock() {
-    var pin = document.getElementById('pin-input').value.trim();
-    if (pin !== '272727') {
-      document.getElementById('pin-err').style.display = 'block';
+  var API = 'https://carely-backend-production.up.railway.app';
+  var SESSION_KEY = 'carely_partner_token';
+
+  function isDemo() {
+    return new URLSearchParams(location.search).get('demo') === 'true';
+  }
+
+  function checkAuth() {
+    if (isDemo()) {
+      document.getElementById('login-gate').style.display = 'none';
+      initDemoData();
       return;
     }
-    sessionStorage.setItem('carely_auth', '1');
-    document.getElementById('pin-gate').style.display = 'none';
+    var token = sessionStorage.getItem(SESSION_KEY);
+    if (!token) {
+      document.getElementById('login-gate').style.display = 'flex';
+      return;
+    }
+    document.getElementById('login-gate').style.display = 'none';
+    fetchLiveData(token);
+  }
+
+  function doLogin() {
+    var email    = document.getElementById('login-email').value.trim();
+    var password = document.getElementById('login-password').value;
+    var err      = document.getElementById('login-err');
+    err.style.display = 'none';
+
+    if (!email || !password) {
+      err.textContent = 'Please enter email and password.';
+      err.style.display = 'block';
+      return;
+    }
+
+    fetch(API + '/partner/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: password }),
+    })
+      .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+      .then(function(result) {
+        if (!result.ok) {
+          err.textContent = result.data.message || result.data.error || 'Login failed.';
+          err.style.display = 'block';
+          return;
+        }
+        sessionStorage.setItem(SESSION_KEY, result.data.token);
+        document.getElementById('login-gate').style.display = 'none';
+        fetchLiveData(result.data.token);
+      })
+      .catch(function() {
+        err.textContent = 'Network error. Please try again.';
+        err.style.display = 'block';
+      });
+  }
+
+  function fetchLiveData(token) {
+    fetch(API + '/portal/patients', {
+      headers: { 'Authorization': 'Bearer ' + token },
+    })
+      .then(function(r) {
+        if (r.status === 401) {
+          sessionStorage.removeItem(SESSION_KEY);
+          document.getElementById('login-gate').style.display = 'flex';
+          return null;
+        }
+        return r.json();
+      })
+      .then(function(data) {
+        if (data && data.patients) {
+          renderLivePatients(data.patients);
+        }
+      })
+      .catch(function() {
+        // network error — leave demo data in place
+      });
+  }
+
+  function renderLivePatients(patients) {
+    var container = document.getElementById('patients-list') || document.getElementById('patient-table-body') || document.querySelector('tbody') || document.querySelector('.patients-container');
+    if (!container) return;
+    container.innerHTML = '';
+    if (!patients.length) {
+      var row = document.createElement('tr');
+      var cell = document.createElement('td');
+      cell.setAttribute('colspan', '10');
+      cell.textContent = 'No patients connected yet. Share your invite code with patients.';
+      cell.style.cssText = 'text-align:center;padding:24px;color:#9ab8c4;';
+      row.appendChild(cell);
+      container.appendChild(row);
+      return;
+    }
+    patients.forEach(function(p) {
+      var row = document.createElement('tr');
+      var cells = [
+        p.first_name + ' ' + (p.last_initial || '') + '.',
+        p.adherence_pct != null ? p.adherence_pct + '%' : '—',
+        p.missed_7d || 0,
+        p.at_risk ? 'At risk' : 'On track',
+      ];
+      cells.forEach(function(val) {
+        var td = document.createElement('td');
+        td.textContent = String(val);
+        row.appendChild(td);
+      });
+      container.appendChild(row);
+    });
+  }
+
+  function initDemoData() {
     renderDemoReport(DEMO_DATA);
   }
-  document.getElementById('pin-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') doUnlock();
-  });
-  if (sessionStorage.getItem('carely_auth') === '1') {
-    document.getElementById('pin-gate').style.display = 'none';
-    renderDemoReport(DEMO_DATA);
-  }
+
+  checkAuth();
 
   function renderDemoReport(data) {
     document.getElementById('portal').style.display = 'block';
