@@ -310,18 +310,22 @@
     .fin-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(0,0,0,0.2); }
 
     /* FOOTER */
-    footer { background: var(--t5); padding: 56px 24px 32px; border-top: 1px solid rgba(68,171,173,0.15); }
-    .footer-grid { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 48px; border-bottom: 1px solid rgba(68,171,173,0.12); }
-    .footer-brand p { font-size: 0.84rem; color: rgba(255,255,255,0.45); line-height: 1.7; max-width: 260px; margin-top: 12px; }
-    .footer-col h4 { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 16px; }
-    .footer-col a { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.62); margin-bottom: 10px; transition: color 0.15s; }
+    footer { background: var(--t5); border-top: 1px solid rgba(68,171,173,0.12); padding: 64px 24px 32px; }
+    .footer-grid { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 0.6fr 1.2fr 1fr; gap: 36px; margin-bottom: 48px; }
+    .footer-brand p { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.72; max-width: 260px; margin-top: 16px; }
+    .footer-brand .foot-socials { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+    .foot-social-btn { font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); padding: 7px 14px; border-radius: 8px; transition: all 0.15s; text-decoration: none; display: inline-block; }
+    .foot-social-btn:hover { background: rgba(68,171,173,0.15); color: var(--t1); border-color: var(--t1); }
+    .footer-col h4 { font-size: 0.68rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t2); margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 0.84rem; color: rgba(255,255,255,0.45); font-weight: 500; margin-bottom: 10px; transition: color 0.15s; }
     .footer-col a:hover { color: var(--t1); }
-    .footer-bottom { max-width: 1160px; margin: 28px auto 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-    .footer-bottom p { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
-    .footer-bottom a { color: rgba(255,255,255,0.45); font-size: 0.78rem; transition: color 0.15s; }
-    .footer-bottom a:hover { color: var(--t1); }
-    @media(max-width:860px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
-    @media(max-width:480px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-bottom { max-width: 1160px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-copy { font-size: 0.74rem; color: rgba(255,255,255,0.25); }
+    .footer-copy-links { display: flex; gap: 20px; }
+    .footer-copy-links a { font-size: 0.74rem; color: rgba(255,255,255,0.3); font-weight: 500; transition: color 0.15s; }
+    .footer-copy-links a:hover { color: var(--t1); }
+    @media(max-width:860px){ .footer-grid{grid-template-columns:1fr 1fr;gap:32px} }
+    @media(max-width:540px){ .footer-grid{grid-template-columns:1fr} }
 
     /* COOKIE BANNER */
     .cookie-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--t5); border-top: 1px solid rgba(68,171,173,0.22); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; z-index: 9000; flex-wrap: wrap; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
@@ -648,34 +652,52 @@
 </section>
 
 <!-- FOOTER -->
+<!-- FOOTER -->
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <img src="/carely-logo-3d.png" alt="Carely" style="height:38px;width:auto;margin-bottom:12px;">
-      <p>AI-powered medication adherence for patients, families, and the clinicians who care for them.</p>
+      <img src="/carely-logo-3d.png" alt="Carely" style="height:60px;width:auto;opacity:0.95;">
+      <p>Elara is your family's AI caretaker — available 24/7 to check in, track medications, alert your family, and keep your doctor informed. Built in BC, Canada.</p>
+      <div class="foot-socials">
+        <a class="foot-social-btn" href="mailto:hello@carely.fit">hello@carely.fit</a>
+        <a class="foot-social-btn" href="/contact">Contact Us</a>
+      </div>
     </div>
     <div class="footer-col">
-      <h4>Patients</h4>
-      <a href="/">Home</a>
-      <a href="/#how-it-works">How It Works</a>
-      <a href="/#pricing">Pricing</a>
+      <h4>Product</h4>
+      <a href="/#features">Features</a>
+      <a href="/#founding">Pricing</a>
+      <a href="/#compare">Compare</a>
       <a href="/#faq">FAQ</a>
+      <a href="/blog">Blog</a>
     </div>
     <div class="footer-col">
-      <h4>Partners</h4>
-      <a href="/for-doctors.html">For Doctors</a>
+      <h4>For Personal</h4>
+      <a href="/for-caregivers">Family &amp; Caregivers</a>
+    </div>
+    <div class="footer-col">
+      <h4>For Business Partnerships</h4>
+      <a href="/for-doctors">Doctors</a>
+      <a href="/for-clinics">Clinics</a>
+      <a href="/for-pharmacies">Pharmacies</a>
+      <a href="/for-senior-homes">Senior Homes</a>
+      <a href="/join-affiliate">Affiliates</a>
     </div>
     <div class="footer-col">
       <h4>Company</h4>
-      <a href="/about.html">About</a>
-      <a href="/blog">Blog</a>
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/terms.html">Terms of Service</a>
+      <a href="/about">About Us</a>
+      <a href="/contact">Contact</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>&copy; 2026 Carely &middot; BC, Canada. All rights reserved.</p>
-    <a href="/privacy.html">Privacy</a>
+    <div class="footer-copy">&copy; 2026 Carely &middot; BC, Canada &middot; Launching May 30, 2026</div>
+    <div class="footer-copy-links">
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/contact">Contact</a>
+    </div>
   </div>
 </footer>
 
