@@ -66,6 +66,9 @@
     posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
     document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="carely.fit/#"],a.nav-cta,a.hero-cta,a.cta-btn').forEach(function(el){el.addEventListener('click',function(){posthog.capture('cta_clicked',{text:el.textContent.trim(),href:el.getAttribute('href'),page:location.pathname});});});});
   </script>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 </head>
 <body>
 
