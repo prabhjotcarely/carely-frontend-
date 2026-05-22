@@ -274,6 +274,19 @@
 </head>
 <body data-role="admin">
 
+<!-- PIN GATE -->
+<div id="pin-gate" style="position:fixed;inset:0;background:linear-gradient(135deg,#0D3347 0%,#028090 55%,#02C39A 100%);display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:white;border-radius:20px;padding:36px 32px;width:340px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,0.3);">
+    <img src="carely-logo-3d.png" style="height:56px;margin-bottom:12px;" alt="Carely">
+    <h2 style="font-size:1.15rem;color:#0d3347;margin-bottom:4px;">Carely Care Portal</h2>
+    <p style="font-size:13px;color:#6b8fa3;margin-bottom:20px;">Enter the access code to view this demo</p>
+    <input type="password" id="pin-input" placeholder="Enter access code" style="width:100%;padding:11px 14px;border:1.5px solid #e0eaf0;border-radius:9px;font-size:14px;color:#0d3347;background:#f8fbfc;outline:none;font-family:inherit;" />
+    <div id="pin-err" style="display:none;color:#e53e3e;font-size:13px;margin-top:8px;">Invalid access code. Please try again.</div>
+    <button onclick="doUnlock()" style="width:100%;margin-top:14px;background:#028090;color:white;border:none;border-radius:9px;padding:12px;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:inherit;">Enter Portal</button>
+    <div style="margin-top:14px;font-size:12px;color:#6b8fa3;">Access code: <strong>272727</strong></div>
+  </div>
+</div>
+
 <!-- SIDEBAR BACKDROP -->
 <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeSidebar()"></div>
 
@@ -1650,6 +1663,10 @@ document.addEventListener('DOMContentLoaded', function() {
 <script>
   !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
   posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
+</script>
+<script>
+function doUnlock(){var pin=document.getElementById('pin-input').value.trim();if(pin!=='272727'){document.getElementById('pin-err').style.display='block';return;}document.getElementById('pin-gate').style.display='none';}
+document.getElementById('pin-input').addEventListener('keydown',function(e){if(e.key==='Enter')doUnlock();});
 </script>
 </body>
 </html>
