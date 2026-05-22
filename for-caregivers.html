@@ -321,8 +321,11 @@
 
     /* ── FOOTER ── */
     footer { background: var(--t5); border-top: 1px solid rgba(68,171,173,0.12); padding: 64px 24px 32px; }
-    .footer-grid { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-grid { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 0.6fr 1.2fr 1fr; gap: 36px; margin-bottom: 48px; }
     .footer-brand p { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.72; max-width: 260px; margin-top: 16px; }
+    .footer-brand .foot-socials { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+    .foot-social-btn { font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); padding: 7px 14px; border-radius: 8px; transition: all 0.15s; text-decoration: none; display: inline-block; }
+    .foot-social-btn:hover { background: rgba(68,171,173,0.15); color: var(--t1); border-color: var(--t1); }
     .footer-col h4 { font-size: 0.68rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t2); margin-bottom: 16px; }
     .footer-col a { display: block; font-size: 0.84rem; color: rgba(255,255,255,0.45); font-weight: 500; margin-bottom: 10px; transition: color 0.15s; }
     .footer-col a:hover { color: var(--t1); }
@@ -331,8 +334,8 @@
     .footer-copy-links { display: flex; gap: 20px; }
     .footer-copy-links a { font-size: 0.74rem; color: rgba(255,255,255,0.3); font-weight: 500; transition: color 0.15s; }
     .footer-copy-links a:hover { color: var(--t1); }
-    @media(max-width:860px) { .footer-grid{grid-template-columns:1fr 1fr;gap:32px} }
-    @media(max-width:540px) { .footer-grid{grid-template-columns:1fr} }
+    @media(max-width:860px){ .footer-grid{grid-template-columns:1fr 1fr;gap:32px} }
+    @media(max-width:540px){ .footer-grid{grid-template-columns:1fr} }
 
     /* ── MOBILE OVERRIDES ── */
     @media(max-width:640px) {
@@ -676,35 +679,51 @@
 </div>
 
 <!-- ═══ FOOTER ═══ -->
+<!-- FOOTER -->
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <a href="https://carely.fit"><img src="carely-logo-3d.png" alt="Carely" style="height:48px;width:auto;filter:brightness(0) invert(1);opacity:0.85;"></a>
-      <p>The AI caretaker for medications, daily check-ins, and family connection. Launching May 2026.</p>
+      <img src="/carely-logo-3d.png" alt="Carely" style="height:60px;width:auto;opacity:0.95;">
+      <p>Elara is your family's AI caretaker — available 24/7 to check in, track medications, alert your family, and keep your doctor informed. Built in BC, Canada.</p>
+      <div class="foot-socials">
+        <a class="foot-social-btn" href="mailto:hello@carely.fit">hello@carely.fit</a>
+        <a class="foot-social-btn" href="/contact">Contact Us</a>
+      </div>
     </div>
     <div class="footer-col">
       <h4>Product</h4>
-      <a href="https://carely.fit">Home</a>
-      <a href="join.html">Get Early Access</a>
+      <a href="/#features">Features</a>
+      <a href="/#founding">Pricing</a>
+      <a href="/#compare">Compare</a>
+      <a href="/#faq">FAQ</a>
       <a href="/blog">Blog</a>
     </div>
     <div class="footer-col">
-      <h4>Partners</h4>
-      <a href="for-caregivers.html">For Caregivers</a>
+      <h4>For Personal</h4>
+      <a href="/for-caregivers">Family &amp; Caregivers</a>
+    </div>
+    <div class="footer-col">
+      <h4>For Business Partnerships</h4>
+      <a href="/for-doctors">Doctors</a>
+      <a href="/for-clinics">Clinics</a>
+      <a href="/for-pharmacies">Pharmacies</a>
+      <a href="/for-senior-homes">Senior Homes</a>
+      <a href="/join-affiliate">Affiliates</a>
     </div>
     <div class="footer-col">
       <h4>Company</h4>
+      <a href="/about">About Us</a>
+      <a href="/contact">Contact</a>
       <a href="/privacy">Privacy Policy</a>
-      <a href="/terms">Terms of Use</a>
-      <a href="mailto:hello@carely.fit">hello@carely.fit</a>
+      <a href="/terms">Terms of Service</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <span class="footer-copy">&copy; 2026 Carely. Built with care in Canada.</span>
+    <div class="footer-copy">&copy; 2026 Carely &middot; BC, Canada &middot; Launching May 30, 2026</div>
     <div class="footer-copy-links">
       <a href="/privacy">Privacy</a>
       <a href="/terms">Terms</a>
-      <a href="mailto:hello@carely.fit">Contact</a>
+      <a href="/contact">Contact</a>
     </div>
   </div>
 </footer>
