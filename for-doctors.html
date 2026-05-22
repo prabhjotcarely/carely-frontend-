@@ -136,25 +136,25 @@
     .phone-col { display: flex; align-items: center; justify-content: center; position: relative; }
     .phone-bg-ring { position: absolute; width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(68,171,173,0.18) 0%, transparent 70%); animation: ring-breathe 4s ease-in-out infinite; }
     @keyframes ring-breathe { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.08);opacity:0.6} }
-    .phone-device { width: 240px; height: 460px; border-radius: 40px; border: 8px solid #1a1a2e; background: #0a1a22; position: relative; z-index: 1; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06); }
-    .phone-notch { width: 90px; height: 20px; background: #1a1a2e; border-radius: 0 0 14px 14px; margin: 0 auto 12px; }
-    .phone-screen { padding: 0 14px 16px; }
+    .phone-device { width: 240px; height: 460px; border-radius: 40px; border: 8px solid #1e2030; background: #1e2030; position: relative; z-index: 1; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08); }
+    .phone-notch { width: 90px; height: 20px; background: #111320; border-radius: 0 0 14px 14px; margin: 0 auto 0; }
+    .phone-screen { padding: 8px 14px 16px; background: #f5f9fa; height: 100%; }
     .phone-status { display: flex; justify-content: space-between; align-items: center; padding: 0 4px 10px; }
-    .phone-status-time { font-size: 0.62rem; font-weight: 700; color: rgba(255,255,255,0.9); }
-    .phone-status-icons { font-size: 0.55rem; color: rgba(255,255,255,0.7); letter-spacing: 0.05em; }
-    .phone-header { background: rgba(68,171,173,0.15); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; border: 1px solid rgba(68,171,173,0.2); }
-    .phone-header-title { font-size: 0.62rem; font-weight: 800; color: var(--t1); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
-    .phone-header-sub { font-size: 0.58rem; color: rgba(255,255,255,0.65); }
-    .phone-share-banner { background: var(--bright); border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .phone-status-time { font-size: 0.62rem; font-weight: 700; color: #1a3540; }
+    .phone-status-icons { font-size: 0.55rem; color: rgba(26,53,64,0.55); letter-spacing: 0.05em; }
+    .phone-header { background: rgba(68,171,173,0.12); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; border: 1px solid rgba(68,171,173,0.28); }
+    .phone-header-title { font-size: 0.62rem; font-weight: 800; color: #1a6068; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
+    .phone-header-sub { font-size: 0.58rem; color: rgba(26,53,64,0.6); }
+    .phone-share-banner { background: var(--t1); border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
     .phone-share-icon { font-size: 0.9rem; }
-    .phone-share-text { font-size: 0.58rem; font-weight: 800; color: var(--ink); }
-    .phone-med-card { background: rgba(255,255,255,0.06); border-radius: 10px; padding: 9px 11px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.08); }
+    .phone-share-text { font-size: 0.58rem; font-weight: 800; color: #fff; }
+    .phone-med-card { background: #fff; border-radius: 10px; padding: 9px 11px; margin-bottom: 8px; border: 1px solid rgba(26,53,64,0.08); box-shadow: 0 2px 8px rgba(26,53,64,0.06); }
     .phone-med-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-    .phone-med-name { font-size: 0.6rem; font-weight: 700; color: #fff; }
+    .phone-med-name { font-size: 0.6rem; font-weight: 700; color: #1a3540; }
     .phone-med-tag { font-size: 0.5rem; font-weight: 700; padding: 2px 6px; border-radius: 6px; }
-    .tag-taken { background: rgba(46,232,160,0.2); color: var(--bright); }
-    .tag-missed { background: rgba(245,166,35,0.2); color: #f5a623; }
-    .phone-med-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+    .tag-taken { background: rgba(46,180,120,0.15); color: #1a7a50; }
+    .tag-missed { background: rgba(220,130,20,0.15); color: #b06800; }
+    .phone-med-bar { height: 4px; background: rgba(26,53,64,0.1); border-radius: 2px; overflow: hidden; }
     .phone-med-fill { height: 100%; border-radius: 2px; }
     .fill-green { background: var(--bright); width: 87%; }
     .fill-amber { background: #f5a623; width: 62%; }
@@ -344,9 +344,8 @@
 <!-- NAV -->
 <nav class="nav-wrap" id="navWrap">
   <div class="nav">
-    <a href="/" class="nav-logo">
-      <div class="nav-logo-mark">&#x2665;</div>
-      <span class="nav-logo-name">Carely</span>
+    <a href="/" class="nav-logo" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <img src="/carely-logo-3d.png" alt="Carely" style="height:44px;width:auto;">
       <span class="nav-logo-badge">For Doctors</span>
     </a>
     <div class="nav-links">
@@ -652,10 +651,7 @@
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <div class="nav-logo" style="margin-bottom:0;">
-        <div class="nav-logo-mark" style="width:28px;height:28px;font-size:0.85rem;">&#x2665;</div>
-        <span class="nav-logo-name" style="font-size:1.1rem;">Carely</span>
-      </div>
+      <img src="/carely-logo-3d.png" alt="Carely" style="height:38px;width:auto;margin-bottom:12px;">
       <p>AI-powered medication adherence for patients, families, and the clinicians who care for them.</p>
     </div>
     <div class="footer-col">
@@ -668,7 +664,6 @@
     <div class="footer-col">
       <h4>Partners</h4>
       <a href="/for-doctors.html">For Doctors</a>
-              <a href="/for-senior-homes.html">For Senior Homes</a>
     </div>
     <div class="footer-col">
       <h4>Company</h4>
