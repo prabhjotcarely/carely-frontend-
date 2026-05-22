@@ -14,7 +14,7 @@
       --off-white: #F4F7F6; --white: #ffffff;
       --grey-100: #F1F5F4; --grey-200: #E4ECEB; --grey-300: #C8D6D3; --grey-500: #7A9490; --grey-700: #4A6B65;
       --text: #0D2B24; --text-light: #5A7A74;
-      --green: #059669; --green-bg: #ECFDF5; --green-border: #A7F3D0;
+      --green: #02C39A; --green-bg: #ECFDF5; --green-border: #A7F3D0;
       --amber: #D97706; --amber-bg: #FFFBEB; --amber-border: #FDE68A;
       --red: #DC2626; --red-bg: #FEF2F2; --red-border: #FECACA;
       --radius: 14px; --radius-sm: 8px;
@@ -189,7 +189,7 @@
 <nav>
   <div class="nav-inner">
     <a href="/" class="nav-logo">
-      <img src="elara-bot-logo.png" alt="Carely" style="height:30px;width:auto;filter:brightness(10);" />
+      <img src="carely-logo-3d.png" alt="Carely" style="height:52px;width:auto; />
       Carely
     </a>
     <div class="nav-right">
@@ -419,7 +419,7 @@ function renderReport(data) {
   // ── Per-medication breakdown ──────────────────────────────────────────────────
   var medCard = el('div', 'card');
   medCard.appendChild(el('div', 'section-title', 'Per-Medication (' + meta.period + ' days)'));
-  var MED_COLORS = ['#028090','#02C39A','#5B6EF8','#F59E0B','#8B5CF6','#EF4444','#10B981','#F97316'];
+  var MED_COLORS = ['#028090','#02C39A','#0D3347','#F59E0B','#02C39A','#EF4444','#028090','#F97316'];
   meds.forEach(function(med, idx) {
     var row = el('div', 'med-row-r');
     var dot = el('div', 'med-dot-r');

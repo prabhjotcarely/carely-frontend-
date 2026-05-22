@@ -14,7 +14,7 @@
       --teal: #028090; --deep-teal: #0D3347; --mint: #02C39A;
       --off-white: #F7FBFA; --grey-100: #F1F5F4; --grey-300: #C8D6D3;
       --grey-500: #7A9490; --text: #0D2B24; --white: #fff;
-      --radius: 16px; --danger: #EF4444; --warning: #F59E0B; --accent: #6366f1;
+      --radius: 16px; --danger: #EF4444; --warning: #F59E0B; --accent: #028090;
     }
     body { font-family: 'Inter', -apple-system, sans-serif; background: var(--off-white); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
@@ -66,7 +66,7 @@
     .badge-green { background: #D1FAE5; color: #065F46; }
     .badge-red { background: #FEE2E2; color: #991B1B; }
 
-    .condition-tag { display: inline-block; background: #f0f9ff; color: #0369a1; border: 1px solid #bae6fd; border-radius: 6px; padding: 2px 8px; font-size: 0.72rem; font-weight: 600; margin-right: 4px; margin-bottom: 2px; }
+    .condition-tag { display: inline-block; background: #E6F5F7; color: #028090; border: 1px solid #b2dde3; border-radius: 6px; padding: 2px 8px; font-size: 0.72rem; font-weight: 600; margin-right: 4px; margin-bottom: 2px; }
 
     .missed-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
     .missed-item { background: var(--white); border: 1.5px solid var(--grey-300); border-radius: 12px; padding: 16px 18px; display: flex; align-items: flex-start; gap: 12px; border-left: 4px solid var(--danger); }
@@ -150,7 +150,7 @@
 <div id="login-gate" style="display:none; position:fixed; inset:0; background:rgba(13,51,71,0.85); z-index:1000; display:flex; align-items:center; justify-content:center;">
   <div style="background:#fff; border-radius:20px; padding:40px 36px; width:360px; max-width:90vw; box-shadow:0 32px 80px rgba(0,0,0,0.4);">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-      <img src="elara-bot-logo.png" alt="Carely" style="height:36px;width:auto;">
+      <img src="carely-logo-3d.png" alt="Carely" style="height:52px;width:auto;">
       <div style="font-size:18px;font-weight:800;color:#0D3347;">Carely <span style="color:#028090;">Clinic Portal</span></div>
     </div>
     <h2 style="color:#0D3347; font-size:1.3rem; font-weight:800; margin-bottom:6px;">Partner Login</h2>
@@ -166,7 +166,7 @@
 <nav>
   <div class="nav-inner">
     <a href="/" class="logo">
-      <img src="elara-bot-logo.png" alt="Carely" style="height:32px;width:auto;" />
+      <img src="carely-logo-3d.png" alt="Carely" style="height:52px;width:auto;" />
       Carely Clinic
     </a>
     <div style="display:flex;align-items:center;gap:12px;">
@@ -257,7 +257,7 @@
     return '#EF4444';
   }
 
-  var MED_COLORS = ['#02C39A','#6366f1','#F59E0B','#0891b2','#EF4444','#8b5cf6'];
+  var MED_COLORS = ['#02C39A','#028090','#F59E0B','#0D3347','#EF4444','#02C39A'];
   var MED_DETAILS = {
     'M.W.': [{name:'Metformin 500mg',dose:'8:00 AM, 6:00 PM',adh:90},{name:'Lisinopril 10mg',dose:'9:00 AM',adh:95},{name:'Atorvastatin 20mg',dose:'9:00 PM',adh:88},{name:'Aspirin 81mg',dose:'8:00 AM',adh:92}],
     'R.P.': [{name:'Atorvastatin 40mg',dose:'9:00 PM',adh:90},{name:'Rosuvastatin 10mg',dose:'9:00 AM',adh:86}],
@@ -553,11 +553,11 @@
   }
 </script>
 
-<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;color:#e2e8f0;padding:16px 24px;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -2px 12px rgba(0,0,0,.3);">
-  <span>We use cookies to improve your experience and measure usage. See our <a href="/privacy.html" style="color:#818cf8;text-decoration:underline;">Privacy Policy</a>.</span>
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#0D3347;color:#e2e8f0;padding:16px 24px;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -2px 12px rgba(0,0,0,.3);">
+  <span>We use cookies to improve your experience and measure usage. See our <a href="/privacy.html" style="color:#028090;text-decoration:underline;">Privacy Policy</a>.</span>
   <div style="display:flex;gap:10px;flex-shrink:0;">
     <button onclick="cookieDecline()" style="background:transparent;border:1px solid #4b5563;color:#9ca3af;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;">Decline</button>
-    <button onclick="cookieAccept()" style="background:#6366f1;border:none;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">Accept</button>
+    <button onclick="cookieAccept()" style="background:#028090;border:none;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">Accept</button>
   </div>
 </div>
 <script>

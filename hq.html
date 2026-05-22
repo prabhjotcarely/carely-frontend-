@@ -10,8 +10,8 @@
   --teal:#2d8899;--deep:#0d2b38;--sea:#2ee8a0;--mint:#44abad;
   --light:#E0FAF4;--bg:#F4F8F7;--g100:#EFF5F4;--g200:#E2EDEB;
   --g300:#C5D8D4;--g500:#7A9490;--text:#0D2B24;
-  --green:#16a34a;--amber:#d97706;--red:#dc2626;--purple:#7C3AED;
-  --blue:#2563EB;
+  --green:#16a34a;--amber:#d97706;--red:#dc2626;--purple:#02C39A;
+  --blue:#028090;
 }
 html{scroll-behavior:smooth}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;display:flex;height:100vh;overflow:hidden}
@@ -145,7 +145,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 .alert{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:10px;margin-bottom:14px;font-size:0.8rem;font-weight:600}
 .alert.green{background:#DCFCE7;color:#166534}.alert.amber{background:#FEF3C7;color:#92400E}
-.alert.red{background:#FEE2E2;color:#991B1B}.alert.blue{background:#DBEAFE;color:#1E40AF}
+.alert.red{background:#FEE2E2;color:#991B1B}.alert.blue{background:#E0F5F7;color:#028090}
 
 .prog-bar{height:6px;background:var(--g200);border-radius:100px;overflow:hidden;margin-top:8px}
 .prog-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--mint),var(--sea))}
@@ -190,10 +190,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ch-acc-btn{padding:6px 14px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);font-size:0.75rem;font-weight:700;cursor:pointer;transition:all 0.15s}
 .ch-acc-btn.active{background:var(--deep);color:white;border-color:var(--deep)}
 .ch-tag{display:inline-block;padding:2px 10px;border-radius:100px;font-size:0.66rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase}
-.ch-tag-brand{background:#DBEAFE;color:#1D4ED8}
-.ch-tag-personal{background:#F3E8FF;color:#7C3AED}
+.ch-tag-brand{background:#E6F5F7;color:#028090}
+.ch-tag-personal{background:#E6F5F7;color:#02C39A}
 .ch-tag-tiktok{background:#FEE2E2;color:#B91C1C}
-.ch-tag-linkedin{background:#DBEAFE;color:#1E40AF}
+.ch-tag-linkedin{background:#E6F5F7;color:#028090}
 .ch-tag-reddit{background:#FEF3C7;color:#92400E}
 .ch-body{background:var(--g100);border-radius:8px;padding:14px 16px;font-size:0.83rem;line-height:1.85;color:var(--text);white-space:pre-wrap;font-family:inherit;margin-bottom:14px}
 .ch-action-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
@@ -227,7 +227,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- ══ PIN LOCK ══ -->
 <div id="pin-screen">
-  <div class="pin-logo"><img src="elara-bot-logo.png" alt="Carely" style="height:64px;"></div>
+  <div class="pin-logo"><img src="carely-logo-3d.png" alt="Carely" style="height:64px;"></div>
   <div class="pin-title">Carely HQ</div>
 
   <!-- Step 1: Who's logging in -->
@@ -285,7 +285,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- ══ SIDEBAR ══ -->
 <nav class="sidebar" id="sidebar">
   <div class="sb-logo">
-    <img src="elara-bot-logo.png" alt="Carely" style="height:46px;margin-bottom:6px;display:block;">
+    <img src="carely-logo-3d.png" alt="Carely" style="height:56px;margin-bottom:6px;display:block;">
     <div class="sub">Mission Control HQ</div>
     <div id="sb-member-badge" style="display:none;margin-top:8px;background:rgba(2,195,154,0.15);border:1px solid rgba(2,195,154,0.3);border-radius:8px;padding:7px 10px;display:flex;align-items:center;gap:8px;">
       <span id="sb-member-icon" style="font-size:18px;">👨‍💻</span>
@@ -739,27 +739,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
 
       <!-- SCALE MILESTONES -->
-      <div class="card" style="margin-bottom:14px;border-left:4px solid #8b5cf6">
-        <div style="font-size:0.7rem;font-weight:800;color:#8b5cf6;letter-spacing:1.5px;margin-bottom:12px">🚀 SCALE — Fix as you grow (not now)</div>
+      <div class="card" style="margin-bottom:14px;border-left:4px solid #02C39A">
+        <div style="font-size:0.7rem;font-weight:800;color:#02C39A;letter-spacing:1.5px;margin-bottom:12px">🚀 SCALE — Fix as you grow (not now)</div>
         <div class="list-item" id="pt-scale-10k" style="cursor:pointer" onclick="ptToggle(this)">
           <span>@10K</span>
           <div class="name"><strong>AI rate limiting: per-IP → per-user-ID</strong><div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Shared networks exhaust the IP bucket — switch aiLimiter keyGenerator to req.userId</div></div>
-          <span class="pill" style="background:#f5f3ff;color:#8b5cf6;border:1px solid #ddd6fe">Future</span>
+          <span class="pill" style="background:#E6F5F7;color:#02C39A;border:1px solid #b2dde3">Future</span>
         </div>
         <div class="list-item" id="pt-scale-50k" style="cursor:pointer" onclick="ptToggle(this)">
           <span>@50K</span>
           <div class="name"><strong>Railway replicas: 1 → 2+</strong><div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Settings → Replicas → 2. Redis already shared so all instances stay in sync</div></div>
-          <span class="pill" style="background:#f5f3ff;color:#8b5cf6;border:1px solid #ddd6fe">Future</span>
+          <span class="pill" style="background:#E6F5F7;color:#02C39A;border:1px solid #b2dde3">Future</span>
         </div>
         <div class="list-item" id="pt-scale-100k" style="cursor:pointer" onclick="ptToggle(this)">
           <span>@100K</span>
           <div class="name"><strong>Supabase PgBouncer connection pooling</strong><div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Already built into Supabase — just enable it in Settings → Database → Connection Pooling</div></div>
-          <span class="pill" style="background:#f5f3ff;color:#8b5cf6;border:1px solid #ddd6fe">Future</span>
+          <span class="pill" style="background:#E6F5F7;color:#02C39A;border:1px solid #b2dde3">Future</span>
         </div>
         <div class="list-item" id="pt-scale-500k" style="cursor:pointer" onclick="ptToggle(this)">
           <span>@500K</span>
           <div class="name"><strong>Supabase Pro upgrade ($25/mo)</strong><div style="font-size:0.75rem;color:var(--g500);margin-top:3px">Higher connection limits — already planned for May 30 when real users start</div></div>
-          <span class="pill" style="background:#f5f3ff;color:#8b5cf6;border:1px solid #ddd6fe">Future</span>
+          <span class="pill" style="background:#E6F5F7;color:#02C39A;border:1px solid #b2dde3">Future</span>
         </div>
       </div>
 
@@ -1709,13 +1709,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="card">
         <div class="card-title">⚡ Execution Log <span class="card-sub">May 5, 2026</span></div>
         <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#991B1B">BLAZE</span><div class="tl-msg">Launch email blast → Mailchimp waitlist · Sent</div><span class="tl-time">8:00 AM</span></div>
-        <div class="tl-item"><span class="tl-badge" style="background:#1D4ED8;color:white">LEO</span><div class="tl-msg">LinkedIn post → Company + Prabh personal · Published</div><span class="tl-time">8:00 AM</span></div>
+        <div class="tl-item"><span class="tl-badge" style="background:#028090;color:white">LEO</span><div class="tl-msg">LinkedIn post → Company + Prabh personal · Published</div><span class="tl-time">8:00 AM</span></div>
         <div class="tl-item"><span class="tl-badge" style="background:#FEF3C7;color:#92400E">FRANK</span><div class="tl-msg">Dose reminders → active medications · Continuous FCM</div><span class="tl-time">Continuous</span></div>
-        <div class="tl-item"><span class="tl-badge" style="background:#EDE9FE;color:#5B21B6">GRACE</span><div class="tl-msg">Daily check-in push → active patients · Sent via FCM (appears as Elara)</div><span class="tl-time">10:00 AM UTC</span></div>
-        <div class="tl-item"><span class="tl-badge" style="background:#DBEAFE;color:#1D4ED8">NINA</span><div class="tl-msg">Email nurture #1 → new signups · Running from Prabhjot</div><span class="tl-time">10:00 AM UTC</span></div>
+        <div class="tl-item"><span class="tl-badge" style="background:#E0F5F7;color:#028090">GRACE</span><div class="tl-msg">Daily check-in push → active patients · Sent via FCM (appears as Elara)</div><span class="tl-time">10:00 AM UTC</span></div>
+        <div class="tl-item"><span class="tl-badge" style="background:#E6F5F7;color:#028090">NINA</span><div class="tl-msg">Email nurture #1 → new signups · Running from Prabhjot</div><span class="tl-time">10:00 AM UTC</span></div>
         <div class="tl-item"><span class="tl-badge" style="background:#EC4899;color:white">LENA</span><div class="tl-msg">Win-back engine → trials expiring · Conversion engine running</div><span class="tl-time">11:00 AM UTC</span></div>
         <div class="tl-item"><span class="tl-badge" style="background:#FEE2E2;color:#B91C1C">REX</span><div class="tl-msg">Monitor cycle → 18 subreddits · 3 reply drafts → Prabh's Telegram</div><span class="tl-time">Every 6h</span></div>
-        <div class="tl-item"><span class="tl-badge" style="background:#7C3AED;color:white">ACE</span><div class="tl-msg">Daily brief → TJ Telegram · Proactive alerts every hour</div><span class="tl-time">8:00 AM PST</span></div>
+        <div class="tl-item"><span class="tl-badge" style="background:#0D3347;color:white">ACE</span><div class="tl-msg">Daily brief → TJ Telegram · Proactive alerts every hour</div><span class="tl-time">8:00 AM PST</span></div>
         <div class="tl-item" style="border:none"><span class="tl-badge" style="background:#D1FAE5;color:#065F46">SCOUT</span><div class="tl-msg">IndexNow → 33 blog URLs · Pinged Google</div><span class="tl-time">Last deploy</span></div>
       </div>
     </div>
@@ -2249,9 +2249,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div style="margin-top:10px;font-size:0.7rem;color:var(--g300)">PIN: 272727 · Show to: GPs, clinic managers</div>
       </div>
 
-      <div style="background:white;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,0.04);border-top:3px solid #7C3AED">
+      <div style="background:white;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,0.04);border-top:3px solid #028090">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">👨‍⚕️</div>
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#028090,#02C39A);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">👨‍⚕️</div>
           <div>
             <div style="font-size:0.88rem;font-weight:800;color:var(--deep)">Doctor Portal</div>
             <div style="font-size:0.72rem;color:var(--g500)">For individual physicians</div>
@@ -2260,7 +2260,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
         <div style="font-size:0.78rem;color:var(--g500);line-height:1.7;margin-bottom:14px">Personal patient list · adherence report PDF · medication schedules · weekly email digest preview</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <a href="doctor-portal.html" target="_blank" style="flex:1;text-align:center;background:#7C3AED;color:white;font-size:0.78rem;font-weight:700;padding:8px 14px;border-radius:8px;text-decoration:none">Open Portal</a>
+          <a href="doctor-portal.html" target="_blank" style="flex:1;text-align:center;background:#028090;color:white;font-size:0.78rem;font-weight:700;padding:8px 14px;border-radius:8px;text-decoration:none">Open Portal</a>
           <button onclick="copyLink('doctor-portal.html')" style="font-size:0.74rem;border:1.5px solid var(--g200);padding:8px 12px;border-radius:8px;background:white;cursor:pointer;color:var(--g500)">Copy Link</button>
         </div>
         <div style="margin-top:10px;font-size:0.7rem;color:var(--g300)">PIN: 272727 · Show to: GPs, specialists, family doctors</div>
@@ -2283,9 +2283,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div style="margin-top:10px;font-size:0.7rem;color:var(--g300)">PIN: 272727 · Show to: pharmacy owners, pharmacists</div>
       </div>
 
-      <div style="background:white;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,0.04);border-top:3px solid #059669">
+      <div style="background:white;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,0.04);border-top:3px solid #02C39A">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#059669,#34D399);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">🏡</div>
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#02C39A,#028090);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">🏡</div>
           <div>
             <div style="font-size:0.88rem;font-weight:800;color:var(--deep)">Senior Care Portal</div>
             <div style="font-size:0.72rem;color:var(--g500)">For care home staff</div>
@@ -2294,15 +2294,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
         <div style="font-size:0.78rem;color:var(--g500);line-height:1.7;margin-bottom:14px">Resident overview · caregiver connect · real-time adherence feed · staff notes per resident</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <a href="care-portal.html" target="_blank" style="flex:1;text-align:center;background:#059669;color:white;font-size:0.78rem;font-weight:700;padding:8px 14px;border-radius:8px;text-decoration:none">Open Portal</a>
+          <a href="care-portal.html" target="_blank" style="flex:1;text-align:center;background:#02C39A;color:white;font-size:0.78rem;font-weight:700;padding:8px 14px;border-radius:8px;text-decoration:none">Open Portal</a>
           <button onclick="copyLink('care-portal.html')" style="font-size:0.74rem;border:1.5px solid var(--g200);padding:8px 12px;border-radius:8px;background:white;cursor:pointer;color:var(--g500)">Copy Link</button>
         </div>
         <div style="margin-top:10px;font-size:0.7rem;color:var(--g300)">PIN: 272727 · Show to: care home directors, senior living managers</div>
       </div>
 
-      <div style="background:white;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,0.04);border-top:3px solid #2563EB">
+      <div style="background:white;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,0.04);border-top:3px solid #028090">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2563EB,#60A5FA);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">🏢</div>
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#028090,#02C39A);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">🏢</div>
           <div>
             <div style="font-size:0.88rem;font-weight:800;color:var(--deep)">Enterprise Portal</div>
             <div style="font-size:0.72rem;color:var(--g500)">For large orgs + chains</div>
@@ -2311,7 +2311,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
         <div style="font-size:0.78rem;color:var(--g500);line-height:1.7;margin-bottom:14px">Multi-site dashboard · org-wide adherence · billing + plan management · enterprise analytics</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <a href="enterprise-portal.html" target="_blank" style="flex:1;text-align:center;background:#2563EB;color:white;font-size:0.78rem;font-weight:700;padding:8px 14px;border-radius:8px;text-decoration:none">Open Portal</a>
+          <a href="enterprise-portal.html" target="_blank" style="flex:1;text-align:center;background:#028090;color:white;font-size:0.78rem;font-weight:700;padding:8px 14px;border-radius:8px;text-decoration:none">Open Portal</a>
           <button onclick="copyLink('enterprise-portal.html')" style="font-size:0.74rem;border:1.5px solid var(--g200);padding:8px 12px;border-radius:8px;background:white;cursor:pointer;color:var(--g500)">Copy Link</button>
         </div>
         <div style="margin-top:10px;font-size:0.7rem;color:var(--g300)">PIN: 272727 · Show to: hospital networks, large senior living chains</div>
@@ -2354,7 +2354,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div style="font-size:0.82rem;font-weight:800;color:var(--deep);margin-bottom:4px">For Senior Homes</div>
         <div style="font-size:0.73rem;color:var(--g500);margin-bottom:12px">Senior living directors + care coordinators</div>
         <div style="display:flex;gap:8px">
-          <a href="for-senior-homes.html" target="_blank" style="flex:1;text-align:center;background:#059669;color:white;font-size:0.76rem;font-weight:700;padding:7px 10px;border-radius:7px;text-decoration:none">Open</a>
+          <a href="for-senior-homes.html" target="_blank" style="flex:1;text-align:center;background:#02C39A;color:white;font-size:0.76rem;font-weight:700;padding:7px 10px;border-radius:7px;text-decoration:none">Open</a>
           <button onclick="copyLink('for-senior-homes.html')" style="font-size:0.73rem;border:1.5px solid var(--g200);padding:7px 10px;border-radius:7px;background:white;cursor:pointer;color:var(--g500)">Copy</button>
         </div>
       </div>
@@ -2363,7 +2363,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div style="font-size:0.82rem;font-weight:800;color:var(--deep);margin-bottom:4px">For Doctors</div>
         <div style="font-size:0.73rem;color:var(--g500);margin-bottom:12px">Individual physicians · patient adherence at a glance</div>
         <div style="display:flex;gap:8px">
-          <a href="for-doctors.html" target="_blank" style="flex:1;text-align:center;background:#7C3AED;color:white;font-size:0.76rem;font-weight:700;padding:7px 10px;border-radius:7px;text-decoration:none">Open</a>
+          <a href="for-doctors.html" target="_blank" style="flex:1;text-align:center;background:#028090;color:white;font-size:0.76rem;font-weight:700;padding:7px 10px;border-radius:7px;text-decoration:none">Open</a>
           <button onclick="copyLink('for-doctors.html')" style="font-size:0.73rem;border:1.5px solid var(--g200);padding:7px 10px;border-radius:7px;background:white;cursor:pointer;color:var(--g500)">Copy</button>
         </div>
       </div>
@@ -2484,18 +2484,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="card" style="border-left:3px solid #02C39A"><div style="font-size:0.72rem;font-weight:800;color:#02C39A;text-transform:uppercase;margin-bottom:6px">Week 1 · May 15–22 · IGNITION</div><div style="font-size:0.78rem;line-height:1.8;color:var(--deep)">Blaze fires launch email · Nina day-0 onboarding · Rex 3 Reddit replies/day · Cole first 5 B2B emails · Leo founding story LinkedIn</div><div style="margin-top:10px;font-size:0.72rem;font-weight:700;color:var(--g500)">Milestone: 3 paying customers</div></div>
       <div class="card" style="border-left:3px solid #028090"><div style="font-size:0.72rem;font-weight:800;color:#028090;text-transform:uppercase;margin-bottom:6px">Week 2 · May 22–29 · LEARN FAST</div><div style="font-size:0.78rem;line-height:1.8;color:var(--deep)">Rex doubles subreddits driving clicks · Lena rewrites if &lt;20% conversion · Cole follows up any pharmacy reply · TikTok: 5 videos published</div><div style="margin-top:10px;font-size:0.72rem;font-weight:700;color:var(--g500)">Milestone: 7 paying customers</div></div>
       <div class="card" style="border-left:3px solid #0D3347"><div style="font-size:0.72rem;font-weight:800;color:#0D3347;text-transform:uppercase;margin-bottom:6px">Week 3 · May 29–Jun 5 · PRESS GAS</div><div style="font-size:0.78rem;line-height:1.8;color:var(--deep)">Lena 3-touch aggressive if &lt;30% · Cole personal follow-up to openers · Leo 50 LinkedIn connections/week · Rex surfaces viral posts to TikTok</div><div style="margin-top:10px;font-size:0.72rem;font-weight:700;color:var(--g500)">Milestone: 15 customers, $150 MRR</div></div>
-      <div class="card" style="border-left:3px solid #7C3AED"><div style="font-size:0.72rem;font-weight:800;color:#7C3AED;text-transform:uppercase;margin-bottom:6px">Week 4 · Jun 5–12 · CLOSE MONTH 1</div><div style="font-size:0.78rem;line-height:1.8;color:var(--deep)">Full agent self-reflection Sunday · Best channel gets 2x attention in June · Founding spots urgency if &lt;150 left · June plan locked</div><div style="margin-top:10px;font-size:0.72rem;font-weight:700;color:var(--g500)">Milestone: 20 customers, $200 MRR</div></div>
+      <div class="card" style="border-left:3px solid #02C39A"><div style="font-size:0.72rem;font-weight:800;color:#02C39A;text-transform:uppercase;margin-bottom:6px">Week 4 · Jun 5–12 · CLOSE MONTH 1</div><div style="font-size:0.78rem;line-height:1.8;color:var(--deep)">Full agent self-reflection Sunday · Best channel gets 2x attention in June · Founding spots urgency if &lt;150 left · June plan locked</div><div style="margin-top:10px;font-size:0.72rem;font-weight:700;color:var(--g500)">Milestone: 20 customers, $200 MRR</div></div>
     </div>
 
     <div class="card">
       <div class="card-title" style="margin-bottom:12px">What Compounds Automatically Each Month</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:0.78rem">
         <div style="background:#f0fdf4;border-radius:8px;padding:12px"><strong style="color:#16a34a">Elara</strong><br><span style="color:var(--g600);line-height:1.7">Learns each user's patterns → retention up, churn down → compounding MRR</span></div>
-        <div style="background:#eff6ff;border-radius:8px;padding:12px"><strong style="color:#2563eb">Rex</strong><br><span style="color:var(--g600);line-height:1.7">Learns which Reddit posts get clicks → reach grows without more effort</span></div>
+        <div style="background:#E6F5F7;border-radius:8px;padding:12px"><strong style="color:#028090">Rex</strong><br><span style="color:var(--g600);line-height:1.7">Learns which Reddit posts get clicks → reach grows without more effort</span></div>
         <div style="background:#fef3c7;border-radius:8px;padding:12px"><strong style="color:#d97706">Nina + Lena</strong><br><span style="color:var(--g600);line-height:1.7">A/B winners stack up each week → email conversion rate climbs automatically</span></div>
         <div style="background:#fdf4ff;border-radius:8px;padding:12px"><strong style="color:#9333ea">Cole</strong><br><span style="color:var(--g600);line-height:1.7">Learns which B2B orgs reply → outreach gets sharper and faster</span></div>
         <div style="background:#fff1f2;border-radius:8px;padding:12px"><strong style="color:#e11d48">Daily Board</strong><br><span style="color:var(--g600);line-height:1.7">7-day trend feeds into every agent's morning context → urgency compounds</span></div>
-        <div style="background:#f0f9ff;border-radius:8px;padding:12px"><strong style="color:#0284c7">Scout + ASO</strong><br><span style="color:var(--g600);line-height:1.7">Each keyword rank improvement compounds → App Store organic by Aug</span></div>
+        <div style="background:#E6F5F7;border-radius:8px;padding:12px"><strong style="color:#028090">Scout + ASO</strong><br><span style="color:var(--g600);line-height:1.7">Each keyword rank improvement compounds → App Store organic by Aug</span></div>
       </div>
     </div>
   </div>
@@ -2736,7 +2736,7 @@ function loadDailyBoard() {
         banner += '</div>';
       }
 
-      var assigneeColors = { tj: '#6366f1', prabh: '#ec4899', agent: '#ca8a04' };
+      var assigneeColors = { tj: '#028090', prabh: '#ec4899', agent: '#ca8a04' };
       var assigneeLabels = { tj: 'TJ', prabh: 'PRABH', agent: null };
 
       // Group: TJ → Prabh → Agents
@@ -2761,7 +2761,7 @@ function loadDailyBoard() {
       }
 
       var html = banner;
-      html += renderSection('TJ — CEO', groups.tj, '#6366f1');
+      html += renderSection('TJ — CEO', groups.tj, '#028090');
       html += renderSection('PRABH — COO+CMO', groups.prabh, '#ec4899');
       html += renderSection('AI AGENTS', groups.agent, '#ca8a04');
       document.getElementById('gp-board-tasks').innerHTML = html;
@@ -3001,7 +3001,7 @@ function loadHealth() {
       var events = d.events || d || [];
       var tl = document.getElementById('hl-timeline');
       if (!events.length) { tl.innerHTML = '<div style="color:var(--g400);font-size:0.82rem;padding:12px">No activity yet — agents will populate this as they run.</div>'; return; }
-      var COLORS = { hermes:'#0B2D3D','frank':'#F59E0B','maya':'#F97316','cara':'#EF4444','grace':'#8B5CF6','elara':'#8B5CF6','nina':'#3B82F6','lena':'#EC4899','leo':'#2563EB','rex':'#DC2626','cole':'#D97706','blaze':'#EF4444','scout':'#10B981','vance':'#06B6D4','oracle':'#FBBF24','signals':'#F59E0B','ace':'#7C3AED','comp intel':'#EF4444' };
+      var COLORS = { hermes:'#0B2D3D','frank':'#F59E0B','maya':'#F97316','cara':'#EF4444','grace':'#028090','elara':'#02C39A','nina':'#028090','lena':'#EC4899','leo':'#028090','rex':'#DC2626','cole':'#D97706','blaze':'#EF4444','scout':'#02C39A','vance':'#02C39A','oracle':'#FBBF24','signals':'#F59E0B','ace':'#0D3347','comp intel':'#EF4444' };
       tl.innerHTML = events.map(function(ev) {
         var name = (ev.agentName||'').toLowerCase();
         var bg   = COLORS[name] || '#6B7280';
@@ -3459,8 +3459,8 @@ function _chGet(id) { return _chS[id] || { status:'pending' }; }
 function _chSet(id, patch) { _chS[id] = Object.assign({}, _chGet(id), patch); _chSave(); }
 function _chContent(item) { return (_chS[item.id] && _chS[item.id].content) ? _chS[item.id].content : item.content; }
 
-var STATUS_BG = { 'FILM FIRST':'#D1FAE5','FILM THIS':'#D1FAE5','POST NOW':'#D1FAE5','REPLY':'#DBEAFE','POST':'#DBEAFE','POST DAY 2':'#FEF3C7','POST DAY 3':'#FEF3C7','POST DAY 4':'#FEF3C7','POST DAY 5':'#FEF3C7','POST DAY 6':'#FEF3C7','SAVE FOR LATER':'#EDE9FE','AFTER CREDIBILITY':'#FEE2E2' };
-var STATUS_FG = { 'FILM FIRST':'#065F46','FILM THIS':'#065F46','POST NOW':'#065F46','REPLY':'#1D4ED8','POST':'#1D4ED8','POST DAY 2':'#92400E','POST DAY 3':'#92400E','POST DAY 4':'#92400E','POST DAY 5':'#92400E','POST DAY 6':'#92400E','SAVE FOR LATER':'#5B21B6','AFTER CREDIBILITY':'#B91C1C' };
+var STATUS_BG = { 'FILM FIRST':'#D1FAE5','FILM THIS':'#D1FAE5','POST NOW':'#D1FAE5','REPLY':'#E6F5F7','POST':'#E6F5F7','POST DAY 2':'#FEF3C7','POST DAY 3':'#FEF3C7','POST DAY 4':'#FEF3C7','POST DAY 5':'#FEF3C7','POST DAY 6':'#FEF3C7','SAVE FOR LATER':'#E6F5F7','AFTER CREDIBILITY':'#FEE2E2' };
+var STATUS_FG = { 'FILM FIRST':'#065F46','FILM THIS':'#065F46','POST NOW':'#065F46','REPLY':'#028090','POST':'#028090','POST DAY 2':'#92400E','POST DAY 3':'#92400E','POST DAY 4':'#92400E','POST DAY 5':'#92400E','POST DAY 6':'#92400E','SAVE FOR LATER':'#02C39A','AFTER CREDIBILITY':'#B91C1C' };
 
 function _chCard(item) {
   var content = _chContent(item);
@@ -3512,7 +3512,7 @@ function _chCard(item) {
   // Copy button — always visible on Reddit (manual posting only), also on all cards as handy shortcut
   var cpBtn = document.createElement('button');
   cpBtn.className = 'ch-btn-edit';
-  cpBtn.style.cssText = 'background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE';
+  cpBtn.style.cssText = 'background:#E6F5F7;color:#028090;border-color:#b2dde3';
   cpBtn.textContent = '⎘ Copy';
   cpBtn.onclick = (function(i, btn){ return function(){
     var text = _chContent(i);
@@ -3520,7 +3520,7 @@ function _chCard(item) {
       btn.textContent = '✓ Copied!';
       btn.style.background = '#D1FAE5';
       btn.style.color = '#065F46';
-      setTimeout(function(){ btn.textContent = '⎘ Copy'; btn.style.background = '#EFF6FF'; btn.style.color = '#1D4ED8'; }, 2000);
+      setTimeout(function(){ btn.textContent = '⎘ Copy'; btn.style.background = '#E6F5F7'; btn.style.color = '#028090'; }, 2000);
     }).catch(function(){
       var ta = document.createElement('textarea');
       ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
@@ -3752,7 +3752,7 @@ var _SECRET_CH = (function(){ var s = document.querySelector('script[data-secret
 
 function _chContentCard(draft, platform) {
   var BACKEND = _BACKEND, SECRET = _SECRET;
-  var platformColor = { reddit:'#FF4500', linkedin:'#0A66C2', community:'#7C3AED', instagram:'#E1306C', quora:'#B92B27', youtube:'#FF0000', facebook:'#1877F2', tiktok:'#010101' }[platform] || 'var(--g400)';
+  var platformColor = { reddit:'#FF4500', linkedin:'#0A66C2', community:'#028090', instagram:'#E1306C', quora:'#B92B27', youtube:'#FF0000', facebook:'#1877F2', tiktok:'#010101' }[platform] || 'var(--g400)';
 
   var card = document.createElement('div');
   card.className = 'card';
@@ -4081,8 +4081,8 @@ function _ciBuildCard(fp, sub) {
   // Tone full-width
   var toneCard = document.createElement('div');
   toneCard.className = 'card';
-  toneCard.style.cssText = 'margin-bottom:12px;border-left:3px solid #7C3AED';
-  toneCard.innerHTML = '<div style="font-size:0.72rem;font-weight:800;color:#7C3AED;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">COMMUNITY TONE</div><div style="font-size:0.82rem;line-height:1.7;color:var(--text)">' + (fp.tone || '') + '</div>';
+  toneCard.style.cssText = 'margin-bottom:12px;border-left:3px solid #028090';
+  toneCard.innerHTML = '<div style="font-size:0.72rem;font-weight:800;color:#028090;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">COMMUNITY TONE</div><div style="font-size:0.82rem;line-height:1.7;color:var(--text)">' + (fp.tone || '') + '</div>';
   wrap.appendChild(toneCard);
 
   // Carely strategy card
@@ -5023,17 +5023,17 @@ function rejectProposal(id) {
   var SECRET = _SECRET;
 
   var AGENT_COLORS = {
-    ace:'#7C3AED',elara:'#02C39A',frank:'#2563EB',grace:'#D97706',
-    maya:'#DC2626',nina:'#059669',blaze:'#F97316',lena:'#EC4899',
-    scout:'#0891B2',rex:'#B91C1C',leo:'#1D4ED8',cara:'#9333EA',
+    ace:'#0D3347',elara:'#02C39A',frank:'#028090',grace:'#D97706',
+    maya:'#DC2626',nina:'#02C39A',blaze:'#F97316',lena:'#EC4899',
+    scout:'#028090',rex:'#B91C1C',leo:'#028090',cara:'#02C39A',
     'dr. bridge':'#065F46','dr.bridge':'#065F46',cole:'#92400E',
-    oracle:'#0D4D6B',signals:'#059669',vance:'#9333EA',refer:'#D97706',
+    oracle:'#0D4D6B',signals:'#02C39A',vance:'#02C39A',refer:'#D97706',
     hermes:'#0B2D3D','comp intel':'#DC2626'
   };
 
   var TYPE_LABELS = { action:'ACTION', alert:'ALERT', success:'SUCCESS', info:'INFO', metric:'METRIC' };
   var TYPE_COLORS = {
-    action:'#1D4ED8',alert:'#DC2626',success:'#16A34A',info:'#6B7280',metric:'#7C3AED'
+    action:'#028090',alert:'#DC2626',success:'#16A34A',info:'#6B7280',metric:'#028090'
   };
 
   function timeAgo(iso) {
@@ -5260,8 +5260,8 @@ function rejectProposal(id) {
   var BACKEND = _BACKEND;
   var SECRET = _SECRET;
 
-  var PRIORITY_COLORS = { critical: '#B91C1C', normal: '#1D4ED8', info: '#065F46' };
-  var PRIORITY_BG = { critical: '#FEE2E2', normal: '#DBEAFE', info: '#D1FAE5' };
+  var PRIORITY_COLORS = { critical: '#B91C1C', normal: '#028090', info: '#065F46' };
+  var PRIORITY_BG = { critical: '#FEE2E2', normal: '#E6F5F7', info: '#D1FAE5' };
 
   function timeAgo(iso) {
     var s = Math.round((Date.now() - new Date(iso)) / 1000);
@@ -5364,8 +5364,8 @@ function rejectProposal(id) {
     var DEMO_INBOX = [
           {agent:'FRANK', title:'Dose reminders delivered', body:'8 beta patients — all confirmed within 5 min. 0 missed doses.', color:'#02C39A', time:'2h ago'},
           {agent:'GRACE', title:'Morning check-ins complete', body:'7/8 patients responded. 1 flagged for follow-up.', color:'#028090', time:'4h ago'},
-          {agent:'COLE', title:'B2B outreach drafted', body:'Pacific Family Medicine email ready in Approvals queue.', color:'#7C3AED', time:'6h ago'},
-          {agent:'LEO', title:'"The 2AM Phone Call" published', body:'LinkedIn post live — 52 impressions so far.', color:'#6366F1', time:'8h ago'},
+          {agent:'COLE', title:'B2B outreach drafted', body:'Pacific Family Medicine email ready in Approvals queue.', color:'#028090', time:'6h ago'},
+          {agent:'LEO', title:'"The 2AM Phone Call" published', body:'LinkedIn post live — 52 impressions so far.', color:'#028090', time:'8h ago'},
           {agent:'REX', title:'Reddit thread flagged', body:'High-signal r/caregivers discussion. Draft reply sent to Prabh.', color:'#6B7280', time:'12h ago'},
         ];
         DEMO_INBOX.forEach(function(item) {
@@ -5504,7 +5504,7 @@ function rejectProposal(id) {
             editBtn2.onclick = function() { prev2.textContent = ta2.value; ta2.replaceWith(prev2); editBtn2.textContent = 'Edit'; };
           }; })(preview);
           var suggestBtn2 = document.createElement('button'); suggestBtn2.textContent = 'Suggest';
-          suggestBtn2.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid #818CF8;background:white;color:#818CF8;cursor:pointer';
+          suggestBtn2.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid #028090;background:white;color:#028090;cursor:pointer';
           suggestBtn2.onclick = function() { suggestBtn2.textContent = 'Sent to Hermes'; suggestBtn2.disabled = true; };
           btnRow.appendChild(approveBtn);
           btnRow.appendChild(editBtn2);
@@ -5580,7 +5580,7 @@ function rejectProposal(id) {
             editBtn.onclick = function() { prev.textContent = ta.value; ta.replaceWith(prev); editBtn.textContent = 'Edit'; editBtn.onclick = arguments.callee; };
           }; })(preview, card);
           var suggestBtn = document.createElement('button'); suggestBtn.textContent = 'Suggest';
-          suggestBtn.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid #818CF8;background:white;color:#818CF8;cursor:pointer';
+          suggestBtn.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid #028090;background:white;color:#028090;cursor:pointer';
           suggestBtn.onclick = function() { suggestBtn.textContent = 'Sent to Hermes'; suggestBtn.disabled = true; };
           btnRow.appendChild(approveBtn); btnRow.appendChild(editBtn); btnRow.appendChild(suggestBtn); btnRow.appendChild(skipBtn); card.appendChild(btnRow);
           feed.appendChild(card);
@@ -5660,7 +5660,7 @@ function rejectProposal(id) {
     var t = type.toLowerCase();
     if (t.includes('reddit')) return '#FF4500';
     if (t.includes('linkedin')) return '#0A66C2';
-    if (t.includes('community')) return '#7C3AED';
+    if (t.includes('community')) return '#028090';
     if (t.includes('email')) return '#028090';
     return 'var(--g400)';
   }
@@ -5748,7 +5748,7 @@ function rejectProposal(id) {
         if (draft.telegramMsgIds.prabh) {
           var prabhDot = document.createElement('span');
           prabhDot.style.cssText = 'display:inline-flex;align-items:center;gap:3px';
-          prabhDot.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:#818CF8;display:inline-block"></span> Prabh notified';
+          prabhDot.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:#028090;display:inline-block"></span> Prabh notified';
           syncBar.appendChild(prabhDot);
         }
         card.appendChild(syncBar);
@@ -5902,7 +5902,7 @@ function rejectProposal(id) {
       });
   };
 
-  var PLATFORM_COLORS_RTP = { reddit:'#FF4500', linkedin:'#0A66C2', instagram:'#E1306C', quora:'#B92B27', youtube:'#FF0000', facebook:'#1877F2', tiktok:'#010101', community:'#7C3AED' };
+  var PLATFORM_COLORS_RTP = { reddit:'#FF4500', linkedin:'#0A66C2', instagram:'#E1306C', quora:'#B92B27', youtube:'#FF0000', facebook:'#1877F2', tiktok:'#010101', community:'#028090' };
   var PLATFORM_EMOJI = { reddit:'🔴', linkedin:'💼', instagram:'📸', quora:'❓', youtube:'▶️', facebook:'👥', tiktok:'🎵', community:'🌐' };
 
   window.loadCalendar = function() {
@@ -6027,7 +6027,7 @@ function rejectProposal(id) {
 (function() {
   var BACKEND = _BACKEND;
   var SECRET = _SECRET;
-  var TYPE_COLORS = { action:'#028090', alert:'#DC2626', success:'#02C39A', info:'#6B7280', metric:'#7C3AED' };
+  var TYPE_COLORS = { action:'#028090', alert:'#DC2626', success:'#02C39A', info:'#6B7280', metric:'#028090' };
   var TYPE_LABELS = { action:'→', alert:'⚠', success:'✓', info:'·', metric:'#' };
 
   function timeAgo(ts) {
@@ -6301,12 +6301,12 @@ var BRAIN_BACKEND = 'https://carely-backend-production.up.railway.app';
 var BRAIN_SECRET  = 'carely-admin-6add43330d2313d8';
 
 var BRAIN_TOPIC_META = {
-  product:           { icon: '📱', label: 'Product',           color: '#2563EB' },
+  product:           { icon: '📱', label: 'Product',           color: '#028090' },
   competitors:       { icon: '⚔️',  label: 'Competitors',       color: '#DC2626' },
   customers:         { icon: '👥', label: 'Customers',          color: '#16A34A' },
   market:            { icon: '🌍', label: 'Market',             color: '#D97706' },
-  pricing:           { icon: '💰', label: 'Pricing',            color: '#059669' },
-  growth_playbook:   { icon: '🚀', label: 'Growth Playbook',    color: '#7C3AED' },
+  pricing:           { icon: '💰', label: 'Pricing',            color: '#02C39A' },
+  growth_playbook:   { icon: '🚀', label: 'Growth Playbook',    color: '#028090' },
   agent_directives:  { icon: '🤖', label: 'Agent Directives',   color: '#0891B2' },
   carely_brand:      { icon: '💙', label: 'Carely Brand',        color: '#0D3347' },
   carely_voice:      { icon: '🗣️', label: 'Carely Voice',        color: '#2D8899' },
@@ -6428,10 +6428,10 @@ function initBrainConstellation() {
     { name:'CARA',      label:'Caregiver Alert',            cluster:'CARE',   color:'#00B89A', size: 9, activity:10, skills:['FCM to caregiver','Triggered by Maya','Instant alert'] },
     { name:'BRIDGE',    label:'Doctor Reports · PDF',       cluster:'CARE',   color:'#0891B2', size: 9, activity: 8, skills:['Hourly check','Weekly PDF','Email to GP','Supabase'] },
     // GROWTH — purple/pink
-    { name:'LEO',       label:'LinkedIn · 6x/week',         cluster:'GROWTH', color:'#818CF8', size:12, activity:16, skills:['Posts 6x/week','8AM + 5PM PST','Brand + Prabh','Token June 29'] },
-    { name:'REX',       label:'Reddit · 18 Subs',           cluster:'GROWTH', color:'#A78BFA', size:11, activity:14, skills:['18 subreddits','Every 6h','Reply drafts → Prabh','Never pitches first'] },
+    { name:'LEO',       label:'LinkedIn · 6x/week',         cluster:'GROWTH', color:'#028090', size:12, activity:16, skills:['Posts 6x/week','8AM + 5PM PST','Brand + Prabh','Token June 29'] },
+    { name:'REX',       label:'Reddit · 18 Subs',           cluster:'GROWTH', color:'#02C39A', size:11, activity:14, skills:['18 subreddits','Every 6h','Reply drafts → Prabh','Never pitches first'] },
     { name:'NINA',      label:'Trial Nurture · Email',      cluster:'GROWTH', color:'#FB7185', size:10, activity:11, skills:['Day 0→7 arc','10AM UTC','From Prabhjot','SendGrid'] },
-    { name:'COLE',      label:'B2B Outreach',               cluster:'GROWTH', color:'#C084FC', size:10, activity:12, skills:['5 targets/day','TJ approval gate','Senior homes + pharma','Cole Outreach tab'] },
+    { name:'COLE',      label:'B2B Outreach',               cluster:'GROWTH', color:'#028090', size:10, activity:12, skills:['5 targets/day','TJ approval gate','Senior homes + pharma','Cole Outreach tab'] },
     { name:'VANCE',     label:'TikTok/Reels Scripts',       cluster:'GROWTH', color:'#F472B6', size: 9, activity: 9, skills:['9AM PST','45-60s scripts','Sent to Prabh','3 approved'] },
     { name:'LENA',      label:'Win-back · Closer',          cluster:'GROWTH', color:'#E879F9', size: 9, activity: 7, skills:['11AM UTC','3-touch sequence','Expiring trials','Behavioural triggers'] },
     { name:'BLAZE',     label:'Launch Blast · May 30',      cluster:'GROWTH', color:'#F97316', size: 9, activity: 4, skills:['Mailchimp blast','Standby','May 30 trigger','Full waitlist'] },
@@ -6444,7 +6444,7 @@ function initBrainConstellation() {
 
   var CLUSTER = {
     CARE:   { label:'PATIENT CARE',   color:'#02C39A', glow:'rgba(2,195,154,0.12)'   },
-    GROWTH: { label:'GROWTH ENGINE',  color:'#818CF8', glow:'rgba(129,140,248,0.12)' },
+    GROWTH: { label:'GROWTH ENGINE',  color:'#028090', glow:'rgba(2,128,144,0.12)' },
     INTEL:  { label:'INTELLIGENCE',   color:'#FBBF24', glow:'rgba(251,191,36,0.12)'  },
     OPS:    { label:'OPERATIONS',     color:'#FFFFFF', glow:'rgba(255,255,255,0.08)' },
   };
