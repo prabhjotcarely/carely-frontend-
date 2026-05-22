@@ -34,9 +34,9 @@
     '.ecw-dot:nth-child(2){animation-delay:0.2s}.ecw-dot:nth-child(3){animation-delay:0.4s}',
     '@keyframes ecwDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}',
     '#ecw-form{padding:10px 12px;border-top:1px solid #E2EDEB;display:flex;gap:7px}',
-    '#ecw-input{flex:1;border:1.5px solid #E2EDEB;border-radius:8px;padding:8px 12px;font-size:0.82rem;font-family:inherit;outline:none;resize:none;max-height:80px;line-height:1.45;color:#0D2B24;background:white;transition:border-color 0.15s}',
-    '#ecw-input:focus{border-color:#028090}',
-    '#ecw-input::placeholder{color:#7A9490}',
+    '#ecw-input{flex:1;border:1.5px solid #E2EDEB !important;border-radius:8px !important;padding:8px 12px !important;font-size:0.82rem !important;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;outline:none !important;resize:none !important;max-height:80px;line-height:1.45 !important;color:#0D2B24 !important;background:#ffffff !important;transition:border-color 0.15s;box-shadow:none !important}',
+    '#ecw-input:focus{border-color:#028090 !important;background:#ffffff !important}',
+    '#ecw-input::placeholder{color:#7A9490 !important}',
     '#ecw-send{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#028090,#02C39A);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity 0.15s}',
     '#ecw-send:hover{opacity:0.85}',
     '#ecw-send:disabled{opacity:0.4;cursor:not-allowed}',
@@ -156,10 +156,32 @@
   });
 
   // ── Message helpers ──────────────────────────────────────────────
+  // Parse simple markdown (**, *, newlines) into DOM nodes — no innerHTML, XSS-safe
+  function appendMarkdown(container, text) {
+    var lines = text.split('\n');
+    lines.forEach(function(line, li) {
+      if (li > 0) container.appendChild(document.createElement('br'));
+      // Split on **bold** and *italic* markers
+      var parts = line.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+      parts.forEach(function(part) {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          var strong = document.createElement('strong');
+          strong.textContent = part.slice(2, -2);
+          container.appendChild(strong);
+        } else if (part.startsWith('*') && part.endsWith('*') && part.length > 2) {
+          var em = document.createElement('em');
+          em.textContent = part.slice(1, -1);
+          container.appendChild(em);
+        } else {
+          container.appendChild(document.createTextNode(part));
+        }
+      });
+    });
+  }
   function addBotMsg(text) {
     var b = document.createElement('div');
     b.className = 'ecw-bubble bot';
-    b.textContent = text;
+    appendMarkdown(b, text);
     msgs.appendChild(b);
     msgs.scrollTop = msgs.scrollHeight;
   }
