@@ -1,908 +1,824 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="elara-3d-new.png"><link rel="apple-touch-icon" href="elara-3d-new.png"><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Carely connects to your practice. Get weekly medication adherence reports, missed dose alerts, and appointment requests from patients — without changing your workflow." />
-  <meta name="robots" content="index, follow" />
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="/elara-3d-new.png">
+  <link rel="apple-touch-icon" href="/elara-3d-new.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Carely for Doctors — Know Your Patients Are Taking Their Medication</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <meta name="description" content="Carely's DrBridge gives GPs weekly medication adherence reports, missed-dose alerts, and appointment requests from patients — without changing your workflow.">
+  <meta property="og:title" content="Carely for Doctors — Know Your Patients Are Taking Their Medication">
+  <meta property="og:description" content="Get weekly adherence reports from your patients. Automated. No extra charting time.">
+  <meta property="og:image" content="https://carely.fit/elara-3d.png">
+  <meta property="og:url" content="https://carely.fit/for-doctors">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="robots" content="index, follow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --deep-teal: #0D3347;
-      --teal: #028090;
-      --mint: #02C39A;
-      --light-mint: #E0FAF4;
-      --offwhite: #F7FBFA;
-      --accent: #0284C7;
-      --accent-light: #dbeafe;
-      --text-dark: #0D3347;
-      --text-mid: #2d5a6b;
-      --text-muted: #5a8a99;
-      --white: #ffffff;
+      --w:      #ffffff;
+      --off:    #f2fafb;
+      --t1:     #44abad;
+      --t2:     #2d8899;
+      --t3:     #1e6070;
+      --t4:     #175060;
+      --t5:     #0d2b38;
+      --tglow:  rgba(68,171,173,0.32);
+      --tdim:   rgba(68,171,173,0.12);
+      --tbor:   rgba(68,171,173,0.25);
+      --bor:    #cfe5ea;
+      --ink:    #0d2b38;
+      --inkm:   #2d5a6a;
+      --inks:   #7aaabb;
+      --bright: #2ee8a0;
+      --app-grad: linear-gradient(140deg, #44abad 0%, #2d8899 38%, #1e6070 72%, #175060 100%);
+      --dark-grad: linear-gradient(135deg, #0d2b38 0%, #175060 55%, #1e6070 100%);
     }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--w); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; outline: none; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--t2); border-radius: 2px; }
 
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      color: var(--text-dark);
-      background: var(--offwhite);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
+    .hero-eyebrow { animation: fadeUp 0.55s ease forwards; animation-delay: 0.08s; opacity: 0; }
+    .hero h1      { animation: fadeUp 0.65s ease forwards; animation-delay: 0.18s; opacity: 0; }
+    .hero-sub     { animation: fadeUp 0.6s  ease forwards; animation-delay: 0.3s;  opacity: 0; }
+    .hero-btns    { animation: fadeUp 0.55s ease forwards; animation-delay: 0.42s; opacity: 0; }
+    .hero-trust   { animation: fadeUp 0.5s  ease forwards; animation-delay: 0.52s; opacity: 0; }
+    #phoneCol     { animation: fadeUp 0.7s  ease forwards; animation-delay: 0.12s; opacity: 0; }
+
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .reveal.in-view { opacity: 1; transform: none; }
+
+    .pain-grid, .hiw-steps, .feat-pills, .stats-bar { opacity: 1; transform: none; }
+    .pain-card, .hiw-step, .pill, .stt { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
+
+    .pain-grid.in-view .pain-card, .hiw-steps.in-view .hiw-step, .feat-pills.in-view .pill, .stats-bar.in-view .stt { opacity: 1; transform: none; }
+    .pain-grid.in-view .pain-card:nth-child(2) { transition-delay: 0.07s; }
+    .pain-grid.in-view .pain-card:nth-child(3) { transition-delay: 0.14s; }
+    .hiw-steps.in-view .hiw-step:nth-child(2) { transition-delay: 0.1s; }
+    .hiw-steps.in-view .hiw-step:nth-child(3) { transition-delay: 0.2s; }
+    .feat-pills.in-view .pill:nth-child(2) { transition-delay: 0.05s; }
+    .feat-pills.in-view .pill:nth-child(3) { transition-delay: 0.1s; }
+    .feat-pills.in-view .pill:nth-child(4) { transition-delay: 0.15s; }
+    .feat-pills.in-view .pill:nth-child(5) { transition-delay: 0.2s; }
+    .feat-pills.in-view .pill:nth-child(6) { transition-delay: 0.25s; }
+    .stats-bar.in-view .stt:nth-child(2) { transition-delay: 0.07s; }
+    .stats-bar.in-view .stt:nth-child(3) { transition-delay: 0.14s; }
+    .stats-bar.in-view .stt:nth-child(4) { transition-delay: 0.21s; }
+
+    .fin-cta h2, .fin-cta p, .fin-cta-btn { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fin-cta.in-view h2 { opacity: 1; transform: none; }
+    .fin-cta.in-view p  { opacity: 1; transform: none; transition-delay: 0.15s; }
+    .fin-cta.in-view .fin-cta-btn { opacity: 1; transform: none; transition-delay: 0.28s; }
 
     /* NAV */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--white);
-      border-bottom: 1px solid #e8f4f0;
-      padding: 0 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 68px;
-      box-shadow: 0 2px 12px rgba(13,51,71,0.07);
+    .nav-wrap { position: sticky; top: 0; z-index: 300; background: rgba(13,43,56,0.95); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid rgba(68,171,173,0.18); transition: box-shadow 0.3s; }
+    .nav-wrap.up { box-shadow: 0 2px 32px rgba(0,0,0,0.3); }
+    .nav { max-width: 1160px; margin: 0 auto; padding: 0 24px; height: 66px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo-mark { width: 32px; height: 32px; border-radius: 9px; background: var(--app-grad); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .nav-logo-name { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: #fff; letter-spacing: -0.01em; }
+    .nav-logo-badge { font-size: 0.65rem; font-weight: 700; color: var(--t1); background: rgba(68,171,173,0.12); border: 1px solid rgba(68,171,173,0.28); padding: 2px 8px; border-radius: 100px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-a { padding: 7px 14px; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: rgba(255,255,255,0.7); transition: color 0.15s, background 0.15s; }
+    .nav-a:hover { color: #fff; background: rgba(68,171,173,0.15); }
+    .nav-cta { padding: 10px 24px; border-radius: 100px; background: var(--t1); color: #fff; font-size: 0.875rem; font-weight: 800; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; }
+    .nav-cta:hover { background: var(--t2); transform: translateY(-1px); box-shadow: 0 5px 20px var(--tglow); }
+    .nav-burger { display: none; flex-direction: column; gap: 5px; width: 42px; height: 42px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+    .nav-burger span { display: block; width: 18px; height: 2px; background: #fff; border-radius: 1px; transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), opacity 0.2s; }
+    .nav-burger.open { background: rgba(68,171,173,0.2); }
+    .nav-burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+    @media(max-width:640px) { .nav-links { display: none; } .nav-cta { display: none; } .nav-burger { display: flex; } }
+
+    /* MOBILE NAV OVERLAY */
+    .nav-mob { position: fixed; top: 0; left: 0; right: 0; background: rgba(13,43,56,0.98); backdrop-filter: blur(24px); z-index: 250; padding: 80px 24px 36px; display: flex; flex-direction: column; gap: 2px; transform: translateY(-110%); transition: transform 0.38s cubic-bezier(0.16,1,0.3,1); border-bottom: 1px solid rgba(68,171,173,0.2); box-shadow: 0 24px 56px rgba(0,0,0,0.5); }
+    .nav-mob.open { transform: translateY(0); }
+    .nav-mob a { font-size: 1.15rem; font-weight: 700; color: rgba(255,255,255,0.72); padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.06); display: block; transition: color 0.15s; }
+    .nav-mob a:last-of-type { border-bottom: none; }
+    .nav-mob a:hover { color: var(--t1); }
+    .nav-mob .mob-cta { margin-top: 16px; padding: 15px 24px; border-radius: 100px; background: var(--t1); color: #fff; font-weight: 900; text-align: center; letter-spacing: 0.01em; border-bottom: none !important; }
+    .nav-mob .mob-cta:hover { background: var(--t2); }
+
+    /* HERO */
+    .hero-wrap { background: var(--dark-grad); position: relative; overflow: hidden; }
+    .hero-wrap::before { content: ''; position: absolute; top: -30%; right: -15%; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(68,171,173,0.12) 0%, transparent 65%); pointer-events: none; }
+    .hero-wrap::after { content: ''; position: absolute; bottom: -20%; left: -10%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(46,232,160,0.06) 0%, transparent 65%); pointer-events: none; }
+    .hero { max-width: 1160px; margin: 0 auto; padding: 80px 24px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; position: relative; z-index: 1; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px 6px 10px; border-radius: 100px; background: rgba(68,171,173,0.15); border: 1px solid rgba(68,171,173,0.35); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t1); margin-bottom: 22px; }
+    .eye-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bright); animation: tpulse 2s ease-in-out infinite; }
+    @keyframes tpulse { 0%,100%{box-shadow:0 0 0 0 rgba(46,232,160,0.5)} 50%{box-shadow:0 0 0 7px rgba(46,232,160,0)} }
+    .hero h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(2.4rem, 4.5vw, 4.2rem); line-height: 1.06; letter-spacing: -0.025em; color: #fff; margin-bottom: 20px; }
+    .hero h1 em { font-style: italic; color: var(--t1); }
+    .hero-sub { font-size: clamp(1rem, 1.6vw, 1.05rem); color: rgba(255,255,255,0.78); line-height: 1.78; margin-bottom: 32px; max-width: 460px; }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+    .hero-btn-primary { padding: 14px 32px; border-radius: 100px; background: var(--t1); color: #fff; font-size: 0.95rem; font-weight: 800; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; }
+    .hero-btn-primary:hover { background: var(--t2); transform: translateY(-2px); box-shadow: 0 8px 28px var(--tglow); }
+    .hero-btn-secondary { padding: 14px 28px; border-radius: 100px; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.85); font-size: 0.95rem; font-weight: 700; transition: background 0.15s, border-color 0.15s; }
+    .hero-btn-secondary:hover { background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.35); }
+    .hero-trust { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.8rem; color: rgba(255,255,255,0.6); font-weight: 600; }
+    .hero-trust span { display: flex; align-items: center; gap: 5px; }
+    .tc { color: var(--bright); }
+
+    /* Phone mockup column */
+    .phone-col { display: flex; align-items: center; justify-content: center; position: relative; }
+    .phone-bg-ring { position: absolute; width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(68,171,173,0.18) 0%, transparent 70%); animation: ring-breathe 4s ease-in-out infinite; }
+    @keyframes ring-breathe { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.08);opacity:0.6} }
+    .phone-device { width: 240px; height: 460px; border-radius: 40px; border: 8px solid #1a1a2e; background: #0a1a22; position: relative; z-index: 1; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06); }
+    .phone-notch { width: 90px; height: 20px; background: #1a1a2e; border-radius: 0 0 14px 14px; margin: 0 auto 12px; }
+    .phone-screen { padding: 0 14px 16px; }
+    .phone-status { display: flex; justify-content: space-between; align-items: center; padding: 0 4px 10px; }
+    .phone-status-time { font-size: 0.62rem; font-weight: 700; color: rgba(255,255,255,0.9); }
+    .phone-status-icons { font-size: 0.55rem; color: rgba(255,255,255,0.7); letter-spacing: 0.05em; }
+    .phone-header { background: rgba(68,171,173,0.15); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; border: 1px solid rgba(68,171,173,0.2); }
+    .phone-header-title { font-size: 0.62rem; font-weight: 800; color: var(--t1); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
+    .phone-header-sub { font-size: 0.58rem; color: rgba(255,255,255,0.65); }
+    .phone-share-banner { background: var(--bright); border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .phone-share-icon { font-size: 0.9rem; }
+    .phone-share-text { font-size: 0.58rem; font-weight: 800; color: var(--ink); }
+    .phone-med-card { background: rgba(255,255,255,0.06); border-radius: 10px; padding: 9px 11px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.08); }
+    .phone-med-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+    .phone-med-name { font-size: 0.6rem; font-weight: 700; color: #fff; }
+    .phone-med-tag { font-size: 0.5rem; font-weight: 700; padding: 2px 6px; border-radius: 6px; }
+    .tag-taken { background: rgba(46,232,160,0.2); color: var(--bright); }
+    .tag-missed { background: rgba(245,166,35,0.2); color: #f5a623; }
+    .phone-med-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+    .phone-med-fill { height: 100%; border-radius: 2px; }
+    .fill-green { background: var(--bright); width: 87%; }
+    .fill-amber { background: #f5a623; width: 62%; }
+    .fill-teal { background: var(--t1); width: 94%; }
+    .phone-badge { position: absolute; top: 36%; right: -20px; z-index: 10; background: var(--t5); border: 1px solid rgba(68,171,173,0.3); border-radius: 12px; padding: 9px 13px; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 28px rgba(0,0,0,0.25); animation: badge-slide 0.5s cubic-bezier(0.34,1.56,0.64,1) both; animation-delay: 1.2s; opacity: 0; animation-fill-mode: forwards; }
+    @keyframes badge-slide { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+    .phone-badge-icon { font-size: 1.2rem; }
+    .phone-badge-text { font-size: 0.65rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    .phone-badge-text span { color: var(--t1); display: block; font-size: 0.6rem; font-weight: 500; }
+
+    @media(max-width:840px) {
+      .hero { grid-template-columns: 1fr; padding: 50px 20px 40px; text-align: center; }
+      .hero-sub { margin: 0 auto 28px; }
+      .hero-btns { justify-content: center; }
+      .hero-trust { justify-content: center; }
+      .phone-col { order: -1; }
+      .phone-device { width: 200px; height: 380px; }
+      .phone-bg-ring { width: 280px; height: 280px; }
+      .phone-badge { right: 10px; }
     }
 
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
+    /* STATS BAR */
+    .stats-bar { background: var(--t5); border-top: 1px solid rgba(68,171,173,0.2); }
+    .stats-row { max-width: 1160px; margin: 0 auto; padding: 0 24px; display: flex; }
+    .stt { flex: 1; padding: 28px 16px; text-align: center; border-right: 1px solid rgba(68,171,173,0.15); }
+    .stt:last-child { border-right: none; }
+    .stt-n { font-family: 'DM Serif Display', serif; font-size: 2.4rem; color: #fff; letter-spacing: -0.04em; display: block; line-height: 1; margin-bottom: 5px; }
+    .stt-n em { color: var(--t1); font-style: normal; }
+    .stt-l { font-size: 0.72rem; color: rgba(255,255,255,0.55); font-weight: 600; line-height: 1.4; }
+    @media(max-width:600px) { .stt-n{font-size:1.6rem} .stt{padding:18px 8px} .stats-row{flex-wrap:wrap} .stt{flex-basis:50%;border-bottom:1px solid rgba(68,171,173,0.15)} }
 
-    .nav-logo img { height: 36px; width: auto; }
-
-    .nav-logo span {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      letter-spacing: -0.02em;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .nav-badge {
-      background: var(--light-mint);
-      color: var(--teal);
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 5px 12px;
-      border-radius: 20px;
-      border: 1px solid #a8edda;
-      white-space: nowrap;
-    }
-
-    .nav-cta {
-      background: var(--teal);
-      color: var(--white);
-      font-size: 0.875rem;
-      font-weight: 600;
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.1s;
-      white-space: nowrap;
-    }
-
-    .nav-cta:hover {
-      background: #016b78;
-      transform: translateY(-1px);
-    }
-
-    /* HERO — blue-teal accent */
-    .hero {
-      background: var(--deep-teal);
-      background-image:
-        radial-gradient(ellipse at 75% 40%, rgba(2, 132, 199, 0.18) 0%, transparent 60%),
-        radial-gradient(ellipse at 15% 80%, rgba(2, 128, 144, 0.12) 0%, transparent 55%);
-      padding: 100px 24px 110px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230284C7' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
-    }
-
-    .hero-eyebrow {
-      display: inline-block;
-      background: rgba(2, 132, 199, 0.15);
-      border: 1px solid rgba(2, 132, 199, 0.3);
-      color: #38bdf8;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 6px 16px;
-      border-radius: 20px;
-      margin-bottom: 28px;
-    }
-
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.18;
-      letter-spacing: -0.03em;
-      max-width: 800px;
-      margin: 0 auto 24px;
-    }
-
-    .hero h1 em {
-      color: #38bdf8;
-      font-style: normal;
-    }
-
-    .hero p {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      color: rgba(255,255,255,0.78);
-      max-width: 640px;
-      margin: 0 auto 44px;
-      font-weight: 400;
-      line-height: 1.65;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      background: #0284C7;
-      color: var(--white);
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 16px 36px;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(2, 132, 199, 0.4);
-    }
-
-    .hero-cta:hover {
-      background: #0369a1;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(2, 132, 199, 0.5);
-    }
-
-    .hero-sub-note {
-      margin-top: 20px;
-      font-size: 0.82rem;
-      color: rgba(255,255,255,0.45);
-    }
-
-    section { padding: 80px 24px; }
-
-    .container {
-      max-width: 1080px;
-      margin: 0 auto;
-    }
-
-    .section-eyebrow {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.25rem);
-      font-weight: 800;
-      color: var(--deep-teal);
-      letter-spacing: -0.025em;
-      line-height: 1.2;
-      margin-bottom: 16px;
-    }
-
-    .section-sub {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      max-width: 580px;
-      line-height: 1.65;
-      margin-bottom: 56px;
-    }
-
-    /* PROBLEM */
-    .problem-section { background: var(--white); }
-
-    .problem-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 28px;
-      margin-top: 48px;
-    }
-
-    .problem-card {
-      background: var(--offwhite);
-      border: 1px solid #d8eee8;
-      border-radius: 16px;
-      padding: 32px 28px;
-      position: relative;
-    }
-
-    .problem-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #0284C7, var(--teal));
-      border-radius: 16px 16px 0 0;
-    }
-
-    .problem-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
-
-    .problem-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 10px;
-      line-height: 1.3;
-    }
-
-    .problem-card p {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
+    /* PAIN SECTION */
+    .pain { background: var(--app-grad); padding: 72px 24px 56px; position: relative; overflow: hidden; }
+    .pain::before { content: ''; position: absolute; top: -40%; left: 50%; transform: translateX(-50%); width: 900px; height: 900px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 60%); pointer-events: none; }
+    .sec-label { display: inline-block; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 12px; }
+    .sec-h2 { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; color: #fff; margin-bottom: 14px; }
+    .sec-h2 em { font-style: italic; color: rgba(255,255,255,0.7); }
+    .sec-sub { font-size: 1rem; color: rgba(255,255,255,0.75); max-width: 520px; line-height: 1.7; margin-bottom: 44px; }
+    .pain-center { text-align: center; }
+    .pain-center .sec-sub { margin-left: auto; margin-right: auto; }
+    .pain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
+    .pain-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.13); backdrop-filter: blur(8px); border-radius: 20px; padding: 28px 24px; }
+    .pain-icon { font-size: 2rem; margin-bottom: 14px; display: block; }
+    .pain-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: #fff; margin-bottom: 9px; }
+    .pain-card p { font-size: 0.88rem; color: rgba(255,255,255,0.72); line-height: 1.7; }
+    @media(max-width:700px) { .pain-grid { grid-template-columns: 1fr; } }
 
     /* HOW IT WORKS */
-    .how-section { background: var(--offwhite); }
+    .hiw { background: var(--off); padding: 80px 24px; }
+    .hiw-inner { max-width: 960px; margin: 0 auto; }
+    .hiw-head { text-align: center; margin-bottom: 56px; }
+    .hiw-head .sec-label { color: var(--t2); }
+    .hiw-head .sec-h2 { color: var(--ink); }
+    .hiw-head .sec-sub { color: var(--inkm); margin: 0 auto; }
+    .hiw-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; position: relative; }
+    .hiw-steps::before { content: ''; position: absolute; top: 36px; left: calc(16.6% + 20px); right: calc(16.6% + 20px); height: 2px; background: linear-gradient(90deg, var(--t1) 0%, var(--t2) 100%); opacity: 0.35; z-index: 0; }
+    .hiw-step { text-align: center; position: relative; z-index: 1; }
+    .hiw-num { width: 72px; height: 72px; border-radius: 50%; background: var(--app-grad); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 8px 24px var(--tglow); }
+    .hiw-num span { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: #fff; font-weight: 400; }
+    .hiw-step h3 { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--ink); margin-bottom: 10px; }
+    .hiw-step p { font-size: 0.88rem; color: var(--inkm); line-height: 1.7; }
+    @media(max-width:680px) { .hiw-steps { grid-template-columns: 1fr; gap: 28px; } .hiw-steps::before { display: none; } }
 
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 32px;
-      margin-top: 48px;
-    }
+    /* BROWSER MOCKUP */
+    .preview { background: var(--dark-grad); padding: 80px 24px; overflow: hidden; }
+    .preview-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .preview-text .sec-label { color: rgba(255,255,255,0.55); }
+    .preview-text .sec-h2 { color: #fff; margin-bottom: 14px; }
+    .preview-text .sec-sub { color: rgba(255,255,255,0.72); margin-bottom: 28px; }
+    .preview-bullet { display: flex; flex-direction: column; gap: 12px; }
+    .preview-bullet li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: rgba(255,255,255,0.75); list-style: none; }
+    .preview-bullet li::before { content: ''; width: 18px; height: 18px; border-radius: 50%; background: rgba(46,232,160,0.2); border: 1.5px solid var(--bright); flex-shrink: 0; margin-top: 2px; }
+    .browser-frame { background: #1a2a38; border-radius: 16px; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06); }
+    .browser-bar { background: #0f1e2a; padding: 10px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .browser-dots { display: flex; gap: 6px; }
+    .browser-dots span { width: 11px; height: 11px; border-radius: 50%; }
+    .bd-r { background: #ff5f57; }
+    .bd-y { background: #febc2e; }
+    .bd-g { background: #28c840; }
+    .browser-url { flex: 1; background: rgba(255,255,255,0.06); border-radius: 6px; padding: 5px 12px; font-size: 0.68rem; color: rgba(255,255,255,0.4); font-family: 'Inter', monospace; }
+    .browser-content { padding: 20px; }
+    .bc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .bc-title { font-size: 0.8rem; font-weight: 800; color: #fff; }
+    .bc-badge { font-size: 0.65rem; font-weight: 700; padding: 4px 10px; border-radius: 100px; background: rgba(68,171,173,0.2); color: var(--t1); border: 1px solid rgba(68,171,173,0.3); }
+    .bc-patient { background: rgba(255,255,255,0.04); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.06); }
+    .bc-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; color: #fff; flex-shrink: 0; }
+    .av-a { background: linear-gradient(135deg,#44abad,#2d8899); }
+    .av-b { background: linear-gradient(135deg,#2ee8a0,#1e6070); }
+    .av-c { background: linear-gradient(135deg,#f5a623,#175060); }
+    .bc-info { flex: 1; }
+    .bc-name { font-size: 0.72rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .bc-med { font-size: 0.62rem; color: rgba(255,255,255,0.5); margin-bottom: 6px; }
+    .bc-prog { display: flex; align-items: center; gap: 8px; }
+    .bc-bar { flex: 1; height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+    .bc-fill { height: 100%; border-radius: 3px; }
+    .fill-92 { background: var(--bright); width: 92%; }
+    .fill-68 { background: #f5a623; width: 68%; }
+    .fill-97 { background: var(--t1); width: 97%; }
+    .bc-pct { font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.7); white-space: nowrap; }
+    @media(max-width:860px) { .preview-inner { grid-template-columns: 1fr; gap: 40px; } }
 
-    .step-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 36px 28px;
-      text-align: center;
-      border: 1px solid #e0f0eb;
-    }
-
-    .step-number {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: #0284C7;
-      color: var(--white);
-      font-size: 1.2rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px;
-      box-shadow: 0 4px 14px rgba(2,132,199,0.3);
-    }
-
-    .step-card h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 10px;
-    }
-
-    .step-card p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* BENEFITS */
-    .benefits-section { background: var(--white); }
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-      margin-top: 48px;
-    }
-
-    .benefit-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      padding: 24px;
-      background: #f0f9ff;
-      border-radius: 12px;
-      border: 1px solid #bae6fd;
-    }
-
-    .benefit-emoji { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
-
-    .benefit-item h4 {
-      font-size: 0.98rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 6px;
-    }
-
-    .benefit-item p {
-      font-size: 0.87rem;
-      color: var(--text-muted);
-      line-height: 1.55;
-    }
-
-    /* STATS */
-    .stats-strip {
-      background: var(--deep-teal);
-      background-image: radial-gradient(ellipse at 80% 50%, rgba(2,132,199,0.15) 0%, transparent 60%);
-      padding: 72px 24px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 40px;
-      text-align: center;
-    }
-
-    .stat-number {
-      font-size: clamp(2.2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      color: #38bdf8;
-      line-height: 1;
-      letter-spacing: -0.03em;
-      margin-bottom: 8px;
-    }
-
-    .stat-label {
-      font-size: 0.92rem;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.45;
-      max-width: 180px;
-      margin: 0 auto;
-    }
+    /* FEATURES */
+    .features { background: var(--w); padding: 80px 24px; }
+    .features-inner { max-width: 1000px; margin: 0 auto; }
+    .features-head { text-align: center; margin-bottom: 48px; }
+    .features-head .sec-label { color: var(--t2); }
+    .features-head .sec-h2 { color: var(--ink); }
+    .feat-pills { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .pill { display: flex; align-items: center; gap: 9px; padding: 12px 20px; border-radius: 100px; background: var(--off); border: 1.5px solid var(--bor); font-size: 0.875rem; font-weight: 600; color: var(--ink); transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; }
+    .pill:hover { border-color: var(--t1); box-shadow: 0 4px 16px var(--tdim); background: #fff; }
+    .pill-icon { font-size: 1.1rem; }
 
     /* TESTIMONIAL */
-    .testimonial-section { background: var(--offwhite); }
+    .testi { background: var(--off); padding: 72px 24px; }
+    .testi-inner { max-width: 740px; margin: 0 auto; text-align: center; }
+    .testi-quote { font-family: 'DM Serif Display', serif; font-size: clamp(1.3rem, 3vw, 1.75rem); color: var(--ink); line-height: 1.5; margin-bottom: 28px; position: relative; }
+    .testi-quote::before { content: '\201C'; position: absolute; top: -20px; left: -10px; font-size: 5rem; color: var(--tdim); font-family: 'DM Serif Display', serif; line-height: 1; pointer-events: none; }
+    .testi-author { display: flex; align-items: center; justify-content: center; gap: 14px; }
+    .testi-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--app-grad); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .testi-meta strong { display: block; font-size: 0.9rem; font-weight: 800; color: var(--ink); }
+    .testi-meta span { font-size: 0.8rem; color: var(--inks); }
 
-    .testimonial-card {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 52px 48px;
-      max-width: 760px;
-      margin: 0 auto;
-      border: 1px solid #daeee8;
-      text-align: center;
-      position: relative;
-    }
+    /* PARTNER FORM */
+    .partner { background: var(--dark-grad); padding: 80px 24px; }
+    .partner-inner { max-width: 640px; margin: 0 auto; }
+    .partner-head { text-align: center; margin-bottom: 40px; }
+    .partner-head .sec-label { color: rgba(255,255,255,0.55); }
+    .partner-head .sec-h2 { color: #fff; margin-bottom: 12px; }
+    .partner-head .sec-sub { color: rgba(255,255,255,0.7); margin: 0 auto; font-size: 0.95rem; }
+    .partner-form { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(12px); border-radius: 24px; padding: 36px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .form-field label { font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.7); letter-spacing: 0.04em; text-transform: uppercase; }
+    .form-field input, .form-field textarea, .form-field select { background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 13px 16px; font-size: 0.9rem; font-family: inherit; color: #fff; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .form-field input::placeholder, .form-field textarea::placeholder { color: rgba(255,255,255,0.3); }
+    .form-field input:focus, .form-field textarea:focus, .form-field select:focus { border-color: var(--t1); box-shadow: 0 0 0 3px rgba(68,171,173,0.18); }
+    .form-field select option { background: var(--t5); color: #fff; }
+    .form-field textarea { resize: vertical; min-height: 90px; }
+    .form-submit { width: 100%; padding: 15px 24px; border-radius: 100px; background: var(--t1); color: #fff; font-size: 0.95rem; font-weight: 900; letter-spacing: 0.01em; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; margin-top: 8px; }
+    .form-submit:hover { background: var(--t2); transform: translateY(-2px); box-shadow: 0 8px 28px var(--tglow); }
+    .form-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; box-shadow: none; }
+    .form-note { text-align: center; font-size: 0.74rem; color: rgba(255,255,255,0.4); margin-top: 14px; }
+    .success-msg { display: none; text-align: center; padding: 32px 24px; }
+    @media(max-width:500px) { .form-row { grid-template-columns: 1fr; } .partner-form { padding: 24px; } }
 
-    .testimonial-card::before {
-      content: '\201C';
-      position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 5rem;
-      color: #0284C7;
-      font-family: Georgia, serif;
-      line-height: 1;
-    }
-
-    .testimonial-card blockquote {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      color: var(--text-dark);
-      font-style: italic;
-      line-height: 1.7;
-      margin-bottom: 28px;
-    }
-
-    .testimonial-attribution {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--teal);
-    }
-
-    /* CONTACT */
-    .contact-section { background: var(--white); }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: start;
-      margin-top: 48px;
-    }
-
-    .contact-info h3 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 16px;
-    }
-
-    .contact-info p {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      line-height: 1.65;
-      margin-bottom: 20px;
-    }
-
-    .contact-detail {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.92rem;
-      color: var(--text-mid);
-      margin-bottom: 10px;
-      font-weight: 500;
-    }
-
-    .contact-form { display: flex; flex-direction: column; gap: 16px; }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-
-    .form-group label {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text-mid);
-      letter-spacing: 0.02em;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.92rem;
-      color: var(--text-dark);
-      background: var(--offwhite);
-      border: 1.5px solid #cce8e0;
-      border-radius: 8px;
-      padding: 12px 14px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      width: 100%;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-      border-color: #0284C7;
-      box-shadow: 0 0 0 3px rgba(2,132,199,0.12);
-    }
-
-    .form-group textarea { resize: vertical; min-height: 130px; }
-
-    .form-submit {
-      background: #0284C7;
-      color: var(--white);
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 15px 32px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-      text-align: center;
-      text-decoration: none;
-      display: block;
-      width: 100%;
-    }
-
-    .form-submit:hover { background: #0369a1; transform: translateY(-1px); }
-
-    .form-note {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      text-align: center;
-      margin-top: -4px;
-    }
+    /* FINAL CTA */
+    .fin-cta { background: var(--app-grad); padding: 96px 24px; text-align: center; position: relative; overflow: hidden; }
+    .fin-cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.06) 0%, transparent 60%); pointer-events: none; }
+    .fin-cta h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 4vw, 3rem); color: #fff; margin-bottom: 16px; position: relative; z-index: 1; }
+    .fin-cta h2 em { font-style: italic; color: rgba(255,255,255,0.8); }
+    .fin-cta p { font-size: 1.05rem; color: rgba(255,255,255,0.8); max-width: 480px; margin: 0 auto 32px; line-height: 1.7; position: relative; z-index: 1; }
+    .fin-cta-btn { display: inline-block; padding: 16px 40px; border-radius: 100px; background: #fff; color: var(--t3); font-size: 1rem; font-weight: 900; transition: transform 0.15s, box-shadow 0.15s; position: relative; z-index: 1; }
+    .fin-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(0,0,0,0.2); }
 
     /* FOOTER */
-    footer {
-      background: var(--deep-teal);
-      padding: 48px 24px 32px;
-      color: rgba(255,255,255,0.6);
-    }
+    footer { background: var(--t5); padding: 56px 24px 32px; border-top: 1px solid rgba(68,171,173,0.15); }
+    .footer-grid { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 48px; border-bottom: 1px solid rgba(68,171,173,0.12); }
+    .footer-brand p { font-size: 0.84rem; color: rgba(255,255,255,0.45); line-height: 1.7; max-width: 260px; margin-top: 12px; }
+    .footer-col h4 { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.62); margin-bottom: 10px; transition: color 0.15s; }
+    .footer-col a:hover { color: var(--t1); }
+    .footer-bottom { max-width: 1160px; margin: 28px auto 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+    .footer-bottom a { color: rgba(255,255,255,0.45); font-size: 0.78rem; transition: color 0.15s; }
+    .footer-bottom a:hover { color: var(--t1); }
+    @media(max-width:860px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
+    @media(max-width:480px) { .footer-grid { grid-template-columns: 1fr; } }
 
-    .footer-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    .footer-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .footer-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-
-    .footer-logo img {
-      height: 30px;
-      filter: brightness(0) invert(1);
-      opacity: 0.8;
-    }
-
-    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
-
-    .footer-links a {
-      color: rgba(255,255,255,0.55);
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover { color: var(--mint); }
-
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding-top: 20px;
-      font-size: 0.8rem;
-      text-align: center;
-    }
-
-    @media (max-width: 768px) {
-      nav { padding: 0 16px; }
-      .nav-badge { display: none; }
-      .hero { padding: 72px 20px 80px; }
-      section { padding: 60px 20px; }
-      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
-      .form-row { grid-template-columns: 1fr; }
-      .testimonial-card { padding: 48px 28px 36px; }
-      .footer-top { flex-direction: column; }
-    }
-
-    @media (max-width: 480px) {
-      .hero h1 { font-size: 1.75rem; }
-      .stats-grid { grid-template-columns: 1fr; gap: 36px; }
-    }
+    /* COOKIE BANNER */
+    .cookie-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--t5); border-top: 1px solid rgba(68,171,173,0.22); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; z-index: 9000; flex-wrap: wrap; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .cookie-bar.show { transform: translateY(0); }
+    .cookie-txt { font-size: 0.78rem; color: rgba(255,255,255,0.65); line-height: 1.55; flex: 1; min-width: 200px; }
+    .cookie-txt a { color: var(--t1); text-decoration: underline; }
+    .cookie-btns { display: flex; gap: 10px; flex-shrink: 0; }
+    .cookie-accept { padding: 9px 20px; border-radius: 100px; background: #02C39A; color: #fff; font-size: 0.82rem; font-weight: 800; border: none; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+    .cookie-accept:hover { background: #028090; }
+    .cookie-decline { padding: 9px 16px; border-radius: 100px; background: transparent; color: rgba(255,255,255,0.45); font-size: 0.82rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.12); cursor: pointer; font-family: inherit; transition: border-color 0.15s, color 0.15s; }
+    .cookie-decline:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); }
+    @media(max-width:640px) { .cookie-bar { padding: 14px 16px 24px; } }
   </style>
-  <!-- PostHog Analytics -->
-  <script>
-    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
-    posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
-    document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="carely.fit/#"],a.nav-cta,a.hero-cta,a.cta-btn').forEach(function(el){el.addEventListener('click',function(){posthog.capture('cta_clicked',{text:el.textContent.trim(),href:el.getAttribute('href'),page:location.pathname});});});});
-  </script>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="https://carely.fit" class="nav-logo">
-      <img src="elara-bot.png" alt="Carely" />
-      <span>Carely</span>
+<!-- NAV -->
+<nav class="nav-wrap" id="navWrap">
+  <div class="nav">
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-mark">&#x2665;</div>
+      <span class="nav-logo-name">Carely</span>
+      <span class="nav-logo-badge">For Doctors</span>
     </a>
-    <div class="nav-right">
-      <span class="nav-badge">Partner with Carely</span>
-      <a href="mailto:hello@carely.fit?subject=Partnership Enquiry" class="nav-cta">Contact us</a>
+    <div class="nav-links">
+      <a href="#how-it-works" class="nav-a">How It Works</a>
+      <a href="#features" class="nav-a">Features</a>
+      <a href="#partner-form" class="nav-a">Apply</a>
+      <a href="/for-clinics.html" class="nav-a">For Clinics</a>
+      <a href="/for-pharmacies.html" class="nav-a">For Pharmacies</a>
     </div>
-  </nav>
+    <a href="#partner-form" class="nav-cta">Apply as Doctor Partner</a>
+    <button class="nav-burger" id="burger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="container">
-      <span class="hero-eyebrow">Carely for Doctors</span>
-      <h1>Your patients say yes in the office. Then go home <em>and forget.</em></h1>
-      <p>Carely connects to your practice. Get weekly adherence reports, missed dose alerts, and appointment requests — without changing your workflow.</p>
-      <a href="mailto:hello@carely.fit?subject=Partnership Enquiry" class="hero-cta">Connect Carely to your practice</a>
-      <p class="hero-sub-note">No software to install. No EMR integration required. hello@carely.fit</p>
-    </div>
-  </section>
+<div class="nav-mob" id="navMob">
+  <a href="#how-it-works">How It Works</a>
+  <a href="#features">Features</a>
+  <a href="/for-clinics.html">For Clinics</a>
+  <a href="/for-pharmacies.html">For Pharmacies</a>
+  <a href="/">Back to Carely</a>
+  <a href="#partner-form" class="mob-cta">Apply as Doctor Partner</a>
+</div>
 
-  <!-- PROBLEM -->
-  <section class="problem-section">
-    <div class="container">
-      <p class="section-eyebrow">The Problem We Solve</p>
-      <h2 class="section-title">What happens between appointments is invisible to you.</h2>
-      <p class="section-sub">You make evidence-based treatment decisions based on what patients tell you. But what they tell you doesn't always match what's actually happening at home.</p>
-
-      <div class="problem-grid">
-        <div class="problem-card">
-          <span class="problem-icon">📋</span>
-          <h3>Patients report 80% adherence — the real number is 50%</h3>
-          <p>Studies consistently show that patients overreport adherence in clinical settings. They're not lying to you — they're embarrassed, or genuinely don't know how many doses they've missed.</p>
-        </div>
-        <div class="problem-card">
-          <span class="problem-icon">🏥</span>
-          <h3>Non-adherent patients return more often and get worse outcomes</h3>
-          <p>Uncontrolled conditions from missed medication lead to more frequent visits, more acute episodes, and higher resource use — for both your practice and the healthcare system.</p>
-        </div>
-        <div class="problem-card">
-          <span class="problem-icon">👁️</span>
-          <h3>You have no way to know what's happening between visits</h3>
-          <p>Between appointments — which can be weeks or months apart — you're operating blind. Carely closes that gap and gives you real data, not just patient recall.</p>
-        </div>
+<!-- HERO -->
+<div class="hero-wrap">
+  <div class="hero">
+    <div class="hero-text">
+      <div class="hero-eyebrow"><span class="eye-dot"></span> DrBridge &mdash; Built for GPs</div>
+      <h1>Know your patients are <em>actually</em> taking their medication.</h1>
+      <p class="hero-sub">Carely sends you weekly adherence reports, missed-dose alerts, and appointment requests &mdash; all generated by AI, directly from your patient&rsquo;s daily check-ins. No extra charting. No new workflow.</p>
+      <div class="hero-btns">
+        <a href="#partner-form" class="hero-btn-primary">Apply for Early Access</a>
+        <a href="#how-it-works" class="hero-btn-secondary">See How It Works</a>
+      </div>
+      <div class="hero-trust">
+        <span><span class="tc">&#10003;</span> PIPEDA Compliant</span>
+        <span><span class="tc">&#10003;</span> No EMR Change Required</span>
+        <span><span class="tc">&#10003;</span> 2-Minute Setup</span>
       </div>
     </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="how-section">
-    <div class="container">
-      <p class="section-eyebrow">How It Works</p>
-      <h2 class="section-title">Zero workflow change. Full patient visibility.</h2>
-      <p class="section-sub">Carely doesn't ask you to learn new software or integrate with your EMR. Everything arrives in your inbox — ready to read in 60 seconds.</p>
-
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <h3>Patient connects your name and clinic inside Carely</h3>
-          <p>When a patient sets up Carely, they enter your name and clinic email. From that point, you're linked to their adherence data — with their full consent.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <h3>You receive a formatted weekly adherence report</h3>
-          <p>Every Monday, a clean one-page PDF summary lands in your inbox. It shows each patient's medication name, dose times, adherence rate, and any concerning patterns.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <h3>Patients can request appointments directly through the app</h3>
-          <p>If a patient needs to see you, they can request an appointment inside Carely. The request arrives in your inbox — no phone tag, no receptionist bottleneck.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- BENEFITS -->
-  <section class="benefits-section">
-    <div class="container">
-      <p class="section-eyebrow">What Your Patients Get</p>
-      <h2 class="section-title">Support between visits — without extra burden on you.</h2>
-      <p class="section-sub">Carely acts as a quiet, always-on clinical support layer — checking in on patients, reminding them of doses, and keeping you informed.</p>
-
-      <div class="benefits-grid">
-        <div class="benefit-item">
-          <span class="benefit-emoji">📄</span>
-          <div>
-            <h4>Weekly PDF adherence reports</h4>
-            <p>A one-page summary of each patient's medication adherence lands in your inbox weekly. Glance at it in 60 seconds — and know exactly who needs follow-up.</p>
+    <div class="phone-col" id="phoneCol">
+      <div class="phone-bg-ring"></div>
+      <div class="phone-device">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-status">
+            <span class="phone-status-time">9:41 AM</span>
+            <span class="phone-status-icons">&#9679;&#9679;&#9679;</span>
           </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">📅</span>
-          <div>
-            <h4>Appointment request emails</h4>
-            <p>Patients can initiate appointment requests from inside the app. Formatted, timestamped, and sent straight to your inbox — no calls required.</p>
+          <div class="phone-header">
+            <div class="phone-header-title">Elara &mdash; Daily Check-in</div>
+            <div class="phone-header-sub">Medication Report Ready</div>
           </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">🚨</span>
-          <div>
-            <h4>Missed dose alerts</h4>
-            <p>If a patient misses multiple consecutive doses, you receive an alert — giving you the chance to follow up proactively before an acute event occurs.</p>
+          <div class="phone-share-banner">
+            <span class="phone-share-icon">&#128203;</span>
+            <span class="phone-share-text">Share with Dr. Sharma</span>
           </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">🤖</span>
-          <div>
-            <h4>Elara AI monitors between visits</h4>
-            <p>Carely's AI companion Elara checks in daily with patients — asking how they're feeling and flagging symptoms or concerns. You receive a summary, not noise.</p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">💻</span>
-          <div>
-            <h4>No software to install — ever</h4>
-            <p>Everything arrives as an email. No login, no portal, no new system. Works with whatever inbox you already use — Gmail, Outlook, or your clinic's email provider.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STATS -->
-  <section class="stats-strip">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-number">50%</div>
-          <div class="stat-label">of patients are non-adherent within 6 months of starting a prescription</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">10%</div>
-          <div class="stat-label">of all hospital admissions are medication-related and preventable</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">0 min</div>
-          <div class="stat-label">of your time needed to receive weekly adherence reports</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONIAL -->
-  <section class="testimonial-section">
-    <div class="container">
-      <p class="section-eyebrow" style="text-align:center;">What Doctors Are Saying</p>
-      <h2 class="section-title" style="text-align:center; margin-bottom: 40px;">Know exactly who to follow up with before they book.</h2>
-
-      <div class="testimonial-card">
-        <blockquote>
-          "I get a one-page summary every Monday. I know exactly which patients to follow up with before they even book. It changed the way I think about chronic disease management — instead of reacting, I'm actually getting ahead of problems. And my patients haven't had to do anything differently."
-        </blockquote>
-        <div class="testimonial-attribution">— Family Physician, Ontario</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT FORM -->
-  <section class="contact-section" id="contact">
-    <div class="container">
-      <p class="section-eyebrow">Get in Touch</p>
-      <h2 class="section-title">Connect Carely to your practice today.</h2>
-      <p class="section-sub">Tell us about your practice and we'll show you how the weekly reporting works. No commitment, no fee, no integration required.</p>
-
-      <div class="contact-grid">
-        <div class="contact-info">
-          <h3>We'd love to hear from you.</h3>
-          <p>Whether you're a solo GP, a clinic group, or a specialist practice, Carely works with any setup that has an email address. We'll have you receiving reports within days of connecting.</p>
-          <p>All data is shared with full patient consent and is fully PIPEDA/PHIPA compliant. No PHI is stored without authorisation.</p>
-          <div class="contact-detail">
-            <span>📧</span>
-            <a href="mailto:hello@carely.fit" style="color: var(--teal); text-decoration:none;">hello@carely.fit</a>
-          </div>
-          <div class="contact-detail">
-            <span>🌐</span>
-            <a href="https://carely.fit" style="color: var(--teal); text-decoration:none;">carely.fit</a>
-          </div>
-        </div>
-
-        <form id="partner-form" class="contact-form" onsubmit="handleSubmit(event)">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="name">Your Name</label>
-              <input type="text" id="name" name="name" placeholder="Dr. Sarah Khan" required />
+          <div class="phone-med-card">
+            <div class="phone-med-top">
+              <span class="phone-med-name">Metformin 500mg</span>
+              <span class="phone-med-tag tag-taken">Taken</span>
             </div>
-            <div class="form-group">
-              <label for="org">Clinic / Practice Name</label>
-              <input type="text" id="org" name="organisation" placeholder="Westside Family Medicine" required />
+            <div class="phone-med-bar"><div class="phone-med-fill fill-green"></div></div>
+          </div>
+          <div class="phone-med-card">
+            <div class="phone-med-top">
+              <span class="phone-med-name">Lisinopril 10mg</span>
+              <span class="phone-med-tag tag-missed">62% adherence</span>
             </div>
+            <div class="phone-med-bar"><div class="phone-med-fill fill-amber"></div></div>
           </div>
-          <div class="form-group">
-            <label for="email">Clinic Email Address</label>
-            <input type="email" id="email" name="email" placeholder="dr.khan@westsideclinic.ca" required />
+          <div class="phone-med-card">
+            <div class="phone-med-top">
+              <span class="phone-med-name">Atorvastatin 20mg</span>
+              <span class="phone-med-tag tag-taken">94%</span>
+            </div>
+            <div class="phone-med-bar"><div class="phone-med-fill fill-teal"></div></div>
           </div>
-          <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" name="phone" placeholder="+1 604 555 0123" required />
-          </div>
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" placeholder="Tell us about your practice and what you'd like to know about Carely..."></textarea>
-          </div>
-          <button type="submit" id="submit-btn" class="form-submit">Apply to Partner</button>
-          <p class="form-note">Or email us directly at hello@carely.fit — we respond within 1 business day.</p>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-top">
-        <a href="https://carely.fit" class="footer-logo">
-          <img src="elara-bot-logo.png" alt="Carely" />
-        </a>
-        <div class="footer-links">
-          <a href="https://carely.fit">Home</a>
-          <a href="for-pharmacies.html">Pharmacies</a>
-          <a href="for-doctors.html">Doctors</a>
-          <a href="for-caregivers.html">Caregivers</a>
-          <a href="for-senior-homes.html">Senior Living</a>
-          <a href="../privacy.html">Privacy Policy</a>
-          <a href="../terms.html">Terms of Use</a>
+        </div>
+        <div class="phone-badge">
+          <span class="phone-badge-icon">&#128270;</span>
+          <div class="phone-badge-text">Report sent<span>Dr. Sharma notified</span></div>
         </div>
       </div>
-      <div class="footer-bottom">
-        &copy; 2026 Carely. Built with care for patients and the people who support them. &mdash; <a href="mailto:hello@carely.fit" style="color: var(--mint); text-decoration:none;">hello@carely.fit</a>
-      </div>
     </div>
-  </footer>
-
-<!-- GDPR / CASL Cookie Consent Banner -->
-<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;color:#e2e8f0;padding:16px 24px;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -2px 12px rgba(0,0,0,.3);">
-  <span>We use cookies to improve your experience and measure usage. See our <a href="/privacy.html" style="color:#818cf8;text-decoration:underline;">Privacy Policy</a>.</span>
-  <div style="display:flex;gap:10px;flex-shrink:0;">
-    <button onclick="cookieDecline()" style="background:transparent;border:1px solid #4b5563;color:#9ca3af;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;">Decline</button>
-    <button onclick="cookieAccept()" style="background:#6366f1;border:none;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">Accept</button>
   </div>
 </div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-row">
+    <div class="stt"><span class="stt-n">50<em>%</em></span><span class="stt-l">of patients stop chronic<br>meds within 1 year</span></div>
+    <div class="stt"><span class="stt-n">3<em>x</em></span><span class="stt-l">more hospital readmissions<br>from non-adherence</span></div>
+    <div class="stt"><span class="stt-n">87<em>%</em></span><span class="stt-l">adherence rate for patients<br>using Carely daily</span></div>
+    <div class="stt"><span class="stt-n">2<em>min</em></span><span class="stt-l">to connect your practice<br>to DrBridge</span></div>
+  </div>
+</div>
+
+<!-- PROBLEM SECTION -->
+<section class="pain">
+  <div class="pain-center reveal">
+    <span class="sec-label">The Problem</span>
+    <h2 class="sec-h2">You prescribe it. <em>But do they take it?</em></h2>
+    <p class="sec-sub">Non-adherence is the silent epidemic behind most chronic disease complications. Right now, you have no visibility between appointments.</p>
+  </div>
+  <div class="pain-grid">
+    <div class="pain-card">
+      <span class="pain-icon">&#128248;</span>
+      <h3>No between-visit data</h3>
+      <p>You see patients every 3&ndash;6 months. Between visits, you have zero information about whether prescriptions are actually being followed.</p>
+    </div>
+    <div class="pain-card">
+      <span class="pain-icon">&#9888;</span>
+      <h3>Missed doses go unreported</h3>
+      <p>Patients often don&rsquo;t mention non-adherence. They forget, or feel embarrassed. By the time you find out, complications may have already started.</p>
+    </div>
+    <div class="pain-card">
+      <span class="pain-icon">&#128202;</span>
+      <h3>No time for manual follow-up</h3>
+      <p>Your team doesn&rsquo;t have bandwidth to call every patient about their daily meds. You need passive intelligence, not more admin work.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="hiw" id="how-it-works">
+  <div class="hiw-inner">
+    <div class="hiw-head reveal">
+      <span class="sec-label">How DrBridge Works</span>
+      <h2 class="sec-h2">Three steps. Zero workflow change.</h2>
+      <p class="sec-sub">Carely plugs into your existing practice without touching your EMR or adding any charting burden.</p>
+    </div>
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <div class="hiw-num"><span>1</span></div>
+        <h3>You apply &amp; get your DrBridge link</h3>
+        <p>We create a unique shareable link for your practice. Give it to patients during any appointment, or send it by text &mdash; takes 30 seconds.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-num"><span>2</span></div>
+        <h3>Elara tracks their daily doses</h3>
+        <p>Your patients download Carely and Elara, our AI caretaker, checks in with them every morning. Each dose is logged, each mood noted, every side effect flagged.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-num"><span>3</span></div>
+        <h3>You get weekly adherence reports</h3>
+        <p>Every Sunday, a clean summary lands in your inbox: adherence percentage, missed doses, flagged concerns, and patients requesting a follow-up.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BROWSER MOCKUP / PREVIEW -->
+<section class="preview">
+  <div class="preview-inner">
+    <div class="preview-text reveal">
+      <span class="sec-label">Your Weekly Report</span>
+      <h2 class="sec-h2">A patient panel you&rsquo;ve <em>never had before.</em></h2>
+      <p class="sec-sub">See adherence at a glance across your entire patient list. Drill into individuals who are struggling before complications arise.</p>
+      <ul class="preview-bullet">
+        <li>Colour-coded adherence rates per patient, per medication</li>
+        <li>Missed-dose streaks with AI-generated context</li>
+        <li>Appointment requests triggered by flagged patterns</li>
+        <li>Exportable PDF report for your records</li>
+      </ul>
+    </div>
+    <div class="browser-frame reveal">
+      <div class="browser-bar">
+        <div class="browser-dots">
+          <span class="bd-r"></span><span class="bd-y"></span><span class="bd-g"></span>
+        </div>
+        <div class="browser-url">drbridge.carely.fit/report/weekly</div>
+      </div>
+      <div class="browser-content">
+        <div class="bc-header">
+          <span class="bc-title">Patient Adherence &mdash; This Week</span>
+          <span class="bc-badge">3 patients reviewed</span>
+        </div>
+        <div class="bc-patient">
+          <div class="bc-avatar av-a">MJ</div>
+          <div class="bc-info">
+            <div class="bc-name">M. Johnson &mdash; Metformin 500mg</div>
+            <div class="bc-med">Type 2 Diabetes &middot; Daily</div>
+            <div class="bc-prog">
+              <div class="bc-bar"><div class="bc-fill fill-92"></div></div>
+              <span class="bc-pct">92%</span>
+            </div>
+          </div>
+        </div>
+        <div class="bc-patient">
+          <div class="bc-avatar av-b">PR</div>
+          <div class="bc-info">
+            <div class="bc-name">P. Rajan &mdash; Lisinopril 10mg</div>
+            <div class="bc-med">Hypertension &middot; Daily &middot; &#9888; Low adherence</div>
+            <div class="bc-prog">
+              <div class="bc-bar"><div class="bc-fill fill-68"></div></div>
+              <span class="bc-pct">68%</span>
+            </div>
+          </div>
+        </div>
+        <div class="bc-patient">
+          <div class="bc-avatar av-c">SK</div>
+          <div class="bc-info">
+            <div class="bc-name">S. Kim &mdash; Atorvastatin 20mg</div>
+            <div class="bc-med">High Cholesterol &middot; Daily</div>
+            <div class="bc-prog">
+              <div class="bc-bar"><div class="bc-fill fill-97"></div></div>
+              <span class="bc-pct">97%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-inner">
+    <div class="features-head reveal">
+      <span class="sec-label">What&rsquo;s Included</span>
+      <h2 class="sec-h2">Everything DrBridge gives you</h2>
+    </div>
+    <div class="feat-pills">
+      <div class="pill"><span class="pill-icon">&#128203;</span> Weekly adherence reports</div>
+      <div class="pill"><span class="pill-icon">&#9888;</span> Missed-dose alerts</div>
+      <div class="pill"><span class="pill-icon">&#128270;</span> Side effect flagging</div>
+      <div class="pill"><span class="pill-icon">&#128197;</span> Appointment request triggers</div>
+      <div class="pill"><span class="pill-icon">&#128274;</span> PIPEDA-compliant data</div>
+      <div class="pill"><span class="pill-icon">&#128221;</span> Exportable PDF reports</div>
+      <div class="pill"><span class="pill-icon">&#128241;</span> Patient app included</div>
+      <div class="pill"><span class="pill-icon">&#128172;</span> Elara AI daily check-ins</div>
+      <div class="pill"><span class="pill-icon">&#9881;</span> No EMR integration needed</div>
+      <div class="pill"><span class="pill-icon">&#128101;</span> Family alerts on behalf of patient</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testi">
+  <div class="testi-inner reveal">
+    <blockquote class="testi-quote">
+      "Finally, something that gives me real visibility between appointments. I had a patient on three chronic meds and no idea they&rsquo;d stopped two of them. That won&rsquo;t happen again."
+    </blockquote>
+    <div class="testi-author">
+      <div class="testi-avatar">&#128084;</div>
+      <div class="testi-meta">
+        <strong>Dr. A. Sharma</strong>
+        <span>General Practitioner &mdash; Vancouver, BC</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER FORM -->
+<section class="partner" id="partner-form">
+  <div class="partner-inner">
+    <div class="partner-head reveal">
+      <span class="sec-label">DrBridge Partner Application</span>
+      <h2 class="sec-h2">Apply for early access</h2>
+      <p class="sec-sub">We&rsquo;re onboarding a small group of founding GP partners. No cost, no commitment &mdash; just early access and direct input into how DrBridge evolves.</p>
+    </div>
+    <div class="partner-form reveal" id="formWrap">
+      <form id="applyForm" novalidate>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="name">Your Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Dr. Jane Smith" required>
+          </div>
+          <div class="form-field">
+            <label for="org">Practice Name</label>
+            <input type="text" id="org" name="org" placeholder="Westside Family Clinic" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@practice.ca" required>
+          </div>
+          <div class="form-field">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="+1 604 555 0100">
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="message">Anything you&rsquo;d like us to know? (optional)</label>
+          <textarea id="message" name="message" placeholder="Number of patients, specialties, current challenges..."></textarea>
+        </div>
+        <button type="submit" class="form-submit" id="submit-btn">Apply for DrBridge Access</button>
+        <p class="form-note">We review each application personally. You&rsquo;ll hear from us within 2 business days.</p>
+      </form>
+      <div class="success-msg" id="successMsg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="fin-cta reveal">
+  <h2>Your patients deserve <em>consistent</em> care.</h2>
+  <p>Join the growing group of Canadian GPs using Carely to close the gap between appointments.</p>
+  <a href="#partner-form" class="fin-cta-btn">Apply for Early Access</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo" style="margin-bottom:0;">
+        <div class="nav-logo-mark" style="width:28px;height:28px;font-size:0.85rem;">&#x2665;</div>
+        <span class="nav-logo-name" style="font-size:1.1rem;">Carely</span>
+      </div>
+      <p>AI-powered medication adherence for patients, families, and the clinicians who care for them.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Patients</h4>
+      <a href="/">Home</a>
+      <a href="/#how-it-works">How It Works</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/#faq">FAQ</a>
+    </div>
+    <div class="footer-col">
+      <h4>Partners</h4>
+      <a href="/for-doctors.html">For Doctors</a>
+      <a href="/for-clinics.html">For Clinics</a>
+      <a href="/for-pharmacies.html">For Pharmacies</a>
+      <a href="/for-senior-homes.html">For Senior Homes</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/blog">Blog</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms of Service</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Lumina Path Inc. All rights reserved.</p>
+    <a href="/privacy.html">Privacy</a>
+  </div>
+</footer>
+
+<!-- COOKIE BANNER -->
+<div class="cookie-bar" id="cookieBar">
+  <p class="cookie-txt">We use cookies to improve your experience. See our <a href="/privacy.html">Privacy Policy</a>.</p>
+  <div class="cookie-btns">
+    <button class="cookie-accept" id="cookieAccept">Accept</button>
+    <button class="cookie-decline" id="cookieDecline">Decline</button>
+  </div>
+</div>
+
+<!-- POSTHOG -->
 <script>
-(function(){
-  var b = document.getElementById('cookie-banner');
-  if (!localStorage.getItem('cookie_consent')) { b.style.display = 'flex'; }
-})();
-function cookieAccept() {
-  localStorage.setItem('cookie_consent', 'accepted');
-  document.getElementById('cookie-banner').style.display = 'none';
-}
-function cookieDecline() {
-  localStorage.setItem('cookie_consent', 'declined');
-  document.getElementById('cookie-banner').style.display = 'none';
-  if (window.posthog) { posthog.opt_out_capturing(); }
-}
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init("phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP", {api_host:"https://app.posthog.com"});
 </script>
 
 <script>
-var API = 'https://carely-backend-production.up.railway.app';
+  var API = 'https://carely-backend-production.up.railway.app';
 
-function handleSubmit(e) {
-  e.preventDefault();
-  var btn = document.getElementById('submit-btn');
-  btn.disabled = true;
-  btn.textContent = 'Sending...';
+  // NAV scroll shadow
+  var navWrap = document.getElementById('navWrap');
+  window.addEventListener('scroll', function() {
+    navWrap.classList.toggle('up', window.scrollY > 10);
+  });
 
-  var nameVal  = (document.getElementById('name')  || document.getElementById('contact_name') || {}).value || '';
-  var orgVal   = (document.getElementById('org')   || document.getElementById('org_name')     || {}).value || '';
-  var emailVal = (document.getElementById('email') || {}).value || '';
-  var phoneVal = (document.getElementById('phone') || {}).value || '';
-  var msgVal   = (document.getElementById('message') || document.getElementById('msg') || {}).value || '';
+  // HAMBURGER
+  var burger = document.getElementById('burger');
+  var navMob = document.getElementById('navMob');
+  burger.addEventListener('click', function() {
+    burger.classList.toggle('open');
+    navMob.classList.toggle('open');
+    document.body.style.overflow = navMob.classList.contains('open') ? 'hidden' : '';
+  });
+  navMob.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      burger.classList.remove('open');
+      navMob.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
 
-  fetch(API + '/partner/apply', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      type:         'doctor',
-      org_name:     orgVal,
-      contact_name: nameVal,
-      email:        emailVal,
-      phone:        phoneVal,
-      country:      'CA',
-      message:      msgVal || undefined,
-    }),
-  })
-    .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
-    .then(function(result) {
-      if (result.ok) {
-        document.getElementById('partner-form').style.display = 'none';
-        var success = document.createElement('div');
-        success.style.cssText = 'text-align:center;padding:32px 0;';
-        var h = document.createElement('h3');
-        h.textContent = 'Application received!';
-        h.style.cssText = 'color:#028090;font-size:1.3rem;font-weight:800;margin-bottom:12px;';
-        var p = document.createElement('p');
-        p.textContent = "We review each application personally and will be in touch within 2 business days.";
-        p.style.color = '#6b8fa3';
-        success.appendChild(h);
-        success.appendChild(p);
-        document.getElementById('partner-form').parentNode.insertBefore(success, document.getElementById('partner-form').nextSibling);
-      } else {
-        btn.disabled = false;
-        btn.textContent = 'Apply to Partner';
-        var errMsg = result.data.message || result.data.error || 'Something went wrong. Please try again.';
-        var errEl = document.getElementById('form-error');
-        if (!errEl) {
-          errEl = document.createElement('p');
-          errEl.id = 'form-error';
-          errEl.style.cssText = 'color:#e53e3e;font-size:0.85rem;margin-top:8px;';
-          document.getElementById('partner-form').appendChild(errEl);
-        }
-        errEl.textContent = errMsg;
+  // INTERSECTION OBSERVER
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
       }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal, .pain-grid, .hiw-steps, .feat-pills, .stats-bar, .fin-cta').forEach(function(el) {
+    observer.observe(el);
+  });
+
+  // FORM SUBMIT
+  var form = document.getElementById('applyForm');
+  var submitBtn = document.getElementById('submit-btn');
+  var successMsg = document.getElementById('successMsg');
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    var nameVal  = document.getElementById('name').value.trim();
+    var orgVal   = document.getElementById('org').value.trim();
+    var emailVal = document.getElementById('email').value.trim();
+    var phoneVal = document.getElementById('phone').value.trim();
+    var msgVal   = document.getElementById('message').value.trim();
+
+    if (!nameVal || !orgVal || !emailVal) {
+      alert('Please fill in your name, practice name, and email.');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    fetch(API + '/partner/apply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'doctor',
+        org_name: orgVal,
+        contact_name: nameVal,
+        email: emailVal,
+        phone: phoneVal,
+        country: 'CA',
+        message: msgVal || undefined,
+      }),
+    })
+    .then(function(res) { return res.json(); })
+    .then(function() {
+      form.style.display = 'none';
+      successMsg.style.display = 'block';
+
+      var icon = document.createElement('div');
+      icon.style.cssText = 'font-size:2.5rem;margin-bottom:16px;';
+      icon.textContent = String.fromCodePoint(0x2705);
+
+      var h = document.createElement('h3');
+      h.textContent = 'Application received!';
+      h.style.cssText = 'color:var(--t1);font-family:DM Serif Display,Georgia,serif;font-size:1.4rem;margin-bottom:12px;';
+
+      var p = document.createElement('p');
+      p.textContent = 'We review each application personally and will be in touch within 2 business days.';
+      p.style.cssText = 'color:rgba(255,255,255,0.72);line-height:1.7;font-size:0.95rem;';
+
+      successMsg.appendChild(icon);
+      successMsg.appendChild(h);
+      successMsg.appendChild(p);
+
+      if (window.posthog) posthog.capture('doctor_partner_applied', { email: emailVal });
     })
     .catch(function() {
-      btn.disabled = false;
-      btn.textContent = 'Apply to Partner';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Apply for DrBridge Access';
+      alert('Something went wrong. Please email us at hello@carely.fit');
     });
-}
-</script>
+  }
 
+  form.addEventListener('submit', handleSubmit);
+
+  // COOKIE BANNER
+  var cookieBar = document.getElementById('cookieBar');
+  if (!localStorage.getItem('cookie_consent')) {
+    setTimeout(function() { cookieBar.classList.add('show'); }, 900);
+  }
+  document.getElementById('cookieAccept').addEventListener('click', function() {
+    localStorage.setItem('cookie_consent', 'yes');
+    cookieBar.classList.remove('show');
+  });
+  document.getElementById('cookieDecline').addEventListener('click', function() {
+    localStorage.setItem('cookie_consent', 'no');
+    cookieBar.classList.remove('show');
+  });
+</script>
 </body>
 </html>

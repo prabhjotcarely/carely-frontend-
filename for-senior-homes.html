@@ -1,992 +1,1272 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="elara-3d-new.png"><link rel="apple-touch-icon" href="elara-3d-new.png"><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Carely helps senior living communities reduce medication errors, cut family check-in calls, and give residents daily AI companionship — without adding to staff workload." />
-  <meta name="robots" content="index, follow" />
-  <title>Carely for Senior Living — Better Medication Compliance. Happier Residents.</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="elara-3d-new.png">
+  <link rel="apple-touch-icon" href="elara-3d-new.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carely for Senior Homes — Every Resident. Every Dose. Always Accounted For.</title>
+  <meta name="description" content="Carely gives senior living communities real-time medication adherence across your entire resident population — with automated family alerts and compliance-ready reporting.">
+  <meta property="og:title" content="Carely for Senior Homes — Every Resident. Every Dose. Always Accounted For.">
+  <meta property="og:description" content="Reduce medication errors, cut family check-in calls, and give your care team full visibility — without adding to staff workload.">
+  <meta property="og:image" content="https://carely.fit/elara-3d.png">
+  <meta property="og:url" content="https://carely.fit/for-senior-homes.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="robots" content="index, follow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --deep-teal: #0D3347;
-      --teal: #028090;
-      --mint: #02C39A;
-      --light-mint: #E0FAF4;
-      --offwhite: #F7FBFA;
-      --accent: #028090;
-      --accent-teal: #0891b2;
-      --accent-light: #eef2ff;
-      --text-dark: #0D3347;
-      --text-mid: #2d5a6b;
-      --text-muted: #5a8a99;
-      --white: #ffffff;
+      --w:      #ffffff;
+      --off:    #f2fafb;
+      --t1:     #44abad;
+      --t2:     #2d8899;
+      --t3:     #1e6070;
+      --t4:     #175060;
+      --t5:     #0d2b38;
+      --tglow:  rgba(68,171,173,0.32);
+      --tdim:   rgba(68,171,173,0.12);
+      --tbor:   rgba(68,171,173,0.25);
+      --bor:    #cfe5ea;
+      --ink:    #0d2b38;
+      --inkm:   #2d5a6a;
+      --inks:   #7aaabb;
+      --bright: #2ee8a0;
+      --app-grad: linear-gradient(140deg, #44abad 0%, #2d8899 38%, #1e6070 72%, #175060 100%);
+      --dark-grad: linear-gradient(135deg, #0d2b38 0%, #175060 55%, #1e6070 100%);
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--w); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; outline: none; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--t2); border-radius: 2px; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes tpulse {
+      0%, 100% { box-shadow: 0 0 0 0 var(--tglow); }
+      50%       { box-shadow: 0 0 0 14px rgba(68,171,173,0); }
+    }
+    @keyframes ring-breathe {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(1.07); opacity: 0.85; }
+    }
+    @keyframes bubble-pop {
+      0%   { opacity: 0; transform: translateX(18px) scale(0.9); }
+      60%  { transform: translateX(-3px) scale(1.02); }
+      100% { opacity: 1; transform: translateX(0) scale(1); }
+    }
+    @keyframes badge-slide {
+      0%   { opacity: 0; transform: translateX(-18px) scale(0.9); }
+      60%  { transform: translateX(3px) scale(1.02); }
+      100% { opacity: 1; transform: translateX(0) scale(1); }
+    }
+    @keyframes row-slide {
+      from { opacity: 0; transform: translateX(-12px); }
+      to   { opacity: 1; transform: translateX(0); }
     }
 
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      color: var(--text-dark);
-      background: var(--offwhite);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
     }
+    .reveal.in-view { opacity: 1; transform: none; }
 
-    /* NAV */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--white);
-      border-bottom: 1px solid #e8f4f0;
-      padding: 0 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 68px;
-      box-shadow: 0 2px 12px rgba(13,51,71,0.07);
+    /* ── NAV ── */
+    .nav-wrap {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(13,43,56,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
+    .nav {
+      max-width: 1160px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px; padding: 0 24px;
     }
-
-    .nav-logo img { height: 36px; width: auto; }
-
-    .nav-logo span {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      letter-spacing: -0.02em;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .nav-badge {
-      background: var(--light-mint);
-      color: var(--teal);
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 5px 12px;
-      border-radius: 20px;
-      border: 1px solid #a8edda;
-      white-space: nowrap;
-    }
-
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { color: rgba(255,255,255,0.75); font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--t1); }
     .nav-cta {
-      background: var(--accent);
-      color: var(--white);
-      font-size: 0.875rem;
-      font-weight: 600;
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.1s;
-      white-space: nowrap;
+      background: var(--t1); color: #fff;
+      font-size: 0.875rem; font-weight: 700;
+      padding: 10px 22px; border-radius: 10px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .nav-cta:hover { background: var(--t2); transform: translateY(-1px); box-shadow: 0 4px 16px var(--tglow); }
+    .nav-burger {
+      display: none; flex-direction: column; gap: 5px;
+      background: transparent; padding: 6px;
+    }
+    .nav-burger span {
+      display: block; width: 22px; height: 2px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .nav-mob {
+      display: none; flex-direction: column; gap: 0;
+      background: rgba(13,43,56,0.98);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transform: translateY(-110%);
+      transition: transform 0.35s ease;
+      position: sticky; top: 68px; z-index: 199;
+    }
+    .nav-mob.open { transform: translateY(0); display: flex; }
+    .nav-mob a {
+      color: rgba(255,255,255,0.8); font-size: 1rem; font-weight: 500;
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-mob a:hover { color: var(--t1); background: rgba(68,171,173,0.08); }
+    .nav-mob .mob-cta {
+      margin: 16px 24px 20px;
+      background: var(--t1); color: #fff;
+      text-align: center; padding: 14px;
+      border-radius: 12px; font-weight: 700; font-size: 1rem;
     }
 
-    .nav-cta:hover {
-      background: #028090;
-      transform: translateY(-1px);
-    }
-
-    /* HERO — purple-teal accent */
+    /* ── HERO ── */
     .hero {
-      background: var(--deep-teal);
-      background-image:
-        radial-gradient(ellipse at 70% 35%, rgba(99, 102, 241, 0.2) 0%, transparent 60%),
-        radial-gradient(ellipse at 15% 75%, rgba(8, 145, 178, 0.15) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 85%, rgba(2, 195, 154, 0.1) 0%, transparent 45%);
-      padding: 100px 24px 110px;
-      text-align: center;
+      background: var(--dark-grad);
+      padding: 96px 24px 80px;
+      min-height: 88vh;
+      display: flex; align-items: center;
+    }
+    .hero-inner {
+      max-width: 1160px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+    }
+    .hero-copy { animation: fadeUp 0.7s ease both; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(68,171,173,0.15);
+      border: 1px solid rgba(68,171,173,0.3);
+      border-radius: 100px; padding: 6px 16px;
+      font-size: 0.78rem; font-weight: 700;
+      color: var(--t1); letter-spacing: 0.04em; text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero-eyebrow-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--bright);
+      animation: tpulse 2.2s infinite;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+      font-weight: 400; line-height: 1.18;
+      color: #fff; margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+    .hero h1 em { font-style: italic; color: var(--t1); }
+    .hero-sub {
+      font-size: 1.1rem; color: rgba(255,255,255,0.72);
+      max-width: 480px; margin-bottom: 36px; line-height: 1.65;
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--t1); color: #fff;
+      font-size: 1rem; font-weight: 700;
+      padding: 14px 30px; border-radius: 12px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { background: var(--t2); transform: translateY(-2px); box-shadow: 0 8px 24px var(--tglow); }
+    .btn-ghost {
+      background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.2);
+      font-size: 1rem; font-weight: 600;
+      padding: 14px 28px; border-radius: 12px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.35); }
+    .hero-trust {
+      margin-top: 28px; display: flex; align-items: center; gap: 8px;
+      color: rgba(255,255,255,0.45); font-size: 0.8rem;
+    }
+    .hero-trust-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--t1); }
+
+    /* ── DESKTOP MOCKUP ── */
+    .hero-visual {
+      animation: fadeUp 0.7s ease 0.2s both;
       position: relative;
+    }
+    .desktop-frame {
+      background: #1a2e3a;
+      border-radius: 14px;
+      border: 2px solid rgba(255,255,255,0.12);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
       overflow: hidden;
     }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.04'%3E%3Cpath d='M40 40 L60 20 L80 40 L60 60 Z'/%3E%3Cpath d='M0 40 L20 20 L40 40 L20 60 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
+    .desktop-bar {
+      background: #0f1e26;
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
     }
-
-    .hero-eyebrow {
-      display: inline-block;
-      background: rgba(99, 102, 241, 0.15);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      color: #a5b4fc;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 6px 16px;
-      border-radius: 20px;
-      margin-bottom: 28px;
+    .desktop-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .desktop-dot.red   { background: #ff5f57; }
+    .desktop-dot.amber { background: #ffbd2e; }
+    .desktop-dot.green { background: #28c840; }
+    .desktop-url {
+      flex: 1; margin-left: 10px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 6px; padding: 4px 12px;
+      font-size: 0.72rem; color: rgba(255,255,255,0.4);
     }
-
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.18;
-      letter-spacing: -0.03em;
-      max-width: 820px;
-      margin: 0 auto 24px;
-    }
-
-    .hero h1 em {
-      color: #a5b4fc;
-      font-style: normal;
-    }
-
-    .hero p {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      color: rgba(255,255,255,0.78);
-      max-width: 660px;
-      margin: 0 auto 44px;
-      font-weight: 400;
-      line-height: 1.65;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--white);
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 16px 36px;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
-    }
-
-    .hero-cta:hover {
-      background: #028090;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(99, 102, 241, 0.5);
-    }
-
-    .hero-sub-note {
-      margin-top: 20px;
-      font-size: 0.82rem;
-      color: rgba(255,255,255,0.45);
-    }
-
-    section { padding: 80px 24px; }
-
-    .container {
-      max-width: 1080px;
-      margin: 0 auto;
-    }
-
-    .section-eyebrow {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
+    .desktop-content { padding: 16px; }
+    .dash-header {
+      display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 12px;
     }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.25rem);
-      font-weight: 800;
-      color: var(--deep-teal);
-      letter-spacing: -0.025em;
-      line-height: 1.2;
-      margin-bottom: 16px;
+    .dash-title { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.9); }
+    .dash-badge {
+      background: rgba(46,232,160,0.18);
+      border: 1px solid rgba(46,232,160,0.3);
+      color: var(--bright);
+      font-size: 0.65rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 100px;
     }
-
-    .section-sub {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      max-width: 580px;
-      line-height: 1.65;
-      margin-bottom: 56px;
+    .dash-stats {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
+      margin-bottom: 14px;
     }
-
-    /* PROBLEM */
-    .problem-section { background: var(--white); }
-
-    .problem-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 28px;
-      margin-top: 48px;
-    }
-
-    .problem-card {
-      background: var(--offwhite);
-      border: 1px solid #d8eee8;
-      border-radius: 16px;
-      padding: 32px 28px;
-      position: relative;
-    }
-
-    .problem-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-teal));
-      border-radius: 16px 16px 0 0;
-    }
-
-    .problem-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
-
-    .problem-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 10px;
-      line-height: 1.3;
-    }
-
-    .problem-card p {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* HOW IT WORKS */
-    .how-section { background: var(--offwhite); }
-
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 32px;
-      margin-top: 48px;
-    }
-
-    .step-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 36px 28px;
+    .dash-stat {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 8px; padding: 10px;
       text-align: center;
-      border: 1px solid #e0e8f8;
     }
-
-    .step-number {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent-teal));
-      color: var(--white);
-      font-size: 1.2rem;
-      font-weight: 800;
-      display: flex;
+    .dash-stat-num { font-size: 1.1rem; font-weight: 800; color: var(--t1); font-family: 'DM Serif Display', serif; }
+    .dash-stat-lbl { font-size: 0.6rem; color: rgba(255,255,255,0.45); margin-top: 2px; }
+    .dash-table-head {
+      display: grid; grid-template-columns: 2fr 1.2fr 1fr 1fr;
+      gap: 6px; padding: 6px 10px;
+      font-size: 0.6rem; font-weight: 700;
+      color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .dash-row {
+      display: grid; grid-template-columns: 2fr 1.2fr 1fr 1fr;
+      gap: 6px; padding: 8px 10px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 7px; margin-bottom: 5px;
       align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px;
-      box-shadow: 0 4px 14px rgba(99,102,241,0.3);
+      animation: row-slide 0.4s ease both;
     }
-
-    .step-card h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 10px;
+    .dash-row:nth-child(1) { animation-delay: 0.6s; }
+    .dash-row:nth-child(2) { animation-delay: 0.75s; }
+    .dash-row:nth-child(3) { animation-delay: 0.9s; }
+    .dash-row:nth-child(4) { animation-delay: 1.05s; }
+    .dash-row:nth-child(5) { animation-delay: 1.2s; }
+    .res-name { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.88); }
+    .res-room { font-size: 0.65rem; color: rgba(255,255,255,0.4); }
+    .adh-bar-wrap { display: flex; align-items: center; gap: 6px; }
+    .adh-bar {
+      flex: 1; height: 5px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px; overflow: hidden;
     }
-
-    .step-card p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* BENEFITS */
-    .benefits-section { background: var(--white); }
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-      margin-top: 48px;
-    }
-
-    .benefit-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      padding: 24px;
-      background: #f5f3ff;
-      border-radius: 12px;
-      border: 1px solid #c7d2fe;
-    }
-
-    .benefit-emoji { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
-
-    .benefit-item h4 {
-      font-size: 0.98rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 6px;
-    }
-
-    .benefit-item p {
-      font-size: 0.87rem;
-      color: var(--text-muted);
-      line-height: 1.55;
-    }
-
-    /* STAFF RELIEF CALLOUT */
-    .staff-callout {
-      background: var(--deep-teal);
-      border-radius: 20px;
-      padding: 52px 48px;
-      margin-top: 48px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      align-items: center;
-    }
-
-    .staff-callout h3 {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.25;
-      margin-bottom: 16px;
-      letter-spacing: -0.025em;
-    }
-
-    .staff-callout p {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.7);
-      line-height: 1.65;
-    }
-
-    .staff-metrics {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .staff-metric {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .staff-metric-icon { font-size: 1.5rem; }
-
-    .staff-metric-text strong {
-      display: block;
-      font-size: 1rem;
-      font-weight: 700;
-      color: #a5b4fc;
-      margin-bottom: 4px;
-    }
-
-    .staff-metric-text span {
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.6);
-    }
-
-    /* STATS */
-    .stats-strip {
-      background: var(--deep-teal);
-      background-image:
-        radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.12) 0%, transparent 55%),
-        radial-gradient(ellipse at 80% 50%, rgba(8,145,178,0.1) 0%, transparent 55%);
-      padding: 72px 24px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 40px;
+    .adh-fill { height: 100%; border-radius: 3px; background: var(--bright); }
+    .adh-num { font-size: 0.65rem; font-weight: 700; color: rgba(255,255,255,0.7); }
+    .status-pill {
+      font-size: 0.6rem; font-weight: 700;
+      padding: 3px 8px; border-radius: 100px;
       text-align: center;
     }
-
-    .stat-number {
-      font-size: clamp(2.2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      color: #a5b4fc;
-      line-height: 1;
-      letter-spacing: -0.03em;
-      margin-bottom: 8px;
+    .pill-ok   { background: rgba(46,232,160,0.18); color: var(--bright); }
+    .pill-warn { background: rgba(255,190,0,0.18);  color: #ffd166; }
+    .pill-miss { background: rgba(255,80,80,0.18);  color: #ff7070; }
+    .alert-pill {
+      font-size: 0.6rem; font-weight: 600;
+      color: rgba(255,255,255,0.45);
     }
-
-    .stat-label {
-      font-size: 0.92rem;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.45;
-      max-width: 180px;
-      margin: 0 auto;
+    .alert-on { color: var(--t1); }
+    .desktop-badge {
+      position: absolute; right: -20px; top: 28%;
+      background: rgba(13,43,56,0.95);
+      border: 1px solid rgba(68,171,173,0.35);
+      backdrop-filter: blur(8px);
+      border-radius: 14px; padding: 10px 14px;
+      max-width: 190px;
+      animation: bubble-pop 0.5s ease 1.4s both;
     }
-
-    /* TESTIMONIAL */
-    .testimonial-section { background: var(--offwhite); }
-
-    .testimonial-card {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 52px 48px;
-      max-width: 760px;
-      margin: 0 auto;
-      border: 1px solid #e0e8f8;
-      text-align: center;
-      position: relative;
+    .desktop-badge-icon { font-size: 1.1rem; margin-bottom: 4px; }
+    .desktop-badge-txt { font-size: 0.7rem; color: rgba(255,255,255,0.85); line-height: 1.4; }
+    .desktop-badge-num { font-size: 1rem; font-weight: 800; color: var(--bright); }
+    .desktop-tag {
+      position: absolute; left: -18px; bottom: 28%;
+      background: rgba(13,43,56,0.95);
+      border: 1px solid rgba(68,171,173,0.3);
+      backdrop-filter: blur(8px);
+      border-radius: 14px; padding: 10px 14px;
+      animation: badge-slide 0.5s ease 2s both;
     }
+    .desktop-tag-row { display: flex; align-items: center; gap: 6px; }
+    .desktop-tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--bright); flex-shrink: 0; }
+    .desktop-tag-txt { font-size: 0.68rem; color: rgba(255,255,255,0.8); font-weight: 500; }
 
-    .testimonial-card::before {
-      content: '\201C';
-      position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 5rem;
-      color: var(--accent);
-      font-family: Georgia, serif;
-      line-height: 1;
-    }
-
-    .testimonial-card blockquote {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      color: var(--text-dark);
-      font-style: italic;
-      line-height: 1.7;
-      margin-bottom: 28px;
-    }
-
-    .testimonial-attribution {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--accent);
-    }
-
-    /* CONTACT */
-    .contact-section { background: var(--white); }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: start;
-      margin-top: 48px;
-    }
-
-    .contact-info h3 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 16px;
-    }
-
-    .contact-info p {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      line-height: 1.65;
-      margin-bottom: 20px;
-    }
-
-    .contact-detail {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.92rem;
-      color: var(--text-mid);
-      margin-bottom: 10px;
-      font-weight: 500;
-    }
-
-    .contact-form { display: flex; flex-direction: column; gap: 16px; }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-
-    .form-group label {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text-mid);
-      letter-spacing: 0.02em;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.92rem;
-      color: var(--text-dark);
-      background: var(--offwhite);
-      border: 1.5px solid #cce8e0;
-      border-radius: 8px;
-      padding: 12px 14px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      width: 100%;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
-    }
-
-    .form-group textarea { resize: vertical; min-height: 130px; }
-
-    .form-submit {
-      background: var(--accent);
-      color: var(--white);
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 15px 32px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-      text-align: center;
-      text-decoration: none;
-      display: block;
-      width: 100%;
-    }
-
-    .form-submit:hover { background: #028090; transform: translateY(-1px); }
-
-    .form-note {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      text-align: center;
-      margin-top: -4px;
-    }
-
-    /* COMPLIANCE CALLOUT */
-    .compliance-strip {
-      background: var(--light-mint);
-      border-top: 1px solid #b8e8da;
-      border-bottom: 1px solid #b8e8da;
+    /* ── STATS BAR ── */
+    .stats-bar {
+      background: var(--t5);
       padding: 40px 24px;
     }
-
-    .compliance-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
+    .stats-inner {
+      max-width: 1000px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 16px;
     }
-
-    .compliance-icon { font-size: 2rem; }
-
-    .compliance-text h4 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 4px;
+    .stt {
+      text-align: center; padding: 20px 16px;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      transform: translateY(10px);
     }
-
-    .compliance-text p {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      max-width: 640px;
+    .stt:last-child { border-right: none; }
+    .stats-bar.in-view .stt:nth-child(1) { opacity:1;transform:none;transition-delay:0s; }
+    .stats-bar.in-view .stt:nth-child(2) { opacity:1;transform:none;transition-delay:0.1s; }
+    .stats-bar.in-view .stt:nth-child(3) { opacity:1;transform:none;transition-delay:0.2s; }
+    .stats-bar.in-view .stt:nth-child(4) { opacity:1;transform:none;transition-delay:0.3s; }
+    .stt-num {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 2.2rem; color: var(--t1);
+      line-height: 1; margin-bottom: 6px;
     }
+    .stt-lbl { font-size: 0.78rem; color: rgba(255,255,255,0.55); font-weight: 500; }
 
-    /* FOOTER */
-    footer {
-      background: var(--deep-teal);
-      padding: 48px 24px 32px;
-      color: rgba(255,255,255,0.6);
-    }
-
-    .footer-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    .footer-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .footer-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-
-    .footer-logo img {
-      height: 30px;
-      filter: brightness(0) invert(1);
-      opacity: 0.8;
-    }
-
-    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
-
-    .footer-links a {
-      color: rgba(255,255,255,0.55);
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover { color: var(--mint); }
-
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding-top: 20px;
-      font-size: 0.8rem;
+    /* ── PROBLEM SECTION ── */
+    .prob-sec { background: var(--app-grad); padding: 88px 24px; }
+    .prob-inner { max-width: 1080px; margin: 0 auto; }
+    .sec-label {
       text-align: center;
+      font-size: 0.75rem; font-weight: 700;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .sec-h2 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+      font-weight: 400; color: #fff;
+      text-align: center; margin-bottom: 16px;
+      line-height: 1.25;
+    }
+    .sec-sub {
+      text-align: center; color: rgba(255,255,255,0.65);
+      font-size: 1rem; max-width: 560px; margin: 0 auto 52px;
+      line-height: 1.65;
+    }
+    .prob-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 20px;
+    }
+    .prob-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.13);
+      backdrop-filter: blur(8px);
+      border-radius: 20px; padding: 32px 28px;
+      opacity: 0; transform: translateY(14px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .prob-grid.in-view .prob-card:nth-child(1) { opacity:1;transform:none;transition-delay:0s; }
+    .prob-grid.in-view .prob-card:nth-child(2) { opacity:1;transform:none;transition-delay:0.12s; }
+    .prob-grid.in-view .prob-card:nth-child(3) { opacity:1;transform:none;transition-delay:0.24s; }
+    .prob-icon { font-size: 2rem; margin-bottom: 16px; }
+    .prob-h { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: #fff; margin-bottom: 10px; }
+    .prob-p { font-size: 0.875rem; color: rgba(255,255,255,0.68); line-height: 1.65; }
+
+    /* ── HOW IT WORKS ── */
+    .hiw-sec { padding: 88px 24px; background: var(--off); }
+    .hiw-inner { max-width: 900px; margin: 0 auto; }
+    .hiw-sec .sec-h2 { color: var(--ink); }
+    .hiw-sec .sec-label { color: var(--inkm); }
+    .hiw-sec .sec-sub { color: var(--inkm); }
+    .hiw-steps {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 8px;
+      position: relative; margin-top: 4px;
+    }
+    .hiw-steps::before {
+      content: '';
+      position: absolute; top: 36px; left: 10%; right: 10%; height: 2px;
+      background: linear-gradient(90deg, var(--t1), var(--bright));
+      z-index: 0;
+    }
+    .hiw-step {
+      position: relative; z-index: 1;
+      text-align: center; padding: 0 12px;
+      opacity: 0; transform: translateY(14px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .hiw-steps.in-view .hiw-step:nth-child(1) { opacity:1;transform:none;transition-delay:0s; }
+    .hiw-steps.in-view .hiw-step:nth-child(2) { opacity:1;transform:none;transition-delay:0.12s; }
+    .hiw-steps.in-view .hiw-step:nth-child(3) { opacity:1;transform:none;transition-delay:0.24s; }
+    .hiw-steps.in-view .hiw-step:nth-child(4) { opacity:1;transform:none;transition-delay:0.36s; }
+    .hiw-num {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--app-grad);
+      color: #fff; font-weight: 800; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 4px 16px var(--tglow);
+    }
+    .hiw-h { font-weight: 700; font-size: 0.9rem; color: var(--ink); margin-bottom: 8px; }
+    .hiw-p { font-size: 0.8rem; color: var(--inkm); line-height: 1.6; }
+
+    /* ── FEATURES ── */
+    .feat-sec { background: var(--dark-grad); padding: 88px 24px; }
+    .feat-inner { max-width: 1080px; margin: 0 auto; }
+    .feat-sec .sec-h2 { color: #fff; }
+    .feat-sec .sec-label { color: rgba(255,255,255,0.45); }
+    .feat-sec .sec-sub { color: rgba(255,255,255,0.6); }
+    .feat-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 16px;
+    }
+    .feat-pill {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 20px 20px;
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .feat-grid.in-view .feat-pill:nth-child(1) { opacity:1;transform:none;transition-delay:0s; }
+    .feat-grid.in-view .feat-pill:nth-child(2) { opacity:1;transform:none;transition-delay:0.07s; }
+    .feat-grid.in-view .feat-pill:nth-child(3) { opacity:1;transform:none;transition-delay:0.14s; }
+    .feat-grid.in-view .feat-pill:nth-child(4) { opacity:1;transform:none;transition-delay:0.21s; }
+    .feat-grid.in-view .feat-pill:nth-child(5) { opacity:1;transform:none;transition-delay:0.28s; }
+    .feat-grid.in-view .feat-pill:nth-child(6) { opacity:1;transform:none;transition-delay:0.35s; }
+    .feat-grid.in-view .feat-pill:nth-child(7) { opacity:1;transform:none;transition-delay:0.42s; }
+    .feat-grid.in-view .feat-pill:nth-child(8) { opacity:1;transform:none;transition-delay:0.49s; }
+    .feat-grid.in-view .feat-pill:nth-child(9) { opacity:1;transform:none;transition-delay:0.56s; }
+    .feat-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 1px; }
+    .feat-txt h4 { font-size: 0.875rem; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 4px; }
+    .feat-txt p  { font-size: 0.78rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+    /* ── DASHBOARD SHOWCASE ── */
+    .dash-sec { padding: 88px 24px; background: var(--w); }
+    .dash-sec-inner { max-width: 1080px; margin: 0 auto; }
+    .dash-sec .sec-h2 { color: var(--ink); }
+    .dash-sec .sec-label { color: var(--inkm); }
+    .dash-sec .sec-sub { color: var(--inkm); }
+    .dash-mockup-wrap {
+      position: relative; max-width: 800px; margin: 0 auto;
+    }
+    .dash-big-frame {
+      background: #1a2e3a;
+      border-radius: 16px;
+      border: 2px solid rgba(255,255,255,0.1);
+      box-shadow: 0 32px 80px rgba(13,43,56,0.35);
+      overflow: hidden;
+    }
+    .dash-big-bar {
+      background: #0f1e26;
+      padding: 12px 18px;
+      display: flex; align-items: center; gap: 7px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .dash-big-content { padding: 20px; }
+    .dash-sidebar {
+      display: flex; gap: 16px;
+    }
+    .dash-sidenav {
+      width: 140px; flex-shrink: 0;
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px; padding: 12px 8px;
+    }
+    .dash-nav-item {
+      padding: 8px 10px; border-radius: 7px;
+      font-size: 0.68rem; color: rgba(255,255,255,0.45);
+      margin-bottom: 3px; cursor: default;
+    }
+    .dash-nav-item.active {
+      background: rgba(68,171,173,0.18);
+      color: var(--t1); font-weight: 700;
+    }
+    .dash-main { flex: 1; }
+    .dash-kpi-row {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 8px;
+      margin-bottom: 14px;
+    }
+    .dash-kpi {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 9px; padding: 12px;
+    }
+    .dash-kpi-val { font-size: 1.1rem; font-weight: 800; color: var(--t1); font-family: 'DM Serif Display', serif; }
+    .dash-kpi-lbl { font-size: 0.6rem; color: rgba(255,255,255,0.4); margin-top: 2px; }
+    .dash-section-title { font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,0.5); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .dash-big-table { border-radius: 9px; overflow: hidden; background: rgba(255,255,255,0.04); }
+    .dash-big-head {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.05);
+      font-size: 0.6rem; font-weight: 700;
+      color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .dash-big-row {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      padding: 9px 12px; align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.68rem; color: rgba(255,255,255,0.75);
     }
 
-    @media (max-width: 900px) {
-      .staff-callout { grid-template-columns: 1fr; }
+    /* ── COMPLIANCE ── */
+    .comply-sec { background: var(--t5); padding: 72px 24px; }
+    .comply-inner { max-width: 1000px; margin: 0 auto; text-align: center; }
+    .comply-sec .sec-h2 { color: #fff; margin-bottom: 14px; }
+    .comply-sec .sec-sub { color: rgba(255,255,255,0.55); margin-bottom: 48px; }
+    .comply-badges {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;
     }
+    .comply-badge {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(68,171,173,0.25);
+      border-radius: 12px; padding: 14px 22px;
+      display: flex; align-items: center; gap: 10px;
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .comply-badges.in-view .comply-badge:nth-child(1) { opacity:1;transform:none;transition-delay:0s; }
+    .comply-badges.in-view .comply-badge:nth-child(2) { opacity:1;transform:none;transition-delay:0.08s; }
+    .comply-badges.in-view .comply-badge:nth-child(3) { opacity:1;transform:none;transition-delay:0.16s; }
+    .comply-badges.in-view .comply-badge:nth-child(4) { opacity:1;transform:none;transition-delay:0.24s; }
+    .comply-badges.in-view .comply-badge:nth-child(5) { opacity:1;transform:none;transition-delay:0.32s; }
+    .comply-badge-icon { font-size: 1.3rem; }
+    .comply-badge-name { font-size: 0.82rem; font-weight: 700; color: rgba(255,255,255,0.85); }
+    .comply-badge-desc { font-size: 0.68rem; color: rgba(255,255,255,0.4); margin-top: 1px; }
 
-    @media (max-width: 768px) {
-      nav { padding: 0 16px; }
-      .nav-badge { display: none; }
-      .hero { padding: 72px 20px 80px; }
-      section { padding: 60px 20px; }
-      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    /* ── ENTERPRISE FORM ── */
+    .form-sec { padding: 88px 24px; background: var(--off); }
+    .form-inner { max-width: 680px; margin: 0 auto; }
+    .form-sec .sec-h2 { color: var(--ink); }
+    .form-sec .sec-label { color: var(--inkm); }
+    .form-sec .sec-sub { color: var(--inkm); margin-bottom: 48px; }
+    .form-card {
+      background: #fff;
+      border: 1px solid var(--bor);
+      border-radius: 20px;
+      padding: 40px 40px;
+      box-shadow: 0 8px 32px rgba(13,43,56,0.08);
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block; font-size: 0.82rem; font-weight: 600;
+      color: var(--ink); margin-bottom: 7px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      background: var(--off);
+      border: 1.5px solid var(--bor);
+      border-radius: 10px; padding: 11px 14px;
+      font: inherit; font-size: 0.9rem; color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--t1);
+      box-shadow: 0 0 0 3px var(--tdim);
+    }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-submit {
+      width: 100%;
+      background: var(--app-grad); color: #fff;
+      font-size: 1rem; font-weight: 700;
+      padding: 15px; border-radius: 12px;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      margin-top: 6px;
+    }
+    .form-submit:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 24px var(--tglow); }
+    .form-submit:disabled { opacity: 0.6; transform: none; cursor: not-allowed; }
+    .form-note { text-align: center; font-size: 0.75rem; color: var(--inks); margin-top: 14px; }
+
+    /* ── FINAL CTA ── */
+    .cta-sec { background: var(--app-grad); padding: 88px 24px; text-align: center; }
+    .cta-inner { max-width: 640px; margin: 0 auto; }
+    .cta-sec h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      color: #fff; margin-bottom: 16px; font-weight: 400;
+    }
+    .cta-sec p { color: rgba(255,255,255,0.72); font-size: 1.05rem; margin-bottom: 36px; }
+    .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    .footer { background: var(--t5); padding: 64px 24px 32px; }
+    .footer-grid {
+      max-width: 1080px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-brand p { font-size: 0.85rem; color: rgba(255,255,255,0.45); margin-top: 14px; line-height: 1.6; max-width: 260px; }
+    .footer-col h4 { font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 0.875rem; color: rgba(255,255,255,0.6); margin-bottom: 10px; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--t1); }
+    .footer-bottom {
+      max-width: 1080px; margin: 28px auto 0;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 0.78rem; color: rgba(255,255,255,0.35); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--t1); }
+
+    /* ── COOKIE BAR ── */
+    .cookie-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 500;
+      background: rgba(13,43,56,0.97);
+      border-top: 1px solid rgba(68,171,173,0.25);
+      backdrop-filter: blur(12px);
+      padding: 16px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+      transform: translateY(100%);
+      transition: transform 0.4s ease;
+    }
+    .cookie-bar.show { transform: translateY(0); }
+    .cookie-txt { font-size: 0.82rem; color: rgba(255,255,255,0.7); max-width: 640px; }
+    .cookie-txt a { color: var(--t1); text-decoration: underline; }
+    .cookie-btns { display: flex; gap: 10px; flex-shrink: 0; }
+    .cookie-decline {
+      background: transparent; color: rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 8px 18px; border-radius: 8px; font-size: 0.82rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .cookie-decline:hover { border-color: rgba(255,255,255,0.4); color: rgba(255,255,255,0.8); }
+    .cookie-accept {
+      background: var(--t1); color: #fff;
+      padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700;
+      transition: background 0.2s;
+    }
+    .cookie-accept:hover { background: var(--t2); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+      .hero { min-height: unset; padding: 72px 24px 64px; }
+      .hero h1 { font-size: 2.2rem; }
+      .hero-sub { max-width: 100%; }
+      .desktop-badge { right: 0; top: auto; bottom: -20px; }
+      .desktop-tag  { left: 0; bottom: auto; top: -20px; }
+      .prob-grid { grid-template-columns: 1fr; }
+      .hiw-steps { grid-template-columns: 1fr 1fr; gap: 24px; }
+      .hiw-steps::before { display: none; }
+      .feat-grid { grid-template-columns: 1fr 1fr; }
+      .dash-sidebar { flex-direction: column; }
+      .dash-sidenav { width: 100%; display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; }
+      .dash-kpi-row { grid-template-columns: 1fr 1fr; }
+      .stats-inner { grid-template-columns: 1fr 1fr; }
+      .stt { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .stt:nth-child(2), .stt:last-child { border-bottom: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+      .comply-badges { gap: 10px; }
+    }
+    @media (max-width: 640px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-burger { display: flex; }
+      .hero h1 { font-size: 1.85rem; }
+      .hiw-steps { grid-template-columns: 1fr; }
+      .feat-grid { grid-template-columns: 1fr; }
       .form-row { grid-template-columns: 1fr; }
-      .testimonial-card { padding: 48px 28px 36px; }
-      .footer-top { flex-direction: column; }
-      .staff-callout { padding: 36px 28px; }
-    }
-
-    @media (max-width: 480px) {
-      .hero h1 { font-size: 1.75rem; }
-      .stats-grid { grid-template-columns: 1fr; gap: 36px; }
+      .form-card { padding: 28px 20px; }
+      .stats-inner { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .dash-kpi-row { grid-template-columns: 1fr 1fr; }
+      .dash-big-head, .dash-big-row { grid-template-columns: 2fr 1fr 1fr; }
+      .dash-big-head > *:nth-child(4),
+      .dash-big-head > *:nth-child(5),
+      .dash-big-row  > *:nth-child(4),
+      .dash-big-row  > *:nth-child(5) { display: none; }
     }
   </style>
-  <!-- PostHog Analytics -->
-  <script>
-    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
-    posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
-    document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="carely.fit/#"],a.nav-cta,a.hero-cta,a.cta-btn').forEach(function(el){el.addEventListener('click',function(){posthog.capture('cta_clicked',{text:el.textContent.trim(),href:el.getAttribute('href'),page:location.pathname});});});});
-  </script>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="https://carely.fit" class="nav-logo">
-      <img src="elara-bot.png" alt="Carely" />
-      <span>Carely</span>
-    </a>
-    <div class="nav-right">
-      <span class="nav-badge">Partner with Carely</span>
-      <a href="mailto:hello@carely.fit?subject=Partnership Enquiry" class="nav-cta">Contact us</a>
+<!-- NAV -->
+<div class="nav-wrap" id="navWrap">
+  <nav class="nav">
+    <a href="index.html"><img src="carely-logo-3d.png" style="height:52px;width:auto;" alt="Carely"></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="for-caregivers.html">For Families</a>
+      <a href="for-senior-homes.html">For Senior Homes</a>
+      <a href="for-pharmacies.html">For Pharmacies</a>
+      <a href="for-doctors.html">For Doctors</a>
     </div>
+    <a href="#partner-form" class="nav-cta btn-primary" style="text-decoration:none;display:inline-block;">Request a Demo</a>
+    <button class="nav-burger" id="navBurger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+</div>
+<div class="nav-mob" id="navMob">
+  <a href="index.html">Home</a>
+  <a href="for-caregivers.html">For Families</a>
+  <a href="for-senior-homes.html">For Senior Homes</a>
+  <a href="for-pharmacies.html">For Pharmacies</a>
+  <a href="for-doctors.html">For Doctors</a>
+  <a href="#partner-form" class="mob-cta">Request a Demo</a>
+</div>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="container">
-      <span class="hero-eyebrow">Carely for Senior Living Communities</span>
-      <h1>Medication errors are the <em>#1 preventable risk</em> in senior care.</h1>
-      <p>Carely gives your residents smart reminders, AI check-ins, and family visibility — reducing missed doses, after-hours calls, and staff burden.</p>
-      <a href="mailto:hello@carely.fit?subject=Partnership Enquiry" class="hero-cta">Book a community partnership call</a>
-      <p class="hero-sub-note">No system integration required. Works on any Android or iPhone. hello@carely.fit</p>
-    </div>
-  </section>
-
-  <!-- PROBLEM -->
-  <section class="problem-section">
-    <div class="container">
-      <p class="section-eyebrow">The Problem We Solve</p>
-      <h2 class="section-title">Three gaps in resident care that cost communities every day.</h2>
-      <p class="section-sub">Senior living communities deliver exceptional care — but medication management between scheduled staff visits is one of the hardest gaps to close.</p>
-
-      <div class="problem-grid">
-        <div class="problem-card">
-          <span class="problem-icon">💊</span>
-          <h3>Residents forget doses between staff visits — especially evenings and weekends</h3>
-          <p>Scheduled medication rounds can't cover every dose for every resident. Self-managed evening and weekend medications are the highest-risk window — and also the hardest to monitor without significantly increasing staff hours.</p>
-        </div>
-        <div class="problem-card">
-          <span class="problem-icon">📞</span>
-          <h3>Family members call constantly to check in — pulling staff away from care</h3>
-          <p>Concerned families call the front desk, nursing stations, and care coordinators to check on medication compliance. These calls consume hours of staff time every week — time that belongs at the bedside.</p>
-        </div>
-        <div class="problem-card">
-          <span class="problem-icon">⚠️</span>
-          <h3>Medication non-compliance leads to hospitalisations and liability</h3>
-          <p>A missed dose of a blood thinner, a skipped insulin dose, or a forgotten antihypertensive can have serious consequences — and raise difficult questions about whether your community caught it in time.</p>
-        </div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        Built for Senior Living Communities
+      </div>
+      <h1>Every resident.<br>Every dose.<br><em>Always accounted for.</em></h1>
+      <p class="hero-sub">Carely gives your care team real-time medication adherence across your entire resident population — with automated family alerts and compliance-ready reporting built in.</p>
+      <div class="hero-btns">
+        <a href="#partner-form" class="btn-primary">Request a Demo</a>
+        <a href="#how-it-works" class="btn-ghost">See How It Works</a>
+      </div>
+      <div class="hero-trust">
+        <span class="hero-trust-dot"></span>
+        PIPEDA compliant
+        <span class="hero-trust-dot"></span>
+        White-label available
+        <span class="hero-trust-dot"></span>
+        No hardware required
       </div>
     </div>
-  </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="how-section">
-    <div class="container">
-      <p class="section-eyebrow">How It Works</p>
-      <h2 class="section-title">Simple to deploy. Immediate impact for staff and families.</h2>
-      <p class="section-sub">Carely requires no integration with your care management system. Residents and their families set it up themselves — your staff simply recommend it.</p>
-
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <h3>Residents (or families) set up Carely on move-in</h3>
-          <p>During the move-in process, your team recommends Carely. The resident or a family member downloads the app and enters their medications and scheduled times — guided by Elara AI in plain, simple language.</p>
+    <div class="hero-visual">
+      <!-- CSS Desktop Mockup -->
+      <div class="desktop-frame" style="position:relative;">
+        <div class="desktop-bar">
+          <div class="desktop-dot red"></div>
+          <div class="desktop-dot amber"></div>
+          <div class="desktop-dot green"></div>
+          <div class="desktop-url">app.carely.fit/admin/dashboard</div>
         </div>
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <h3>Carely reminds and checks in at every dose time</h3>
-          <p>At each scheduled dose, the resident receives a gentle notification. Elara follows up with a friendly check-in to confirm they've taken it — and flags any missed dose immediately.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <h3>Families are alerted — reducing calls to your staff</h3>
-          <p>When a dose is missed, the resident's designated family caregiver receives an instant notification. They can follow up directly, without calling your staff first — significantly reducing after-hours call volume.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- BENEFITS -->
-  <section class="benefits-section">
-    <div class="container">
-      <p class="section-eyebrow">What Your Community Gets</p>
-      <h2 class="section-title">Better outcomes for residents. Less burden on staff.</h2>
-      <p class="section-sub">Carely is a resident-facing tool — but the benefits ripple through your entire community, from staffing to family relations to care quality metrics.</p>
-
-      <div class="benefits-grid">
-        <div class="benefit-item">
-          <span class="benefit-emoji">📉</span>
-          <div>
-            <h4>Automated dose reminders reduce staff burden</h4>
-            <p>Self-managed medication reminders mean staff spend less time chasing doses and more time on hands-on care. Carely doesn't replace your care team — it extends their reach.</p>
+        <div class="desktop-content">
+          <div class="dash-header">
+            <span class="dash-title">Resident Adherence — Sunrise Gardens</span>
+            <span class="dash-badge">Live</span>
           </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">📵</span>
-          <div>
-            <h4>Family alert system cuts check-in calls significantly</h4>
-            <p>When families know they'll be notified if something goes wrong, they stop calling to check. Communities report a meaningful reduction in unsolicited family calls within weeks of recommending Carely.</p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">🤖</span>
-          <div>
-            <h4>Elara AI provides daily companionship check-ins</h4>
-            <p>Elara has a friendly, warm conversation with residents every day — asking how they're feeling, noting any concerns, and providing companionship between staff visits. Residents feel less alone.</p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">📊</span>
-          <div>
-            <h4>Adherence reports for care coordinators</h4>
-            <p>Care coordinators can receive weekly adherence summaries for residents who consent — giving you early warning of compliance issues before they become clinical events.</p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">📱</span>
-          <div>
-            <h4>Works on any Android or iPhone</h4>
-            <p>No special hardware, no tablets to purchase, no IT setup. Carely runs on whatever device the resident or their family already has. If they can make a phone call, they can use Carely.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Staff Relief Callout -->
-      <div class="staff-callout">
-        <div>
-          <h3>The family call problem — solved.</h3>
-          <p>One of the most consistent pieces of feedback from senior living coordinators is the volume of family check-in calls they receive. These calls are driven by anxiety — and anxiety driven by not knowing. Carely gives families a real-time view of their loved one's adherence, which means they call you when there's something to discuss — not just to check if everything is fine.</p>
-        </div>
-        <div class="staff-metrics">
-          <div class="staff-metric">
-            <span class="staff-metric-icon">📞</span>
-            <div class="staff-metric-text">
-              <strong>Avg 2 hrs/day</strong>
-              <span>of staff time consumed by family check-in calls</span>
+          <div class="dash-stats">
+            <div class="dash-stat">
+              <div class="dash-stat-num">94%</div>
+              <div class="dash-stat-lbl">Adherence today</div>
+            </div>
+            <div class="dash-stat">
+              <div class="dash-stat-num">42</div>
+              <div class="dash-stat-lbl">Residents tracked</div>
+            </div>
+            <div class="dash-stat">
+              <div class="dash-stat-num">3</div>
+              <div class="dash-stat-lbl">Needs attention</div>
             </div>
           </div>
-          <div class="staff-metric">
-            <span class="staff-metric-icon">📉</span>
-            <div class="staff-metric-text">
-              <strong>Significant call reduction</strong>
-              <span>reported by communities who recommend Carely at move-in</span>
-            </div>
+          <div class="dash-table-head">
+            <span>Resident</span>
+            <span>Adherence</span>
+            <span>Status</span>
+            <span>Alerts</span>
           </div>
-          <div class="staff-metric">
-            <span class="staff-metric-icon">❤️</span>
-            <div class="staff-metric-text">
-              <strong>Higher family satisfaction</strong>
-              <span>when families feel informed and connected to their loved one's care</span>
-            </div>
+          <div class="dash-row">
+            <div><div class="res-name">Margaret H.</div><div class="res-room">Room 12A</div></div>
+            <div class="adh-bar-wrap"><div class="adh-bar"><div class="adh-fill" style="width:98%"></div></div><span class="adh-num">98%</span></div>
+            <div><span class="status-pill pill-ok">On track</span></div>
+            <div><span class="alert-pill alert-on">Family notified</span></div>
+          </div>
+          <div class="dash-row">
+            <div><div class="res-name">Robert C.</div><div class="res-room">Room 7B</div></div>
+            <div class="adh-bar-wrap"><div class="adh-bar"><div class="adh-fill" style="width:76%;background:#ffd166"></div></div><span class="adh-num">76%</span></div>
+            <div><span class="status-pill pill-warn">Review</span></div>
+            <div><span class="alert-pill alert-on">Alert sent</span></div>
+          </div>
+          <div class="dash-row">
+            <div><div class="res-name">Yvonne M.</div><div class="res-room">Room 3C</div></div>
+            <div class="adh-bar-wrap"><div class="adh-bar"><div class="adh-fill" style="width:100%"></div></div><span class="adh-num">100%</span></div>
+            <div><span class="status-pill pill-ok">On track</span></div>
+            <div><span class="alert-pill">Auto-update</span></div>
+          </div>
+          <div class="dash-row">
+            <div><div class="res-name">James T.</div><div class="res-room">Room 19A</div></div>
+            <div class="adh-bar-wrap"><div class="adh-bar"><div class="adh-fill" style="width:55%;background:#ff7070"></div></div><span class="adh-num">55%</span></div>
+            <div><span class="status-pill pill-miss">Missed dose</span></div>
+            <div><span class="alert-pill alert-on">Escalated</span></div>
+          </div>
+          <div class="dash-row">
+            <div><div class="res-name">Patricia L.</div><div class="res-room">Room 5B</div></div>
+            <div class="adh-bar-wrap"><div class="adh-bar"><div class="adh-fill" style="width:91%"></div></div><span class="adh-num">91%</span></div>
+            <div><span class="status-pill pill-ok">On track</span></div>
+            <div><span class="alert-pill">Auto-update</span></div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- STATS -->
-  <section class="stats-strip">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-number">42%</div>
-          <div class="stat-label">of senior living residents experience medication errors annually</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">2 hrs</div>
-          <div class="stat-label">per day of staff time lost to family check-in calls on average</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">30%</div>
-          <div class="stat-label">reduction in hospital readmissions with consistent medication routines</div>
-        </div>
+      <!-- Floating annotations -->
+      <div class="desktop-badge">
+        <div class="desktop-badge-icon">📊</div>
+        <div class="desktop-badge-num">94%</div>
+        <div class="desktop-badge-txt">Community adherence<br>— up 18% this month</div>
       </div>
-    </div>
-  </section>
-
-  <!-- COMPLIANCE CALLOUT -->
-  <div class="compliance-strip">
-    <div class="compliance-inner">
-      <span class="compliance-icon">🔒</span>
-      <div class="compliance-text">
-        <h4>Designed for the sensitivity of senior care</h4>
-        <p>All data sharing in Carely requires explicit resident consent. Carely is built to be PIPEDA-compliant and resident-first — meaning your residents' data is never shared without their authorisation. We take privacy in senior care seriously.</p>
+      <div class="desktop-tag">
+        <div class="desktop-tag-row">
+          <div class="desktop-tag-dot"></div>
+          <div class="desktop-tag-txt">3 families auto-notified today</div>
+        </div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- TESTIMONIAL -->
-  <section class="testimonial-section">
-    <div class="container">
-      <p class="section-eyebrow" style="text-align:center;">What Communities Are Saying</p>
-      <h2 class="section-title" style="text-align:center; margin-bottom: 40px;">It cut our evening check-in calls significantly.</h2>
-
-      <div class="testimonial-card">
-        <blockquote>
-          "We started recommending Carely to families during move-in — framing it as part of our care support package. Within weeks, our evening check-in call volume dropped noticeably. Families who used Carely weren't calling to ask if everything was fine — they already knew. It gave them confidence, and it gave our staff time back."
-        </blockquote>
-        <div class="testimonial-attribution">— Care Coordinator, Senior Living Community, Alberta</div>
-      </div>
+<!-- STATS BAR -->
+<div class="stats-bar reveal" id="statsBar">
+  <div class="stats-inner">
+    <div class="stt">
+      <div class="stt-num">68%</div>
+      <div class="stt-lbl">of care home medication errors are preventable</div>
     </div>
-  </section>
-
-  <!-- CONTACT FORM -->
-  <section class="contact-section" id="contact">
-    <div class="container">
-      <p class="section-eyebrow">Get in Touch</p>
-      <h2 class="section-title">Partner with Carely for your community.</h2>
-      <p class="section-sub">Whether you're a small independent retirement home or a multi-site senior living group, we'll work with you on a partnership that fits your community's needs.</p>
-
-      <div class="contact-grid">
-        <div class="contact-info">
-          <h3>Let's talk about your community.</h3>
-          <p>Every senior living community is different. We'd love to understand yours — the size, the care model, the resident profile — and show you how Carely could fit into your move-in process or existing care support.</p>
-          <p>There's no cost to recommend Carely to your residents or families. We simply ask for the opportunity to support the people in your care.</p>
-          <div class="contact-detail">
-            <span>📧</span>
-            <a href="mailto:hello@carely.fit" style="color: var(--accent); text-decoration:none;">hello@carely.fit</a>
-          </div>
-          <div class="contact-detail">
-            <span>🌐</span>
-            <a href="https://carely.fit" style="color: var(--accent); text-decoration:none;">carely.fit</a>
-          </div>
-        </div>
-
-        <form id="partner-form" class="contact-form" onsubmit="handleSubmit(event)">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="name">Your Name</label>
-              <input type="text" id="name" name="name" placeholder="Margaret Williams" required />
-            </div>
-            <div class="form-group">
-              <label for="role">Your Role</label>
-              <input type="text" id="role" name="role" placeholder="Care Coordinator, Director..." />
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="org">Community / Organisation Name</label>
-            <input type="text" id="org" name="organisation" placeholder="Sunrise Senior Living, Calgary" required />
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="m.williams@sunrisesenior.ca" required />
-          </div>
-          <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" name="phone" placeholder="+1 604 555 0123" required />
-          </div>
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" placeholder="Tell us about your community — size, location, and what you're hoping Carely can help with..."></textarea>
-          </div>
-          <button type="submit" id="submit-btn" class="form-submit">Apply to Partner</button>
-          <p class="form-note">Or email us directly at hello@carely.fit — we respond within 1 business day.</p>
-        </form>
-      </div>
+    <div class="stt">
+      <div class="stt-num">4×</div>
+      <div class="stt-lbl">faster family communications with auto-alerts</div>
     </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-top">
-        <a href="https://carely.fit" class="footer-logo">
-          <img src="elara-bot-logo.png" alt="Carely" />
-        </a>
-        <div class="footer-links">
-          <a href="https://carely.fit">Home</a>
-          <a href="for-pharmacies.html">Pharmacies</a>
-          <a href="for-doctors.html">Doctors</a>
-          <a href="for-caregivers.html">Caregivers</a>
-          <a href="for-senior-homes.html">Senior Living</a>
-          <a href="../privacy.html">Privacy Policy</a>
-          <a href="../terms.html">Terms of Use</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        &copy; 2026 Carely. Built with care for patients and the people who support them. &mdash; <a href="mailto:hello@carely.fit" style="color: var(--mint); text-decoration:none;">hello@carely.fit</a>
-      </div>
+    <div class="stt">
+      <div class="stt-num">PIPEDA</div>
+      <div class="stt-lbl">compliant — built for Canadian healthcare</div>
     </div>
-  </footer>
-
-<!-- GDPR / CASL Cookie Consent Banner -->
-<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#0D3347;color:#e2f4f1;padding:16px 24px;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -2px 12px rgba(0,0,0,.3);">
-  <span>We use cookies to improve your experience and measure usage. See our <a href="/privacy.html" style="color:#818cf8;text-decoration:underline;">Privacy Policy</a>.</span>
-  <div style="display:flex;gap:10px;flex-shrink:0;">
-    <button onclick="cookieDecline()" style="background:transparent;border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.65);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;">Decline</button>
-    <button onclick="cookieAccept()" style="background:#028090;border:none;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">Accept</button>
+    <div class="stt">
+      <div class="stt-num">White-<br>label</div>
+      <div class="stt-lbl">available — your brand, our technology</div>
+    </div>
   </div>
 </div>
+
+<!-- PROBLEM SECTION -->
+<section class="prob-sec">
+  <div class="prob-inner">
+    <p class="sec-label reveal">The Reality in Senior Living</p>
+    <h2 class="sec-h2 reveal">The gaps that keep administrators up at night</h2>
+    <p class="sec-sub reveal">Medication management in senior care is fragmented, reactive, and dangerously opaque. Your staff works hard — but the tools haven't kept up.</p>
+    <div class="prob-grid reveal">
+      <div class="prob-card">
+        <div class="prob-icon">⚠️</div>
+        <h3 class="prob-h">No real-time visibility</h3>
+        <p class="prob-p">Staff chart after the fact. By the time a missed dose is documented, the window for intervention has closed — and families are already calling.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">📞</div>
+        <h3 class="prob-h">Family calls consume your team</h3>
+        <p class="prob-p">"Did Mum take her medication today?" — multiplied across 40 residents. Your nurses become call centre agents instead of caregivers.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">📋</div>
+        <h3 class="prob-h">Compliance reporting is manual</h3>
+        <p class="prob-p">Audit time means hours of paper-chasing. Medication logs are incomplete, inconsistent, and nearly impossible to aggregate across your whole community.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="hiw-sec" id="how-it-works">
+  <div class="hiw-inner">
+    <p class="sec-label reveal">How It Works</p>
+    <h2 class="sec-h2 reveal">From setup to full visibility in 48 hours</h2>
+    <p class="sec-sub reveal">No hardware. No complex IT integration. Your residents start using Carely within two days of onboarding.</p>
+    <div class="hiw-steps reveal">
+      <div class="hiw-step">
+        <div class="hiw-num">1</div>
+        <h4 class="hiw-h">We onboard your community</h4>
+        <p class="hiw-p">Our team imports your resident list, medication schedules, and family contacts. White-label branding applied.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-num">2</div>
+        <h4 class="hiw-h">Residents get the Carely app</h4>
+        <p class="hiw-p">Simple, large-text interface. Elara guides each resident through their schedule with friendly reminders — no tech experience needed.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-num">3</div>
+        <h4 class="hiw-h">Families get live access</h4>
+        <p class="hiw-p">Family members join as caregivers. They see adherence in real time and receive automatic alerts — without calling your front desk.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-num">4</div>
+        <h4 class="hiw-h">Your team gets the dashboard</h4>
+        <p class="hiw-p">Care staff see every resident's status at a glance. Missed doses trigger escalation alerts. Reports export in one click for audits.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="feat-sec">
+  <div class="feat-inner">
+    <p class="sec-label reveal">Platform Features</p>
+    <h2 class="sec-h2 reveal">Built for operations at scale</h2>
+    <p class="sec-sub reveal">Every feature designed around what care home administrators actually need — not what looks good in a brochure.</p>
+    <div class="feat-grid reveal">
+      <div class="feat-pill">
+        <span class="feat-icon">📊</span>
+        <div class="feat-txt">
+          <h4>Real-time adherence dashboard</h4>
+          <p>See every resident's medication status at a glance, updated in real time.</p>
+        </div>
+      </div>
+      <div class="feat-pill">
+        <span class="feat-icon">🔔</span>
+        <div class="feat-txt">
+          <h4>Automated family alerts</h4>
+          <p>Missed dose? Family is notified automatically — without involving your staff.</p>
+        </div>
+      </div>
+      <div class="feat-pill">
+        <span class="feat-icon">📋</span>
+        <div class="feat-txt">
+          <h4>Compliance-ready reports</h4>
+          <p>One-click audit exports with full adherence history by resident or medication.</p>
+        </div>
+      </div>
+      <div class="feat-pill">
+        <span class="feat-icon">🏷️</span>
+        <div class="feat-txt">
+          <h4>White-label branding</h4>
+          <p>Residents and families see your community's name and logo — not Carely's.</p>
+        </div>
+      </div>
+      <div class="feat-pill">
+        <span class="feat-icon">🤖</span>
+        <div class="feat-txt">
+          <h4>Elara AI companion</h4>
+          <p>Friendly AI that reminds, checks in, and keeps residents engaged with their health.</p>
+        </div>
+      </div>
+      <div class="feat-pill">
+        <span class="feat-icon">👨‍👩‍👧</span>
+        <div class="feat-txt">
+          <h4>Multi-caregiver access</h4>
+          <p>Add multiple family members per resident — each with their own access level.</p>
+        </div>
+      </div>
+      <div class="feat-pill">
+        <span class="feat-icon">📱</span>
+        <div class="feat-txt">
+          <h4>Works on any device</h4>
+          <p>Large-text app for residents. Web + mobile dashboard for staff and families.</p>
+        </div>
+      </div>
+      <div class="feat-pill">
+        <span class="feat-icon">🔗</span>
+        <div class="feat-txt">
+          <h4>Pharmacy integration</h4>
+          <p>Connect directly with partner pharmacies for automatic refill reminders.</p>
+        </div>
+      </div>
+      <div class="feat-pill">
+        <span class="feat-icon">🔐</span>
+        <div class="feat-txt">
+          <h4>Enterprise-grade security</h4>
+          <p>AES-256 encryption, PIPEDA compliance, and role-based access controls.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD SHOWCASE -->
+<section class="dash-sec reveal">
+  <div class="dash-sec-inner">
+    <p class="sec-label">Admin Dashboard</p>
+    <h2 class="sec-h2">Complete operational visibility</h2>
+    <p class="sec-sub">Your team sees everything — across every resident, every wing, every shift — from a single screen.</p>
+    <div class="dash-mockup-wrap">
+      <div class="dash-big-frame">
+        <div class="dash-big-bar">
+          <div class="desktop-dot red"></div>
+          <div class="desktop-dot amber"></div>
+          <div class="desktop-dot green"></div>
+          <div class="desktop-url" style="margin-left:10px;">app.carely.fit/admin</div>
+        </div>
+        <div class="dash-big-content">
+          <div class="dash-sidebar">
+            <div class="dash-sidenav">
+              <div class="dash-nav-item active">Dashboard</div>
+              <div class="dash-nav-item">Residents</div>
+              <div class="dash-nav-item">Medications</div>
+              <div class="dash-nav-item">Alerts</div>
+              <div class="dash-nav-item">Reports</div>
+              <div class="dash-nav-item">Settings</div>
+            </div>
+            <div class="dash-main">
+              <div class="dash-kpi-row">
+                <div class="dash-kpi"><div class="dash-kpi-val">42</div><div class="dash-kpi-lbl">Total residents</div></div>
+                <div class="dash-kpi"><div class="dash-kpi-val">94%</div><div class="dash-kpi-lbl">Adherence today</div></div>
+                <div class="dash-kpi"><div class="dash-kpi-val">3</div><div class="dash-kpi-lbl">Needs attention</div></div>
+                <div class="dash-kpi"><div class="dash-kpi-val">12</div><div class="dash-kpi-lbl">Family alerts sent</div></div>
+              </div>
+              <div class="dash-section-title">Resident Overview — Today</div>
+              <div class="dash-big-table">
+                <div class="dash-big-head">
+                  <span>Resident</span>
+                  <span>Wing</span>
+                  <span>Adherence</span>
+                  <span>Last dose</span>
+                  <span>Status</span>
+                </div>
+                <div class="dash-big-row">
+                  <span>Margaret Henderson</span>
+                  <span>East</span>
+                  <span style="color:var(--bright);">98%</span>
+                  <span style="color:rgba(255,255,255,0.45);font-size:0.62rem;">12:05 PM</span>
+                  <span><span class="status-pill pill-ok">On track</span></span>
+                </div>
+                <div class="dash-big-row">
+                  <span>James Thornton</span>
+                  <span>West</span>
+                  <span style="color:#ff7070;">55%</span>
+                  <span style="color:rgba(255,255,255,0.45);font-size:0.62rem;">Yesterday</span>
+                  <span><span class="status-pill pill-miss">Missed</span></span>
+                </div>
+                <div class="dash-big-row">
+                  <span>Yvonne Mitchell</span>
+                  <span>East</span>
+                  <span style="color:var(--bright);">100%</span>
+                  <span style="color:rgba(255,255,255,0.45);font-size:0.62rem;">9:02 AM</span>
+                  <span><span class="status-pill pill-ok">On track</span></span>
+                </div>
+                <div class="dash-big-row">
+                  <span>Robert Clarke</span>
+                  <span>North</span>
+                  <span style="color:#ffd166;">76%</span>
+                  <span style="color:rgba(255,255,255,0.45);font-size:0.62rem;">8:45 AM</span>
+                  <span><span class="status-pill pill-warn">Review</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPLIANCE BADGES -->
+<section class="comply-sec">
+  <div class="comply-inner">
+    <h2 class="sec-h2 reveal">Built to meet healthcare compliance standards</h2>
+    <p class="sec-sub reveal">Carely is designed from the ground up for regulated healthcare environments. Every layer of the platform — data, access, storage — meets or exceeds industry requirements.</p>
+    <div class="comply-badges reveal">
+      <div class="comply-badge">
+        <span class="comply-badge-icon">🇨🇦</span>
+        <div>
+          <div class="comply-badge-name">PIPEDA</div>
+          <div class="comply-badge-desc">Canadian privacy law</div>
+        </div>
+      </div>
+      <div class="comply-badge">
+        <span class="comply-badge-icon">🏥</span>
+        <div>
+          <div class="comply-badge-name">HIPAA Ready</div>
+          <div class="comply-badge-desc">US health data standards</div>
+        </div>
+      </div>
+      <div class="comply-badge">
+        <span class="comply-badge-icon">🔗</span>
+        <div>
+          <div class="comply-badge-name">HL7 FHIR</div>
+          <div class="comply-badge-desc">Interoperability standard</div>
+        </div>
+      </div>
+      <div class="comply-badge">
+        <span class="comply-badge-icon">🔐</span>
+        <div>
+          <div class="comply-badge-name">AES-256</div>
+          <div class="comply-badge-desc">Military-grade encryption</div>
+        </div>
+      </div>
+      <div class="comply-badge">
+        <span class="comply-badge-icon">✅</span>
+        <div>
+          <div class="comply-badge-name">ISO 27001</div>
+          <div class="comply-badge-desc">Info security management</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENTERPRISE FORM -->
+<section class="form-sec" id="partner-form-section">
+  <div class="form-inner">
+    <p class="sec-label reveal">Partner With Us</p>
+    <h2 class="sec-h2 reveal">Request a demo for your community</h2>
+    <p class="sec-sub reveal">Tell us a bit about your community and we'll reach out within 2 business days to schedule a personalized walkthrough.</p>
+    <div class="form-card reveal">
+      <form id="partner-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Your name</label>
+            <input type="text" id="name" name="name" placeholder="Jane Smith" required>
+          </div>
+          <div class="form-group">
+            <label for="role">Your role</label>
+            <input type="text" id="role" name="role" placeholder="Executive Director">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="org">Community / organization name</label>
+          <input type="text" id="org" name="org" placeholder="Sunrise Gardens Senior Living" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Work email</label>
+            <input type="email" id="email" name="email" placeholder="jane@sunrisegardens.ca" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone number</label>
+            <input type="tel" id="phone" name="phone" placeholder="+1 (604) 555-0100">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="message">Tell us about your community (optional)</label>
+          <textarea id="message" name="message" placeholder="Number of residents, current medication management process, biggest challenges..."></textarea>
+        </div>
+        <button type="submit" id="submit-btn" class="form-submit">Apply to Partner</button>
+        <p class="form-note">We review every application personally. No spam, ever.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-sec reveal">
+  <div class="cta-inner">
+    <h2>Ready to give your residents better care?</h2>
+    <p>Join senior living communities across Canada that trust Carely to keep every resident on track — and every family in the loop.</p>
+    <div class="cta-btns">
+      <a href="#partner-form-section" class="btn-primary" style="display:inline-block;padding:15px 34px;">Request a Demo</a>
+      <a href="index.html" class="btn-ghost" style="display:inline-block;padding:15px 28px;">Learn More About Carely</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="carely-logo-3d.png" style="height:48px;width:auto;" alt="Carely">
+      <p>AI-powered medication adherence for seniors, families, and the care communities that support them.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="index.html">Home</a>
+      <a href="for-caregivers.html">For Families</a>
+      <a href="for-senior-homes.html">For Senior Homes</a>
+      <a href="for-pharmacies.html">For Pharmacies</a>
+      <a href="for-doctors.html">For Doctors</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="about.html">About</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact</a>
+      <a href="join.html">Join Waitlist</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="accessibility.html">Accessibility</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">2026 Carely by Lumina Path Inc. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<!-- COOKIE BAR -->
+<div class="cookie-bar" id="cookieBar">
+  <p class="cookie-txt">We use cookies to improve your experience and understand how our site is used. See our <a href="privacy.html">Privacy Policy</a>.</p>
+  <div class="cookie-btns">
+    <button class="cookie-decline" onclick="cookieChoice(false)">Decline</button>
+    <button class="cookie-accept" onclick="cookieChoice(true)">Accept All</button>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
 <script>
-(function(){
-  var b = document.getElementById('cookie-banner');
-  if (!localStorage.getItem('cookie_consent')) { b.style.display = 'flex'; }
-})();
-function cookieAccept() {
-  localStorage.setItem('cookie_consent', 'accepted');
-  document.getElementById('cookie-banner').style.display = 'none';
-}
-function cookieDecline() {
-  localStorage.setItem('cookie_consent', 'declined');
-  document.getElementById('cookie-banner').style.display = 'none';
-  if (window.posthog) { posthog.opt_out_capturing(); }
-}
+  // Cookie banner
+  (function() {
+    if (!localStorage.getItem('cookie_consent')) {
+      setTimeout(function() {
+        document.getElementById('cookieBar').classList.add('show');
+      }, 1200);
+    }
+  })();
+  function cookieChoice(accepted) {
+    localStorage.setItem('cookie_consent', accepted ? 'accepted' : 'declined');
+    document.getElementById('cookieBar').classList.remove('show');
+    if (accepted && window.posthog) { posthog.opt_in_capturing(); }
+    if (!accepted && window.posthog) { posthog.opt_out_capturing(); }
+  }
+
+  // Hamburger menu
+  var burger = document.getElementById('navBurger');
+  var mob    = document.getElementById('navMob');
+  burger.addEventListener('click', function() {
+    burger.classList.toggle('open');
+    if (mob.classList.contains('open')) {
+      mob.classList.remove('open');
+      mob.style.display = '';
+    } else {
+      mob.style.display = 'flex';
+      requestAnimationFrame(function() { mob.classList.add('open'); });
+    }
+  });
+
+  // Scroll reveal + stagger trigger
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll(
+    '.reveal, .stats-bar, .prob-grid, .hiw-steps, .feat-grid, .comply-badges'
+  ).forEach(function(el) { obs.observe(el); });
 </script>
 
+<!-- PostHog Analytics -->
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP', {
+  api_host: 'https://us.i.posthog.com',
+  person_profiles: 'identified_only',
+});
+</script>
+
+<!-- Backend Form Submit -->
 <script>
 var API = 'https://carely-backend-production.up.railway.app';
 
@@ -1023,10 +1303,10 @@ function handleSubmit(e) {
         success.style.cssText = 'text-align:center;padding:32px 0;';
         var h = document.createElement('h3');
         h.textContent = 'Application received!';
-        h.style.cssText = 'color:#028090;font-size:1.3rem;font-weight:800;margin-bottom:12px;';
+        h.style.cssText = 'color:#44abad;font-size:1.3rem;font-weight:800;margin-bottom:12px;';
         var p = document.createElement('p');
-        p.textContent = "We review each application personally and will be in touch within 2 business days.";
-        p.style.color = '#6b8fa3';
+        p.textContent = 'We review each application personally and will be in touch within 2 business days.';
+        p.style.color = '#7aaabb';
         success.appendChild(h);
         success.appendChild(p);
         document.getElementById('partner-form').parentNode.insertBefore(success, document.getElementById('partner-form').nextSibling);

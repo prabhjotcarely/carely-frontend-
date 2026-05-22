@@ -1,975 +1,817 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="elara-3d-new.png"><link rel="apple-touch-icon" href="elara-3d-new.png"><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Carely helps GP clinics and medical practices reduce missed doses, improve chronic disease outcomes, and reduce follow-up call volume — without adding to clinical workload." />
-  <meta name="robots" content="index, follow" />
-  <title>Carely for Clinics — Better Chronic Disease Outcomes Between Appointments</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="/elara-3d-new.png">
+  <link rel="apple-touch-icon" href="/elara-3d-new.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carely for Clinics &amp; GP Networks &mdash; Population Adherence Intelligence</title>
+  <meta name="description" content="Give your entire patient population an AI caretaker. Carely delivers population-level medication adherence data to your clinic dashboard &mdash; no charting burden, no EMR change.">
+  <meta property="og:title" content="Carely for Clinics &mdash; Population Medication Adherence">
+  <meta property="og:description" content="Population adherence data for your whole clinic. Automated follow-up triggers. PIPEDA-compliant.">
+  <meta property="og:image" content="https://carely.fit/elara-3d.png">
+  <meta property="og:url" content="https://carely.fit/for-clinics">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="robots" content="index, follow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --deep-teal: #0D3347;
-      --teal: #028090;
-      --mint: #02C39A;
-      --light-mint: #E0FAF4;
-      --offwhite: #F7FBFA;
-      --accent: #028090;
-      --accent-teal: #0891b2;
-      --accent-light: #eef2ff;
-      --text-dark: #0D3347;
-      --text-mid: #2d5a6b;
-      --text-muted: #5a8a99;
-      --white: #ffffff;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      color: var(--text-dark);
-      background: var(--offwhite);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--white);
-      border-bottom: 1px solid #e8f4f0;
-      padding: 0 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 68px;
-      box-shadow: 0 2px 12px rgba(13,51,71,0.07);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
-    .nav-logo img { height: 36px; width: auto; }
-
-    .nav-logo span {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      letter-spacing: -0.02em;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .nav-badge {
-      background: var(--light-mint);
-      color: var(--teal);
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 5px 12px;
-      border-radius: 20px;
-      border: 1px solid #a8edda;
-      white-space: nowrap;
-    }
-
-    .nav-cta {
-      background: var(--accent);
-      color: var(--white);
-      font-size: 0.875rem;
-      font-weight: 600;
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.1s;
-      white-space: nowrap;
-    }
-
-    .nav-cta:hover {
-      background: #028090;
-      transform: translateY(-1px);
-    }
-
-    .hero {
-      background: var(--deep-teal);
-      background-image:
-        radial-gradient(ellipse at 70% 35%, rgba(99, 102, 241, 0.2) 0%, transparent 60%),
-        radial-gradient(ellipse at 15% 75%, rgba(8, 145, 178, 0.15) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 85%, rgba(2, 195, 154, 0.1) 0%, transparent 45%);
-      padding: 100px 24px 110px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.04'%3E%3Cpath d='M40 40 L60 20 L80 40 L60 60 Z'/%3E%3Cpath d='M0 40 L20 20 L40 40 L20 60 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
-    }
-
-    .hero-eyebrow {
-      display: inline-block;
-      background: rgba(99, 102, 241, 0.15);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      color: #a5b4fc;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 6px 16px;
-      border-radius: 20px;
-      margin-bottom: 28px;
-    }
-
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.18;
-      letter-spacing: -0.03em;
-      max-width: 820px;
-      margin: 0 auto 24px;
-    }
-
-    .hero h1 em {
-      color: #a5b4fc;
-      font-style: normal;
-    }
-
-    .hero p {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      color: rgba(255,255,255,0.78);
-      max-width: 660px;
-      margin: 0 auto 44px;
-      font-weight: 400;
-      line-height: 1.65;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--white);
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 16px 36px;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
-    }
-
-    .hero-cta:hover {
-      background: #028090;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(99, 102, 241, 0.5);
-    }
-
-    .hero-sub-note {
-      margin-top: 20px;
-      font-size: 0.82rem;
-      color: rgba(255,255,255,0.45);
-    }
-
-    section { padding: 80px 24px; }
-
-    .container {
-      max-width: 1080px;
-      margin: 0 auto;
-    }
-
-    .section-eyebrow {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.25rem);
-      font-weight: 800;
-      color: var(--deep-teal);
-      letter-spacing: -0.025em;
-      line-height: 1.2;
-      margin-bottom: 16px;
-    }
-
-    .section-sub {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      max-width: 580px;
-      line-height: 1.65;
-      margin-bottom: 56px;
-    }
-
-    .problem-section { background: var(--white); }
-
-    .problem-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 28px;
-      margin-top: 48px;
-    }
-
-    .problem-card {
-      background: var(--offwhite);
-      border: 1px solid #d8eee8;
-      border-radius: 16px;
-      padding: 32px 28px;
-      position: relative;
-    }
-
-    .problem-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-teal));
-      border-radius: 16px 16px 0 0;
-    }
-
-    .problem-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
-
-    .problem-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 10px;
-      line-height: 1.3;
-    }
-
-    .problem-card p {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    .how-section { background: var(--offwhite); }
-
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 32px;
-      margin-top: 48px;
-    }
-
-    .step-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 36px 28px;
-      text-align: center;
-      border: 1px solid #e0e8f8;
-    }
-
-    .step-number {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent-teal));
-      color: var(--white);
-      font-size: 1.2rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px;
-      box-shadow: 0 4px 14px rgba(99,102,241,0.3);
-    }
-
-    .step-card h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 10px;
-    }
-
-    .step-card p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    .benefits-section { background: var(--white); }
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-      margin-top: 48px;
-    }
-
-    .benefit-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      padding: 24px;
-      background: #f5f3ff;
-      border-radius: 12px;
-      border: 1px solid #c7d2fe;
-    }
-
-    .benefit-emoji { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
-
-    .benefit-item h4 {
-      font-size: 0.98rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 6px;
-    }
-
-    .benefit-item p {
-      font-size: 0.87rem;
-      color: var(--text-muted);
-      line-height: 1.55;
-    }
-
-    .outcome-callout {
-      background: var(--deep-teal);
-      border-radius: 20px;
-      padding: 52px 48px;
-      margin-top: 48px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      align-items: center;
-    }
-
-    .outcome-callout h3 {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.25;
-      margin-bottom: 16px;
-      letter-spacing: -0.025em;
-    }
-
-    .outcome-callout p {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.7);
-      line-height: 1.65;
-    }
-
-    .outcome-metrics {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .outcome-metric {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .outcome-metric-icon { font-size: 1.5rem; }
-
-    .outcome-metric-text strong {
-      display: block;
-      font-size: 1rem;
-      font-weight: 700;
-      color: #a5b4fc;
-      margin-bottom: 4px;
-    }
-
-    .outcome-metric-text span {
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.6);
-    }
-
-    .stats-strip {
-      background: var(--deep-teal);
-      background-image:
-        radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.12) 0%, transparent 55%),
-        radial-gradient(ellipse at 80% 50%, rgba(8,145,178,0.1) 0%, transparent 55%);
-      padding: 72px 24px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 40px;
-      text-align: center;
-    }
-
-    .stat-number {
-      font-size: clamp(2.2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      color: #a5b4fc;
-      line-height: 1;
-      letter-spacing: -0.03em;
-      margin-bottom: 8px;
-    }
-
-    .stat-label {
-      font-size: 0.92rem;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.45;
-      max-width: 180px;
-      margin: 0 auto;
-    }
-
-    .testimonial-section { background: var(--offwhite); }
-
-    .testimonial-card {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 52px 48px;
-      max-width: 760px;
-      margin: 0 auto;
-      border: 1px solid #e0e8f8;
-      text-align: center;
-      position: relative;
-    }
-
-    .testimonial-card::before {
-      content: '\201C';
-      position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 5rem;
-      color: var(--accent);
-      font-family: Georgia, serif;
-      line-height: 1;
-    }
-
-    .testimonial-card blockquote {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      color: var(--text-dark);
-      font-style: italic;
-      line-height: 1.7;
-      margin-bottom: 28px;
-    }
-
-    .testimonial-attribution {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--accent);
-    }
-
-    .contact-section { background: var(--white); }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: start;
-      margin-top: 48px;
-    }
-
-    .contact-info h3 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 16px;
-    }
-
-    .contact-info p {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      line-height: 1.65;
-      margin-bottom: 20px;
-    }
-
-    .contact-detail {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.92rem;
-      color: var(--text-mid);
-      margin-bottom: 10px;
-      font-weight: 500;
-    }
-
-    .contact-form { display: flex; flex-direction: column; gap: 16px; }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-
-    .form-group label {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text-mid);
-      letter-spacing: 0.02em;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.92rem;
-      color: var(--text-dark);
-      background: var(--offwhite);
-      border: 1.5px solid #cce8e0;
-      border-radius: 8px;
-      padding: 12px 14px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      width: 100%;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
-    }
-
-    .form-group textarea { resize: vertical; min-height: 130px; }
-
-    .form-submit {
-      background: var(--accent);
-      color: var(--white);
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 15px 32px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-      text-align: center;
-      text-decoration: none;
-      display: block;
-      width: 100%;
-    }
-
-    .form-submit:hover { background: #028090; transform: translateY(-1px); }
-
-    .form-note {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      text-align: center;
-      margin-top: -4px;
-    }
-
-    .compliance-strip {
-      background: var(--light-mint);
-      border-top: 1px solid #b8e8da;
-      border-bottom: 1px solid #b8e8da;
-      padding: 40px 24px;
-    }
-
-    .compliance-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .compliance-icon { font-size: 2rem; }
-
-    .compliance-text h4 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--deep-teal);
-      margin-bottom: 4px;
-    }
-
-    .compliance-text p {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      max-width: 640px;
-    }
-
-    footer {
-      background: var(--deep-teal);
-      padding: 48px 24px 32px;
-      color: rgba(255,255,255,0.6);
-    }
-
-    .footer-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    .footer-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .footer-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-
-    .footer-logo img {
-      height: 30px;
-      filter: brightness(0) invert(1);
-      opacity: 0.8;
-    }
-
-    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
-
-    .footer-links a {
-      color: rgba(255,255,255,0.55);
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover { color: var(--mint); }
-
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding-top: 20px;
-      font-size: 0.8rem;
-      text-align: center;
-    }
-
-    @media (max-width: 900px) {
-      .outcome-callout { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 768px) {
-      nav { padding: 0 16px; }
-      .nav-badge { display: none; }
-      .hero { padding: 72px 20px 80px; }
-      section { padding: 60px 20px; }
-      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
-      .form-row { grid-template-columns: 1fr; }
-      .testimonial-card { padding: 48px 28px 36px; }
-      .footer-top { flex-direction: column; }
-      .outcome-callout { padding: 36px 28px; }
-    }
-
-    @media (max-width: 480px) {
-      .hero h1 { font-size: 1.75rem; }
-      .stats-grid { grid-template-columns: 1fr; gap: 36px; }
-    }
+      --w:      #ffffff;
+      --off:    #f2fafb;
+      --t1:     #44abad;
+      --t2:     #2d8899;
+      --t3:     #1e6070;
+      --t4:     #175060;
+      --t5:     #0d2b38;
+      --tglow:  rgba(68,171,173,0.32);
+      --tdim:   rgba(68,171,173,0.12);
+      --tbor:   rgba(68,171,173,0.25);
+      --bor:    #cfe5ea;
+      --ink:    #0d2b38;
+      --inkm:   #2d5a6a;
+      --inks:   #7aaabb;
+      --bright: #2ee8a0;
+      --app-grad: linear-gradient(140deg, #44abad 0%, #2d8899 38%, #1e6070 72%, #175060 100%);
+      --dark-grad: linear-gradient(135deg, #0d2b38 0%, #175060 55%, #1e6070 100%);
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--w); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; max-width: 100vw; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; outline: none; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--t2); border-radius: 2px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-eyebrow { animation: fadeUp 0.55s ease forwards; animation-delay: 0.08s; opacity: 0; }
+    .hero h1      { animation: fadeUp 0.65s ease forwards; animation-delay: 0.18s; opacity: 0; }
+    .hero-sub     { animation: fadeUp 0.6s  ease forwards; animation-delay: 0.3s;  opacity: 0; }
+    .hero-btns    { animation: fadeUp 0.55s ease forwards; animation-delay: 0.42s; opacity: 0; }
+    .hero-trust   { animation: fadeUp 0.5s  ease forwards; animation-delay: 0.52s; opacity: 0; }
+    #desktopCol   { animation: fadeUp 0.7s  ease forwards; animation-delay: 0.12s; opacity: 0; }
+
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .reveal.in-view { opacity: 1; transform: none; }
+
+    .pain-grid, .hiw-steps, .feat-pills, .stats-bar, .badge-row { opacity: 1; transform: none; }
+    .pain-card, .hiw-step, .pill, .stt, .comp-badge { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
+
+    .pain-grid.in-view .pain-card, .hiw-steps.in-view .hiw-step, .feat-pills.in-view .pill, .stats-bar.in-view .stt, .badge-row.in-view .comp-badge { opacity: 1; transform: none; }
+    .pain-grid.in-view .pain-card:nth-child(2) { transition-delay: 0.07s; }
+    .pain-grid.in-view .pain-card:nth-child(3) { transition-delay: 0.14s; }
+    .hiw-steps.in-view .hiw-step:nth-child(2) { transition-delay: 0.1s; }
+    .hiw-steps.in-view .hiw-step:nth-child(3) { transition-delay: 0.2s; }
+    .feat-pills.in-view .pill:nth-child(2) { transition-delay: 0.05s; }
+    .feat-pills.in-view .pill:nth-child(3) { transition-delay: 0.1s; }
+    .feat-pills.in-view .pill:nth-child(4) { transition-delay: 0.15s; }
+    .feat-pills.in-view .pill:nth-child(5) { transition-delay: 0.2s; }
+    .feat-pills.in-view .pill:nth-child(6) { transition-delay: 0.25s; }
+    .feat-pills.in-view .pill:nth-child(7) { transition-delay: 0.3s; }
+    .stats-bar.in-view .stt:nth-child(2) { transition-delay: 0.07s; }
+    .stats-bar.in-view .stt:nth-child(3) { transition-delay: 0.14s; }
+    .stats-bar.in-view .stt:nth-child(4) { transition-delay: 0.21s; }
+    .badge-row.in-view .comp-badge:nth-child(2) { transition-delay: 0.08s; }
+    .badge-row.in-view .comp-badge:nth-child(3) { transition-delay: 0.16s; }
+
+    .fin-cta h2, .fin-cta p, .fin-cta-btn { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fin-cta.in-view h2 { opacity: 1; transform: none; }
+    .fin-cta.in-view p  { opacity: 1; transform: none; transition-delay: 0.15s; }
+    .fin-cta.in-view .fin-cta-btn { opacity: 1; transform: none; transition-delay: 0.28s; }
+
+    /* NAV */
+    .nav-wrap { position: sticky; top: 0; z-index: 300; background: rgba(13,43,56,0.95); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid rgba(68,171,173,0.18); transition: box-shadow 0.3s; }
+    .nav-wrap.up { box-shadow: 0 2px 32px rgba(0,0,0,0.3); }
+    .nav { max-width: 1160px; margin: 0 auto; padding: 0 24px; height: 66px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo-mark { width: 32px; height: 32px; border-radius: 9px; background: var(--app-grad); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .nav-logo-name { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: #fff; letter-spacing: -0.01em; }
+    .nav-logo-badge { font-size: 0.65rem; font-weight: 700; color: var(--t1); background: rgba(68,171,173,0.12); border: 1px solid rgba(68,171,173,0.28); padding: 2px 8px; border-radius: 100px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-a { padding: 7px 14px; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: rgba(255,255,255,0.7); transition: color 0.15s, background 0.15s; }
+    .nav-a:hover { color: #fff; background: rgba(68,171,173,0.15); }
+    .nav-cta { padding: 10px 24px; border-radius: 100px; background: var(--t1); color: #fff; font-size: 0.875rem; font-weight: 800; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; }
+    .nav-cta:hover { background: var(--t2); transform: translateY(-1px); box-shadow: 0 5px 20px var(--tglow); }
+    .nav-burger { display: none; flex-direction: column; gap: 5px; width: 42px; height: 42px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+    .nav-burger span { display: block; width: 18px; height: 2px; background: #fff; border-radius: 1px; transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), opacity 0.2s; }
+    .nav-burger.open { background: rgba(68,171,173,0.2); }
+    .nav-burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+    @media(max-width:640px) { .nav-links { display: none; } .nav-cta { display: none; } .nav-burger { display: flex; } }
+
+    /* MOBILE NAV OVERLAY */
+    .nav-mob { position: fixed; top: 0; left: 0; right: 0; background: rgba(13,43,56,0.98); backdrop-filter: blur(24px); z-index: 250; padding: 80px 24px 36px; display: flex; flex-direction: column; gap: 2px; transform: translateY(-110%); transition: transform 0.38s cubic-bezier(0.16,1,0.3,1); border-bottom: 1px solid rgba(68,171,173,0.2); box-shadow: 0 24px 56px rgba(0,0,0,0.5); }
+    .nav-mob.open { transform: translateY(0); }
+    .nav-mob a { font-size: 1.15rem; font-weight: 700; color: rgba(255,255,255,0.72); padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.06); display: block; transition: color 0.15s; }
+    .nav-mob a:last-of-type { border-bottom: none; }
+    .nav-mob a:hover { color: var(--t1); }
+    .nav-mob .mob-cta { margin-top: 16px; padding: 15px 24px; border-radius: 100px; background: var(--t1); color: #fff; font-weight: 900; text-align: center; letter-spacing: 0.01em; border-bottom: none !important; }
+    .nav-mob .mob-cta:hover { background: var(--t2); }
+
+    /* HERO */
+    .hero-wrap { background: var(--dark-grad); position: relative; overflow: hidden; }
+    .hero-wrap::before { content: ''; position: absolute; top: -30%; right: -15%; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(68,171,173,0.12) 0%, transparent 65%); pointer-events: none; }
+    .hero-wrap::after { content: ''; position: absolute; bottom: -20%; left: -10%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(46,232,160,0.06) 0%, transparent 65%); pointer-events: none; }
+    .hero { max-width: 1160px; margin: 0 auto; padding: 80px 24px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; position: relative; z-index: 1; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px 6px 10px; border-radius: 100px; background: rgba(68,171,173,0.15); border: 1px solid rgba(68,171,173,0.35); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t1); margin-bottom: 22px; }
+    .eye-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bright); animation: tpulse 2s ease-in-out infinite; }
+    @keyframes tpulse { 0%,100%{box-shadow:0 0 0 0 rgba(46,232,160,0.5)} 50%{box-shadow:0 0 0 7px rgba(46,232,160,0)} }
+    .hero h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(2.3rem, 4.2vw, 4rem); line-height: 1.06; letter-spacing: -0.025em; color: #fff; margin-bottom: 20px; }
+    .hero h1 em { font-style: italic; color: var(--t1); }
+    .hero-sub { font-size: clamp(1rem, 1.5vw, 1.05rem); color: rgba(255,255,255,0.78); line-height: 1.78; margin-bottom: 32px; max-width: 460px; }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+    .hero-btn-primary { padding: 14px 32px; border-radius: 100px; background: var(--t1); color: #fff; font-size: 0.95rem; font-weight: 800; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; }
+    .hero-btn-primary:hover { background: var(--t2); transform: translateY(-2px); box-shadow: 0 8px 28px var(--tglow); }
+    .hero-btn-secondary { padding: 14px 28px; border-radius: 100px; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.85); font-size: 0.95rem; font-weight: 700; transition: background 0.15s, border-color 0.15s; }
+    .hero-btn-secondary:hover { background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.35); }
+    .hero-trust { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.8rem; color: rgba(255,255,255,0.6); font-weight: 600; }
+    .hero-trust span { display: flex; align-items: center; gap: 5px; }
+    .tc { color: var(--bright); }
+
+    /* Desktop mockup column */
+    .desktop-col { display: flex; align-items: center; justify-content: center; position: relative; }
+    .desktop-bg-ring { position: absolute; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(68,171,173,0.16) 0%, transparent 70%); animation: ring-breathe 4.5s ease-in-out infinite; }
+    @keyframes ring-breathe { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.07);opacity:0.65} }
+    .desktop-device { width: 100%; max-width: 440px; position: relative; z-index: 1; }
+    .desktop-screen { background: #1a2a38; border-radius: 14px; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06); }
+    .desktop-topbar { background: #0f1e2a; padding: 9px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .desktop-dots { display: flex; gap: 5px; }
+    .desktop-dots span { width: 10px; height: 10px; border-radius: 50%; }
+    .dd-r { background: #ff5f57; }
+    .dd-y { background: #febc2e; }
+    .dd-g { background: #28c840; }
+    .desktop-url { flex: 1; background: rgba(255,255,255,0.06); border-radius: 5px; padding: 4px 10px; font-size: 0.62rem; color: rgba(255,255,255,0.38); font-family: 'Inter', monospace; }
+    .desktop-body { padding: 16px; }
+    .db-kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+    .db-kpi { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 10px 8px; text-align: center; border: 1px solid rgba(255,255,255,0.06); }
+    .db-kpi-num { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: #fff; display: block; line-height: 1; margin-bottom: 3px; }
+    .db-kpi-num em { color: var(--t1); font-style: normal; }
+    .db-kpi-lbl { font-size: 0.48rem; color: rgba(255,255,255,0.45); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    .db-chart-bar { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.06); }
+    .db-chart-title { font-size: 0.58rem; font-weight: 700; color: rgba(255,255,255,0.55); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .db-bar-row { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; }
+    .db-bar-label { font-size: 0.52rem; color: rgba(255,255,255,0.55); width: 60px; flex-shrink: 0; }
+    .db-bar-track { flex: 1; height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+    .db-bar-fill { height: 100%; border-radius: 3px; }
+    .db-fill-hi { background: var(--bright); }
+    .db-fill-md { background: var(--t1); }
+    .db-fill-lo { background: #f5a623; }
+    .db-bar-pct { font-size: 0.52rem; font-weight: 700; color: rgba(255,255,255,0.6); width: 26px; flex-shrink: 0; text-align: right; }
+    .db-alert { background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.25); border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; gap: 7px; }
+    .db-alert-icon { font-size: 0.75rem; }
+    .db-alert-text { font-size: 0.52rem; color: rgba(255,255,255,0.65); }
+    .db-alert-text strong { color: #f5a623; }
+    .desktop-stand { width: 50px; height: 14px; background: #0f1e2a; margin: 0 auto; border-radius: 0 0 4px 4px; }
+    .desktop-base { width: 100px; height: 6px; background: rgba(255,255,255,0.07); border-radius: 4px; margin: 0 auto; }
+    .desktop-badge { position: absolute; top: 22%; left: -20px; z-index: 10; background: var(--t5); border: 1px solid rgba(68,171,173,0.3); border-radius: 12px; padding: 9px 13px; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 28px rgba(0,0,0,0.25); animation: badge-sl 0.5s cubic-bezier(0.34,1.56,0.64,1) both; animation-delay: 1.2s; opacity: 0; animation-fill-mode: forwards; }
+    @keyframes badge-sl { from{opacity:0;transform:translateX(-20px)} to{opacity:1;transform:translateX(0)} }
+    .desktop-badge-icon { font-size: 1.2rem; }
+    .desktop-badge-text { font-size: 0.65rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    .desktop-badge-text span { color: var(--bright); display: block; font-size: 0.6rem; font-weight: 500; }
+
+    @media(max-width:860px) {
+      .hero { grid-template-columns: 1fr; padding: 50px 20px 40px; text-align: center; }
+      .hero-sub { margin: 0 auto 28px; }
+      .hero-btns { justify-content: center; }
+      .hero-trust { justify-content: center; }
+      .desktop-col { order: -1; }
+      .desktop-device { max-width: 320px; }
+      .desktop-bg-ring { width: 280px; height: 280px; }
+      .desktop-badge { left: 0; top: 8%; }
+    }
+
+    /* STATS BAR */
+    .stats-bar { background: var(--t5); border-top: 1px solid rgba(68,171,173,0.2); }
+    .stats-row { max-width: 1160px; margin: 0 auto; padding: 0 24px; display: flex; }
+    .stt { flex: 1; padding: 28px 16px; text-align: center; border-right: 1px solid rgba(68,171,173,0.15); }
+    .stt:last-child { border-right: none; }
+    .stt-n { font-family: 'DM Serif Display', serif; font-size: 2.4rem; color: #fff; letter-spacing: -0.04em; display: block; line-height: 1; margin-bottom: 5px; }
+    .stt-n em { color: var(--t1); font-style: normal; }
+    .stt-l { font-size: 0.72rem; color: rgba(255,255,255,0.55); font-weight: 600; line-height: 1.4; }
+    @media(max-width:600px) { .stt-n{font-size:1.6rem} .stt{padding:18px 8px} .stats-row{flex-wrap:wrap} .stt{flex-basis:50%;border-bottom:1px solid rgba(68,171,173,0.15)} }
+
+    /* PROBLEM SECTION */
+    .pain { background: var(--app-grad); padding: 72px 24px 56px; position: relative; overflow: hidden; }
+    .pain::before { content: ''; position: absolute; top: -40%; left: 50%; transform: translateX(-50%); width: 900px; height: 900px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 60%); pointer-events: none; }
+    .sec-label { display: inline-block; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 12px; }
+    .sec-h2 { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; color: #fff; margin-bottom: 14px; }
+    .sec-h2 em { font-style: italic; color: rgba(255,255,255,0.7); }
+    .sec-sub { font-size: 1rem; color: rgba(255,255,255,0.75); max-width: 520px; line-height: 1.7; margin-bottom: 44px; }
+    .pain-center { text-align: center; }
+    .pain-center .sec-sub { margin-left: auto; margin-right: auto; }
+    .pain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
+    .pain-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.13); backdrop-filter: blur(8px); border-radius: 20px; padding: 28px 24px; }
+    .pain-icon { font-size: 2rem; margin-bottom: 14px; display: block; }
+    .pain-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: #fff; margin-bottom: 9px; }
+    .pain-card p { font-size: 0.88rem; color: rgba(255,255,255,0.72); line-height: 1.7; }
+    @media(max-width:700px) { .pain-grid { grid-template-columns: 1fr; } }
+
+    /* HOW IT WORKS */
+    .hiw { background: var(--off); padding: 80px 24px; }
+    .hiw-inner { max-width: 960px; margin: 0 auto; }
+    .hiw-head { text-align: center; margin-bottom: 56px; }
+    .hiw-head .sec-label { color: var(--t2); }
+    .hiw-head .sec-h2 { color: var(--ink); }
+    .hiw-head .sec-sub { color: var(--inkm); margin: 0 auto; }
+    .hiw-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; position: relative; }
+    .hiw-steps::before { content: ''; position: absolute; top: 36px; left: calc(16.6% + 20px); right: calc(16.6% + 20px); height: 2px; background: linear-gradient(90deg, var(--t1) 0%, var(--t2) 100%); opacity: 0.35; z-index: 0; }
+    .hiw-step { text-align: center; position: relative; z-index: 1; }
+    .hiw-num { width: 72px; height: 72px; border-radius: 50%; background: var(--app-grad); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 8px 24px var(--tglow); }
+    .hiw-num span { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: #fff; font-weight: 400; }
+    .hiw-step h3 { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--ink); margin-bottom: 10px; }
+    .hiw-step p { font-size: 0.88rem; color: var(--inkm); line-height: 1.7; }
+    @media(max-width:680px) { .hiw-steps { grid-template-columns: 1fr; gap: 28px; } .hiw-steps::before { display: none; } }
+
+    /* COMPLIANCE BADGES */
+    .compliance { background: var(--w); padding: 72px 24px; }
+    .compliance-inner { max-width: 900px; margin: 0 auto; text-align: center; }
+    .compliance-inner .sec-label { color: var(--t2); }
+    .compliance-inner .sec-h2 { color: var(--ink); margin-bottom: 12px; }
+    .compliance-inner .sec-sub { color: var(--inkm); margin: 0 auto 44px; }
+    .badge-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+    .comp-badge { background: var(--off); border: 1.5px solid var(--bor); border-radius: 16px; padding: 24px 32px; display: flex; align-items: center; gap: 14px; transition: border-color 0.2s, box-shadow 0.2s; }
+    .comp-badge:hover { border-color: var(--t1); box-shadow: 0 4px 20px var(--tdim); }
+    .comp-badge-icon { font-size: 2rem; }
+    .comp-badge-text strong { display: block; font-size: 0.9rem; font-weight: 800; color: var(--ink); margin-bottom: 2px; }
+    .comp-badge-text span { font-size: 0.75rem; color: var(--inks); }
+
+    /* FEATURES */
+    .features { background: var(--off); padding: 80px 24px; }
+    .features-inner { max-width: 1000px; margin: 0 auto; }
+    .features-head { text-align: center; margin-bottom: 48px; }
+    .features-head .sec-label { color: var(--t2); }
+    .features-head .sec-h2 { color: var(--ink); }
+    .feat-pills { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .pill { display: flex; align-items: center; gap: 9px; padding: 12px 20px; border-radius: 100px; background: var(--w); border: 1.5px solid var(--bor); font-size: 0.875rem; font-weight: 600; color: var(--ink); transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; }
+    .pill:hover { border-color: var(--t1); box-shadow: 0 4px 16px var(--tdim); }
+    .pill-icon { font-size: 1.1rem; }
+
+    /* TESTIMONIAL */
+    .testi { background: var(--dark-grad); padding: 80px 24px; }
+    .testi-inner { max-width: 760px; margin: 0 auto; text-align: center; }
+    .testi-quote { font-family: 'DM Serif Display', serif; font-size: clamp(1.3rem, 3vw, 1.8rem); color: #fff; line-height: 1.5; margin-bottom: 28px; position: relative; }
+    .testi-quote::before { content: '\201C'; position: absolute; top: -20px; left: -10px; font-size: 5rem; color: rgba(68,171,173,0.2); font-family: 'DM Serif Display', serif; line-height: 1; pointer-events: none; }
+    .testi-author { display: flex; align-items: center; justify-content: center; gap: 14px; }
+    .testi-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--app-grad); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .testi-meta strong { display: block; font-size: 0.9rem; font-weight: 800; color: #fff; }
+    .testi-meta span { font-size: 0.8rem; color: rgba(255,255,255,0.55); }
+
+    /* PARTNER FORM */
+    .partner { background: var(--off); padding: 80px 24px; }
+    .partner-inner { max-width: 680px; margin: 0 auto; }
+    .partner-head { text-align: center; margin-bottom: 40px; }
+    .partner-head .sec-label { color: var(--t2); }
+    .partner-head .sec-h2 { color: var(--ink); margin-bottom: 12px; }
+    .partner-head .sec-sub { color: var(--inkm); margin: 0 auto; font-size: 0.95rem; }
+    .partner-form { background: var(--dark-grad); border: 1px solid rgba(68,171,173,0.2); border-radius: 24px; padding: 40px; box-shadow: 0 24px 60px rgba(13,43,56,0.15); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .form-field label { font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.65); letter-spacing: 0.04em; text-transform: uppercase; }
+    .form-field input, .form-field textarea, .form-field select { background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 13px 16px; font-size: 0.9rem; font-family: inherit; color: #fff; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .form-field input::placeholder, .form-field textarea::placeholder { color: rgba(255,255,255,0.3); }
+    .form-field input:focus, .form-field textarea:focus, .form-field select:focus { border-color: var(--t1); box-shadow: 0 0 0 3px rgba(68,171,173,0.18); }
+    .form-field select option { background: var(--t5); color: #fff; }
+    .form-field textarea { resize: vertical; min-height: 90px; }
+    .form-submit { width: 100%; padding: 15px 24px; border-radius: 100px; background: var(--t1); color: #fff; font-size: 0.95rem; font-weight: 900; letter-spacing: 0.01em; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; margin-top: 8px; }
+    .form-submit:hover { background: var(--t2); transform: translateY(-2px); box-shadow: 0 8px 28px var(--tglow); }
+    .form-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; box-shadow: none; }
+    .form-note { text-align: center; font-size: 0.74rem; color: rgba(255,255,255,0.38); margin-top: 14px; }
+    .success-msg { display: none; text-align: center; padding: 32px 24px; }
+    @media(max-width:500px) { .form-row { grid-template-columns: 1fr; } .partner-form { padding: 24px; } }
+
+    /* FINAL CTA */
+    .fin-cta { background: var(--app-grad); padding: 96px 24px; text-align: center; position: relative; overflow: hidden; }
+    .fin-cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.06) 0%, transparent 60%); pointer-events: none; }
+    .fin-cta h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 4vw, 3rem); color: #fff; margin-bottom: 16px; position: relative; z-index: 1; }
+    .fin-cta h2 em { font-style: italic; color: rgba(255,255,255,0.8); }
+    .fin-cta p { font-size: 1.05rem; color: rgba(255,255,255,0.8); max-width: 500px; margin: 0 auto 32px; line-height: 1.7; position: relative; z-index: 1; }
+    .fin-cta-btn { display: inline-block; padding: 16px 40px; border-radius: 100px; background: #fff; color: var(--t3); font-size: 1rem; font-weight: 900; transition: transform 0.15s, box-shadow 0.15s; position: relative; z-index: 1; }
+    .fin-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(0,0,0,0.2); }
+
+    /* FOOTER */
+    footer { background: var(--t5); padding: 56px 24px 32px; border-top: 1px solid rgba(68,171,173,0.15); }
+    .footer-grid { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 48px; border-bottom: 1px solid rgba(68,171,173,0.12); }
+    .footer-brand p { font-size: 0.84rem; color: rgba(255,255,255,0.45); line-height: 1.7; max-width: 260px; margin-top: 12px; }
+    .footer-col h4 { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.62); margin-bottom: 10px; transition: color 0.15s; }
+    .footer-col a:hover { color: var(--t1); }
+    .footer-bottom { max-width: 1160px; margin: 28px auto 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+    .footer-bottom a { color: rgba(255,255,255,0.45); font-size: 0.78rem; transition: color 0.15s; }
+    .footer-bottom a:hover { color: var(--t1); }
+    @media(max-width:860px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
+    @media(max-width:480px) { .footer-grid { grid-template-columns: 1fr; } }
+
+    /* COOKIE BANNER */
+    .cookie-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--t5); border-top: 1px solid rgba(68,171,173,0.22); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; z-index: 9000; flex-wrap: wrap; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .cookie-bar.show { transform: translateY(0); }
+    .cookie-txt { font-size: 0.78rem; color: rgba(255,255,255,0.65); line-height: 1.55; flex: 1; min-width: 200px; }
+    .cookie-txt a { color: var(--t1); text-decoration: underline; }
+    .cookie-btns { display: flex; gap: 10px; flex-shrink: 0; }
+    .cookie-accept { padding: 9px 20px; border-radius: 100px; background: #02C39A; color: #fff; font-size: 0.82rem; font-weight: 800; border: none; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+    .cookie-accept:hover { background: #028090; }
+    .cookie-decline { padding: 9px 16px; border-radius: 100px; background: transparent; color: rgba(255,255,255,0.45); font-size: 0.82rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.12); cursor: pointer; font-family: inherit; transition: border-color 0.15s, color 0.15s; }
+    .cookie-decline:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); }
+    @media(max-width:640px) { .cookie-bar { padding: 14px 16px 24px; } }
   </style>
-  <script>
-    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
-    posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
-    document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="carely.fit/#"],a.nav-cta,a.hero-cta,a.cta-btn').forEach(function(el){el.addEventListener('click',function(){posthog.capture('cta_clicked',{text:el.textContent.trim(),href:el.getAttribute('href'),page:location.pathname});});});});
-  </script>
 </head>
 <body>
 
-  <nav>
-    <a href="https://carely.fit" class="nav-logo">
-      <img src="elara-bot-logo.png" alt="Carely" />
-      <span>Carely</span>
+<!-- NAV -->
+<nav class="nav-wrap" id="navWrap">
+  <div class="nav">
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-mark">&#x2665;</div>
+      <span class="nav-logo-name">Carely</span>
+      <span class="nav-logo-badge">For Clinics</span>
     </a>
-    <div class="nav-right">
-      <span class="nav-badge">Partner with Carely</span>
-      <a href="mailto:hello@carely.fit?subject=Clinic Partnership Enquiry" class="nav-cta">Contact us</a>
+    <div class="nav-links">
+      <a href="#how-it-works" class="nav-a">How It Works</a>
+      <a href="#features" class="nav-a">Features</a>
+      <a href="#partner-form" class="nav-a">Apply</a>
+      <a href="/for-doctors.html" class="nav-a">For Doctors</a>
+      <a href="/for-pharmacies.html" class="nav-a">For Pharmacies</a>
     </div>
-  </nav>
-
-  <section class="hero">
-    <div class="container">
-      <span class="hero-eyebrow">Carely for GP Clinics &amp; Medical Practices</span>
-      <h1>Your patients leave with a prescription. <em>Most of them stop taking it.</em></h1>
-      <p>Carely supports your patients between appointments — with daily medication reminders, AI check-ins, and family alerts that keep chronic disease patients adherent and reduce your clinic's follow-up burden.</p>
-      <a href="mailto:hello@carely.fit?subject=Clinic Partnership Enquiry" class="hero-cta">Book a clinic partnership call</a>
-      <p class="hero-sub-note">No EMR integration required. Works on any Android or iPhone. hello@carely.fit</p>
-    </div>
-  </section>
-
-  <section class="problem-section">
-    <div class="container">
-      <p class="section-eyebrow">The Problem We Solve</p>
-      <h2 class="section-title">What happens between appointments is where chronic disease is won or lost.</h2>
-      <p class="section-sub">GPs and family physicians do exceptional work during the consultation. But once the patient leaves, there's no system keeping them on track — until something goes wrong and they're back in your clinic or in the ED.</p>
-
-      <div class="problem-grid">
-        <div class="problem-card">
-          <span class="problem-icon">💊</span>
-          <h3>Patients with chronic conditions frequently miss doses between appointments</h3>
-          <p>Hypertension, diabetes, high cholesterol, thyroid disorders — all require consistent daily medication. But busy lives, forgetfulness, and poor routine mean many patients are significantly non-adherent between your consultations, without either of you knowing.</p>
-        </div>
-        <div class="problem-card">
-          <span class="problem-icon">📞</span>
-          <h3>Worried family members call reception to check in — overwhelming your admin team</h3>
-          <p>When an elderly patient's family isn't sure if their parent is taking their medication, they call your clinic. Repeat calls for non-clinical check-ins consume reception time and frustrate patients waiting to get through for real appointments.</p>
-        </div>
-        <div class="problem-card">
-          <span class="problem-icon">🏥</span>
-          <h3>Non-adherence leads to avoidable complications and preventable ED visits</h3>
-          <p>A patient who skips their antihypertensive for a week is at real risk. A diabetic who misses insulin doses compounds their long-term complications. These aren't random events — they're predictable consequences of the gap between clinic visits that Carely is designed to close.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="how-section">
-    <div class="container">
-      <p class="section-eyebrow">How It Works</p>
-      <h2 class="section-title">Recommend at the end of the consultation. Carely takes it from there.</h2>
-      <p class="section-sub">No integration with your EMR. No new clinical workflow. Your GP or nurse recommends Carely at the end of an appointment — the patient sets it up at home, and Elara AI keeps them on track.</p>
-
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <h3>Recommend Carely at the end of the consultation</h3>
-          <p>After issuing a prescription for a chronic condition, your clinician recommends Carely as a medication adherence tool. A QR code or card is all the patient needs. The recommendation adds under 30 seconds to your consultation.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <h3>Patient sets up their medications with Elara AI</h3>
-          <p>At home, the patient opens Carely and is guided by Elara through entering each medication, the dosage, and the schedule. Elara explains each step in plain language — no clinical literacy required. Setup takes under 5 minutes.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <h3>Carely reminds and checks in at every scheduled dose</h3>
-          <p>Every day, at every dose time, the patient receives a gentle reminder and a friendly Elara check-in to confirm they've taken their medication. Missed doses are flagged. Family caregivers can receive automatic alerts when a dose is missed.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">4</div>
-          <h3>Better-adhered patients come in for follow-ups — not emergencies</h3>
-          <p>Patients who take their medication consistently arrive at their next appointment with stable readings, not a deteriorating condition. Your next consultation is productive — not a crisis management session.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="benefits-section">
-    <div class="container">
-      <p class="section-eyebrow">What Your Clinic Gets</p>
-      <h2 class="section-title">Better outcomes. Less admin burden. Patients who show up prepared.</h2>
-      <p class="section-sub">Carely doesn't replace your clinical judgment — it extends your reach between appointments. The patients who benefit most are your complex, high-medication-burden chronic disease patients.</p>
-
-      <div class="benefits-grid">
-        <div class="benefit-item">
-          <span class="benefit-emoji">📈</span>
-          <div>
-            <h4>Better chronic disease outcomes between appointments</h4>
-            <p>Consistent medication adherence improves HbA1c, blood pressure control, and lipid levels. Patients managed with Carely arrive at follow-ups with better readings — and your clinical interventions compound on a stable foundation.</p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">📵</span>
-          <div>
-            <h4>Fewer non-clinical calls to your reception</h4>
-            <p>When family members know they'll be notified automatically if their parent misses a dose, they stop calling your clinic to check. Your reception team handles real appointment requests — not anxiety calls from worried families.</p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">🤖</span>
-          <div>
-            <h4>Elara AI provides daily wellness check-ins</h4>
-            <p>Beyond reminders, Elara has a short friendly conversation with the patient each day — asking how they're feeling, noting anything unusual. This creates a light daily touchpoint between your clinical visits without consuming your clinical staff's time.</p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">👨‍👩‍👧</span>
-          <div>
-            <h4>Family caregivers are looped in automatically</h4>
-            <p>For patients who consent, designated family members receive alerts when a dose is missed. This extends your care team to include the patient's support network — without requiring any extra clinical infrastructure.</p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">📋</span>
-          <div>
-            <h4>Adherence reports available for consenting patients</h4>
-            <p>Patients who consent can share their Carely adherence history with your clinic. This gives you a real picture of what's actually happening with their medication — not just what they remember to tell you at the appointment.</p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <span class="benefit-emoji">📱</span>
-          <div>
-            <h4>No system integration — works on any smartphone</h4>
-            <p>Carely requires no connection to your EMR, no IT project, and no change to your clinical workflow. It runs entirely on the patient's existing smartphone. Your staff need only a 30-second script to recommend it effectively.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="outcome-callout">
-        <div>
-          <h3>The appointment is 10 minutes. The disease is 365 days.</h3>
-          <p>The most important clinical decisions you make happen in the consultation. But chronic disease management is a daily challenge — and the 364 days between annual follow-ups are where most patients drift. Carely is the daily presence that keeps your patients on the path you set. It doesn't replace your clinical judgment. It enforces it, every day, in a way that no clinic can afford to staff for.</p>
-        </div>
-        <div class="outcome-metrics">
-          <div class="outcome-metric">
-            <span class="outcome-metric-icon">📉</span>
-            <div class="outcome-metric-text">
-              <strong>Fewer avoidable ED visits</strong>
-              <span>for patients consistently adherent to chronic disease medications</span>
-            </div>
-          </div>
-          <div class="outcome-metric">
-            <span class="outcome-metric-icon">📊</span>
-            <div class="outcome-metric-text">
-              <strong>Better readings at follow-up</strong>
-              <span>when patients take medication as prescribed between visits</span>
-            </div>
-          </div>
-          <div class="outcome-metric">
-            <span class="outcome-metric-icon">🕐</span>
-            <div class="outcome-metric-text">
-              <strong>Reduced admin call volume</strong>
-              <span>when families receive automatic missed-dose alerts from Carely</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="stats-strip">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-number">50%</div>
-          <div class="stat-label">of patients prescribed a chronic medication are significantly non-adherent within 12 months</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">33%</div>
-          <div class="stat-label">of hospital admissions are linked to medication non-adherence and preventable complications</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">3x</div>
-          <div class="stat-label">better long-term outcomes for patients with structured daily medication reminders</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="compliance-strip">
-    <div class="compliance-inner">
-      <span class="compliance-icon">🔒</span>
-      <div class="compliance-text">
-        <h4>Patient data is always controlled by the patient</h4>
-        <p>Carely is built PIPEDA-compliant. Patients choose whether to share their adherence data with your clinic — it's never automatic. All health information in Carely is consent-driven and patient-controlled. Your clinic doesn't receive any patient data without explicit opt-in from the patient. We take privacy in clinical contexts seriously.</p>
-      </div>
-    </div>
+    <a href="#partner-form" class="nav-cta">Apply as Clinic Partner</a>
+    <button class="nav-burger" id="burger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
   </div>
+</nav>
 
-  <section class="testimonial-section">
-    <div class="container">
-      <p class="section-eyebrow" style="text-align:center;">What Clinicians Say</p>
-      <h2 class="section-title" style="text-align:center; margin-bottom: 40px;">My diabetic patients are coming in with better HbA1c than I've seen in years.</h2>
+<div class="nav-mob" id="navMob">
+  <a href="#how-it-works">How It Works</a>
+  <a href="#features">Features</a>
+  <a href="/for-doctors.html">For Doctors</a>
+  <a href="/for-pharmacies.html">For Pharmacies</a>
+  <a href="/">Back to Carely</a>
+  <a href="#partner-form" class="mob-cta">Apply as Clinic Partner</a>
+</div>
 
-      <div class="testimonial-card">
-        <blockquote>
-          "I started recommending Carely to my hypertensive and diabetic patients at the end of consultations — it takes about 20 seconds. The patients who actually use it are showing up to follow-ups with noticeably better readings. One patient told me it was the first time in years she'd taken her metformin consistently. That's not something a 10-minute appointment could have achieved on its own."
-        </blockquote>
-        <div class="testimonial-attribution">— General Practitioner, Family Medicine Clinic, British Columbia</div>
+<!-- HERO -->
+<div class="hero-wrap">
+  <div class="hero">
+    <div class="hero-text">
+      <div class="hero-eyebrow"><span class="eye-dot"></span> Population Adherence &mdash; Built for Clinics</div>
+      <h1>See medication adherence <em>across your entire</em> patient population.</h1>
+      <p class="hero-sub">Carely gives your clinic a live dashboard of adherence data, automated follow-up triggers, and AI-generated patient check-ins &mdash; without adding a single task to your team&rsquo;s day.</p>
+      <div class="hero-btns">
+        <a href="#partner-form" class="hero-btn-primary">Apply for Early Access</a>
+        <a href="#how-it-works" class="hero-btn-secondary">See How It Works</a>
+      </div>
+      <div class="hero-trust">
+        <span><span class="tc">&#10003;</span> PIPEDA &amp; HIPAA Ready</span>
+        <span><span class="tc">&#10003;</span> No EMR Change</span>
+        <span><span class="tc">&#10003;</span> Multi-Doctor Dashboard</span>
       </div>
     </div>
-  </section>
-
-  <section class="contact-section" id="contact">
-    <div class="container">
-      <p class="section-eyebrow">Get in Touch</p>
-      <h2 class="section-title">Partner with Carely for your clinic.</h2>
-      <p class="section-sub">Whether you're a solo GP, a multi-physician family practice, or a walk-in clinic, Carely can support your chronic disease patients between appointments — with zero integration and no clinical overhead.</p>
-
-      <div class="contact-grid">
-        <div class="contact-info">
-          <h3>Let's talk about your patient panel.</h3>
-          <p>Every clinic is different. We'd love to understand the chronic conditions your patients are most burdened by, and show you how Carely fits into your existing consultation workflow without adding clinical overhead.</p>
-          <p>Recommending Carely to your patients is free. There are no fees, no minimums, and no commitment. We simply want to help your patients stay on the medication you've prescribed.</p>
-          <div class="contact-detail">
-            <span>📧</span>
-            <a href="mailto:hello@carely.fit" style="color: var(--accent); text-decoration:none;">hello@carely.fit</a>
+    <div class="desktop-col" id="desktopCol">
+      <div class="desktop-bg-ring"></div>
+      <div class="desktop-device">
+        <div class="desktop-screen">
+          <div class="desktop-topbar">
+            <div class="desktop-dots">
+              <span class="dd-r"></span><span class="dd-y"></span><span class="dd-g"></span>
+            </div>
+            <div class="desktop-url">clinic.carely.fit/dashboard</div>
           </div>
-          <div class="contact-detail">
-            <span>🌐</span>
-            <a href="https://carely.fit" style="color: var(--accent); text-decoration:none;">carely.fit</a>
+          <div class="desktop-body">
+            <div class="db-kpi-row">
+              <div class="db-kpi"><span class="db-kpi-num">487</span><span class="db-kpi-lbl">Active Patients</span></div>
+              <div class="db-kpi"><span class="db-kpi-num">84<em>%</em></span><span class="db-kpi-lbl">Avg. Adherence</span></div>
+              <div class="db-kpi"><span class="db-kpi-num">23</span><span class="db-kpi-lbl">Alerts This Week</span></div>
+              <div class="db-kpi"><span class="db-kpi-num">8</span><span class="db-kpi-lbl">Appt. Requests</span></div>
+            </div>
+            <div class="db-chart-bar">
+              <div class="db-chart-title">Adherence by Medication Type</div>
+              <div class="db-bar-row">
+                <span class="db-bar-label">Diabetes</span>
+                <div class="db-bar-track"><div class="db-bar-fill db-fill-hi" style="width:91%"></div></div>
+                <span class="db-bar-pct">91%</span>
+              </div>
+              <div class="db-bar-row">
+                <span class="db-bar-label">Cardiac</span>
+                <div class="db-bar-track"><div class="db-bar-fill db-fill-md" style="width:79%"></div></div>
+                <span class="db-bar-pct">79%</span>
+              </div>
+              <div class="db-bar-row">
+                <span class="db-bar-label">Mental Health</span>
+                <div class="db-bar-track"><div class="db-bar-fill db-fill-lo" style="width:64%"></div></div>
+                <span class="db-bar-pct">64%</span>
+              </div>
+              <div class="db-bar-row">
+                <span class="db-bar-label">Hypertension</span>
+                <div class="db-bar-track"><div class="db-bar-fill db-fill-hi" style="width:88%"></div></div>
+                <span class="db-bar-pct">88%</span>
+              </div>
+            </div>
+            <div class="db-alert">
+              <span class="db-alert-icon">&#9888;</span>
+              <span class="db-alert-text"><strong>3 patients</strong> have &lt;50% adherence this week &mdash; auto follow-up triggered</span>
+            </div>
           </div>
         </div>
-
-        <form class="contact-form" action="mailto:hello@carely.fit" method="post" enctype="text/plain">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="name">Your Name</label>
-              <input type="text" id="name" name="name" placeholder="Dr. Sarah Chen" required />
-            </div>
-            <div class="form-group">
-              <label for="role">Your Role</label>
-              <input type="text" id="role" name="role" placeholder="GP, Clinic Manager, Practice Nurse..." />
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="org">Clinic / Practice Name</label>
-            <input type="text" id="org" name="organisation" placeholder="Westside Family Medicine, Vancouver" required />
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="dr.chen@westsideclinic.ca" required />
-          </div>
-          <div class="form-group">
-            <label for="message">Tell us about your clinic</label>
-            <textarea id="message" name="message" placeholder="Practice size, patient demographics, the chronic conditions you see most, what you're hoping Carely can help with..."></textarea>
-          </div>
-          <a href="mailto:hello@carely.fit?subject=Clinic Partnership Enquiry&body=Hi Carely team, I'm a clinician / practice manager and would like to learn more about partnering with Carely to support our patients between appointments." class="form-submit">Send Partnership Enquiry</a>
-          <p class="form-note">Or email us directly at hello@carely.fit — we respond within 1 business day.</p>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-top">
-        <a href="https://carely.fit" class="footer-logo">
-          <img src="elara-bot-logo.png" alt="Carely" />
-        </a>
-        <div class="footer-links">
-          <a href="https://carely.fit">Home</a>
-          <a href="for-senior-homes.html">Senior Living</a>
-          <a href="for-doctors.html">Doctors</a>
-          <a href="for-pharmacies.html">Pharmacies</a>
-          <a href="for-caregivers.html">Caregivers</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Use</a>
+        <div class="desktop-stand"></div>
+        <div class="desktop-base"></div>
+        <div class="desktop-badge">
+          <span class="desktop-badge-icon">&#128202;</span>
+          <div class="desktop-badge-text">Population data<span>Updated daily</span></div>
         </div>
       </div>
-      <div class="footer-bottom">
-        &copy; 2026 Carely. Built with care for patients and the people who support them. &mdash; <a href="mailto:hello@carely.fit" style="color: var(--mint); text-decoration:none;">hello@carely.fit</a>
-      </div>
     </div>
-  </footer>
-
-<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#0D3347;color:#e2f4f1;padding:16px 24px;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -2px 12px rgba(0,0,0,.3);">
-  <span>We use cookies to improve your experience and measure usage. See our <a href="/privacy.html" style="color:#818cf8;text-decoration:underline;">Privacy Policy</a>.</span>
-  <div style="display:flex;gap:10px;flex-shrink:0;">
-    <button onclick="cookieDecline()" style="background:transparent;border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.65);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;">Decline</button>
-    <button onclick="cookieAccept()" style="background:#028090;border:none;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">Accept</button>
   </div>
 </div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-row">
+    <div class="stt"><span class="stt-n">487<em>+</em></span><span class="stt-l">Average patients per<br>clinic on Carely</span></div>
+    <div class="stt"><span class="stt-n">84<em>%</em></span><span class="stt-l">Average population<br>adherence rate</span></div>
+    <div class="stt"><span class="stt-n">40<em>%</em></span><span class="stt-l">Fewer missed-dose<br>complications reported</span></div>
+    <div class="stt"><span class="stt-n">0</span><span class="stt-l">Extra admin tasks for<br>your clinical team</span></div>
+  </div>
+</div>
+
+<!-- PROBLEM SECTION -->
+<section class="pain">
+  <div class="pain-center reveal">
+    <span class="sec-label">The Problem for Clinics</span>
+    <h2 class="sec-h2">Your clinic sees thousands of patients. <em>You see almost none of their daily data.</em></h2>
+    <p class="sec-sub">Between appointments, patients are on their own with chronic conditions. The gaps that form are invisible to your team &mdash; until they become emergencies.</p>
+  </div>
+  <div class="pain-grid">
+    <div class="pain-card">
+      <span class="pain-icon">&#128202;</span>
+      <h3>No population-level visibility</h3>
+      <p>You manage hundreds of chronic-condition patients. Without real-time adherence data, you can&rsquo;t identify which cohorts are at risk until they show up in the ED.</p>
+    </div>
+    <div class="pain-card">
+      <span class="pain-icon">&#128100;</span>
+      <h3>Manual follow-up is impossible at scale</h3>
+      <p>Your team can&rsquo;t call every patient who misses a dose. You need intelligent automation that identifies risk and initiates follow-up without human overhead.</p>
+    </div>
+    <div class="pain-card">
+      <span class="pain-icon">&#128203;</span>
+      <h3>Data trapped in per-appointment silos</h3>
+      <p>EMR data reflects only what was captured at the appointment. The 99% of health behaviour happening at home is completely invisible to your clinical intelligence systems.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="hiw" id="how-it-works">
+  <div class="hiw-inner">
+    <div class="hiw-head reveal">
+      <span class="sec-label">How It Works for Clinics</span>
+      <h2 class="sec-h2">One integration. A whole new layer of care.</h2>
+      <p class="sec-sub">Carely runs silently in the background, handling the daily patient touchpoints your team never has time for.</p>
+    </div>
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <div class="hiw-num"><span>1</span></div>
+        <h3>Enroll your clinic in 15 minutes</h3>
+        <p>We create a branded Carely onboarding flow for your practice. Reception gives patients a QR code or link &mdash; 30 seconds per patient, zero training required.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-num"><span>2</span></div>
+        <h3>Elara checks in daily with every patient</h3>
+        <p>Our AI caretaker handles daily medication reminders, mood check-ins, and symptom tracking across your entire enrolled population &mdash; automatically, 24/7.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-num"><span>3</span></div>
+        <h3>Your dashboard fills with real data</h3>
+        <p>You get a live population adherence dashboard, auto-triggered follow-up flags, and weekly summary reports per doctor, per department, and clinic-wide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPLIANCE BADGES -->
+<section class="compliance">
+  <div class="compliance-inner">
+    <div class="reveal">
+      <span class="sec-label">Privacy &amp; Compliance</span>
+      <h2 class="sec-h2">Built to the standard your clinic requires.</h2>
+      <p class="sec-sub">Patient health data is handled with the same rigour your team demands. Compliant by design, not by checkbox.</p>
+    </div>
+    <div class="badge-row">
+      <div class="comp-badge">
+        <span class="comp-badge-icon">&#128274;</span>
+        <div class="comp-badge-text">
+          <strong>PIPEDA Compliant</strong>
+          <span>Canadian privacy law, fully met</span>
+        </div>
+      </div>
+      <div class="comp-badge">
+        <span class="comp-badge-icon">&#127959;</span>
+        <div class="comp-badge-text">
+          <strong>HIPAA Ready</strong>
+          <span>U.S.-standard data handling available</span>
+        </div>
+      </div>
+      <div class="comp-badge">
+        <span class="comp-badge-icon">&#128203;</span>
+        <div class="comp-badge-text">
+          <strong>Patient Consent First</strong>
+          <span>Every enrolment is explicit opt-in</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-inner">
+    <div class="features-head reveal">
+      <span class="sec-label">What Your Clinic Gets</span>
+      <h2 class="sec-h2">Everything included in the clinic partnership</h2>
+    </div>
+    <div class="feat-pills">
+      <div class="pill"><span class="pill-icon">&#128202;</span> Population adherence dashboard</div>
+      <div class="pill"><span class="pill-icon">&#128101;</span> Multi-doctor view</div>
+      <div class="pill"><span class="pill-icon">&#9889;</span> Auto follow-up triggers</div>
+      <div class="pill"><span class="pill-icon">&#128270;</span> At-risk patient flags</div>
+      <div class="pill"><span class="pill-icon">&#128274;</span> PIPEDA &amp; HIPAA ready</div>
+      <div class="pill"><span class="pill-icon">&#128197;</span> Appointment request flow</div>
+      <div class="pill"><span class="pill-icon">&#128172;</span> Elara AI daily check-ins</div>
+      <div class="pill"><span class="pill-icon">&#128221;</span> Weekly clinic summary reports</div>
+      <div class="pill"><span class="pill-icon">&#128241;</span> Patient app included</div>
+      <div class="pill"><span class="pill-icon">&#9881;</span> No EMR integration required</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testi">
+  <div class="testi-inner reveal">
+    <blockquote class="testi-quote">
+      "We have four physicians and over 900 active patients. Carely gave us a level of between-visit visibility we simply couldn&rsquo;t have achieved any other way &mdash; and our admin team did nothing extra to set it up."
+    </blockquote>
+    <div class="testi-author">
+      <div class="testi-avatar">&#127973;</div>
+      <div class="testi-meta">
+        <strong>Operations Director, Pacific Coast Family Health Centre</strong>
+        <span>Multi-physician primary care clinic &mdash; British Columbia</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER FORM -->
+<section class="partner" id="partner-form">
+  <div class="partner-inner">
+    <div class="partner-head reveal">
+      <span class="sec-label">Clinic Partnership Application</span>
+      <h2 class="sec-h2">Apply for early access</h2>
+      <p class="sec-sub">We&rsquo;re working with a small cohort of founding clinic partners. Participating practices get free access during our launch period and direct input into the roadmap.</p>
+    </div>
+    <div class="partner-form reveal" id="formWrap">
+      <form id="applyForm" novalidate>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="name">Your Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Dr. Maria Reyes" required>
+          </div>
+          <div class="form-field">
+            <label for="org">Clinic or Network Name</label>
+            <input type="text" id="org" name="org" placeholder="Pacific Coast Family Health" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@yourclinic.ca" required>
+          </div>
+          <div class="form-field">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="+1 604 555 0200">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="num_doctors">Number of Physicians</label>
+            <select id="num_doctors" name="num_doctors">
+              <option value="">Select range...</option>
+              <option value="1-3">1&ndash;3 physicians</option>
+              <option value="4-10">4&ndash;10 physicians</option>
+              <option value="11-30">11&ndash;30 physicians</option>
+              <option value="30+">30+ physicians</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="num_patients">Approximate Patient Volume</label>
+            <select id="num_patients" name="num_patients">
+              <option value="">Select range...</option>
+              <option value="under-500">Under 500</option>
+              <option value="500-2000">500&ndash;2,000</option>
+              <option value="2000-10000">2,000&ndash;10,000</option>
+              <option value="10000+">10,000+</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="message">Anything you&rsquo;d like us to know? (optional)</label>
+          <textarea id="message" name="message" placeholder="Location, specialties, current adherence challenges, EMR system..."></textarea>
+        </div>
+        <button type="submit" class="form-submit" id="submit-btn">Apply for Clinic Partnership</button>
+        <p class="form-note">We review each application personally. You&rsquo;ll hear from us within 2 business days.</p>
+      </form>
+      <div class="success-msg" id="successMsg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="fin-cta reveal">
+  <h2>Your patients deserve <em>continuous</em> care.</h2>
+  <p>Join the founding cohort of Canadian clinics bringing population-level adherence intelligence to primary care.</p>
+  <a href="#partner-form" class="fin-cta-btn">Apply for Clinic Partnership</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo" style="margin-bottom:0;">
+        <div class="nav-logo-mark" style="width:28px;height:28px;font-size:0.85rem;">&#x2665;</div>
+        <span class="nav-logo-name" style="font-size:1.1rem;">Carely</span>
+      </div>
+      <p>AI-powered medication adherence for patients, families, and the clinicians who care for them.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Patients</h4>
+      <a href="/">Home</a>
+      <a href="/#how-it-works">How It Works</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/#faq">FAQ</a>
+    </div>
+    <div class="footer-col">
+      <h4>Partners</h4>
+      <a href="/for-doctors.html">For Doctors</a>
+      <a href="/for-clinics.html">For Clinics</a>
+      <a href="/for-pharmacies.html">For Pharmacies</a>
+      <a href="/for-senior-homes.html">For Senior Homes</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/blog">Blog</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms of Service</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Lumina Path Inc. All rights reserved.</p>
+    <a href="/privacy.html">Privacy</a>
+  </div>
+</footer>
+
+<!-- COOKIE BANNER -->
+<div class="cookie-bar" id="cookieBar">
+  <p class="cookie-txt">We use cookies to improve your experience. See our <a href="/privacy.html">Privacy Policy</a>.</p>
+  <div class="cookie-btns">
+    <button class="cookie-accept" id="cookieAccept">Accept</button>
+    <button class="cookie-decline" id="cookieDecline">Decline</button>
+  </div>
+</div>
+
+<!-- POSTHOG -->
 <script>
-(function(){
-  var b = document.getElementById('cookie-banner');
-  if (!localStorage.getItem('cookie_consent')) { b.style.display = 'flex'; }
-})();
-function cookieAccept() {
-  localStorage.setItem('cookie_consent', 'accepted');
-  document.getElementById('cookie-banner').style.display = 'none';
-}
-function cookieDecline() {
-  localStorage.setItem('cookie_consent', 'declined');
-  document.getElementById('cookie-banner').style.display = 'none';
-  if (window.posthog) { posthog.opt_out_capturing(); }
-}
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init("phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP", {api_host:"https://app.posthog.com"});
 </script>
 
+<script>
+  var API = 'https://carely-backend-production.up.railway.app';
+
+  // NAV scroll shadow
+  var navWrap = document.getElementById('navWrap');
+  window.addEventListener('scroll', function() {
+    navWrap.classList.toggle('up', window.scrollY > 10);
+  });
+
+  // HAMBURGER
+  var burger = document.getElementById('burger');
+  var navMob = document.getElementById('navMob');
+  burger.addEventListener('click', function() {
+    burger.classList.toggle('open');
+    navMob.classList.toggle('open');
+    document.body.style.overflow = navMob.classList.contains('open') ? 'hidden' : '';
+  });
+  navMob.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      burger.classList.remove('open');
+      navMob.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // INTERSECTION OBSERVER
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal, .pain-grid, .hiw-steps, .feat-pills, .stats-bar, .badge-row, .fin-cta').forEach(function(el) {
+    observer.observe(el);
+  });
+
+  // FORM SUBMIT
+  var form = document.getElementById('applyForm');
+  var submitBtn = document.getElementById('submit-btn');
+  var successMsg = document.getElementById('successMsg');
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    var nameVal  = document.getElementById('name').value.trim();
+    var orgVal   = document.getElementById('org').value.trim();
+    var emailVal = document.getElementById('email').value.trim();
+    var phoneVal = document.getElementById('phone').value.trim();
+    var msgVal   = document.getElementById('message').value.trim();
+    var numDocs  = document.getElementById('num_doctors').value;
+    var numPats  = document.getElementById('num_patients').value;
+
+    if (!nameVal || !orgVal || !emailVal) {
+      alert('Please fill in your name, clinic name, and email.');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    var payload = {
+      type: 'clinic',
+      org_name: orgVal,
+      contact_name: nameVal,
+      email: emailVal,
+      phone: phoneVal,
+      country: 'CA',
+    };
+    if (msgVal) payload.message = msgVal;
+    if (numDocs) payload.num_doctors = numDocs;
+    if (numPats) payload.num_patients = numPats;
+
+    fetch(API + '/partner/apply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    .then(function(res) { return res.json(); })
+    .then(function() {
+      form.style.display = 'none';
+      successMsg.style.display = 'block';
+
+      var icon = document.createElement('div');
+      icon.style.cssText = 'font-size:2.5rem;margin-bottom:16px;';
+      icon.textContent = String.fromCodePoint(0x2705);
+
+      var h = document.createElement('h3');
+      h.textContent = 'Application received!';
+      h.style.cssText = 'color:var(--t1);font-family:DM Serif Display,Georgia,serif;font-size:1.4rem;margin-bottom:12px;';
+
+      var p = document.createElement('p');
+      p.textContent = 'We review each clinic application personally and will be in touch within 2 business days.';
+      p.style.cssText = 'color:rgba(255,255,255,0.72);line-height:1.7;font-size:0.95rem;';
+
+      successMsg.appendChild(icon);
+      successMsg.appendChild(h);
+      successMsg.appendChild(p);
+
+      if (window.posthog) posthog.capture('clinic_partner_applied', { email: emailVal, org: orgVal });
+    })
+    .catch(function() {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Apply for Clinic Partnership';
+      alert('Something went wrong. Please email us at hello@carely.fit');
+    });
+  }
+
+  form.addEventListener('submit', handleSubmit);
+
+  // COOKIE BANNER
+  var cookieBar = document.getElementById('cookieBar');
+  if (!localStorage.getItem('cookie_consent')) {
+    setTimeout(function() { cookieBar.classList.add('show'); }, 900);
+  }
+  document.getElementById('cookieAccept').addEventListener('click', function() {
+    localStorage.setItem('cookie_consent', 'yes');
+    cookieBar.classList.remove('show');
+  });
+  document.getElementById('cookieDecline').addEventListener('click', function() {
+    localStorage.setItem('cookie_consent', 'no');
+    cookieBar.classList.remove('show');
+  });
+</script>
 </body>
 </html>

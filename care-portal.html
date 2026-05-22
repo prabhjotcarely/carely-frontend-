@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Care Portal — Carely</title>
-  <link rel="icon" type="image/png" href="elara-3d-new.png" />
+  <link rel="icon" type="image/png" href="carely-logo-3d.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
@@ -14,1022 +14,1639 @@
       --off-white: #F7FBFA; --grey-100: #F1F5F4; --grey-300: #C8D6D3;
       --grey-500: #7A9490; --text: #0D2B24; --white: #fff;
       --radius: 16px; --danger: #EF4444; --warning: #F59E0B;
+      --sidebar-w: 240px;
     }
     body { font-family: 'Inter', -apple-system, sans-serif; background: var(--off-white); color: var(--text); -webkit-font-smoothing: antialiased; }
-    nav { position: sticky; top: 0; z-index: 100; background: rgba(247,251,250,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(200,214,211,0.5); padding: 0 20px; }
-    .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; }
-    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: var(--deep-teal); text-decoration: none; }
-    main { max-width: 1100px; margin: 0 auto; padding: 40px 20px 80px; }
-    .loading { display: flex; align-items: center; justify-content: center; min-height: 50vh; flex-direction: column; gap: 16px; }
-    .spinner { width: 40px; height: 40px; border: 3px solid var(--grey-300); border-top-color: var(--teal); border-radius: 50%; animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    #portal { display: none; }
-    .page-title { font-size: 2rem; font-weight: 900; color: var(--deep-teal); margin-bottom: 4px; letter-spacing: -0.03em; }
-    .page-subtitle { font-size: 1rem; color: var(--grey-500); margin-bottom: 32px; }
 
-    /* Summary row */
-    .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
-    .summary-card { background: var(--white); border-radius: var(--radius); padding: 20px; border: 1.5px solid var(--grey-300); }
-    .summary-value { font-size: 2.2rem; font-weight: 900; color: var(--deep-teal); }
-    .summary-value.green { color: var(--mint); }
-    .summary-value.red { color: var(--danger); }
-    .summary-label { font-size: 0.8rem; font-weight: 600; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+    /* ── NAV ── */
+    nav { position: sticky; top: 0; z-index: 200; background: var(--deep-teal); padding: 0 20px; }
+    .nav-inner { max-width: 100%; display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: #fff; text-decoration: none; }
+    .logo span { color: var(--mint); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .role-switcher { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: rgba(255,255,255,0.7); }
+    .role-select { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 8px; padding: 5px 10px; font-size: 0.82rem; font-family: inherit; cursor: pointer; }
+    .role-select option { background: var(--deep-teal); color: #fff; }
+    .sidebar-toggle { display: none; background: none; border: none; color: #fff; cursor: pointer; padding: 6px; }
 
-    /* Org ring hero */
-    .org-ring-hero {
-      background: var(--white);
-      border-radius: var(--radius);
-      border: 1.5px solid var(--grey-300);
-      padding: 28px;
-      margin-bottom: 32px;
-      display: flex;
-      gap: 32px;
-      align-items: flex-start;
-      flex-wrap: wrap;
-    }
-    .org-ring-left {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-    .org-ring-title {
-      font-size: 11px;
-      font-weight: 800;
-      color: #B0BEC5;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-    .org-ring-sub {
-      font-size: 12px;
-      color: var(--grey-500);
-      text-align: center;
-      margin-top: -4px;
-    }
-    .org-ring-right {
-      flex: 1;
-      min-width: 200px;
-    }
-    .org-ring-right-title {
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--deep-teal);
-      margin-bottom: 12px;
-    }
+    /* ── LAYOUT ── */
+    .portal-layout { display: flex; min-height: calc(100vh - 60px); }
 
-    /* Heatmap */
-    .day-headers-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-bottom: 6px;
+    /* ── SIDEBAR ── */
+    aside.sidebar {
+      width: var(--sidebar-w); flex-shrink: 0; background: var(--white);
+      border-right: 1.5px solid var(--grey-300); padding: 20px 0;
+      position: sticky; top: 60px; height: calc(100vh - 60px);
+      overflow-y: auto; transition: transform 0.25s ease;
     }
-    .day-header-cell {
-      text-align: center;
-      font-size: 9px;
-      font-weight: 800;
-      color: #C5CDD8;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+    .sidebar-section { padding: 6px 12px; font-size: 0.7rem; font-weight: 800; color: var(--grey-500); text-transform: uppercase; letter-spacing: 1px; margin-top: 12px; }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+      font-size: 0.88rem; font-weight: 600; color: var(--grey-500);
+      cursor: pointer; border-radius: 10px; margin: 2px 10px;
+      transition: background 0.15s, color 0.15s; position: relative;
     }
-    .heatmap-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-bottom: 10px;
-    }
+    .sidebar-item:hover { background: var(--grey-100); color: var(--text); }
+    .sidebar-item.active { background: rgba(2,128,144,0.1); color: var(--teal); }
+    .sidebar-item .icon { font-size: 1.1rem; width: 20px; text-align: center; }
+    .sidebar-item .badge { background: var(--danger); color: #fff; font-size: 0.65rem; font-weight: 800; padding: 1px 6px; border-radius: 10px; margin-left: auto; }
+
+    /* ── MAIN CONTENT ── */
+    .content-area { flex: 1; padding: 28px 32px 80px; max-width: 100%; overflow-x: hidden; }
+    .section { display: none; animation: fadeUp 0.22s ease; }
+    .section.active { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── SECTION HEADER ── */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    .section-title { font-size: 1.5rem; font-weight: 900; color: var(--deep-teal); letter-spacing: -0.03em; }
+    .section-subtitle { font-size: 0.85rem; color: var(--grey-500); margin-top: 2px; }
+
+    /* ── BUTTONS ── */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; border: none; font-family: inherit; transition: opacity 0.15s; }
+    .btn:hover { opacity: 0.88; }
+    .btn-primary { background: linear-gradient(135deg, var(--teal), var(--mint)); color: #fff; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--teal); color: var(--teal); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-sm { padding: 6px 12px; font-size: 0.78rem; }
+    .btn-ghost { background: var(--grey-100); color: var(--text); }
+
+    /* ── CARDS ── */
+    .card { background: var(--white); border: 1.5px solid var(--grey-300); border-radius: var(--radius); padding: 24px; }
+    .card-sm { padding: 16px 20px; }
+
+    /* ── STATS ROW ── */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--white); border: 1.5px solid var(--grey-300); border-radius: var(--radius); padding: 20px; }
+    .stat-value { font-size: 2rem; font-weight: 900; color: var(--deep-teal); line-height: 1; }
+    .stat-value.red { color: var(--danger); }
+    .stat-value.green { color: var(--mint); }
+    .stat-value.amber { color: var(--warning); }
+    .stat-label { font-size: 0.75rem; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
+
+    /* ── ALERT BANNER ── */
+    .alert-banner { background: #FEF3C7; border: 1.5px solid #F59E0B; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 0.88rem; font-weight: 600; color: #92400E; }
+    .alert-banner .alert-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .alert-banner a { color: var(--teal); text-decoration: none; font-weight: 700; margin-left: auto; white-space: nowrap; }
+
+    /* ── ACTIVITY FEED ── */
+    .activity-list { list-style: none; }
+    .activity-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--grey-100); font-size: 0.85rem; }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); flex-shrink: 0; margin-top: 5px; }
+    .activity-time { font-size: 0.75rem; color: var(--grey-500); white-space: nowrap; margin-left: auto; }
+
+    /* ── HEATMAP ── */
+    .day-headers-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 6px; }
+    .day-header-cell { text-align: center; font-size: 9px; font-weight: 800; color: var(--grey-500); letter-spacing: 0.5px; text-transform: uppercase; }
+    .heatmap-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 10px; }
     .heat-cell { aspect-ratio: 1; border-radius: 6px; cursor: default; transition: transform 0.15s ease; }
     .heat-cell:hover { transform: scale(1.2); }
     .heat-cell.perfect { background: #00C896; }
     .heat-cell.good    { background: #6EDFC0; }
     .heat-cell.partial { background: #FF8800; }
     .heat-cell.miss    { background: #FF3B3B; }
-    .heat-cell.future  { background: #EEF1F5; }
-    .heatmap-legend {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 9px;
-      color: #8A9BB0;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+    .heat-cell.future  { background: var(--grey-100); }
+    .heatmap-legend { display: flex; gap: 12px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 9px; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
     .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
 
-    /* Patients grid */
-    .patients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-    .patient-card { background: var(--white); border-radius: var(--radius); padding: 20px; border: 1.5px solid var(--grey-300); transition: border-color 0.15s; }
-    .patient-card:hover { border-color: var(--teal); }
-    .patient-card.at-risk { border-color: var(--danger); }
+    /* ── RESIDENT CARDS ── */
+    .residents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .resident-card { background: var(--white); border: 1.5px solid var(--grey-300); border-radius: var(--radius); padding: 20px; transition: border-color 0.15s, box-shadow 0.15s; cursor: pointer; }
+    .resident-card:hover { border-color: var(--teal); box-shadow: 0 4px 16px rgba(2,128,144,0.1); }
+    .resident-card.critical { border-color: var(--danger); }
+    .resident-card.at-risk { border-color: var(--warning); }
     .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-    .avatar { width: 44px; height: 44px; border-radius: 22px; background: var(--grey-100); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; color: var(--teal); flex-shrink: 0; }
-    .patient-name { font-size: 16px; font-weight: 700; color: var(--deep-teal); }
-    .patient-plan { font-size: 12px; color: var(--grey-500); margin-top: 2px; }
-
-    /* Patient card ring area */
-    .card-ring-area { margin-left: auto; display: flex; flex-direction: column; align-items: center; }
-
-    .dose-row { font-size: 13px; color: var(--grey-500); margin-bottom: 10px; }
-    .meds-list { display: flex; flex-wrap: wrap; gap: 6px; }
-    .med-chip { background: var(--grey-100); border-radius: 8px; padding: 3px 10px; font-size: 12px; color: var(--grey-500); font-weight: 500; display: flex; align-items: center; gap: 5px; }
+    .avatar { width: 44px; height: 44px; border-radius: 22px; background: var(--grey-100); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; color: var(--teal); flex-shrink: 0; }
+    .resident-name { font-size: 1rem; font-weight: 700; color: var(--deep-teal); }
+    .resident-meta { font-size: 0.75rem; color: var(--grey-500); margin-top: 2px; }
+    .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge-good { background: #D1FAE5; color: #065F46; }
+    .badge-risk { background: #FEF3C7; color: #92400E; }
+    .badge-critical { background: #FEE2E2; color: #991B1B; }
+    .meds-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .med-chip { background: var(--grey-100); border-radius: 8px; padding: 3px 10px; font-size: 0.75rem; color: var(--grey-500); font-weight: 500; display: flex; align-items: center; gap: 5px; }
     .med-dot { width: 8px; height: 8px; border-radius: 4px; flex-shrink: 0; }
-    .no-patients { text-align: center; padding: 60px 20px; color: var(--grey-500); grid-column: 1 / -1; }
-    .error-msg { color: var(--danger); font-weight: 700; text-align: center; }
-    footer { background: var(--deep-teal); color: rgba(255,255,255,0.6); text-align: center; padding: 24px 20px; font-size: 0.82rem; margin-top: 60px; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--grey-100); }
+    .assigned-nurse { font-size: 0.75rem; color: var(--grey-500); }
 
-    /* ── Ring System ── */
-    .ring-card-ui {
-      background: #fff;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-    .ring-card-ui .rc-label {
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      color: #B0BEC5;
-      text-transform: uppercase;
-      text-align: center;
-    }
-    .ring-card-ui .rc-sublabel {
-      font-size: 10px;
-      color: #B0BEC5;
-      font-weight: 600;
-      text-align: center;
-      margin-top: -6px;
-    }
-    .ring-wrap-ui { position: relative; flex-shrink: 0; }
-    .ring-wrap-ui svg { transform: rotate(-90deg); display: block; }
-    .ring-bg-ui { fill: none; stroke: #EEF1F5; }
-    .ring-fill-ui { fill: none; stroke-linecap: round; transition: stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1), stroke 0.4s ease; }
-    .ring-center-ui { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; }
-    .ring-pct-ui { font-weight: 900; color: #1A2D3D; line-height: 1; letter-spacing: -1px; }
-    .ring-sub-ui { font-size: 9px; color: #B0BEC5; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-
-    /* Inline ring (no card wrapper) */
+    /* ── RING SYSTEM ── */
     .ring-inline-wrap { position: relative; flex-shrink: 0; }
     .ring-inline-wrap svg { transform: rotate(-90deg); display: block; }
     .ring-inline-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .ring-inline-pct { font-size: 11px; font-weight: 900; color: #1A2D3D; line-height: 1; }
-    .ring-inline-sublabel { font-size: 8px; font-weight: 700; color: #B0BEC5; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; margin-top: 2px; }
+    .ring-inline-pct { font-size: 11px; font-weight: 900; color: var(--deep-teal); line-height: 1; }
+    .ring-inline-sublabel { font-size: 8px; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; text-align: center; margin-top: 2px; }
 
-    @media (max-width: 600px) {
-      .org-ring-hero { flex-direction: column; }
-      .org-ring-right { min-width: unset; width: 100%; }
+    /* ── SEARCH & FILTER ── */
+    .search-filter-row { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .search-input { flex: 1; min-width: 200px; padding: 9px 14px; border: 1.5px solid var(--grey-300); border-radius: 10px; font-size: 0.88rem; font-family: inherit; outline: none; background: var(--white); }
+    .search-input:focus { border-color: var(--teal); }
+    .filter-select { padding: 9px 14px; border: 1.5px solid var(--grey-300); border-radius: 10px; font-size: 0.88rem; font-family: inherit; outline: none; background: var(--white); cursor: pointer; }
+    .filter-select:focus { border-color: var(--teal); }
+
+    /* ── TABLES ── */
+    .table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1.5px solid var(--grey-300); background: var(--white); }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: var(--grey-100); font-size: 0.75rem; font-weight: 800; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 16px; text-align: left; }
+    td { padding: 12px 16px; font-size: 0.85rem; border-top: 1px solid var(--grey-100); vertical-align: middle; }
+    tr:hover td { background: var(--off-white); }
+    .status-pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; }
+    .status-active { background: #D1FAE5; color: #065F46; }
+    .status-invited { background: #FEF3C7; color: #92400E; }
+    .status-deactivated { background: #FEE2E2; color: #991B1B; }
+    .status-taken { background: #D1FAE5; color: #065F46; }
+    .status-missed { background: #FEE2E2; color: #991B1B; }
+
+    /* ── MODALS ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-box { background: var(--white); border-radius: 24px; padding: 32px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; position: relative; transform: translateY(10px); transition: transform 0.2s; }
+    .modal-overlay.open .modal-box { transform: translateY(0); }
+    .modal-close { position: absolute; top: 16px; right: 16px; background: var(--grey-100); border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--grey-500); }
+    .modal-close:hover { background: var(--grey-300); }
+    .modal-title { font-size: 1.2rem; font-weight: 800; color: var(--deep-teal); margin-bottom: 20px; }
+
+    /* ── FORMS ── */
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .form-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--grey-300); border-radius: 10px; font-size: 0.88rem; font-family: inherit; outline: none; background: var(--white); transition: border-color 0.15s; }
+    .form-input:focus { border-color: var(--teal); }
+    .form-select { width: 100%; padding: 10px 14px; border: 1.5px solid var(--grey-300); border-radius: 10px; font-size: 0.88rem; font-family: inherit; outline: none; background: var(--white); cursor: pointer; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* ── TOAST ── */
+    #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+    .toast { padding: 12px 20px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; color: #fff; box-shadow: 0 8px 24px rgba(0,0,0,0.15); animation: slideIn 0.3s ease; max-width: 320px; }
+    .toast.success { background: var(--mint); color: var(--deep-teal); }
+    .toast.error { background: var(--danger); }
+    @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    /* ── SETTINGS TABS ── */
+    .sub-tabs { display: flex; gap: 4px; background: var(--grey-100); border-radius: 12px; padding: 4px; margin-bottom: 24px; flex-wrap: wrap; }
+    .sub-tab { padding: 8px 16px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; color: var(--grey-500); border: none; background: transparent; font-family: inherit; }
+    .sub-tab.active { background: var(--white); color: var(--teal); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .sub-tab-panel { display: none; }
+    .sub-tab-panel.active { display: block; }
+
+    /* ── TOGGLE SWITCH ── */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--grey-100); }
+    .toggle-label { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+    .toggle-desc { font-size: 0.75rem; color: var(--grey-500); margin-top: 2px; }
+    .toggle-switch { position: relative; width: 44px; height: 24px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--grey-300); border-radius: 24px; cursor: pointer; transition: background 0.2s; }
+    .toggle-slider:before { content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%; background: #fff; top: 3px; left: 3px; transition: transform 0.2s; }
+    .toggle-switch input:checked + .toggle-slider { background: var(--teal); }
+    .toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+    /* ── PERMISSIONS MATRIX ── */
+    .perm-table th, .perm-table td { text-align: center; }
+    .perm-table td:first-child { text-align: left; font-weight: 600; }
+    .perm-check { color: var(--mint); font-size: 1rem; }
+    .perm-x { color: var(--danger); font-size: 1rem; }
+
+    /* ── BILLING ── */
+    .billing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    .plan-badge { display: inline-flex; align-items: center; gap: 6px; background: #D1FAE5; color: #065F46; border-radius: 20px; padding: 4px 12px; font-size: 0.78rem; font-weight: 800; }
+    .plan-price { font-size: 2rem; font-weight: 900; color: var(--deep-teal); margin: 8px 0; }
+    .usage-bar { background: var(--grey-100); border-radius: 8px; height: 8px; margin-top: 6px; }
+    .usage-fill { background: linear-gradient(90deg, var(--teal), var(--mint)); border-radius: 8px; height: 8px; }
+
+    /* ── RESIDENT DETAIL OVERLAY ── */
+    .detail-overlay { position: fixed; inset: 0; background: var(--off-white); z-index: 400; overflow-y: auto; display: none; }
+    .detail-overlay.open { display: block; }
+    .detail-nav { background: var(--white); border-bottom: 1.5px solid var(--grey-300); padding: 14px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 1; }
+    .detail-back { background: none; border: none; font-size: 1rem; cursor: pointer; color: var(--teal); font-weight: 700; display: flex; align-items: center; gap: 6px; font-family: inherit; }
+    .detail-content { max-width: 900px; margin: 0 auto; padding: 28px 24px 80px; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-bottom: 24px; }
+
+    /* ── ROLE VISIBILITY ── */
+    body[data-role="nurse"] .admin-only { display: none !important; }
+    body[data-role="nurse"] .senior-only { display: none !important; }
+    body[data-role="senior"] .admin-only { display: none !important; }
+
+    /* ── MOBILE BOTTOM TAB BAR ── */
+    .mobile-tab-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); border-top: 1.5px solid var(--grey-300); z-index: 300; padding: 8px 0 env(safe-area-inset-bottom); }
+    .mobile-tabs { display: flex; justify-content: space-around; }
+    .mobile-tab { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 4px 12px; cursor: pointer; font-size: 0.65rem; font-weight: 700; color: var(--grey-500); border: none; background: none; font-family: inherit; }
+    .mobile-tab .tab-icon { font-size: 1.3rem; }
+    .mobile-tab.active { color: var(--teal); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .billing-grid { grid-template-columns: 1fr; }
+      .detail-grid { grid-template-columns: 1fr; }
     }
-    .pb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .pb-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--grey-300); overflow: hidden; }
-    .pb-card-head { padding: 14px 20px; border-bottom: 1px solid var(--grey-100); font-size: 0.88rem; font-weight: 800; color: var(--deep-teal); text-transform: uppercase; letter-spacing: 0.5px; }
-    .pb-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 20px; border-bottom: 1px solid var(--grey-100); font-size: 0.875rem; }
-    .pb-row:last-child { border-bottom: none; }
-    .pb-label { color: var(--grey-500); font-weight: 600; }
-    .pb-val { color: var(--deep-teal); font-weight: 700; }
-    .pb-code { background: var(--off-white); border: 1.5px solid var(--grey-300); border-radius: 8px; padding: 3px 12px; font-size: 0.95rem; font-weight: 900; color: var(--teal); letter-spacing: 1px; }
-    .pb-btns { display: flex; gap: 10px; padding: 16px 20px; flex-wrap: wrap; }
-    .pb-btn { display: inline-block; padding: 10px 18px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; text-decoration: none; border: none; font-family: inherit; }
-    .pb-btn-primary { background: linear-gradient(135deg,#028090,#02C39A); color: #fff; }
-    .pb-btn-outline { background: transparent; border: 1.5px solid var(--teal); color: var(--teal); }
-    .pb-note { font-size: 0.75rem; color: var(--grey-500); padding: 0 20px 14px; line-height: 1.6; }
-    @media (max-width: 640px) { .pb-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) {
+      .content-area { padding: 20px 16px 80px; }
+      .sidebar { position: fixed; top: 60px; left: 0; height: calc(100vh - 60px); z-index: 150; transform: translateX(-100%); box-shadow: 4px 0 20px rgba(0,0,0,0.1); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-toggle { display: flex; }
+      .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 140; }
+      .sidebar-backdrop.open { display: block; }
+      .mobile-tab-bar { display: block; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .residents-grid { grid-template-columns: 1fr; }
+    }
+
+    footer { background: var(--deep-teal); color: rgba(255,255,255,0.5); text-align: center; padding: 20px; font-size: 0.78rem; }
+    footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--grey-500); }
+    .empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state p { margin-bottom: 16px; }
+
+    /* ── UPGRADE CARD ── */
+    .upgrade-card { background: linear-gradient(135deg, var(--deep-teal), #1a4a65); border-radius: var(--radius); padding: 28px; color: #fff; }
+    .upgrade-card h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
+    .upgrade-price { font-size: 2rem; font-weight: 900; margin: 8px 0; }
+    .upgrade-features { list-style: none; margin: 12px 0 20px; }
+    .upgrade-features li { padding: 4px 0; font-size: 0.85rem; opacity: 0.85; }
+    .upgrade-features li::before { content: '✓ '; color: var(--mint); }
+    .coming-soon { background: var(--grey-300); color: var(--grey-500); border-radius: 6px; padding: 2px 8px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
   </style>
-  <!-- PostHog Analytics -->
-  <script>
-    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
-    posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
-    document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="carely.fit/#"],a.nav-cta,a.hero-cta,a.cta-btn').forEach(function(el){el.addEventListener('click',function(){posthog.capture('cta_clicked',{text:el.textContent.trim(),href:el.getAttribute('href'),page:location.pathname});});});});
-  </script>
 </head>
-<body>
+<body data-role="admin">
+
+<!-- SIDEBAR BACKDROP -->
+<div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeSidebar()"></div>
+
+<!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <a href="/" class="logo">
-      <img src="elara-bot-logo.png" alt="Carely" style="height:32px;width:auto;" />
-      Care Portal
-    </a>
-    <span id="org-name-nav" style="font-weight:600;font-size:0.9rem;color:var(--teal);"></span>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Menu">&#9776;</button>
+      <a href="/" class="logo">
+        <img src="carely-logo-3d.png" alt="Carely" style="height:40px;width:auto;" />
+        <span>Care</span>Portal
+      </a>
+    </div>
+    <div class="nav-right">
+      <div class="role-switcher">
+        <span>Viewing as:</span>
+        <select class="role-select" id="role-select" onchange="switchRole(this.value)">
+          <option value="admin">Admin</option>
+          <option value="senior">Senior Nurse</option>
+          <option value="nurse">Nurse</option>
+        </select>
+      </div>
+    </div>
   </div>
 </nav>
 
-<!-- LOGIN GATE -->
-<div id="login-gate" style="display:none; position:fixed; inset:0; background:rgba(13,51,71,0.85); z-index:1000; display:flex; align-items:center; justify-content:center;">
-  <div style="background:#fff; border-radius:20px; padding:40px 36px; width:360px; max-width:90vw; box-shadow:0 32px 80px rgba(0,0,0,0.4);">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-      <img src="elara-bot-logo.png" alt="Carely" style="height:36px;width:auto;">
-      <div style="font-size:18px;font-weight:800;color:#0D3347;">Carely <span style="color:#028090;">Care Portal</span></div>
+<!-- PORTAL LAYOUT -->
+<div class="portal-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-section">Main</div>
+    <div class="sidebar-item active" data-section="dashboard" onclick="showSection('dashboard',this)">
+      <span class="icon">&#128202;</span> Dashboard
     </div>
-    <h2 style="color:#0D3347; font-size:1.3rem; font-weight:800; margin-bottom:6px;">Partner Login</h2>
-    <p style="color:#6b8fa3; font-size:0.85rem; margin-bottom:24px;">Sign in to your Carely partner account</p>
-    <input type="email" id="login-email" placeholder="Email address" style="width:100%; padding:12px 14px; border:1.5px solid #e0eaf0; border-radius:10px; font-size:0.95rem; font-family:inherit; margin-bottom:12px; outline:none;" />
-    <input type="password" id="login-password" placeholder="Password" style="width:100%; padding:12px 14px; border:1.5px solid #e0eaf0; border-radius:10px; font-size:0.95rem; font-family:inherit; margin-bottom:16px; outline:none;" />
-    <button onclick="doLogin()" style="width:100%; padding:13px; background:linear-gradient(135deg,#028090,#02C39A); color:#fff; border:none; border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer; font-family:inherit;">Sign In</button>
-    <p id="login-err" style="color:#e53e3e; font-size:0.82rem; margin-top:10px; display:none;"></p>
-    <p style="margin-top:16px; font-size:0.78rem; color:#b0c4ce; text-align:center;">Demo mode: add <code>?demo=true</code> to the URL</p>
+    <div class="sidebar-item" data-section="residents" onclick="showSection('residents',this)">
+      <span class="icon">&#128106;</span> Residents
+    </div>
+    <div class="sidebar-item admin-only senior-only" data-section="staff" onclick="showSection('staff',this)">
+      <span class="icon">&#128104;&#8205;&#9877;</span> Staff
+    </div>
+    <div class="sidebar-item admin-only senior-only" data-section="medicines" onclick="showSection('medicines',this)">
+      <span class="icon">&#128138;</span> Medicines
+    </div>
+    <div class="sidebar-item" data-section="reports" onclick="showSection('reports',this)">
+      <span class="icon">&#128203;</span> Reports
+      <span class="badge">3</span>
+    </div>
+    <div class="sidebar-section">Account</div>
+    <div class="sidebar-item admin-only" data-section="settings" onclick="showSection('settings',this)">
+      <span class="icon">&#9881;</span> Settings
+    </div>
+    <div class="sidebar-item admin-only" data-section="billing" onclick="showSection('billing',this)">
+      <span class="icon">&#128179;</span> Billing
+    </div>
+    <div style="padding:20px 16px;margin-top:auto;">
+      <div style="font-size:0.75rem;color:var(--grey-500);font-weight:600;">Sunrise Senior Living</div>
+      <div style="font-size:0.7rem;color:var(--grey-300);margin-top:2px;">Care Pro · 24 residents</div>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="content-area">
+
+    <!-- ═══════════════════════════════ DASHBOARD ═══════════════════════════════ -->
+    <div class="section active" id="section-dashboard">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Good morning, Admin</div>
+          <div class="section-subtitle" id="dashboard-date"></div>
+        </div>
+      </div>
+
+      <!-- Alert -->
+      <div class="alert-banner">
+        <span class="alert-icon">&#9888;</span>
+        <span>3 residents missed their 8:00 AM dose — Eleanor, James, Dorothy</span>
+        <a href="#" onclick="showSection('residents',null);return false;">View &rarr;</a>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-value">24</div>
+          <div class="stat-label">Total Residents</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value green">67 <span style="font-size:1rem;color:var(--grey-500)">/ 72</span></div>
+          <div class="stat-label">Doses Logged Today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value red">3</div>
+          <div class="stat-label">At-Risk Residents</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value amber">6</div>
+          <div class="stat-label">Staff On Duty</div>
+        </div>
+      </div>
+
+      <!-- Two-column: activity + heatmap -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;" id="dash-two-col">
+        <div class="card">
+          <div style="font-size:0.88rem;font-weight:800;color:var(--deep-teal);margin-bottom:16px;">Recent Activity</div>
+          <ul class="activity-list" id="activity-list"></ul>
+        </div>
+        <div class="card">
+          <div style="font-size:0.88rem;font-weight:800;color:var(--deep-teal);margin-bottom:12px;">7-Day Adherence Heatmap</div>
+          <div class="day-headers-grid" id="heatmap-headers"></div>
+          <div id="heatmap-rows"></div>
+          <div class="heatmap-legend" style="margin-top:8px;">
+            <div class="legend-item"><div class="legend-dot" style="background:#00C896"></div>100%</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#6EDFC0"></div>Good</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#FF8800"></div>Partial</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#FF3B3B"></div>Missed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════ RESIDENTS ═══════════════════════════════ -->
+    <div class="section" id="section-residents">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Residents</div>
+          <div class="section-subtitle">Manage resident profiles and medication adherence</div>
+        </div>
+        <button class="btn btn-primary admin-only senior-only" onclick="openModal('modal-add-resident')">+ Add Resident</button>
+      </div>
+      <div class="search-filter-row">
+        <input type="text" class="search-input" placeholder="Search residents..." id="resident-search" oninput="filterResidents()" />
+        <select class="filter-select" id="resident-filter" onchange="filterResidents()">
+          <option value="all">All Statuses</option>
+          <option value="good">Good</option>
+          <option value="at-risk">At Risk</option>
+          <option value="critical">Critical</option>
+        </select>
+      </div>
+      <div class="residents-grid" id="residents-grid"></div>
+    </div>
+
+    <!-- ═══════════════════════════════ STAFF ═══════════════════════════════════ -->
+    <div class="section admin-only senior-only" id="section-staff">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Staff Management</div>
+          <div class="section-subtitle">Manage team members and permissions</div>
+        </div>
+        <button class="btn btn-primary admin-only" onclick="openModal('modal-invite-staff')">+ Invite Staff</button>
+      </div>
+      <div class="table-wrap" style="margin-bottom:24px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Role</th><th>Email</th><th>Status</th><th>Residents</th><th>Last Active</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="staff-table-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Shift Assignment -->
+      <div class="card">
+        <div style="font-size:0.95rem;font-weight:800;color:var(--deep-teal);margin-bottom:4px;">Shift Assignment — Today</div>
+        <div style="font-size:0.8rem;color:var(--grey-500);margin-bottom:16px;">Toggle to assign staff to residents for the current shift</div>
+        <div id="shift-assignment-panel"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════ MEDICINES ════════════════════════════════ -->
+    <div class="section admin-only senior-only" id="section-medicines">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Medicines Library</div>
+          <div class="section-subtitle">All medications administered across residents</div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-add-medicine')">+ Add Medicine</button>
+      </div>
+      <div class="alert-banner" style="background:#FEE2E2;border-color:var(--danger);color:#991B1B;margin-bottom:20px;">
+        <span class="alert-icon">&#128138;</span>
+        <span>Low stock alert: Robert Martinez — Warfarin 5mg has less than 7 days supply remaining</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Medicine</th><th>Residents</th><th>Doses/Day</th><th>Stock Status</th><th>Last Reviewed</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="medicines-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════ REPORTS ══════════════════════════════════ -->
+    <div class="section" id="section-reports">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Reports</div>
+          <div class="section-subtitle">Dose logs, adherence summaries and incident tracking</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-outline btn-sm" onclick="exportDemo('CSV')">&#11015; CSV</button>
+          <button class="btn btn-outline btn-sm" onclick="exportDemo('PDF')">&#11015; PDF</button>
+        </div>
+      </div>
+
+      <!-- Report sub-tabs -->
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="showSubTab('reports','daily',this)">Daily Dose Log</button>
+        <button class="sub-tab" onclick="showSubTab('reports','adherence',this)">Adherence Summary</button>
+        <button class="sub-tab" onclick="showSubTab('reports','incidents',this)">Incident Log</button>
+      </div>
+
+      <!-- Daily Dose Log -->
+      <div class="sub-tab-panel active" id="reports-daily">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+          <label style="font-size:0.85rem;font-weight:700;">Date:</label>
+          <input type="date" class="form-input" style="width:auto;" id="dose-log-date" value="2026-05-21" onchange="renderDoseLog()" />
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Time</th><th>Resident</th><th>Medicine</th><th>Dose</th><th>Logged By</th><th>Status</th></tr></thead>
+            <tbody id="dose-log-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Adherence Summary -->
+      <div class="sub-tab-panel" id="reports-adherence">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+          <label style="font-size:0.85rem;font-weight:700;">From:</label>
+          <input type="date" class="form-input" style="width:auto;" value="2026-05-14" />
+          <label style="font-size:0.85rem;font-weight:700;">To:</label>
+          <input type="date" class="form-input" style="width:auto;" value="2026-05-21" />
+          <button class="btn btn-primary btn-sm">Apply</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Resident</th><th>Adherence %</th><th>Trend</th><th>Doses Taken</th><th>Doses Missed</th></tr></thead>
+            <tbody id="adherence-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Incident Log -->
+      <div class="sub-tab-panel" id="reports-incidents">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Date/Time</th><th>Resident</th><th>Medicine</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="incidents-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════ SETTINGS ═════════════════════════════════ -->
+    <div class="section admin-only" id="section-settings">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Settings</div>
+          <div class="section-subtitle">Organization profile, notifications and integrations</div>
+        </div>
+      </div>
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="showSubTab('settings','org',this)">Organization</button>
+        <button class="sub-tab" onclick="showSubTab('settings','notifications',this)">Notifications</button>
+        <button class="sub-tab" onclick="showSubTab('settings','permissions',this)">Permissions</button>
+        <button class="sub-tab" onclick="showSubTab('settings','integrations',this)">Integrations</button>
+      </div>
+
+      <!-- Org Profile -->
+      <div class="sub-tab-panel active" id="settings-org">
+        <div class="card">
+          <div style="font-size:1rem;font-weight:800;color:var(--deep-teal);margin-bottom:20px;">Organization Profile</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Care Home Name</label>
+              <input type="text" class="form-input" value="Sunrise Senior Living" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-input" value="+1 (604) 555-0192" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Address</label>
+            <input type="text" class="form-input" value="1234 Sunrise Blvd, Vancouver, BC V5Z 1A1" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Admin Email</label>
+            <input type="email" class="form-input" value="admin@carehome.ca" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Logo Upload</label>
+            <input type="file" class="form-input" accept="image/*" />
+          </div>
+          <button class="btn btn-primary" onclick="toast('Organization profile saved','success')">Save Changes</button>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="sub-tab-panel" id="settings-notifications">
+        <div class="card">
+          <div style="font-size:1rem;font-weight:800;color:var(--deep-teal);margin-bottom:8px;">Notification Preferences</div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Family email alerts on missed dose</div><div class="toggle-desc">Notify family contact when a dose is missed</div></div>
+            <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Staff Slack / email alerts</div><div class="toggle-desc">Alert assigned nurse when resident misses a dose</div></div>
+            <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Weekly summary email</div><div class="toggle-desc">Send admin a weekly adherence summary every Monday</div></div>
+            <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row" style="border-bottom:none;">
+            <div><div class="toggle-label">Low supply alerts</div><div class="toggle-desc">Alert when any resident has less than 7 days of medication</div></div>
+            <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+          </div>
+          <div style="margin-top:16px;">
+            <button class="btn btn-primary" onclick="toast('Notification settings saved','success')">Save Settings</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Permissions -->
+      <div class="sub-tab-panel" id="settings-permissions">
+        <div class="card">
+          <div style="font-size:1rem;font-weight:800;color:var(--deep-teal);margin-bottom:20px;">Role Permission Matrix</div>
+          <div class="table-wrap">
+            <table class="perm-table">
+              <thead><tr><th style="text-align:left;">Permission</th><th>Admin</th><th>Senior Nurse</th><th>Nurse</th></tr></thead>
+              <tbody>
+                <tr><td>View dashboard</td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-check">&#10003;</span></td></tr>
+                <tr><td>View all residents</td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-x">&#10007;</span></td></tr>
+                <tr><td>View assigned residents</td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-check">&#10003;</span></td></tr>
+                <tr><td>Log doses</td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-check">&#10003;</span></td></tr>
+                <tr><td>Add / edit residents</td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-x">&#10007;</span></td></tr>
+                <tr><td>Delete residents</td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-x">&#10007;</span></td><td><span class="perm-x">&#10007;</span></td></tr>
+                <tr><td>Edit medicines</td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-x">&#10007;</span></td></tr>
+                <tr><td>Manage staff</td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-x">&#10007;</span></td><td><span class="perm-x">&#10007;</span></td></tr>
+                <tr><td>View reports</td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-x">&#10007;</span></td></tr>
+                <tr><td>Access settings</td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-x">&#10007;</span></td><td><span class="perm-x">&#10007;</span></td></tr>
+                <tr><td>Access billing</td><td><span class="perm-check">&#10003;</span></td><td><span class="perm-x">&#10007;</span></td><td><span class="perm-x">&#10007;</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Integrations -->
+      <div class="sub-tab-panel" id="settings-integrations">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="card">
+            <div style="font-size:0.95rem;font-weight:800;color:var(--deep-teal);margin-bottom:4px;">SendGrid Email</div>
+            <div style="font-size:0.8rem;color:var(--grey-500);margin-bottom:14px;">Connect SendGrid to enable family and staff email notifications</div>
+            <div class="form-group">
+              <label class="form-label">API Key</label>
+              <input type="password" class="form-input" placeholder="SG.xxxxxxxx..." />
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="toast('SendGrid connected successfully','success')">Connect SendGrid</button>
+          </div>
+          <div class="card">
+            <div style="font-size:0.95rem;font-weight:800;color:var(--deep-teal);margin-bottom:4px;">Pharmacy Partner</div>
+            <div style="font-size:0.8rem;color:var(--grey-500);margin-bottom:14px;">Enter your pharmacy partner invite code to sync medication stock</div>
+            <div class="form-group">
+              <label class="form-label">Invite Code</label>
+              <input type="text" class="form-input" placeholder="PHARM-XXXX-XXXX" />
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="toast('Pharmacy partner connected','success')">Connect Pharmacy</button>
+          </div>
+          <div class="card">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+              <div style="font-size:0.95rem;font-weight:800;color:var(--deep-teal);">EHR Integration</div>
+              <span class="coming-soon">Coming Soon</span>
+            </div>
+            <div style="font-size:0.8rem;color:var(--grey-500);">Connect your Electronic Health Records system for seamless resident data sync</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════ BILLING ══════════════════════════════════ -->
+    <div class="section admin-only" id="section-billing">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Billing</div>
+          <div class="section-subtitle">Manage your plan, payment method and invoices</div>
+        </div>
+      </div>
+
+      <div class="billing-grid">
+        <!-- Current Plan -->
+        <div class="card">
+          <div style="font-size:0.75rem;font-weight:800;color:var(--grey-500);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Current Plan</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+            <div style="font-size:1.1rem;font-weight:800;color:var(--deep-teal);">Care Pro</div>
+            <span class="plan-badge">&#9679; Active</span>
+          </div>
+          <div class="plan-price">$49<span style="font-size:1rem;font-weight:600;color:var(--grey-500)">/month</span></div>
+          <div style="font-size:0.8rem;color:var(--grey-500);margin-bottom:16px;">Renews June 21, 2026</div>
+          <button class="btn btn-outline" onclick="openModal('modal-upgrade')">Upgrade Plan</button>
+        </div>
+        <!-- Payment Method -->
+        <div class="card">
+          <div style="font-size:0.75rem;font-weight:800;color:var(--grey-500);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Payment Method</div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="background:var(--deep-teal);color:#fff;border-radius:8px;padding:8px 14px;font-weight:800;font-size:0.85rem;">VISA</div>
+            <div>
+              <div style="font-weight:700;color:var(--deep-teal);">Visa ending in 4242</div>
+              <div style="font-size:0.78rem;color:var(--grey-500);">Expires 12/27</div>
+            </div>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="openModal('modal-update-card')">Update Card</button>
+        </div>
+      </div>
+
+      <!-- Usage -->
+      <div class="card" style="margin-bottom:24px;">
+        <div style="font-size:0.95rem;font-weight:800;color:var(--deep-teal);margin-bottom:16px;">Usage This Month</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;">
+          <div>
+            <div style="font-size:0.8rem;font-weight:700;color:var(--grey-500);margin-bottom:6px;">Residents</div>
+            <div style="font-weight:800;color:var(--deep-teal);margin-bottom:6px;">24 / 30</div>
+            <div class="usage-bar"><div class="usage-fill" style="width:80%"></div></div>
+          </div>
+          <div>
+            <div style="font-size:0.8rem;font-weight:700;color:var(--grey-500);margin-bottom:6px;">Staff Accounts</div>
+            <div style="font-weight:800;color:var(--deep-teal);margin-bottom:6px;">5 / Unlimited</div>
+            <div class="usage-bar"><div class="usage-fill" style="width:20%"></div></div>
+          </div>
+          <div>
+            <div style="font-size:0.8rem;font-weight:700;color:var(--grey-500);margin-bottom:6px;">Reports Generated</div>
+            <div style="font-weight:800;color:var(--deep-teal);margin-bottom:6px;">12 this month</div>
+            <div class="usage-bar"><div class="usage-fill" style="width:40%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoice History -->
+      <div class="card" style="margin-bottom:24px;">
+        <div style="font-size:0.95rem;font-weight:800;color:var(--deep-teal);margin-bottom:16px;">Invoice History</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Status</th><th>Download</th></tr></thead>
+            <tbody id="invoice-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Upgrade Card -->
+      <div class="upgrade-card">
+        <h3>Care Enterprise</h3>
+        <div class="upgrade-price">$149<span style="font-size:1rem;font-weight:600;opacity:0.7">/month</span></div>
+        <ul class="upgrade-features">
+          <li>Unlimited residents</li>
+          <li>Unlimited staff accounts</li>
+          <li>Advanced analytics & custom reports</li>
+          <li>Priority phone support</li>
+          <li>Custom branding</li>
+          <li>EHR integration</li>
+          <li>Dedicated account manager</li>
+        </ul>
+        <button class="btn" style="background:var(--mint);color:var(--deep-teal);font-weight:800;" onclick="openModal('modal-upgrade')">Upgrade to Enterprise</button>
+      </div>
+    </div>
+
+  </div><!-- end content-area -->
+</div><!-- end portal-layout -->
+
+<!-- MOBILE BOTTOM TAB BAR -->
+<div class="mobile-tab-bar">
+  <div class="mobile-tabs">
+    <button class="mobile-tab active" onclick="showSection('dashboard',null);setMobileTab(this)">
+      <span class="tab-icon">&#128202;</span>Dashboard
+    </button>
+    <button class="mobile-tab" onclick="showSection('residents',null);setMobileTab(this)">
+      <span class="tab-icon">&#128106;</span>Residents
+    </button>
+    <button class="mobile-tab" onclick="showSection('staff',null);setMobileTab(this)">
+      <span class="tab-icon">&#128104;&#8205;&#9877;</span>Staff
+    </button>
+    <button class="mobile-tab" onclick="showSection('reports',null);setMobileTab(this)">
+      <span class="tab-icon">&#128203;</span>Reports
+    </button>
+    <button class="mobile-tab" onclick="showSection('settings',null);setMobileTab(this)">
+      <span class="tab-icon">&#9881;</span>Settings
+    </button>
   </div>
 </div>
 
-<main>
-  <div class="loading" id="loading" style="display:none;">
-    <div class="spinner"></div>
-    <p style="color:color:var(--grey-500);">Loading care portal...</p>
+<!-- RESIDENT DETAIL OVERLAY -->
+<div class="detail-overlay" id="resident-detail">
+  <div class="detail-nav">
+    <button class="detail-back" onclick="closeResidentDetail()">&#8592; Back to Residents</button>
+    <span id="detail-resident-name" style="font-weight:800;color:var(--deep-teal);"></span>
   </div>
+  <div class="detail-content" id="detail-content"></div>
+</div>
 
-  <div id="portal">
-    <h1 class="page-title" id="portal-title">Care Dashboard</h1>
-    <p class="page-subtitle" id="portal-subtitle">Today's adherence across all your patients</p>
+<!-- ═══════════ MODALS ═══════════ -->
 
-    <!-- Org aggregate ring + 30-day heatmap -->
-    <div class="org-ring-hero" id="org-ring-hero" style="display:none;"></div>
-
-    <div class="summary-row" id="summary-row"></div>
-    <div class="patients-grid" id="patients-grid"></div>
-    <!-- Profile & Billing -->
-    <div id="profile-billing" style="display:none;margin-top:24px;"></div>
+<!-- Add Resident -->
+<div class="modal-overlay" id="modal-add-resident" onclick="outsideClose(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-add-resident')">&#215;</button>
+    <div class="modal-title">Add Resident</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" id="res-fname" /></div>
+      <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" id="res-lname" /></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Date of Birth</label><input type="date" class="form-input" id="res-dob" /></div>
+      <div class="form-group"><label class="form-label">Room Number</label><input type="text" class="form-input" id="res-room" placeholder="e.g. 204B" /></div>
+    </div>
+    <div class="form-group"><label class="form-label">Conditions</label><input type="text" class="form-input" id="res-conditions" placeholder="e.g. Type 2 Diabetes, Hypertension" /></div>
+    <div style="font-size:0.85rem;font-weight:800;color:var(--deep-teal);margin:16px 0 8px;">Family Contact</div>
+    <div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" id="res-family-name" /></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="res-family-email" /></div>
+      <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" id="res-family-phone" /></div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;" onclick="addResident()">Add Resident</button>
   </div>
-</main>
+</div>
+
+<!-- Invite Staff -->
+<div class="modal-overlay" id="modal-invite-staff" onclick="outsideClose(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-invite-staff')">&#215;</button>
+    <div class="modal-title">Invite Staff Member</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" id="staff-name" /></div>
+      <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="staff-email" /></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Role</label>
+      <select class="form-select" id="staff-role">
+        <option value="Nurse">Nurse</option>
+        <option value="Senior Nurse">Senior Nurse</option>
+        <option value="Admin">Admin</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Personal Message (optional)</label><textarea class="form-input" id="staff-msg" rows="3" placeholder="Welcome to the team..."></textarea></div>
+    <div id="invite-link-wrap" style="display:none;margin-bottom:16px;">
+      <div style="font-size:0.8rem;font-weight:700;color:var(--grey-500);margin-bottom:6px;">Invite Link Generated</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" class="form-input" id="invite-link-val" readonly style="flex:1;font-size:0.75rem;" />
+        <button class="btn btn-outline btn-sm" onclick="copyInviteLink()">Copy</button>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;" onclick="inviteStaff()">Send Invite</button>
+  </div>
+</div>
+
+<!-- Add Medicine -->
+<div class="modal-overlay" id="modal-add-medicine" onclick="outsideClose(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-add-medicine')">&#215;</button>
+    <div class="modal-title">Add Medicine to Library</div>
+    <div class="form-group"><label class="form-label">Medicine Name</label><input type="text" class="form-input" id="med-name" /></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Dosage</label><input type="text" class="form-input" id="med-dose" placeholder="e.g. 500mg" /></div>
+      <div class="form-group"><label class="form-label">Doses per Day</label><input type="number" class="form-input" id="med-freq" value="2" min="1" max="6" /></div>
+    </div>
+    <div class="form-group"><label class="form-label">Administration Times</label><input type="text" class="form-input" id="med-times" placeholder="e.g. 8:00 AM, 8:00 PM" /></div>
+    <button class="btn btn-primary" style="width:100%;" onclick="addMedicine()">Add Medicine</button>
+  </div>
+</div>
+
+<!-- Log Dose -->
+<div class="modal-overlay" id="modal-log-dose" onclick="outsideClose(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-log-dose')">&#215;</button>
+    <div class="modal-title">Log Dose</div>
+    <div class="form-group">
+      <label class="form-label">Resident</label>
+      <select class="form-select" id="log-resident"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Medicine</label>
+      <select class="form-select" id="log-medicine"></select>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="log-date" /></div>
+      <div class="form-group"><label class="form-label">Time</label><input type="time" class="form-input" id="log-time" /></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Status</label>
+      <select class="form-select" id="log-status">
+        <option value="taken">Taken</option>
+        <option value="missed">Missed</option>
+        <option value="refused">Refused</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" style="width:100%;" onclick="logDose()">Log Dose</button>
+  </div>
+</div>
+
+<!-- Update Card -->
+<div class="modal-overlay" id="modal-update-card" onclick="outsideClose(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-update-card')">&#215;</button>
+    <div class="modal-title">Update Payment Method</div>
+    <div class="form-group"><label class="form-label">Card Number</label><input type="text" class="form-input" placeholder="4242 4242 4242 4242" maxlength="19" /></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Expiry</label><input type="text" class="form-input" placeholder="MM / YY" maxlength="7" /></div>
+      <div class="form-group"><label class="form-label">CVC</label><input type="text" class="form-input" placeholder="123" maxlength="4" /></div>
+    </div>
+    <div class="form-group"><label class="form-label">Name on Card</label><input type="text" class="form-input" placeholder="Jane Smith" /></div>
+    <button class="btn btn-primary" style="width:100%;" onclick="updateCard()">Update Card</button>
+    <p style="font-size:0.73rem;color:var(--grey-500);text-align:center;margin-top:12px;">This is a demo — no real charges will be made</p>
+  </div>
+</div>
+
+<!-- Upgrade Plan -->
+<div class="modal-overlay" id="modal-upgrade" onclick="outsideClose(event,this)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-upgrade')">&#215;</button>
+    <div class="modal-title">Upgrade to Enterprise</div>
+    <div style="background:var(--off-white);border-radius:12px;padding:20px;margin-bottom:20px;">
+      <div style="font-size:1.1rem;font-weight:800;color:var(--deep-teal);">Care Enterprise</div>
+      <div style="font-size:1.8rem;font-weight:900;color:var(--deep-teal);margin:6px 0;">$149<span style="font-size:1rem;color:var(--grey-500);font-weight:600;">/month</span></div>
+      <ul style="list-style:none;font-size:0.85rem;color:var(--grey-500);">
+        <li style="padding:3px 0;">&#10003; Unlimited residents & staff</li>
+        <li style="padding:3px 0;">&#10003; Advanced analytics</li>
+        <li style="padding:3px 0;">&#10003; EHR integration</li>
+        <li style="padding:3px 0;">&#10003; Dedicated account manager</li>
+        <li style="padding:3px 0;">&#10003; Custom branding</li>
+      </ul>
+    </div>
+    <button class="btn btn-primary" style="width:100%;" onclick="closeModal('modal-upgrade');toast('Contact us at hello@carely.fit to upgrade','success')">Contact Sales</button>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
 
 <footer>
-  <span id="footer-copy">© 2026 Carely · B2B Care Portal</span>
+  &copy; 2026 Carely &nbsp;&middot;&nbsp; PIPEDA &amp; HIPAA Compliant &nbsp;&middot;&nbsp;
+  <a href="#">Privacy</a> &nbsp;&middot;&nbsp; <a href="#">Terms</a>
 </footer>
 
 <script>
-  var API = 'https://carely-backend-production.up.railway.app';
-  var token = new URLSearchParams(window.location.search).get('token');
-
-  // ── Ring System ──────────────────────────────────────────────────────────────
-  var _ringIdCounter = 0;
-
-  var RING_SIZES = {
-    lg: { wrap: 180, r: 74, sw: 12, C: 464.9, pctSize: 40 },
-    sm: { wrap: 80,  r: 32, sw: 8,  C: 201.1, pctSize: 18 },
-    xs: { wrap: 64,  r: 26, sw: 7,  C: 163.4, pctSize: 13 }
-  };
-
-  function ringColor(pct) {
-    if (pct === null || pct === undefined || isNaN(pct)) return '#EEF1F5';
-    return pct >= 80 ? '#00C896' : pct >= 50 ? '#FF8800' : '#FF3B3B';
-  }
-
-  // Full ring card (with white card wrapper + label)
-  function makeRing(pct, size, label, sublabel) {
-    var s = RING_SIZES[size] || RING_SIZES.sm;
-    var id = 'ring-' + (++_ringIdCounter);
-    var pctId = 'pct-' + _ringIdCounter;
-    var safePct = (pct !== null && pct !== undefined) ? pct : 0;
-
-    var card = document.createElement('div');
-    card.className = 'ring-card-ui';
-    card.dataset.ringId = id;
-    card.dataset.pctId = pctId;
-    card.dataset.targetPct = safePct;
-    card.dataset.size = size;
-
-    if (label) {
-      var lbl = document.createElement('div');
-      lbl.className = 'rc-label';
-      lbl.textContent = label;
-      card.appendChild(lbl);
-    }
-
-    var wrap = document.createElement('div');
-    wrap.className = 'ring-wrap-ui';
-    wrap.style.width = s.wrap + 'px';
-    wrap.style.height = s.wrap + 'px';
-
-    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width', s.wrap);
-    svg.setAttribute('height', s.wrap);
-    svg.setAttribute('viewBox', '0 0 ' + s.wrap + ' ' + s.wrap);
-
-    var cx = s.wrap / 2;
-    var cy = s.wrap / 2;
-
-    var bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    bgCircle.setAttribute('cx', cx);
-    bgCircle.setAttribute('cy', cy);
-    bgCircle.setAttribute('r', s.r);
-    bgCircle.setAttribute('class', 'ring-bg-ui');
-    bgCircle.setAttribute('stroke-width', s.sw);
-
-    var fillCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    fillCircle.setAttribute('id', id);
-    fillCircle.setAttribute('cx', cx);
-    fillCircle.setAttribute('cy', cy);
-    fillCircle.setAttribute('r', s.r);
-    fillCircle.setAttribute('class', 'ring-fill-ui');
-    fillCircle.setAttribute('stroke-width', s.sw);
-    fillCircle.setAttribute('stroke-dasharray', s.C);
-    fillCircle.setAttribute('stroke-dashoffset', s.C);
-    fillCircle.setAttribute('stroke', ringColor(safePct));
-
-    svg.appendChild(bgCircle);
-    svg.appendChild(fillCircle);
-    wrap.appendChild(svg);
-
-    var center = document.createElement('div');
-    center.className = 'ring-center-ui';
-
-    var pctEl = document.createElement('span');
-    pctEl.id = pctId;
-    pctEl.className = 'ring-pct-ui';
-    pctEl.style.fontSize = s.pctSize + 'px';
-    pctEl.textContent = '0%';
-    center.appendChild(pctEl);
-
-    var subEl = document.createElement('span');
-    subEl.className = 'ring-sub-ui';
-    subEl.textContent = 'today';
-    center.appendChild(subEl);
-
-    wrap.appendChild(center);
-    card.appendChild(wrap);
-
-    if (sublabel) {
-      var sub = document.createElement('div');
-      sub.className = 'rc-sublabel';
-      sub.textContent = sublabel;
-      card.appendChild(sub);
-    }
-
-    return card;
-  }
-
-  // Inline ring (no card wrapper — used inside patient cards)
-  function makeRingInline(pct, size) {
-    var s = RING_SIZES[size] || RING_SIZES.xs;
-    var id = 'ring-' + (++_ringIdCounter);
-    var pctId = 'pct-' + _ringIdCounter;
-    var safePct = (pct !== null && pct !== undefined) ? pct : 0;
-
-    var wrap = document.createElement('div');
-    wrap.className = 'ring-inline-wrap';
-    wrap.style.width = s.wrap + 'px';
-    wrap.style.height = s.wrap + 'px';
-    wrap.dataset.ringId = id;
-    wrap.dataset.pctId = pctId;
-    wrap.dataset.targetPct = safePct;
-    wrap.dataset.size = size;
-
-    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width', s.wrap);
-    svg.setAttribute('height', s.wrap);
-    svg.setAttribute('viewBox', '0 0 ' + s.wrap + ' ' + s.wrap);
-
-    var cx = s.wrap / 2;
-    var cy = s.wrap / 2;
-
-    var bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    bgCircle.setAttribute('cx', cx);
-    bgCircle.setAttribute('cy', cy);
-    bgCircle.setAttribute('r', s.r);
-    bgCircle.setAttribute('fill', 'none');
-    bgCircle.setAttribute('stroke', '#EEF1F5');
-    bgCircle.setAttribute('stroke-width', s.sw);
-
-    var fillCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    fillCircle.setAttribute('id', id);
-    fillCircle.setAttribute('cx', cx);
-    fillCircle.setAttribute('cy', cy);
-    fillCircle.setAttribute('r', s.r);
-    fillCircle.setAttribute('fill', 'none');
-    fillCircle.setAttribute('stroke-linecap', 'round');
-    fillCircle.setAttribute('stroke-width', s.sw);
-    fillCircle.setAttribute('stroke-dasharray', s.C);
-    fillCircle.setAttribute('stroke-dashoffset', s.C);
-    fillCircle.setAttribute('stroke', ringColor(safePct));
-    fillCircle.style.transition = 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1), stroke 0.4s ease';
-
-    svg.appendChild(bgCircle);
-    svg.appendChild(fillCircle);
-    wrap.appendChild(svg);
-
-    var center = document.createElement('div');
-    center.className = 'ring-inline-center';
-
-    var pctEl = document.createElement('span');
-    pctEl.id = pctId;
-    pctEl.className = 'ring-inline-pct';
-    pctEl.textContent = safePct + '%';
-    center.appendChild(pctEl);
-
-    var subLbl = document.createElement('span');
-    subLbl.className = 'ring-inline-sublabel';
-    subLbl.textContent = 'today';
-    center.appendChild(subLbl);
-
-    wrap.appendChild(center);
-    return wrap;
-  }
-
-  function animateRingEl(el) {
-    var id = el.dataset.ringId;
-    var pctId = el.dataset.pctId;
-    var size = el.dataset.size || 'xs';
-    var pct = parseInt(el.dataset.targetPct) || 0;
-    var s = RING_SIZES[size] || RING_SIZES.xs;
-
-    var circle = document.getElementById(id);
-    var label = document.getElementById(pctId);
-    if (!circle || !label) return;
-
-    var offset = s.C * (1 - pct / 100);
-    circle.style.strokeDashoffset = offset;
-    circle.style.stroke = ringColor(pct);
-
-    var from = 0;
-    var start = null;
-    function step(ts) {
-      if (!start) start = ts;
-      var p = Math.min((ts - start) / 1300, 1);
-      var e = 1 - Math.pow(1 - p, 3);
-      label.textContent = Math.round(from + (pct - from) * e) + '%';
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-
-  // ── Heatmap ──────────────────────────────────────────────────────────────────
-  function makeHeatmap(states28) {
-    var wrap = document.createElement('div');
-
-    var headers = document.createElement('div');
-    headers.className = 'day-headers-grid';
-    ['M','T','W','T','F','S','S'].forEach(function(d) {
-      var h = document.createElement('div');
-      h.className = 'day-header-cell';
-      h.textContent = d;
-      headers.appendChild(h);
-    });
-    wrap.appendChild(headers);
-
-    var grid = document.createElement('div');
-    grid.className = 'heatmap-grid';
-    states28.forEach(function(s) {
-      var cell = document.createElement('div');
-      cell.className = 'heat-cell ' + s;
-      grid.appendChild(cell);
-    });
-    wrap.appendChild(grid);
-
-    var legend = document.createElement('div');
-    legend.className = 'heatmap-legend';
-    var legendItems = [
-      {color:'#00C896', label:'All taken'},
-      {color:'#6EDFC0', label:'Most'},
-      {color:'#FF8800', label:'Partial'},
-      {color:'#FF3B3B', label:'Missed'},
-      {color:'#EEF1F5', label:'Upcoming'}
-    ];
-    legendItems.forEach(function(item) {
-      var li = document.createElement('div');
-      li.className = 'legend-item';
-      var dot = document.createElement('div');
-      dot.className = 'legend-dot';
-      dot.style.background = item.color;
-      var txt = document.createElement('span');
-      txt.textContent = item.label;
-      li.appendChild(dot);
-      li.appendChild(txt);
-      legend.appendChild(li);
-    });
-    wrap.appendChild(legend);
-
-    return wrap;
-  }
-
-  function generateHeatmapStates(adhPct) {
-    var states = [];
-    var threshold = (adhPct !== null && adhPct !== undefined) ? adhPct / 100 : 0.5;
-    for (var i = 0; i < 21; i++) {
-      var r = Math.random();
-      var state;
-      if (r < threshold * 0.65)      state = 'perfect';
-      else if (r < threshold * 0.85) state = 'good';
-      else if (r < threshold)        state = 'partial';
-      else                           state = 'miss';
-      states.push(state);
-    }
-    for (var j = 21; j < 28; j++) states.push('future');
-    return states;
-  }
-  // ── End Ring System ──────────────────────────────────────────────────────────
-
-  function adherenceColor(pct) {
-    if (pct === null || pct === undefined) return '#7A9490';
-    if (pct >= 80) return '#02C39A';
-    if (pct >= 50) return '#F59E0B';
-    return '#EF4444';
-  }
-
-  function makeSummaryCard(value, label, colorClass) {
-    var card = document.createElement('div');
-    card.className = 'summary-card';
-    var v = document.createElement('div');
-    v.className = 'summary-value' + (colorClass ? ' ' + colorClass : '');
-    v.textContent = String(value);
-    var l = document.createElement('div');
-    l.className = 'summary-label';
-    l.textContent = label;
-    card.appendChild(v);
-    card.appendChild(l);
-    return card;
-  }
-
-  function makeOrgRingHero(avgAdherence) {
-    var hero = document.getElementById('org-ring-hero');
-    hero.style.display = 'flex';
-
-    // Left: large ring
-    var left = document.createElement('div');
-    left.className = 'org-ring-left';
-
-    var titleEl = document.createElement('div');
-    titleEl.className = 'org-ring-title';
-    titleEl.textContent = 'Overall Adherence';
-    left.appendChild(titleEl);
-
-    var pct = avgAdherence !== null ? avgAdherence : 0;
-    var ringCard = makeRing(pct, 'lg', null, null);
-    left.appendChild(ringCard);
-
-    var subEl = document.createElement('div');
-    subEl.className = 'org-ring-sub';
-    subEl.textContent = 'All patients today';
-    left.appendChild(subEl);
-
-    hero.appendChild(left);
-
-    // Right: 30-day heatmap
-    var right = document.createElement('div');
-    right.className = 'org-ring-right';
-
-    var rightTitle = document.createElement('div');
-    rightTitle.className = 'org-ring-right-title';
-    rightTitle.textContent = '28-Day Adherence Calendar';
-    right.appendChild(rightTitle);
-
-    var states = generateHeatmapStates(pct);
-    var heatmapEl = makeHeatmap(states);
-    right.appendChild(heatmapEl);
-
-    hero.appendChild(right);
-
-    return ringCard;
-  }
-
-  function makePatientCard(p) {
-    var pct = p.today.adherencePct;
-    var card = document.createElement('div');
-    card.className = 'patient-card' + ((pct !== null && pct < 50) ? ' at-risk' : '');
-
-    var top = document.createElement('div');
-    top.className = 'card-top';
-
-    var avatar = document.createElement('div');
-    avatar.className = 'avatar';
-    avatar.textContent = (p.firstName || '?').charAt(0).toUpperCase();
-
-    var info = document.createElement('div');
-    var name = document.createElement('div');
-    name.className = 'patient-name';
-    name.textContent = p.firstName || 'Patient';
-    var plan = document.createElement('div');
-    plan.className = 'patient-plan';
-    plan.textContent = p.plan || 'trial';
-    info.appendChild(name);
-    info.appendChild(plan);
-
-    // sm inline ring per patient
-    var ringArea = document.createElement('div');
-    ringArea.className = 'card-ring-area';
-    var inlineRing = makeRingInline(pct !== null ? pct : 0, 'sm');
-    ringArea.appendChild(inlineRing);
-
-    top.appendChild(avatar);
-    top.appendChild(info);
-    top.appendChild(ringArea);
-    card.appendChild(top);
-
-    if (p.today.total > 0) {
-      var doseRow = document.createElement('div');
-      doseRow.className = 'dose-row';
-      doseRow.textContent = p.today.taken + ' of ' + p.today.total + ' doses taken today';
-      card.appendChild(doseRow);
-    }
-
-    if (p.medicines && p.medicines.length) {
-      var medsList = document.createElement('div');
-      medsList.className = 'meds-list';
-      var shown = p.medicines.slice(0, 4);
-      shown.forEach(function(m) {
-        var chip = document.createElement('div');
-        chip.className = 'med-chip';
-        var dot = document.createElement('div');
-        dot.className = 'med-dot';
-        dot.style.backgroundColor = m.colourTag || '#028090';
-        var label = document.createElement('span');
-        label.textContent = m.nickname || m.name;
-        chip.appendChild(dot);
-        chip.appendChild(label);
-        medsList.appendChild(chip);
-      });
-      if (p.medicines.length > 4) {
-        var more = document.createElement('div');
-        more.className = 'med-chip';
-        more.textContent = '+' + (p.medicines.length - 4) + ' more';
-        medsList.appendChild(more);
-      }
-      card.appendChild(medsList);
-    }
-
-    return { card: card, ring: inlineRing };
-  }
-
-  var DEMO_ORG = {
-    org: { name: 'Sunrise Senior Living' },
-    summary: { totalPatients: 12, avgAdherence: 84, atRisk: 2 },
-    patients: [
-      { firstName: 'Margaret', plan: 'premium', today: { adherencePct: 100, taken: 3, total: 3 }, medicines: [{ name: 'Metformin', nickname: 'Diabetes', colourTag: '#028090' }, { name: 'Lisinopril', nickname: 'BP', colourTag: '#02C39A' }] },
-      { firstName: 'Robert', plan: 'premium', today: { adherencePct: 67, taken: 2, total: 3 }, medicines: [{ name: 'Warfarin', nickname: 'Blood thinner', colourTag: '#FF8800' }] },
-      { firstName: 'Dorothy', plan: 'trial', today: { adherencePct: 33, taken: 1, total: 3 }, medicines: [{ name: 'Atorvastatin', nickname: 'Cholesterol', colourTag: '#FF3B3B' }, { name: 'Metoprolol', nickname: 'Heart', colourTag: '#028090' }] },
-      { firstName: 'Harold', plan: 'premium', today: { adherencePct: 100, taken: 2, total: 2 }, medicines: [{ name: 'Amlodipine', nickname: 'BP', colourTag: '#02C39A' }] },
-      { firstName: 'Eleanor', plan: 'premium', today: { adherencePct: 50, taken: 1, total: 2 }, medicines: [{ name: 'Levothyroxine', nickname: 'Thyroid', colourTag: '#FF8800' }] },
-      { firstName: 'Walter', plan: 'premium', today: { adherencePct: 100, taken: 4, total: 4 }, medicines: [{ name: 'Insulin Glargine', nickname: 'Insulin', colourTag: '#028090' }, { name: 'Metformin', nickname: 'Diabetes', colourTag: '#02C39A' }] }
+// ═══════════════════════════════════════════════════════════════════════════════
+// DEMO DATA
+// ═══════════════════════════════════════════════════════════════════════════════
+var residents = [
+  { id:1, first:'Eleanor', last:'Chen', age:78, room:'104A', dob:'1948-03-12', conditions:'Type 2 Diabetes, Hypertension', adherence:62, status:'at-risk',
+    nurse:'Sarah Kim', familyName:'Michael Chen', familyEmail:'mchen@gmail.com', familyPhone:'604-555-0101',
+    meds:[
+      {name:'Metformin',dose:'500mg',freq:'Twice daily',times:'8:00 AM, 8:00 PM',color:'#028090'},
+      {name:'Lisinopril',dose:'10mg',freq:'Once daily',times:'8:00 AM',color:'#02C39A'}
     ]
-  };
-
-  var API = 'https://carely-backend-production.up.railway.app';
-  var SESSION_KEY = 'carely_partner_token';
-
-  function isDemo() {
-    return new URLSearchParams(location.search).get('demo') === 'true';
+  },
+  { id:2, first:'James', last:'Whitfield', age:83, room:'207B', dob:'1943-07-22', conditions:'Cardiovascular Disease, High Cholesterol', adherence:95, status:'good',
+    nurse:'Michael Torres', familyName:'Patricia Whitfield', familyEmail:'pwhitfield@yahoo.com', familyPhone:'604-555-0202',
+    meds:[
+      {name:'Aspirin',dose:'81mg',freq:'Once daily',times:'9:00 AM',color:'#EF4444'},
+      {name:'Atorvastatin',dose:'20mg',freq:'Once daily',times:'9:00 PM',color:'#F59E0B'}
+    ]
+  },
+  { id:3, first:'Dorothy', last:'Nguyen', age:71, room:'312C', dob:'1955-01-08', conditions:'Hypothyroidism', adherence:88, status:'good',
+    nurse:'Priya Patel', familyName:'Kevin Nguyen', familyEmail:'kn@gmail.com', familyPhone:'604-555-0303',
+    meds:[{name:'Levothyroxine',dose:'50mcg',freq:'Once daily',times:'7:00 AM',color:'#8B5CF6'}]
+  },
+  { id:4, first:'Robert', last:'Martinez', age:90, room:'101A', dob:'1936-11-30', conditions:'Atrial Fibrillation, Heart Failure', adherence:44, status:'critical',
+    nurse:'Sarah Kim', familyName:'Anna Martinez', familyEmail:'anna.m@outlook.com', familyPhone:'604-555-0404',
+    meds:[
+      {name:'Warfarin',dose:'5mg',freq:'Once daily',times:'6:00 PM',color:'#EF4444'},
+      {name:'Digoxin',dose:'0.125mg',freq:'Once daily',times:'8:00 AM',color:'#F97316'}
+    ]
+  },
+  { id:5, first:'Margaret', last:'Thompson', age:67, room:'215D', dob:'1959-05-19', conditions:'Type 2 Diabetes, Depression', adherence:78, status:'good',
+    nurse:'Michael Torres', familyName:'Susan Thompson', familyEmail:'sthompson@gmail.com', familyPhone:'604-555-0505',
+    meds:[
+      {name:'Metformin',dose:'1000mg',freq:'Twice daily',times:'8:00 AM, 8:00 PM',color:'#028090'},
+      {name:'Sertraline',dose:'50mg',freq:'Once daily',times:'8:00 AM',color:'#6366F1'}
+    ]
+  },
+  { id:6, first:'Harold', last:'Benson', age:76, room:'308B', dob:'1950-09-14', conditions:'COPD, Anxiety', adherence:82, status:'good',
+    nurse:'Priya Patel', familyName:'Carol Benson', familyEmail:'cbenson@gmail.com', familyPhone:'604-555-0606',
+    meds:[{name:'Albuterol',dose:'2.5mg',freq:'Twice daily',times:'8:00 AM, 8:00 PM',color:'#0EA5E9'}]
+  },
+  { id:7, first:'Edith', last:'Sullivan', age:84, room:'120A', dob:'1942-12-03', conditions:'Osteoporosis, Arthritis', adherence:91, status:'good',
+    nurse:'Sarah Kim', familyName:'Tom Sullivan', familyEmail:'tsullivan@gmail.com', familyPhone:'604-555-0707',
+    meds:[
+      {name:'Alendronate',dose:'70mg',freq:'Weekly',times:'Monday 8:00 AM',color:'#EC4899'},
+      {name:'Calcium',dose:'500mg',freq:'Twice daily',times:'8:00 AM, 8:00 PM',color:'#14B8A6'}
+    ]
+  },
+  { id:8, first:'Francis', last:'Park', age:79, room:'219C', dob:'1947-04-27', conditions:'Parkinson\'s Disease', adherence:67, status:'at-risk',
+    nurse:'Michael Torres', familyName:'Jenny Park', familyEmail:'jpark@outlook.com', familyPhone:'604-555-0808',
+    meds:[
+      {name:'Levodopa',dose:'25mg',freq:'Three times daily',times:'7:00 AM, 1:00 PM, 7:00 PM',color:'#A855F7'},
+      {name:'Carbidopa',dose:'100mg',freq:'Three times daily',times:'7:00 AM, 1:00 PM, 7:00 PM',color:'#8B5CF6'}
+    ]
   }
+];
 
-  function checkAuth() {
-    if (isDemo()) {
-      document.getElementById('login-gate').style.display = 'none';
-      initDemoData();
-      return;
-    }
-    var token = sessionStorage.getItem(SESSION_KEY);
-    if (!token) {
-      document.getElementById('login-gate').style.display = 'flex';
-      return;
-    }
-    document.getElementById('login-gate').style.display = 'none';
-    fetchLiveData(token);
+var staff = [
+  {id:1, name:'You (Admin)', role:'Admin', email:'admin@carehome.ca', status:'Active', residents:'All', lastActive:'Now'},
+  {id:2, name:'Sarah Kim', role:'Senior Nurse', email:'sarah@carehome.ca', status:'Active', residents:'8', lastActive:'1 hour ago'},
+  {id:3, name:'Michael Torres', role:'Nurse', email:'michael@carehome.ca', status:'Active', residents:'5', lastActive:'3 hours ago'},
+  {id:4, name:'Priya Patel', role:'Nurse', email:'priya@carehome.ca', status:'Active', residents:'6', lastActive:'Yesterday'},
+  {id:5, name:'David Chen', role:'Nurse', email:'david@carehome.ca', status:'Invited', residents:'—', lastActive:'Pending'}
+];
+
+var medicines = [
+  {name:'Metformin', residents:2, dosesPerDay:2, stockAlert:false, lastReviewed:'May 15, 2026'},
+  {name:'Lisinopril', residents:1, dosesPerDay:1, stockAlert:false, lastReviewed:'May 10, 2026'},
+  {name:'Aspirin', residents:1, dosesPerDay:1, stockAlert:false, lastReviewed:'May 18, 2026'},
+  {name:'Atorvastatin', residents:1, dosesPerDay:1, stockAlert:false, lastReviewed:'May 12, 2026'},
+  {name:'Levothyroxine', residents:1, dosesPerDay:1, stockAlert:false, lastReviewed:'May 20, 2026'},
+  {name:'Warfarin', residents:1, dosesPerDay:1, stockAlert:true, lastReviewed:'May 19, 2026'},
+  {name:'Digoxin', residents:1, dosesPerDay:1, stockAlert:false, lastReviewed:'May 17, 2026'},
+  {name:'Sertraline', residents:1, dosesPerDay:1, stockAlert:false, lastReviewed:'May 14, 2026'},
+  {name:'Levodopa', residents:1, dosesPerDay:3, stockAlert:false, lastReviewed:'May 16, 2026'},
+  {name:'Carbidopa', residents:1, dosesPerDay:3, stockAlert:false, lastReviewed:'May 16, 2026'}
+];
+
+var doseLogs = [
+  {time:'9:14 AM', resident:'Eleanor Chen', medicine:'Metformin 500mg', dose:'500mg', loggedBy:'Sarah Kim', status:'taken', date:'2026-05-21'},
+  {time:'9:20 AM', resident:'James Whitfield', medicine:'Aspirin 81mg', dose:'81mg', loggedBy:'Michael Torres', status:'taken', date:'2026-05-21'},
+  {time:'8:45 AM', resident:'Dorothy Nguyen', medicine:'Levothyroxine 50mcg', dose:'50mcg', loggedBy:'Priya Patel', status:'taken', date:'2026-05-21'},
+  {time:'8:00 AM', resident:'Eleanor Chen', medicine:'Lisinopril 10mg', dose:'10mg', loggedBy:'Sarah Kim', status:'missed', date:'2026-05-21'},
+  {time:'9:30 AM', resident:'Margaret Thompson', medicine:'Metformin 1000mg', dose:'1000mg', loggedBy:'Michael Torres', status:'taken', date:'2026-05-21'},
+  {time:'8:00 AM', resident:'Robert Martinez', medicine:'Digoxin 0.125mg', dose:'0.125mg', loggedBy:'Sarah Kim', status:'missed', date:'2026-05-21'},
+  {time:'9:45 AM', resident:'Harold Benson', medicine:'Albuterol 2.5mg', dose:'2.5mg', loggedBy:'Priya Patel', status:'taken', date:'2026-05-21'},
+  {time:'8:00 AM', resident:'Edith Sullivan', medicine:'Calcium 500mg', dose:'500mg', loggedBy:'Sarah Kim', status:'taken', date:'2026-05-21'},
+  {time:'8:15 AM', resident:'Francis Park', medicine:'Levodopa 25mg', dose:'25mg', loggedBy:'Michael Torres', status:'taken', date:'2026-05-21'},
+  {time:'8:15 AM', resident:'Francis Park', medicine:'Carbidopa 100mg', dose:'100mg', loggedBy:'Michael Torres', status:'taken', date:'2026-05-21'}
+];
+
+var activityFeed = [
+  {text:'Nurse Sarah logged Metformin for Eleanor Chen', time:'9:14 AM'},
+  {text:'Admin added new resident: James Whitfield', time:'8:30 AM'},
+  {text:'Nurse Priya logged Levothyroxine for Dorothy Nguyen', time:'8:45 AM'},
+  {text:'Dose missed alert — Robert Martinez — Digoxin', time:'8:05 AM'},
+  {text:'Nurse Michael logged Aspirin for James Whitfield', time:'9:20 AM'},
+  {text:'Admin updated medicine: Warfarin dosage revised', time:'Yesterday 4:12 PM'},
+  {text:'Sarah Kim clocked into shift', time:'Yesterday 7:00 AM'},
+  {text:'Weekly adherence report generated', time:'Mon 9:00 AM'},
+  {text:'New staff invite sent — David Chen', time:'Sun 2:30 PM'},
+  {text:'Eleanor Chen family contact updated', time:'Sat 11:10 AM'}
+];
+
+var invoices = [
+  {date:'May 1, 2026', desc:'Care Pro — Monthly', amount:'$49.00', status:'Paid'},
+  {date:'Apr 1, 2026', desc:'Care Pro — Monthly', amount:'$49.00', status:'Paid'},
+  {date:'Mar 1, 2026', desc:'Care Pro — Monthly', amount:'$49.00', status:'Paid'},
+  {date:'Feb 1, 2026', desc:'Care Pro — Monthly', amount:'$49.00', status:'Paid'},
+  {date:'Jan 1, 2026', desc:'Care Pro — Monthly', amount:'$49.00', status:'Paid'}
+];
+
+var incidents = [
+  {datetime:'May 21, 2026 8:00 AM', resident:'Eleanor Chen', medicine:'Lisinopril 10mg', reason:'Resident refused', status:'Open'},
+  {datetime:'May 21, 2026 8:00 AM', resident:'Robert Martinez', medicine:'Digoxin 0.125mg', reason:'Not logged by shift end', status:'Open'},
+  {datetime:'May 20, 2026 8:00 PM', resident:'Francis Park', medicine:'Levodopa 25mg', reason:'Late administration', status:'Reviewed'},
+  {datetime:'May 19, 2026 9:00 AM', resident:'Eleanor Chen', medicine:'Metformin 500mg', reason:'Resident asleep', status:'Reviewed'}
+];
+
+var adherenceSummary = residents.map(function(r) {
+  var trend = r.adherence > 80 ? 'up' : 'down';
+  return { name: r.first + ' ' + r.last, pct: r.adherence, trend: trend, taken: Math.round(r.adherence * 0.14), missed: Math.round((100-r.adherence) * 0.14) };
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// RING SYSTEM
+// ═══════════════════════════════════════════════════════════════════════════════
+var _ringId = 0;
+function ringColor(pct) {
+  if (!pct && pct !== 0) return '#EEF1F5';
+  return pct >= 80 ? '#00C896' : pct >= 50 ? '#FF8800' : '#FF3B3B';
+}
+function makeInlineRing(pct, size) {
+  var r = size * 0.38, sw = size * 0.1;
+  var C = 2 * Math.PI * r;
+  var offset = C - (pct / 100) * C;
+  var id = 'ir' + (++_ringId);
+  var wrap = document.createElement('div');
+  wrap.className = 'ring-inline-wrap';
+  wrap.style.width = size + 'px';
+  wrap.style.height = size + 'px';
+  wrap.innerHTML = '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'">' +
+    '<circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="#EEF1F5" stroke-width="'+sw+'"/>' +
+    '<circle id="'+id+'" cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="'+ringColor(pct)+'" stroke-width="'+sw+'" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+C+'"/>' +
+    '</svg>' +
+    '<div class="ring-inline-center"><div class="ring-inline-pct">'+pct+'%</div></div>';
+  setTimeout(function() {
+    var el = document.getElementById(id);
+    if (el) el.style.strokeDashoffset = offset;
+    el && (el.style.transition = 'stroke-dashoffset 1s ease');
+  }, 50);
+  return wrap;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// NAV / SECTION SWITCHING
+// ═══════════════════════════════════════════════════════════════════════════════
+function showSection(name, el) {
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+  var sec = document.getElementById('section-' + name);
+  if (sec) sec.classList.add('active');
+  document.querySelectorAll('.sidebar-item').forEach(function(item){ item.classList.remove('active'); });
+  if (el) { el.classList.add('active'); }
+  else {
+    var match = document.querySelector('[data-section="'+name+'"]');
+    if (match) match.classList.add('active');
   }
+  closeSidebar();
+}
 
-  function doLogin() {
-    var email    = document.getElementById('login-email').value.trim();
-    var password = document.getElementById('login-password').value;
-    var err      = document.getElementById('login-err');
-    err.style.display = 'none';
+function toggleSidebar() {
+  var sb = document.getElementById('sidebar');
+  var bd = document.getElementById('sidebar-backdrop');
+  sb.classList.toggle('open');
+  bd.classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-backdrop').classList.remove('open');
+}
 
-    if (!email || !password) {
-      err.textContent = 'Please enter email and password.';
-      err.style.display = 'block';
-      return;
+function setMobileTab(el) {
+  document.querySelectorAll('.mobile-tab').forEach(function(t){ t.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+function switchRole(role) {
+  document.body.setAttribute('data-role', role);
+  // If nurse switches to a hidden section, go back to dashboard
+  var activeSection = document.querySelector('.section.active');
+  if (activeSection && !activeSection.classList.contains('active')) return;
+  if (role === 'nurse') {
+    var visibleSections = ['dashboard', 'residents', 'reports'];
+    var cur = document.querySelector('.section.active');
+    if (cur) {
+      var id = cur.id.replace('section-','');
+      if (visibleSections.indexOf(id) === -1) showSection('dashboard', null);
     }
+  }
+}
 
-    fetch(API + '/partner/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email, password: password }),
-    })
-      .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
-      .then(function(result) {
-        if (!result.ok) {
-          err.textContent = result.data.message || result.data.error || 'Login failed.';
-          err.style.display = 'block';
-          return;
-        }
-        sessionStorage.setItem(SESSION_KEY, result.data.token);
-        document.getElementById('login-gate').style.display = 'none';
-        fetchLiveData(result.data.token);
-      })
-      .catch(function() {
-        err.textContent = 'Network error. Please try again.';
-        err.style.display = 'block';
+// ═══════════════════════════════════════════════════════════════════════════════
+// MODALS
+// ═══════════════════════════════════════════════════════════════════════════════
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+function outsideClose(e, overlay) {
+  if (e.target === overlay) closeModal(overlay.id);
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(function(m){ closeModal(m.id); });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════════════════════════
+function toast(msg, type) {
+  var t = document.createElement('div');
+  t.className = 'toast ' + (type || 'success');
+  t.textContent = msg;
+  document.getElementById('toast-container').appendChild(t);
+  setTimeout(function(){ t.style.opacity='0'; t.style.transition='opacity 0.4s'; setTimeout(function(){ t.remove(); },400); }, 3000);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// SUB TABS
+// ═══════════════════════════════════════════════════════════════════════════════
+function showSubTab(section, name, el) {
+  var panels = document.querySelectorAll('#section-' + section + ' .sub-tab-panel');
+  panels.forEach(function(p){ p.classList.remove('active'); });
+  var panel = document.getElementById(section + '-' + name);
+  if (panel) panel.classList.add('active');
+  var tabs = el.closest('.sub-tabs').querySelectorAll('.sub-tab');
+  tabs.forEach(function(t){ t.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// RENDER: DASHBOARD
+// ═══════════════════════════════════════════════════════════════════════════════
+function renderDashboard() {
+  // Date
+  var dateEl = document.getElementById('dashboard-date');
+  if (dateEl) {
+    var d = new Date(2026, 4, 21);
+    dateEl.textContent = d.toLocaleDateString('en-CA', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  }
+  // Activity feed
+  var al = document.getElementById('activity-list');
+  if (al) {
+    al.innerHTML = '';
+    activityFeed.forEach(function(a) {
+      var li = document.createElement('li');
+      li.className = 'activity-item';
+      li.innerHTML = '<div class="activity-dot"></div><span>'+a.text+'</span><span class="activity-time">'+a.time+'</span>';
+      al.appendChild(li);
+    });
+  }
+  // Heatmap
+  var days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  var hh = document.getElementById('heatmap-headers');
+  if (hh) {
+    hh.innerHTML = '';
+    days.forEach(function(d){ var c=document.createElement('div'); c.className='day-header-cell'; c.textContent=d; hh.appendChild(c); });
+  }
+  var hr = document.getElementById('heatmap-rows');
+  if (hr) {
+    hr.innerHTML = '';
+    var heatData = [
+      ['perfect','good','perfect','good','partial','miss','good'],
+      ['good','perfect','good','perfect','good','good','partial'],
+      ['miss','good','perfect','good','good','perfect','good'],
+      ['partial','partial','good','miss','perfect','good','good'],
+      ['good','good','perfect','good','partial','good','future']
+    ];
+    heatData.forEach(function(row) {
+      var grid = document.createElement('div');
+      grid.className = 'heatmap-grid';
+      row.forEach(function(cls) {
+        var cell = document.createElement('div');
+        cell.className = 'heat-cell ' + cls;
+        grid.appendChild(cell);
       });
-  }
-
-  function fetchPartnerProfile(token) {
-    Promise.all([
-      fetch(API + '/partner/me', { headers: { 'Authorization': 'Bearer ' + token } }).then(function(r) { return r.ok ? r.json() : null; }),
-      fetch(API + '/partner/billing/status', { headers: { 'Authorization': 'Bearer ' + token } }).then(function(r) { return r.ok ? r.json() : null; }),
-    ]).then(function(results) {
-      var profile = results[0]; var billing = results[1];
-      if (profile && profile.partner) renderProfileBilling(profile.partner, billing, token);
-    }).catch(function() {});
-  }
-
-  function openBillingPortal(token) {
-    fetch(API + '/partner/billing/portal', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } })
-      .then(function(r) { return r.json(); })
-      .then(function(data) { if (data.url) window.open(data.url, '_blank'); else alert('Contact hello@carely.fit'); })
-      .catch(function() { alert('Could not open billing portal. Contact hello@carely.fit'); });
-  }
-
-  function subscribeToPlan(token) {
-    fetch(API + '/partner/billing/subscribe', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } })
-      .then(function(r) { return r.json(); })
-      .then(function(data) { if (data.checkoutUrl) window.location.href = data.checkoutUrl; else alert('Contact hello@carely.fit'); })
-      .catch(function() { alert('Could not start checkout. Contact hello@carely.fit'); });
-  }
-
-  function renderProfileBilling(partner, billing, token) {
-    var section = document.getElementById('profile-billing');
-    if (!section) return;
-    section.textContent = '';
-    section.style.display = 'block';
-    var grid = document.createElement('div'); grid.className = 'pb-grid';
-
-    var profileCard = document.createElement('div'); profileCard.className = 'pb-card';
-    var ph = document.createElement('div'); ph.className = 'pb-card-head'; ph.textContent = 'My Profile';
-    profileCard.appendChild(ph);
-    [
-      ['Organisation', partner.org_name||'—'],
-      ['Contact', partner.contact_name||'—'],
-      ['Email', partner.email||'—'],
-      ['Country', partner.country === 'CA' ? 'Canada' : partner.country === 'US' ? 'United States' : (partner.country||'—')],
-      ['Member since', partner.activated_at ? new Date(partner.activated_at).toLocaleDateString('en-CA',{year:'numeric',month:'short',day:'numeric'}) : '—'],
-    ].forEach(function(p) {
-      var row = document.createElement('div'); row.className = 'pb-row';
-      var lbl = document.createElement('span'); lbl.className = 'pb-label'; lbl.textContent = p[0];
-      var val = document.createElement('span'); val.className = 'pb-val'; val.textContent = p[1];
-      row.appendChild(lbl); row.appendChild(val); profileCard.appendChild(row);
-    });
-    if (partner.invite_code) {
-      var codeRow = document.createElement('div'); codeRow.className = 'pb-row';
-      var codeLbl = document.createElement('span'); codeLbl.className = 'pb-label'; codeLbl.textContent = 'Invite Code';
-      var codePill = document.createElement('span'); codePill.className = 'pb-code'; codePill.textContent = partner.invite_code;
-      codeRow.appendChild(codeLbl); codeRow.appendChild(codePill); profileCard.appendChild(codeRow);
-    }
-    grid.appendChild(profileCard);
-
-    var billingCard = document.createElement('div'); billingCard.className = 'pb-card';
-    var bh = document.createElement('div'); bh.className = 'pb-card-head'; bh.textContent = 'Billing';
-    billingCard.appendChild(bh);
-
-    var bStatus   = (billing && billing.billing)   ? billing.billing   : null;
-    var bRes      = (billing && billing.residents) ? billing.residents : null;
-
-    var planText   = bStatus ? bStatus.plan   : 'Care Home Plan — $5/resident/month';
-    var statusText = bStatus ? (bStatus.status === 'active' ? 'Active' : 'Not subscribed') : '—';
-    var resCount   = bRes    ? bRes.linked    : '—';
-    var monthlyText = bRes ? bRes.formatted + '/month' : '—';
-
-    [
-      ['Plan',      planText],
-      ['Status',    statusText],
-      ['Residents', String(resCount)],
-      ['Monthly Bill', monthlyText],
-    ].forEach(function(p) {
-      var row = document.createElement('div'); row.className = 'pb-row';
-      var lbl = document.createElement('span'); lbl.className = 'pb-label'; lbl.textContent = p[0];
-      var val = document.createElement('span'); val.className = 'pb-val'; val.textContent = p[1];
-      row.appendChild(lbl); row.appendChild(val); billingCard.appendChild(row);
-    });
-
-    var btns = document.createElement('div'); btns.className = 'pb-btns';
-    var currentToken = token || sessionStorage.getItem(SESSION_KEY) || '';
-    if (bStatus && bStatus.hasSubscription) {
-      var manageBtn = document.createElement('button'); manageBtn.className = 'pb-btn pb-btn-primary'; manageBtn.textContent = 'Manage Billing';
-      manageBtn.onclick = function() { openBillingPortal(currentToken); };
-      btns.appendChild(manageBtn);
-    } else {
-      var subBtn = document.createElement('button'); subBtn.className = 'pb-btn pb-btn-primary'; subBtn.textContent = 'Subscribe — 14-day free trial';
-      subBtn.onclick = function() { subscribeToPlan(currentToken); };
-      btns.appendChild(subBtn);
-    }
-    btns.appendChild((function() {
-      var a = document.createElement('a'); a.className = 'pb-btn pb-btn-outline'; a.href = 'mailto:hello@carely.fit?subject=Billing%20Help'; a.textContent = 'Billing Support'; return a;
-    })());
-    billingCard.appendChild(btns);
-    var note = document.createElement('div'); note.className = 'pb-note'; note.textContent = 'Billed monthly at C$7/resident (Canada) or US$5/resident (US). Count updates automatically as you add residents. Questions? hello@carely.fit';
-    billingCard.appendChild(note);
-    grid.appendChild(billingCard);
-    section.appendChild(grid);
-  }
-
-  function fetchLiveData(token) {
-    fetch(API + '/portal/patients', {
-      headers: { 'Authorization': 'Bearer ' + token },
-    })
-      .then(function(r) {
-        if (r.status === 401) {
-          sessionStorage.removeItem(SESSION_KEY);
-          document.getElementById('login-gate').style.display = 'flex';
-          return null;
-        }
-        return r.json();
-      })
-      .then(function(data) {
-        if (data && data.patients) {
-          renderLivePatients(data.patients);
-          fetchPartnerProfile(token);
-        }
-      })
-      .catch(function() {});
-  }
-
-  function renderLivePatients(patients) {
-    var container = document.getElementById('patients-list') || document.getElementById('patient-table-body') || document.querySelector('tbody') || document.querySelector('.patients-container');
-    if (!container) return;
-    container.innerHTML = '';
-    if (!patients.length) {
-      var row = document.createElement('tr');
-      var cell = document.createElement('td');
-      cell.setAttribute('colspan', '10');
-      cell.textContent = 'No patients connected yet. Share your invite code with patients.';
-      cell.style.cssText = 'text-align:center;padding:24px;color:#9ab8c4;';
-      row.appendChild(cell);
-      container.appendChild(row);
-      return;
-    }
-    patients.forEach(function(p) {
-      var row = document.createElement('tr');
-      var cells = [
-        p.first_name + ' ' + (p.last_initial || '') + '.',
-        p.adherence_pct != null ? p.adherence_pct + '%' : '—',
-        p.missed_7d || 0,
-        p.at_risk ? 'At risk' : 'On track',
-      ];
-      cells.forEach(function(val) {
-        var td = document.createElement('td');
-        td.textContent = String(val);
-        row.appendChild(td);
-      });
-      container.appendChild(row);
+      hr.appendChild(grid);
     });
   }
-
-  function initDemoData() {
-    renderDemoPortal(DEMO_ORG);
-    renderProfileBilling({ org_name: 'Sunrise Senior Living', contact_name: 'Jennifer Park', email: 'j.park@sunrisesenior.ca', invite_code: 'SNRLV', activated_at: '2026-03-15T00:00:00Z', country: 'CA' }, { billing: { hasSubscription: true, status: 'active', plan: 'Care Home Plan — C$7/resident/month', currency: 'CAD', isCareHome: true }, commission: null, residents: { linked: 24, monthlyBilledCents: 16800, formatted: '$168.00' } }, '');
-  }
-
-  checkAuth();
-
-  function renderDemoPortal(data) {
-    document.getElementById('portal').style.display = 'block';
-    var org = data.org;
-    var summary = data.summary;
-    var patients = data.patients;
-
-    document.getElementById('portal-title').textContent = org.name + ' — Care Dashboard';
-    document.getElementById('portal-subtitle').textContent = "Today's adherence across all " + summary.totalPatients + " patients";
-    document.getElementById('org-name-nav').textContent = org.name;
-
-    var orgRingCard = makeOrgRingHero(summary.avgAdherence);
-
-    var summaryRow = document.getElementById('summary-row');
-    summaryRow.appendChild(makeSummaryCard(summary.totalPatients, 'Total patients', ''));
-    summaryRow.appendChild(makeSummaryCard(
-      summary.avgAdherence + '%',
-      'Avg adherence today', summary.avgAdherence >= 80 ? 'green' : summary.avgAdherence < 50 ? 'red' : ''
-    ));
-    summaryRow.appendChild(makeSummaryCard(summary.atRisk, 'At risk today (<50%)', summary.atRisk > 0 ? 'red' : 'green'));
-
-    var grid = document.getElementById('patients-grid');
-    var allPatientRings = [];
-    patients.sort(function(a, b) { return a.today.adherencePct - b.today.adherencePct; });
-    patients.forEach(function(p) {
-      var result = makePatientCard(p);
-      grid.appendChild(result.card);
-      allPatientRings.push(result.ring);
-    });
-
-    setTimeout(function() {
-      animateRingEl(orgRingCard);
-      allPatientRings.forEach(function(r) { animateRingEl(r); });
-    }, 300);
-  }
-</script>
-<!-- GDPR / CASL Cookie Consent Banner -->
-<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;color:#e2e8f0;padding:16px 24px;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -2px 12px rgba(0,0,0,.3);">
-  <span id="cookie-text">We use cookies to improve your experience and measure usage. See our </span>
-  <div style="display:flex;gap:10px;flex-shrink:0;">
-    <button onclick="cookieDecline()" style="background:transparent;border:1px solid #4b5563;color:#9ca3af;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;">Decline</button>
-    <button onclick="cookieAccept()" style="background:#6366f1;border:none;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">Accept</button>
-  </div>
-</div>
-<script>
-(function(){
-  var b = document.getElementById('cookie-banner');
-  var cookieText = document.getElementById('cookie-text');
-  var link = document.createElement('a');
-  link.href = '/privacy.html';
-  link.style.color = '#818cf8';
-  link.style.textDecoration = 'underline';
-  link.textContent = 'Privacy Policy';
-  cookieText.appendChild(link);
-  link.insertAdjacentText('afterend', '.');
-  if (!localStorage.getItem('cookie_consent')) { b.style.display = 'flex'; }
-})();
-function cookieAccept() {
-  localStorage.setItem('cookie_consent', 'accepted');
-  document.getElementById('cookie-banner').style.display = 'none';
-}
-function cookieDecline() {
-  localStorage.setItem('cookie_consent', 'declined');
-  document.getElementById('cookie-banner').style.display = 'none';
-  if (window.posthog) { posthog.opt_out_capturing(); }
-}
-</script>
-
-<!-- B2B Support Chat -->
-<div id="chat-bubble" onclick="toggleChat()" style="position:fixed;bottom:24px;right:24px;width:56px;height:56px;background:linear-gradient(135deg,#028090,#02C39A);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 20px rgba(2,128,144,0.4);z-index:900;">
-  <span style="color:#fff;font-size:22px;">💬</span>
-</div>
-
-<div id="chat-panel" style="display:none;position:fixed;bottom:90px;right:24px;width:340px;max-height:480px;background:#fff;border-radius:20px;box-shadow:0 16px 60px rgba(13,51,71,0.25);z-index:901;flex-direction:column;overflow:hidden;">
-  <div style="background:linear-gradient(135deg,#028090,#02C39A);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;">
-    <div>
-      <div style="color:#fff;font-weight:800;font-size:0.95rem;">Portal Support</div>
-      <div style="color:rgba(255,255,255,0.8);font-size:0.75rem;">AI assistant — ask anything about your portal</div>
-    </div>
-    <span onclick="toggleChat()" style="color:#fff;font-size:20px;cursor:pointer;line-height:1;">×</span>
-  </div>
-  <div id="chat-messages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:200px;max-height:300px;"></div>
-  <div style="padding:12px 16px;border-top:1px solid #eaf0f4;display:flex;gap:8px;">
-    <input id="chat-input" type="text" placeholder="Ask a question..." maxlength="500" style="flex:1;padding:10px 12px;border:1.5px solid #e0eaf0;border-radius:10px;font-size:0.88rem;font-family:inherit;outline:none;" onkeydown="if(event.key==='Enter')sendChat();" />
-    <button onclick="sendChat()" style="padding:10px 14px;background:#028090;color:#fff;border:none;border-radius:10px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:inherit;">Send</button>
-  </div>
-</div>
-
-<script>
-var chatOpen = false;
-
-function toggleChat() {
-  chatOpen = !chatOpen;
-  document.getElementById('chat-panel').style.display = chatOpen ? 'flex' : 'none';
 }
 
-function addChatMessage(text, isUser) {
-  var container = document.getElementById('chat-messages');
-  var bubble = document.createElement('div');
-  bubble.style.cssText = isUser
-    ? 'align-self:flex-end;background:#028090;color:#fff;border-radius:14px 14px 4px 14px;padding:10px 14px;font-size:0.85rem;max-width:80%;line-height:1.5;'
-    : 'align-self:flex-start;background:#f0faf9;color:#0D3347;border-radius:14px 14px 14px 4px;padding:10px 14px;font-size:0.85rem;max-width:80%;line-height:1.5;';
-  bubble.textContent = text;
-  container.appendChild(bubble);
-  container.scrollTop = container.scrollHeight;
-}
-
-function sendChat() {
-  var input = document.getElementById('chat-input');
-  var msg = input.value.trim();
-  if (!msg) return;
-  input.value = '';
-
-  addChatMessage(msg, true);
-
-  var token = sessionStorage.getItem('carely_partner_token');
-  if (!token && !isDemo()) {
-    addChatMessage('Please log in to use the support chat.', false);
+// ═══════════════════════════════════════════════════════════════════════════════
+// RENDER: RESIDENTS
+// ═══════════════════════════════════════════════════════════════════════════════
+function renderResidents(data) {
+  var grid = document.getElementById('residents-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  if (!data || data.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128106;</div><p>No residents found.</p><button class="btn btn-primary admin-only senior-only" onclick="openModal(\'modal-add-resident\')">Add First Resident</button></div>';
     return;
   }
+  data.forEach(function(r) {
+    var card = document.createElement('div');
+    var cardClass = r.status === 'critical' ? 'critical' : r.status === 'at-risk' ? 'at-risk' : '';
+    card.className = 'resident-card ' + cardClass;
+    card.onclick = function(){ openResidentDetail(r); };
 
-  var thinking = document.createElement('div');
-  thinking.id = 'chat-thinking';
-  thinking.style.cssText = 'align-self:flex-start;color:#9ab8c4;font-size:0.82rem;padding:4px 0;';
-  thinking.textContent = 'Thinking...';
-  document.getElementById('chat-messages').appendChild(thinking);
+    var badgeHtml = r.status === 'critical'
+      ? '<span class="badge badge-critical">Critical</span>'
+      : r.status === 'at-risk'
+        ? '<span class="badge badge-risk">At Risk</span>'
+        : '<span class="badge badge-good">Good</span>';
 
-  var headers = { 'Content-Type': 'application/json' };
-  if (token) headers['Authorization'] = 'Bearer ' + token;
+    var medsHtml = r.meds.map(function(m){
+      return '<div class="med-chip"><div class="med-dot" style="background:'+m.color+'"></div>'+m.name+' '+m.dose+'</div>';
+    }).join('');
 
-  fetch(API + '/partner-chat/message', {
-    method: 'POST',
-    headers: headers,
-    body: JSON.stringify({ message: msg }),
-  })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var el = document.getElementById('chat-thinking');
-      if (el) el.remove();
-      addChatMessage(data.reply || 'For help, email hello@carely.fit', false);
-    })
-    .catch(function() {
-      var el = document.getElementById('chat-thinking');
-      if (el) el.remove();
-      addChatMessage('Network error. Email hello@carely.fit for help.', false);
-    });
+    var ring = makeInlineRing(r.adherence, 60);
+
+    card.innerHTML =
+      '<div class="card-top">' +
+        '<div class="avatar">' + r.first[0] + r.last[0] + '</div>' +
+        '<div>' +
+          '<div class="resident-name">' + r.first + ' ' + r.last + '</div>' +
+          '<div class="resident-meta">Age ' + r.age + ' &nbsp;&middot;&nbsp; Room ' + r.room + '</div>' +
+          badgeHtml +
+        '</div>' +
+      '</div>' +
+      '<div class="meds-list">' + medsHtml + '</div>' +
+      '<div class="card-footer">' +
+        '<div class="assigned-nurse">Nurse: ' + r.nurse + '</div>' +
+        '<button class="btn btn-outline btn-sm" onclick="event.stopPropagation();openResidentDetail(residents.find(function(x){return x.id==='+r.id+';}))">View Detail</button>' +
+      '</div>';
+
+    // Insert ring into card-top
+    var cardTop = card.querySelector('.card-top');
+    ring.style.marginLeft = 'auto';
+    cardTop.appendChild(ring);
+
+    grid.appendChild(card);
+  });
 }
+
+function filterResidents() {
+  var q = document.getElementById('resident-search').value.toLowerCase();
+  var f = document.getElementById('resident-filter').value;
+  var filtered = residents.filter(function(r) {
+    var matchQ = (r.first + ' ' + r.last).toLowerCase().includes(q) || r.room.toLowerCase().includes(q);
+    var matchF = f === 'all' || r.status === f;
+    return matchQ && matchF;
+  });
+  renderResidents(filtered);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// RESIDENT DETAIL
+// ═══════════════════════════════════════════════════════════════════════════════
+function openResidentDetail(r) {
+  if (!r) return;
+  document.getElementById('detail-resident-name').textContent = r.first + ' ' + r.last;
+  var content = document.getElementById('detail-content');
+
+  var logsForResident = doseLogs.filter(function(d){ return d.resident === r.first + ' ' + r.last; });
+  var logRows = logsForResident.map(function(d){
+    return '<tr><td>'+d.date+'</td><td>'+d.medicine+'</td><td>'+d.time+'</td><td>'+d.loggedBy+'</td>' +
+      '<td><span class="status-pill '+(d.status==='taken'?'status-taken':'status-missed')+'">'+(d.status==='taken'?'Taken':'Missed')+'</span></td></tr>';
+  }).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--grey-500);">No dose logs yet</td></tr>';
+
+  var medsRows = r.meds.map(function(m,i){
+    return '<tr>' +
+      '<td><div style="display:flex;align-items:center;gap:8px;"><div style="width:10px;height:10px;border-radius:50%;background:'+m.color+'"></div>'+m.name+'</div></td>' +
+      '<td>'+m.dose+'</td>' +
+      '<td>'+m.freq+'</td>' +
+      '<td>'+m.times+'</td>' +
+      '<td style="font-size:0.75rem;color:var(--grey-500);">Today 9:14 AM</td>' +
+      '<td class="admin-only senior-only"><button class="btn btn-ghost btn-sm" onclick="editMedInline('+i+','+r.id+')">Edit</button></td>' +
+      '</tr>';
+  }).join('');
+
+  var role = document.body.getAttribute('data-role');
+  var showEdit = role === 'admin' || role === 'senior';
+
+  content.innerHTML =
+    '<div class="detail-grid" style="margin-bottom:24px;">' +
+      '<div class="card">' +
+        '<div style="font-size:0.95rem;font-weight:800;color:var(--deep-teal);margin-bottom:16px;">Resident Profile</div>' +
+        '<div style="font-size:0.85rem;line-height:2;">' +
+          '<div><strong>Full Name:</strong> ' + r.first + ' ' + r.last + '</div>' +
+          '<div><strong>Date of Birth:</strong> ' + r.dob + '</div>' +
+          '<div><strong>Age:</strong> ' + r.age + '</div>' +
+          '<div><strong>Room:</strong> ' + r.room + '</div>' +
+          '<div><strong>Conditions:</strong> ' + r.conditions + '</div>' +
+        '</div>' +
+        '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--grey-100);">' +
+          '<div style="font-size:0.85rem;font-weight:800;color:var(--deep-teal);margin-bottom:10px;">Family Contact</div>' +
+          '<div style="font-size:0.85rem;line-height:2;">' +
+            '<div><strong>Name:</strong> ' + r.familyName + '</div>' +
+            '<div><strong>Email:</strong> ' + r.familyEmail + '</div>' +
+            '<div><strong>Phone:</strong> ' + r.familyPhone + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div>' +
+        '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">' +
+          '<div class="stat-card" style="flex:1;">' +
+            '<div class="stat-value '+(r.adherence>=80?'green':r.adherence>=50?'amber':'red')+'">' + r.adherence + '%</div>' +
+            '<div class="stat-label">Adherence</div>' +
+          '</div>' +
+          '<div class="stat-card" style="flex:1;">' +
+            '<div class="stat-value">' + r.meds.length + '</div>' +
+            '<div class="stat-label">Medications</div>' +
+          '</div>' +
+          '<div class="stat-card" style="flex:1;">' +
+            '<div class="stat-value green">' + logsForResident.filter(function(d){return d.status==='taken';}).length + '</div>' +
+            '<div class="stat-label">Doses Today</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
+          '<button class="btn btn-primary btn-sm" onclick="prefillLogDose(\''+r.first+' '+r.last+'\');openModal(\'modal-log-dose\')">Log Dose</button>' +
+          (showEdit ? '<button class="btn btn-outline btn-sm admin-only senior-only" onclick="toast(\'Edit medicines form would open here\',\'success\')">Edit Medicines</button>' : '') +
+          '<button class="btn btn-ghost btn-sm admin-only" onclick="deleteResident('+r.id+')">Delete Resident</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="card" style="margin-bottom:20px;">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">' +
+        '<div style="font-size:0.95rem;font-weight:800;color:var(--deep-teal);">Medications</div>' +
+        (showEdit ? '<button class="btn btn-primary btn-sm" onclick="openModal(\'modal-add-medicine\')">+ Add Medicine</button>' : '') +
+      '</div>' +
+      '<div class="table-wrap">' +
+        '<table><thead><tr><th>Medicine</th><th>Dose</th><th>Frequency</th><th>Times</th><th>Last Logged</th>'+(showEdit?'<th>Actions</th>':'')+'</tr></thead>' +
+        '<tbody>' + medsRows + '</tbody></table>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="card">' +
+      '<div style="font-size:0.95rem;font-weight:800;color:var(--deep-teal);margin-bottom:16px;">Dose Log — Last 7 Days</div>' +
+      '<div class="table-wrap">' +
+        '<table><thead><tr><th>Date</th><th>Medicine</th><th>Time</th><th>Logged By</th><th>Status</th></tr></thead>' +
+        '<tbody>' + logRows + '</tbody></table>' +
+      '</div>' +
+    '</div>';
+
+  document.getElementById('resident-detail').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeResidentDetail() {
+  document.getElementById('resident-detail').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function deleteResident(id) {
+  if (!confirm('Delete this resident? This cannot be undone.')) return;
+  residents = residents.filter(function(r){ return r.id !== id; });
+  closeResidentDetail();
+  renderResidents(residents);
+  toast('Resident removed', 'success');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// RENDER: STAFF
+// ═══════════════════════════════════════════════════════════════════════════════
+function renderStaff() {
+  var tbody = document.getElementById('staff-table-body');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  staff.forEach(function(s) {
+    var statusClass = s.status === 'Active' ? 'status-active' : s.status === 'Invited' ? 'status-invited' : 'status-deactivated';
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><strong>' + s.name + '</strong></td>' +
+      '<td>' +
+        '<select class="filter-select" style="padding:5px 8px;font-size:0.78rem;" onchange="updateStaffRole('+s.id+',this.value)">' +
+          ['Admin','Senior Nurse','Nurse'].map(function(r){ return '<option'+(r===s.role?' selected':'')+'>'+r+'</option>'; }).join('') +
+        '</select>' +
+      '</td>' +
+      '<td>' + s.email + '</td>' +
+      '<td><span class="status-pill '+statusClass+'">' + s.status + '</span></td>' +
+      '<td>' + s.residents + '</td>' +
+      '<td style="color:var(--grey-500);font-size:0.8rem;">' + s.lastActive + '</td>' +
+      '<td>' +
+        (s.status === 'Invited' ? '<button class="btn btn-ghost btn-sm" onclick="toast(\'Invite resent to '+s.email+'\',\'success\')">Resend</button> ' : '') +
+        (s.name !== 'You (Admin)' ? '<button class="btn btn-danger btn-sm" onclick="deactivateStaff('+s.id+')">Deactivate</button>' : '') +
+      '</td>';
+    tbody.appendChild(tr);
+  });
+
+  // Shift assignment
+  var panel = document.getElementById('shift-assignment-panel');
+  if (!panel) return;
+  panel.innerHTML = '';
+  var activeStaff = staff.filter(function(s){ return s.status === 'Active' && s.name !== 'You (Admin)'; });
+  activeStaff.forEach(function(s) {
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--grey-100);';
+    row.innerHTML =
+      '<div>' +
+        '<div style="font-weight:700;font-size:0.9rem;">' + s.name + '</div>' +
+        '<div style="font-size:0.75rem;color:var(--grey-500);">' + s.role + ' &middot; ' + s.residents + ' residents</div>' +
+      '</div>' +
+      '<label class="toggle-switch" title="On duty">' +
+        '<input type="checkbox" '+(s.status==='Active'?'checked':'')+' onchange="toast(s.name+\' shift updated\',\'success\')" />' +
+        '<span class="toggle-slider"></span>' +
+      '</label>';
+    panel.appendChild(row);
+  });
+}
+
+function updateStaffRole(id, role) {
+  var s = staff.find(function(x){ return x.id===id; });
+  if (s) { s.role = role; toast('Role updated to ' + role, 'success'); }
+}
+
+function deactivateStaff(id) {
+  if (!confirm('Deactivate this staff member?')) return;
+  var s = staff.find(function(x){ return x.id===id; });
+  if (s) { s.status = 'Deactivated'; renderStaff(); toast('Staff member deactivated', 'success'); }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// RENDER: MEDICINES
+// ═══════════════════════════════════════════════════════════════════════════════
+function renderMedicines() {
+  var tbody = document.getElementById('medicines-table-body');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  medicines.forEach(function(m) {
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><strong>' + m.name + '</strong></td>' +
+      '<td>' + m.residents + '</td>' +
+      '<td>' + m.dosesPerDay + 'x / day</td>' +
+      '<td>' + (m.stockAlert ? '<span class="badge badge-critical">Low Stock</span>' : '<span class="badge badge-good">OK</span>') + '</td>' +
+      '<td style="color:var(--grey-500);font-size:0.82rem;">' + m.lastReviewed + '</td>' +
+      '<td><button class="btn btn-ghost btn-sm" onclick="toast(\''+m.name+' updated\',\'success\')">Edit</button></td>';
+    tbody.appendChild(tr);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// RENDER: REPORTS
+// ═══════════════════════════════════════════════════════════════════════════════
+function renderDoseLog() {
+  var tbody = document.getElementById('dose-log-table');
+  if (!tbody) return;
+  var date = document.getElementById('dose-log-date').value;
+  var filtered = doseLogs.filter(function(d){ return d.date === date; });
+  tbody.innerHTML = filtered.length === 0
+    ? '<tr><td colspan="6" style="text-align:center;color:var(--grey-500);padding:24px;">No doses logged for this date</td></tr>'
+    : filtered.map(function(d){
+        return '<tr><td>'+d.time+'</td><td>'+d.resident+'</td><td>'+d.medicine+'</td><td>'+d.dose+'</td><td>'+d.loggedBy+'</td>' +
+          '<td><span class="status-pill '+(d.status==='taken'?'status-taken':'status-missed')+'">'+(d.status==='taken'?'Taken':'Missed')+'</span></td></tr>';
+      }).join('');
+}
+
+function renderAdherence() {
+  var tbody = document.getElementById('adherence-table');
+  if (!tbody) return;
+  tbody.innerHTML = adherenceSummary.map(function(a){
+    var arrow = a.trend === 'up' ? '<span style="color:var(--mint);">&#8593; Up</span>' : '<span style="color:var(--danger);">&#8595; Down</span>';
+    return '<tr><td>'+a.name+'</td><td><strong>'+a.pct+'%</strong></td><td>'+arrow+'</td><td>'+a.taken+'</td><td>'+a.missed+'</td></tr>';
+  }).join('');
+}
+
+function renderIncidents() {
+  var tbody = document.getElementById('incidents-table');
+  if (!tbody) return;
+  tbody.innerHTML = incidents.map(function(inc, i){
+    var pill = inc.status === 'Open'
+      ? '<span class="status-pill status-missed">Open</span>'
+      : '<span class="status-pill status-taken">Reviewed</span>';
+    var btn = inc.status === 'Open'
+      ? '<button class="btn btn-outline btn-sm" onclick="markReviewed('+i+')">Mark Reviewed</button>'
+      : '—';
+    return '<tr><td style="font-size:0.8rem;">'+inc.datetime+'</td><td>'+inc.resident+'</td><td>'+inc.medicine+'</td><td>'+inc.reason+'</td><td>'+pill+'</td><td>'+btn+'</td></tr>';
+  }).join('');
+}
+
+function markReviewed(i) {
+  incidents[i].status = 'Reviewed';
+  renderIncidents();
+  toast('Incident marked as reviewed', 'success');
+}
+
+function exportDemo(type) {
+  toast('Downloading report as ' + type + '... (demo)', 'success');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// RENDER: BILLING
+// ═══════════════════════════════════════════════════════════════════════════════
+function renderInvoices() {
+  var tbody = document.getElementById('invoice-table');
+  if (!tbody) return;
+  tbody.innerHTML = invoices.map(function(inv){
+    return '<tr><td>'+inv.date+'</td><td>'+inv.desc+'</td><td>'+inv.amount+'</td>' +
+      '<td><span class="status-pill status-taken">'+inv.status+'</span></td>' +
+      '<td><button class="btn btn-ghost btn-sm" onclick="toast(\'Invoice download started\',\'success\')">&#11015; PDF</button></td></tr>';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════════════════════════════════════
+function addResident() {
+  var fname = document.getElementById('res-fname').value.trim();
+  var lname = document.getElementById('res-lname').value.trim();
+  if (!fname || !lname) { toast('Please enter a name', 'error'); return; }
+  var newRes = {
+    id: Date.now(), first: fname, last: lname,
+    age: 0, room: document.getElementById('res-room').value || 'TBD',
+    dob: document.getElementById('res-dob').value,
+    conditions: document.getElementById('res-conditions').value,
+    adherence: 100, status: 'good',
+    nurse: 'Unassigned',
+    familyName: document.getElementById('res-family-name').value,
+    familyEmail: document.getElementById('res-family-email').value,
+    familyPhone: document.getElementById('res-family-phone').value,
+    meds: []
+  };
+  residents.push(newRes);
+  activityFeed.unshift({ text: 'Admin added new resident: ' + fname + ' ' + lname, time: 'Just now' });
+  closeModal('modal-add-resident');
+  renderResidents(residents);
+  renderDashboard();
+  toast('Resident added successfully', 'success');
+}
+
+function inviteStaff() {
+  var name = document.getElementById('staff-name').value.trim();
+  var email = document.getElementById('staff-email').value.trim();
+  var role = document.getElementById('staff-role').value;
+  if (!name || !email) { toast('Please enter name and email', 'error'); return; }
+  var link = 'https://portal.carely.fit/join?invite=' + Math.random().toString(36).slice(2,10).toUpperCase();
+  document.getElementById('invite-link-val').value = link;
+  document.getElementById('invite-link-wrap').style.display = 'block';
+  staff.push({ id: Date.now(), name: name, role: role, email: email, status: 'Invited', residents: '—', lastActive: 'Pending' });
+  renderStaff();
+  toast('Invite sent to ' + email, 'success');
+}
+
+function copyInviteLink() {
+  var val = document.getElementById('invite-link-val').value;
+  navigator.clipboard.writeText(val).then(function(){ toast('Link copied to clipboard', 'success'); });
+}
+
+function addMedicine() {
+  var name = document.getElementById('med-name').value.trim();
+  if (!name) { toast('Please enter a medicine name', 'error'); return; }
+  medicines.push({
+    name: name,
+    residents: 0,
+    dosesPerDay: parseInt(document.getElementById('med-freq').value) || 1,
+    stockAlert: false,
+    lastReviewed: 'Today'
+  });
+  closeModal('modal-add-medicine');
+  renderMedicines();
+  toast('Medicine added to library', 'success');
+}
+
+function prefillLogDose(residentName) {
+  var sel = document.getElementById('log-resident');
+  if (!sel) return;
+  sel.innerHTML = residents.map(function(r){
+    var n = r.first + ' ' + r.last;
+    return '<option'+(n===residentName?' selected':'')+'>'+n+'</option>';
+  }).join('');
+  var medSel = document.getElementById('log-medicine');
+  if (medSel) medSel.innerHTML = medicines.map(function(m){ return '<option>'+m.name+'</option>'; }).join('');
+  var now = new Date();
+  var dateEl = document.getElementById('log-date');
+  var timeEl = document.getElementById('log-time');
+  if (dateEl) dateEl.value = '2026-05-21';
+  if (timeEl) timeEl.value = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+}
+
+function logDose() {
+  var res = document.getElementById('log-resident').value;
+  var med = document.getElementById('log-medicine').value;
+  var date = document.getElementById('log-date').value;
+  var time = document.getElementById('log-time').value;
+  var status = document.getElementById('log-status').value;
+  doseLogs.push({ time: time, resident: res, medicine: med, dose: '—', loggedBy: 'You', status: status, date: date });
+  activityFeed.unshift({ text: 'You logged ' + med + ' for ' + res, time: 'Just now' });
+  closeModal('modal-log-dose');
+  renderDoseLog();
+  renderDashboard();
+  toast('Dose logged successfully', 'success');
+}
+
+function updateCard() {
+  closeModal('modal-update-card');
+  toast('Payment method updated', 'success');
+}
+
+function editMedInline(idx, resId) {
+  toast('Inline edit for medicine #' + (idx+1) + ' — form would open here', 'success');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+  renderDashboard();
+  renderResidents(residents);
+  renderStaff();
+  renderMedicines();
+  renderDoseLog();
+  renderAdherence();
+  renderIncidents();
+  renderInvoices();
+
+  // Prefill log dose resident/med selects on modal open
+  document.getElementById('modal-log-dose').addEventListener('click', function(){});
+  var logBtn = document.querySelectorAll('[onclick*="modal-log-dose"]');
+  // Pre-populate log dose defaults
+  prefillLogDose(residents[0].first + ' ' + residents[0].last);
+});
 </script>
 
+<!-- PostHog Analytics -->
+<script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
+  posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
+</script>
 </body>
 </html>
