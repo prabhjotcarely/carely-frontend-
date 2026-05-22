@@ -311,6 +311,16 @@
     @media(max-width:840px) { .personal-note-inner{grid-template-columns:1fr} }
 
     /* ── FINAL CTA ── */
+    .pricing-strip { background: var(--t5); border-top: 1px solid rgba(68,171,173,0.18); border-bottom: 1px solid rgba(68,171,173,0.18); padding: 28px 24px; }
+    .pricing-strip-inner { max-width: 1160px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .pricing-strip-copy { flex: 1; }
+    .pricing-strip-tag { font-size: 0.68rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t1); display: block; margin-bottom: 4px; }
+    .pricing-strip-copy p { font-size: 1rem; color: rgba(255,255,255,0.88); font-weight: 600; }
+    .pricing-strip-copy p strong { color: #fff; }
+    .pricing-strip-btn { display: inline-block; background: var(--t1); color: #fff; font-size: 0.9rem; font-weight: 900; padding: 13px 28px; border-radius: 100px; white-space: nowrap; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; flex-shrink: 0; }
+    .pricing-strip-btn:hover { background: var(--t2); transform: translateY(-2px); box-shadow: 0 8px 24px var(--tglow); }
+    @media(max-width:640px){ .pricing-strip-inner { flex-direction: column; align-items: flex-start; } }
+
     .fin-cta { background: var(--dark-grad); padding: 100px 24px; text-align: center; position: relative; overflow: hidden; }
     .fin-cta::before { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:600px; height:600px; border-radius:50%; background:radial-gradient(circle,rgba(68,171,173,0.15) 0%,transparent 65%); pointer-events:none; }
     .fin-cta h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2.2rem, 5vw, 4rem); letter-spacing: -0.025em; color: #fff; margin-bottom: 16px; position: relative; z-index: 1; }
@@ -401,7 +411,7 @@
       <h1><em>"Did they take it?"</em> never wonder again.</h1>
       <p class="hero-sub">Carely connects you to your loved one's medication routine. You get alerts when something's missed. They keep their independence. Everyone gets peace of mind.</p>
       <div class="hero-cta-wrap">
-        <a class="hero-cta" href="join.html">Get Carely for Your Family</a>
+        <a class="hero-cta" href="https://carely.fit/#founding">Get Carely for Your Family &rarr;</a>
         <div class="hero-trust">
           <span><span class="tc">✓</span> Free caregiver access</span>
           <span><span class="tc">✓</span> Real-time alerts</span>
@@ -565,6 +575,17 @@
   </div>
 </div>
 
+<!-- ═══ PRICING STRIP 1 ═══ -->
+<div class="pricing-strip reveal">
+  <div class="pricing-strip-inner">
+    <div class="pricing-strip-copy">
+      <span class="pricing-strip-tag">Plans from CA$5/month</span>
+      <p>Caregiver access is <strong>free</strong> — your loved one just needs a Carely plan. Founding spots are limited.</p>
+    </div>
+    <a href="https://carely.fit/#founding" class="pricing-strip-btn">See Pricing &rarr;</a>
+  </div>
+</div>
+
 <!-- ═══ MOCKUP / NOTIFICATION DEMO ═══ -->
 <div class="mockup-sec">
   <div class="mockup-inner">
@@ -651,6 +672,17 @@
   </div>
 </div>
 
+<!-- ═══ PRICING STRIP 2 ═══ -->
+<div class="pricing-strip reveal">
+  <div class="pricing-strip-inner">
+    <div class="pricing-strip-copy">
+      <span class="pricing-strip-tag">Only 43 founding spots left</span>
+      <p>Lock in <strong>CA$5/month for life</strong> before launch. Price goes up May 30.</p>
+    </div>
+    <a href="https://carely.fit/#founding" class="pricing-strip-btn">Claim Founding Spot &rarr;</a>
+  </div>
+</div>
+
 <!-- ═══ PERSONAL NOTE ═══ -->
 <div class="personal-note-sec">
   <div class="personal-note-inner">
@@ -675,8 +707,8 @@
 <div class="fin-cta reveal">
   <h2>Give them <em>independence.</em> Give yourself peace of mind.</h2>
   <p>Carely is free to join as a caregiver alongside any Carely plan. Set up takes minutes. And from that moment on, you'll know — without having to ask.</p>
-  <a href="join.html" class="fin-cta-btn">Get Carely for Your Family</a>
-  <p class="fin-cta-note">Free caregiver access · Real-time alerts · Works everywhere</p>
+  <a href="https://carely.fit/#founding" class="fin-cta-btn">See Plans &amp; Get Started &rarr;</a>
+  <p class="fin-cta-note">From CA$5/month · Free caregiver access · Founding spots limited</p>
 </div>
 
 <!-- ═══ FOOTER ═══ -->
