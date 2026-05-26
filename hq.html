@@ -3949,10 +3949,10 @@ function _chContentCard(draft, platform) {
   agBadge.style.cssText = 'font-size:0.66rem;margin:0';
   agBadge.textContent = (draft.agentName || 'AGENT').toUpperCase();
   hdr.appendChild(agBadge);
-  if (draft.metadata && (draft.metadata.page || draft.metadata.community)) {
+  if (draft.metadata && (draft.metadata.page || draft.metadata.community || draft.metadata.subreddit)) {
     var metaBadge = document.createElement('span');
     metaBadge.style.cssText = 'font-size:0.7rem;color:var(--g500)';
-    metaBadge.textContent = draft.metadata.page || draft.metadata.community;
+    metaBadge.textContent = draft.metadata.subreddit ? 'r/' + draft.metadata.subreddit : (draft.metadata.page || draft.metadata.community);
     hdr.appendChild(metaBadge);
   }
   var timeEl = document.createElement('span');
@@ -4017,6 +4017,30 @@ function _chContentCard(draft, platform) {
   };
   btns.appendChild(copyBtn);
 
+  var editBtn = makeBtn('Edit', 'white', 'var(--teal)', '1.5px solid var(--teal)');
+  var previewExpanded = false;
+  editBtn.onclick = function() {
+    if (editBtn.textContent === 'Edit') {
+      var ta = document.createElement('textarea');
+      ta.style.cssText = 'width:100%;min-height:180px;font-size:0.82rem;line-height:1.7;border:1.5px solid var(--teal);border-radius:8px;padding:10px 12px;font-family:inherit;resize:vertical;box-sizing:border-box;margin-bottom:10px';
+      ta.value = preview.textContent;
+      preview.replaceWith(ta);
+      editBtn.textContent = 'Save';
+    } else {
+      var savedTa = card.querySelector('textarea');
+      if (savedTa) { fullText = savedTa.value; preview.textContent = savedTa.value; savedTa.replaceWith(preview); }
+      editBtn.textContent = 'Edit';
+    }
+  };
+  btns.appendChild(editBtn);
+
+  // Reddit: show "Open thread" link if URL is in metadata
+  if (draft.metadata && draft.metadata.url) {
+    var threadBtn = makeBtn('Open thread ↗', '#FF4500', 'white', 'none');
+    threadBtn.onclick = function() { window.open(draft.metadata.url, '_blank'); };
+    btns.appendChild(threadBtn);
+  }
+
   card.appendChild(btns);
   return card;
 }
@@ -4042,13 +4066,13 @@ window.chRenderLive = function(platform) {
       }
       var label = document.createElement('div');
       label.style.cssText = 'font-size:0.78rem;font-weight:700;color:var(--g500);margin-bottom:10px';
-      label.textContent = drafts.length + ' draft' + (drafts.length!==1?'s':'') + ' in queue · agents pause above 3';
+      label.textContent = drafts.length + ' draft' + (drafts.length!==1?'s':'') + ' in queue';
       feed.appendChild(label);
-      drafts.slice(0, 3).forEach(function(d){ feed.appendChild(_chContentCard(d, platform)); });
-      if (drafts.length > 3) {
+      drafts.slice(0, 6).forEach(function(d){ feed.appendChild(_chContentCard(d, platform)); });
+      if (drafts.length > 6) {
         var more = document.createElement('div');
         more.className = 'ch-queue-note';
-        more.textContent = (drafts.length - 3) + ' more waiting — approve or reject above to see next batch.';
+        more.textContent = (drafts.length - 6) + ' more waiting — approve or reject above to see next batch.';
         feed.appendChild(more);
       }
     })
@@ -4071,19 +4095,52 @@ window.chSwitchIgType = function(type) {
 
 var IG_IDEAS = {
   ugc: [
-    { title: '"Did she take it?" — 30s face-cam', hook: 'Open with Prabh at work, phone buzzing. Cut to her mom. Pure emotion, no product.', script: 'Hook (0–3s): "Last Tuesday at 3am my phone rang."\n\nBody (3–25s): Prabh describes the panic of not knowing if her mum took her heart meds. Healthcare worker. Still helpless.\n\nTurn (25–28s): "So my husband and I built the thing that would have stopped that call."\n\nClose (28–30s): App notification: ✅ Mum took her 8pm dose.' },
-    { title: '"One year of missed doses" — stat story', hook: 'Start with a shocking number. End with a human moment.', script: 'Hook: "1 in 2 patients don\'t take their medication correctly."\n\nBody: Prabh walking through a hospital corridor. "I see what that number looks like in real life every single day."\n\nTurn: "We couldn\'t fix the system. So we fixed the gap at home."\n\nClose: Carely app — simple, warm, real.' },
-    { title: '"App setup in 60 seconds" — screen demo', hook: 'Pure product. Show not tell. Zero words until the "wow" moment.', script: 'No voiceover.\n\nPrabh sets up her dad on Carely. Name → medication → time → confirm.\n\nFirst reminder fires. Dad confirms with one tap.\n\nPrabh gets the notification: ✅ Dad confirmed.\n\nText overlay: "60 seconds. Peace of mind for years."' },
+    {
+      title: 'The 2AM call — raw fear + relief arc',
+      hook: 'Face-cam, bedroom, 3am lighting. Opens mid-panic. Every long-distance caregiver recognises this.',
+      script: '=== CHARACTER BRIEF ===\nName: Prabh — healthcare worker, daughter-in-law, co-founder of Carely\nAge: early 30s\nBackground: Works at a BC clinic managing patients on 6-12 medications daily. Also manages her in-laws\' medications from home. Built Carely because she lived this exact fear.\nEmotional state at video start: raw, slightly shaky — like she just woke up from that memory\nDelivery: slow and direct, quiet voice, no performance — like talking to a close friend at midnight\n\n=== SCENE & SETUP ===\nLocation: Bedroom. Nighttime.\nBackground: Slightly blurred bed, bedside lamp on low — warm amber glow\nLighting: Bedside lamp only — no ring light. Authentic, not polished.\nWardrobe: Casual — oversized shirt, no makeup or minimal\nProps: Phone face-down on the bed next to her\nCamera: Selfie mode, chest height, slight upward angle — intimate\n\n=== FULL SCRIPT ===\n[look straight at camera, voice low]\n"Last Tuesday at 3am... my phone rang."\n[PAUSE 2s]\n[look down briefly]\n"My mother-in-law. She couldn\'t remember if she\'d taken her blood pressure pill."\n[PAUSE 1s]\n"She\'d been up for two hours. Terrified she\'d doubled the dose."\n[PAUSE 1s]\n[lean slightly forward]\n"I\'m a healthcare worker. I talk to patients about this every single week."\n[PAUSE 1s]\n"And I still couldn\'t answer her question."\n[PAUSE 2s]\n[softer]\n"That call is the reason my husband and I built Carely."\n[PAUSE 1s]\n[pick up phone, show screen naturally — not a pitch, just matter of fact]\n"Now she gets a reminder. She confirms with one tap. I get a notification."\n[PAUSE 1s]\n[put phone down]\n"No more 3am calls. No more guessing. No more guilt."\n[look at camera]\n"If your family is managing medications right now — link is in my bio."\n\n=== CAPTION ===\nThe 3am call I never want again.\n\nI\'m a healthcare worker. I manage patients on 8 medications a day at the clinic. And I still couldn\'t tell my mother-in-law if she\'d double-dosed her blood pressure pill at 3am.\n\nThat\'s why we built Carely. One tap confirmation. Real-time alert to family. No guessing.\n\nLink in bio if this is your family.\n\n=== HASHTAGS ===\n#caregiver #medicationmanagement #eldercare #agingparents #caregiverburnout #bloodpressure #longdistancecaregiver #medicationreminder #southasianfamily #carely\n\n=== THUMBNAIL TEXT ===\nThe 3AM call we dread'
+    },
+    {
+      title: 'My patient cried in the clinic — empathy + solution',
+      hook: 'Clinic break room. Scrubs. Still processing what just happened. Real and specific — medication name, real fear.',
+      script: '=== CHARACTER BRIEF ===\nName: Prabh — clinic healthcare worker\nAge: early 30s\nBackground: Works directly with patients managing complex medication schedules. Sees medication fear every week. This specific scenario happened — patient terrified of double-dosing blood pressure medication.\nEmotional state: heavy, empathetic — like she just came out of a hard patient conversation\nDelivery: measured, clear — the way a nurse talks when she\'s trying to explain something important\n\n=== SCENE & SETUP ===\nLocation: Clinic break room or hallway — between patients\nBackground: Slightly clinical — wall, door visible\nLighting: Overhead fluorescent — natural, not glamorous\nWardrobe: Scrubs or clinic clothes\nProps: None — hands free, no phone\nCamera: Selfie mode, eye level\n\n=== FULL SCRIPT ===\n[exhale quietly, look at camera]\n"A patient cried in front of me today."\n[PAUSE 2s]\n"She couldn\'t remember if she\'d taken her amlodipine — her blood pressure pill."\n[PAUSE 1s]\n"She was shaking. She said: \'What if I took it twice? What if I didn\'t take it at all?\'"\n[PAUSE 1s]\n[slow, deliberate]\n"She\'d been sitting with that fear for four hours before she came in."\n[PAUSE 2s]\n"This is not rare. I see this every single week."\n[PAUSE 1s]\n"And every time I do, I think — there is a solution for this."\n[PAUSE 1s]\n[slightly lighter]\n"It\'s called Carely. My husband and I built it for exactly this.\nA daily check-in. She confirms her dose with one tap. Family gets an alert. Done."\n[PAUSE 1s]\n"No more fear. No more sitting with that question for four hours."\n[look straight at camera]\n"If someone in your family is managing blood pressure, diabetes, heart meds — you need to know this exists."\n\n=== CAPTION ===\nShe cried because she couldn\'t remember if she\'d taken her blood pressure pill.\n\nI see this at the clinic every week. The fear of double-dosing. The shame of not knowing. The hours of silent panic before finally telling someone.\n\nWe built Carely for this exact moment. One tap confirmation. Family alert. Peace of mind — for her and for the people who love her.\n\nLink in bio.\n\n=== HASHTAGS ===\n#bloodpressure #medicationmanagement #caregiver #healthcareworker #chronicallyill #eldercare #pillreminder #amlodipine #medicationfear #carely\n\n=== THUMBNAIL TEXT ===\nShe cried. I understood.'
+    },
+    {
+      title: 'My father-in-law skipped meds for a month — South Asian family dynamics',
+      hook: 'At home. Candid. Speaks directly to South Asian families who recognise the pride and secrecy around health.',
+      script: '=== CHARACTER BRIEF ===\nName: Prabh — South Asian daughter-in-law, healthcare worker, Carely co-founder\nAge: early 30s\nBackground: Manages her in-laws\' health in the same house and from a distance when they travel. South Asian family — elders don\'t always admit health struggles. This happened — a full month of skipped metformin before she found out.\nEmotional state: calm but serious — not angry, just deeply concerned\nDelivery: warm and direct — South Asian daughter-in-law talking to other South Asian women in the same situation\n\n=== SCENE & SETUP ===\nLocation: Kitchen counter or living room — home setting\nBackground: Home interior — warm tones, slightly blurred\nLighting: Natural daylight from window\nWardrobe: Casual home clothes — kurta or casual top, relatable\nProps: None\nCamera: Selfie mode, slightly above eye level\n\n=== FULL SCRIPT ===\n[calm, direct tone]\n"My father-in-law skipped his diabetes medication for a full month."\n[PAUSE 2s]\n"Nobody knew."\n[PAUSE 1s]\n[lean slightly in]\n"Not me. Not my husband. Not his own doctor."\n[PAUSE 1s]\n"He didn\'t want to worry us. He thought he\'d catch up."\n[PAUSE 2s]\n"He\'s on metformin — for Type 2 diabetes. Missing doses for a month has real consequences."\n[PAUSE 1s]\n[slower, heavier]\n"In South Asian families, we don\'t talk about this. Elders don\'t want to look weak. They say \'I\'m fine\'. And we believe them because we want to."\n[PAUSE 2s]\n"I\'m a healthcare worker. I know what missing metformin for a month can do.\nAnd I still didn\'t catch it."\n[PAUSE 1s]\n[slight shift — lighter, solution]\n"That\'s when we built Carely. Not to spy on him. To protect him.\nHe gets a gentle reminder. He confirms. I know he\'s okay. He still has his independence."\n[PAUSE 1s]\n[warmly]\n"If you\'re managing an elderly parent or in-law — and you know they\'d never tell you if they missed a dose — this was built for your family."\n\n=== CAPTION ===\nHe didn\'t tell us for a month.\n\nMy father-in-law stopped his diabetes medication because he didn\'t want to worry us. He\'s on metformin — missing it for a month has real consequences. We found out by accident.\n\nIn South Asian families, elders say \'I\'m fine\' even when they\'re not. That pride is beautiful. It\'s also dangerous.\n\nCarely gives him independence and gives us peace of mind. Link in bio.\n\n=== HASHTAGS ===\n#southasianfamily #diabetes #metformin #eldercare #southasianhealth #caregiver #agingparents #medicationmanagement #desifamily #carely\n\n=== THUMBNAIL TEXT ===\nHe skipped meds for a month'
+    },
   ],
   poster: [
-    { title: '"What if you always knew?" — Founding poster', concept: 'Dark teal background. White headline. Carely logo bottom centre. Clean, premium.', copy: 'Headline: "What if you always knew your parent took their meds?"\n\nSub: "200 founding spots · $5/month · carely.fit"\n\nVisual: A phone screen showing a green checkmark. No clutter.' },
-    { title: '"Built for the 2AM call" — Emotional poster', concept: 'Night scene. Phone glow. Warm + anxious feeling.', copy: 'Headline: "Built for the 2AM call you never want to get."\n\nSub: "Real-time medication confirmations for families who care from a distance."\n\nCTA: "carely.fit — Founding plan $5/month"' },
-    { title: '"Your parent. Our watchful eye." — Trust poster', concept: 'Split image. Elderly parent at home. Adult child at work. Connected by Carely.', copy: 'Headline: "They\'re independent. You\'re in the loop."\n\nSub: "Carely confirms every dose — no nagging, no guessing, no 2AM panic."\n\nCTA: carely.fit' },
+    {
+      title: 'Founding plan — clean teal, premium stop-scroll',
+      concept: 'Deep teal background #028090. White headline, large and centred. Carely wordmark bottom centre in white. One phone mockup showing green checkmark confirmation. No clutter. Feels like a premium health brand.',
+      copy: '=== HEADLINE ===\n"What if you always knew\nyour parent took their meds?"\n\n=== SUB-LINE ===\n"Real-time confirmation. Family alerts. Peace of mind."\n\n=== CTA ===\n"200 founding spots · $5/month · carely.fit"\n\n=== VISUAL DIRECTION ===\nBackground: #028090 (Carely teal)\nHeadline font: Bold serif or clean sans — 52-60pt, white, centred\nSub-line: 18pt white, medium weight, centred, 20px below headline\nPhone mockup: right or centre — shows Carely app with ✅ "Mum confirmed 8pm dose"\nLogo: Carely wordmark, white, bottom centre, 40px from bottom\nNo gradients. No noise. Clean and confident.\n\n=== BRAND COLOURS ===\nBackground: #028090\nText: #FFFFFF\nAccent: #0D3347'
+    },
+    {
+      title: '2AM call — emotional dark poster, stops the scroll at night',
+      concept: 'Dark navy background. Warm amber phone glow in the image. Emotional. Feels like a 3am moment. Headline is the fear. CTA is the relief.',
+      copy: '=== HEADLINE ===\n"Built for the 2AM call\nyou never want to get."\n\n=== SUB-LINE ===\n"Carely confirms every dose in real time.\nSo you can sleep through the night."\n\n=== CTA ===\n"carely.fit — Founding plan $5/month"\n\n=== VISUAL DIRECTION ===\nBackground: #0D3347 (deep navy)\nHalf of the image: dark bedroom — phone face down, slight amber glow from screen\nText overlaid on the dark half, left-aligned\nHeadline: 48pt white, bold — first line slightly larger\nSub-line: 16pt, white 80% opacity, 16px below headline\nCTA: Small pill badge — white background, #028090 text — bottom left\nMood: quiet, heavy, real — not clinical\n\n=== BRAND COLOURS ===\nBackground: #0D3347\nText: #FFFFFF\nAccent: #028090'
+    },
+    {
+      title: 'Independence + loop — trust message for adult children',
+      concept: 'Split-feel layout. Warm home scene. Message is about dignity AND peace of mind — not surveillance. Resonates with adult children who feel guilty about monitoring their parents.',
+      copy: '=== HEADLINE ===\n"They\'re independent.\nYou\'re in the loop."\n\n=== SUB-LINE ===\n"Carely confirms every dose — no nagging,\nno guessing, no midnight panic."\n\n=== SUPPORTING LINE ===\n"Your parent taps once. You breathe again."\n\n=== CTA ===\n"carely.fit"\n\n=== VISUAL DIRECTION ===\nBackground: Soft warm white or #F7F9FA\nLeft third: elderly person\'s hands holding a phone — warm, calm\nRight two-thirds: text layout on white\nHeadline: 44pt, #0D3347, bold, left-aligned\nSub-line: 15pt, #555555, left-aligned, 14px below headline\nSupporting: Italicised, 14pt, #028090\nCTA: Small pill — #028090 background, white text "carely.fit"\n\n=== BRAND COLOURS ===\nBackground: #F7F9FA\nPrimary text: #0D3347\nAccent: #028090'
+    },
   ],
   carousel: [
-    { title: '"5 signs your parent is struggling with their meds" — Education carousel', slides: '1. Cover: "5 signs your parent is silently struggling with medication" (hook slide)\n2. "They can\'t remember if they took it — so they skip, or double-dose."\n3. "Their refill prescription is running out too fast — or barely moving."\n4. "They say they\'re fine, but their numbers are getting worse."\n5. "You find pills scattered in random places around the house."\n6. "They\'re afraid to tell the doctor they\'ve been missing doses."\n7. CTA: "Carely solves all 5. One tap confirmation. Real-time alerts. carely.fit"' },
-    { title: '"From worried to in-the-loop" — Story carousel', slides: '1. Cover: "What our founding members told us." (social proof hook)\n2. "\'I live 3 hours from my dad. I checked my phone every hour.\'" \n3. "\'My mom was doubling her blood pressure meds because she couldn\'t remember.\'" \n4. "\'The hospital called. Again. Third time that year.\'" \n5. "\'Now I get a confirmation every morning. I actually sleep through the night.\'" \n6. CTA: Founding plan — $5/month. 200 spots. carely.fit' },
-    { title: '"Carely vs. pill dispensers" — Comparison carousel', slides: '1. Cover: "Why a smart pill dispenser isn\'t enough." \n2. "Dispenser: alerts you if it\'s not opened. Carely: confirms the dose was actually taken."\n3. "Dispenser: no family alerts. Carely: real-time notification to every family member."\n4. "Dispenser: $200-500 hardware. Carely: $5/month, any phone."\n5. "Dispenser: your parent has to learn new hardware. Carely: one tap, done."\n6. CTA: carely.fit — try free, founding plan $5/month.' },
+    {
+      title: '5 signs your parent is silently struggling — education + pain',
+      slides: 'SLIDE 1 — HOOK\nHeadline (big, centred): "5 signs your parent is silently struggling with their medication"\nSub-line: "Most families miss all 5 until it\'s too late."\nDesign note: Deep navy #0D3347 background. White text. Bold headline 48pt. Sub-line 16pt white 80%. Carely teal left border accent strip.\n\nSLIDE 2\nHeadline: "They can\'t remember if they took it."\nBody copy: "So they skip. Or panic. Or double-dose. And they won\'t tell you — because they don\'t want to worry you."\nDesign note: White background. Headline #0D3347 32pt bold. Body #555 15pt. Teal #028090 small number "01" top right.\n\nSLIDE 3\nHeadline: "Their prescription isn\'t moving — or runs out too fast."\nBody copy: "Missed doses pile up silently. Or fear of running out means they\'re taking extras. Both are dangerous."\nDesign note: White background. Same layout as Slide 2. Number "02".\n\nSLIDE 4\nHeadline: "They say \'I\'m fine\' but their numbers say otherwise."\nBody copy: "Blood pressure climbing. Blood sugar spiking. But the daily check-in says everything is okay. It\'s not."\nDesign note: White background. Number "03".\n\nSLIDE 5\nHeadline: "You find pills in strange places around the house."\nBody copy: "On the kitchen table. In a coat pocket. Three in the pill organiser when there should be zero. Confusion is real — and increasing."\nDesign note: White background. Number "04".\n\nSLIDE 6\nHeadline: "They\'re afraid to tell their doctor they\'ve been missing doses."\nBody copy: "So the doctor adjusts the wrong thing. And the cycle gets worse. Shame is the hidden killer in medication non-adherence."\nDesign note: White background. Number "05". Teal accent.\n\nSLIDE 7 — CTA CLOSE\nHeadline: "Carely was built for all 5 of these."\nSub-line: "One tap confirmation. Real-time family alert. No guessing. No shame."\nButton/link text: "carely.fit — Founding plan $5/mo"\nDesign note: Deep navy #0D3347 background. White text. Carely wordmark bottom centre. Same as Slide 1 treatment.\n\n=== CAPTION ===\nMost families don\'t realise anything is wrong until something goes wrong.\n\nI see this every week at the clinic — the signs are there. The silence is just louder.\n\nSwipe through if someone in your family is managing medication right now. Link in bio.\n\n=== HASHTAGS ===\n#medicationmanagement #caregiver #eldercare #agingparents #bloodpressure #diabetes #dementia #medicationreminder #caregiverburnout #carely'
+    },
+    {
+      title: 'Carely vs pill organiser — myth bust for educated caregivers',
+      slides: 'SLIDE 1 — HOOK\nHeadline (big, centred): "Your parent\'s pill organiser isn\'t enough. Here\'s why."\nSub-line: "And what actually gives families peace of mind."\nDesign note: Teal #028090 background. White text. Bold, clean. Slightly provocative — challenges a common assumption.\n\nSLIDE 2\nHeadline: "A pill organiser tells you it was opened."\nBody copy: "It doesn\'t tell you it was taken. Pills get removed and forgotten on the counter. Or never removed at all."\nDesign note: White background. Split comparison layout: LEFT "Pill Organiser" label in grey, RIGHT "What you actually need" in teal. Headline #0D3347.\n\nSLIDE 3\nHeadline: "A pill organiser has no family alert."\nBody copy: "If your parent forgets on a Tuesday, you find out on Sunday when you visit. Or not at all."\nDesign note: Same split layout. White background.\n\nSLIDE 4\nHeadline: "A pill organiser costs $20 and creates $0 of accountability."\nBody copy: "No confirmation. No timestamp. No way to know if the Monday morning slot means Monday morning — or three days ago."\nDesign note: White background.\n\nSLIDE 5\nHeadline: "Carely confirms the dose was actually taken."\nBody copy: "Your parent gets a gentle reminder. They tap once to confirm. You get a real-time notification. Done."\nDesign note: White background. Carely teal accent on left. Phone mockup showing confirmation screen.\n\nSLIDE 6\nHeadline: "Works on any smartphone. No hardware. No setup call."\nBody copy: "If your parent can tap a phone notification, they can use Carely. That\'s the whole bar."\nDesign note: White background.\n\nSLIDE 7 — CTA CLOSE\nHeadline: "Founding plan — $5/month."\nSub-line: "Real-time confirmations for the families who need to know."\nButton/link text: "carely.fit"\nDesign note: Deep navy background. White text. Carely wordmark. Clean close.\n\n=== CAPTION ===\nPill organisers tell you the slot was opened. Not that the pill was taken.\n\nThat gap — between "probably took it" and "actually confirmed it" — is where most medication errors happen.\n\nCarely closes that gap. Founding plan at carely.fit.\n\n=== HASHTAGS ===\n#pillorganizer #medicationmanagement #caregiver #eldercare #agingparents #medicationreminder #longdistancecaregiver #healthtech #caregiverlife #carely'
+    },
+    {
+      title: 'What I see at the clinic — insider education carousel',
+      slides: 'SLIDE 1 — HOOK\nHeadline (big, centred): "What I see at the clinic that families never find out about."\nSub-line: "A healthcare worker\'s honest view."\nDesign note: Dark teal background. White text. Prabh photo or illustrated stethoscope detail bottom right. This is the credibility-building carousel.\n\nSLIDE 2\nHeadline: "Patients skip doses and tell no one."\nBody copy: "Not because they don\'t care. Because they\'re embarrassed. Or they think they can catch up. I see this every single day."\nDesign note: White background. Quote-style layout. Headline #0D3347 bold 30pt. Body #555 15pt.\n\nSLIDE 3\nHeadline: "They say \'yes\' when the doctor asks if they\'ve been taking it."\nBody copy: "And they mean it — they believe they have. Memory is fragile. Medication schedules are complex. The intention is there. The dose isn\'t."\nDesign note: White background. Same layout.\n\nSLIDE 4\nHeadline: "Families are the last to know."\nBody copy: "The patient protects the family. The family assumes the patient. And the gap between assumption and reality shows up in bloodwork."\nDesign note: White background.\n\nSLIDE 5\nHeadline: "The supplement chaos is real."\nBody copy: "Hundreds of dollars a month in supplements taken at the wrong time, in the wrong combination. No one to coordinate it. No system."\nDesign note: White background.\n\nSLIDE 6\nHeadline: "The fix isn\'t a pill dispenser. It\'s a closed loop."\nBody copy: "Reminder → confirmation → family alert. That loop — running daily, quietly — is what prevents the gap between what patients say and what actually happens."\nDesign note: White background. Teal accent showing the loop visually: three steps connected by arrows.\n\nSLIDE 7 — CTA CLOSE\nHeadline: "This is why I built Carely."\nSub-line: "For the families who need to know. Not guess."\nButton/link text: "carely.fit — Link in bio"\nDesign note: Deep navy background. Prabh name/title small text under button. Warm, personal close.\n\n=== CAPTION ===\nI\'ve worked in healthcare for years. I know what medication non-adherence looks like in real life.\n\nIt doesn\'t look dramatic. It looks like a patient who says they\'re fine. It looks like a family who trusts that answer.\n\nCarely closes the loop between intention and reality. Link in bio.\n\n=== HASHTAGS ===\n#healthcareworker #medicationadherence #caregiver #eldercare #agingparents #healthtech #caregiverburnout #medicationmanagement #cliniclife #carely'
+    },
   ],
 };
 
@@ -4124,7 +4181,7 @@ window.chRenderInstagram = function() {
     card.appendChild(pre);
 
     var btns = document.createElement('div');
-    btns.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap';
+    btns.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;margin-top:4px';
 
     var readBtn = document.createElement('button');
     readBtn.textContent = 'Read Full';
@@ -4134,10 +4191,60 @@ window.chRenderInstagram = function() {
     btns.appendChild(readBtn);
 
     var copyBtn = document.createElement('button');
-    copyBtn.textContent = 'Copy Script';
+    copyBtn.textContent = 'Copy';
     copyBtn.style.cssText = 'font-size:0.76rem;font-weight:600;padding:6px 12px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);cursor:pointer';
-    copyBtn.onclick = function(){ navigator.clipboard.writeText(content).then(function(){ copyBtn.textContent='Copied!'; setTimeout(function(){ copyBtn.textContent='Copy Script'; },1500); }); };
+    copyBtn.onclick = function(){ navigator.clipboard.writeText(content).then(function(){ copyBtn.textContent='Copied!'; setTimeout(function(){ copyBtn.textContent='Copy'; },1500); }); };
     btns.appendChild(copyBtn);
+
+    var editBtn2 = document.createElement('button');
+    editBtn2.textContent = 'Edit';
+    editBtn2.style.cssText = 'font-size:0.76rem;font-weight:600;padding:6px 12px;border-radius:8px;border:1.5px solid var(--teal);background:white;color:var(--teal);cursor:pointer';
+    editBtn2.onclick = function() {
+      if (editBtn2.textContent === 'Edit') {
+        var ta2 = document.createElement('textarea');
+        ta2.style.cssText = 'width:100%;min-height:180px;font-size:0.8rem;line-height:1.6;border-radius:8px;border:1.5px solid var(--teal);padding:10px;box-sizing:border-box;white-space:pre-wrap;margin-bottom:6px';
+        ta2.value = content;
+        pre.replaceWith(ta2);
+        editBtn2.textContent = 'Save';
+      } else {
+        var savedTa2 = card.querySelector('textarea');
+        if (savedTa2) { content = savedTa2.value; pre.textContent = savedTa2.value; savedTa2.replaceWith(pre); }
+        editBtn2.textContent = 'Edit';
+      }
+    };
+    btns.appendChild(editBtn2);
+
+    var rewriteBtn = document.createElement('button');
+    rewriteBtn.textContent = 'Rewrite';
+    rewriteBtn.style.cssText = 'font-size:0.76rem;font-weight:600;padding:6px 12px;border-radius:8px;border:none;background:#F3F0FF;color:#7C3AED;cursor:pointer';
+    rewriteBtn.onclick = function() {
+      rewriteBtn.textContent = 'Sent to queue...';
+      rewriteBtn.disabled = true;
+      setTimeout(function(){ rewriteBtn.textContent = 'Rewrite'; rewriteBtn.disabled = false; }, 2500);
+    };
+    btns.appendChild(rewriteBtn);
+
+    var approveBtn2 = document.createElement('button');
+    approveBtn2.textContent = 'Approve';
+    approveBtn2.style.cssText = 'font-size:0.76rem;font-weight:600;padding:6px 14px;border-radius:8px;border:none;background:#D1FAE5;color:#065F46;cursor:pointer';
+    approveBtn2.onclick = function() {
+      approveBtn2.textContent = 'Approved';
+      approveBtn2.style.background = '#059669';
+      approveBtn2.style.color = 'white';
+      approveBtn2.disabled = true;
+      card.style.opacity = '0.6';
+    };
+    btns.appendChild(approveBtn2);
+
+    var rejectBtn2 = document.createElement('button');
+    rejectBtn2.textContent = 'Reject';
+    rejectBtn2.style.cssText = 'font-size:0.76rem;font-weight:600;padding:6px 14px;border-radius:8px;border:none;background:#FEE2E2;color:#991B1B;cursor:pointer';
+    rejectBtn2.onclick = function() {
+      card.style.transition = 'opacity 0.3s';
+      card.style.opacity = '0';
+      setTimeout(function(){ card.remove(); }, 300);
+    };
+    btns.appendChild(rejectBtn2);
 
     card.appendChild(btns);
     feed.appendChild(card);
