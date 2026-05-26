@@ -580,7 +580,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="tabs" style="margin-bottom:16px">
       <div class="tab active" onclick="switchTab(this,'inbox-alerts')">🔔 Alerts</div>
       <div class="tab" onclick="switchTab(this,'inbox-pending')" id="inbox-pending-tab">✅ Pending Tasks <span id="pending-count-badge" style="background:#ef4444;color:white;font-size:0.65rem;font-weight:800;padding:1px 6px;border-radius:10px;margin-left:4px">14</span></div>
-      <div class="tab" onclick="switchTab(this,'inbox-beta-codes')">🔑 Beta Codes</div>
+      <div class="tab" onclick="switchTab(this,'inbox-beta-codes');bcRender()">🔑 Beta Codes</div>
     </div>
 
     <!-- ALERTS TAB -->
@@ -792,6 +792,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
       </div>
     </div>
+
+    <!-- BETA CODES TAB -->
+    <div class="tab-panel" id="inbox-beta-codes">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-size:0.82rem;font-weight:700;color:var(--deep)">All beta access codes — tick when given out</div>
+          <div style="font-size:0.72rem;color:var(--g500);margin-top:2px">Ticks save automatically in your browser</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <span id="bc-counter" style="font-size:0.78rem;font-weight:700;color:var(--teal);padding:6px 12px;background:rgba(2,195,154,0.1);border-radius:8px">— available</span>
+          <button onclick="copyAllCodes()" style="background:var(--teal);color:white;border:none;border-radius:8px;padding:8px 14px;font-size:0.78rem;font-weight:700;cursor:pointer">⎘ Copy All</button>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:14px;border-left:4px solid var(--teal);padding:0">
+        <div style="padding:14px 16px 10px;font-size:0.72rem;font-weight:800;color:var(--teal);text-transform:uppercase;letter-spacing:0.08em">1-MONTH — 30 days free</div>
+        <div id="codes-1m-list"></div>
+      </div>
+      <div class="card" style="border-left:4px solid #6C63FF;padding:0">
+        <div style="padding:14px 16px 10px;font-size:0.72rem;font-weight:800;color:#6C63FF;text-transform:uppercase;letter-spacing:0.08em">1-YEAR — 365 days free</div>
+        <div id="codes-1y-list"></div>
+      </div>
+      <div style="font-size:0.72rem;color:var(--g500);margin-top:10px">Tick = given out · Code still works until recipient uses it · Ticks persist across sessions</div>
+    </div>
+
   </div>
 
   <!-- ══ CONTENT HUB ══ -->
@@ -1719,32 +1743,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div style="text-align:center;color:var(--g300);padding:4px">↓</div>
       <div class="funnel-step s4"><div class="funnel-label">⭐ Retained 30d+</div><div class="funnel-num">—</div></div>
     </div>
-  </div>
-
-  <!-- ══ BETA CODES TAB (inside My Inbox page) ══ -->
-  <div class="tab-panel" id="inbox-beta-codes" style="display:none">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
-      <div>
-        <div style="font-size:0.82rem;font-weight:700;color:var(--deep)">All beta access codes — tick when given out</div>
-        <div style="font-size:0.72rem;color:var(--g500);margin-top:2px">Ticks save automatically in your browser</div>
-      </div>
-      <div style="display:flex;gap:8px">
-        <span id="bc-counter" style="font-size:0.78rem;font-weight:700;color:var(--teal);padding:6px 12px;background:rgba(2,195,154,0.1);border-radius:8px">— available</span>
-        <button onclick="copyAllCodes()" style="background:var(--teal);color:white;border:none;border-radius:8px;padding:8px 14px;font-size:0.78rem;font-weight:700;cursor:pointer">⎘ Copy All</button>
-      </div>
-    </div>
-
-    <div class="card" style="margin-bottom:14px;border-left:4px solid var(--teal);padding:0">
-      <div style="padding:14px 16px 10px;font-size:0.72rem;font-weight:800;color:var(--teal);text-transform:uppercase;letter-spacing:0.08em">1-MONTH — 30 days free</div>
-      <div id="codes-1m-list"></div>
-    </div>
-
-    <div class="card" style="border-left:4px solid #6C63FF;padding:0">
-      <div style="padding:14px 16px 10px;font-size:0.72rem;font-weight:800;color:#6C63FF;text-transform:uppercase;letter-spacing:0.08em">1-YEAR — 365 days free</div>
-      <div id="codes-1y-list"></div>
-    </div>
-
-    <div style="font-size:0.72rem;color:var(--g500);margin-top:10px">Tick = given out · Code still works until the recipient uses it · Ticks persist across sessions</div>
   </div>
 
   <!-- ══ REPORTING ══ -->
@@ -7180,16 +7178,6 @@ function copyAllCodes() {
   });
 }
 
-// Render on tab open
-(function() {
-  var origSwitch = window.switchTab;
-  window.switchTab = function(el, id) {
-    origSwitch(el, id);
-    if (id === 'inbox-beta-codes') bcRender();
-  };
-  // Also render if already visible
-  setTimeout(function(){ if (document.getElementById('inbox-beta-codes') && document.getElementById('inbox-beta-codes').classList.contains('active')) bcRender(); }, 100);
-})();
 
 // ═══ INIT: load data for pages that need it on startup ═══════════════════════
 (function() {
