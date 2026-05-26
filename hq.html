@@ -119,6 +119,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tbl tr:last-child td{border-bottom:none}
 
 .pill{display:inline-flex;align-items:center;font-size:0.67rem;font-weight:700;padding:2px 8px;border-radius:100px;letter-spacing:0.04em}
+.beta-code{font-family:monospace;font-size:0.78rem;font-weight:700;color:var(--teal);background:rgba(2,195,154,0.08);border:1px solid rgba(2,195,154,0.3);border-radius:8px;padding:5px 10px;cursor:pointer;user-select:all;letter-spacing:0.04em}
+.beta-code:hover{background:rgba(2,195,154,0.18)}
 .pill.green{background:rgba(22,163,74,0.1);color:var(--green)}
 .pill.amber{background:rgba(217,119,6,0.1);color:var(--amber)}
 .pill.red{background:rgba(220,38,38,0.1);color:var(--red)}
@@ -578,6 +580,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="tabs" style="margin-bottom:16px">
       <div class="tab active" onclick="switchTab(this,'inbox-alerts')">🔔 Alerts</div>
       <div class="tab" onclick="switchTab(this,'inbox-pending')" id="inbox-pending-tab">✅ Pending Tasks <span id="pending-count-badge" style="background:#ef4444;color:white;font-size:0.65rem;font-weight:800;padding:1px 6px;border-radius:10px;margin-left:4px">14</span></div>
+      <div class="tab" onclick="switchTab(this,'inbox-beta-codes')">🔑 Beta Codes</div>
     </div>
 
     <!-- ALERTS TAB -->
@@ -1716,6 +1719,54 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div style="text-align:center;color:var(--g300);padding:4px">↓</div>
       <div class="funnel-step s4"><div class="funnel-label">⭐ Retained 30d+</div><div class="funnel-num">—</div></div>
     </div>
+  </div>
+
+  <!-- ══ BETA CODES TAB (inside My Inbox page) ══ -->
+  <div class="tab-panel" id="inbox-beta-codes" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div>
+        <div style="font-size:0.82rem;font-weight:700;color:var(--deep)">All beta access codes — single-use each</div>
+        <div style="font-size:0.72rem;color:var(--g500);margin-top:2px">Give one code per person. Expires after the free period.</div>
+      </div>
+      <button onclick="copyAllCodes()" style="background:var(--teal);color:white;border:none;border-radius:8px;padding:8px 14px;font-size:0.78rem;font-weight:700;cursor:pointer">⎘ Copy All</button>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;border-left:4px solid var(--teal)">
+      <div style="font-size:0.72rem;font-weight:800;color:var(--teal);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px">1-MONTH CODES — 30 days free (65 codes)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px" id="codes-1m">
+        <span class="beta-code">CARE-1M-R7KP</span><span class="beta-code">CARE-1M-X2QN</span><span class="beta-code">CARE-1M-T9WL</span><span class="beta-code">CARE-1M-B4JM</span><span class="beta-code">CARE-1M-H6YF</span>
+        <span class="beta-code">CARE-1M-D3NC</span><span class="beta-code">CARE-1M-Z8VA</span><span class="beta-code">CARE-1M-G5TK</span><span class="beta-code">CARE-1M-S1PE</span><span class="beta-code">CARE-1M-W0QB</span>
+        <span class="beta-code">CARE-1M-F7LX</span><span class="beta-code">CARE-1M-M2HD</span><span class="beta-code">CARE-1M-K4RU</span><span class="beta-code">CARE-1M-Y9GS</span><span class="beta-code">CARE-1M-J6WC</span>
+        <span class="beta-code">CARE-1M-A1BC</span><span class="beta-code">CARE-1M-B2CD</span><span class="beta-code">CARE-1M-C3DE</span><span class="beta-code">CARE-1M-D4EF</span><span class="beta-code">CARE-1M-E5FG</span>
+        <span class="beta-code">CARE-1M-F6GH</span><span class="beta-code">CARE-1M-G7HJ</span><span class="beta-code">CARE-1M-H8JK</span><span class="beta-code">CARE-1M-J9KL</span><span class="beta-code">CARE-1M-K0LM</span>
+        <span class="beta-code">CARE-1M-L1MN</span><span class="beta-code">CARE-1M-M2NP</span><span class="beta-code">CARE-1M-N3PQ</span><span class="beta-code">CARE-1M-P4QR</span><span class="beta-code">CARE-1M-Q5RS</span>
+        <span class="beta-code">CARE-1M-R6ST</span><span class="beta-code">CARE-1M-S7TU</span><span class="beta-code">CARE-1M-T8UV</span><span class="beta-code">CARE-1M-U9VW</span><span class="beta-code">CARE-1M-V0WX</span>
+        <span class="beta-code">CARE-1M-W1XY</span><span class="beta-code">CARE-1M-X2YZ</span><span class="beta-code">CARE-1M-Y3ZA</span><span class="beta-code">CARE-1M-Z4AB</span><span class="beta-code">CARE-1M-A5BV</span>
+        <span class="beta-code">CARE-1M-B6CW</span><span class="beta-code">CARE-1M-C7DX</span><span class="beta-code">CARE-1M-D8EY</span><span class="beta-code">CARE-1M-E9FZ</span><span class="beta-code">CARE-1M-F0GA</span>
+        <span class="beta-code">CARE-1M-G1HB</span><span class="beta-code">CARE-1M-H2JC</span><span class="beta-code">CARE-1M-J3KD</span><span class="beta-code">CARE-1M-K4LE</span><span class="beta-code">CARE-1M-L5MF</span>
+        <span class="beta-code">CARE-1M-M6NG</span><span class="beta-code">CARE-1M-N7PH</span><span class="beta-code">CARE-1M-P8QJ</span><span class="beta-code">CARE-1M-Q9RK</span><span class="beta-code">CARE-1M-R0SL</span>
+        <span class="beta-code">CARE-1M-S1TM</span><span class="beta-code">CARE-1M-T2UN</span><span class="beta-code">CARE-1M-U3VP</span><span class="beta-code">CARE-1M-V4WQ</span><span class="beta-code">CARE-1M-W5XR</span>
+        <span class="beta-code">CARE-1M-X6YS</span><span class="beta-code">CARE-1M-Y7ZT</span><span class="beta-code">CARE-1M-Z8AU</span><span class="beta-code">CARE-1M-A9BV</span><span class="beta-code">CARE-1M-B0CW</span>
+      </div>
+    </div>
+
+    <div class="card" style="border-left:4px solid #6C63FF">
+      <div style="font-size:0.72rem;font-weight:800;color:#6C63FF;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px">1-YEAR CODES — 365 days free (20 codes)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px" id="codes-1y">
+        <span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-A8NZ</span><span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-E3PV</span>
+        <span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-U7KT</span><span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-I5QM</span>
+        <span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-O2LW</span><span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-C9XF</span>
+        <span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-N4BJ</span><span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-V6HD</span>
+        <span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-Q1RS</span><span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-L0YP</span>
+        <span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-P2QX</span><span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-R4SY</span>
+        <span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-T6UZ</span><span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-V8WA</span>
+        <span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-X0YB</span><span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-Z2AC</span>
+        <span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-B4CD</span><span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-D6EF</span>
+        <span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-F8GH</span><span class="beta-code" style="border-color:#6C63FF;color:#6C63FF">CARE-1Y-H0JK</span>
+      </div>
+    </div>
+
+    <div style="font-size:0.72rem;color:var(--g500);margin-top:12px">Single-use · Enter on the paywall screen in the app · Expired codes auto-lock to the user who used them</div>
   </div>
 
   <!-- ══ REPORTING ══ -->
@@ -7077,6 +7128,19 @@ function triggerCEOReview() {
     .then(function() {
       if (msg) msg.textContent = 'Triggered. Check Telegram for CEO review memo.';
     }).catch(function() { if (msg) msg.textContent = 'Failed to trigger — check backend.'; });
+}
+
+// ═══ BETA CODES ══════════════════════════════════════════════════════════════
+function copyAllCodes() {
+  var codes = Array.from(document.querySelectorAll('.beta-code')).map(function(el){ return el.textContent.trim(); });
+  var text = '1-MONTH CODES (30 days):\n' +
+    codes.filter(function(c){ return c.includes('1M'); }).join('\n') +
+    '\n\n1-YEAR CODES (365 days):\n' +
+    codes.filter(function(c){ return c.includes('1Y'); }).join('\n');
+  navigator.clipboard.writeText(text).then(function(){
+    var btn = document.querySelector('[onclick="copyAllCodes()"]');
+    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(function(){ btn.textContent = '⎘ Copy All'; }, 2000); }
+  });
 }
 
 // ═══ INIT: load data for pages that need it on startup ═══════════════════════
