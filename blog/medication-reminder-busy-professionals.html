@@ -52,6 +52,15 @@
     .highlight-box h3 { font-size:15px; font-weight:800; color:#065f46; margin-bottom:8px; margin-top:0; }
     .highlight-box p { font-size:14px; color:#374151; line-height:1.7; margin:0; }
     blockquote { border-left:4px solid #02C39A; padding:12px 20px; margin:24px 0; background:#f9fafb; border-radius:0 8px 8px 0; font-style:italic; font-size:17px; color:#374151; line-height:1.7; }
+  
+    .related-posts{max-width:760px;margin:0 auto;padding:48px 24px 8px}
+    .related-posts-heading{font-size:0.75rem;font-weight:800;color:#028090;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:16px}
+    .related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+    .related-card{display:flex;flex-direction:column;gap:6px;padding:16px 18px;border:1.5px solid #e8efed;border-radius:12px;text-decoration:none;background:#fff;transition:border-color 0.15s,box-shadow 0.15s,transform 0.1s}
+    .related-card:hover{border-color:#028090;box-shadow:0 2px 14px rgba(2,128,144,0.12);transform:translateY(-1px)}
+    .related-card-tag{font-size:0.62rem;font-weight:800;color:#028090;text-transform:uppercase;letter-spacing:0.1em}
+    .related-card-title{font-size:0.84rem;font-weight:700;color:#0D3347;line-height:1.4}
+    .related-card-arrow{font-size:0.78rem;color:#028090;font-weight:700;margin-top:auto;padding-top:6px}
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-HNNSVW5Q57"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-HNNSVW5Q57");</script>
@@ -162,6 +171,28 @@
 
   <h3>Built by people who understand the problem</h3>
   <p>Carely was built by a team who watched family members struggle with medication management. Not a pharma company. Not a VC-backed data play. A small team building something genuinely useful.</p>
+</div>
+
+
+<div class="related-posts">
+  <div class="related-posts-heading">Related Articles</div>
+  <div class="related-grid">
+    <a href="/blog/supplement-tracker-busy-professionals.html" class="related-card">
+      <span class="related-card-tag">SUPPLEMENTS</span>
+      <div class="related-card-title">Supplement Tracker for Busy Professionals</div>
+      <span class="related-card-arrow">Read more →</span>
+    </a>
+    <a href="/blog/medication-reminder-adhd.html" class="related-card">
+      <span class="related-card-tag">ADHD</span>
+      <div class="related-card-title">Medication Reminder App for ADHD</div>
+      <span class="related-card-arrow">Read more →</span>
+    </a>
+    <a href="/blog/dose-tracker-app.html" class="related-card">
+      <span class="related-card-tag">DOSE TRACKING</span>
+      <div class="related-card-title">Dose Tracker App</div>
+      <span class="related-card-arrow">Read more →</span>
+    </a>
+  </div>
 </div>
 
 <div class="cta-section">

@@ -68,6 +68,15 @@
     .cta-section h2{color:#fff;margin-top:0;font-size:32px}
     .cta-section p{color:rgba(255,255,255,0.75);margin-bottom:28px}
     .cta-btn{display:inline-block;background:#02C39A;color:#0D3347;font-weight:800;font-size:16px;padding:14px 36px;border-radius:10px;text-decoration:none}
+  
+    .related-posts{max-width:760px;margin:0 auto;padding:48px 24px 8px}
+    .related-posts-heading{font-size:0.75rem;font-weight:800;color:#028090;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:16px}
+    .related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+    .related-card{display:flex;flex-direction:column;gap:6px;padding:16px 18px;border:1.5px solid #e8efed;border-radius:12px;text-decoration:none;background:#fff;transition:border-color 0.15s,box-shadow 0.15s,transform 0.1s}
+    .related-card:hover{border-color:#028090;box-shadow:0 2px 14px rgba(2,128,144,0.12);transform:translateY(-1px)}
+    .related-card-tag{font-size:0.62rem;font-weight:800;color:#028090;text-transform:uppercase;letter-spacing:0.1em}
+    .related-card-title{font-size:0.84rem;font-weight:700;color:#0D3347;line-height:1.4}
+    .related-card-arrow{font-size:0.78rem;color:#028090;font-weight:700;margin-top:auto;padding-top:6px}
   </style>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
@@ -251,6 +260,28 @@
     </div>
   </div>
 
+</div>
+
+
+<div class="related-posts">
+  <div class="related-posts-heading">Related Articles</div>
+  <div class="related-grid">
+    <a href="/blog/medication-management-app.html" class="related-card">
+      <span class="related-card-tag">MED MANAGEMENT</span>
+      <div class="related-card-title">Medication Management App</div>
+      <span class="related-card-arrow">Read more →</span>
+    </a>
+    <a href="/blog/all-in-one-health-tracker-app.html" class="related-card">
+      <span class="related-card-tag">HEALTH TRACKING</span>
+      <div class="related-card-title">All-in-One Health Tracker App</div>
+      <span class="related-card-arrow">Read more →</span>
+    </a>
+    <a href="/blog/vitals-tracking-app.html" class="related-card">
+      <span class="related-card-tag">VITALS</span>
+      <div class="related-card-title">Vitals Tracking App</div>
+      <span class="related-card-arrow">Read more →</span>
+    </a>
+  </div>
 </div>
 
 <div class="cta-section">

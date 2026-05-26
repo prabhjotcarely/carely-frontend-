@@ -53,6 +53,15 @@
     nav { background:#fff; border-bottom:1px solid #e8efed; padding:0 24px; height:56px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
     .nav-logo { font-size:16px; font-weight:900; color:#028090; letter-spacing:1px; text-decoration:none; }
     .nav-cta { background:#02C39A; color:#0D3347; font-weight:700; font-size:12px; padding:7px 16px; border-radius:7px; text-decoration:none; }
+  
+    .related-posts{max-width:760px;margin:0 auto;padding:48px 24px 8px}
+    .related-posts-heading{font-size:0.75rem;font-weight:800;color:#028090;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:16px}
+    .related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+    .related-card{display:flex;flex-direction:column;gap:6px;padding:16px 18px;border:1.5px solid #e8efed;border-radius:12px;text-decoration:none;background:#fff;transition:border-color 0.15s,box-shadow 0.15s,transform 0.1s}
+    .related-card:hover{border-color:#028090;box-shadow:0 2px 14px rgba(2,128,144,0.12);transform:translateY(-1px)}
+    .related-card-tag{font-size:0.62rem;font-weight:800;color:#028090;text-transform:uppercase;letter-spacing:0.1em}
+    .related-card-title{font-size:0.84rem;font-weight:700;color:#0D3347;line-height:1.4}
+    .related-card-arrow{font-size:0.78rem;color:#028090;font-weight:700;margin-top:auto;padding-top:6px}
   </style>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HNNSVW5Q57"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-HNNSVW5Q57");</script>
   <!-- PostHog Analytics -->
@@ -136,6 +145,28 @@
       <h3>Full Medication Management</h3>
       <p>Track multiple medications, dosages, schedules, and refill reminders — all in one place for the whole family.</p>
     </div>
+  </div>
+</div>
+
+
+<div class="related-posts">
+  <div class="related-posts-heading">Related Articles</div>
+  <div class="related-grid">
+    <a href="/blog/medisafe-alternative.html" class="related-card">
+      <span class="related-card-tag">COMPARISON</span>
+      <div class="related-card-title">Best Medisafe Alternative</div>
+      <span class="related-card-arrow">Read more →</span>
+    </a>
+    <a href="/blog/best-medication-reminder-app-elderly.html" class="related-card">
+      <span class="related-card-tag">ELDERLY CARE</span>
+      <div class="related-card-title">Best Medication Reminder App for the Elderly</div>
+      <span class="related-card-arrow">Read more →</span>
+    </a>
+    <a href="/blog/caregiver-app-for-aging-parents.html" class="related-card">
+      <span class="related-card-tag">AGING PARENTS</span>
+      <div class="related-card-title">Caregiver App for Aging Parents</div>
+      <span class="related-card-arrow">Read more →</span>
+    </a>
   </div>
 </div>
 
