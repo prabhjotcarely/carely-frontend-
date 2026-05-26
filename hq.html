@@ -1732,6 +1732,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="tab" onclick="switchTab(this,'rp-agents')">🤖 Agent Activity</div>
       <div class="tab" onclick="switchTab(this,'rp-platforms')">🌐 Platforms</div>
       <div class="tab" onclick="switchTab(this,'rp-costs')">💰 Costs &amp; AI</div>
+      <div class="tab" onclick="switchTab(this,'rp-analytics');loadCohortData()">📊 User Analytics</div>
     </div>
     <div class="tab-panel active" id="rp-log">
       <div class="card">
@@ -1818,6 +1819,84 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <div style="font-size:0.72rem;color:var(--g500);margin-top:8px">Full usage tracking added post-launch. Costs estimated based on expected volume.</div>
         </div>
       </div>
+    </div>
+
+    <!-- ══ USER ANALYTICS TAB ══ -->
+    <div class="tab-panel" id="rp-analytics">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-size:0.72rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.08em">Live cohort data · auto-refreshes every 60s</div>
+          <div id="analytics-last-updated" style="font-size:0.7rem;color:var(--g500);margin-top:2px">Loading...</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="loadCohortData()" style="background:var(--teal);color:white;border:none;border-radius:8px;padding:8px 14px;font-size:0.78rem;font-weight:700;cursor:pointer">↻ Refresh</button>
+          <button onclick="downloadCohortCSV()" style="background:var(--deep);color:white;border:none;border-radius:8px;padding:8px 14px;font-size:0.78rem;font-weight:700;cursor:pointer">⬇ Download CSV</button>
+        </div>
+      </div>
+
+      <!-- Summary metrics -->
+      <div class="metric-row" id="analytics-summary-row">
+        <div class="metric"><div class="metric-label">Total Users</div><div class="metric-val teal" id="an-total-users">—</div><div class="metric-sub">All signups</div></div>
+        <div class="metric"><div class="metric-label">Avg Adherence</div><div class="metric-val" id="an-avg-adherence">—</div><div class="metric-sub">Last 30 days</div></div>
+        <div class="metric"><div class="metric-label">Conditions Tracked</div><div class="metric-val amber" id="an-conditions">—</div><div class="metric-sub">Disease groups</div></div>
+        <div class="metric"><div class="metric-label">Doses Logged</div><div class="metric-val" id="an-doses">—</div><div class="metric-sub">Last 30 days</div></div>
+      </div>
+
+      <div class="cols" style="margin-top:0">
+
+        <!-- Condition breakdown -->
+        <div class="card">
+          <div class="card-title">🏥 Users by Condition</div>
+          <div id="an-conditions-chart" style="padding-top:4px"></div>
+        </div>
+
+        <!-- Age groups -->
+        <div class="card">
+          <div class="card-title">👥 Users by Age Group</div>
+          <div id="an-age-chart" style="padding-top:4px"></div>
+        </div>
+
+      </div>
+
+      <div class="cols" style="margin-top:0">
+
+        <!-- Adherence by condition -->
+        <div class="card">
+          <div class="card-title">💊 Adherence % by Condition</div>
+          <div id="an-adherence-chart" style="padding-top:4px"></div>
+        </div>
+
+        <!-- Top skip reasons -->
+        <div class="card">
+          <div class="card-title">⏭ Top Skip Reasons</div>
+          <div id="an-skip-chart" style="padding-top:4px"></div>
+        </div>
+
+      </div>
+
+      <div class="cols" style="margin-top:0">
+
+        <!-- Top medicines -->
+        <div class="card">
+          <div class="card-title">💉 Top Medicines Used</div>
+          <div id="an-medicines-table"></div>
+        </div>
+
+        <!-- Top symptoms -->
+        <div class="card">
+          <div class="card-title">🌡 Top Symptoms Reported</div>
+          <div id="an-symptoms-table"></div>
+        </div>
+
+      </div>
+
+      <!-- Plan distribution -->
+      <div class="card" style="margin-top:0">
+        <div class="card-title">💳 Users by Plan</div>
+        <div id="an-plans-row" style="display:flex;flex-wrap:wrap;gap:10px;padding-top:6px"></div>
+      </div>
+
+      <div id="analytics-error" style="display:none;background:#FEE2E2;color:#991B1B;padding:14px;border-radius:10px;font-size:0.82rem;margin-top:8px"></div>
     </div>
   </div>
 
@@ -7004,6 +7083,212 @@ function triggerCEOReview() {
 (function() {
   if (window.loadDrafts) window.loadDrafts();
 })();
+
+// ═══ USER ANALYTICS (cohort-report) ══════════════════════════════════════════
+
+var _cohortData = null;
+var _cohortRefreshTimer = null;
+
+function loadCohortData() {
+  var secret = 'b00f4fc3fd0333847bbc9513a4c60ffb086f0e5332ef16983c921de115125657';
+  var errEl = document.getElementById('analytics-error');
+  var updEl = document.getElementById('analytics-last-updated');
+  if (errEl) errEl.style.display = 'none';
+  if (updEl) updEl.textContent = 'Loading...';
+
+  fetch(_BACKEND + '/admin/cohort-report', {
+    headers: { 'x-carely-secret': secret }
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(function(data) {
+    _cohortData = data;
+    renderCohortData(data);
+    if (updEl) updEl.textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+    // auto-refresh every 60s while tab is active
+    clearTimeout(_cohortRefreshTimer);
+    _cohortRefreshTimer = setTimeout(loadCohortData, 60000);
+  })
+  .catch(function(err) {
+    if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'Failed to load: ' + err.message; }
+    if (updEl) updEl.textContent = 'Error loading data';
+  });
+}
+
+function renderCohortData(d) {
+  var s = d.summary || {};
+  // Summary metrics
+  setText('an-total-users', s.totalUsers || 0);
+  setText('an-avg-adherence', s.avgAdherenceRate != null ? Math.round(s.avgAdherenceRate) + '%' : '—');
+  setText('an-conditions', Object.keys(d.byCondition || {}).length);
+  setText('an-doses', s.totalDosesLogged || 0);
+
+  // Condition bars
+  renderBars('an-conditions-chart', d.byCondition || {}, 'users', '#028090');
+
+  // Age group bars
+  var ageLabels = { under_18:'<18', '18_34':'18–34', '35_49':'35–49', '50_64':'50–64', '65_79':'65–79', '80_plus':'80+' };
+  renderBars('an-age-chart', d.byAgeGroup || {}, 'users', '#6C63FF', ageLabels);
+
+  // Adherence by condition
+  renderAdherenceBars('an-adherence-chart', d.adherenceByCondition || {});
+
+  // Skip reasons
+  renderListBars('an-skip-chart', d.topSkipReasons || [], 'reason', 'count', '#F59E0B');
+
+  // Top medicines table
+  renderTable('an-medicines-table', d.topMedicines || [], ['name', 'users'], ['Medicine', 'Users']);
+
+  // Top symptoms table
+  renderTable('an-symptoms-table', d.topSymptoms || [], ['symptom', 'count'], ['Symptom', 'Reports']);
+
+  // Plans
+  var planRow = document.getElementById('an-plans-row');
+  if (planRow) {
+    planRow.innerHTML = '';
+    var plans = d.byPlan || {};
+    Object.keys(plans).forEach(function(p) {
+      var badge = document.createElement('div');
+      badge.style.cssText = 'background:var(--g100);border-radius:8px;padding:10px 16px;text-align:center;min-width:90px';
+      badge.innerHTML = '<div style="font-size:1.3rem;font-weight:900;color:var(--teal)">' + (plans[p] || 0) + '</div><div style="font-size:0.72rem;color:var(--g500);text-transform:capitalize;margin-top:2px">' + p + '</div>';
+      planRow.appendChild(badge);
+    });
+  }
+}
+
+function renderBars(id, obj, valueKey, color, labelMap) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var keys = Object.keys(obj);
+  if (!keys.length) { el.innerHTML = '<div style="color:var(--g500);font-size:0.78rem">No data yet</div>'; return; }
+  var maxVal = Math.max.apply(null, keys.map(function(k){ return (obj[k][valueKey] || obj[k] || 0); }));
+  el.innerHTML = keys.map(function(k) {
+    var val = obj[k][valueKey] != null ? obj[k][valueKey] : (typeof obj[k] === 'number' ? obj[k] : 0);
+    var pct = maxVal > 0 ? Math.round((val / maxVal) * 100) : 0;
+    var label = (labelMap && labelMap[k]) ? labelMap[k] : k.replace(/_/g,' ');
+    return '<div style="margin-bottom:8px">' +
+      '<div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:3px">' +
+      '<span style="text-transform:capitalize;color:var(--deep)">' + label + '</span>' +
+      '<span style="font-weight:700;color:var(--g600)">' + val + '</span></div>' +
+      '<div style="background:var(--g100);border-radius:4px;height:8px"><div style="background:' + color + ';width:' + pct + '%;height:8px;border-radius:4px;transition:width 0.4s"></div></div>' +
+      '</div>';
+  }).join('');
+}
+
+function renderAdherenceBars(id, obj) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var keys = Object.keys(obj);
+  if (!keys.length) { el.innerHTML = '<div style="color:var(--g500);font-size:0.78rem">No data yet</div>'; return; }
+  el.innerHTML = keys.map(function(k) {
+    var pct = Math.round(obj[k] || 0);
+    var color = pct >= 80 ? '#10B981' : pct >= 50 ? '#F59E0B' : '#EF4444';
+    return '<div style="margin-bottom:8px">' +
+      '<div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:3px">' +
+      '<span style="text-transform:capitalize;color:var(--deep)">' + k.replace(/_/g,' ') + '</span>' +
+      '<span style="font-weight:700;color:' + color + '">' + pct + '%</span></div>' +
+      '<div style="background:var(--g100);border-radius:4px;height:8px"><div style="background:' + color + ';width:' + pct + '%;height:8px;border-radius:4px;transition:width 0.4s"></div></div>' +
+      '</div>';
+  }).join('');
+}
+
+function renderListBars(id, arr, labelKey, countKey, color) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  if (!arr.length) { el.innerHTML = '<div style="color:var(--g500);font-size:0.78rem">No data yet</div>'; return; }
+  var maxVal = arr[0][countKey] || 1;
+  el.innerHTML = arr.slice(0, 8).map(function(item) {
+    var val = item[countKey] || 0;
+    var pct = Math.round((val / maxVal) * 100);
+    var label = (item[labelKey] || 'unknown').replace(/_/g,' ');
+    return '<div style="margin-bottom:8px">' +
+      '<div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:3px">' +
+      '<span style="text-transform:capitalize;color:var(--deep)">' + label + '</span>' +
+      '<span style="font-weight:700;color:var(--g600)">' + val + '</span></div>' +
+      '<div style="background:var(--g100);border-radius:4px;height:8px"><div style="background:' + color + ';width:' + pct + '%;height:8px;border-radius:4px;transition:width 0.4s"></div></div>' +
+      '</div>';
+  }).join('');
+}
+
+function renderTable(id, arr, cols, headers) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  if (!arr.length) { el.innerHTML = '<div style="color:var(--g500);font-size:0.78rem">No data yet</div>'; return; }
+  var html = '<table class="tbl"><thead><tr>' + headers.map(function(h){ return '<th>' + h + '</th>'; }).join('') + '</tr></thead><tbody>';
+  arr.slice(0, 10).forEach(function(row, i) {
+    html += '<tr>' + cols.map(function(c, ci) {
+      var val = row[c] != null ? row[c] : '—';
+      if (typeof val === 'string') val = val.replace(/_/g,' ');
+      var style = ci === 0 ? 'style="text-transform:capitalize"' : '';
+      return '<td ' + style + '>' + (i === 0 && ci === 0 ? '<strong>' + val + '</strong>' : val) + '</td>';
+    }).join('') + '</tr>';
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+function setText(id, val) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function downloadCohortCSV() {
+  if (!_cohortData) { alert('Load data first'); return; }
+  var d = _cohortData;
+  var rows = [['Section','Key','Value']];
+
+  // Summary
+  var s = d.summary || {};
+  Object.keys(s).forEach(function(k){ rows.push(['Summary', k, s[k]]); });
+
+  // Conditions
+  Object.keys(d.byCondition || {}).forEach(function(k){
+    var v = d.byCondition[k];
+    rows.push(['Condition', k, typeof v === 'object' ? v.users : v]);
+  });
+
+  // Age groups
+  Object.keys(d.byAgeGroup || {}).forEach(function(k){
+    var v = d.byAgeGroup[k];
+    rows.push(['AgeGroup', k, typeof v === 'object' ? v.users : v]);
+  });
+
+  // Plans
+  Object.keys(d.byPlan || {}).forEach(function(k){
+    rows.push(['Plan', k, d.byPlan[k]]);
+  });
+
+  // Adherence
+  Object.keys(d.adherenceByCondition || {}).forEach(function(k){
+    rows.push(['AdherencePct', k, Math.round(d.adherenceByCondition[k]) + '%']);
+  });
+
+  // Top medicines
+  (d.topMedicines || []).forEach(function(m){
+    rows.push(['TopMedicine', m.name || m.medicine_name || '', m.users || m.count || '']);
+  });
+
+  // Skip reasons
+  (d.topSkipReasons || []).forEach(function(r){
+    rows.push(['SkipReason', r.reason || r.skip_reason || '', r.count || '']);
+  });
+
+  // Symptoms
+  (d.topSymptoms || []).forEach(function(r){
+    rows.push(['TopSymptom', r.symptom || '', r.count || '']);
+  });
+
+  var csv = rows.map(function(r){ return r.map(function(cell){ return '"' + String(cell).replace(/"/g,'""') + '"'; }).join(','); }).join('\n');
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'carely-cohort-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
 </script>
 </body>
 </html>
