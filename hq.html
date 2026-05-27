@@ -363,6 +363,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="sb-item" onclick="nav(this,'crm')"><span class="ic">👤</span> CRM</div>
     <div class="sb-item" onclick="nav(this,'affiliates')"><span class="ic">💰</span> Affiliates</div>
     <div class="sb-item" onclick="nav(this,'user-intel');loadUserIntel()"><span class="ic">🧠</span> User Intelligence</div>
+    <div class="sb-item" onclick="nav(this,'health-insights');loadHealthInsights()"><span class="ic">📊</span> Health Insights</div>
+    <div class="sb-item" onclick="nav(this,'data-governance')"><span class="ic">🛡️</span> Data Governance</div>
     <div class="sb-item" onclick="nav(this,'reporting')"><span class="ic">📈</span> Reporting</div>
   </div>
 
@@ -2921,6 +2923,139 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="card-title">🏥 Condition Summary</div>
         <div id="export-condition-summary"><div style="text-align:center;padding:28px;color:var(--g500)">Click to load</div></div>
         <button onclick="loadConditionSummary()" style="background:var(--deep);color:white;border:none;border-radius:10px;padding:11px 20px;font-size:0.85rem;font-weight:700;cursor:pointer;width:100%;margin-top:12px">Load Condition Breakdown</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-data-governance">
+    <div class="ph"><h1>🛡️ Data Governance</h1><p>PIPEDA compliance · data categories · user rights · audit status</p></div>
+
+    <style>
+      .dg-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
+      @media(max-width:700px){.dg-grid{grid-template-columns:1fr}}
+      .dg-card{background:white;border:1.5px solid var(--g200);border-radius:12px;padding:18px}
+      .dg-card-title{font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--g500);margin-bottom:14px}
+      .dg-row{display:flex;align-items:flex-start;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--g100);gap:12px}
+      .dg-row:last-child{border-bottom:none;padding-bottom:0}
+      .dg-label{font-size:0.8rem;color:var(--text);flex:1}
+      .dg-sub{font-size:0.7rem;color:var(--g500);margin-top:2px}
+      .dg-badge{font-size:0.62rem;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+      .dg-ok{background:rgba(2,195,154,0.12);color:#059669;border:1px solid rgba(2,195,154,0.3)}
+      .dg-pending{background:rgba(251,191,36,0.12);color:#b45309;border:1px solid rgba(251,191,36,0.3)}
+      .dg-warn{background:rgba(220,38,38,0.1);color:#dc2626;border:1px solid rgba(220,38,38,0.25)}
+      .dg-cat{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--g100)}
+      .dg-cat:last-child{border-bottom:none}
+      .dg-cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+      .dg-cat-name{font-size:0.8rem;font-weight:700;color:var(--deep);min-width:90px}
+      .dg-cat-desc{font-size:0.72rem;color:var(--g500);flex:1}
+      .dg-cat-purpose{font-size:0.65rem;color:var(--teal);font-weight:600;white-space:nowrap}
+      .dg-full{grid-column:1/-1}
+      .dg-rights{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+      .dg-right{background:var(--g100);border-radius:8px;padding:12px 14px}
+      .dg-right-title{font-size:0.75rem;font-weight:700;color:var(--deep);margin-bottom:4px}
+      .dg-right-desc{font-size:0.7rem;color:var(--g500);line-height:1.4}
+      .dg-disclosure{background:rgba(2,128,144,0.04);border:1.5px solid rgba(2,128,144,0.2);border-radius:10px;padding:16px 18px;font-size:0.78rem;color:var(--text);line-height:1.7}
+    </style>
+
+    <div class="dg-grid">
+
+      <!-- PIPEDA Compliance Status -->
+      <div class="dg-card">
+        <div class="dg-card-title">PIPEDA Compliance Status</div>
+        <div class="dg-row"><div><div class="dg-label">Privacy policy published</div><div class="dg-sub">carely.fit/privacy</div></div><span class="dg-badge dg-ok">LIVE</span></div>
+        <div class="dg-row"><div><div class="dg-label">Data stored outside Canada disclosed</div><div class="dg-sub">US East (Supabase) — disclosed in policy</div></div><span class="dg-badge dg-ok">DISCLOSED</span></div>
+        <div class="dg-row"><div><div class="dg-label">Encryption at rest</div><div class="dg-sub">Supabase AES-256</div></div><span class="dg-badge dg-ok">ACTIVE</span></div>
+        <div class="dg-row"><div><div class="dg-label">Encryption in transit</div><div class="dg-sub">TLS 1.3 on all endpoints</div></div><span class="dg-badge dg-ok">ACTIVE</span></div>
+        <div class="dg-row"><div><div class="dg-label">Row Level Security (RLS)</div><div class="dg-sub">Users can only access their own data</div></div><span class="dg-badge dg-ok">ENABLED</span></div>
+        <div class="dg-row"><div><div class="dg-label">In-app consent screen</div><div class="dg-sub">User taps agree before onboarding</div></div><span class="dg-badge dg-pending">PENDING</span></div>
+        <div class="dg-row"><div><div class="dg-label">Right to erasure (data deletion)</div><div class="dg-sub">Backend endpoint live</div></div><span class="dg-badge dg-ok">READY</span></div>
+        <div class="dg-row"><div><div class="dg-label">Breach notification process</div><div class="dg-sub">72h notify OPC — process documented</div></div><span class="dg-badge dg-pending">PENDING</span></div>
+        <div class="dg-row"><div><div class="dg-label">Audit logging</div><div class="dg-sub">Admin access logged</div></div><span class="dg-badge dg-pending">IN PROGRESS</span></div>
+      </div>
+
+      <!-- Data Categories -->
+      <div class="dg-card">
+        <div class="dg-card-title">Data Categories Collected</div>
+        <div class="dg-cat"><div class="dg-cat-dot" style="background:#028090"></div><div class="dg-cat-name">Personal</div><div class="dg-cat-desc">Name, email, phone</div><div class="dg-cat-purpose">Account management</div></div>
+        <div class="dg-cat"><div class="dg-cat-dot" style="background:#dc2626"></div><div class="dg-cat-name">Health</div><div class="dg-cat-desc">Medication names, dose schedules, adherence logs, missed doses</div><div class="dg-cat-purpose">Core service</div></div>
+        <div class="dg-cat"><div class="dg-cat-dot" style="background:#7c3aed"></div><div class="dg-cat-name">Clinical</div><div class="dg-cat-desc">Vitals (BP, glucose, weight, SpO2), doctor connections, appointment history, PDF reports</div><div class="dg-cat-purpose">Health monitoring</div></div>
+        <div class="dg-cat"><div class="dg-cat-dot" style="background:#d97706"></div><div class="dg-cat-name">Behavioural</div><div class="dg-cat-desc">App usage patterns, notification response times, Elara session data</div><div class="dg-cat-purpose">AI personalisation</div></div>
+        <div class="dg-cat"><div class="dg-cat-dot" style="background:#059669"></div><div class="dg-cat-name">Financial</div><div class="dg-cat-desc">Stripe customer ID, subscription plan, billing status</div><div class="dg-cat-purpose">Payment processing</div></div>
+        <div class="dg-cat"><div class="dg-cat-dot" style="background:#6b7280"></div><div class="dg-cat-name">Relationship</div><div class="dg-cat-desc">Caregiver links, patient connections, permissions granted</div><div class="dg-cat-purpose">Caregiver feature</div></div>
+      </div>
+
+      <!-- User Rights -->
+      <div class="dg-card dg-full">
+        <div class="dg-card-title">User Rights Under PIPEDA</div>
+        <div class="dg-rights">
+          <div class="dg-right"><div class="dg-right-title">Right to Access</div><div class="dg-right-desc">Users can request a full export of their data at any time via the app or by emailing hello@carely.fit</div></div>
+          <div class="dg-right"><div class="dg-right-title">Right to Correction</div><div class="dg-right-desc">Users can update their personal information directly in the app at any time</div></div>
+          <div class="dg-right"><div class="dg-right-title">Right to Erasure</div><div class="dg-right-desc">Full account deletion removes all health data, dose logs, vitals, and doctor connections permanently</div></div>
+          <div class="dg-right"><div class="dg-right-title">Right to Withdraw Consent</div><div class="dg-right-desc">Users can cancel at any time. Withdrawal does not affect lawfulness of prior processing</div></div>
+          <div class="dg-right"><div class="dg-right-title">Right to Complain</div><div class="dg-right-desc">Users may file a complaint with the Office of the Privacy Commissioner of Canada (OPC) at priv.gc.ca</div></div>
+          <div class="dg-right"><div class="dg-right-title">Data Portability</div><div class="dg-right-desc">Users can export their full health history as CSV or PDF via the Data Export section of the app</div></div>
+        </div>
+      </div>
+
+      <!-- Data Residency Disclosure -->
+      <div class="dg-card dg-full">
+        <div class="dg-card-title">Data Residency &amp; Third-Party Processors</div>
+        <div class="dg-disclosure">
+          Carely stores personal and health data on servers operated by <strong>Supabase Inc.</strong> (US East — N. Virginia, USA) under SOC 2 Type II certification and AES-256 encryption at rest. Data is transferred to the United States in accordance with PIPEDA Schedule 1, Principle 4.1.3, with contractual protections in place. Users are informed of this in the privacy policy and consent screen prior to onboarding.<br><br>
+          <strong>Third-party processors:</strong> Supabase (database) · Stripe (payments) · SendGrid (email) · Firebase (push notifications) · OpenRouter/OpenAI (AI features) · Upstash (session cache) · Railway (hosting) · Cloudflare (CDN).
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page" id="page-health-insights">
+    <div class="ph"><h1>📊 Health Insights</h1><p>Anonymised aggregate health trends · investor-ready · no personal data shown</p></div>
+
+    <style>
+      .hi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:24px}
+      .hi-stat{background:white;border:1.5px solid var(--g200);border-radius:10px;padding:14px 16px}
+      .hi-stat-label{font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;color:var(--g500);margin-bottom:6px}
+      .hi-stat-val{font-size:1.6rem;font-weight:900;color:var(--deep)}
+      .hi-stat-sub{font-size:0.68rem;color:var(--g500);margin-top:3px}
+      .hi-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media(max-width:700px){.hi-cards{grid-template-columns:1fr}}
+      .hi-card{background:white;border:1.5px solid var(--g200);border-radius:12px;padding:18px}
+      .hi-card-title{font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;color:var(--g500);margin-bottom:14px}
+      .hi-bar-row{margin-bottom:10px}
+      .hi-bar-top{display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:4px}
+      .hi-bar-label{color:var(--text)}
+      .hi-bar-count{font-weight:700;color:var(--deep)}
+      .hi-track{height:7px;background:var(--g100);border-radius:4px;overflow:hidden}
+      .hi-fill{height:100%;border-radius:4px;transition:width 0.7s}
+      .hi-anon-note{font-size:0.68rem;color:var(--g500);background:var(--g100);border-radius:7px;padding:8px 12px;margin-bottom:18px;display:flex;align-items:center;gap:6px}
+    </style>
+
+    <div class="hi-anon-note">🔒 All data shown is anonymised and aggregated. No individual user can be identified from these insights.</div>
+
+    <div class="hi-grid">
+      <div class="hi-stat"><div class="hi-stat-label">Overall Adherence</div><div class="hi-stat-val" id="hi-adherence" style="color:#02C39A">—</div><div class="hi-stat-sub">doses taken on time</div></div>
+      <div class="hi-stat"><div class="hi-stat-label">Total Dose Logs</div><div class="hi-stat-val" id="hi-total-logs">—</div><div class="hi-stat-sub">all time</div></div>
+      <div class="hi-stat"><div class="hi-stat-label">Medicines Tracked</div><div class="hi-stat-val" id="hi-medicines">—</div><div class="hi-stat-sub">across all users</div></div>
+      <div class="hi-stat"><div class="hi-stat-label">Vitals Logged</div><div class="hi-stat-val" id="hi-vitals">—</div><div class="hi-stat-sub">BP, glucose, weight, SpO2</div></div>
+    </div>
+
+    <div class="hi-cards">
+      <div class="hi-card">
+        <div class="hi-card-title">Dose Response Breakdown</div>
+        <div id="hi-dose-breakdown"></div>
+      </div>
+      <div class="hi-card">
+        <div class="hi-card-title">Dose Form Types</div>
+        <div id="hi-dose-types"></div>
+      </div>
+      <div class="hi-card">
+        <div class="hi-card-title">Plan Distribution</div>
+        <div id="hi-plan-dist"></div>
+      </div>
+      <div class="hi-card">
+        <div class="hi-card-title">Weekly Signup Trend</div>
+        <div id="hi-signup-trend"></div>
       </div>
     </div>
   </div>
@@ -7657,6 +7792,6 @@ function downloadCohortCSV() {
   URL.revokeObjectURL(url);
 }
 </script>
-<script src="hq-intel.js?v=20260527d"></script>
+<script src="hq-intel.js?v=20260527e"></script>
 </body>
 </html>
