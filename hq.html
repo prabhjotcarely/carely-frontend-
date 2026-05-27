@@ -4770,10 +4770,38 @@ function _chContentCard(draft, platform) {
   };
   btns.appendChild(editBtn);
 
-  // Reddit: show "Open thread" link if URL is in metadata
-  if (draft.metadata && draft.metadata.url) {
+  // Rewrite button on live cards
+  var rwLiveBtn = makeBtn('↻ Rewrite', '#f0fdf4', '#16a34a', '1.5px solid #bbf7d0');
+  rwLiveBtn.onclick = function() {
+    var feedback = prompt('What to change? (Leave blank for fresh angle)') || 'Rewrite this with a fresh angle — same message, different hook.';
+    if (!feedback) return;
+    rwLiveBtn.textContent = 'Rewriting...'; rwLiveBtn.disabled = true;
+    fetch(BACKEND + '/admin/content/rewrite', {
+      method:'POST', headers:{'Content-Type':'application/json','x-carely-secret':SECRET},
+      body: JSON.stringify({ contentId: platform.slice(0,2)+'-re', originalContent: fullText, editFeedback: feedback })
+    }).then(function(r){ return r.json(); })
+      .then(function(d){
+        if (d.ok && d.rewritten) {
+          preview.textContent = d.rewritten;
+          rwLiveBtn.textContent = '↻ Rewrite';
+          rwLiveBtn.disabled = false;
+        } else { rwLiveBtn.textContent = 'Failed'; }
+      }).catch(function(){ rwLiveBtn.textContent = 'Failed'; rwLiveBtn.disabled = false; });
+  };
+  btns.appendChild(rwLiveBtn);
+
+  // Reddit reply: show source thread URL prominently
+  var sourceUrl = (draft.metadata && (draft.metadata.url || draft.metadata.sourceUrl || draft.metadata.threadUrl)) || draft.postUrl;
+  if (sourceUrl) {
+    var threadWrap = document.createElement('div');
+    threadWrap.style.cssText = 'background:#fff8f3;border:1.5px solid #FF4500;border-radius:8px;padding:8px 12px;margin-bottom:8px;font-size:0.75rem;display:flex;align-items:center;gap:8px';
+    var threadLabel = document.createElement('span'); threadLabel.style.cssText = 'color:#FF4500;font-weight:800'; threadLabel.textContent = 'Reply to:';
+    var threadLink = document.createElement('a'); threadLink.href = sourceUrl; threadLink.target = '_blank';
+    threadLink.style.cssText = 'color:#FF4500;word-break:break-all;flex:1'; threadLink.textContent = sourceUrl;
+    threadWrap.appendChild(threadLabel); threadWrap.appendChild(threadLink);
+    card.insertBefore(threadWrap, btns);
     var threadBtn = makeBtn('Open thread ↗', '#FF4500', 'white', 'none');
-    threadBtn.onclick = function() { window.open(draft.metadata.url, '_blank'); };
+    threadBtn.onclick = function() { window.open(sourceUrl, '_blank'); };
     btns.appendChild(threadBtn);
   }
 
