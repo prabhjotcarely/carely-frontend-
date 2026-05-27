@@ -186,6 +186,29 @@ function _makeTagBadge(tag) {
   return s;
 }
 
+var _routeCounts = {};
+function _loadRouteCounts() {
+  fetch(_BACKEND + '/admin/route-counts', { headers: { 'x-carely-secret': _SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      _routeCounts = d.counts || {};
+      // Overlay badges on already-rendered cards
+      document.querySelectorAll('.file-card[data-route]').forEach(function(card) {
+        var route = card.getAttribute('data-route');
+        var cnt = _routeCounts[route] || 0;
+        var existing = card.querySelector('.fc-count-badge');
+        if (existing) existing.remove();
+        if (cnt > 0) {
+          var badge = el('span'); badge.className = 'fc-count-badge';
+          badge.style.cssText = 'background:#dcfce7;color:#16a34a;font-size:0.62rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle';
+          badge.textContent = cnt + ' today';
+          var pathDiv = card.querySelector('.fc-path');
+          if (pathDiv) pathDiv.appendChild(badge);
+        }
+      });
+    }).catch(function() {});
+}
+
 function _renderFiles() {
   var grid = document.getElementById('file-registry');
   var count = document.getElementById('fr-count');
@@ -198,8 +221,16 @@ function _renderFiles() {
     var card = el('div');
     card.className = 'file-card';
     card.setAttribute('onclick', 'openFileDetail('+origIdx+')');
+    if (f.route) card.setAttribute('data-route', f.route);
 
     var pathDiv = el('div'); pathDiv.className = 'fc-path'; pathDiv.textContent = f.path;
+    // Show cached count immediately if available
+    if (f.route && _routeCounts[f.route] > 0) {
+      var badge = el('span'); badge.className = 'fc-count-badge';
+      badge.style.cssText = 'background:#dcfce7;color:#16a34a;font-size:0.62rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle';
+      badge.textContent = _routeCounts[f.route] + ' today';
+      pathDiv.appendChild(badge);
+    }
     card.appendChild(pathDiv);
 
     var titleDiv = el('div'); titleDiv.className = 'fc-title'; titleDiv.textContent = f.title;
@@ -216,6 +247,9 @@ function _renderFiles() {
 
     grid.appendChild(card);
   });
+
+  // Fetch fresh counts after render
+  _loadRouteCounts();
 }
 
 function openFileDetail(idx) {
