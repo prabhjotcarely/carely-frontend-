@@ -7409,7 +7409,7 @@ function toggleBrainFilter(type) {
   if(btn) btn.style.opacity=_brainFilter[type]?'1':'0.3';
 }
 
-downloadCohortCSV() {
+function downloadCohortCSV() {
   if (!_cohortData) { alert('Load data first'); return; }
   var d = _cohortData;
   var rows = [['Section','Key','Value']];
