@@ -1218,9 +1218,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <span id="brain-status" style="font-size:0.68rem;font-weight:600;color:rgba(255,255,255,0.35);flex-shrink:0">v2.4 · LIVE</span>
         <span id="brain-online-dot" style="width:6px;height:6px;border-radius:50%;background:#02C39A;animation:pulse 2s infinite;flex-shrink:0;display:inline-block;"></span>
       </div>
-      <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
-        <button onclick="loadBrain()" style="font-size:0.7rem;border:1px solid rgba(255,255,255,0.15);padding:3px 10px;border-radius:6px;background:rgba(255,255,255,0.06);cursor:pointer;color:rgba(255,255,255,0.5)">Refresh</button>
-        <button onclick="showBrainInject()" style="font-size:0.7rem;border:none;padding:4px 12px;border-radius:6px;background:#028090;color:white;cursor:pointer;font-weight:700">+ Inject</button>
+      <div style="display:flex;gap:5px;align-items:center;flex-shrink:0;flex-wrap:wrap">
+        <button id="bf-agent"    onclick="toggleBrainFilter('agent')"    style="font-size:0.6rem;padding:2px 8px;border-radius:20px;border:1px solid rgba(167,139,250,0.5);background:rgba(167,139,250,0.1);color:#a78bfa;cursor:pointer;font-weight:700">Agents</button>
+        <button id="bf-route"    onclick="toggleBrainFilter('route')"    style="font-size:0.6rem;padding:2px 8px;border-radius:20px;border:1px solid rgba(2,195,154,0.5);background:rgba(2,195,154,0.1);color:#02c39a;cursor:pointer;font-weight:700">Routes</button>
+        <button id="bf-service"  onclick="toggleBrainFilter('service')"  style="font-size:0.6rem;padding:2px 8px;border-radius:20px;border:1px solid rgba(56,189,248,0.5);background:rgba(56,189,248,0.1);color:#38bdf8;cursor:pointer;font-weight:700">Services</button>
+        <button id="bf-frontend" onclick="toggleBrainFilter('frontend')" style="font-size:0.6rem;padding:2px 8px;border-radius:20px;border:1px solid rgba(251,191,36,0.5);background:rgba(251,191,36,0.1);color:#fbbf24;cursor:pointer;font-weight:700">Frontend</button>
+        <button id="bf-file"     onclick="toggleBrainFilter('file')"     style="font-size:0.6rem;padding:2px 8px;border-radius:20px;border:1px solid rgba(249,115,22,0.5);background:rgba(249,115,22,0.1);color:#f97316;cursor:pointer;font-weight:700">Files</button>
+        <div style="width:1px;height:18px;background:rgba(255,255,255,0.1)"></div>
+        <button onclick="loadBrain()" style="font-size:0.6rem;border:1px solid rgba(255,255,255,0.15);padding:2px 10px;border-radius:6px;background:rgba(255,255,255,0.06);cursor:pointer;color:rgba(255,255,255,0.45)">Refresh</button>
+        <button onclick="showBrainInject()" style="font-size:0.6rem;border:none;padding:3px 10px;border-radius:6px;background:#028090;color:white;cursor:pointer;font-weight:700">+ Inject</button>
       </div>
     </div>
     <!-- Inject panel -->
@@ -2890,297 +2896,186 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ BACKEND ARCHITECTURE ══ -->
   <div class="page" id="page-backend-diagram">
-    <div class="ph"><h1>⬡ System Architecture</h1><p>Carely full-stack · Client · Backend · Data &amp; Services</p></div>
+    <div class="ph"><h1>⬡ System Architecture</h1><p>Carely full-stack · 5 layers · Client → Gateway → Routes → AgentOS → Data</p></div>
 
     <style>
-      .arch-space{background:linear-gradient(160deg,#060c18 0%,#0b1525 55%,#071220 100%);border-radius:18px;padding:28px 24px;position:relative;overflow:hidden}
-      .arch-space::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(0,168,150,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 30%,rgba(2,128,144,0.08) 0%,transparent 55%);pointer-events:none}
-      .arch-cols{display:grid;grid-template-columns:1fr 60px 1fr 60px 1fr;gap:0;align-items:center;min-width:820px}
-      .arch-panel{border-radius:14px;padding:20px 16px;position:relative}
-      .arch-panel-client{border:1.5px solid rgba(139,92,246,0.6);background:rgba(139,92,246,0.05);box-shadow:0 0 28px rgba(139,92,246,0.1) inset,0 0 12px rgba(139,92,246,0.08)}
-      .arch-panel-backend{border:1.5px solid rgba(2,195,154,0.7);background:rgba(2,195,154,0.04);box-shadow:0 0 32px rgba(2,195,154,0.12) inset,0 0 16px rgba(2,195,154,0.1)}
-      .arch-panel-data{border:1.5px solid rgba(2,128,144,0.65);background:rgba(2,128,144,0.05);box-shadow:0 0 28px rgba(2,128,144,0.1) inset,0 0 12px rgba(2,128,144,0.08)}
-      .arch-panel-title{font-size:0.72rem;font-weight:900;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.07)}
-      .arch-panel-client .arch-panel-title{color:#a78bfa}
-      .arch-panel-backend .arch-panel-title{color:#02c39a}
-      .arch-panel-data .arch-panel-title{color:#028090}
-      .arch-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;margin-bottom:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);transition:background 0.2s}
-      .arch-row:hover{background:rgba(255,255,255,0.06)}
-      .arch-row-icon{font-size:1.1rem;width:24px;text-align:center;flex-shrink:0}
-      .arch-row-text{flex:1}
-      .arch-row-label{font-size:0.78rem;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.2}
-      .arch-row-sub{font-size:0.67rem;color:rgba(255,255,255,0.35);margin-top:1px}
-      .arch-row-tag{font-size:0.6rem;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:0.06em;flex-shrink:0}
-      .tag-live{background:rgba(2,195,154,0.15);color:#02c39a;border:1px solid rgba(2,195,154,0.3)}
-      .tag-agent{background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.3)}
-      .tag-db{background:rgba(2,128,144,0.15);color:#67e8f9;border:1px solid rgba(2,128,144,0.3)}
-      .arch-connector{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
-      .arch-conn-line{width:2px;height:32px;background:linear-gradient(to bottom,transparent,rgba(2,195,154,0.5),transparent)}
-      .arch-conn-arrow{display:flex;flex-direction:column;align-items:center;gap:4px}
-      .arch-conn-arrowbody{width:36px;height:2px;background:linear-gradient(to right,rgba(2,195,154,0.3),rgba(2,195,154,0.9))}
-      .arch-conn-arrowhead{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:8px solid rgba(2,195,154,0.9);margin-left:36px}
-      .arch-conn-arrowback{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:8px solid rgba(2,195,154,0.9);margin-right:36px}
-      .arch-conn-label{font-size:0.6rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(2,195,154,0.7);writing-mode:vertical-lr;transform:rotate(180deg)}
-      .arch-section-sep{height:1px;background:rgba(255,255,255,0.06);margin:10px 0}
-      .arch-sub-title{font-size:0.63rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin:10px 0 6px}
-      .arch-flows{margin-top:20px;border-top:1px solid rgba(255,255,255,0.06);padding-top:18px}
-      .arch-flow-title{font-size:0.7rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;color:rgba(2,195,154,0.7);margin-bottom:12px}
-      .arch-flow-row{display:flex;align-items:flex-start;gap:10px;padding:7px 12px;border-radius:8px;margin-bottom:6px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05)}
-      .arch-flow-badge{font-size:0.62rem;font-weight:800;padding:2px 8px;border-radius:20px;flex-shrink:0;margin-top:1px;letter-spacing:0.04em}
-      .badge-dose{background:rgba(2,195,154,0.15);color:#02c39a;border:1px solid rgba(2,195,154,0.25)}
-      .badge-chat{background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.25)}
-      .badge-signup{background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid rgba(251,191,36,0.25)}
-      .badge-alert{background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.25)}
-      .arch-flow-text{font-size:0.72rem;color:rgba(255,255,255,0.55);line-height:1.5}
-      .arch-flow-text strong{color:rgba(255,255,255,0.85)}
+      .asc{background:linear-gradient(150deg,#050c18 0%,#0a1828 60%,#060f1c 100%);border-radius:18px;padding:24px 20px;position:relative;overflow:hidden}
+      .asc::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 10% 50%,rgba(139,92,246,0.07) 0%,transparent 50%),radial-gradient(ellipse at 90% 30%,rgba(2,128,144,0.08) 0%,transparent 50%),radial-gradient(ellipse at 50% 80%,rgba(2,195,154,0.05) 0%,transparent 50%);pointer-events:none}
+      .ap{border-radius:13px;padding:16px 14px;flex:1}
+      .ap-client{border:1.5px solid rgba(139,92,246,0.55);background:rgba(139,92,246,0.04);box-shadow:0 0 30px rgba(139,92,246,0.08) inset}
+      .ap-gateway{border:1.5px solid rgba(251,191,36,0.5);background:rgba(251,191,36,0.03);box-shadow:0 0 30px rgba(251,191,36,0.07) inset}
+      .ap-routes{border:1.5px solid rgba(2,195,154,0.6);background:rgba(2,195,154,0.04);box-shadow:0 0 30px rgba(2,195,154,0.09) inset}
+      .ap-agents{border:1.5px solid rgba(167,139,250,0.6);background:rgba(167,139,250,0.04);box-shadow:0 0 30px rgba(167,139,250,0.09) inset}
+      .ap-data{border:1.5px solid rgba(14,165,233,0.55);background:rgba(14,165,233,0.04);box-shadow:0 0 30px rgba(14,165,233,0.08) inset}
+      .ap-title{font-size:0.65rem;font-weight:900;letter-spacing:0.13em;text-transform:uppercase;margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,0.07)}
+      .ap-client .ap-title{color:#a78bfa}.ap-gateway .ap-title{color:#fbbf24}.ap-routes .ap-title{color:#02c39a}.ap-agents .ap-title{color:#c4b5fd}.ap-data .ap-title{color:#38bdf8}
+      .an{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;margin-bottom:5px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.055);transition:background 0.15s}
+      .an:hover{background:rgba(255,255,255,0.055)}
+      .an-ic{font-size:0.9rem;width:20px;text-align:center;flex-shrink:0}
+      .an-body{flex:1;min-width:0}
+      .an-name{font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.88);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .an-sub{font-size:0.62rem;color:rgba(255,255,255,0.32);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+      .an-tag{font-size:0.55rem;font-weight:800;padding:1px 6px;border-radius:20px;letter-spacing:0.06em;flex-shrink:0;white-space:nowrap}
+      .t-live{background:rgba(2,195,154,0.15);color:#02c39a;border:1px solid rgba(2,195,154,0.3)}
+      .t-ai{background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.3)}
+      .t-db{background:rgba(14,165,233,0.15);color:#38bdf8;border:1px solid rgba(14,165,233,0.3)}
+      .t-mkt{background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid rgba(251,191,36,0.3)}
+      .t-sec{background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.3)}
+      .ap-sep{height:1px;background:rgba(255,255,255,0.06);margin:8px 0}
+      .ap-grp{font-size:0.58rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin:8px 0 5px}
+      .asc-conn{width:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;flex-shrink:0}
+      .asc-conn-line{flex:1;width:1.5px;background:linear-gradient(to bottom,transparent,rgba(2,195,154,0.4),transparent)}
+      .asc-conn-arrow{display:flex;align-items:center}
+      .asc-conn-shaft{width:24px;height:1.5px;background:rgba(2,195,154,0.7)}
+      .asc-conn-head{width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:7px solid rgba(2,195,154,0.9)}
+      .asc-conn-headl{width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:7px solid rgba(2,195,154,0.9)}
+      .asc-conn-lbl{font-size:0.54rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:rgba(2,195,154,0.5);writing-mode:vertical-lr;transform:rotate(180deg);white-space:nowrap}
+      .asc-flow-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;min-width:1050px}
+      .asc-flow-card{padding:10px 12px;border-radius:9px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06)}
+      .asc-flow-badge{font-size:0.6rem;font-weight:800;padding:2px 8px;border-radius:20px;letter-spacing:0.06em;display:inline-block;margin-bottom:6px}
+      .fb-dose{background:rgba(2,195,154,0.15);color:#02c39a;border:1px solid rgba(2,195,154,0.25)}
+      .fb-miss{background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.25)}
+      .fb-sign{background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid rgba(251,191,36,0.25)}
+      .fb-chat{background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.25)}
+      .asc-flow-text{font-size:0.7rem;color:rgba(255,255,255,0.45);line-height:1.5}
+      .asc-flow-text b{color:rgba(255,255,255,0.8)}
     </style>
 
-    <div class="arch-space" style="overflow-x:auto">
-      <div class="arch-cols">
+    <div class="asc" style="overflow-x:auto">
+      <div style="display:flex;align-items:stretch;gap:0;min-width:1050px;position:relative;z-index:1">
 
-        <!-- ── CLIENT PANEL ── -->
-        <div class="arch-panel arch-panel-client">
-          <div class="arch-panel-title">⬡ Client Layer</div>
-
-          <div class="arch-sub-title">Mobile</div>
-          <div class="arch-row">
-            <div class="arch-row-icon">📱</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">React Native App</div>
-              <div class="arch-row-sub">iOS + Android · Expo</div>
-            </div>
-            <span class="arch-row-tag tag-live">LIVE</span>
-          </div>
-          <div class="arch-row">
-            <div class="arch-row-icon">🔐</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">Supabase Auth</div>
-              <div class="arch-row-sub">JWT · Session management</div>
-            </div>
-          </div>
-          <div class="arch-row">
-            <div class="arch-row-icon">📡</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">Axios API Client</div>
-              <div class="arch-row-sub">HTTPS to Railway</div>
-            </div>
-          </div>
-
-          <div class="arch-section-sep"></div>
-          <div class="arch-sub-title">Web</div>
-
-          <div class="arch-row">
-            <div class="arch-row-icon">🌐</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">carely.fit</div>
-              <div class="arch-row-sub">Landing · Cloudflare CDN</div>
-            </div>
-            <span class="arch-row-tag tag-live">LIVE</span>
-          </div>
-          <div class="arch-row">
-            <div class="arch-row-icon">🖥️</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">Carely HQ</div>
-              <div class="arch-row-sub">carely.fit/hq · This dashboard</div>
-            </div>
-            <span class="arch-row-tag tag-live">LIVE</span>
-          </div>
-          <div class="arch-row">
-            <div class="arch-row-icon">🤝</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">Partner Portals</div>
-              <div class="arch-row-sub">Clinic · Doctor · Pharmacy</div>
-            </div>
-          </div>
+        <!-- CLIENT -->
+        <div class="ap ap-client" style="flex:1">
+          <div class="ap-title">📱 Client Layer</div>
+          <div class="ap-grp">Mobile</div>
+          <div class="an"><div class="an-ic">📱</div><div class="an-body"><div class="an-name">React Native App</div><div class="an-sub">iOS + Android · Expo</div></div><span class="an-tag t-live">LIVE</span></div>
+          <div class="an"><div class="an-ic">🔐</div><div class="an-body"><div class="an-name">Supabase Auth</div><div class="an-sub">JWT · Session tokens</div></div></div>
+          <div class="an"><div class="an-ic">📡</div><div class="an-body"><div class="an-name">Axios API Client</div><div class="an-sub">HTTPS → Railway</div></div></div>
+          <div class="an"><div class="an-ic">🔔</div><div class="an-body"><div class="an-name">Expo Notifications</div><div class="an-sub">FCM token · Push receive</div></div></div>
+          <div class="ap-sep"></div>
+          <div class="ap-grp">Web</div>
+          <div class="an"><div class="an-ic">🌐</div><div class="an-body"><div class="an-name">carely.fit</div><div class="an-sub">Landing · 33 blog pages</div></div><span class="an-tag t-live">LIVE</span></div>
+          <div class="an"><div class="an-ic">🖥️</div><div class="an-body"><div class="an-name">Carely HQ</div><div class="an-sub">carely.fit/hq · You are here</div></div><span class="an-tag t-live">LIVE</span></div>
+          <div class="an"><div class="an-ic">🤝</div><div class="an-body"><div class="an-name">Partner Portals</div><div class="an-sub">Clinic · Doctor · Pharmacy</div></div></div>
+          <div class="an"><div class="an-ic">✈️</div><div class="an-body"><div class="an-name">Telegram Bots</div><div class="an-sub">TJ · Prabh · Hermes · Dora</div></div><span class="an-tag t-live">4 LIVE</span></div>
         </div>
 
-        <!-- ── CONNECTOR 1 ── -->
-        <div class="arch-connector">
-          <div class="arch-conn-arrow">
-            <div class="arch-conn-arrowback"></div>
-            <div class="arch-conn-arrowbody"></div>
-            <div class="arch-conn-arrowhead"></div>
-          </div>
-          <div class="arch-conn-label">HTTPS API</div>
-          <div class="arch-conn-line"></div>
+        <!-- CONN 1 -->
+        <div class="asc-conn"><div class="asc-conn-line"></div><div class="asc-conn-arrow"><div class="asc-conn-headl"></div><div class="asc-conn-shaft"></div><div class="asc-conn-head"></div></div><div class="asc-conn-lbl">HTTPS</div><div class="asc-conn-line"></div></div>
+
+        <!-- GATEWAY -->
+        <div class="ap ap-gateway" style="flex:1">
+          <div class="ap-title">☁️ Gateway</div>
+          <div class="ap-grp">CDN + Shield</div>
+          <div class="an"><div class="an-ic">☁️</div><div class="an-body"><div class="an-name">Cloudflare</div><div class="an-sub">CDN · DDoS · DNS proxy</div></div><span class="an-tag t-live">LIVE</span></div>
+          <div class="an"><div class="an-ic">🚦</div><div class="an-body"><div class="an-name">Rate Limiter</div><div class="an-sub">200 req/15min global · 20 auth</div></div></div>
+          <div class="an"><div class="an-ic">🔒</div><div class="an-body"><div class="an-name">Helmet.js</div><div class="an-sub">Security headers + CSP</div></div></div>
+          <div class="an"><div class="an-ic">⏱️</div><div class="an-body"><div class="an-name">Request Timeout</div><div class="an-sub">30s · prevents server hang</div></div></div>
+          <div class="an"><div class="an-ic">🛡️</div><div class="an-body"><div class="an-name">agentGuard</div><div class="an-sub">Anomaly detection</div></div></div>
+          <div class="an"><div class="an-ic">🔁</div><div class="an-body"><div class="an-name">Circuit Breaker</div><div class="an-sub">OpenAI + DB resilience</div></div></div>
+          <div class="ap-sep"></div>
+          <div class="ap-grp">Infra</div>
+          <div class="an"><div class="an-ic">🚂</div><div class="an-body"><div class="an-name">Railway</div><div class="an-sub">Node.js · Express · TypeScript</div></div><span class="an-tag t-live">LIVE</span></div>
+          <div class="an"><div class="an-ic">⚙️</div><div class="an-body"><div class="an-name">Scheduler</div><div class="an-sub">Cron · Agent triggers · Loop</div></div></div>
+          <div class="an"><div class="an-ic">📊</div><div class="an-body"><div class="an-name">Agent Feed</div><div class="an-sub">HQ live activity stream</div></div></div>
+          <div class="an"><div class="an-ic">🧠</div><div class="an-body"><div class="an-name">Obsidian Brain</div><div class="an-sub">Company memory store</div></div></div>
         </div>
 
-        <!-- ── BACKEND PANEL ── -->
-        <div class="arch-panel arch-panel-backend">
-          <div class="arch-panel-title">⚙️ Backend Core · Railway</div>
+        <!-- CONN 2 -->
+        <div class="asc-conn"><div class="asc-conn-line"></div><div class="asc-conn-arrow"><div class="asc-conn-headl"></div><div class="asc-conn-shaft"></div><div class="asc-conn-head"></div></div><div class="asc-conn-lbl">ROUTER</div><div class="asc-conn-line"></div></div>
 
-          <div class="arch-sub-title">API Routes (35+)</div>
-          <div class="arch-row">
-            <div class="arch-row-icon">🔑</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">/auth · /user · /subscription</div>
-              <div class="arch-row-sub">Auth · Profile · Stripe payments</div>
-            </div>
-          </div>
-          <div class="arch-row">
-            <div class="arch-row-icon">💊</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">/medicines · /schedules · /dose-logs</div>
-              <div class="arch-row-sub">Core medication tracking</div>
-            </div>
-          </div>
-          <div class="arch-row">
-            <div class="arch-row-icon">🤖</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">/ai · /elara · /hermes</div>
-              <div class="arch-row-sub">AI caretaker + CEO agent</div>
-            </div>
-          </div>
-          <div class="arch-row">
-            <div class="arch-row-icon">🛡️</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">/admin · /ace · /portal</div>
-              <div class="arch-row-sub">HQ data · Security · Partners</div>
-            </div>
-          </div>
-
-          <div class="arch-section-sep"></div>
-          <div class="arch-sub-title">AgentOS (19 agents)</div>
-
-          <div class="arch-row">
-            <div class="arch-row-icon">🧠</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">Hermes CEO</div>
-              <div class="arch-row-sub">Master orchestrator · Telegram</div>
-            </div>
-            <span class="arch-row-tag tag-agent">OS</span>
-          </div>
-          <div class="arch-row">
-            <div class="arch-row-icon">💫</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">Elara AI Caretaker</div>
-              <div class="arch-row-sub">Memory · Check-ins · GPT-4o</div>
-            </div>
-            <span class="arch-row-tag tag-agent">AI</span>
-          </div>
-          <div class="arch-row">
-            <div class="arch-row-icon">🚨</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">Cara · Frank · Grace · Ace</div>
-              <div class="arch-row-sub">Alerts · Pharmacy · Check-in · Security</div>
-            </div>
-            <span class="arch-row-tag tag-agent">OPS</span>
-          </div>
-          <div class="arch-row">
-            <div class="arch-row-icon">📣</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">Rex · Scout · Vance · Nina</div>
-              <div class="arch-row-sub">Reddit · SEO · Content · Growth</div>
-            </div>
-            <span class="arch-row-tag tag-agent">MKT</span>
-          </div>
+        <!-- ROUTES -->
+        <div class="ap ap-routes" style="flex:1">
+          <div class="ap-title">⚡ API Routes (35+)</div>
+          <div class="ap-grp">Auth &amp; User</div>
+          <div class="an"><div class="an-ic">🔑</div><div class="an-body"><div class="an-name">/auth · /user</div><div class="an-sub">Signup · Login · Profile</div></div></div>
+          <div class="an"><div class="an-ic">💳</div><div class="an-body"><div class="an-name">/subscription</div><div class="an-sub">Stripe · Trial · Founding $5</div></div></div>
+          <div class="ap-grp">Medication Core</div>
+          <div class="an"><div class="an-ic">💊</div><div class="an-body"><div class="an-name">/medicines · /schedules</div><div class="an-sub">CRUD · Timing · Colours</div></div></div>
+          <div class="an"><div class="an-ic">📋</div><div class="an-body"><div class="an-name">/dose-logs</div><div class="an-sub">Taken · Skipped · Missed</div></div></div>
+          <div class="an"><div class="an-ic">🌡️</div><div class="an-body"><div class="an-name">/vitals · /symptoms</div><div class="an-sub">Health tracking</div></div></div>
+          <div class="ap-grp">AI &amp; Care</div>
+          <div class="an"><div class="an-ic">🤖</div><div class="an-body"><div class="an-name">/ai · /elara · /persona</div><div class="an-sub">GPT chat · Memory · Identity</div></div><span class="an-tag t-ai">AI</span></div>
+          <div class="an"><div class="an-ic">🧑‍⚕️</div><div class="an-body"><div class="an-name">/caregiver · /doctor</div><div class="an-sub">Family links · GP reports · PDF</div></div></div>
+          <div class="an"><div class="an-ic">📅</div><div class="an-body"><div class="an-name">/appointments · /checkins</div><div class="an-sub">Booking · Daily check</div></div></div>
+          <div class="an"><div class="an-ic">📓</div><div class="an-body"><div class="an-name">/journal · /share-history</div><div class="an-sub">Notes · Data share</div></div></div>
+          <div class="ap-grp">Partners &amp; Growth</div>
+          <div class="an"><div class="an-ic">🏥</div><div class="an-body"><div class="an-name">/pharmacy · /partner · /b2b</div><div class="an-sub">Med network · Clinic · Senior homes</div></div></div>
+          <div class="an"><div class="an-ic">📣</div><div class="an-body"><div class="an-name">/seo · /outreach · /affiliate</div><div class="an-sub">Blog · Reddit posts · Referrals</div></div></div>
+          <div class="an"><div class="an-ic">🤝</div><div class="an-body"><div class="an-name">/leaderboard · /feedback</div><div class="an-sub">Gamification · User voice</div></div></div>
+          <div class="ap-grp">Platform</div>
+          <div class="an"><div class="an-ic">🧠</div><div class="an-body"><div class="an-name">/hermes · /admin · /ace</div><div class="an-sub">CEO OS · HQ data · Security</div></div></div>
+          <div class="an"><div class="an-ic">🔔</div><div class="an-body"><div class="an-name">/notifications · /telegram</div><div class="an-sub">FCM push + 4 Telegram bots</div></div></div>
+          <div class="an"><div class="an-ic">🌍</div><div class="an-body"><div class="an-name">/waitlist · /privacy · /reports</div><div class="an-sub">Pre-launch · PIPEDA · PDF export</div></div></div>
         </div>
 
-        <!-- ── CONNECTOR 2 ── -->
-        <div class="arch-connector">
-          <div class="arch-conn-arrow">
-            <div class="arch-conn-arrowback"></div>
-            <div class="arch-conn-arrowbody"></div>
-            <div class="arch-conn-arrowhead"></div>
-          </div>
-          <div class="arch-conn-label">SDK · REST</div>
-          <div class="arch-conn-line"></div>
+        <!-- CONN 3 -->
+        <div class="asc-conn"><div class="asc-conn-line"></div><div class="asc-conn-arrow"><div class="asc-conn-headl"></div><div class="asc-conn-shaft"></div><div class="asc-conn-head"></div></div><div class="asc-conn-lbl">AGENTS</div><div class="asc-conn-line"></div></div>
+
+        <!-- AGENTOS -->
+        <div class="ap ap-agents" style="flex:1">
+          <div class="ap-title">🧠 AgentOS · 19</div>
+          <div class="ap-grp">CEO</div>
+          <div class="an"><div class="an-ic">👑</div><div class="an-body"><div class="an-name">Hermes CEO</div><div class="an-sub">Master OS · Directives · Telegram</div></div><span class="an-tag t-ai">OS</span></div>
+          <div class="ap-grp">Patient Care</div>
+          <div class="an"><div class="an-ic">💫</div><div class="an-body"><div class="an-name">Elara</div><div class="an-sub">AI Caretaker · GPT · Redis memory</div></div><span class="an-tag t-ai">AI</span></div>
+          <div class="an"><div class="an-ic">💊</div><div class="an-body"><div class="an-name">Frank</div><div class="an-sub">Dose FCM · Every dose · Unique msg</div></div></div>
+          <div class="an"><div class="an-ic">🌅</div><div class="an-body"><div class="an-name">Grace</div><div class="an-sub">Daily 9AM check-in</div></div></div>
+          <div class="an"><div class="an-ic">🚨</div><div class="an-body"><div class="an-name">Cara + Maya</div><div class="an-sub">Caregiver alert · 30min miss scan</div></div></div>
+          <div class="an"><div class="an-ic">🩺</div><div class="an-body"><div class="an-name">Bridge</div><div class="an-sub">Doctor reports · Weekly PDF</div></div></div>
+          <div class="ap-grp">Operations</div>
+          <div class="an"><div class="an-ic">🔒</div><div class="an-body"><div class="an-name">Ace</div><div class="an-sub">Security · 8AM brief · EOD scan</div></div><span class="an-tag t-sec">SEC</span></div>
+          <div class="an"><div class="an-ic">💼</div><div class="an-body"><div class="an-name">Cole</div><div class="an-sub">B2B outreach · 5 targets/day</div></div></div>
+          <div class="an"><div class="an-ic">💊</div><div class="an-body"><div class="an-name">Zara</div><div class="an-sub">Pharmacy network</div></div></div>
+          <div class="an"><div class="an-ic">🔁</div><div class="an-body"><div class="an-name">Refer</div><div class="an-sub">Viral loop · Referral codes</div></div></div>
+          <div class="ap-grp">Marketing</div>
+          <div class="an"><div class="an-ic">📣</div><div class="an-body"><div class="an-name">Rex</div><div class="an-sub">Reddit · 18 subs · Every 6h</div></div><span class="an-tag t-mkt">MKT</span></div>
+          <div class="an"><div class="an-ic">🔍</div><div class="an-body"><div class="an-name">Scout</div><div class="an-sub">SEO · Blog · IndexNow · 33 pages</div></div><span class="an-tag t-mkt">SEO</span></div>
+          <div class="an"><div class="an-ic">💼</div><div class="an-body"><div class="an-name">Leo</div><div class="an-sub">LinkedIn · 6x/week posts</div></div><span class="an-tag t-mkt">MKT</span></div>
+          <div class="an"><div class="an-ic">📧</div><div class="an-body"><div class="an-name">Nina</div><div class="an-sub">Trial nurture · Day 0→7 email arc</div></div></div>
+          <div class="an"><div class="an-ic">🎨</div><div class="an-body"><div class="an-name">Vance · Axel · Mia</div><div class="an-sub">Video · Creative · Social posts</div></div></div>
+          <div class="an"><div class="an-ic">🤖</div><div class="an-body"><div class="an-name">Dora</div><div class="an-sub">Prabh personal bot</div></div></div>
         </div>
 
-        <!-- ── DATA PANEL ── -->
-        <div class="arch-panel arch-panel-data">
-          <div class="arch-panel-title">🗄️ Data &amp; Services</div>
+        <!-- CONN 4 -->
+        <div class="asc-conn"><div class="asc-conn-line"></div><div class="asc-conn-arrow"><div class="asc-conn-headl"></div><div class="asc-conn-shaft"></div><div class="asc-conn-head"></div></div><div class="asc-conn-lbl">SDK REST</div><div class="asc-conn-line"></div></div>
 
-          <div class="arch-sub-title">Storage</div>
-          <div class="arch-row">
-            <div class="arch-row-icon">🐘</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">Supabase</div>
-              <div class="arch-row-sub">PostgreSQL · Auth · RLS</div>
-            </div>
-            <span class="arch-row-tag tag-db">DB</span>
-          </div>
-          <div class="arch-row">
-            <div class="arch-row-icon">⚡</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">Upstash Redis</div>
-              <div class="arch-row-sub">Session cache · Elara memory</div>
-            </div>
-            <span class="arch-row-tag tag-db">CACHE</span>
-          </div>
-
-          <div class="arch-section-sep"></div>
-          <div class="arch-sub-title">Intelligence</div>
-
-          <div class="arch-row">
-            <div class="arch-row-icon">🧬</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">OpenRouter AI</div>
-              <div class="arch-row-sub">GPT-4o · Claude · Elara brain</div>
-            </div>
-          </div>
-
-          <div class="arch-section-sep"></div>
-          <div class="arch-sub-title">Notifications &amp; Comms</div>
-
-          <div class="arch-row">
-            <div class="arch-row-icon">🔔</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">Firebase FCM</div>
-              <div class="arch-row-sub">Push · Dose reminders</div>
-            </div>
-          </div>
-          <div class="arch-row">
-            <div class="arch-row-icon">📧</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">SendGrid</div>
-              <div class="arch-row-sub">Email · Reports · Onboarding</div>
-            </div>
-          </div>
-          <div class="arch-row">
-            <div class="arch-row-icon">✈️</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">Telegram</div>
-              <div class="arch-row-sub">TJ + Prabh · 4 bots · Hermes</div>
-            </div>
-          </div>
-
-          <div class="arch-section-sep"></div>
-          <div class="arch-sub-title">Revenue</div>
-
-          <div class="arch-row">
-            <div class="arch-row-icon">💳</div>
-            <div class="arch-row-text">
-              <div class="arch-row-label">Stripe</div>
-              <div class="arch-row-sub">Subscriptions · Webhooks</div>
-            </div>
-          </div>
+        <!-- DATA -->
+        <div class="ap ap-data" style="flex:1">
+          <div class="ap-title">🗄️ Data &amp; Services</div>
+          <div class="ap-grp">Storage</div>
+          <div class="an"><div class="an-ic">🐘</div><div class="an-body"><div class="an-name">Supabase</div><div class="an-sub">PostgreSQL · Auth · RLS</div></div><span class="an-tag t-db">DB</span></div>
+          <div class="an"><div class="an-ic">⚡</div><div class="an-body"><div class="an-name">Upstash Redis</div><div class="an-sub">Cache · Elara memory · Sessions</div></div><span class="an-tag t-db">CACHE</span></div>
+          <div class="ap-sep"></div>
+          <div class="ap-grp">AI</div>
+          <div class="an"><div class="an-ic">🧬</div><div class="an-body"><div class="an-name">OpenRouter</div><div class="an-sub">GPT-4o · Claude · $20/mo cap</div></div><span class="an-tag t-ai">AI</span></div>
+          <div class="ap-sep"></div>
+          <div class="ap-grp">Notifications</div>
+          <div class="an"><div class="an-ic">🔔</div><div class="an-body"><div class="an-name">Firebase FCM</div><div class="an-sub">Push · iOS + Android</div></div></div>
+          <div class="an"><div class="an-ic">📧</div><div class="an-body"><div class="an-name">SendGrid</div><div class="an-sub">Transactional · Reports · Nina arc</div></div></div>
+          <div class="an"><div class="an-ic">✈️</div><div class="an-body"><div class="an-name">Telegram</div><div class="an-sub">4 bots · TJ + Prabh + Hermes + Dora</div></div><span class="an-tag t-live">LIVE</span></div>
+          <div class="ap-sep"></div>
+          <div class="ap-grp">Revenue</div>
+          <div class="an"><div class="an-ic">💳</div><div class="an-body"><div class="an-name">Stripe</div><div class="an-sub">$5 Founding · $9.99/mo · $90/yr</div></div></div>
+          <div class="ap-sep"></div>
+          <div class="ap-grp">DB Schema (8 tables)</div>
+          <div class="an"><div class="an-ic">📊</div><div class="an-body"><div class="an-name">users · medicines · schedules</div><div class="an-sub">dose_logs · caregiver_links</div></div></div>
+          <div class="an"><div class="an-ic">📊</div><div class="an-body"><div class="an-name">doctor_connections · appointments</div><div class="an-sub">elara_memory · notification_logs</div></div></div>
         </div>
 
-      </div><!-- end arch-cols -->
+      </div><!-- end flex row -->
 
-      <!-- ── DATA FLOWS ── -->
-      <div class="arch-flows">
-        <div class="arch-flow-title">Key Data Flows</div>
-        <div class="arch-flow-row">
-          <span class="arch-flow-badge badge-dose">DOSE TAKEN</span>
-          <div class="arch-flow-text"><strong>App logs</strong> → /dose-logs → <strong>Supabase</strong> → Ace increments streak → <strong>Elara</strong> loads for chat context</div>
-        </div>
-        <div class="arch-flow-row">
-          <span class="arch-flow-badge badge-alert">DOSE MISSED</span>
-          <div class="arch-flow-text"><strong>App logs missed</strong> → Cara fires <strong>Firebase FCM</strong> to caregiver → <strong>Hermes</strong> logs in daily brief</div>
-        </div>
-        <div class="arch-flow-row">
-          <span class="arch-flow-badge badge-signup">NEW SIGNUP</span>
-          <div class="arch-flow-text"><strong>Supabase Auth</strong> → /auth/profile → medicines onboarding → <strong>Frank</strong> registers FCM token → <strong>Grace</strong> schedules first check-in</div>
-        </div>
-        <div class="arch-flow-row">
-          <span class="arch-flow-badge badge-chat">ELARA CHAT</span>
-          <div class="arch-flow-text"><strong>/ai/chat</strong> → Redis loads memory → <strong>OpenRouter GPT-4o</strong> → response → Redis saves memory → user sees reply</div>
+      <!-- DATA FLOWS -->
+      <div style="margin-top:18px;position:relative;z-index:1">
+        <div style="font-size:0.67rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;color:rgba(2,195,154,0.6);margin-bottom:10px">Key Data Flows</div>
+        <div class="asc-flow-grid">
+          <div class="asc-flow-card"><span class="asc-flow-badge fb-dose">DOSE TAKEN</span><div class="asc-flow-text"><b>App</b> → /dose-logs → <b>Supabase</b> → Ace streak++ → Grace context → <b>Elara</b> chat</div></div>
+          <div class="asc-flow-card"><span class="asc-flow-badge fb-miss">DOSE MISSED</span><div class="asc-flow-text"><b>Maya</b> 30min scan → triggers <b>Cara</b> → <b>Firebase FCM</b> caregiver → <b>Hermes</b> daily brief</div></div>
+          <div class="asc-flow-card"><span class="asc-flow-badge fb-sign">NEW SIGNUP</span><div class="asc-flow-text"><b>Supabase Auth</b> → /auth → meds onboard → <b>Frank</b> FCM → <b>Grace</b> day-1 → <b>Nina</b> day-0 email</div></div>
+          <div class="asc-flow-card"><span class="asc-flow-badge fb-chat">ELARA CHAT</span><div class="asc-flow-text"><b>/ai/chat</b> → <b>Redis</b> memory → <b>OpenRouter GPT-4o</b> → response → Redis saves → reply</div></div>
         </div>
       </div>
-
-    </div><!-- end arch-space -->
+    </div><!-- end asc -->
   </div>
 
   <div class="page" id="page-company-map">
@@ -7189,753 +7084,332 @@ function showBrainInject() {
   if (p) p.style.display = p.style.display === 'none' ? '' : 'none';
 }
 
-// ═══ OBSIDIAN BRAIN CONSTELLATION ════════════════════════════════════════════
+// ═══ OBSIDIAN BRAIN — FORCE GRAPH v3 ══════════════════════════════════════════
 var _brainAnim = null;
 var _brainResizeObs = null;
+var _brainHovered = null;
+var _brainSelected = null;
+var _brainFilter = {agent:true,route:true,service:true,frontend:true,file:true};
+var _brainNodeMap = {};
+var _brainSimNodes = [];
+var _brainSimEdges = [];
+var _brainMemCount = 0;
 
-function initBrainConstellation() {
+var BRAIN_NODES = [
+  {id:'hermes',    label:'Hermes',        sub:'CEO · OS Core',             type:'agent',   color:'#FFFFFF', size:22},
+  {id:'elara',     label:'Elara',         sub:'AI Caretaker · GPT',        type:'agent',   color:'#c4b5fd', size:17},
+  {id:'frank',     label:'Frank',         sub:'Dose FCM reminders',        type:'agent',   color:'#a78bfa', size:12},
+  {id:'grace',     label:'Grace',         sub:'Daily check-in · 9AM',      type:'agent',   color:'#a78bfa', size:11},
+  {id:'cara',      label:'Cara',          sub:'Caregiver alerts',          type:'agent',   color:'#a78bfa', size:11},
+  {id:'maya',      label:'Maya',          sub:'Missed dose detector',      type:'agent',   color:'#a78bfa', size:10},
+  {id:'bridge',    label:'Bridge',        sub:'Doctor reports · PDF',      type:'agent',   color:'#a78bfa', size:10},
+  {id:'ace',       label:'Ace',           sub:'Security · 8AM brief',      type:'agent',   color:'#fb7185', size:11},
+  {id:'rex',       label:'Rex',           sub:'Reddit · 18 subs',          type:'agent',   color:'#a78bfa', size:11},
+  {id:'scout',     label:'Scout',         sub:'SEO + IndexNow · 33 pages', type:'agent',   color:'#a78bfa', size:11},
+  {id:'leo',       label:'Leo',           sub:'LinkedIn · 6x/week',        type:'agent',   color:'#a78bfa', size:10},
+  {id:'nina',      label:'Nina',          sub:'Trial nurture · Day 0-7',   type:'agent',   color:'#a78bfa', size:10},
+  {id:'cole',      label:'Cole',          sub:'B2B outreach · 5/day',      type:'agent',   color:'#a78bfa', size:10},
+  {id:'vance',     label:'Vance',         sub:'Video content',             type:'agent',   color:'#a78bfa', size: 9},
+  {id:'axel',      label:'Axel',          sub:'Creative + design',         type:'agent',   color:'#a78bfa', size: 9},
+  {id:'mia',       label:'Mia',           sub:'Social posts',              type:'agent',   color:'#a78bfa', size: 9},
+  {id:'zara',      label:'Zara',          sub:'Pharmacy network',          type:'agent',   color:'#a78bfa', size: 9},
+  {id:'dora',      label:'Dora',          sub:'Prabh personal bot',        type:'agent',   color:'#a78bfa', size: 9},
+  {id:'refer',     label:'Refer',         sub:'Viral loop + codes',        type:'agent',   color:'#a78bfa', size: 9},
+  {id:'r_auth',    label:'/auth',         sub:'Signup + Login + JWT',      type:'route',   color:'#02c39a', size:13},
+  {id:'r_user',    label:'/user',         sub:'Profile + Settings',        type:'route',   color:'#02c39a', size:10},
+  {id:'r_meds',    label:'/medicines',    sub:'Med CRUD + colours',        type:'route',   color:'#02c39a', size:13},
+  {id:'r_sched',   label:'/schedules',    sub:'Timing + frequency',        type:'route',   color:'#02c39a', size:10},
+  {id:'r_dose',    label:'/dose-logs',    sub:'Adherence core',            type:'route',   color:'#02c39a', size:15},
+  {id:'r_ai',      label:'/ai',           sub:'Elara chat endpoint',       type:'route',   color:'#02c39a', size:14},
+  {id:'r_elara',   label:'/elara',        sub:'AI engine + memory',        type:'route',   color:'#02c39a', size:12},
+  {id:'r_admin',   label:'/admin',        sub:'HQ data + metrics',         type:'route',   color:'#02c39a', size:12},
+  {id:'r_sub',     label:'/subscription', sub:'Stripe billing',            type:'route',   color:'#02c39a', size:11},
+  {id:'r_pharm',   label:'/pharmacy',     sub:'Med network',               type:'route',   color:'#02c39a', size:10},
+  {id:'r_partner', label:'/partner',      sub:'B2B portals',               type:'route',   color:'#02c39a', size:10},
+  {id:'r_seo',     label:'/seo',          sub:'Blog + meta',               type:'route',   color:'#02c39a', size:10},
+  {id:'r_out',     label:'/outreach',     sub:'Reddit posts',              type:'route',   color:'#02c39a', size:10},
+  {id:'r_hermes',  label:'/hermes',       sub:'CEO OS API',                type:'route',   color:'#02c39a', size:11},
+  {id:'r_notif',   label:'/notifications',sub:'FCM dispatch',              type:'route',   color:'#02c39a', size: 9},
+  {id:'supabase',  label:'Supabase',      sub:'PostgreSQL + Auth + RLS',   type:'service', color:'#38bdf8', size:17},
+  {id:'redis',     label:'Redis',         sub:'Cache + Elara memory',      type:'service', color:'#38bdf8', size:14},
+  {id:'openrouter',label:'OpenRouter',    sub:'GPT-4o + Claude',           type:'service', color:'#818cf8', size:15},
+  {id:'firebase',  label:'Firebase',      sub:'FCM Push iOS + Android',    type:'service', color:'#38bdf8', size:13},
+  {id:'sendgrid',  label:'SendGrid',      sub:'Transactional email',       type:'service', color:'#38bdf8', size:11},
+  {id:'stripe',    label:'Stripe',        sub:'$5 Founding · $9.99/mo',    type:'service', color:'#38bdf8', size:13},
+  {id:'telegram',  label:'Telegram',      sub:'4 bots live',               type:'service', color:'#38bdf8', size:12},
+  {id:'cloudflare',label:'Cloudflare',    sub:'CDN + DNS + Shield',        type:'service', color:'#38bdf8', size:11},
+  {id:'mobile',    label:'Mobile App',    sub:'React Native iOS + Android',type:'frontend',color:'#fbbf24', size:16},
+  {id:'landing',   label:'carely.fit',    sub:'Landing + 33 blog pages',   type:'frontend',color:'#fbbf24', size:13},
+  {id:'hq',        label:'Carely HQ',     sub:'You are here',              type:'frontend',color:'#fbbf24', size:14},
+  {id:'portals',   label:'Portals',       sub:'Clinic · Doctor · Pharmacy',type:'frontend',color:'#fbbf24', size:11},
+  {id:'scheduler', label:'scheduler.ts',  sub:'Cron + agent triggers',     type:'file',    color:'#f97316', size:10},
+  {id:'agentfeed', label:'agentFeed.ts',  sub:'HQ live activity',          type:'file',    color:'#f97316', size:10},
+  {id:'obsidian',  label:'obsidianBrain', sub:'Company memory store',      type:'file',    color:'#f97316', size:12},
+  {id:'agentguard',label:'agentGuard',    sub:'Anomaly detection',         type:'file',    color:'#f97316', size: 9},
+  {id:'circbkr',   label:'circuitBreaker',sub:'Resilience layer',          type:'file',    color:'#f97316', size: 9},
+];
+
+var BRAIN_EDGES = [
+  ['mobile','r_auth'],['mobile','r_meds'],['mobile','r_sched'],['mobile','r_dose'],
+  ['mobile','r_ai'],['mobile','r_elara'],['mobile','r_sub'],['mobile','r_notif'],
+  ['landing','r_admin'],['hq','r_admin'],['hq','r_hermes'],
+  ['portals','r_partner'],
+  ['r_auth','supabase'],['r_user','supabase'],['r_meds','supabase'],
+  ['r_sched','supabase'],['r_dose','supabase'],['r_admin','supabase'],
+  ['r_sub','stripe'],['r_sub','supabase'],['r_pharm','supabase'],
+  ['r_partner','supabase'],['r_hermes','supabase'],
+  ['r_ai','redis'],['r_ai','openrouter'],['r_elara','redis'],['r_elara','openrouter'],
+  ['r_notif','firebase'],['r_seo','cloudflare'],
+  ['hermes','r_admin'],['hermes','r_hermes'],
+  ['elara','r_ai'],['elara','r_elara'],
+  ['frank','r_meds'],['frank','r_notif'],
+  ['grace','r_dose'],['cara','r_dose'],['maya','r_dose'],
+  ['bridge','r_partner'],['ace','r_admin'],
+  ['rex','r_out'],['scout','r_seo'],['cole','r_partner'],
+  ['nina','r_user'],['zara','r_pharm'],
+  ['hermes','telegram'],['hermes','supabase'],
+  ['frank','firebase'],['cara','firebase'],['grace','firebase'],
+  ['nina','sendgrid'],['bridge','sendgrid'],
+  ['elara','redis'],['elara','openrouter'],
+  ['dora','telegram'],['leo','telegram'],['scout','cloudflare'],
+  ['hermes','elara'],['hermes','frank'],['hermes','grace'],['hermes','cara'],
+  ['hermes','maya'],['hermes','ace'],['hermes','rex'],['hermes','scout'],
+  ['hermes','nina'],['hermes','cole'],['hermes','leo'],['hermes','bridge'],
+  ['hermes','dora'],['hermes','refer'],['maya','cara'],
+  ['scheduler','frank'],['scheduler','grace'],['scheduler','maya'],
+  ['scheduler','leo'],['scheduler','rex'],['scheduler','scout'],
+  ['agentfeed','hermes'],['obsidian','hermes'],['obsidian','elara'],
+  ['agentguard','r_admin'],['circbkr','openrouter'],['circbkr','supabase'],
+];
+
+function initBrainGraph() {
   if (_brainAnim) { cancelAnimationFrame(_brainAnim); _brainAnim = null; }
   var canvas = document.getElementById('brain-canvas');
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
 
-  // ── Agent definitions ────────────────────────────────────────────────────────
-  var AGENTS = [
-    // OPS — center, white/bright
-    { name:'HERMES',    label:'CEO · OS Core',              cluster:'OPS',    color:'#FFFFFF', size:22, activity:30, skills:['Commands all agents','Daily brief','Directive writing','Error watch'] },
-    { name:'ACE',       label:'Morning Brief · EOD',        cluster:'OPS',    color:'#C8F0E8', size:11, activity:15, skills:['8AM brief','8PM EOD scan','Proactive alerts','Per-agent directives'] },
-    { name:'REFER',     label:'Referral · Viral Loop',      cluster:'OPS',    color:'#9FD8CC', size: 9, activity: 6, skills:['Referral codes','Viral mechanics','1PM daily'] },
-    // PATIENT CARE — teal/mint
-    { name:'FRANK',     label:'Dose Reminders · FCM',       cluster:'CARE',   color:'#02C39A', size:13, activity:22, skills:['FCM push','Every dose','Unique messages','Continuous'] },
-    { name:'ELARA',     label:'AI Caretaker · Chat',        cluster:'CARE',   color:'#44abad', size:13, activity:20, skills:['GPT-4o','Redis memory','Personalised','On-demand'] },
-    { name:'MAYA',      label:'Missed Dose Detector',       cluster:'CARE',   color:'#06B6D4', size:11, activity:18, skills:['30-min scans','Supabase check','Triggers Cara'] },
-    { name:'GRACE',     label:'Daily Check-in · 9AM',       cluster:'CARE',   color:'#2ee8a0', size:10, activity:14, skills:['Morning push','Appears as Elara','FCM','10AM UTC'] },
-    { name:'CARA',      label:'Caregiver Alert',            cluster:'CARE',   color:'#00B89A', size: 9, activity:10, skills:['FCM to caregiver','Triggered by Maya','Instant alert'] },
-    { name:'BRIDGE',    label:'Doctor Reports · PDF',       cluster:'CARE',   color:'#0891B2', size: 9, activity: 8, skills:['Hourly check','Weekly PDF','Email to GP','Supabase'] },
-    // GROWTH — purple/pink
-    { name:'LEO',       label:'LinkedIn · 6x/week',         cluster:'GROWTH', color:'#028090', size:12, activity:16, skills:['Posts 6x/week','8AM + 5PM PST','Brand + Prabh','Token June 29'] },
-    { name:'REX',       label:'Reddit · 18 Subs',           cluster:'GROWTH', color:'#02C39A', size:11, activity:14, skills:['18 subreddits','Every 6h','Reply drafts → Prabh','Never pitches first'] },
-    { name:'NINA',      label:'Trial Nurture · Email',      cluster:'GROWTH', color:'#FB7185', size:10, activity:11, skills:['Day 0→7 arc','10AM UTC','From Prabhjot','SendGrid'] },
-    { name:'COLE',      label:'B2B Outreach',               cluster:'GROWTH', color:'#028090', size:10, activity:12, skills:['5 targets/day','TJ approval gate','Senior homes + pharma','Cole Outreach tab'] },
-    { name:'VANCE',     label:'TikTok/Reels Scripts',       cluster:'GROWTH', color:'#F472B6', size: 9, activity: 9, skills:['9AM PST','45-60s scripts','Sent to Prabh','3 approved'] },
-    { name:'LENA',      label:'Win-back · Closer',          cluster:'GROWTH', color:'#E879F9', size: 9, activity: 7, skills:['11AM UTC','3-touch sequence','Expiring trials','Behavioural triggers'] },
-    { name:'BLAZE',     label:'Launch Blast · May 30',      cluster:'GROWTH', color:'#F97316', size: 9, activity: 4, skills:['Mailchimp blast','Standby','May 30 trigger','Full waitlist'] },
-    // INTEL — amber/gold/red
-    { name:'ORACLE',    label:'World Intel · Reddit+iTunes',cluster:'INTEL',  color:'#FBBF24', size:11, activity:13, skills:['Every 30min','Reddit ICP','iTunes synthesis','World intel'] },
-    { name:'SIGNALS',   label:'Customer Pain Scan',         cluster:'INTEL',  color:'#F59E0B', size:10, activity:11, skills:['Every 2h','Pain angles','Agent directives','Customer voice'] },
-    { name:'SCOUT',     label:'ASO + SEO + IndexNow',       cluster:'INTEL',  color:'#FCD34D', size:10, activity: 9, skills:['On deploy','ASO Sundays','IndexNow ping','7 blog URLs'] },
-    { name:'COMPINTEL', label:'Competitor Monitor',         cluster:'INTEL',  color:'#EF4444', size: 9, activity: 8, skills:['Every 6h','App Store watch','Alerts Cole+Leo+Scout','Competitor moves'] },
-  ];
-
-  var CLUSTER = {
-    CARE:   { label:'PATIENT CARE',   color:'#02C39A', glow:'rgba(2,195,154,0.12)'   },
-    GROWTH: { label:'GROWTH ENGINE',  color:'#028090', glow:'rgba(2,128,144,0.12)' },
-    INTEL:  { label:'INTELLIGENCE',   color:'#FBBF24', glow:'rgba(251,191,36,0.12)'  },
-    OPS:    { label:'OPERATIONS',     color:'#FFFFFF', glow:'rgba(255,255,255,0.08)' },
-  };
-
-  // Stars background
-  var STARS = [];
-  for (var si=0; si<180; si++) STARS.push({ x:Math.random(), y:Math.random(), r:Math.random()*1.2+0.3, a:Math.random()*0.6+0.1, tw:1500+Math.random()*3000, t0:Math.random()*5000 });
-
-  var nodes = [];        // { x,y,vx,vy,r,agent,pulse,cx,cy,knowledgeLevel }
-  var particles = [];   // shooting stars between nodes
-  var popup = null;     // { nodeIdx, ox, oy }
-  var W=0, H=0;
-
-  function hex2rgb(hex) {
-    var r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
-    return [r,g,b];
+  function resize() {
+    var p = canvas.parentElement;
+    canvas.width  = p ? p.offsetWidth  : 900;
+    canvas.height = p ? p.offsetHeight : 600;
   }
-  function rgba(hex,a) { var c=hex2rgb(hex); return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')'; }
+  resize();
+  if (_brainResizeObs) _brainResizeObs.disconnect();
+  _brainResizeObs = new ResizeObserver(resize);
+  _brainResizeObs.observe(canvas.parentElement);
 
-  function layout() {
-    W = canvas.offsetWidth; H = canvas.offsetHeight;
-    var CX=W/2, CY=H*0.46;
-    var clusterPos = {
-      OPS:    { cx:CX,        cy:CY },
-      CARE:   { cx:CX*0.28,  cy:CY*0.70 },
-      GROWTH: { cx:CX*1.72,  cy:CY*0.70 },
-      INTEL:  { cx:CX,        cy:CY*1.68 },
-    };
+  var CX = canvas.width / 2, CY = canvas.height / 2;
+  _brainSimNodes = BRAIN_NODES.map(function(n, i) {
+    var a = (i / BRAIN_NODES.length) * Math.PI * 2;
+    var r = 100 + Math.random() * 200;
+    return Object.assign({}, n, {x: CX + Math.cos(a)*r, y: CY + Math.sin(a)*r, vx:0, vy:0, fx:0, fy:0});
+  });
+  _brainNodeMap = {};
+  _brainSimNodes.forEach(function(n) { _brainNodeMap[n.id] = n; });
+  _brainSimEdges = BRAIN_EDGES.map(function(e) {
+    return {from:_brainNodeMap[e[0]], to:_brainNodeMap[e[1]]};
+  }).filter(function(e) { return e.from && e.to; });
 
-    // Group non-HERMES agents by cluster
-    var clusterLists = { OPS:[], CARE:[], GROWTH:[], INTEL:[] };
-    AGENTS.forEach(function(ag) { if (ag.name!=='HERMES') clusterLists[ag.cluster].push(ag); });
+  var alpha = 1.0;
 
-    // Pre-compute ring positions for every non-HERMES node
-    var ringPos = {};
-    Object.keys(clusterLists).forEach(function(ck) {
-      var list = clusterLists[ck];
-      var n = list.length;
-      if (!n) return;
-      var cp = clusterPos[ck];
-      var avgSz = list.reduce(function(s,a){return s+a.size;},0)/n;
-      // Ring radius: arc gap between nodes >= node diameter + 32px label room
-      var arcGap = avgSz*2 + 36;
-      var ringR = Math.max(Math.min(W,H)*0.14, (arcGap*n)/(Math.PI*2));
-      var aOff = ck==='CARE'?0.25 : ck==='GROWTH'?-0.25 : ck==='INTEL'?1.1 : 0.8;
-      list.forEach(function(ag,i) {
-        var angle = aOff + (i/n)*Math.PI*2;
-        ringPos[ag.name] = { rx: cp.cx+Math.cos(angle)*ringR, ry: cp.cy+Math.sin(angle)*ringR };
-      });
-    });
+  function tick() {
+    CX = canvas.width/2; CY = canvas.height/2;
+    if (alpha > 0.002) alpha -= 0.003;
+    var repel = 2800*alpha + 600;
+    var spring = 0.04*alpha + 0.006;
+    var restLen = 110;
 
-    nodes = AGENTS.map(function(ag) {
-      var cp = clusterPos[ag.cluster];
-      if (ag.name==='HERMES') {
-        return { x:cp.cx, y:cp.cy, vx:0, vy:0, r:ag.size, agent:ag, pulse:0,
-                 cx:cp.cx, cy:cp.cy, rx:cp.cx, ry:cp.cy, knowledgeLevel:1 };
-      }
-      var p = ringPos[ag.name];
-      return {
-        x: p.rx+(Math.random()-0.5)*3, y: p.ry+(Math.random()-0.5)*3,
-        vx:(Math.random()-0.5)*0.05, vy:(Math.random()-0.5)*0.05,
-        r: ag.size, agent:ag, pulse:Math.random()*Math.PI*2,
-        cx:cp.cx, cy:cp.cy, rx:p.rx, ry:p.ry,
-        knowledgeLevel: ag.activity/30,
-      };
-    });
-  }
-
-  function spawnParticle() {
-    if (nodes.length<2) return;
-    var fromIdx = Math.floor(Math.random()*nodes.length);
-    var from = nodes[fromIdx];
-    // Prefer connections: same cluster OR to/from Hermes
-    var pool = nodes.filter(function(n,i){
-      if (i===fromIdx) return false;
-      return n.agent.cluster===from.agent.cluster || n.agent.name==='HERMES' || from.agent.name==='HERMES';
-    });
-    if (!pool.length) pool = nodes.filter(function(n,i){ return i!==fromIdx; });
-    var to = pool[Math.floor(Math.random()*pool.length)];
-    var speed = 0.005 + Math.random()*0.007;
-    particles.push({
-      x:from.x, y:from.y, tx:to.x, ty:to.y,
-      prog:0, speed:speed,
-      color: Math.random()>0.5 ? from.agent.color : to.agent.color,
-      size: 1.5+Math.random()*2.5,
-      tailLen: 0.05+Math.random()*0.06,
-      fromName: from.agent.name,
-      toName: to.agent.name,
-    });
-  }
-
-  var lastParticle=0, lastFeedTick=0, feedIndex=0;
-
-  function draw(ts) {
-    if (!canvas.offsetParent && document.getElementById('page-brain') && !document.getElementById('page-brain').classList.contains('active')) {
-      _brainAnim = requestAnimationFrame(draw);
-      return;
+    for (var i=0;i<_brainSimNodes.length;i++) {
+      var n = _brainSimNodes[i];
+      n.fx = (CX - n.x) * 0.003 * alpha;
+      n.fy = (CY - n.y) * 0.003 * alpha;
     }
-    ctx.setTransform(window.devicePixelRatio||1, 0, 0, window.devicePixelRatio||1, 0, 0);
-    ctx.clearRect(0,0,W,H);
+    for (var i=0;i<_brainSimNodes.length;i++) {
+      if (!_brainFilter[_brainSimNodes[i].type]) continue;
+      for (var j=i+1;j<_brainSimNodes.length;j++) {
+        if (!_brainFilter[_brainSimNodes[j].type]) continue;
+        var dx=_brainSimNodes[j].x-_brainSimNodes[i].x, dy=_brainSimNodes[j].y-_brainSimNodes[i].y;
+        var d=Math.sqrt(dx*dx+dy*dy)+0.5, f=-repel/(d*d);
+        _brainSimNodes[i].fx+=f*dx/d; _brainSimNodes[i].fy+=f*dy/d;
+        _brainSimNodes[j].fx-=f*dx/d; _brainSimNodes[j].fy-=f*dy/d;
+      }
+    }
+    for (var e=0;e<_brainSimEdges.length;e++) {
+      var a=_brainSimEdges[e].from, b=_brainSimEdges[e].to;
+      if (!a||!b||!_brainFilter[a.type]||!_brainFilter[b.type]) continue;
+      var dx=b.x-a.x, dy=b.y-a.y, d=Math.sqrt(dx*dx+dy*dy)+0.01;
+      var f=spring*(d-restLen);
+      a.fx+=f*dx/d; a.fy+=f*dy/d; b.fx-=f*dx/d; b.fy-=f*dy/d;
+    }
+    var damp=0.84;
+    for (var i=0;i<_brainSimNodes.length;i++) {
+      var n=_brainSimNodes[i];
+      n.vx=(n.vx+n.fx)*damp; n.vy=(n.vy+n.fy)*damp;
+      n.x+=n.vx; n.y+=n.vy;
+    }
+  }
 
-    // ── Deep space background ──────────────────────────────────────────────
-    var bg = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*0.8);
-    bg.addColorStop(0,'#0a0f1e'); bg.addColorStop(0.5,'#070c18'); bg.addColorStop(1,'#030609');
+  function draw() {
+    var W=canvas.width, H=canvas.height;
+    ctx.clearRect(0,0,W,H);
+    var bg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*0.8);
+    bg.addColorStop(0,'#070f1e'); bg.addColorStop(1,'#030810');
     ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
 
-    // ── Stars ──────────────────────────────────────────────────────────────
-    STARS.forEach(function(s){
-      var t = (ts - s.t0) / s.tw;
-      var alpha = s.a * (0.4 + 0.6*Math.abs(Math.sin(t*Math.PI)));
-      ctx.beginPath(); ctx.arc(s.x*W, s.y*H, s.r, 0, Math.PI*2);
-      ctx.fillStyle='rgba(255,255,255,'+alpha.toFixed(2)+')'; ctx.fill();
-    });
+    var sel=_brainSelected?_brainNodeMap[_brainSelected]:null;
+    var hov=_brainHovered ?_brainNodeMap[_brainHovered] :null;
 
-    // ── Cluster glow zones ─────────────────────────────────────────────────
-    var rendered={};
-    nodes.forEach(function(n){
-      var ck=n.agent.cluster; if (rendered[ck]) return; rendered[ck]=true;
-      var cl=CLUSTER[ck];
-      var g=ctx.createRadialGradient(n.cx,n.cy,0,n.cx,n.cy,Math.min(W,H)*0.18);
-      g.addColorStop(0,cl.glow); g.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.beginPath(); ctx.arc(n.cx,n.cy,Math.min(W,H)*0.18,0,Math.PI*2);
+    // Edges
+    for (var e=0;e<_brainSimEdges.length;e++) {
+      var ea=_brainSimEdges[e].from, eb=_brainSimEdges[e].to;
+      if (!ea||!eb||!_brainFilter[ea.type]||!_brainFilter[eb.type]) continue;
+      var conn=sel&&(ea.id===sel.id||eb.id===sel.id);
+      ctx.beginPath(); ctx.moveTo(ea.x,ea.y); ctx.lineTo(eb.x,eb.y);
+      if (conn) { ctx.strokeStyle='rgba(2,195,154,0.7)'; ctx.lineWidth=1.8; }
+      else if (sel) { ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.lineWidth=0.5; }
+      else { ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.lineWidth=0.8; }
+      ctx.stroke();
+    }
+
+    // Nodes
+    for (var i=0;i<_brainSimNodes.length;i++) {
+      var n=_brainSimNodes[i];
+      if (!_brainFilter[n.type]) continue;
+      var isH=hov&&hov.id===n.id, isS=sel&&sel.id===n.id;
+      var isC=sel&&_brainSimEdges.some(function(e){return(e.from.id===sel.id&&e.to.id===n.id)||(e.to.id===sel.id&&e.from.id===n.id);});
+      var fade=sel&&!isS&&!isC;
+      var r=n.size*(isH||isS?1.35:1);
+      ctx.globalAlpha=fade?0.2:1;
+      if (!fade) {
+        ctx.beginPath(); ctx.arc(n.x,n.y,r*3.2,0,Math.PI*2);
+        ctx.fillStyle=n.color+'1a'; ctx.fill();
+      }
+      ctx.beginPath(); ctx.arc(n.x,n.y,r,0,Math.PI*2);
+      var g=ctx.createRadialGradient(n.x-r*0.3,n.y-r*0.3,r*0.05,n.x,n.y,r);
+      g.addColorStop(0,n.color); g.addColorStop(1,n.color+'88');
       ctx.fillStyle=g; ctx.fill();
-      // Cluster label
-      ctx.font='bold 9px -apple-system,sans-serif';
-      ctx.textAlign='center'; ctx.fillStyle=rgba(cl.color,0.28);
-      ctx.fillText(cl.label, n.cx, n.cy - Math.min(W,H)*0.14);
-      ctx.textAlign='left';
-    });
-
-    // ── Static connection web ──────────────────────────────────────────────
-    nodes.forEach(function(a,ai){
-      nodes.forEach(function(b,bi){
-        if (bi<=ai) return;
-        var same = a.agent.cluster===b.agent.cluster;
-        var toHermes = a.agent.name==='HERMES'||b.agent.name==='HERMES';
-        if (!same && !toHermes) return;
-        var d=Math.hypot(a.x-b.x,a.y-b.y);
-        var maxD=Math.min(W,H)*(toHermes?0.7:0.3);
-        if (d>maxD) return;
-        var alpha = toHermes ? 0.07 : 0.05*(1-d/maxD);
-        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-        ctx.strokeStyle=rgba(toHermes?'#FFFFFF':a.agent.color, alpha);
-        ctx.lineWidth=0.6; ctx.stroke();
-      });
-    });
-
-    // ── Spawn shooting stars ───────────────────────────────────────────────
-    if (ts-lastParticle>120) { spawnParticle(); if(Math.random()<0.3) spawnParticle(); lastParticle=ts; }
-
-    // ── Draw shooting stars ────────────────────────────────────────────────
-    particles = particles.filter(function(p){
-      p.prog += p.speed;
-      if (p.prog>=1) return false;
-      var x=p.x+(p.tx-p.x)*p.prog, y=p.y+(p.ty-p.y)*p.prog;
-      var tx2=p.x+(p.tx-p.x)*Math.max(0,p.prog-p.tailLen);
-      var ty2=p.y+(p.ty-p.y)*Math.max(0,p.prog-p.tailLen);
-      var g=ctx.createLinearGradient(tx2,ty2,x,y);
-      g.addColorStop(0,rgba(p.color,0)); g.addColorStop(0.6,rgba(p.color,0.4)); g.addColorStop(1,rgba(p.color,1));
-      ctx.beginPath(); ctx.moveTo(tx2,ty2); ctx.lineTo(x,y);
-      ctx.strokeStyle=g; ctx.lineWidth=p.size*(0.6+0.4*(1-p.prog)); ctx.stroke();
-      // Bright head
-      var hg=ctx.createRadialGradient(x,y,0,x,y,p.size*2.5);
-      hg.addColorStop(0,rgba(p.color,0.9)); hg.addColorStop(1,rgba(p.color,0));
-      ctx.beginPath(); ctx.arc(x,y,p.size*2.5,0,Math.PI*2); ctx.fillStyle=hg; ctx.fill();
-      return true;
-    });
-
-    // ── Nodes ─────────────────────────────────────────────────────────────
-    nodes.forEach(function(n,ni){
-      n.pulse+=0.02;
-      // Drift back toward ring position
-      n.vx+=(n.rx-n.x)*0.004; n.vy+=(n.ry-n.y)*0.004;
-      n.x+=n.vx; n.y+=n.vy; n.vx*=0.995; n.vy*=0.995;
-
-      var r=n.r+Math.sin(n.pulse)*(n.agent.name==='HERMES'?3:1.5);
-      var col=n.agent.color, isHovered=(popup&&popup.nodeIdx===ni);
-
-      // Outer corona
-      var cr=r*(isHovered?7:5);
-      var cg=ctx.createRadialGradient(n.x,n.y,r*0.5,n.x,n.y,cr);
-      cg.addColorStop(0,rgba(col,isHovered?0.35:0.18));
-      cg.addColorStop(0.5,rgba(col,0.06));
-      cg.addColorStop(1,rgba(col,0));
-      ctx.beginPath(); ctx.arc(n.x,n.y,cr,0,Math.PI*2); ctx.fillStyle=cg; ctx.fill();
-
-      // Node core
-      var ng=ctx.createRadialGradient(n.x-r*0.35,n.y-r*0.35,0,n.x,n.y,r);
-      ng.addColorStop(0,'rgba(255,255,255,0.95)'); ng.addColorStop(0.3,col); ng.addColorStop(1,rgba(col,0.7));
-      ctx.beginPath(); ctx.arc(n.x,n.y,r,0,Math.PI*2); ctx.fillStyle=ng; ctx.fill();
-
-      // Hermes: triple pulsing rings
-      if (n.agent.name==='HERMES') {
-        [1.8,2.8,4.0].forEach(function(m,ri){
-          var rr=r*m+Math.sin(n.pulse*0.7+ri*0.9)*4;
-          ctx.beginPath(); ctx.arc(n.x,n.y,rr,0,Math.PI*2);
-          ctx.strokeStyle=rgba(col,0.12-ri*0.03); ctx.lineWidth=1.5-ri*0.4; ctx.stroke();
-        });
-      }
-
-      // Activity ring
-      var arcLen=(n.agent.activity/30)*Math.PI*2;
-      ctx.beginPath(); ctx.arc(n.x,n.y,r+3,-(Math.PI/2),-(Math.PI/2)+arcLen);
-      ctx.strokeStyle=rgba(col,0.55); ctx.lineWidth=2; ctx.stroke();
-
-      // Label
-      var fs=n.agent.name==='HERMES'?10:7.5;
-      ctx.font='bold '+fs+'px -apple-system,sans-serif';
+      if (isS||isH) { ctx.strokeStyle=isS?'#02c39a':'rgba(255,255,255,0.6)'; ctx.lineWidth=isS?2:1.5; ctx.stroke(); }
+      var fs=Math.max(8,Math.min(11,n.size*0.72));
+      ctx.font='600 '+fs+'px system-ui,sans-serif';
       ctx.textAlign='center';
-      ctx.fillStyle=rgba(col,isHovered?1:0.88);
-      ctx.fillText(n.agent.name, n.x, n.y+r+13);
-      if (isHovered||n.agent.name==='HERMES') {
-        ctx.font='6.5px -apple-system,sans-serif';
-        ctx.fillStyle=rgba(col,0.5);
-        ctx.fillText(n.agent.label, n.x, n.y+r+22);
+      ctx.fillStyle='rgba(255,255,255,'+(fade?0.15:0.88)+')';
+      ctx.fillText(n.label,n.x,n.y+r+fs+2);
+      if (isH||isS) {
+        ctx.font=(fs-1)+'px system-ui,sans-serif';
+        ctx.fillStyle='rgba(255,255,255,0.4)';
+        ctx.fillText(n.sub,n.x,n.y+r+fs*2+4);
       }
-      ctx.textAlign='left';
+      ctx.globalAlpha=1;
+    }
+
+    // Legend
+    var types=[
+      {type:'agent',color:'#a78bfa',label:'Agents (19)'},
+      {type:'route',color:'#02c39a',label:'Routes (15+)'},
+      {type:'service',color:'#38bdf8',label:'Services (8)'},
+      {type:'frontend',color:'#fbbf24',label:'Frontend (4)'},
+      {type:'file',color:'#f97316',label:'Core Files (5)'},
+    ];
+    var lx=14,ly=H-14-types.length*22;
+    types.forEach(function(t,i) {
+      ctx.globalAlpha=_brainFilter[t.type]?1:0.3;
+      ctx.beginPath(); ctx.arc(lx+6,ly+i*22+6,5,0,Math.PI*2);
+      ctx.fillStyle=t.color; ctx.fill();
+      ctx.font='10px system-ui,sans-serif'; ctx.textAlign='left';
+      ctx.fillStyle='rgba(255,255,255,0.55)';
+      ctx.fillText(t.label,lx+17,ly+i*22+10);
+      ctx.globalAlpha=1;
     });
 
-    _brainAnim = requestAnimationFrame(draw);
+    // Stats
+    ctx.font='bold 10px system-ui,sans-serif'; ctx.textAlign='right';
+    ctx.fillStyle='rgba(2,195,154,0.5)';
+    ctx.fillText('NODES: '+_brainSimNodes.filter(function(n){return _brainFilter[n.type];}).length+' · EDGES: '+_brainSimEdges.filter(function(e){return e.from&&e.to&&_brainFilter[e.from.type]&&_brainFilter[e.to.type];}).length+' · MEMORY: '+(_brainMemCount||0), W-14, H-14);
   }
 
-  // ── Mouse interaction ────────────────────────────────────────────────────
-  canvas.addEventListener('mousemove', function(e){
-    var rect=canvas.getBoundingClientRect();
-    var mx=e.clientX-rect.left, my=e.clientY-rect.top;
-    var found=-1;
-    for (var i=0;i<nodes.length;i++) {
-      if (Math.hypot(nodes[i].x-mx,nodes[i].y-my)<nodes[i].r+18) { found=i; break; }
+  function loop() { tick(); draw(); _brainAnim=requestAnimationFrame(loop); }
+  loop();
+
+  canvas.onmousemove=function(e) {
+    var r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+    var best=null,bestD=Infinity;
+    for (var i=0;i<_brainSimNodes.length;i++) {
+      var n=_brainSimNodes[i];
+      if (!_brainFilter[n.type]) continue;
+      var dx=mx-n.x,dy=my-n.y,d=Math.sqrt(dx*dx+dy*dy);
+      if (d<n.size*1.6+8&&d<bestD) { bestD=d; best=n; }
     }
-    var popEl=document.getElementById('brain-popup');
-    if (found>=0&&popEl) {
-      popup={nodeIdx:found};
-      var n=nodes[found], ag=n.agent;
-      popEl.style.display='block';
-      var px=Math.min(mx+22, W-290), py=Math.max(Math.min(my-60,H-200),10);
-      popEl.style.left=px+'px'; popEl.style.top=py+'px';
-      document.getElementById('brain-popup-name').textContent=ag.name;
-      document.getElementById('brain-popup-role').textContent=ag.label;
-      document.getElementById('brain-popup-stats').innerHTML=
-        'Cluster: <strong style="color:'+CLUSTER[ag.cluster].color+'">'+CLUSTER[ag.cluster].label+'</strong><br>'+
-        'Activity: <strong>'+ag.activity+'%</strong> of brain cycles<br>'+
-        'Skills:<br>' + ag.skills.map(function(s){ return '· '+s; }).join('<br>');
-      document.getElementById('brain-popup-last').textContent='Carely AI · v2.4 · Running on Railway';
-      canvas.style.cursor='pointer';
-    } else {
-      popup=null;
-      if (popEl) popEl.style.display='none';
-      canvas.style.cursor='';
+    _brainHovered=best?best.id:null;
+    canvas.style.cursor=best?'pointer':'default';
+    var pop=document.getElementById('brain-popup');
+    if (best&&pop) {
+      var c=_brainSimEdges.filter(function(ed){return ed.from&&ed.to&&(ed.from.id===best.id||ed.to.id===best.id)&&_brainFilter[ed.from.type]&&_brainFilter[ed.to.type];}).length;
+      document.getElementById('brain-popup-name').textContent=best.label;
+      document.getElementById('brain-popup-role').textContent=best.sub;
+      document.getElementById('brain-popup-stats').textContent='Type: '+best.type.toUpperCase()+'  ·  Connections: '+c;
+      document.getElementById('brain-popup-last').textContent='Click to highlight connections';
+      pop.style.display='block';
+      pop.style.left=(mx+16)+'px'; pop.style.top=(my-10)+'px';
+    } else if (pop) pop.style.display='none';
+  };
+  canvas.onclick=function(e) {
+    var r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+    var best=null,bestD=Infinity;
+    for (var i=0;i<_brainSimNodes.length;i++) {
+      var n=_brainSimNodes[i];
+      if (!_brainFilter[n.type]) continue;
+      var dx=mx-n.x,dy=my-n.y,d=Math.sqrt(dx*dx+dy*dy);
+      if (d<n.size*1.6+8&&d<bestD){bestD=d;best=n;}
     }
-  });
-  canvas.addEventListener('mouseleave',function(){ popup=null; var p=document.getElementById('brain-popup'); if(p) p.style.display='none'; });
-
-  // ── Resize ───────────────────────────────────────────────────────────────
-  function resize() {
-    var container=canvas.parentElement;
-    if (!container||!container.offsetWidth) return;
-    canvas.width=container.offsetWidth*(window.devicePixelRatio||1);
-    canvas.height=container.offsetHeight*(window.devicePixelRatio||1);
-    canvas.style.width=container.offsetWidth+'px';
-    canvas.style.height=container.offsetHeight+'px';
-    W=container.offsetWidth; H=container.offsetHeight;
-    layout();
-  }
-
-  // ── Live activity feed ───────────────────────────────────────────────────
-  var FEED_EVENTS=[
-    {agent:'HERMES',   msg:'Daily pulse complete — 20 agents checked · 0 errors · 3 drafts queued for TJ'},
-    {agent:'FRANK',    msg:'Dose reminders sent to 8 beta patients — 6 confirmed within 5 min'},
-    {agent:'LEO',      msg:'LinkedIn post published: "The 2AM Phone Call" — 52 impressions so far'},
-    {agent:'COLE',     msg:'B2B outreach drafted for Pacific Family Medicine — awaiting TJ approval'},
-    {agent:'REX',      msg:'High-signal thread in r/caregivers — reply draft sent to Prabh via Telegram'},
-    {agent:'MAYA',     msg:'No missed doses in last 30-min scan — all beta patients on track'},
-    {agent:'ELARA',    msg:'7 AI check-in sessions completed · 5 patient responses logged · memory updated'},
-    {agent:'SCOUT',    msg:'carely.fit indexed · 4 keywords ranking page 2 · IndexNow ping sent'},
-    {agent:'ORACLE',   msg:'Competitor update: Medisafe v4.2 · no new caregiver features — no threat'},
-    {agent:'NINA',     msg:'Day-3 nurture email sent to 3 trial users — Caregiver Connect walkthrough'},
-    {agent:'SIGNALS',  msg:'Pain pattern detected: "distance caregiver guilt" trending in r/eldercare'},
-    {agent:'GRACE',    msg:'Morning check-ins sent to all active patients — 9AM PST · 6 acknowledged'},
-    {agent:'ACE',      msg:'EOD scan complete — 1 alert: OpenRouter balance low · sent to TJ Telegram'},
-    {agent:'COMPINTEL',msg:'MediSafe App Store reviews analysed — 3 new UX complaints logged for Scout'},
-    {agent:'VANCE',    msg:'TikTok script #4 drafted: "The Morning Routine" — sent to Prabh via Telegram'},
-  ];
-
-  function renderFeed() {
-    var feed=document.getElementById('brain-feed');
-    if (!feed) return;
-    while(feed.firstChild) feed.removeChild(feed.firstChild);
-    var start=feedIndex%FEED_EVENTS.length;
-    var items=[];
-    for (var i=0;i<5;i++) items.push(FEED_EVENTS[(start+i)%FEED_EVENTS.length]);
-    feedIndex++;
-    items.forEach(function(ev,i){
-      var row=document.createElement('div');
-      row.style.cssText='display:flex;gap:8px;align-items:flex-start;font-size:0.71rem;line-height:1.4;opacity:'+(1-i*0.15);
-      var ag=AGENTS.find(function(a){return a.name===ev.agent;});
-      var color=ag?ag.color:'#888';
-      var badge=document.createElement('span');
-      badge.style.cssText='font-size:0.58rem;font-weight:800;letter-spacing:0.05em;flex-shrink:0;padding:2px 6px;border-radius:4px;color:'+color+';border:1px solid '+rgba(color,0.3)+';background:'+rgba(color,0.08)+';margin-top:1px';
-      badge.textContent=ev.agent;
-      var msg=document.createElement('span');
-      msg.style.cssText='color:rgba(255,255,255,0.5);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
-      msg.textContent=ev.msg;
-      var t=document.createElement('span');
-      t.style.cssText='color:rgba(255,255,255,0.18);flex-shrink:0;font-size:0.6rem';
-      t.textContent=i===0?'now':(i*3+(Math.floor(Date.now()/1000)%7))+'m';
-      row.appendChild(badge); row.appendChild(msg); row.appendChild(t);
-      feed.appendChild(row);
-    });
-  }
-
-  window.addEventListener('resize', resize);
-  resize();
-  if (!W || !H) {
-    setTimeout(function(){
-      resize();
-      if (!_brainAnim) { renderFeed(); requestAnimationFrame(draw); setInterval(renderFeed,8000); }
-    }, 100);
-  } else {
-    renderFeed();
-    requestAnimationFrame(draw);
-    setInterval(renderFeed, 8000);
-  }
+    _brainSelected=best?(best.id===_brainSelected?null:best.id):null;
+  };
+  canvas.onmouseleave=function(){
+    _brainHovered=null;
+    var pop=document.getElementById('brain-popup');
+    if(pop)pop.style.display='none';
+  };
 }
+
+function loadBrain() {
+  var st=document.getElementById('brain-status');
+  if(st) st.textContent='Loading…';
+  fetch('https://carely-backend-production.up.railway.app/admin/brain-health',{headers:{'x-carely-secret':'carely-admin-6add43330d2313d8'}})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      _brainMemCount=(d&&d.totalEntries)?d.totalEntries:0;
+      if(st) st.textContent='v3.0 · '+BRAIN_NODES.length+' nodes · '+(_brainMemCount?_brainMemCount+' memories':'')+' · LIVE';
+    }).catch(function(){if(st)st.textContent='v3.0 · LIVE';});
+  initBrainGraph();
+}
+
+function showBrainInject() {
+  var p=document.getElementById('brain-inject-panel');
+  if(p) p.style.display=p.style.display==='none'?'block':'none';
+}
+
 function submitBrainInject() {
-  var topic = document.getElementById('brain-inject-topic');
-  var key   = document.getElementById('brain-inject-key');
-  var val   = document.getElementById('brain-inject-value');
-  var msg   = document.getElementById('brain-inject-msg');
-  if (!topic || !key || !val) return;
-  if (!key.value.trim() || !val.value.trim()) { if (msg) { msg.textContent = 'Fill in key and value.'; msg.style.color = 'var(--red)'; } return; }
-  if (msg) { msg.textContent = 'Injecting...'; msg.style.color = 'var(--g500)'; }
-  // Fetch existing content then append the note
-  fetch(BRAIN_BACKEND + '/admin/brain', { headers: { 'x-carely-secret': BRAIN_SECRET } })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      var existing = '';
-      (d.entries || []).forEach(function(e) { if (e.topic === topic.value) existing = e.content || ''; });
-      var note = '\n\n[TJ note · ' + new Date().toLocaleDateString('en-CA') + ' · ' + key.value.trim() + ']\n' + val.value.trim();
-      return fetch(BRAIN_BACKEND + '/admin/brain/' + encodeURIComponent(topic.value), {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'x-carely-secret': BRAIN_SECRET },
-        body: JSON.stringify({ content: existing + note })
-      });
-    })
-    .then(function(r) { return r.json(); })
-    .then(function() {
-      if (msg) { msg.textContent = 'Injected! Brain updated.'; msg.style.color = 'var(--green)'; }
-      val.value = ''; key.value = '';
-      setTimeout(function() { loadBrain(); if (msg) msg.textContent = ''; }, 800);
-    })
-    .catch(function() { if (msg) { msg.textContent = 'Inject failed — check backend.'; msg.style.color = 'var(--red)'; } });
+  var topic=document.getElementById('brain-inject-topic');
+  var key=document.getElementById('brain-inject-key');
+  var val=document.getElementById('brain-inject-value');
+  var msg=document.getElementById('brain-inject-msg');
+  if(!key||!val||!key.value.trim()||!val.value.trim()){if(msg){msg.textContent='Fill all fields.';msg.style.color='#f87171';}return;}
+  if(msg){msg.textContent='Injecting…';msg.style.color='#fbbf24';}
+  fetch('https://carely-backend-production.up.railway.app/admin/brain-inject',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-carely-secret':'carely-admin-6add43330d2313d8'},
+    body:JSON.stringify({topic:topic?topic.value:'general',key:key.value.trim(),value:val.value.trim()})
+  }).then(function(r){return r.json();})
+    .then(function(){if(msg){msg.textContent='Injected into brain.';msg.style.color='#02C39A';}val.value='';key.value='';})
+    .catch(function(){if(msg){msg.textContent='Error.';msg.style.color='#f87171';}});
 }
 
-// ═══ V12 ENGINE FUNCTIONS ════════════════════════════════════════════════════
-var BACKEND = (typeof BRAIN_BACKEND !== 'undefined') ? BRAIN_BACKEND : 'https://carely-backend-production.up.railway.app';
-var SECRET  = (typeof BRAIN_SECRET  !== 'undefined') ? BRAIN_SECRET  : 'carely-admin-6add43330d2313d8';
-
-function loadConversionIntel() {
-  fetch(BACKEND + '/admin/conversion/weekly', { headers: { 'x-carely-secret': SECRET } })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      var el = document.getElementById('conversion-report-content');
-      if (!el) return;
-      if (d && d.report) {
-        el.innerHTML = '<pre style="white-space:pre-wrap;font-size:0.82rem;color:var(--g700)">' + JSON.stringify(d.report, null, 2) + '</pre>';
-        var totalEl = document.getElementById('conv-total');
-        var weekEl  = document.getElementById('conv-week');
-        var topEl   = document.getElementById('conv-top');
-        if (totalEl && d.report.totalSignups !== undefined) totalEl.textContent = d.report.totalSignups;
-        if (weekEl  && d.report.thisWeek    !== undefined) weekEl.textContent  = d.report.thisWeek;
-        if (topEl   && d.report.topSource   !== undefined) topEl.textContent   = d.report.topSource;
-      } else {
-        el.innerHTML = '<span style="color:var(--g400)">No conversion report yet — first report runs Sunday 6AM PST after content is posted with ?ref= links.</span>';
-      }
-    }).catch(function() {
-      var el = document.getElementById('conversion-report-content');
-      if (el) el.innerHTML = '<span style="color:var(--red)">Failed to load — backend may be starting up.</span>';
-    });
+function toggleBrainFilter(type) {
+  _brainFilter[type]=!_brainFilter[type];
+  var btn=document.getElementById('bf-'+type);
+  if(btn) btn.style.opacity=_brainFilter[type]?'1':'0.3';
 }
 
-function loadExperiments() {
-  fetch(BACKEND + '/admin/experiments', { headers: { 'x-carely-secret': SECRET } })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      var el = document.getElementById('experiments-content');
-      var activeEl = document.getElementById('exp-active-count');
-      var doneEl   = document.getElementById('exp-done-count');
-      if (!el) return;
-      var exps = d.active || [];
-      if (activeEl) activeEl.textContent = exps.length;
-      if (doneEl)   doneEl.textContent   = d.concluded || 0;
-      if (exps.length === 0) {
-        el.innerHTML = '<span style="color:var(--g400)">No active experiments. Hermes will propose experiments on Sunday after user gates are met.</span>';
-        return;
-      }
-      var html = '';
-      exps.forEach(function(e) {
-        html += '<div style="border:1px solid var(--g200);border-radius:8px;padding:12px;margin-bottom:10px">'
-          + '<div style="font-weight:700;font-size:0.88rem;margin-bottom:4px">' + e.id + ' · ' + e.type + '</div>'
-          + '<div style="font-size:0.8rem;color:var(--g600);margin-bottom:6px">' + e.hypothesis + '</div>'
-          + '<div style="font-size:0.78rem;color:var(--g500)"><strong>Control:</strong> ' + e.control + ' · <strong>Variant:</strong> ' + e.variant + '</div>'
-          + '<div style="font-size:0.78rem;color:var(--g500);margin-top:4px"><strong>Success:</strong> ' + e.successMetric + ' ≥ ' + e.successTarget + ' · Gate: ' + e.userCountGate + '+ trials</div>'
-          + '</div>';
-      });
-      el.innerHTML = html;
-    }).catch(function() {
-      var el = document.getElementById('experiments-content');
-      if (el) el.innerHTML = '<span style="color:var(--red)">Failed to load experiments.</span>';
-    });
-}
-
-function loadAxelCreative() {
-  fetch(BACKEND + '/admin/axel/brief', { headers: { 'x-carely-secret': SECRET } })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      var el = document.getElementById('axel-concepts-content');
-      if (!el) return;
-      var brief = d.brief;
-      if (!brief || !brief.concepts || brief.concepts.length === 0) {
-        el.innerHTML = '<span style="color:var(--g400)">No Axel brief yet — runs Saturday 8AM PST. First run generates creative concepts from competitor App Store reviews.</span>';
-        return;
-      }
-      var html = '<div style="font-size:0.8rem;color:var(--g500);margin-bottom:10px">Week of ' + brief.weekOf + ' · ' + brief.concepts.length + ' concepts generated</div>';
-      brief.concepts.forEach(function(c, i) {
-        html += '<div style="border:1px solid var(--g200);border-radius:8px;padding:12px;margin-bottom:10px">'
-          + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
-          + '<div style="font-weight:700;font-size:0.88rem">#' + (i+1) + ' · ' + c.title + '</div>'
-          + '<div style="font-size:0.78rem;background:#f0fdf4;color:#16a34a;padding:3px 8px;border-radius:6px;font-weight:700">Score: ' + (c.predictedConversionScore || '—') + '</div>'
-          + '</div>'
-          + '<div style="font-size:0.82rem;font-style:italic;color:var(--g700);margin-bottom:4px">"' + c.hook + '"</div>'
-          + '<div style="font-size:0.78rem;color:var(--g500)"><strong>Angle:</strong> ' + c.angle + ' · <strong>Format:</strong> ' + c.format + ' · <strong>Platform:</strong> ' + c.platform + '</div>'
-          + (c.competitorOpportunity ? '<div style="font-size:0.75rem;color:var(--amber);margin-top:4px">Competitor gap: ' + c.competitorOpportunity + '</div>' : '')
-          + '</div>';
-      });
-      if (brief.creativeDirectorNote) {
-        html += '<div style="background:#fef3c7;border-radius:8px;padding:12px;font-size:0.82rem;color:#92400e;margin-top:4px"><strong>Axel note:</strong> ' + brief.creativeDirectorNote + '</div>';
-      }
-      el.innerHTML = html;
-    }).catch(function() {
-      var el = document.getElementById('axel-concepts-content');
-      if (el) el.innerHTML = '<span style="color:var(--red)">Failed to load Axel brief.</span>';
-    });
-}
-
-function triggerAxel() {
-  var msg = document.getElementById('axel-trigger-msg');
-  if (msg) msg.textContent = 'Triggering Axel...';
-  fetch(BACKEND + '/admin/trigger/axel', { method: 'POST', headers: { 'x-carely-secret': SECRET } })
-    .then(function(r) { return r.json(); })
-    .then(function() {
-      if (msg) msg.textContent = 'Axel triggered. Check Telegram in ~2 min for results.';
-      setTimeout(loadAxelCreative, 90000);
-    }).catch(function() { if (msg) msg.textContent = 'Failed to trigger.'; });
-}
-
-function triggerExperiments() {
-  var msg = document.getElementById('exp-trigger-msg');
-  if (msg) msg.textContent = 'Triggering experiment evaluation...';
-  fetch(BACKEND + '/admin/trigger/experiments', { method: 'POST', headers: { 'x-carely-secret': SECRET } })
-    .then(function(r) { return r.json(); })
-    .then(function() {
-      if (msg) msg.textContent = 'Done. Refreshing in 5s...';
-      setTimeout(loadExperiments, 5000);
-    }).catch(function() { if (msg) msg.textContent = 'Failed.'; });
-}
-
-function triggerCEOReview() {
-  var msg = document.getElementById('ceo-review-msg');
-  if (msg) msg.textContent = 'Triggering CEO weekly review...';
-  fetch(BACKEND + '/admin/hermes/weekly', { method: 'POST', headers: { 'x-carely-secret': SECRET } })
-    .then(function(r) { return r.json(); })
-    .then(function() {
-      if (msg) msg.textContent = 'Triggered. Check Telegram for CEO review memo.';
-    }).catch(function() { if (msg) msg.textContent = 'Failed to trigger — check backend.'; });
-}
-
-// ═══ BETA CODES ══════════════════════════════════════════════════════════════
-var BC_1M = [
-  'CARE-1M-R7KP','CARE-1M-X2QN','CARE-1M-T9WL','CARE-1M-B4JM','CARE-1M-H6YF',
-  'CARE-1M-D3NC','CARE-1M-Z8VA','CARE-1M-G5TK','CARE-1M-S1PE','CARE-1M-W0QB',
-  'CARE-1M-F7LX','CARE-1M-M2HD','CARE-1M-K4RU','CARE-1M-Y9GS','CARE-1M-J6WC',
-  'CARE-1M-A1BC','CARE-1M-B2CD','CARE-1M-C3DE','CARE-1M-D4EF','CARE-1M-E5FG',
-  'CARE-1M-F6GH','CARE-1M-G7HJ','CARE-1M-H8JK','CARE-1M-J9KL','CARE-1M-K0LM',
-  'CARE-1M-L1MN','CARE-1M-M2NP','CARE-1M-N3PQ','CARE-1M-P4QR','CARE-1M-Q5RS',
-  'CARE-1M-R6ST','CARE-1M-S7TU','CARE-1M-T8UV','CARE-1M-U9VW','CARE-1M-V0WX',
-  'CARE-1M-W1XY','CARE-1M-X2YZ','CARE-1M-Y3ZA','CARE-1M-Z4AB','CARE-1M-A5BV',
-  'CARE-1M-B6CW','CARE-1M-C7DX','CARE-1M-D8EY','CARE-1M-E9FZ','CARE-1M-F0GA',
-  'CARE-1M-G1HB','CARE-1M-H2JC','CARE-1M-J3KD','CARE-1M-K4LE','CARE-1M-L5MF',
-  'CARE-1M-M6NG','CARE-1M-N7PH','CARE-1M-P8QJ','CARE-1M-Q9RK','CARE-1M-R0SL',
-  'CARE-1M-S1TM','CARE-1M-T2UN','CARE-1M-U3VP','CARE-1M-V4WQ','CARE-1M-W5XR',
-  'CARE-1M-X6YS','CARE-1M-Y7ZT','CARE-1M-Z8AU','CARE-1M-A9BV','CARE-1M-B0CW'
-];
-var BC_1Y = [
-  'CARE-1Y-A8NZ','CARE-1Y-E3PV','CARE-1Y-U7KT','CARE-1Y-I5QM','CARE-1Y-O2LW',
-  'CARE-1Y-C9XF','CARE-1Y-N4BJ','CARE-1Y-V6HD','CARE-1Y-Q1RS','CARE-1Y-L0YP',
-  'CARE-1Y-P2QX','CARE-1Y-R4SY','CARE-1Y-T6UZ','CARE-1Y-V8WA','CARE-1Y-X0YB',
-  'CARE-1Y-Z2AC','CARE-1Y-B4CD','CARE-1Y-D6EF','CARE-1Y-F8GH','CARE-1Y-H0JK'
-];
-
-function bcGivenOut() {
-  try { return JSON.parse(localStorage.getItem('bc_given') || '{}'); } catch(e) { return {}; }
-}
-function bcToggle(code) {
-  var given = bcGivenOut();
-  if (given[code]) { delete given[code]; } else { given[code] = Date.now(); }
-  localStorage.setItem('bc_given', JSON.stringify(given));
-  bcRender();
-}
-function bcRender() {
-  var given = bcGivenOut();
-  var allCodes = BC_1M.concat(BC_1Y);
-  var available = allCodes.filter(function(c){ return !given[c]; }).length;
-  var counter = document.getElementById('bc-counter');
-  if (counter) counter.textContent = available + ' available · ' + Object.keys(given).length + ' given out';
-
-  ['1m','1y'].forEach(function(type) {
-    var list = document.getElementById('codes-' + type + '-list');
-    if (!list) return;
-    var codes = type === '1m' ? BC_1M : BC_1Y;
-    var accent = type === '1m' ? 'var(--teal)' : '#6C63FF';
-    list.innerHTML = codes.map(function(code, i) {
-      var isGiven = !!given[code];
-      var isLast = i === codes.length - 1;
-      return '<div onclick="bcToggle(\'' + code + '\')" style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;cursor:pointer;border-bottom:' + (isLast ? 'none' : '1px solid var(--g100)') + ';background:' + (isGiven ? '#F8F8F8' : 'white') + ';transition:background 0.15s" onmouseover="this.style.background=\'' + (isGiven ? '#F0F0F0' : '#F7FFFE') + '\'" onmouseout="this.style.background=\'' + (isGiven ? '#F8F8F8' : 'white') + '\'">' +
-        '<span style="font-family:monospace;font-size:0.82rem;font-weight:700;color:' + (isGiven ? '#B0C4C8' : accent) + ';text-decoration:' + (isGiven ? 'line-through' : 'none') + '">' + code + '</span>' +
-        '<div style="display:flex;align-items:center;gap:10px">' +
-          (isGiven ? '<span style="font-size:0.68rem;color:#B0C4C8;font-weight:600">Given out</span>' : '') +
-          '<div style="width:22px;height:22px;border-radius:6px;border:2px solid ' + (isGiven ? '#02C39A' : '#D0DFE3') + ';background:' + (isGiven ? '#02C39A' : 'white') + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' +
-            (isGiven ? '<svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '') +
-          '</div>' +
-        '</div>' +
-      '</div>';
-    }).join('');
-  });
-}
-
-function copyAllCodes() {
-  var given = bcGivenOut();
-  var available1m = BC_1M.filter(function(c){ return !given[c]; });
-  var available1y = BC_1Y.filter(function(c){ return !given[c]; });
-  var text = '1-MONTH CODES (30 days):\n' + available1m.join('\n') +
-             '\n\n1-YEAR CODES (365 days):\n' + available1y.join('\n');
-  navigator.clipboard.writeText(text).then(function(){
-    var btn = document.querySelector('[onclick="copyAllCodes()"]');
-    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(function(){ btn.textContent = '⎘ Copy All'; }, 2000); }
-  });
-}
-
-
-// ═══ INIT: load data for pages that need it on startup ═══════════════════════
-(function() {
-  if (window.loadDrafts) window.loadDrafts();
-})();
-
-// ═══ USER ANALYTICS (cohort-report) ══════════════════════════════════════════
-
-var _cohortData = null;
-var _cohortRefreshTimer = null;
-
-function loadCohortData() {
-  var secret = 'b00f4fc3fd0333847bbc9513a4c60ffb086f0e5332ef16983c921de115125657';
-  var errEl = document.getElementById('analytics-error');
-  var updEl = document.getElementById('analytics-last-updated');
-  if (errEl) errEl.style.display = 'none';
-  if (updEl) updEl.textContent = 'Loading...';
-
-  fetch(_BACKEND + '/admin/cohort-report', {
-    headers: { 'x-carely-secret': secret }
-  })
-  .then(function(r) {
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
-  })
-  .then(function(data) {
-    _cohortData = data;
-    renderCohortData(data);
-    if (updEl) updEl.textContent = 'Last updated: ' + new Date().toLocaleTimeString();
-    // auto-refresh every 60s while tab is active
-    clearTimeout(_cohortRefreshTimer);
-    _cohortRefreshTimer = setTimeout(loadCohortData, 60000);
-  })
-  .catch(function(err) {
-    if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'Failed to load: ' + err.message; }
-    if (updEl) updEl.textContent = 'Error loading data';
-  });
-}
-
-function renderCohortData(d) {
-  var s = d.summary || {};
-  // Summary metrics
-  setText('an-total-users', s.totalUsers || 0);
-  setText('an-avg-adherence', s.avgAdherenceRate != null ? Math.round(s.avgAdherenceRate) + '%' : '—');
-  setText('an-conditions', Object.keys(d.byCondition || {}).length);
-  setText('an-doses', s.totalDosesLogged || 0);
-
-  // Condition bars
-  renderBars('an-conditions-chart', d.byCondition || {}, 'users', '#028090');
-
-  // Age group bars
-  var ageLabels = { under_18:'<18', '18_34':'18–34', '35_49':'35–49', '50_64':'50–64', '65_79':'65–79', '80_plus':'80+' };
-  renderBars('an-age-chart', d.byAgeGroup || {}, 'users', '#6C63FF', ageLabels);
-
-  // Adherence by condition
-  renderAdherenceBars('an-adherence-chart', d.adherenceByCondition || {});
-
-  // Skip reasons
-  renderListBars('an-skip-chart', d.topSkipReasons || [], 'reason', 'count', '#F59E0B');
-
-  // Top medicines table
-  renderTable('an-medicines-table', d.topMedicines || [], ['name', 'users'], ['Medicine', 'Users']);
-
-  // Top symptoms table
-  renderTable('an-symptoms-table', d.topSymptoms || [], ['symptom', 'count'], ['Symptom', 'Reports']);
-
-  // Plans
-  var planRow = document.getElementById('an-plans-row');
-  if (planRow) {
-    planRow.innerHTML = '';
-    var plans = d.byPlan || {};
-    Object.keys(plans).forEach(function(p) {
-      var badge = document.createElement('div');
-      badge.style.cssText = 'background:var(--g100);border-radius:8px;padding:10px 16px;text-align:center;min-width:90px';
-      badge.innerHTML = '<div style="font-size:1.3rem;font-weight:900;color:var(--teal)">' + (plans[p] || 0) + '</div><div style="font-size:0.72rem;color:var(--g500);text-transform:capitalize;margin-top:2px">' + p + '</div>';
-      planRow.appendChild(badge);
-    });
-  }
-}
-
-function renderBars(id, obj, valueKey, color, labelMap) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  var keys = Object.keys(obj);
-  if (!keys.length) { el.innerHTML = '<div style="color:var(--g500);font-size:0.78rem">No data yet</div>'; return; }
-  var maxVal = Math.max.apply(null, keys.map(function(k){ return (obj[k][valueKey] || obj[k] || 0); }));
-  el.innerHTML = keys.map(function(k) {
-    var val = obj[k][valueKey] != null ? obj[k][valueKey] : (typeof obj[k] === 'number' ? obj[k] : 0);
-    var pct = maxVal > 0 ? Math.round((val / maxVal) * 100) : 0;
-    var label = (labelMap && labelMap[k]) ? labelMap[k] : k.replace(/_/g,' ');
-    return '<div style="margin-bottom:8px">' +
-      '<div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:3px">' +
-      '<span style="text-transform:capitalize;color:var(--deep)">' + label + '</span>' +
-      '<span style="font-weight:700;color:var(--g600)">' + val + '</span></div>' +
-      '<div style="background:var(--g100);border-radius:4px;height:8px"><div style="background:' + color + ';width:' + pct + '%;height:8px;border-radius:4px;transition:width 0.4s"></div></div>' +
-      '</div>';
-  }).join('');
-}
-
-function renderAdherenceBars(id, obj) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  var keys = Object.keys(obj);
-  if (!keys.length) { el.innerHTML = '<div style="color:var(--g500);font-size:0.78rem">No data yet</div>'; return; }
-  el.innerHTML = keys.map(function(k) {
-    var pct = Math.round(obj[k] || 0);
-    var color = pct >= 80 ? '#10B981' : pct >= 50 ? '#F59E0B' : '#EF4444';
-    return '<div style="margin-bottom:8px">' +
-      '<div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:3px">' +
-      '<span style="text-transform:capitalize;color:var(--deep)">' + k.replace(/_/g,' ') + '</span>' +
-      '<span style="font-weight:700;color:' + color + '">' + pct + '%</span></div>' +
-      '<div style="background:var(--g100);border-radius:4px;height:8px"><div style="background:' + color + ';width:' + pct + '%;height:8px;border-radius:4px;transition:width 0.4s"></div></div>' +
-      '</div>';
-  }).join('');
-}
-
-function renderListBars(id, arr, labelKey, countKey, color) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  if (!arr.length) { el.innerHTML = '<div style="color:var(--g500);font-size:0.78rem">No data yet</div>'; return; }
-  var maxVal = arr[0][countKey] || 1;
-  el.innerHTML = arr.slice(0, 8).map(function(item) {
-    var val = item[countKey] || 0;
-    var pct = Math.round((val / maxVal) * 100);
-    var label = (item[labelKey] || 'unknown').replace(/_/g,' ');
-    return '<div style="margin-bottom:8px">' +
-      '<div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:3px">' +
-      '<span style="text-transform:capitalize;color:var(--deep)">' + label + '</span>' +
-      '<span style="font-weight:700;color:var(--g600)">' + val + '</span></div>' +
-      '<div style="background:var(--g100);border-radius:4px;height:8px"><div style="background:' + color + ';width:' + pct + '%;height:8px;border-radius:4px;transition:width 0.4s"></div></div>' +
-      '</div>';
-  }).join('');
-}
-
-function renderTable(id, arr, cols, headers) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  if (!arr.length) { el.innerHTML = '<div style="color:var(--g500);font-size:0.78rem">No data yet</div>'; return; }
-  var html = '<table class="tbl"><thead><tr>' + headers.map(function(h){ return '<th>' + h + '</th>'; }).join('') + '</tr></thead><tbody>';
-  arr.slice(0, 10).forEach(function(row, i) {
-    html += '<tr>' + cols.map(function(c, ci) {
-      var val = row[c] != null ? row[c] : '—';
-      if (typeof val === 'string') val = val.replace(/_/g,' ');
-      var style = ci === 0 ? 'style="text-transform:capitalize"' : '';
-      return '<td ' + style + '>' + (i === 0 && ci === 0 ? '<strong>' + val + '</strong>' : val) + '</td>';
-    }).join('') + '</tr>';
-  });
-  html += '</tbody></table>';
-  el.innerHTML = html;
-}
-
-function setText(id, val) {
-  var el = document.getElementById(id);
-  if (el) el.textContent = val;
-}
-
-function downloadCohortCSV() {
+downloadCohortCSV() {
   if (!_cohortData) { alert('Load data first'); return; }
   var d = _cohortData;
   var rows = [['Section','Key','Value']];
