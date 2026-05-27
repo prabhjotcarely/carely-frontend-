@@ -2880,18 +2880,81 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ BACKEND FILE REGISTRY ══ -->
   <div class="page" id="page-backend-files">
-    <div class="ph"><h1>🗂️ Backend File Registry</h1><p>Every file · What it does · Which agents use it · Revenue connection</p></div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-      <input id="file-search" oninput="filterFiles()" placeholder="Search files..." style="font-size:0.8rem;padding:6px 12px;border:1.5px solid var(--g300);border-radius:8px;flex:1;min-width:180px;outline:none;color:var(--text)">
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="tag-btn active" onclick="filterByTag(this,'all')">All</button>
-        <button class="tag-btn" onclick="filterByTag(this,'route')">Routes</button>
-        <button class="tag-btn" onclick="filterByTag(this,'agent')">Agents</button>
-        <button class="tag-btn" onclick="filterByTag(this,'core')">Core</button>
-        <button class="tag-btn" onclick="filterByTag(this,'profit')">Profit</button>
+    <div class="ph"><h1>🗂️ File Registry</h1><p>Every file · click any row to expand · export as CSV</p></div>
+
+    <style>
+      .fr-bar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+      .fr-search{font-size:0.8rem;padding:6px 12px;border:1.5px solid var(--g300);border-radius:8px;flex:1;min-width:180px;outline:none;color:var(--text);background:var(--card);transition:border-color 0.2s}
+      .fr-search:focus{border-color:var(--teal)}
+      .fr-tag{font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:20px;border:1.5px solid var(--g300);background:transparent;cursor:pointer;color:var(--g500);transition:all 0.15s}
+      .fr-tag.active{background:var(--teal);border-color:var(--teal);color:#fff}
+      .fr-export{font-size:0.72rem;font-weight:700;padding:6px 14px;border-radius:8px;border:1.5px solid var(--mint);background:rgba(2,195,154,0.08);color:var(--mint);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+      .fr-export:hover{background:rgba(2,195,154,0.18)}
+      .fr-count{font-size:0.7rem;color:var(--g400);white-space:nowrap;align-self:center}
+      .fr-wrap{border:1.5px solid var(--g200);border-radius:12px;overflow:hidden;overflow-x:auto}
+      .fr-table{width:100%;border-collapse:collapse;min-width:700px;font-size:0.78rem}
+      .fr-table thead tr{background:var(--g100);border-bottom:2px solid var(--g200)}
+      .fr-table th{padding:10px 12px;text-align:left;font-size:0.67rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--g500);cursor:pointer;white-space:nowrap;user-select:none;transition:color 0.15s}
+      .fr-table th:hover{color:var(--teal)}
+      .fr-table th .sort-arrow{margin-left:4px;opacity:0.3;font-size:0.6rem}
+      .fr-table th.sorted .sort-arrow{opacity:1;color:var(--teal)}
+      .fr-table tbody tr.fr-row{cursor:pointer;border-bottom:1px solid var(--g100);transition:background 0.12s}
+      .fr-table tbody tr.fr-row:hover{background:rgba(2,195,154,0.04)}
+      .fr-table tbody tr.fr-row.expanded{background:rgba(2,195,154,0.06);border-bottom:none}
+      .fr-table td{padding:9px 12px;vertical-align:middle;color:var(--text)}
+      .fr-path{font-size:0.68rem;color:var(--g400);font-family:monospace}
+      .fr-name{font-weight:700;color:var(--deep);font-size:0.8rem}
+      .fr-badge{display:inline-block;font-size:0.58rem;font-weight:800;padding:2px 7px;border-radius:20px;letter-spacing:0.06em;margin:1px 2px 1px 0;text-transform:uppercase}
+      .badge-route{background:rgba(2,128,144,0.12);color:#028090;border:1px solid rgba(2,128,144,0.25)}
+      .badge-agent{background:rgba(139,92,246,0.1);color:#7c3aed;border:1px solid rgba(139,92,246,0.2)}
+      .badge-core{background:rgba(13,51,71,0.1);color:#0D3347;border:1px solid rgba(13,51,71,0.2)}
+      .badge-db{background:rgba(14,165,233,0.1);color:#0284c7;border:1px solid rgba(14,165,233,0.2)}
+      .badge-profit{background:rgba(2,195,154,0.12);color:#059669;border:1px solid rgba(2,195,154,0.25)}
+      .fr-agents{font-size:0.72rem;color:var(--g500);max-width:160px}
+      .fr-profit{font-size:0.7rem;color:var(--g500);max-width:220px;line-height:1.4}
+      .fr-expand-row{background:rgba(2,195,154,0.03) !important;border-bottom:2px solid rgba(2,195,154,0.15) !important}
+      .fr-expand-row td{padding:12px 16px 16px}
+      .fr-expand-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+      .fr-expand-section{background:var(--card);border:1px solid var(--g200);border-radius:8px;padding:12px}
+      .fr-expand-label{font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--g400);margin-bottom:6px}
+      .fr-expand-val{font-size:0.78rem;color:var(--text);line-height:1.5}
+      .fr-expand-profit{background:rgba(2,195,154,0.06);border-color:rgba(2,195,154,0.2)}
+      .fr-expand-profit .fr-expand-label{color:var(--mint)}
+      .fr-row-num{font-size:0.68rem;color:var(--g300);text-align:center;width:32px}
+      .fr-chevron{font-size:0.7rem;color:var(--g300);transition:transform 0.2s;display:inline-block}
+      .fr-row.expanded .fr-chevron{transform:rotate(90deg);color:var(--teal)}
+    </style>
+
+    <div class="fr-bar">
+      <input id="file-search" class="fr-search" oninput="filterFiles()" placeholder="Search files, agents, tags...">
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <button class="fr-tag active" onclick="filterByTag(this,'all')">All</button>
+        <button class="fr-tag" onclick="filterByTag(this,'route')">Routes</button>
+        <button class="fr-tag" onclick="filterByTag(this,'agent')">Agents</button>
+        <button class="fr-tag" onclick="filterByTag(this,'core')">Core</button>
+        <button class="fr-tag" onclick="filterByTag(this,'profit')">Profit</button>
+        <button class="fr-tag" onclick="filterByTag(this,'db')">DB</button>
       </div>
+      <span class="fr-count" id="fr-count"></span>
+      <button class="fr-export" onclick="exportFilesCSV()">⬇ Export CSV</button>
     </div>
-    <div id="file-registry" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px"></div>
+
+    <div class="fr-wrap">
+      <table class="fr-table" id="fr-table">
+        <thead>
+          <tr>
+            <th style="width:32px">#</th>
+            <th onclick="sortFiles('path')" id="fh-path">File Path <span class="sort-arrow">↕</span></th>
+            <th onclick="sortFiles('title')" id="fh-title">Name <span class="sort-arrow">↕</span></th>
+            <th style="width:120px">Tags</th>
+            <th onclick="sortFiles('agents')" id="fh-agents">Agents <span class="sort-arrow">↕</span></th>
+            <th onclick="sortFiles('profit')" id="fh-profit">Revenue Impact <span class="sort-arrow">↕</span></th>
+            <th style="width:28px"></th>
+          </tr>
+        </thead>
+        <tbody id="file-registry"></tbody>
+      </table>
+    </div>
   </div>
 
   <!-- ══ BACKEND ARCHITECTURE ══ -->
