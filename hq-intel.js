@@ -309,69 +309,74 @@ function exportFilesCSV() {
 
 // Init on page load
 
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── USER INTELLIGENCE ───────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
 
-// ▶▶▶ CRM — User Intelligence Table ▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶
+var _uiUsers = [];
+var _uiFilter = 'all';
+var _uiSearch = '';
 
-var _crmUsers = [];
-var _crmFilter = 'all';
-var _crmSearch = '';
-
-function loadCRM() {
-  var wrap = document.getElementById('crm-table-wrap');
-  var cnt  = document.getElementById('crm-count');
-  if (wrap) { wrap.textContent = ''; var ld = el('div'); ld.style.cssText = 'text-align:center;padding:28px;color:#6b7280;font-size:0.82rem'; ld.textContent = 'Loading users...'; wrap.appendChild(ld); }
-
+function loadUserIntel() {
+  var wrap = document.getElementById('ui-table-wrap');
+  if (wrap) { wrap.textContent = ''; var ld = el('div'); ld.style.cssText = 'text-align:center;padding:28px;color:#6b7280;font-size:0.82rem'; ld.textContent = 'Loading users…'; wrap.appendChild(ld); }
   fetch(_IB + '/admin/users-list', { headers: { 'x-carely-secret': _IS } })
     .then(function(r) { return r.json(); })
-    .then(function(d) {
-      _crmUsers = d.users || [];
-      _renderCRM();
-    })
+    .then(function(d) { _uiUsers = d.users || []; _renderUserIntel(); })
     .catch(function() {
-      if (wrap) { wrap.textContent = ''; var er = el('div'); er.style.cssText = 'text-align:center;padding:28px;color:#dc2626;font-size:0.82rem'; er.textContent = 'Failed to load users'; wrap.appendChild(er); }
+      if (wrap) { wrap.textContent = ''; var er = el('div'); er.style.cssText = 'text-align:center;padding:28px;color:#dc2626;font-size:0.82rem'; er.textContent = 'Failed to load — backend may still be deploying'; wrap.appendChild(er); }
     });
 }
 
-function _crmFilterUsers() {
-  var q = _crmSearch.toLowerCase();
-  return _crmUsers.filter(function(u) {
-    var matchFilter = true;
-    var now = Date.now();
-    if (_crmFilter === 'trial') matchFilter = u.plan === 'trial';
-    else if (_crmFilter === 'paid') matchFilter = (u.plan === 'founding' || u.plan === 'monthly' || u.plan === 'annual');
-    else if (_crmFilter === 'inactive') {
-      if (!u.last_active) matchFilter = true;
-      else matchFilter = (now - new Date(u.last_active).getTime()) > 7 * 86400000;
-    } else if (_crmFilter === 'expiring') {
-      matchFilter = u.trial_days_remaining !== null && u.trial_days_remaining <= 3;
-    }
-    if (!matchFilter) return false;
-    if (!q) return true;
-    return ((u.email || '') + (u.first_name || '') + (u.plan || '')).toLowerCase().indexOf(q) >= 0;
-  });
+function setUiFilter(btn, f) {
+  _uiFilter = f;
+  document.querySelectorAll('.ui-filter').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  _renderUserIntel();
 }
 
-function _renderCRM() {
-  var wrap = document.getElementById('crm-table-wrap');
-  var cnt  = document.getElementById('crm-count');
+function uiSearchChange() {
+  _uiSearch = (document.getElementById('ui-search') || {}).value || '';
+  _renderUserIntel();
+}
+
+function _renderUserIntel() {
+  var wrap = document.getElementById('ui-table-wrap');
+  var cnt  = document.getElementById('ui-count');
   if (!wrap) return;
+
+  var now = Date.now();
+  var filtered = _uiUsers.filter(function(u) {
+    var q = _uiSearch.toLowerCase();
+    if (q && (u.first_name + ' ' + u.email).toLowerCase().indexOf(q) < 0) return false;
+    if (_uiFilter === 'trial') return u.plan === 'trial';
+    if (_uiFilter === 'paid') return u.plan !== 'trial' && u.plan !== 'expired';
+    if (_uiFilter === 'inactive') {
+      if (!u.last_active) return true;
+      return (now - new Date(u.last_active).getTime()) > 7*24*3600*1000;
+    }
+    if (_uiFilter === 'expiring') {
+      if (!u.trial_days_remaining) return false;
+      return u.trial_days_remaining <= 3;
+    }
+    if (_uiFilter === 'highadh') return (u.adherence_pct || 0) >= 80;
+    return true;
+  });
+
+  if (cnt) cnt.textContent = filtered.length + ' of ' + _uiUsers.length + ' users';
   wrap.textContent = '';
 
-  var filtered = _crmFilterUsers();
-  if (cnt) cnt.textContent = filtered.length + ' of ' + _crmUsers.length + ' users';
-
   if (filtered.length === 0) {
-    var empty = el('div'); empty.style.cssText = 'text-align:center;padding:28px;color:#6b7280;font-size:0.82rem';
-    empty.textContent = 'No users match this filter';
-    wrap.appendChild(empty);
-    return;
+    var em = el('div'); em.style.cssText = 'text-align:center;padding:40px;color:var(--g500);font-size:0.82rem';
+    em.textContent = _uiUsers.length === 0 ? 'No users yet — they will appear here after launch' : 'No users match this filter';
+    wrap.appendChild(em); return;
   }
 
-  var tbl = el('table'); tbl.className = 'tbl';
+  var tbl = el('table'); tbl.className = 'ui-table';
   var thead = el('thead');
   var htr = el('tr');
-  ['Name', 'Email', 'Plan', 'Trial Ends', 'Medicines', 'Adherence', 'Last Active', 'Elara Memory', 'Actions'].forEach(function(h) {
-    var th = el('th', null, h); htr.appendChild(th);
+  ['Name','Email','Plan','Trial Ends','Medicines','Adherence','Last Active','Elara Memory',''].forEach(function(h){
+    var th = el('th'); th.textContent = h; htr.appendChild(th);
   });
   thead.appendChild(htr); tbl.appendChild(thead);
 
@@ -379,61 +384,38 @@ function _renderCRM() {
   filtered.forEach(function(u) {
     var tr = el('tr');
 
-    // Name
-    var tdName = el('td'); tdName.textContent = u.first_name || '—'; tr.appendChild(tdName);
+    var tdN = el('td'); tdN.textContent = u.first_name || '—'; tr.appendChild(tdN);
+    var tdE = el('td'); tdE.style.fontSize = '0.72rem'; tdE.style.color = 'var(--g500)'; tdE.textContent = u.email || '—'; tr.appendChild(tdE);
 
-    // Email
-    var tdEmail = el('td'); tdEmail.style.cssText = 'font-size:0.74rem;color:#6b7280'; tdEmail.textContent = u.email || '—'; tr.appendChild(tdEmail);
+    var tdP = el('td');
+    var badge = el('span'); badge.className = 'ui-plan ui-plan-'+(u.plan||'trial');
+    badge.textContent = (u.plan||'trial').toUpperCase(); tdP.appendChild(badge); tr.appendChild(tdP);
 
-    // Plan pill
-    var tdPlan = el('td');
-    var planColors = { founding: '#d97706', monthly: '#2563EB', annual: '#16a34a', trial: '#7C3AED', cancelled: '#dc2626' };
-    var pill = el('span'); pill.className = 'pill';
-    pill.style.cssText = 'background:' + (planColors[u.plan] || '#6b7280') + '22;color:' + (planColors[u.plan] || '#6b7280');
-    pill.textContent = (u.plan || 'unknown').toUpperCase();
-    tdPlan.appendChild(pill); tr.appendChild(tdPlan);
+    var tdT = el('td');
+    if (u.trial_days_remaining != null) {
+      tdT.textContent = u.trial_days_remaining + 'd';
+      if (u.trial_days_remaining <= 3) tdT.style.color = '#dc2626';
+    } else { tdT.textContent = '—'; }
+    tr.appendChild(tdT);
 
-    // Trial ends
-    var tdTrial = el('td'); tdTrial.style.cssText = 'font-size:0.74rem';
-    if (u.trial_ends_at) {
-      var daysLeft = u.trial_days_remaining;
-      tdTrial.textContent = u.trial_ends_at.slice(0, 10);
-      if (daysLeft !== null && daysLeft <= 3) { tdTrial.style.color = '#dc2626'; tdTrial.textContent += ' (' + daysLeft + 'd)'; }
-    } else { tdTrial.textContent = '—'; tdTrial.style.color = '#9ca3af'; }
-    tr.appendChild(tdTrial);
+    var tdM = el('td'); tdM.textContent = u.medicine_count || 0; tr.appendChild(tdM);
 
-    // Medicine count
-    var tdMeds = el('td', null, String(u.medicine_count || 0)); tr.appendChild(tdMeds);
+    var tdA = el('td');
+    var adh = u.adherence_pct != null ? Math.round(u.adherence_pct) : null;
+    tdA.textContent = adh != null ? adh + '%' : '—';
+    if (adh != null) tdA.className = adh >= 80 ? 'ui-adh-high' : adh >= 50 ? 'ui-adh-mid' : 'ui-adh-low';
+    tr.appendChild(tdA);
 
-    // Adherence
-    var tdAdh = el('td');
-    if (u.adherence_pct !== null && u.adherence_pct !== undefined) {
-      var adh = el('span'); adh.textContent = u.adherence_pct + '%';
-      adh.style.color = u.adherence_pct >= 80 ? '#16a34a' : u.adherence_pct >= 50 ? '#d97706' : '#dc2626';
-      adh.style.fontWeight = '700';
-      tdAdh.appendChild(adh);
-    } else { tdAdh.textContent = '—'; tdAdh.style.color = '#9ca3af'; }
-    tr.appendChild(tdAdh);
+    var tdL = el('td'); tdL.style.fontSize = '0.72rem';
+    tdL.textContent = u.last_active ? new Date(u.last_active).toLocaleDateString() : 'Never';
+    tr.appendChild(tdL);
 
-    // Last active
-    var tdLast = el('td'); tdLast.style.cssText = 'font-size:0.74rem;color:#6b7280';
-    if (u.last_active) {
-      var dAgo = Math.floor((Date.now() - new Date(u.last_active).getTime()) / 86400000);
-      tdLast.textContent = dAgo === 0 ? 'Today' : dAgo === 1 ? 'Yesterday' : dAgo + 'd ago';
-      if (dAgo >= 7) tdLast.style.color = '#dc2626';
-    } else { tdLast.textContent = 'Never'; tdLast.style.color = '#dc2626'; }
-    tr.appendChild(tdLast);
+    var tdMem = el('td'); tdMem.textContent = u.elara_memory_depth || 0; tr.appendChild(tdMem);
 
-    // Elara memory depth
-    var tdElara = el('td', null, String(u.elara_memory_depth || 0)); tr.appendChild(tdElara);
-
-    // Actions
-    var tdAct = el('td');
-    var msgBtn = el('button'); msgBtn.style.cssText = 'font-size:0.71rem;padding:3px 9px;border-radius:6px;border:1px solid var(--g300);background:white;cursor:pointer;color:var(--deep)';
-    msgBtn.textContent = 'Message';
-    var uName = u.first_name || u.email || 'user';
-    msgBtn.setAttribute('onclick', 'alert("Targeting ' + uName.replace(/'/g, '') + ' via Hermes")');
-    tdAct.appendChild(msgBtn); tr.appendChild(tdAct);
+    var tdBtn = el('td');
+    var btn = el('button'); btn.className = 'ui-target-btn'; btn.textContent = 'Target';
+    btn.setAttribute('onclick', 'uiTargetUser("'+encodeURIComponent(JSON.stringify({name:u.first_name,email:u.email,plan:u.plan}))+'")');
+    tdBtn.appendChild(btn); tr.appendChild(tdBtn);
 
     tbody.appendChild(tr);
   });
@@ -441,60 +423,23 @@ function _renderCRM() {
   wrap.appendChild(tbl);
 }
 
-function crmSetFilter(btn, filter) {
-  _crmFilter = filter;
-  document.querySelectorAll('.crm-filter-btn').forEach(function(b) { b.classList.remove('active'); });
-  if (btn) btn.classList.add('active');
-  _renderCRM();
+function uiTargetUser(encoded) {
+  var u = JSON.parse(decodeURIComponent(encoded));
+  alert('Hermes targeting: ' + (u.name||u.email) + ' (' + u.plan + ')\nTelegram brief will be sent to TJ + Prabh.');
 }
 
-function crmSearch(val) {
-  _crmSearch = val || '';
-  _renderCRM();
-}
-
-function exportCRMcsv() {
-  var filtered = _crmFilterUsers();
-  var cols = ['id', 'email', 'first_name', 'plan', 'trial_ends_at', 'trial_days_remaining', 'medicine_count', 'total_dose_logs', 'adherence_pct', 'last_active', 'elara_memory_depth'];
-  var rows = [cols];
-  filtered.forEach(function(u) {
-    rows.push(cols.map(function(c) {
-      var v = u[c];
-      if (v === null || v === undefined) return '';
-      var s = String(v);
-      return s.indexOf(',') >= 0 || s.indexOf('"') >= 0 ? '"' + s.replace(/"/g, '""') + '"' : s;
-    }));
+function exportUserIntelCSV() {
+  var rows = [['Name','Email','Plan','Trial Days Left','Medicines','Adherence %','Last Active','Elara Memory']];
+  _uiUsers.forEach(function(u) {
+    rows.push([u.first_name||'',u.email||'',u.plan||'',u.trial_days_remaining||'',
+               u.medicine_count||0, u.adherence_pct!=null?Math.round(u.adherence_pct)+'%':'',
+               u.last_active||'',u.elara_memory_depth||0]);
   });
-  var csv = rows.map(function(r) { return r.join(','); }).join('\r\n');
-  var blob = new Blob([csv], { type: 'text/csv' });
+  var csv = rows.map(function(r){ return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(','); }).join('\r\n');
+  var blob = new Blob([csv],{type:'text/csv'});
   var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = 'carely-users-' + new Date().toISOString().slice(0, 10) + '.csv';
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-// ▶▶▶ Investor Metrics ▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶
-
-function loadInvestorMetrics() {
-  fetch(_IB + '/admin/investor-metrics', { headers: { 'x-carely-secret': _IS } })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      txt('inv-total-users',    d.total_users   || 0);
-      txt('inv-paid-users',     d.paid_users    || 0);
-      txt('inv-trial-users',    d.trial_users   || 0);
-      txt('inv-mau',            d.mau           || 0);
-      txt('inv-dau',            d.dau           || 0);
-      txt('inv-dau-mau',        (d.dau_mau_ratio || 0) + '%');
-      txt('inv-avg-adherence',  (d.avg_adherence || 0) + '%');
-      txt('inv-dose-logs',      d.total_dose_logs || 0);
-      txt('inv-medicines',      d.medicines_tracked || 0);
-      txt('inv-avg-meds',       d.avg_medicines_per_user || '—');
-    })
-    .catch(function() {
-      ['inv-total-users','inv-paid-users','inv-trial-users','inv-mau','inv-dau','inv-dau-mau','inv-avg-adherence','inv-dose-logs','inv-medicines','inv-avg-meds'].forEach(function(id) { txt(id, '—'); });
-    });
+  var a = document.createElement('a'); a.href=url; a.download='carely-users-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click(); URL.revokeObjectURL(url);
 }
 
 
