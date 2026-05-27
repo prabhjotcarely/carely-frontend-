@@ -1506,109 +1506,51 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ CRM ══ -->
   <div class="page" id="page-crm">
-    <div class="ph"><h1>👤 CRM</h1><p>Consumer users + B2B pipeline · All contacts · Live from backend</p></div>
+    <div class="ph"><h1>👤 CRM — User Intelligence</h1><p>Every user · real metrics · filter and target</p></div>
 
-    <!-- CRM Tab switcher -->
-    <div class="tabs" style="margin-bottom:16px;">
-      <div class="tab active" onclick="crmTab('users',this)">Consumer Users</div>
-      <div class="tab" onclick="crmTab('b2b',this)">B2B Pipeline</div>
-      <div class="tab" onclick="crmTab('cole',this)">Cole Outreach</div>
-      <div class="tab" onclick="crmTab('stats',this)">Pipeline Stats</div>
+    <style>
+      .crm-bar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+      .crm-search{font-size:0.8rem;padding:6px 12px;border:1.5px solid var(--g300);border-radius:8px;flex:1;min-width:180px;outline:none;color:var(--text);transition:border-color 0.2s}
+      .crm-search:focus{border-color:var(--teal)}
+      .crm-filter{font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:20px;border:1.5px solid var(--g300);background:transparent;cursor:pointer;color:var(--g500);transition:all 0.15s}
+      .crm-filter.active{background:var(--teal);border-color:var(--teal);color:#fff}
+      .crm-export{font-size:0.72rem;font-weight:700;padding:6px 14px;border-radius:8px;border:1.5px solid var(--mint);background:rgba(2,195,154,0.08);color:var(--mint);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+      .crm-export:hover{background:rgba(2,195,154,0.18)}
+      .crm-count{font-size:0.7rem;color:var(--g500);white-space:nowrap;align-self:center}
+      .crm-wrap{border:1.5px solid var(--g200);border-radius:12px;overflow:hidden;overflow-x:auto}
+      .crm-table{width:100%;border-collapse:collapse;min-width:900px;font-size:0.78rem}
+      .crm-table thead tr{background:var(--g100);border-bottom:2px solid var(--g200)}
+      .crm-table th{padding:10px 12px;text-align:left;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--g500);white-space:nowrap}
+      .crm-table td{padding:9px 12px;vertical-align:middle;border-bottom:1px solid var(--g100);color:var(--text);font-size:0.78rem}
+      .crm-table tbody tr:hover{background:rgba(2,195,154,0.04)}
+      .crm-plan{display:inline-block;font-size:0.6rem;font-weight:800;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em}
+      .plan-founding{background:rgba(251,191,36,0.15);color:#b45309;border:1px solid rgba(251,191,36,0.4)}
+      .plan-monthly{background:rgba(2,128,144,0.12);color:#028090;border:1px solid rgba(2,128,144,0.3)}
+      .plan-annual{background:rgba(2,195,154,0.12);color:#059669;border:1px solid rgba(2,195,154,0.3)}
+      .plan-trial{background:rgba(139,92,246,0.1);color:#7c3aed;border:1px solid rgba(139,92,246,0.25)}
+      .plan-expired{background:rgba(220,38,38,0.1);color:#dc2626;border:1px solid rgba(220,38,38,0.25)}
+      .crm-adh{font-weight:700}
+      .crm-adh.high{color:#059669}.crm-adh.mid{color:#d97706}.crm-adh.low{color:#dc2626}
+      .crm-msg-btn{font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:6px;border:1.5px solid var(--teal);background:transparent;color:var(--teal);cursor:pointer;transition:all 0.15s}
+      .crm-msg-btn:hover{background:var(--teal);color:white}
+      .crm-empty{text-align:center;padding:40px;color:var(--g500);font-size:0.82rem}
+    </style>
+
+    <div class="crm-bar">
+      <input id="crm-search" class="crm-search" oninput="crmSearchChange()" placeholder="Search name, email, plan...">
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <button class="crm-filter active" onclick="setCrmFilter(this,'all')">All</button>
+        <button class="crm-filter" onclick="setCrmFilter(this,'trial')">Trial</button>
+        <button class="crm-filter" onclick="setCrmFilter(this,'paid')">Paid</button>
+        <button class="crm-filter" onclick="setCrmFilter(this,'inactive')">Inactive 7d</button>
+        <button class="crm-filter" onclick="setCrmFilter(this,'expiring')">Expiring Soon</button>
+      </div>
+      <span class="crm-count" id="crm-count"></span>
+      <button class="crm-export" onclick="exportCRMcsv()">&#x2B07; Export CSV</button>
     </div>
-
-    <!-- Consumer Users tab -->
-    <div id="crm-pane-users">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-        <select id="crm-filter" onchange="loadCRM()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
-          <option value="">All users</option>
-          <option value="founding">Founding</option>
-          <option value="monthly">Monthly</option>
-          <option value="annual">Annual</option>
-          <option value="trial">Trial</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
-        <div style="font-size:0.8rem;color:var(--g500)" id="crm-count">Loading...</div>
-        <button onclick="loadCRM()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
-      </div>
-      <div class="card" style="overflow-x:auto">
-        <div id="crm-table-wrap">
-          <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading users...</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- B2B Pipeline tab -->
-    <div id="crm-pane-b2b" style="display:none;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-        <select id="b2b-status-filter" onchange="loadB2BPipeline()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
-          <option value="">All stages</option>
-          <option value="pending">Prospecting</option>
-          <option value="sent">Contacted</option>
-          <option value="opened">Opened Email</option>
-          <option value="clicked">Clicked Link</option>
-          <option value="replied">Replied</option>
-          <option value="converted">Won</option>
-          <option value="unsubscribed">Unsubscribed</option>
-        </select>
-        <select id="b2b-type-filter" onchange="loadB2BPipeline()" style="font-size:0.8rem;padding:5px 10px;border:1px solid var(--g300);border-radius:6px;background:white;color:var(--text)">
-          <option value="">All types</option>
-          <option value="senior_living">Senior Living</option>
-          <option value="pharmacy">Pharmacy</option>
-          <option value="clinic">Clinic</option>
-          <option value="caregiver_org">Caregiver Org</option>
-          <option value="home_care">Home Care</option>
-        </select>
-        <div style="font-size:0.8rem;color:var(--g500)" id="b2b-count">Loading...</div>
-        <button onclick="loadB2BPipeline()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
-      </div>
-
-      <!-- Pipeline stage summary -->
-      <div class="metric-row" id="b2b-stage-summary" style="margin-bottom:16px;"></div>
-
-      <div class="card" style="overflow-x:auto;">
-        <div id="b2b-table-wrap">
-          <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem;">Loading B2B pipeline...</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Cole Outreach tab -->
-    <div id="crm-pane-cole" style="display:none;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-        <div style="font-size:0.82rem;font-weight:700;color:var(--deep)" id="cole-count">Loading Cole activity...</div>
-        <button onclick="loadColeOutreach()" style="font-size:0.73rem;border:1px solid var(--g300);padding:3px 10px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
-      </div>
-      <div class="metric-row">
-        <div class="metric"><div class="metric-label">Emails Sent</div><div class="metric-val teal" id="cole-sent-count">—</div><div class="metric-sub">B2B outreach</div></div>
-        <div class="metric"><div class="metric-label">Replies Received</div><div class="metric-val green" id="cole-reply-count">—</div><div class="metric-sub">Positive signals</div></div>
-        <div class="metric"><div class="metric-label">Reply Rate</div><div class="metric-val" id="cole-reply-rate">—</div><div class="metric-sub">Industry avg: 3–8%</div></div>
-        <div class="metric"><div class="metric-label">Pending Approval</div><div class="metric-val amber" id="cole-pending-count">—</div><div class="metric-sub">Awaiting TJ sign-off</div></div>
-      </div>
-      <div class="card" style="overflow-x:auto">
-        <div class="card-title">📧 Cole Email Outreach Log</div>
-        <div id="cole-outreach-wrap">
-          <div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading outreach log...</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Pipeline Stats tab -->
-    <div id="crm-pane-stats" style="display:none;">
-      <div class="metric-row" id="b2b-stats-row"></div>
-      <div class="cols" style="margin-top:16px;">
-        <div class="card">
-          <div class="card-title">Top Performing Segments</div>
-          <div id="b2b-segment-breakdown" style="display:flex;flex-direction:column;gap:8px;"></div>
-        </div>
-        <div class="card">
-          <div class="card-title">Cole + Hermes Activity (Last 7 Days)</div>
-          <div id="b2b-cole-activity" style="display:flex;flex-direction:column;gap:8px;"></div>
-        </div>
-      </div>
-    </div>
+    <div class="crm-wrap"><div id="crm-table-wrap"></div></div>
   </div>
 
-  <!-- ══ AFFILIATES ══ -->
   <div class="page" id="page-affiliates">
     <div class="ph" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px">
       <div><h1>💰 Affiliates</h1><p>Active affiliates · Pending payouts · Conversion earnings</p></div>
@@ -2673,6 +2615,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- ══ V12: CEO WEEKLY REVIEW ══ -->
   <div class="page" id="page-ceo-review">
     <div class="ph"><h1>🧠 CEO Weekly Review</h1><p>V12 War Room · Hermes reads Scout + Axel + Conversion every Monday 7AM PST and writes the business review</p></div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px" id="inv-metrics-grid">
+      <div style="background:white;border:1.5px solid var(--g200);border-radius:10px;padding:14px 16px">
+        <div style="font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--g500);margin-bottom:6px">Total Users</div>
+        <div style="font-size:1.6rem;font-weight:900;color:var(--deep)" id="inv-total-users">&#x2014;</div>
+      </div>
+      <div style="background:white;border:1.5px solid var(--g200);border-radius:10px;padding:14px 16px">
+        <div style="font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--g500);margin-bottom:6px">Paid Users</div>
+        <div style="font-size:1.6rem;font-weight:900;color:#059669" id="inv-paid-users">&#x2014;</div>
+      </div>
+      <div style="background:white;border:1.5px solid var(--g200);border-radius:10px;padding:14px 16px">
+        <div style="font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--g500);margin-bottom:6px">DAU / MAU</div>
+        <div style="font-size:1.6rem;font-weight:900;color:var(--teal)" id="inv-dau-mau">&#x2014;</div>
+      </div>
+      <div style="background:white;border:1.5px solid var(--g200);border-radius:10px;padding:14px 16px">
+        <div style="font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--g500);margin-bottom:6px">Avg Adherence</div>
+        <div style="font-size:1.6rem;font-weight:900;color:#02C39A" id="inv-adherence">&#x2014;</div>
+      </div>
+      <div style="background:white;border:1.5px solid var(--g200);border-radius:10px;padding:14px 16px">
+        <div style="font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--g500);margin-bottom:6px">Dose Logs</div>
+        <div style="font-size:1.6rem;font-weight:900;color:var(--deep)" id="inv-dose-logs">&#x2014;</div>
+      </div>
+      <div style="background:white;border:1.5px solid var(--g200);border-radius:10px;padding:14px 16px">
+        <div style="font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--g500);margin-bottom:6px">Medicines Tracked</div>
+        <div style="font-size:1.6rem;font-weight:900;color:var(--deep)" id="inv-medicines">&#x2014;</div>
+      </div>
+    </div>
+
     <div class="metric-row">
       <div class="metric"><div class="metric-label">Runs</div><div class="metric-val teal">Mon 7AM PST</div><div class="metric-sub">Weekly cadence</div></div>
       <div class="metric"><div class="metric-label">Sources</div><div class="metric-val">3 streams</div><div class="metric-sub">Scout + Axel + Conversion</div></div>
@@ -7610,6 +7580,6 @@ function downloadCohortCSV() {
   URL.revokeObjectURL(url);
 }
 </script>
-<script src="hq-intel.js?v=20260527a"></script>
+<script src="hq-intel.js?v=20260527b"></script>
 </body>
 </html>
