@@ -443,5 +443,110 @@ function exportUserIntelCSV() {
 }
 
 
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── HEALTH INSIGHTS ─────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+
+function loadHealthInsights() {
+  fetch(_IB + '/admin/health-insights', { headers: { 'x-carely-secret': _IS } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      txt('hi-adherence', d.overall_adherence_pct != null ? d.overall_adherence_pct + '%' : '0%');
+      txt('hi-total-logs', d.dose_response_breakdown ? d.dose_response_breakdown.total : 0);
+      txt('hi-medicines', d.total_medicines || 0);
+      txt('hi-vitals', d.total_vitals_logged || 0);
+
+      // Dose breakdown bars
+      var db = d.dose_response_breakdown || {};
+      var dbCont = document.getElementById('hi-dose-breakdown');
+      if (dbCont) {
+        dbCont.textContent = '';
+        var total = db.total || 1;
+        var entries = [
+          { label: 'Taken on time', count: db.taken||0, color: '#02C39A' },
+          { label: 'Snoozed',       count: db.snoozed||0, color: '#d97706' },
+          { label: 'Skipped',       count: db.skipped||0, color: '#f97316' },
+          { label: 'Missed',        count: db.missed||0,  color: '#dc2626' },
+        ];
+        entries.forEach(function(e) {
+          var row = el('div'); row.className = 'hi-bar-row';
+          var top = el('div'); top.className = 'hi-bar-top';
+          var lbl = el('span'); lbl.className = 'hi-bar-label'; lbl.textContent = e.label;
+          var cnt = el('span'); cnt.className = 'hi-bar-count'; cnt.textContent = e.count;
+          top.appendChild(lbl); top.appendChild(cnt); row.appendChild(top);
+          var track = el('div'); track.className = 'hi-track';
+          var fill  = el('div'); fill.className  = 'hi-fill';
+          fill.style.cssText = 'width:' + Math.round((e.count/total)*100) + '%;background:' + e.color;
+          track.appendChild(fill); row.appendChild(track); dbCont.appendChild(row);
+        });
+      }
+
+      // Dose types
+      var dtCont = document.getElementById('hi-dose-types');
+      if (dtCont && d.dose_type_breakdown) {
+        dtCont.textContent = '';
+        var types = d.dose_type_breakdown;
+        var maxT = Math.max(1, Math.max.apply(null, Object.values(types).map(Number)));
+        Object.keys(types).forEach(function(k) {
+          var v = Number(types[k]);
+          var row = el('div'); row.className = 'hi-bar-row';
+          var top = el('div'); top.className = 'hi-bar-top';
+          var lbl = el('span'); lbl.className = 'hi-bar-label'; lbl.textContent = k || 'other';
+          var cnt = el('span'); cnt.className = 'hi-bar-count'; cnt.textContent = v;
+          top.appendChild(lbl); top.appendChild(cnt); row.appendChild(top);
+          var track = el('div'); track.className = 'hi-track';
+          var fill  = el('div'); fill.className  = 'hi-fill';
+          fill.style.cssText = 'width:' + Math.round((v/maxT)*100) + '%;background:#028090';
+          track.appendChild(fill); row.appendChild(track); dtCont.appendChild(row);
+        });
+        if (!Object.keys(types).length) { var em = el('div'); em.style.cssText='padding:12px;color:var(--g500);font-size:0.78rem'; em.textContent='No data yet'; dtCont.appendChild(em); }
+      }
+
+      // Plan distribution
+      var pdCont = document.getElementById('hi-plan-dist');
+      if (pdCont && d.plan_breakdown) {
+        pdCont.textContent = '';
+        var plans = d.plan_breakdown;
+        var maxP = Math.max(1, Math.max.apply(null, Object.values(plans).map(Number)));
+        var colors = { trial:'#7c3aed', founding:'#b45309', monthly:'#028090', annual:'#059669' };
+        Object.keys(plans).forEach(function(k) {
+          var v = Number(plans[k]);
+          var row = el('div'); row.className = 'hi-bar-row';
+          var top = el('div'); top.className = 'hi-bar-top';
+          var lbl = el('span'); lbl.className = 'hi-bar-label'; lbl.textContent = k;
+          var cnt = el('span'); cnt.className = 'hi-bar-count'; cnt.textContent = v + ' users';
+          top.appendChild(lbl); top.appendChild(cnt); row.appendChild(top);
+          var track = el('div'); track.className = 'hi-track';
+          var fill  = el('div'); fill.className  = 'hi-fill';
+          fill.style.cssText = 'width:' + Math.round((v/maxP)*100) + '%;background:'+(colors[k]||'#6b7280');
+          track.appendChild(fill); row.appendChild(track); pdCont.appendChild(row);
+        });
+      }
+
+      // Weekly signups
+      var wsCont = document.getElementById('hi-signup-trend');
+      if (wsCont && d.weekly_signups) {
+        wsCont.textContent = '';
+        var weeks = d.weekly_signups;
+        var maxW = Math.max(1, Math.max.apply(null, weeks.map(function(w){ return w.count; })));
+        weeks.forEach(function(w) {
+          var row = el('div'); row.className = 'hi-bar-row';
+          var top = el('div'); top.className = 'hi-bar-top';
+          var lbl = el('span'); lbl.className = 'hi-bar-label'; lbl.textContent = w.week;
+          var cnt = el('span'); cnt.className = 'hi-bar-count'; cnt.textContent = w.count;
+          top.appendChild(lbl); top.appendChild(cnt); row.appendChild(top);
+          var track = el('div'); track.className = 'hi-track';
+          var fill  = el('div'); fill.className  = 'hi-fill';
+          fill.style.cssText = 'width:' + Math.round((w.count/maxW)*100) + '%;background:#02C39A';
+          track.appendChild(fill); row.appendChild(track); wsCont.appendChild(row);
+        });
+      }
+    })
+    .catch(function() {
+      ['hi-adherence','hi-total-logs','hi-medicines','hi-vitals'].forEach(function(id){ txt(id,'—'); });
+    });
+}
+
+
 // Init
 filterFiles();
