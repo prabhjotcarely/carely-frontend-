@@ -118,7 +118,7 @@ function loadConditionSummary() {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// ─── FILE REGISTRY — TABLE VIEW ──────────────────────────────────────────────
+// ─── FILE REGISTRY — CARD GRID ───────────────────────────────────────────────
 // ══════════════════════════════════════════════════════════════════════════════
 
 var FILES = [
@@ -160,9 +160,6 @@ var FILES = [
 ];
 
 var _filesFiltered = FILES.slice();
-var _filesSortCol  = '';
-var _filesSortAsc  = true;
-var _filesExpanded = {};
 var _filesTagFilter = 'all';
 
 function filterFiles() {
@@ -174,7 +171,6 @@ function filterFiles() {
     if (!q) return true;
     return (f.path+f.title+f.desc+f.agents+f.profit+f.tags.join(' ')).toLowerCase().indexOf(q) >= 0;
   });
-  if (_filesSortCol) _applySortFiles();
   _renderFiles();
 }
 
@@ -185,127 +181,117 @@ function filterByTag(btn, tag) {
   filterFiles();
 }
 
-function sortFiles(col) {
-  if (_filesSortCol === col) { _filesSortAsc = !_filesSortAsc; }
-  else { _filesSortCol = col; _filesSortAsc = true; }
-  document.querySelectorAll('.fr-table th').forEach(function(th){ th.classList.remove('sorted'); });
-  var hdr = document.getElementById('fh-'+col);
-  if (hdr) {
-    hdr.classList.add('sorted');
-    hdr.querySelector('.sort-arrow').textContent = _filesSortAsc ? '↑' : '↓';
-  }
-  _applySortFiles();
-  _renderFiles();
-}
-
-function _applySortFiles() {
-  var col = _filesSortCol;
-  _filesFiltered.sort(function(a,b){
-    var av = (a[col]||'').toString().toLowerCase();
-    var bv = (b[col]||'').toString().toLowerCase();
-    if (av < bv) return _filesSortAsc ? -1 : 1;
-    if (av > bv) return _filesSortAsc ?  1 :-1;
-    return 0;
-  });
-}
-
 function _makeTagBadge(tag) {
   var s = el('span'); s.className = 'fr-badge badge-'+tag; s.textContent = tag.toUpperCase();
   return s;
 }
 
-function toggleFileRow(idx) {
-  _filesExpanded[idx] = !_filesExpanded[idx];
-  _renderFiles();
-}
-
 function _renderFiles() {
-  var tbody = document.getElementById('file-registry');
+  var grid = document.getElementById('file-registry');
   var count = document.getElementById('fr-count');
-  if (!tbody) return;
-  tbody.textContent = '';
+  if (!grid) return;
+  grid.textContent = '';
   if (count) count.textContent = _filesFiltered.length + ' of ' + FILES.length + ' files';
 
-  _filesFiltered.forEach(function(f, i) {
+  _filesFiltered.forEach(function(f) {
     var origIdx = FILES.indexOf(f);
-    var expanded = !!_filesExpanded[origIdx];
+    var card = el('div');
+    card.className = 'file-card';
+    card.setAttribute('onclick', 'openFileDetail('+origIdx+')');
 
-    // Main row
-    var tr = el('tr');
-    tr.className = 'fr-row' + (expanded ? ' expanded' : '');
-    tr.setAttribute('onclick', 'toggleFileRow('+origIdx+')');
+    var pathDiv = el('div'); pathDiv.className = 'fc-path'; pathDiv.textContent = f.path;
+    card.appendChild(pathDiv);
 
-    var tdNum = el('td'); tdNum.className = 'fr-row-num'; tdNum.textContent = i+1;
-    tr.appendChild(tdNum);
+    var titleDiv = el('div'); titleDiv.className = 'fc-title'; titleDiv.textContent = f.title;
+    card.appendChild(titleDiv);
 
-    var tdPath = el('td');
-    var pathSpan = el('span'); pathSpan.className = 'fr-path'; pathSpan.textContent = f.path;
-    tdPath.appendChild(pathSpan);
-    tr.appendChild(tdPath);
+    var descDiv = el('div'); descDiv.className = 'fc-desc'; descDiv.textContent = f.desc;
+    card.appendChild(descDiv);
 
-    var tdName = el('td');
-    var nameSpan = el('span'); nameSpan.className = 'fr-name'; nameSpan.textContent = f.title;
-    tdName.appendChild(nameSpan);
-    tr.appendChild(tdName);
+    var footer = el('div'); footer.className = 'fc-footer';
+    f.tags.forEach(function(t){ footer.appendChild(_makeTagBadge(t)); });
+    var arrow = el('span'); arrow.className = 'fc-arrow'; arrow.textContent = 'View details →';
+    footer.appendChild(arrow);
+    card.appendChild(footer);
 
-    var tdTags = el('td');
-    f.tags.forEach(function(t){ tdTags.appendChild(_makeTagBadge(t)); });
-    tr.appendChild(tdTags);
-
-    var tdAgents = el('td'); tdAgents.className = 'fr-agents'; tdAgents.textContent = f.agents;
-    tr.appendChild(tdAgents);
-
-    var tdProfit = el('td'); tdProfit.className = 'fr-profit'; tdProfit.textContent = f.profit;
-    tr.appendChild(tdProfit);
-
-    var tdChev = el('td');
-    var chev = el('span'); chev.className = 'fr-chevron'; chev.textContent = '›';
-    tdChev.appendChild(chev);
-    tr.appendChild(tdChev);
-
-    tbody.appendChild(tr);
-
-    // Expanded detail row
-    if (expanded) {
-      var trExp = el('tr'); trExp.className = 'fr-expand-row';
-      var tdExp = el('td'); tdExp.setAttribute('colspan', '7');
-
-      var grid = el('div'); grid.className = 'fr-expand-grid';
-
-      var s1 = el('div'); s1.className = 'fr-expand-section';
-      var l1 = el('div'); l1.className = 'fr-expand-label'; l1.textContent = 'Description';
-      var v1 = el('div'); v1.className = 'fr-expand-val';   v1.textContent = f.desc;
-      s1.appendChild(l1); s1.appendChild(v1); grid.appendChild(s1);
-
-      var s2 = el('div'); s2.className = 'fr-expand-section';
-      var l2 = el('div'); l2.className = 'fr-expand-label'; l2.textContent = 'Agents Using This File';
-      var v2 = el('div'); v2.className = 'fr-expand-val';   v2.textContent = f.agents;
-      s2.appendChild(l2); s2.appendChild(v2); grid.appendChild(s2);
-
-      var s3 = el('div'); s3.className = 'fr-expand-section fr-expand-profit';
-      var l3 = el('div'); l3.className = 'fr-expand-label'; l3.textContent = 'Revenue Impact';
-      var v3 = el('div'); v3.className = 'fr-expand-val';   v3.textContent = f.profit;
-      s3.appendChild(l3); s3.appendChild(v3); grid.appendChild(s3);
-
-      tdExp.appendChild(grid);
-      trExp.appendChild(tdExp);
-      tbody.appendChild(trExp);
-    }
+    grid.appendChild(card);
   });
 }
 
-// ─── Export File Registry as CSV ──────────────────────────────────────────────
+function openFileDetail(idx) {
+  var f = FILES[idx];
+  if (!f) return;
+  var cont = document.getElementById('fd-content');
+  if (!cont) return;
+  cont.textContent = '';
+
+  var hdr = el('div');
+  var nameDiv = el('div'); nameDiv.className = 'fd-name'; nameDiv.textContent = f.title;
+  var pathChip = el('div'); pathChip.className = 'fd-path-chip'; pathChip.textContent = f.path;
+  hdr.appendChild(nameDiv);
+  hdr.appendChild(pathChip);
+
+  var tagsRow = el('div'); tagsRow.className = 'fd-tags';
+  f.tags.forEach(function(t){ tagsRow.appendChild(_makeTagBadge(t)); });
+  hdr.appendChild(tagsRow);
+  cont.appendChild(hdr);
+
+  var tbl = el('table'); tbl.className = 'fd-table';
+  var rows = [
+    ['What this file does', f.desc],
+    ['Agents using it', f.agents],
+    ['Revenue impact', f.profit],
+    ['File path', f.path]
+  ];
+  rows.forEach(function(pair) {
+    var tr = el('tr');
+    var tdL = el('td'); tdL.textContent = pair[0];
+    var tdR = el('td'); tdR.textContent = pair[1];
+    tr.appendChild(tdL); tr.appendChild(tdR);
+    tbl.appendChild(tr);
+  });
+  cont.appendChild(tbl);
+
+  var exportWrap = el('div'); exportWrap.style.cssText = 'margin-top:20px';
+  var exportBtn = el('button'); exportBtn.className = 'fd-export-btn';
+  exportBtn.textContent = '⬇ Export This File as CSV';
+  exportBtn.setAttribute('onclick', 'exportSingleFileCSV('+idx+')');
+  exportWrap.appendChild(exportBtn);
+  cont.appendChild(exportWrap);
+
+  _activatePage('file-detail', false);
+}
+
+function exportSingleFileCSV(idx) {
+  var f = FILES[idx];
+  if (!f) return;
+  var rows = [
+    ['Field','Value'],
+    ['File Path', f.path],
+    ['Name', f.title],
+    ['Tags', f.tags.join(', ')],
+    ['Agents Using It', f.agents],
+    ['Revenue Impact', f.profit],
+    ['Description', f.desc]
+  ];
+  var csv = rows.map(function(r){
+    return r.map(function(cell){
+      var s = (cell||'').toString().replace(/"/g,'""');
+      return '"'+s+'"';
+    }).join(',');
+  }).join('\r\n');
+  var blob = new Blob([csv], {type:'text/csv'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'carely-'+f.path.replace(/\//g,'-').replace(/\.ts$/,'')+'.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function exportFilesCSV() {
   var rows = [['Path','Name','Tags','Agents','Revenue Impact','Description']];
   _filesFiltered.forEach(function(f) {
-    rows.push([
-      f.path,
-      f.title,
-      f.tags.join(', '),
-      f.agents,
-      f.profit,
-      f.desc
-    ]);
+    rows.push([f.path, f.title, f.tags.join(', '), f.agents, f.profit, f.desc]);
   });
   var csv = rows.map(function(r){
     return r.map(function(cell){
@@ -316,8 +302,7 @@ function exportFilesCSV() {
   var blob = new Blob([csv], {type:'text/csv'});
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
-  a.href = url;
-  a.download = 'carely-file-registry-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.href = url; a.download = 'carely-file-registry-'+new Date().toISOString().slice(0,10)+'.csv';
   a.click();
   URL.revokeObjectURL(url);
 }
