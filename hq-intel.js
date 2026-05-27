@@ -412,10 +412,13 @@ function _renderUserIntel() {
 
     var tdMem = el('td'); tdMem.textContent = u.elara_memory_depth || 0; tr.appendChild(tdMem);
 
-    var tdBtn = el('td');
+    var tdBtn = el('td'); tdBtn.style.whiteSpace = 'nowrap';
     var btn = el('button'); btn.className = 'ui-target-btn'; btn.textContent = 'Target';
     btn.setAttribute('onclick', 'uiTargetUser("'+encodeURIComponent(JSON.stringify({name:u.first_name,email:u.email,plan:u.plan}))+'")');
-    tdBtn.appendChild(btn); tr.appendChild(tdBtn);
+    tdBtn.appendChild(btn);
+    var btnTl = el('button'); btnTl.className = 'ui-timeline-btn'; btnTl.textContent = 'Timeline';
+    btnTl.setAttribute('onclick', 'loadUserTimeline("'+(u.id||'')+'","'+(u.first_name||u.email||'User')+'")');
+    tdBtn.appendChild(btnTl); tr.appendChild(tdBtn);
 
     tbody.appendChild(tr);
   });
@@ -442,6 +445,215 @@ function exportUserIntelCSV() {
   a.click(); URL.revokeObjectURL(url);
 }
 
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── USER TIMELINE ───────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+
+var _tlUserId = null;
+var _tlUserName = '';
+var _tlData = null;
+
+function loadUserTimeline(userId, userName) {
+  _tlUserId = userId;
+  _tlUserName = userName || 'User';
+  var cont = document.getElementById('tl-content');
+  if (!cont) return;
+  cont.textContent = '';
+  var loading = el('div'); loading.style.cssText = 'text-align:center;padding:40px;color:var(--g500);font-size:0.82rem';
+  loading.textContent = 'Loading timeline for ' + _tlUserName + '…';
+  cont.appendChild(loading);
+  _activatePage('user-timeline', false);
+
+  fetch(_IB + '/admin/user-timeline/' + encodeURIComponent(userId), { headers: { 'x-carely-secret': _IS } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      _tlData = d;
+      _renderTimeline(d);
+    })
+    .catch(function() {
+      cont.textContent = '';
+      var er = el('div'); er.style.cssText = 'text-align:center;padding:40px;color:#dc2626;font-size:0.82rem';
+      er.textContent = 'Failed to load timeline — check backend logs';
+      cont.appendChild(er);
+    });
+}
+
+function _renderTimeline(d) {
+  var cont = document.getElementById('tl-content');
+  if (!cont) return;
+  cont.textContent = '';
+
+  // Header card
+  var u = d.user || {};
+  var hdr = el('div'); hdr.className = 'tl-hdr';
+  var nameRow = el('div'); nameRow.className = 'tl-hdr-name'; nameRow.textContent = (u.first_name || u.email || '—');
+  var emailRow = el('div'); emailRow.className = 'tl-hdr-email'; emailRow.textContent = u.email || '';
+  var metaRow = el('div'); metaRow.className = 'tl-hdr-meta';
+
+  var plan = el('span'); plan.className = 'tl-badge tl-badge-'+(u.plan||'trial'); plan.textContent = (u.plan||'trial').toUpperCase();
+  metaRow.appendChild(plan);
+  if (d.summary) {
+    var adh = el('span'); adh.className = 'tl-stat'; adh.textContent = (d.summary.adherence_pct != null ? Math.round(d.summary.adherence_pct) : 0) + '% adherence';
+    var meds = el('span'); meds.className = 'tl-stat'; meds.textContent = (d.summary.medicine_count || 0) + ' medicines';
+    var logs = el('span'); logs.className = 'tl-stat'; logs.textContent = (d.summary.total_dose_logs || 0) + ' dose logs';
+    var joined = el('span'); joined.className = 'tl-stat'; joined.textContent = 'Joined ' + (u.created_at ? new Date(u.created_at).toLocaleDateString() : '—');
+    metaRow.appendChild(adh); metaRow.appendChild(meds); metaRow.appendChild(logs); metaRow.appendChild(joined);
+  }
+  hdr.appendChild(nameRow); hdr.appendChild(emailRow); hdr.appendChild(metaRow);
+
+  var exportBtn = el('button'); exportBtn.className = 'tl-export-btn'; exportBtn.textContent = '↓ Export Full Timeline CSV';
+  exportBtn.setAttribute('onclick', 'exportTimelineCSV()');
+  hdr.appendChild(exportBtn);
+  cont.appendChild(hdr);
+
+  // Medicines + Dose History section
+  if (d.medicines && d.medicines.length > 0) {
+    var sec = _tlSection('Medicines & Dose History', d.medicines.length + ' medicines tracked');
+    d.medicines.forEach(function(m) {
+      var card = el('div'); card.className = 'tl-med-card';
+      var mhdr = el('div'); mhdr.className = 'tl-med-name';
+      mhdr.textContent = m.name + (m.nickname ? ' (' + m.nickname + ')' : '');
+      card.appendChild(mhdr);
+
+      var minfo = el('div'); minfo.className = 'tl-med-info';
+      minfo.textContent = (m.dose_amount || '') + ' ' + (m.dose_type || '') + (m.colour_tag ? ' · ' + m.colour_tag : '');
+      card.appendChild(minfo);
+
+      if (m.dose_logs && m.dose_logs.length > 0) {
+        var logWrap = el('div'); logWrap.className = 'tl-log-wrap';
+        var logHdr = el('div'); logHdr.className = 'tl-log-hdr';
+        logHdr.textContent = 'Last ' + Math.min(m.dose_logs.length, 20) + ' dose logs';
+        logWrap.appendChild(logHdr);
+        m.dose_logs.slice(0, 20).forEach(function(log) {
+          var row = el('div'); row.className = 'tl-log-row';
+          var resp = (log.response || 'unknown').toLowerCase();
+          var dot = el('span'); dot.className = 'tl-dot tl-dot-' + resp;
+          var timeEl = el('span'); timeEl.className = 'tl-log-time';
+          timeEl.textContent = log.scheduled_time ? new Date(log.scheduled_time).toLocaleString() : '—';
+          var respEl = el('span'); respEl.className = 'tl-log-resp tl-resp-' + resp;
+          respEl.textContent = resp.toUpperCase();
+          row.appendChild(dot); row.appendChild(timeEl); row.appendChild(respEl);
+          if (log.responded_at && log.scheduled_time) {
+            var diff = Math.round((new Date(log.responded_at) - new Date(log.scheduled_time)) / 60000);
+            if (!isNaN(diff) && Math.abs(diff) < 1440) {
+              var delay = el('span'); delay.className = 'tl-log-delay';
+              delay.textContent = (diff >= 0 ? '+' : '') + diff + 'm';
+              row.appendChild(delay);
+            }
+          }
+          logWrap.appendChild(row);
+        });
+        card.appendChild(logWrap);
+      } else {
+        var noLog = el('div'); noLog.style.cssText = 'font-size:0.72rem;color:var(--g500);padding:6px 0';
+        noLog.textContent = 'No dose logs yet';
+        card.appendChild(noLog);
+      }
+      sec.appendChild(card);
+    });
+    cont.appendChild(sec);
+  }
+
+  // Vitals section
+  if (d.vitals && d.vitals.length > 0) {
+    var vSec = _tlSection('Vitals History', d.vitals.length + ' readings');
+    var vTable = el('table'); vTable.className = 'tl-mini-table';
+    var vHead = el('thead');
+    var vHtr = el('tr');
+    ['Type','Value','Unit','Recorded'].forEach(function(h){ var th = el('th'); th.textContent = h; vHtr.appendChild(th); });
+    vHead.appendChild(vHtr); vTable.appendChild(vHead);
+    var vBody = el('tbody');
+    d.vitals.slice(0, 30).forEach(function(v) {
+      var tr = el('tr');
+      [v.vital_type||'—', v.value||'—', v.unit||'—', v.recorded_at ? new Date(v.recorded_at).toLocaleDateString() : '—'].forEach(function(c){
+        var td = el('td'); td.textContent = c; tr.appendChild(td);
+      });
+      vBody.appendChild(tr);
+    });
+    vTable.appendChild(vBody);
+    vSec.appendChild(vTable);
+    cont.appendChild(vSec);
+  }
+
+  // Doctor connections
+  if (d.doctor_connections && d.doctor_connections.length > 0) {
+    var dSec = _tlSection('Doctor Connections', d.doctor_connections.length + ' connected');
+    d.doctor_connections.forEach(function(dc) {
+      var row = el('div'); row.className = 'tl-info-row';
+      var name = el('span'); name.style.fontWeight = '600'; name.textContent = dc.doctor_name || '—';
+      var email = el('span'); email.style.cssText = 'font-size:0.72rem;color:var(--g500);margin-left:8px'; email.textContent = dc.clinic_email || '';
+      var last = el('span'); last.style.cssText = 'font-size:0.7rem;color:var(--g400);margin-left:8px';
+      last.textContent = dc.last_report_sent_at ? 'Last report: ' + new Date(dc.last_report_sent_at).toLocaleDateString() : 'No reports sent';
+      row.appendChild(name); row.appendChild(email); row.appendChild(last);
+      dSec.appendChild(row);
+    });
+    cont.appendChild(dSec);
+  }
+
+  // Appointments
+  if (d.appointments && d.appointments.length > 0) {
+    var aSec = _tlSection('Appointments', d.appointments.length + ' total');
+    var aTable = el('table'); aTable.className = 'tl-mini-table';
+    var aHead = el('thead');
+    var aHtr = el('tr');
+    ['Reason','Status','Requested','Confirmed'].forEach(function(h){ var th = el('th'); th.textContent = h; aHtr.appendChild(th); });
+    aHead.appendChild(aHtr); aTable.appendChild(aHead);
+    var aBody = el('tbody');
+    d.appointments.slice(0, 20).forEach(function(a) {
+      var tr = el('tr');
+      [a.reason||'—', a.status||'—',
+       a.requested_at ? new Date(a.requested_at).toLocaleDateString() : '—',
+       a.confirmed_at ? new Date(a.confirmed_at).toLocaleDateString() : '—'].forEach(function(c){
+        var td = el('td'); td.textContent = c; tr.appendChild(td);
+      });
+      aBody.appendChild(tr);
+    });
+    aTable.appendChild(aBody);
+    aSec.appendChild(aTable);
+    cont.appendChild(aSec);
+  }
+
+  // Empty state
+  if ((!d.medicines || !d.medicines.length) && (!d.vitals || !d.vitals.length)) {
+    var empty = el('div'); empty.style.cssText = 'text-align:center;padding:60px 20px;color:var(--g500)';
+    var eIcon = el('div'); eIcon.style.cssText = 'font-size:2rem;margin-bottom:8px'; eIcon.textContent = '🌱';
+    var eMsg = el('div'); eMsg.style.fontSize = '0.85rem'; eMsg.textContent = 'This user has just joined — no health activity yet';
+    empty.appendChild(eIcon); empty.appendChild(eMsg); cont.appendChild(empty);
+  }
+}
+
+function _tlSection(title, sub) {
+  var sec = el('div'); sec.className = 'tl-section';
+  var hdr = el('div'); hdr.className = 'tl-sec-hdr';
+  var t = el('span'); t.className = 'tl-sec-title'; t.textContent = title;
+  var s = el('span'); s.className = 'tl-sec-sub'; s.textContent = sub;
+  hdr.appendChild(t); hdr.appendChild(s); sec.appendChild(hdr);
+  return sec;
+}
+
+function exportTimelineCSV() {
+  if (!_tlData) return;
+  var rows = [['Section','Name/Type','Detail','Time','Response']];
+  (_tlData.medicines || []).forEach(function(m) {
+    (m.dose_logs || []).forEach(function(log) {
+      rows.push(['Dose Log', m.name + (m.nickname ? ' ('+m.nickname+')' : ''),
+                 m.dose_amount + ' ' + m.dose_type,
+                 log.scheduled_time || '', log.response || '']);
+    });
+  });
+  (_tlData.vitals || []).forEach(function(v) {
+    rows.push(['Vital', v.vital_type||'', v.value + ' ' + (v.unit||''), v.recorded_at||'', '']);
+  });
+  (_tlData.appointments || []).forEach(function(a) {
+    rows.push(['Appointment', a.reason||'', a.status||'', a.requested_at||'', a.confirmed_at||'']);
+  });
+  var csv = rows.map(function(r){ return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(','); }).join('\r\n');
+  var blob = new Blob([csv],{type:'text/csv'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a'); a.href=url; a.download='timeline-'+(_tlUserId||'user')+'-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click(); URL.revokeObjectURL(url);
+}
 
 // ══════════════════════════════════════════════════════════════════════════════
 // ─── HEALTH INSIGHTS ─────────────────────────────────────────────────────────
