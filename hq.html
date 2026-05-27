@@ -365,6 +365,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="sb-item" onclick="nav(this,'user-intel');loadUserIntel()"><span class="ic">🧠</span> User Intelligence</div>
     <div class="sb-item" onclick="nav(this,'health-insights');loadHealthInsights()"><span class="ic">📊</span> Health Insights</div>
     <div class="sb-item" onclick="nav(this,'data-governance')"><span class="ic">🛡️</span> Data Governance</div>
+    <div class="sb-item" onclick="nav(this,'audit-log')"><span class="ic">📋</span> Audit Log</div>
     <div class="sb-item" onclick="nav(this,'reporting')"><span class="ic">📈</span> Reporting</div>
   </div>
 
@@ -1827,6 +1828,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
       <span class="ui-count" id="ui-count"></span>
       <button class="ui-export" onclick="exportUserIntelCSV()">&#x2B07; Export CSV</button>
+      <button id="ui-hermes-btn" class="ui-export" onclick="sendUserTargetingBrief()" style="background:rgba(13,51,71,0.08);border-color:var(--deep);color:var(--deep)">&#128172; Hermes Brief</button>
+      <span id="ui-hermes-msg" style="font-size:0.72rem;color:var(--g500)"></span>
     </div>
     <div class="ui-wrap"><div id="ui-table-wrap"><div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading users…</div></div></div>
     <style>
@@ -3090,6 +3093,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
+  <!-- ══ AUDIT LOG ══ -->
+  <div class="page" id="page-audit-log">
+    <div class="ph"><h1>📋 Audit Log</h1><p>Every admin data access · PIPEDA accountability · who saw what and when</p></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <div style="font-size:0.78rem;color:var(--g500)">Tracks all admin endpoint access — user timelines viewed, data exports, user deletions</div>
+      <button onclick="loadAuditLog()" style="margin-left:auto;font-size:0.72rem;font-weight:700;padding:5px 14px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);cursor:pointer">Refresh</button>
+    </div>
+    <div id="audit-feed"><div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading audit log…</div></div>
+  </div>
+
   <div class="page" id="page-health-insights">
     <div class="ph"><h1>📊 Health Insights</h1><p>Anonymised aggregate health trends · investor-ready · no personal data shown</p></div>
 
@@ -3530,6 +3543,9 @@ function nav(el, id) {
   if (id === 'conversion-intel')  { loadConversionIntel(); }
   if (id === 'experiments')       { loadExperiments(); }
   if (id === 'axel-creative')     { loadAxelCreative(); }
+  if (id === 'ceo-review')        { loadCEOReview(); }
+  if (id === 'audit-log')         { loadAuditLog(); }
+  if (id === 'user-intel')        { loadUserIntel(); }
 }
 
 // ── Growth Plan ──────────────────────────────────────────────────────────────
@@ -4397,7 +4413,21 @@ function _chCard(item) {
   edBtn.textContent = '✏ Edit';
   edBtn.onclick = (function(i){ return function(){ chToggleEdit(i.id); }; })(item);
 
-  actions.appendChild(apBtn); actions.appendChild(rjBtn); actions.appendChild(edBtn);
+  var rwBtn = document.createElement('button');
+  rwBtn.className = 'ch-btn-edit';
+  rwBtn.style.cssText = 'background:#f0fdf4;color:#16a34a;border-color:#bbf7d0';
+  rwBtn.textContent = '↻ Rewrite';
+  rwBtn.onclick = (function(i, btn){ return function(){
+    var card = document.querySelector('[data-ch-id="' + i.id + '"]');
+    if (!card) return;
+    var ta = card.querySelector('[data-edit] textarea');
+    var box = card.querySelector('[data-edit]');
+    if (box) box.style.display = 'block';
+    if (ta && !ta.value.trim()) ta.value = 'Rewrite this with a fresh angle — same message, different hook and energy.';
+    chSubmitEdit(i.id);
+  }; })(item, rwBtn);
+
+  actions.appendChild(apBtn); actions.appendChild(rjBtn); actions.appendChild(edBtn); actions.appendChild(rwBtn);
 
   // Copy button — always visible on Reddit (manual posting only), also on all cards as handy shortcut
   var cpBtn = document.createElement('button');
@@ -5782,7 +5812,7 @@ function loadProposals() {
   var countLbl = document.getElementById('proposals-count-label');
 
   var url = BACKEND + '/admin/proposals' + (filter ? '?status=' + encodeURIComponent(filter) : '');
-  var _propTimer = setTimeout(function() { _showProposalDemo(feed, countLbl, filter); }, 0);
+  var _propTimer = setTimeout(function() { _showProposalDemo(feed, countLbl, filter); }, 4000);
   fetch(url, { headers: { 'x-carely-secret': SECRET }, signal: AbortSignal.timeout(15000) })
     .then(function(r) { return r.json(); })
     .then(function(d) {
@@ -7872,7 +7902,154 @@ function downloadCohortCSV() {
   a.click();
   URL.revokeObjectURL(url);
 }
+
+// ── CEO Weekly Review ─────────────────────────────────────────────────────────
+function loadCEOReview() {
+  var el = document.getElementById('ceo-review-content');
+  if (!el) return;
+  el.textContent = 'Loading latest review…';
+  fetch(_BACKEND + '/admin/weekly-review', { headers: { 'x-carely-secret': _SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!el) return;
+      el.textContent = '';
+      var review = d.review || d.content || d.summary || '';
+      if (!review) {
+        var note = document.createElement('div');
+        note.style.cssText = 'color:var(--g500);font-size:0.82rem;padding:12px 0';
+        note.textContent = 'No review generated yet. Click "Trigger CEO Review Now" to generate the first one.';
+        el.appendChild(note); return;
+      }
+      review.split('\n').forEach(function(line) {
+        if (!line.trim()) return;
+        var p = document.createElement('p'); p.style.marginBottom = '10px'; p.textContent = line;
+        el.appendChild(p);
+      });
+      if (d.generated_at) {
+        var ts = document.createElement('div');
+        ts.style.cssText = 'font-size:0.7rem;color:var(--g400);margin-top:12px';
+        ts.textContent = 'Generated ' + new Date(d.generated_at).toLocaleString();
+        el.appendChild(ts);
+      }
+    })
+    .catch(function() {
+      if (el) { el.textContent = ''; var er = document.createElement('div'); er.style.cssText = 'color:#dc2626;font-size:0.82rem'; er.textContent = 'Could not load — backend may be offline or OpenRouter balance is zero.'; el.appendChild(er); }
+    });
+}
+function triggerCEOReview() {
+  var msg = document.getElementById('ceo-review-msg');
+  if (msg) { msg.textContent = 'Running… check Telegram in ~60s'; msg.style.color = 'var(--teal)'; }
+  fetch(_BACKEND + '/admin/trigger/weekly-review', { method:'POST', headers: { 'x-carely-secret': _SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function() { if (msg) { msg.textContent = 'Triggered — Hermes is writing the review now.'; } setTimeout(loadCEOReview, 8000); })
+    .catch(function() { if (msg) { msg.textContent = 'Failed — check OpenRouter balance.'; msg.style.color = '#dc2626'; } });
+}
+
+// ── A/B Experiments ───────────────────────────────────────────────────────────
+function loadExperiments() {
+  var el = document.getElementById('experiments-content');
+  var ac = document.getElementById('exp-active-count');
+  var dc = document.getElementById('exp-done-count');
+  if (!el) return;
+  el.textContent = 'Loading experiments…';
+  fetch(_BACKEND + '/admin/experiments', { headers: { 'x-carely-secret': _SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var exps = Array.isArray(d) ? d : (d.experiments || []);
+      var active = exps.filter(function(e){ return e.status === 'active' || e.status === 'running'; });
+      var done   = exps.filter(function(e){ return e.status === 'concluded' || e.status === 'done'; });
+      if (ac) ac.textContent = active.length;
+      if (dc) dc.textContent = done.length;
+      el.textContent = '';
+      if (!exps.length) {
+        var note = document.createElement('div');
+        note.style.cssText = 'color:var(--g500);font-size:0.82rem;padding:12px 0';
+        note.textContent = 'No experiments running yet. Hermes launches the first batch when you hit 10 trial users.';
+        el.appendChild(note); return;
+      }
+      exps.forEach(function(exp) {
+        var card = document.createElement('div');
+        card.style.cssText = 'background:var(--g50);border-radius:10px;padding:14px 16px;margin-bottom:12px;border:1.5px solid var(--g200)';
+        var row1 = document.createElement('div'); row1.style.cssText = 'display:flex;justify-content:space-between;margin-bottom:6px';
+        var title = document.createElement('span'); title.style.cssText = 'font-weight:800;font-size:0.85rem;color:var(--deep)'; title.textContent = exp.name || exp.title || 'Experiment';
+        var pill = document.createElement('span'); pill.className = 'pill ' + (exp.status === 'active' || exp.status === 'running' ? 'green' : 'amber'); pill.textContent = exp.status || 'active';
+        row1.appendChild(title); row1.appendChild(pill); card.appendChild(row1);
+        if (exp.hypothesis) {
+          var hyp = document.createElement('div'); hyp.style.cssText = 'font-size:0.78rem;color:var(--g600);margin-bottom:8px'; hyp.textContent = exp.hypothesis; card.appendChild(hyp);
+        }
+        if (exp.result || exp.winner) {
+          var res = document.createElement('div'); res.style.cssText = 'font-size:0.78rem;font-weight:700;color:#059669'; res.textContent = 'Winner: ' + (exp.winner || exp.result); card.appendChild(res);
+        }
+        el.appendChild(card);
+      });
+    })
+    .catch(function() {
+      if (el) { el.textContent = ''; var er = document.createElement('div'); er.style.cssText = 'color:#dc2626;font-size:0.82rem'; er.textContent = 'Failed to load — OpenRouter may be offline.'; el.appendChild(er); }
+    });
+}
+function triggerExperiments() {
+  var msg = document.getElementById('exp-trigger-msg');
+  if (msg) { msg.textContent = 'Running evaluation…'; msg.style.color = 'var(--teal)'; }
+  fetch(_BACKEND + '/admin/trigger/experiments', { method:'POST', headers: { 'x-carely-secret': _SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function() { if (msg) { msg.textContent = 'Done — results will appear above.'; } setTimeout(loadExperiments, 5000); })
+    .catch(function() { if (msg) { msg.textContent = 'Failed — check OpenRouter balance.'; msg.style.color = '#dc2626'; } });
+}
+
+// ── Hermes User Targeting ─────────────────────────────────────────────────────
+function sendUserTargetingBrief() {
+  var btn = document.getElementById('ui-hermes-btn');
+  var msg = document.getElementById('ui-hermes-msg');
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+  fetch(_BACKEND + '/admin/hermes/user-targeting', { method:'POST', headers: { 'x-carely-secret': _SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Send User Brief to Telegram'; }
+      if (msg) { msg.textContent = d.message || 'Sent to TJ + Prabh Telegram'; msg.style.color = 'var(--mint)'; }
+    })
+    .catch(function() {
+      if (btn) { btn.disabled = false; btn.textContent = 'Send User Brief to Telegram'; }
+      if (msg) { msg.style.color = '#dc2626'; msg.textContent = 'Failed — check backend logs'; }
+    });
+}
+
+// ── Audit Log ─────────────────────────────────────────────────────────────────
+function loadAuditLog() {
+  var wrap = document.getElementById('audit-feed');
+  if (!wrap) return;
+  wrap.textContent = '';
+  var ld = document.createElement('div'); ld.style.cssText = 'text-align:center;padding:28px;color:var(--g500);font-size:0.82rem'; ld.textContent = 'Loading audit log…';
+  wrap.appendChild(ld);
+  fetch(_BACKEND + '/admin/audit-log', { headers: { 'x-carely-secret': _SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var entries = d.entries || d.logs || [];
+      wrap.textContent = '';
+      if (!entries.length) {
+        var em = document.createElement('div'); em.style.cssText = 'text-align:center;padding:40px;color:var(--g500);font-size:0.82rem';
+        em.textContent = 'No audit events yet — events log when admin endpoints are accessed'; wrap.appendChild(em); return;
+      }
+      var tbl = document.createElement('table'); tbl.className = 'ui-table';
+      var thead = document.createElement('thead'); var htr = document.createElement('tr');
+      ['Time','Action','Admin','Details','IP'].forEach(function(h){ var th = document.createElement('th'); th.textContent = h; htr.appendChild(th); });
+      thead.appendChild(htr); tbl.appendChild(thead);
+      var tbody = document.createElement('tbody');
+      entries.forEach(function(e) {
+        var tr = document.createElement('tr');
+        [e.created_at ? new Date(e.created_at).toLocaleString() : '—', e.action||'—', e.admin||'HQ', e.details||'—', e.ip||'—'].forEach(function(c){
+          var td = document.createElement('td'); td.style.fontSize = '0.75rem'; td.textContent = c; tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      tbl.appendChild(tbody);
+      var tableWrap = document.createElement('div'); tableWrap.style.cssText = 'border:1.5px solid var(--g200);border-radius:12px;overflow:hidden;overflow-x:auto';
+      tableWrap.appendChild(tbl); wrap.appendChild(tableWrap);
+    })
+    .catch(function() {
+      wrap.textContent = ''; var er = document.createElement('div'); er.style.cssText = 'color:#dc2626;font-size:0.82rem;padding:20px'; er.textContent = 'Failed to load audit log'; wrap.appendChild(er);
+    });
+}
 </script>
-<script src="hq-intel.js?v=20260527f"></script>
+<script src="hq-intel.js?v=20260527g"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a02743d1dbc02724',t:'MTc3OTkwODQ1Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
