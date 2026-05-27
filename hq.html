@@ -7188,186 +7188,277 @@ function initBrainGraph() {
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
 
+  // Transform state (pan + zoom)
+  var bt = {x:0, y:0, scale:1};
+  var panning = false, panStart = null;
+
   function resize() {
     var p = canvas.parentElement;
     canvas.width  = p ? p.offsetWidth  : 900;
     canvas.height = p ? p.offsetHeight : 600;
+    bt.x = canvas.width/2; bt.y = canvas.height/2; // center origin
   }
   resize();
   if (_brainResizeObs) _brainResizeObs.disconnect();
   _brainResizeObs = new ResizeObserver(resize);
   _brainResizeObs.observe(canvas.parentElement);
 
-  var CX = canvas.width / 2, CY = canvas.height / 2;
-  _brainSimNodes = BRAIN_NODES.map(function(n, i) {
-    var a = (i / BRAIN_NODES.length) * Math.PI * 2;
-    var r = 100 + Math.random() * 200;
-    return Object.assign({}, n, {x: CX + Math.cos(a)*r, y: CY + Math.sin(a)*r, vx:0, vy:0, fx:0, fy:0});
+  var CX = canvas.width/2, CY = canvas.height/2;
+  _brainSimNodes = BRAIN_NODES.map(function(n,i) {
+    var a = (i/BRAIN_NODES.length)*Math.PI*2;
+    var r = 80 + Math.random()*180;
+    return Object.assign({},n,{x:Math.cos(a)*r, y:Math.sin(a)*r, vx:0,vy:0,fx:0,fy:0});
   });
-  _brainNodeMap = {};
-  _brainSimNodes.forEach(function(n) { _brainNodeMap[n.id] = n; });
-  _brainSimEdges = BRAIN_EDGES.map(function(e) {
-    return {from:_brainNodeMap[e[0]], to:_brainNodeMap[e[1]]};
-  }).filter(function(e) { return e.from && e.to; });
+  _brainNodeMap={};
+  _brainSimNodes.forEach(function(n){_brainNodeMap[n.id]=n;});
+  _brainSimEdges=BRAIN_EDGES.map(function(e){
+    return{from:_brainNodeMap[e[0]],to:_brainNodeMap[e[1]]};
+  }).filter(function(e){return e.from&&e.to;});
 
-  var alpha = 1.0;
+  var alpha=1.0;
 
   function tick() {
-    CX = canvas.width/2; CY = canvas.height/2;
-    if (alpha > 0.002) alpha -= 0.003;
-    var repel = 2800*alpha + 600;
-    var spring = 0.04*alpha + 0.006;
-    var restLen = 110;
-
-    for (var i=0;i<_brainSimNodes.length;i++) {
-      var n = _brainSimNodes[i];
-      n.fx = (CX - n.x) * 0.003 * alpha;
-      n.fy = (CY - n.y) * 0.003 * alpha;
+    if(alpha>0.002) alpha-=0.003;
+    var repel=2800*alpha+600, spring=0.04*alpha+0.006, restLen=110;
+    for(var i=0;i<_brainSimNodes.length;i++){
+      _brainSimNodes[i].fx=(-_brainSimNodes[i].x)*0.003*alpha;
+      _brainSimNodes[i].fy=(-_brainSimNodes[i].y)*0.003*alpha;
     }
-    for (var i=0;i<_brainSimNodes.length;i++) {
-      if (!_brainFilter[_brainSimNodes[i].type]) continue;
-      for (var j=i+1;j<_brainSimNodes.length;j++) {
-        if (!_brainFilter[_brainSimNodes[j].type]) continue;
-        var dx=_brainSimNodes[j].x-_brainSimNodes[i].x, dy=_brainSimNodes[j].y-_brainSimNodes[i].y;
-        var d=Math.sqrt(dx*dx+dy*dy)+0.5, f=-repel/(d*d);
-        _brainSimNodes[i].fx+=f*dx/d; _brainSimNodes[i].fy+=f*dy/d;
-        _brainSimNodes[j].fx-=f*dx/d; _brainSimNodes[j].fy-=f*dy/d;
+    for(var i=0;i<_brainSimNodes.length;i++){
+      if(!_brainFilter[_brainSimNodes[i].type]) continue;
+      for(var j=i+1;j<_brainSimNodes.length;j++){
+        if(!_brainFilter[_brainSimNodes[j].type]) continue;
+        var dx=_brainSimNodes[j].x-_brainSimNodes[i].x,dy=_brainSimNodes[j].y-_brainSimNodes[i].y;
+        var d=Math.sqrt(dx*dx+dy*dy)+0.5,f=-repel/(d*d);
+        _brainSimNodes[i].fx+=f*dx/d;_brainSimNodes[i].fy+=f*dy/d;
+        _brainSimNodes[j].fx-=f*dx/d;_brainSimNodes[j].fy-=f*dy/d;
       }
     }
-    for (var e=0;e<_brainSimEdges.length;e++) {
-      var a=_brainSimEdges[e].from, b=_brainSimEdges[e].to;
-      if (!a||!b||!_brainFilter[a.type]||!_brainFilter[b.type]) continue;
-      var dx=b.x-a.x, dy=b.y-a.y, d=Math.sqrt(dx*dx+dy*dy)+0.01;
+    for(var e=0;e<_brainSimEdges.length;e++){
+      var a=_brainSimEdges[e].from,b=_brainSimEdges[e].to;
+      if(!a||!b||!_brainFilter[a.type]||!_brainFilter[b.type]) continue;
+      var dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)+0.01;
       var f=spring*(d-restLen);
-      a.fx+=f*dx/d; a.fy+=f*dy/d; b.fx-=f*dx/d; b.fy-=f*dy/d;
+      a.fx+=f*dx/d;a.fy+=f*dy/d;b.fx-=f*dx/d;b.fy-=f*dy/d;
     }
     var damp=0.84;
-    for (var i=0;i<_brainSimNodes.length;i++) {
+    for(var i=0;i<_brainSimNodes.length;i++){
       var n=_brainSimNodes[i];
-      n.vx=(n.vx+n.fx)*damp; n.vy=(n.vy+n.fy)*damp;
-      n.x+=n.vx; n.y+=n.vy;
+      n.vx=(n.vx+n.fx)*damp;n.vy=(n.vy+n.fy)*damp;
+      n.x+=n.vx;n.y+=n.vy;
     }
   }
 
   function draw() {
-    var W=canvas.width, H=canvas.height;
+    var W=canvas.width,H=canvas.height;
     ctx.clearRect(0,0,W,H);
     var bg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*0.8);
-    bg.addColorStop(0,'#070f1e'); bg.addColorStop(1,'#030810');
-    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+    bg.addColorStop(0,'#070f1e');bg.addColorStop(1,'#030810');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
 
     var sel=_brainSelected?_brainNodeMap[_brainSelected]:null;
     var hov=_brainHovered ?_brainNodeMap[_brainHovered] :null;
 
+    // Apply pan + zoom transform
+    ctx.save();
+    ctx.translate(bt.x, bt.y);
+    ctx.scale(bt.scale, bt.scale);
+
     // Edges
-    for (var e=0;e<_brainSimEdges.length;e++) {
-      var ea=_brainSimEdges[e].from, eb=_brainSimEdges[e].to;
-      if (!ea||!eb||!_brainFilter[ea.type]||!_brainFilter[eb.type]) continue;
+    for(var e=0;e<_brainSimEdges.length;e++){
+      var ea=_brainSimEdges[e].from,eb=_brainSimEdges[e].to;
+      if(!ea||!eb||!_brainFilter[ea.type]||!_brainFilter[eb.type]) continue;
       var conn=sel&&(ea.id===sel.id||eb.id===sel.id);
-      ctx.beginPath(); ctx.moveTo(ea.x,ea.y); ctx.lineTo(eb.x,eb.y);
-      if (conn) { ctx.strokeStyle='rgba(2,195,154,0.7)'; ctx.lineWidth=1.8; }
-      else if (sel) { ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.lineWidth=0.5; }
-      else { ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.lineWidth=0.8; }
+      ctx.beginPath();ctx.moveTo(ea.x,ea.y);ctx.lineTo(eb.x,eb.y);
+      if(conn){ctx.strokeStyle='rgba(2,195,154,0.75)';ctx.lineWidth=1.8/bt.scale;}
+      else if(sel){ctx.strokeStyle='rgba(255,255,255,0.04)';ctx.lineWidth=0.5/bt.scale;}
+      else{ctx.strokeStyle='rgba(255,255,255,0.12)';ctx.lineWidth=0.8/bt.scale;}
       ctx.stroke();
     }
 
     // Nodes
-    for (var i=0;i<_brainSimNodes.length;i++) {
+    for(var i=0;i<_brainSimNodes.length;i++){
       var n=_brainSimNodes[i];
-      if (!_brainFilter[n.type]) continue;
-      var isH=hov&&hov.id===n.id, isS=sel&&sel.id===n.id;
-      var isC=sel&&_brainSimEdges.some(function(e){return(e.from.id===sel.id&&e.to.id===n.id)||(e.to.id===sel.id&&e.from.id===n.id);});
+      if(!_brainFilter[n.type]) continue;
+      var isH=hov&&hov.id===n.id,isS=sel&&sel.id===n.id;
+      var isC=sel&&_brainSimEdges.some(function(e){return e.from&&e.to&&((e.from.id===sel.id&&e.to.id===n.id)||(e.to.id===sel.id&&e.from.id===n.id));});
       var fade=sel&&!isS&&!isC;
       var r=n.size*(isH||isS?1.35:1);
-      ctx.globalAlpha=fade?0.2:1;
-      if (!fade) {
-        ctx.beginPath(); ctx.arc(n.x,n.y,r*3.2,0,Math.PI*2);
-        ctx.fillStyle=n.color+'1a'; ctx.fill();
+      ctx.globalAlpha=fade?0.18:1;
+      if(!fade){
+        ctx.beginPath();ctx.arc(n.x,n.y,r*3.2,0,Math.PI*2);
+        ctx.fillStyle=n.color+'18';ctx.fill();
       }
-      ctx.beginPath(); ctx.arc(n.x,n.y,r,0,Math.PI*2);
+      ctx.beginPath();ctx.arc(n.x,n.y,r,0,Math.PI*2);
       var g=ctx.createRadialGradient(n.x-r*0.3,n.y-r*0.3,r*0.05,n.x,n.y,r);
-      g.addColorStop(0,n.color); g.addColorStop(1,n.color+'88');
-      ctx.fillStyle=g; ctx.fill();
-      if (isS||isH) { ctx.strokeStyle=isS?'#02c39a':'rgba(255,255,255,0.6)'; ctx.lineWidth=isS?2:1.5; ctx.stroke(); }
-      var fs=Math.max(8,Math.min(11,n.size*0.72));
+      g.addColorStop(0,n.color);g.addColorStop(1,n.color+'88');
+      ctx.fillStyle=g;ctx.fill();
+      if(isS||isH){ctx.strokeStyle=isS?'#02c39a':'rgba(255,255,255,0.5)';ctx.lineWidth=(isS?2:1.5)/bt.scale;ctx.stroke();}
+      var fs=Math.max(7,Math.min(11,n.size*0.72))/bt.scale;
+      fs=Math.max(fs,7);
       ctx.font='600 '+fs+'px system-ui,sans-serif';
       ctx.textAlign='center';
-      ctx.fillStyle='rgba(255,255,255,'+(fade?0.15:0.88)+')';
+      ctx.fillStyle='rgba(255,255,255,'+(fade?0.12:0.88)+')';
       ctx.fillText(n.label,n.x,n.y+r+fs+2);
-      if (isH||isS) {
-        ctx.font=(fs-1)+'px system-ui,sans-serif';
-        ctx.fillStyle='rgba(255,255,255,0.4)';
-        ctx.fillText(n.sub,n.x,n.y+r+fs*2+4);
+      if(isH||isS){
+        ctx.font=(fs*0.85)+'px system-ui,sans-serif';
+        ctx.fillStyle='rgba(255,255,255,0.38)';
+        ctx.fillText(n.sub,n.x,n.y+r+fs*2+3);
       }
       ctx.globalAlpha=1;
     }
+    ctx.restore();
 
-    // Legend
+    // Fixed UI: legend bottom-left
     var types=[
-      {type:'agent',color:'#a78bfa',label:'Agents (19)'},
-      {type:'route',color:'#02c39a',label:'Routes (15+)'},
-      {type:'service',color:'#38bdf8',label:'Services (8)'},
+      {type:'agent',   color:'#a78bfa',label:'Agents (19)'},
+      {type:'route',   color:'#02c39a',label:'Routes (15+)'},
+      {type:'service', color:'#38bdf8',label:'Services (8)'},
       {type:'frontend',color:'#fbbf24',label:'Frontend (4)'},
-      {type:'file',color:'#f97316',label:'Core Files (5)'},
+      {type:'file',    color:'#f97316',label:'Core Files (5)'},
     ];
-    var lx=14,ly=H-14-types.length*22;
-    types.forEach(function(t,i) {
-      ctx.globalAlpha=_brainFilter[t.type]?1:0.3;
-      ctx.beginPath(); ctx.arc(lx+6,ly+i*22+6,5,0,Math.PI*2);
-      ctx.fillStyle=t.color; ctx.fill();
-      ctx.font='10px system-ui,sans-serif'; ctx.textAlign='left';
-      ctx.fillStyle='rgba(255,255,255,0.55)';
-      ctx.fillText(t.label,lx+17,ly+i*22+10);
+    var lx=12,ly=H-12-types.length*20;
+    types.forEach(function(t,i){
+      ctx.globalAlpha=_brainFilter[t.type]?1:0.28;
+      ctx.beginPath();ctx.arc(lx+5,ly+i*20+5,4.5,0,Math.PI*2);
+      ctx.fillStyle=t.color;ctx.fill();
+      ctx.font='10px system-ui,sans-serif';ctx.textAlign='left';
+      ctx.fillStyle='rgba(255,255,255,0.5)';
+      ctx.fillText(t.label,lx+16,ly+i*20+9);
       ctx.globalAlpha=1;
     });
 
-    // Stats
-    ctx.font='bold 10px system-ui,sans-serif'; ctx.textAlign='right';
-    ctx.fillStyle='rgba(2,195,154,0.5)';
-    ctx.fillText('NODES: '+_brainSimNodes.filter(function(n){return _brainFilter[n.type];}).length+' · EDGES: '+_brainSimEdges.filter(function(e){return e.from&&e.to&&_brainFilter[e.from.type]&&_brainFilter[e.to.type];}).length+' · MEMORY: '+(_brainMemCount||0), W-14, H-14);
+    // Fixed UI: zoom hint + stats bottom-right
+    ctx.font='10px system-ui,sans-serif';ctx.textAlign='right';
+    ctx.fillStyle='rgba(255,255,255,0.18)';
+    ctx.fillText('scroll to zoom · drag to pan · click node to focus',W-12,H-26);
+    ctx.fillStyle='rgba(2,195,154,0.45)';
+    var vis=_brainSimNodes.filter(function(n){return _brainFilter[n.type];}).length;
+    var edgeVis=_brainSimEdges.filter(function(e){return e.from&&e.to&&_brainFilter[e.from.type]&&_brainFilter[e.to.type];}).length;
+    ctx.fillText('nodes: '+vis+' · edges: '+edgeVis+' · zoom: '+Math.round(bt.scale*100)+'%',W-12,H-12);
   }
 
-  function loop() { tick(); draw(); _brainAnim=requestAnimationFrame(loop); }
+  function loop(){tick();draw();_brainAnim=requestAnimationFrame(loop);}
   loop();
 
-  canvas.onmousemove=function(e) {
-    var r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+  // World coords from canvas coords
+  function toWorld(mx,my){return{x:(mx-bt.x)/bt.scale, y:(my-bt.y)/bt.scale};}
+
+  // Hit test
+  function getNode(mx,my){
+    var w=toWorld(mx,my);
     var best=null,bestD=Infinity;
-    for (var i=0;i<_brainSimNodes.length;i++) {
+    for(var i=_brainSimNodes.length-1;i>=0;i--){
       var n=_brainSimNodes[i];
-      if (!_brainFilter[n.type]) continue;
-      var dx=mx-n.x,dy=my-n.y,d=Math.sqrt(dx*dx+dy*dy);
-      if (d<n.size*1.6+8&&d<bestD) { bestD=d; best=n; }
+      if(!_brainFilter[n.type]) continue;
+      var dx=w.x-n.x,dy=w.y-n.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<n.size*1.6+6&&d<bestD){bestD=d;best=n;}
     }
-    _brainHovered=best?best.id:null;
-    canvas.style.cursor=best?'pointer':'default';
+    return best;
+  }
+
+  // Zoom (mouse wheel)
+  canvas.onwheel=function(e){
+    e.preventDefault();
+    var r=canvas.getBoundingClientRect();
+    var mx=e.clientX-r.left, my=e.clientY-r.top;
+    var factor=e.deltaY<0?1.15:0.87;
+    var ns=Math.max(0.1,Math.min(6,bt.scale*factor));
+    bt.x=mx-(mx-bt.x)*(ns/bt.scale);
+    bt.y=my-(my-bt.y)*(ns/bt.scale);
+    bt.scale=ns;
+  };
+
+  // Pan (drag background)
+  canvas.onmousedown=function(e){
+    var r=canvas.getBoundingClientRect();
+    var n=getNode(e.clientX-r.left,e.clientY-r.top);
+    if(!n){
+      panning=true;
+      panStart={ox:bt.x, oy:bt.y, mx:e.clientX, my:e.clientY};
+      canvas.style.cursor='grabbing';
+    }
+  };
+
+  canvas.onmousemove=function(e){
+    var r=canvas.getBoundingClientRect();
+    var mx=e.clientX-r.left, my=e.clientY-r.top;
+    if(panning&&panStart){
+      bt.x=panStart.ox+(e.clientX-panStart.mx);
+      bt.y=panStart.oy+(e.clientY-panStart.my);
+      return;
+    }
+    var n=getNode(mx,my);
+    _brainHovered=n?n.id:null;
+    canvas.style.cursor=n?'pointer':'grab';
     var pop=document.getElementById('brain-popup');
-    if (best&&pop) {
-      var c=_brainSimEdges.filter(function(ed){return ed.from&&ed.to&&(ed.from.id===best.id||ed.to.id===best.id)&&_brainFilter[ed.from.type]&&_brainFilter[ed.to.type];}).length;
-      document.getElementById('brain-popup-name').textContent=best.label;
-      document.getElementById('brain-popup-role').textContent=best.sub;
-      document.getElementById('brain-popup-stats').textContent='Type: '+best.type.toUpperCase()+'  ·  Connections: '+c;
+    if(n&&pop){
+      var c=_brainSimEdges.filter(function(ed){return ed.from&&ed.to&&(ed.from.id===n.id||ed.to.id===n.id)&&_brainFilter[ed.from.type]&&_brainFilter[ed.to.type];}).length;
+      document.getElementById('brain-popup-name').textContent=n.label;
+      document.getElementById('brain-popup-role').textContent=n.sub;
+      document.getElementById('brain-popup-stats').textContent='Type: '+n.type.toUpperCase()+'  ·  Connections: '+c;
       document.getElementById('brain-popup-last').textContent='Click to highlight connections';
       pop.style.display='block';
-      pop.style.left=(mx+16)+'px'; pop.style.top=(my-10)+'px';
-    } else if (pop) pop.style.display='none';
+      pop.style.left=(mx+16)+'px';pop.style.top=(my-10)+'px';
+    } else if(pop) pop.style.display='none';
   };
-  canvas.onclick=function(e) {
-    var r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
-    var best=null,bestD=Infinity;
-    for (var i=0;i<_brainSimNodes.length;i++) {
-      var n=_brainSimNodes[i];
-      if (!_brainFilter[n.type]) continue;
-      var dx=mx-n.x,dy=my-n.y,d=Math.sqrt(dx*dx+dy*dy);
-      if (d<n.size*1.6+8&&d<bestD){bestD=d;best=n;}
-    }
-    _brainSelected=best?(best.id===_brainSelected?null:best.id):null;
+
+  canvas.onmouseup=function(e){
+    if(panning){panning=false;panStart=null;canvas.style.cursor='grab';return;}
+    var r=canvas.getBoundingClientRect();
+    var n=getNode(e.clientX-r.left,e.clientY-r.top);
+    _brainSelected=n?(n.id===_brainSelected?null:n.id):null;
   };
+
   canvas.onmouseleave=function(){
-    _brainHovered=null;
+    panning=false;panStart=null;_brainHovered=null;
+    canvas.style.cursor='default';
     var pop=document.getElementById('brain-popup');
     if(pop)pop.style.display='none';
   };
+
+  // Touch: pinch zoom + pan
+  var touches={};
+  var lastPinchDist=null;
+  canvas.addEventListener('touchstart',function(e){
+    e.preventDefault();
+    for(var i=0;i<e.changedTouches.length;i++) touches[e.changedTouches[i].identifier]=e.changedTouches[i];
+    lastPinchDist=null;
+  },{passive:false});
+  canvas.addEventListener('touchmove',function(e){
+    e.preventDefault();
+    for(var i=0;i<e.changedTouches.length;i++) touches[e.changedTouches[i].identifier]=e.changedTouches[i];
+    var ids=Object.keys(touches);
+    if(ids.length===2){
+      var t0=touches[ids[0]],t1=touches[ids[1]];
+      var dist=Math.hypot(t1.clientX-t0.clientX,t1.clientY-t0.clientY);
+      if(lastPinchDist){
+        var factor=dist/lastPinchDist;
+        var r=canvas.getBoundingClientRect();
+        var cx=(t0.clientX+t1.clientX)/2-r.left, cy=(t0.clientY+t1.clientY)/2-r.top;
+        var ns=Math.max(0.1,Math.min(6,bt.scale*factor));
+        bt.x=cx-(cx-bt.x)*(ns/bt.scale);
+        bt.y=cy-(cy-bt.y)*(ns/bt.scale);
+        bt.scale=ns;
+      }
+      lastPinchDist=dist;
+    } else if(ids.length===1){
+      var t=touches[ids[0]];
+      if(panStart&&panStart.tid===ids[0]){
+        bt.x=panStart.ox+(t.clientX-panStart.mx);
+        bt.y=panStart.oy+(t.clientY-panStart.my);
+      } else {
+        panStart={ox:bt.x,oy:bt.y,mx:t.clientX,my:t.clientY,tid:ids[0]};
+      }
+    }
+  },{passive:false});
+  canvas.addEventListener('touchend',function(e){
+    for(var i=0;i<e.changedTouches.length;i++) delete touches[e.changedTouches[i].identifier];
+    lastPinchDist=null;
+    if(Object.keys(touches).length===0) panStart=null;
+  },{passive:false});
+
+  canvas.style.cursor='grab';
 }
 
 function loadBrain() {
