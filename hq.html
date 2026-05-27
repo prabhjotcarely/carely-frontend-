@@ -2890,84 +2890,299 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ BACKEND ARCHITECTURE ══ -->
   <div class="page" id="page-backend-diagram">
-    <div class="ph"><h1>🔗 Backend Architecture</h1><p>Full system flow · App to Routes to Agents to External APIs</p></div>
-    <div class="card" style="overflow-x:auto">
-      <div style="min-width:700px">
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;margin-bottom:20px">
-          <div>
-            <div style="font-size:0.67rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--teal);margin-bottom:10px;text-align:center">App Layer</div>
-            <div class="arch-node" style="background:#E0FAF4">📱 React Native App</div>
-            <div class="arch-arrow">↓</div>
-            <div class="arch-node" style="background:#E0FAF4">🔐 Supabase Auth JWT</div>
-            <div class="arch-arrow">↓</div>
-            <div class="arch-node" style="background:#E0FAF4">📡 Axios API Client</div>
+    <div class="ph"><h1>⬡ System Architecture</h1><p>Carely full-stack · Client · Backend · Data &amp; Services</p></div>
+
+    <style>
+      .arch-space{background:linear-gradient(160deg,#060c18 0%,#0b1525 55%,#071220 100%);border-radius:18px;padding:28px 24px;position:relative;overflow:hidden}
+      .arch-space::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(0,168,150,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 30%,rgba(2,128,144,0.08) 0%,transparent 55%);pointer-events:none}
+      .arch-cols{display:grid;grid-template-columns:1fr 60px 1fr 60px 1fr;gap:0;align-items:center;min-width:820px}
+      .arch-panel{border-radius:14px;padding:20px 16px;position:relative}
+      .arch-panel-client{border:1.5px solid rgba(139,92,246,0.6);background:rgba(139,92,246,0.05);box-shadow:0 0 28px rgba(139,92,246,0.1) inset,0 0 12px rgba(139,92,246,0.08)}
+      .arch-panel-backend{border:1.5px solid rgba(2,195,154,0.7);background:rgba(2,195,154,0.04);box-shadow:0 0 32px rgba(2,195,154,0.12) inset,0 0 16px rgba(2,195,154,0.1)}
+      .arch-panel-data{border:1.5px solid rgba(2,128,144,0.65);background:rgba(2,128,144,0.05);box-shadow:0 0 28px rgba(2,128,144,0.1) inset,0 0 12px rgba(2,128,144,0.08)}
+      .arch-panel-title{font-size:0.72rem;font-weight:900;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.07)}
+      .arch-panel-client .arch-panel-title{color:#a78bfa}
+      .arch-panel-backend .arch-panel-title{color:#02c39a}
+      .arch-panel-data .arch-panel-title{color:#028090}
+      .arch-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;margin-bottom:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);transition:background 0.2s}
+      .arch-row:hover{background:rgba(255,255,255,0.06)}
+      .arch-row-icon{font-size:1.1rem;width:24px;text-align:center;flex-shrink:0}
+      .arch-row-text{flex:1}
+      .arch-row-label{font-size:0.78rem;color:rgba(255,255,255,0.85);font-weight:600;line-height:1.2}
+      .arch-row-sub{font-size:0.67rem;color:rgba(255,255,255,0.35);margin-top:1px}
+      .arch-row-tag{font-size:0.6rem;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:0.06em;flex-shrink:0}
+      .tag-live{background:rgba(2,195,154,0.15);color:#02c39a;border:1px solid rgba(2,195,154,0.3)}
+      .tag-agent{background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.3)}
+      .tag-db{background:rgba(2,128,144,0.15);color:#67e8f9;border:1px solid rgba(2,128,144,0.3)}
+      .arch-connector{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+      .arch-conn-line{width:2px;height:32px;background:linear-gradient(to bottom,transparent,rgba(2,195,154,0.5),transparent)}
+      .arch-conn-arrow{display:flex;flex-direction:column;align-items:center;gap:4px}
+      .arch-conn-arrowbody{width:36px;height:2px;background:linear-gradient(to right,rgba(2,195,154,0.3),rgba(2,195,154,0.9))}
+      .arch-conn-arrowhead{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:8px solid rgba(2,195,154,0.9);margin-left:36px}
+      .arch-conn-arrowback{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:8px solid rgba(2,195,154,0.9);margin-right:36px}
+      .arch-conn-label{font-size:0.6rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(2,195,154,0.7);writing-mode:vertical-lr;transform:rotate(180deg)}
+      .arch-section-sep{height:1px;background:rgba(255,255,255,0.06);margin:10px 0}
+      .arch-sub-title{font-size:0.63rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin:10px 0 6px}
+      .arch-flows{margin-top:20px;border-top:1px solid rgba(255,255,255,0.06);padding-top:18px}
+      .arch-flow-title{font-size:0.7rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;color:rgba(2,195,154,0.7);margin-bottom:12px}
+      .arch-flow-row{display:flex;align-items:flex-start;gap:10px;padding:7px 12px;border-radius:8px;margin-bottom:6px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05)}
+      .arch-flow-badge{font-size:0.62rem;font-weight:800;padding:2px 8px;border-radius:20px;flex-shrink:0;margin-top:1px;letter-spacing:0.04em}
+      .badge-dose{background:rgba(2,195,154,0.15);color:#02c39a;border:1px solid rgba(2,195,154,0.25)}
+      .badge-chat{background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.25)}
+      .badge-signup{background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid rgba(251,191,36,0.25)}
+      .badge-alert{background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.25)}
+      .arch-flow-text{font-size:0.72rem;color:rgba(255,255,255,0.55);line-height:1.5}
+      .arch-flow-text strong{color:rgba(255,255,255,0.85)}
+    </style>
+
+    <div class="arch-space" style="overflow-x:auto">
+      <div class="arch-cols">
+
+        <!-- ── CLIENT PANEL ── -->
+        <div class="arch-panel arch-panel-client">
+          <div class="arch-panel-title">⬡ Client Layer</div>
+
+          <div class="arch-sub-title">Mobile</div>
+          <div class="arch-row">
+            <div class="arch-row-icon">📱</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">React Native App</div>
+              <div class="arch-row-sub">iOS + Android · Expo</div>
+            </div>
+            <span class="arch-row-tag tag-live">LIVE</span>
           </div>
-          <div>
-            <div style="font-size:0.67rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--deep);margin-bottom:10px;text-align:center">Routes (Express)</div>
-            <div class="arch-node">/auth</div><div class="arch-node">/medicines</div><div class="arch-node">/dose-logs</div>
-            <div class="arch-node">/ai (Elara)</div><div class="arch-node">/pharmacy</div>
-            <div class="arch-node">/subscription</div><div class="arch-node">/admin</div>
+          <div class="arch-row">
+            <div class="arch-row-icon">🔐</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">Supabase Auth</div>
+              <div class="arch-row-sub">JWT · Session management</div>
+            </div>
           </div>
-          <div>
-            <div style="font-size:0.67rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple);margin-bottom:10px;text-align:center">AgentOS</div>
-            <div class="arch-node" style="background:#F5F3FF">🧠 Hermes CEO</div>
-            <div class="arch-node" style="background:#F5F3FF">💊 Frank</div>
-            <div class="arch-node" style="background:#F5F3FF">👩 Grace</div>
-            <div class="arch-node" style="background:#F5F3FF">🚨 Cara</div>
-            <div class="arch-node" style="background:#F5F3FF">💼 Cole</div>
-            <div class="arch-node" style="background:#F5F3FF">🎯 Nina + Lena</div>
-            <div class="arch-node" style="background:#F5F3FF">🔒 Ace</div>
+          <div class="arch-row">
+            <div class="arch-row-icon">📡</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">Axios API Client</div>
+              <div class="arch-row-sub">HTTPS to Railway</div>
+            </div>
           </div>
-          <div>
-            <div style="font-size:0.67rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--amber);margin-bottom:10px;text-align:center">External</div>
-            <div class="arch-node" style="background:#FEF9E7">🗄️ Supabase</div>
-            <div class="arch-node" style="background:#FEF9E7">⚡ Upstash Redis</div>
-            <div class="arch-node" style="background:#FEF9E7">🔔 Firebase FCM</div>
-            <div class="arch-node" style="background:#FEF9E7">📧 SendGrid</div>
-            <div class="arch-node" style="background:#FEF9E7">💳 Stripe</div>
-            <div class="arch-node" style="background:#FEF9E7">🤖 OpenRouter AI</div>
-            <div class="arch-node" style="background:#FEF9E7">📱 Telegram</div>
+
+          <div class="arch-section-sep"></div>
+          <div class="arch-sub-title">Web</div>
+
+          <div class="arch-row">
+            <div class="arch-row-icon">🌐</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">carely.fit</div>
+              <div class="arch-row-sub">Landing · Cloudflare CDN</div>
+            </div>
+            <span class="arch-row-tag tag-live">LIVE</span>
+          </div>
+          <div class="arch-row">
+            <div class="arch-row-icon">🖥️</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">Carely HQ</div>
+              <div class="arch-row-sub">carely.fit/hq · This dashboard</div>
+            </div>
+            <span class="arch-row-tag tag-live">LIVE</span>
+          </div>
+          <div class="arch-row">
+            <div class="arch-row-icon">🤝</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">Partner Portals</div>
+              <div class="arch-row-sub">Clinic · Doctor · Pharmacy</div>
+            </div>
           </div>
         </div>
-        <div style="background:var(--g100);border-radius:12px;padding:14px">
-          <div style="font-size:0.75rem;font-weight:700;color:var(--deep);margin-bottom:10px">Key Data Flows</div>
-          <div style="display:flex;flex-direction:column;gap:6px;font-size:0.78rem;color:var(--g500)">
-            <div><span style="color:var(--teal);font-weight:700">Dose Taken</span> → App logs → /dose-logs → Supabase → Ace increments streak → Grace reads for check-in → Elara loads for chat</div>
-            <div><span style="color:var(--teal);font-weight:700">Dose Missed</span> → App logs missed → Cara fires FCM to caregiver → Hermes logs in daily brief</div>
-            <div><span style="color:var(--teal);font-weight:700">New Signup</span> → Supabase Auth → /auth/profile → medicines add → Frank gets FCM token → Grace schedules check-in</div>
-            <div><span style="color:var(--teal);font-weight:700">Elara Chat</span> → /ai/chat → Redis loads memory → OpenRouter GPT → response → Redis saves memory</div>
-            <div><span style="color:var(--teal);font-weight:700">Stripe Webhook</span> → plan updated in Supabase → Nina triggered on cancels → Lena on win-back</div>
+
+        <!-- ── CONNECTOR 1 ── -->
+        <div class="arch-connector">
+          <div class="arch-conn-arrow">
+            <div class="arch-conn-arrowback"></div>
+            <div class="arch-conn-arrowbody"></div>
+            <div class="arch-conn-arrowhead"></div>
+          </div>
+          <div class="arch-conn-label">HTTPS API</div>
+          <div class="arch-conn-line"></div>
+        </div>
+
+        <!-- ── BACKEND PANEL ── -->
+        <div class="arch-panel arch-panel-backend">
+          <div class="arch-panel-title">⚙️ Backend Core · Railway</div>
+
+          <div class="arch-sub-title">API Routes (35+)</div>
+          <div class="arch-row">
+            <div class="arch-row-icon">🔑</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">/auth · /user · /subscription</div>
+              <div class="arch-row-sub">Auth · Profile · Stripe payments</div>
+            </div>
+          </div>
+          <div class="arch-row">
+            <div class="arch-row-icon">💊</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">/medicines · /schedules · /dose-logs</div>
+              <div class="arch-row-sub">Core medication tracking</div>
+            </div>
+          </div>
+          <div class="arch-row">
+            <div class="arch-row-icon">🤖</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">/ai · /elara · /hermes</div>
+              <div class="arch-row-sub">AI caretaker + CEO agent</div>
+            </div>
+          </div>
+          <div class="arch-row">
+            <div class="arch-row-icon">🛡️</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">/admin · /ace · /portal</div>
+              <div class="arch-row-sub">HQ data · Security · Partners</div>
+            </div>
+          </div>
+
+          <div class="arch-section-sep"></div>
+          <div class="arch-sub-title">AgentOS (19 agents)</div>
+
+          <div class="arch-row">
+            <div class="arch-row-icon">🧠</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">Hermes CEO</div>
+              <div class="arch-row-sub">Master orchestrator · Telegram</div>
+            </div>
+            <span class="arch-row-tag tag-agent">OS</span>
+          </div>
+          <div class="arch-row">
+            <div class="arch-row-icon">💫</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">Elara AI Caretaker</div>
+              <div class="arch-row-sub">Memory · Check-ins · GPT-4o</div>
+            </div>
+            <span class="arch-row-tag tag-agent">AI</span>
+          </div>
+          <div class="arch-row">
+            <div class="arch-row-icon">🚨</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">Cara · Frank · Grace · Ace</div>
+              <div class="arch-row-sub">Alerts · Pharmacy · Check-in · Security</div>
+            </div>
+            <span class="arch-row-tag tag-agent">OPS</span>
+          </div>
+          <div class="arch-row">
+            <div class="arch-row-icon">📣</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">Rex · Scout · Vance · Nina</div>
+              <div class="arch-row-sub">Reddit · SEO · Content · Growth</div>
+            </div>
+            <span class="arch-row-tag tag-agent">MKT</span>
           </div>
         </div>
+
+        <!-- ── CONNECTOR 2 ── -->
+        <div class="arch-connector">
+          <div class="arch-conn-arrow">
+            <div class="arch-conn-arrowback"></div>
+            <div class="arch-conn-arrowbody"></div>
+            <div class="arch-conn-arrowhead"></div>
+          </div>
+          <div class="arch-conn-label">SDK · REST</div>
+          <div class="arch-conn-line"></div>
+        </div>
+
+        <!-- ── DATA PANEL ── -->
+        <div class="arch-panel arch-panel-data">
+          <div class="arch-panel-title">🗄️ Data &amp; Services</div>
+
+          <div class="arch-sub-title">Storage</div>
+          <div class="arch-row">
+            <div class="arch-row-icon">🐘</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">Supabase</div>
+              <div class="arch-row-sub">PostgreSQL · Auth · RLS</div>
+            </div>
+            <span class="arch-row-tag tag-db">DB</span>
+          </div>
+          <div class="arch-row">
+            <div class="arch-row-icon">⚡</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">Upstash Redis</div>
+              <div class="arch-row-sub">Session cache · Elara memory</div>
+            </div>
+            <span class="arch-row-tag tag-db">CACHE</span>
+          </div>
+
+          <div class="arch-section-sep"></div>
+          <div class="arch-sub-title">Intelligence</div>
+
+          <div class="arch-row">
+            <div class="arch-row-icon">🧬</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">OpenRouter AI</div>
+              <div class="arch-row-sub">GPT-4o · Claude · Elara brain</div>
+            </div>
+          </div>
+
+          <div class="arch-section-sep"></div>
+          <div class="arch-sub-title">Notifications &amp; Comms</div>
+
+          <div class="arch-row">
+            <div class="arch-row-icon">🔔</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">Firebase FCM</div>
+              <div class="arch-row-sub">Push · Dose reminders</div>
+            </div>
+          </div>
+          <div class="arch-row">
+            <div class="arch-row-icon">📧</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">SendGrid</div>
+              <div class="arch-row-sub">Email · Reports · Onboarding</div>
+            </div>
+          </div>
+          <div class="arch-row">
+            <div class="arch-row-icon">✈️</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">Telegram</div>
+              <div class="arch-row-sub">TJ + Prabh · 4 bots · Hermes</div>
+            </div>
+          </div>
+
+          <div class="arch-section-sep"></div>
+          <div class="arch-sub-title">Revenue</div>
+
+          <div class="arch-row">
+            <div class="arch-row-icon">💳</div>
+            <div class="arch-row-text">
+              <div class="arch-row-label">Stripe</div>
+              <div class="arch-row-sub">Subscriptions · Webhooks</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end arch-cols -->
+
+      <!-- ── DATA FLOWS ── -->
+      <div class="arch-flows">
+        <div class="arch-flow-title">Key Data Flows</div>
+        <div class="arch-flow-row">
+          <span class="arch-flow-badge badge-dose">DOSE TAKEN</span>
+          <div class="arch-flow-text"><strong>App logs</strong> → /dose-logs → <strong>Supabase</strong> → Ace increments streak → <strong>Elara</strong> loads for chat context</div>
+        </div>
+        <div class="arch-flow-row">
+          <span class="arch-flow-badge badge-alert">DOSE MISSED</span>
+          <div class="arch-flow-text"><strong>App logs missed</strong> → Cara fires <strong>Firebase FCM</strong> to caregiver → <strong>Hermes</strong> logs in daily brief</div>
+        </div>
+        <div class="arch-flow-row">
+          <span class="arch-flow-badge badge-signup">NEW SIGNUP</span>
+          <div class="arch-flow-text"><strong>Supabase Auth</strong> → /auth/profile → medicines onboarding → <strong>Frank</strong> registers FCM token → <strong>Grace</strong> schedules first check-in</div>
+        </div>
+        <div class="arch-flow-row">
+          <span class="arch-flow-badge badge-chat">ELARA CHAT</span>
+          <div class="arch-flow-text"><strong>/ai/chat</strong> → Redis loads memory → <strong>OpenRouter GPT-4o</strong> → response → Redis saves memory → user sees reply</div>
+        </div>
       </div>
-    </div>
-    <div class="cols">
-      <div class="card">
-        <div class="card-title">📊 Database Tables</div>
-        <table class="tbl">
-          <thead><tr><th>Table</th><th>Key Columns</th><th>Used By</th></tr></thead>
-          <tbody>
-            <tr><td><strong>users</strong></td><td>id, email, plan, trial_ends_at, date_of_birth</td><td>All routes + agents</td></tr>
-            <tr><td><strong>medicines</strong></td><td>user_id, name, dose_type, condition_category</td><td>AI, reminders, export</td></tr>
-            <tr><td><strong>dose_logs</strong></td><td>user_id, response, scheduled_time</td><td>Elara, Grace, Nina, stats</td></tr>
-            <tr><td><strong>elara_memory</strong></td><td>user_id, memory_blob, total_sessions</td><td>Elara AI + Redis</td></tr>
-            <tr><td><strong>caregiver_links</strong></td><td>caregiver_id, patient_id, permissions</td><td>Cara, family dashboard</td></tr>
-            <tr><td><strong>pharmacy_refill_requests</strong></td><td>user_id, medicine_name, pharmacy_email</td><td>/pharmacy route</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="card">
-        <div class="card-title">⚡ Middleware Stack</div>
-        <div class="list-item"><span>🛡️</span><div><div class="name">Helmet</div><div class="meta">HTTP security headers on every request</div></div></div>
-        <div class="list-item"><span>🔒</span><div><div class="name">CORS</div><div class="meta">Whitelisted: carely.fit, localhost only</div></div></div>
-        <div class="list-item"><span>🚦</span><div><div class="name">Rate Limiter</div><div class="meta">100 req/15min global · 20/min auth · AI separately</div></div></div>
-        <div class="list-item"><span>⏱️</span><div><div class="name">Request Timeout</div><div class="meta">30s max — prevents Railway hanging on slow AI</div></div></div>
-        <div class="list-item"><span>🛑</span><div><div class="name">Agent Guard</div><div class="meta">x-carely-secret header required on all /admin routes</div></div></div>
-      </div>
-    </div>
+
+    </div><!-- end arch-space -->
   </div>
 
-  <!-- ══ COMPANY MAP ══ -->
   <div class="page" id="page-company-map">
     <div class="ph"><h1>🏢 Company Operating Map</h1><p>Every human · Every agent · Every system · How they connect and create revenue</p></div>
     <div class="metric-row">
