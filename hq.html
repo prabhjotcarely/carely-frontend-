@@ -1196,7 +1196,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <tr><td><strong>Reddit</strong></td><td>u/carely_medcaretaker</td><td>Rex</td><td><span class="pill green">Monitoring</span></td><td>Manual only</td></tr>
           <tr><td><strong>Instagram</strong></td><td>@carely_medcaretaker</td><td>None yet</td><td><span class="pill amber">Created, not posting</span></td><td>0</td></tr>
           <tr><td><strong>TikTok</strong></td><td>—</td><td>None yet</td><td><span class="pill red">Not set up</span></td><td>0</td></tr>
-          <tr><td><strong>Email</strong></td><td>hello@carely.fit (SendGrid)</td><td>Nina + Blaze</td><td><span class="pill green">Active</span></td><td>—</td></tr>
+          <tr><td><strong>Email</strong></td><td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="78101d141417381b190a1d1401561e110c">[email&#160;protected]</a> (SendGrid)</td><td>Nina + Blaze</td><td><span class="pill green">Active</span></td><td>—</td></tr>
           <tr><td><strong>Telegram</strong></td><td>Carely Claude (TJ) · Ammy05 (Prabh) · HermesCEO (TJ) · DoraCarely (Prabh)</td><td>All agents</td><td><span class="pill green">Active (TJ + Prabh)</span></td><td>—</td></tr>
         </tbody>
       </table>
@@ -1206,7 +1206,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="list-item"><span>📦</span><div class="name">Railway dashboard</div><div class="meta">railway.app — carely-backend-production</div></div>
       <div class="list-item"><span>🗄️</span><div class="name">Supabase dashboard</div><div class="meta">supabase.com — iaxcdasluigpwiydcxle</div></div>
       <div class="list-item"><span>📊</span><div class="name">Google Search Console</div><div class="meta">search.google.com/search-console — check sitemap</div></div>
-      <div class="list-item"><span>🌐</span><div class="name">Cloudflare Pages</div><div class="meta">Wecarely.fit@gmail.com — carely-frontend project</div></div>
+      <div class="list-item"><span>🌐</span><div class="name">Cloudflare Pages</div><div class="meta"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cf98aaacaebdaaa3b6e1a9a6bb8fa8a2aea6a3e1aca0a2">[email&#160;protected]</a> — carely-frontend project</div></div>
       <div class="list-item"><span>📱</span><div class="name">Google Play Console</div><div class="meta">com.carely.meds — Closed Testing Alpha</div></div>
       <div class="list-item"><span>💳</span><div class="name">Stripe Dashboard</div><div class="meta">dashboard.stripe.com — Founding + Monthly + Annual plans</div></div>
     </div>
@@ -1829,6 +1829,64 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <button class="ui-export" onclick="exportUserIntelCSV()">&#x2B07; Export CSV</button>
     </div>
     <div class="ui-wrap"><div id="ui-table-wrap"><div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading users…</div></div></div>
+    <style>
+      .ui-timeline-btn{font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:6px;border:1.5px solid var(--seafoam);background:transparent;color:var(--seafoam);cursor:pointer;transition:all 0.15s;margin-left:5px}
+      .ui-timeline-btn:hover{background:var(--seafoam);color:white}
+    </style>
+  </div>
+
+  <!-- ══ USER TIMELINE ══ -->
+  <div class="page" id="page-user-timeline">
+    <style>
+      .tl-back-btn{font-size:0.75rem;font-weight:600;padding:6px 14px;border-radius:8px;border:1.5px solid var(--g300);background:transparent;color:var(--g500);cursor:pointer;margin-bottom:18px;transition:all 0.15s}
+      .tl-back-btn:hover{border-color:var(--teal);color:var(--teal)}
+      .tl-hdr{background:linear-gradient(135deg,#0D3347 0%,#028090 100%);border-radius:14px;padding:22px 24px;margin-bottom:20px;color:#fff;display:flex;flex-direction:column;gap:6px}
+      .tl-hdr-name{font-size:1.25rem;font-weight:800;letter-spacing:-0.02em}
+      .tl-hdr-email{font-size:0.78rem;opacity:0.75}
+      .tl-hdr-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;align-items:center}
+      .tl-badge{font-size:0.6rem;font-weight:800;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;background:rgba(255,255,255,0.2);color:#fff}
+      .tl-badge-founding{background:rgba(251,191,36,0.35);color:#fef3c7}
+      .tl-badge-monthly{background:rgba(255,255,255,0.15);color:#fff}
+      .tl-badge-annual{background:rgba(2,195,154,0.4);color:#d1fae5}
+      .tl-badge-trial{background:rgba(139,92,246,0.4);color:#ede9fe}
+      .tl-stat{font-size:0.72rem;opacity:0.85;padding:3px 10px;border-radius:12px;background:rgba(255,255,255,0.12)}
+      .tl-export-btn{margin-top:12px;align-self:flex-start;font-size:0.72rem;font-weight:700;padding:7px 16px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.5);background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;transition:all 0.15s}
+      .tl-export-btn:hover{background:rgba(255,255,255,0.2)}
+      .tl-section{margin-bottom:20px;border:1.5px solid var(--g200);border-radius:12px;overflow:hidden}
+      .tl-sec-hdr{display:flex;align-items:baseline;gap:10px;padding:12px 16px;background:var(--g50);border-bottom:1.5px solid var(--g200)}
+      .tl-sec-title{font-size:0.85rem;font-weight:800;color:var(--text)}
+      .tl-sec-sub{font-size:0.7rem;color:var(--g500)}
+      .tl-med-card{padding:14px 16px;border-bottom:1px solid var(--g100)}
+      .tl-med-card:last-child{border-bottom:none}
+      .tl-med-name{font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:3px}
+      .tl-med-info{font-size:0.72rem;color:var(--g500);margin-bottom:8px}
+      .tl-log-wrap{background:var(--g50);border-radius:8px;padding:10px 12px}
+      .tl-log-hdr{font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--g400);margin-bottom:6px}
+      .tl-log-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--g100);font-size:0.73rem}
+      .tl-log-row:last-child{border-bottom:none}
+      .tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+      .tl-dot-taken{background:#02C39A}
+      .tl-dot-skipped{background:#f97316}
+      .tl-dot-missed{background:#dc2626}
+      .tl-dot-snoozed{background:#d97706}
+      .tl-dot-unknown{background:#9ca3af}
+      .tl-log-time{color:var(--g500);flex:1;font-size:0.7rem}
+      .tl-log-resp{font-size:0.6rem;font-weight:800;letter-spacing:0.06em;padding:2px 7px;border-radius:10px}
+      .tl-resp-taken{background:#d1fae5;color:#065f46}
+      .tl-resp-skipped{background:#ffedd5;color:#c2410c}
+      .tl-resp-missed{background:#fee2e2;color:#991b1b}
+      .tl-resp-snoozed{background:#fef3c7;color:#92400e}
+      .tl-resp-unknown{background:#f3f4f6;color:#6b7280}
+      .tl-log-delay{font-size:0.65rem;color:var(--g400)}
+      .tl-mini-table{width:100%;border-collapse:collapse;font-size:0.76rem}
+      .tl-mini-table th{padding:9px 14px;text-align:left;font-size:0.63rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--g500);background:var(--g50)}
+      .tl-mini-table td{padding:8px 14px;border-bottom:1px solid var(--g100);color:var(--text)}
+      .tl-mini-table tbody tr:last-child td{border-bottom:none}
+      .tl-info-row{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--g100);flex-wrap:wrap;gap:4px;font-size:0.78rem}
+      .tl-info-row:last-child{border-bottom:none}
+    </style>
+    <button class="tl-back-btn" onclick="_activatePage('user-intel',false);loadUserIntel()">&#8592; Back to User Intelligence</button>
+    <div id="tl-content"><div style="text-align:center;padding:60px;color:var(--g500);font-size:0.82rem">Select a user from User Intelligence to view their timeline.</div></div>
   </div>
 
   <div class="page" id="page-reporting">
@@ -1899,7 +1957,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
             <tr><td><strong>Reddit</strong></td><td><span class="pill green">Monitoring</span></td><td>u/carely_medcaretaker</td><td>0 (manual)</td></tr>
             <tr><td><strong>Instagram</strong></td><td><span class="pill amber">Created, manual</span></td><td>@carely_medcaretaker</td><td>0</td></tr>
             <tr><td><strong>TikTok</strong></td><td><span class="pill red">Not set up</span></td><td>—</td><td>0</td></tr>
-            <tr><td><strong>Email</strong></td><td><span class="pill green">Active (SendGrid)</span></td><td>hello@carely.fit</td><td>—</td></tr>
+            <tr><td><strong>Email</strong></td><td><span class="pill green">Active (SendGrid)</span></td><td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="94fcf1f8f8fbd4f7f5e6f1f8edbaf2fde0">[email&#160;protected]</a></td><td>—</td></tr>
           </tbody>
         </table>
       </div>
@@ -2260,7 +2318,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="token-icon">📧</div>
       <div class="token-info">
         <div class="token-name">SendGrid API Key</div>
-        <div class="token-detail">SENDGRID_API_KEY · Railway · From: hello@carely.fit · Used by Nina, Dr. Bridge, welcome emails</div>
+        <div class="token-detail">SENDGRID_API_KEY · Railway · From: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d9b1bcb5b5b699bab8abbcb5a0f7bfb0ad">[email&#160;protected]</a> · Used by Nina, Dr. Bridge, welcome emails</div>
       </div>
       <div class="token-expiry ok">No expiry</div>
     </div>
@@ -2988,7 +3046,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="dg-card dg-full">
         <div class="dg-card-title">User Rights Under PIPEDA</div>
         <div class="dg-rights">
-          <div class="dg-right"><div class="dg-right-title">Right to Access</div><div class="dg-right-desc">Users can request a full export of their data at any time via the app or by emailing hello@carely.fit</div></div>
+          <div class="dg-right"><div class="dg-right-title">Right to Access</div><div class="dg-right-desc">Users can request a full export of their data at any time via the app or by emailing <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="90f8f5fcfcffd0f3f1e2f5fce9bef6f9e4">[email&#160;protected]</a></div></div>
           <div class="dg-right"><div class="dg-right-title">Right to Correction</div><div class="dg-right-desc">Users can update their personal information directly in the app at any time</div></div>
           <div class="dg-right"><div class="dg-right-title">Right to Erasure</div><div class="dg-right-desc">Full account deletion removes all health data, dose logs, vitals, and doctor connections permanently</div></div>
           <div class="dg-right"><div class="dg-right-title">Right to Withdraw Consent</div><div class="dg-right-desc">Users can cancel at any time. Withdrawal does not affect lawfulness of prior processing</div></div>
@@ -3373,7 +3431,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 </div><!-- end page-area -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Copy portal link to clipboard
 function copyLink(page) {
   var url = window.location.origin + window.location.pathname.replace(/[^/]*$/, '') + page;
@@ -7792,6 +7850,6 @@ function downloadCohortCSV() {
   URL.revokeObjectURL(url);
 }
 </script>
-<script src="hq-intel.js?v=20260527e"></script>
-</body>
+<script src="hq-intel.js?v=20260527f"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a02743d1dbc02724',t:'MTc3OTkwODQ1Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
