@@ -209,6 +209,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ch-queue-note{text-align:center;padding:18px;font-size:0.82rem;color:var(--g500);font-weight:600;border:2px dashed var(--g200);border-radius:10px;margin-top:6px}
 .ch-approved-row{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid var(--g200)}
 .ch-approved-row:last-child{border-bottom:none}
+
+.arch-node{background:white;border:1.5px solid var(--g200);border-radius:8px;padding:7px 10px;font-size:0.75rem;color:var(--deep);margin-bottom:4px;text-align:center;font-weight:500}
+.arch-arrow{text-align:center;font-size:0.9rem;color:var(--g300);margin:2px 0}
+.tag-btn{font-size:0.72rem;font-weight:700;border:1.5px solid var(--g300);background:white;color:var(--g500);padding:4px 10px;border-radius:100px;cursor:pointer;transition:all 0.15s}
+.tag-btn.active,.tag-btn:hover{background:var(--teal);border-color:var(--teal);color:white}
+.file-card{background:white;border-radius:12px;padding:14px;box-shadow:0 1px 8px rgba(0,0,0,0.05);border:1.5px solid var(--g200);transition:all 0.2s}
+.file-card:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,0.1);border-color:var(--teal)}
+.file-card-path{font-size:0.7rem;color:var(--g500);font-family:monospace;margin-bottom:5px}
+.file-card-title{font-size:0.85rem;font-weight:800;color:var(--deep);margin-bottom:4px}
+.file-card-desc{font-size:0.75rem;color:var(--g500);line-height:1.5;margin-bottom:8px}
+.file-card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.file-tag{font-size:0.62rem;font-weight:700;padding:2px 7px;border-radius:100px;text-transform:uppercase;letter-spacing:0.04em}
+.file-tag.route{background:#DBEAFE;color:#1D4ED8}.file-tag.agent{background:#F5F3FF;color:#5B21B6}.file-tag.core{background:#D1FAE5;color:#065F46}.file-tag.profit{background:#FEF3C7;color:#92400E}.file-tag.db{background:#FCE7F3;color:#9D174D}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bar-track{flex:1;height:10px;background:var(--g200);border-radius:100px;overflow:hidden}
 </style>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
@@ -356,6 +371,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <div class="sb-sec">
+    <div class="sb-sec-title">User Intelligence</div>
+    <div class="sb-item" onclick="nav(this,'demographics');loadDemographics()"><span class="ic">🧬</span> Demographics <span class="dot-g"></span></div>
+    <div class="sb-item" onclick="nav(this,'elara-intel');loadElaraIntel()"><span class="ic">💬</span> Elara Intel</div>
+    <div class="sb-item" onclick="nav(this,'behavior');loadBehavior()"><span class="ic">📱</span> Behavior</div>
+    <div class="sb-item" onclick="nav(this,'data-export')"><span class="ic">📦</span> Data Export</div>
+  </div>
+
+  <div class="sb-sec">
+    <div class="sb-sec-title">Backend Map</div>
+    <div class="sb-item" onclick="nav(this,'backend-files');if(typeof _renderFiles==='function')_renderFiles('','all')"><span class="ic">🗂️</span> File Registry <span class="dot-g"></span></div>
+    <div class="sb-item" onclick="nav(this,'backend-diagram')"><span class="ic">🔗</span> Architecture</div>
+    <div class="sb-item" onclick="nav(this,'company-map')"><span class="ic">🏢</span> Company Map</div>
+  </div>
+
+    <div class="sb-sec">
     <div class="sb-sec-title">System</div>
     <div class="sb-item" onclick="nav(this,'all-agents')"><span class="ic">🧠</span> All 22 Agents</div>
     <div class="sb-item" onclick="nav(this,'org-chart')"><span class="ic">🏗️</span> Org Chart</div>
@@ -2742,6 +2772,255 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <button onclick="triggerAxel()" style="background:#0D3347;color:white;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:700;font-size:0.82rem">Trigger Axel Now</button>
           <span id="axel-trigger-msg" style="display:block;margin-top:6px;font-size:0.78rem;color:var(--g500)"></span>
         </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══ USER DEMOGRAPHICS ══ -->
+  <div class="page" id="page-demographics">
+    <div class="ph"><h1>🧬 User Demographics</h1><p>Age groups · Signup trends · Plan mix · Live from Supabase</p></div>
+    <div class="metric-row">
+      <div class="metric"><div class="metric-label">Total Users</div><div class="metric-val teal" id="dm-total">—</div><div class="metric-sub">Active accounts</div></div>
+      <div class="metric"><div class="metric-label">With Age Data</div><div class="metric-val" id="dm-with-age">—</div><div class="metric-sub">DOB on file</div></div>
+      <div class="metric"><div class="metric-label">Top Age Group</div><div class="metric-val" id="dm-top-age" style="font-size:1.1rem">—</div><div class="metric-sub">Largest cohort</div></div>
+      <div class="metric"><div class="metric-label">Gender</div><div class="metric-val amber" style="font-size:1rem">Phase 2</div><div class="metric-sub">Adding to onboarding</div></div>
+    </div>
+    <div class="cols">
+      <div class="card"><div class="card-title">📊 Age Distribution</div><div id="demo-age-chart"><div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading...</div></div></div>
+      <div class="card"><div class="card-title">💳 Plan Mix</div><div id="demo-plan-chart"><div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading...</div></div></div>
+    </div>
+    <div class="card"><div class="card-title">📈 Weekly Signup Trend <span class="card-sub">Last 12 weeks</span></div><div id="demo-signup-trend"><div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading...</div></div></div>
+    <div class="card" style="background:linear-gradient(135deg,rgba(2,195,154,0.08),rgba(2,128,144,0.06));border:1.5px solid rgba(2,195,154,0.2)">
+      <div class="card-title">🎯 Data Company Roadmap</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:4px">
+        <div style="background:white;border-radius:10px;padding:12px"><div style="font-size:0.72rem;font-weight:700;color:var(--teal);text-transform:uppercase;margin-bottom:4px">Phase 1 — NOW</div><div style="font-size:0.82rem;color:var(--deep)">Medicine conditions · Age groups · Plan mix · Adherence rates</div></div>
+        <div style="background:white;border-radius:10px;padding:12px"><div style="font-size:0.72rem;font-weight:700;color:var(--amber);text-transform:uppercase;margin-bottom:4px">Phase 2 — Q3 2026</div><div style="font-size:0.82rem;color:var(--deep)">Gender + DOB in onboarding · Symptom tracking · Refill patterns</div></div>
+        <div style="background:white;border-radius:10px;padding:12px"><div style="font-size:0.72rem;font-weight:700;color:var(--purple);text-transform:uppercase;margin-bottom:4px">Phase 3 — Q4 2026</div><div style="font-size:0.82rem;color:var(--deep)">Anonymised cohorts · Pharma research · Real-world evidence</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ELARA INTELLIGENCE ══ -->
+  <div class="page" id="page-elara-intel">
+    <div class="ph"><h1>💬 Elara Intelligence</h1><p>Chat engagement · Session depth · What users are asking</p></div>
+    <div class="metric-row">
+      <div class="metric"><div class="metric-label">Users w/ Memory</div><div class="metric-val teal" id="ei-total">—</div><div class="metric-sub">Ever chatted with Elara</div></div>
+      <div class="metric"><div class="metric-label">Engagement Rate</div><div class="metric-val" id="ei-rate">—</div><div class="metric-sub">% of all users</div></div>
+      <div class="metric"><div class="metric-label">Deep Users 5+ sessions</div><div class="metric-val green" id="ei-deep">—</div><div class="metric-sub">High-value retention signal</div></div>
+      <div class="metric"><div class="metric-label">Deep Rate</div><div class="metric-val" id="ei-deeprate">—</div><div class="metric-sub">% of chat users</div></div>
+    </div>
+    <div class="cols">
+      <div class="card"><div class="card-title">📊 Session Depth</div><div id="ei-session-chart"><div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading...</div></div></div>
+      <div class="card">
+        <div class="card-title">🤖 How Elara Learns</div>
+        <div class="list-item"><span>🧠</span><div><div class="name">Redis Memory</div><div class="meta">Persistent memory thread per user across sessions</div></div></div>
+        <div class="list-item"><span>💊</span><div><div class="name">Medicine Context</div><div class="meta">Loads active medicines + schedules before every chat</div></div></div>
+        <div class="list-item"><span>📊</span><div><div class="name">Adherence Data</div><div class="meta">Sees 7-day + 30-day adherence — coaches proactively</div></div></div>
+        <div class="list-item"><span>🎯</span><div><div class="name">Condition Awareness</div><div class="meta">Uses onboarding condition to tailor health guidance</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BEHAVIOR TRACKING ══ -->
+  <div class="page" id="page-behavior">
+    <div class="ph"><h1>📱 Behavior Tracking</h1><p>Dose adherence · Activation funnel · How agents use this data</p></div>
+    <div class="metric-row">
+      <div class="metric"><div class="metric-label">30-Day Adherence</div><div class="metric-val teal" id="beh-adh30">—</div><div class="metric-sub">Doses taken / logged</div></div>
+      <div class="metric"><div class="metric-label">7-Day Adherence</div><div class="metric-val" id="beh-adh7">—</div><div class="metric-sub">This week</div></div>
+      <div class="metric"><div class="metric-label">Activation Rate</div><div class="metric-val green" id="beh-activation">—</div><div class="metric-sub">Users who logged a dose</div></div>
+      <div class="metric"><div class="metric-label">Avg Meds / User</div><div class="metric-val" id="beh-avgmeds">—</div><div class="metric-sub">Active medicines</div></div>
+    </div>
+    <div class="cols">
+      <div class="card"><div class="card-title">💊 Dose Stats</div><div id="beh-dose-stats"><div style="text-align:center;padding:28px;color:var(--g500)">Loading...</div></div></div>
+      <div class="card"><div class="card-title">🎯 Activation Funnel</div><div id="beh-funnel"><div style="text-align:center;padding:28px;color:var(--g500)">Loading...</div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 How Agents Use This Data</div>
+      <table class="tbl">
+        <thead><tr><th>Agent</th><th>Data Used</th><th>Action Triggered</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Grace</strong></td><td>Daily adherence rate</td><td>Check-in if rate drops below 80% for 3 days</td></tr>
+          <tr><td><strong>Cara</strong></td><td>Missed doses</td><td>Caregiver alert after 2nd consecutive miss</td></tr>
+          <tr><td><strong>Elara</strong></td><td>7-day adherence + medicines</td><td>Personalises coaching tone by compliance trend</td></tr>
+          <tr><td><strong>Nina</strong></td><td>Trial-day engagement</td><td>Day 7 close if user logged 3+ doses</td></tr>
+          <tr><td><strong>Hermes</strong></td><td>Overall activation rate</td><td>Flags in daily brief if rate drops</td></tr>
+          <tr><td><strong>Ace</strong></td><td>Feature usage anomalies</td><td>Ops alert if dose log volume drops suddenly</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ DATA EXPORT ══ -->
+  <div class="page" id="page-data-export">
+    <div class="ph"><h1>📦 Data Export</h1><p>CSV download · Condition breakdown · Investor-ready data</p></div>
+    <div class="cols">
+      <div class="card">
+        <div class="card-title">📥 Patient Data CSV</div>
+        <div style="font-size:0.82rem;color:var(--g500);line-height:1.7;margin-bottom:16px">All users, medicines, conditions, plan, onboard date. PIPEDA-compliant.</div>
+        <div class="list-item"><span>✅</span><div class="name">User ID, email, onboard date, plan</div></div>
+        <div class="list-item"><span>✅</span><div class="name">Medicine name + dose type</div></div>
+        <div class="list-item"><span>✅</span><div class="name">Auto-classified condition (13 categories)</div></div>
+        <div class="list-item"><span>✅</span><div class="name">Active vs churned status</div></div>
+        <button onclick="downloadPatientCSV(this)" style="background:var(--teal);color:white;border:none;border-radius:10px;padding:11px 20px;font-size:0.85rem;font-weight:700;cursor:pointer;width:100%;margin-top:12px">Download CSV</button>
+      </div>
+      <div class="card">
+        <div class="card-title">🏥 Condition Summary</div>
+        <div id="export-condition-summary"><div style="text-align:center;padding:28px;color:var(--g500)">Click to load</div></div>
+        <button onclick="loadConditionSummary()" style="background:var(--deep);color:white;border:none;border-radius:10px;padding:11px 20px;font-size:0.85rem;font-weight:700;cursor:pointer;width:100%;margin-top:12px">Load Condition Breakdown</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BACKEND FILE REGISTRY ══ -->
+  <div class="page" id="page-backend-files">
+    <div class="ph"><h1>🗂️ Backend File Registry</h1><p>Every file · What it does · Which agents use it · Revenue connection</p></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <input id="file-search" oninput="filterFiles()" placeholder="Search files..." style="font-size:0.8rem;padding:6px 12px;border:1.5px solid var(--g300);border-radius:8px;flex:1;min-width:180px;outline:none;color:var(--text)">
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="tag-btn active" onclick="filterByTag(this,'all')">All</button>
+        <button class="tag-btn" onclick="filterByTag(this,'route')">Routes</button>
+        <button class="tag-btn" onclick="filterByTag(this,'agent')">Agents</button>
+        <button class="tag-btn" onclick="filterByTag(this,'core')">Core</button>
+        <button class="tag-btn" onclick="filterByTag(this,'profit')">Profit</button>
+      </div>
+    </div>
+    <div id="file-registry" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px"></div>
+  </div>
+
+  <!-- ══ BACKEND ARCHITECTURE ══ -->
+  <div class="page" id="page-backend-diagram">
+    <div class="ph"><h1>🔗 Backend Architecture</h1><p>Full system flow · App to Routes to Agents to External APIs</p></div>
+    <div class="card" style="overflow-x:auto">
+      <div style="min-width:700px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;margin-bottom:20px">
+          <div>
+            <div style="font-size:0.67rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--teal);margin-bottom:10px;text-align:center">App Layer</div>
+            <div class="arch-node" style="background:#E0FAF4">📱 React Native App</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-node" style="background:#E0FAF4">🔐 Supabase Auth JWT</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-node" style="background:#E0FAF4">📡 Axios API Client</div>
+          </div>
+          <div>
+            <div style="font-size:0.67rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--deep);margin-bottom:10px;text-align:center">Routes (Express)</div>
+            <div class="arch-node">/auth</div><div class="arch-node">/medicines</div><div class="arch-node">/dose-logs</div>
+            <div class="arch-node">/ai (Elara)</div><div class="arch-node">/pharmacy</div>
+            <div class="arch-node">/subscription</div><div class="arch-node">/admin</div>
+          </div>
+          <div>
+            <div style="font-size:0.67rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple);margin-bottom:10px;text-align:center">AgentOS</div>
+            <div class="arch-node" style="background:#F5F3FF">🧠 Hermes CEO</div>
+            <div class="arch-node" style="background:#F5F3FF">💊 Frank</div>
+            <div class="arch-node" style="background:#F5F3FF">👩 Grace</div>
+            <div class="arch-node" style="background:#F5F3FF">🚨 Cara</div>
+            <div class="arch-node" style="background:#F5F3FF">💼 Cole</div>
+            <div class="arch-node" style="background:#F5F3FF">🎯 Nina + Lena</div>
+            <div class="arch-node" style="background:#F5F3FF">🔒 Ace</div>
+          </div>
+          <div>
+            <div style="font-size:0.67rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--amber);margin-bottom:10px;text-align:center">External</div>
+            <div class="arch-node" style="background:#FEF9E7">🗄️ Supabase</div>
+            <div class="arch-node" style="background:#FEF9E7">⚡ Upstash Redis</div>
+            <div class="arch-node" style="background:#FEF9E7">🔔 Firebase FCM</div>
+            <div class="arch-node" style="background:#FEF9E7">📧 SendGrid</div>
+            <div class="arch-node" style="background:#FEF9E7">💳 Stripe</div>
+            <div class="arch-node" style="background:#FEF9E7">🤖 OpenRouter AI</div>
+            <div class="arch-node" style="background:#FEF9E7">📱 Telegram</div>
+          </div>
+        </div>
+        <div style="background:var(--g100);border-radius:12px;padding:14px">
+          <div style="font-size:0.75rem;font-weight:700;color:var(--deep);margin-bottom:10px">Key Data Flows</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:0.78rem;color:var(--g500)">
+            <div><span style="color:var(--teal);font-weight:700">Dose Taken</span> → App logs → /dose-logs → Supabase → Ace increments streak → Grace reads for check-in → Elara loads for chat</div>
+            <div><span style="color:var(--teal);font-weight:700">Dose Missed</span> → App logs missed → Cara fires FCM to caregiver → Hermes logs in daily brief</div>
+            <div><span style="color:var(--teal);font-weight:700">New Signup</span> → Supabase Auth → /auth/profile → medicines add → Frank gets FCM token → Grace schedules check-in</div>
+            <div><span style="color:var(--teal);font-weight:700">Elara Chat</span> → /ai/chat → Redis loads memory → OpenRouter GPT → response → Redis saves memory</div>
+            <div><span style="color:var(--teal);font-weight:700">Stripe Webhook</span> → plan updated in Supabase → Nina triggered on cancels → Lena on win-back</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <div class="card-title">📊 Database Tables</div>
+        <table class="tbl">
+          <thead><tr><th>Table</th><th>Key Columns</th><th>Used By</th></tr></thead>
+          <tbody>
+            <tr><td><strong>users</strong></td><td>id, email, plan, trial_ends_at, date_of_birth</td><td>All routes + agents</td></tr>
+            <tr><td><strong>medicines</strong></td><td>user_id, name, dose_type, condition_category</td><td>AI, reminders, export</td></tr>
+            <tr><td><strong>dose_logs</strong></td><td>user_id, response, scheduled_time</td><td>Elara, Grace, Nina, stats</td></tr>
+            <tr><td><strong>elara_memory</strong></td><td>user_id, memory_blob, total_sessions</td><td>Elara AI + Redis</td></tr>
+            <tr><td><strong>caregiver_links</strong></td><td>caregiver_id, patient_id, permissions</td><td>Cara, family dashboard</td></tr>
+            <tr><td><strong>pharmacy_refill_requests</strong></td><td>user_id, medicine_name, pharmacy_email</td><td>/pharmacy route</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">⚡ Middleware Stack</div>
+        <div class="list-item"><span>🛡️</span><div><div class="name">Helmet</div><div class="meta">HTTP security headers on every request</div></div></div>
+        <div class="list-item"><span>🔒</span><div><div class="name">CORS</div><div class="meta">Whitelisted: carely.fit, localhost only</div></div></div>
+        <div class="list-item"><span>🚦</span><div><div class="name">Rate Limiter</div><div class="meta">100 req/15min global · 20/min auth · AI separately</div></div></div>
+        <div class="list-item"><span>⏱️</span><div><div class="name">Request Timeout</div><div class="meta">30s max — prevents Railway hanging on slow AI</div></div></div>
+        <div class="list-item"><span>🛑</span><div><div class="name">Agent Guard</div><div class="meta">x-carely-secret header required on all /admin routes</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ COMPANY MAP ══ -->
+  <div class="page" id="page-company-map">
+    <div class="ph"><h1>🏢 Company Operating Map</h1><p>Every human · Every agent · Every system · How they connect and create revenue</p></div>
+    <div class="metric-row">
+      <div class="metric"><div class="metric-label">Humans</div><div class="metric-val teal">2</div><div class="metric-sub">TJ + Prabh</div></div>
+      <div class="metric"><div class="metric-label">AI Agents</div><div class="metric-val">22</div><div class="metric-sub">Running 24/7 on Railway</div></div>
+      <div class="metric"><div class="metric-label">App Screens</div><div class="metric-val">52</div><div class="metric-sub">iOS + Android</div></div>
+      <div class="metric"><div class="metric-val" style="font-size:1rem;color:var(--green)">$1M ARR</div><div class="metric-sub">By Oct 31, 2026</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:14px">
+      <div class="card" style="border:2px solid var(--teal)">
+        <div class="card-title" style="color:var(--teal)">👥 The Humans</div>
+        <div style="margin-bottom:10px"><div style="font-weight:800;color:var(--deep);margin-bottom:3px">TJ — CEO / Head of Engineering</div><div style="font-size:0.78rem;color:var(--g500);line-height:1.6">All features · AI team · Product strategy · Investor relations</div></div>
+        <div><div style="font-weight:800;color:var(--deep);margin-bottom:3px">Prabh — COO / CMO</div><div style="font-size:0.78rem;color:var(--g500);line-height:1.6">Approves content · Social presence · Customer support · Operations</div></div>
+      </div>
+      <div class="card" style="border:2px solid var(--purple)">
+        <div class="card-title" style="color:var(--purple)">🤖 Patient Care AI</div>
+        <div style="font-size:0.8rem;display:flex;flex-direction:column;gap:4px">
+          <div><strong>Elara</strong> — AI caretaker, memory-based chat</div>
+          <div><strong>Frank</strong> — Funny personalised dose reminders</div>
+          <div><strong>Grace</strong> — Morning check-ins, doctor reports</div>
+          <div><strong>Cara</strong> — Missed dose alerts to caregivers</div>
+          <div><strong>Maya</strong> — Caregiver relationship manager</div>
+          <div><strong>Zara</strong> — Symptom + side effect tracker</div>
+          <div><strong>Atlas</strong> — Pharmacy refill coordinator</div>
+        </div>
+      </div>
+      <div class="card" style="border:2px solid var(--amber)">
+        <div class="card-title" style="color:var(--amber)">📈 Growth AI</div>
+        <div style="font-size:0.8rem;display:flex;flex-direction:column;gap:4px">
+          <div><strong>Nina</strong> — Trial closer (Day 3 + Day 7)</div>
+          <div><strong>Lena</strong> — Win-back cancelled users</div>
+          <div><strong>Cole</strong> — B2B outreach to pharmacies + clinics</div>
+          <div><strong>Rex</strong> — Reddit content</div>
+          <div><strong>Leo</strong> — LinkedIn as Prabh</div>
+          <div><strong>Vance</strong> — TikTok/Reels scripts</div>
+          <div><strong>Sam</strong> — Referral tracking</div>
+          <div><strong>Ace</strong> — Agent watchdog + daily brief</div>
+          <div><strong>Hermes</strong> — CEO operating system</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">💰 User Journey → Revenue</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <div style="background:var(--g100);border-radius:10px;padding:10px 14px;text-align:center;font-size:0.78rem"><div style="font-weight:800;margin-bottom:2px">Discovery</div><div style="color:var(--g500)">Reddit · TikTok<br>Instagram · SEO</div></div>
+        <div style="color:var(--teal);font-size:1.2rem;font-weight:900">→</div>
+        <div style="background:var(--g100);border-radius:10px;padding:10px 14px;text-align:center;font-size:0.78rem"><div style="font-weight:800;margin-bottom:2px">7-Day Trial</div><div style="color:var(--g500)">All features<br>No credit card</div></div>
+        <div style="color:var(--teal);font-size:1.2rem;font-weight:900">→</div>
+        <div style="background:rgba(2,195,154,0.15);border:1.5px solid var(--mint);border-radius:10px;padding:10px 14px;text-align:center;font-size:0.78rem"><div style="font-weight:800;color:var(--teal);margin-bottom:2px">Nina closes Day 7</div><div style="color:var(--g500)">$5 founding<br>$9.99/mo · $90/yr</div></div>
+        <div style="color:var(--teal);font-size:1.2rem;font-weight:900">→</div>
+        <div style="background:rgba(2,195,154,0.15);border:1.5px solid var(--mint);border-radius:10px;padding:10px 14px;text-align:center;font-size:0.78rem"><div style="font-weight:800;color:var(--teal);margin-bottom:2px">Retention</div><div style="color:var(--g500)">Elara · Grace<br>Streaks · Cara</div></div>
+        <div style="color:var(--teal);font-size:1.2rem;font-weight:900">→</div>
+        <div style="background:linear-gradient(135deg,var(--teal),var(--mint));border-radius:10px;padding:10px 14px;text-align:center;font-size:0.78rem;color:white"><div style="font-weight:800;margin-bottom:2px">Data Asset</div><div style="opacity:0.8">Condition data<br>Cohort analytics</div></div>
       </div>
     </div>
   </div>
@@ -7497,5 +7776,6 @@ function downloadCohortCSV() {
   URL.revokeObjectURL(url);
 }
 </script>
+<script src="hq-intel.js"></script>
 </body>
 </html>
