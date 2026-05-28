@@ -1615,40 +1615,42 @@ async function joinWaitlist(e) {
   const btn = e.target.querySelector('button');
   btn.textContent = 'Joining...'; btn.disabled = true;
   try {
-    await fetch('https://carely-backend-production.up.railway.app/waitlist', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+    await fetch('https://carely-backend-production.up.railway.app/waitlist/signup', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
     btn.textContent = '✓ You\'re on the list!'; btn.style.background = 'var(--t2)';
     if(window.posthog) posthog.capture('waitlist_signup',{email});
     const w = document.getElementById('waitlistCount'); if(w) w.textContent = parseInt(w.textContent)+1;
+    document.getElementById('carelyThankyouModal').style.display = 'flex';
   } catch { btn.textContent='Get Early Access'; btn.disabled=false; }
 }
 
-/* ── Plan checkout ── */
-async function claimPlan(plan) {
-  const btn = event && event.target ? event.target : null;
-  const origText = btn ? btn.textContent : '';
-  if(btn){ btn.textContent = 'Redirecting...'; btn.disabled = true; }
-  try {
-    const res = await fetch('https://carely-backend-production.up.railway.app/subscription/buy-founding',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan})});
-    const {url} = await res.json();
-    if(url){ if(window.posthog)posthog.capture('checkout_started',{currency:curr,plan}); window.location.href=url; }
-    else throw new Error();
-  } catch {
-    if(btn){ btn.textContent=origText; btn.disabled=false; }
-    alert('Something went wrong. Email hello@carely.fit');
-  }
+/* ── Checkout email modal ── */
+let _checkoutPlan = 'founding';
+function claimPlan(plan) { _checkoutPlan = plan || 'founding'; openCheckoutModal(); }
+function claimSpot(btn) { _checkoutPlan = 'founding'; openCheckoutModal(); }
+function openCheckoutModal() {
+  document.getElementById('checkoutEmailInp').value = '';
+  document.getElementById('checkoutNameInp').value = '';
+  const sb = document.getElementById('checkoutSubmitBtn');
+  sb.textContent = 'Continue to Checkout'; sb.disabled = false;
+  document.getElementById('carelyCheckoutModal').style.display = 'flex';
 }
-
-/* ── Founding checkout ── */
-async function claimSpot(btn) {
-  const origText = btn ? btn.textContent : '';
-  if(btn){ btn.textContent='Redirecting...'; btn.disabled=true; }
+function closeCheckoutModal() { document.getElementById('carelyCheckoutModal').style.display = 'none'; }
+async function submitCheckout() {
+  const email = document.getElementById('checkoutEmailInp').value.trim();
+  if(!email||!email.includes('@')){ document.getElementById('checkoutEmailInp').focus(); return; }
+  const firstName = document.getElementById('checkoutNameInp').value.trim();
+  const btn = document.getElementById('checkoutSubmitBtn');
+  btn.textContent = 'Redirecting...'; btn.disabled = true;
   try {
-    const res = await fetch('https://carely-backend-production.up.railway.app/subscription/buy-founding',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({currency:curr})});
+    const res = await fetch('https://carely-backend-production.up.railway.app/subscription/buy-founding',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email, firstName, plan: _checkoutPlan})
+    });
     const {url} = await res.json();
-    if(url){ if(window.posthog)posthog.capture('founding_checkout_started',{currency:curr}); window.location.href=url; }
+    if(url){ if(window.posthog)posthog.capture('checkout_started',{plan:_checkoutPlan,currency:curr}); window.location.href=url; }
     else throw new Error();
   } catch {
-    if(btn){ btn.textContent=origText||'Claim Founding Spot'; btn.disabled=false; }
+    btn.textContent='Continue to Checkout'; btn.disabled=false;
     alert('Something went wrong. Email hello@carely.fit');
   }
 }
@@ -1674,6 +1676,30 @@ document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
 
 <!-- PostHog -->
 <script defer>!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);posthog.init('phc_Agnp32s29DdzhBNDxSDB6R7moq9DDbdgShFLxfM6kXBP',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});</script>
+<!-- Thank you modal (shown after waitlist signup) -->
+<div id="carelyThankyouModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:20px;padding:36px 32px;max-width:400px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.25);">
+    <div style="width:56px;height:56px;background:#e6f7f5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.6rem;">✅</div>
+    <h3 style="color:#0D3347;margin:0 0 10px;font-size:1.3rem;">You're on the list!</h3>
+    <p style="color:#555;margin:0 0 8px;font-size:0.95rem;">We've sent a welcome email to your inbox from <strong>hello@carely.fit</strong></p>
+    <p style="color:#888;margin:0 0 24px;font-size:0.85rem;">Can't find it? Check your spam folder.</p>
+    <button onclick="document.getElementById('carelyThankyouModal').style.display='none'" style="background:#028090;color:#fff;border:none;padding:13px 36px;border-radius:10px;font-size:1rem;cursor:pointer;font-weight:600;">Got it, thanks!</button>
+  </div>
+</div>
+
+<!-- Checkout email modal (shown when pricing button is clicked) -->
+<div id="carelyCheckoutModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:20px;padding:36px 32px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.25);">
+    <h3 style="color:#0D3347;margin:0 0 6px;font-size:1.25rem;">One quick step</h3>
+    <p style="color:#666;margin:0 0 20px;font-size:0.92rem;">Enter your email to continue to secure checkout.</p>
+    <input id="checkoutEmailInp" type="email" placeholder="your@email.com" autocomplete="email" style="width:100%;box-sizing:border-box;border:1.5px solid #dde3e8;border-radius:10px;padding:13px 14px;font-size:1rem;margin-bottom:10px;outline:none;" onfocus="this.style.borderColor='#028090'" onblur="this.style.borderColor='#dde3e8'">
+    <input id="checkoutNameInp" type="text" placeholder="First name (optional)" autocomplete="given-name" style="width:100%;box-sizing:border-box;border:1.5px solid #dde3e8;border-radius:10px;padding:13px 14px;font-size:1rem;margin-bottom:18px;outline:none;" onfocus="this.style.borderColor='#028090'" onblur="this.style.borderColor='#dde3e8'">
+    <button id="checkoutSubmitBtn" onclick="submitCheckout()" style="width:100%;background:#028090;color:#fff;border:none;padding:14px;border-radius:10px;font-size:1rem;cursor:pointer;font-weight:600;margin-bottom:10px;">Continue to Checkout</button>
+    <button onclick="closeCheckoutModal()" style="width:100%;background:none;border:1.5px solid #e0e6ea;padding:12px;border-radius:10px;font-size:0.9rem;cursor:pointer;color:#888;">Cancel</button>
+    <p style="text-align:center;margin:14px 0 0;font-size:0.78rem;color:#aaa;">Secure checkout via Stripe. Cancel anytime.</p>
+  </div>
+</div>
+
 <script src="elara.js"></script>
 <script src="elara-widget.js" defer></script>
 </body>
