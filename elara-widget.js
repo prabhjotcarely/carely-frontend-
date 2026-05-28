@@ -238,7 +238,7 @@
     })
     .catch(function() {
       removeTyping();
-      addBotMsg("Connection issue. Email hello@carely.fit — TJ responds within 24h.");
+      addBotMsg("Lost the connection for a moment. Try again, or email hello@carely.fit and we'll get back to you within 24h.");
     })
     .finally(function() {
       isBusy = false;
