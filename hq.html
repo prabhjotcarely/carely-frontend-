@@ -360,6 +360,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="sb-sec-title">Analytics</div>
     <div class="sb-item" onclick="nav(this,'app-metrics')"><span class="ic">📊</span> App Metrics</div>
     <div class="sb-item" onclick="nav(this,'revenue')"><span class="ic">💰</span> Revenue &amp; Growth</div>
+    <div class="sb-item" onclick="nav(this,'expenses');window.loadExpenses&&window.loadExpenses()"><span class="ic">🧾</span> Expenses</div>
     <div class="sb-item" onclick="nav(this,'crm')"><span class="ic">👤</span> CRM</div>
     <div class="sb-item" onclick="nav(this,'affiliates')"><span class="ic">💰</span> Affiliates</div>
     <div class="sb-item" onclick="nav(this,'user-intel');loadUserIntel()"><span class="ic">🧠</span> User Intelligence</div>
@@ -410,7 +411,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="topbar-left" id="topbar-title">Daily Brief</div>
     <div class="topbar-right">
       <span class="badge-live">LIVE</span>
-      <span class="badge-launch">🚀 Launch May 30</span>
+      <span class="badge-launch">🚀 Launch June 15</span>
       <span id="launch-countdown" style="font-size:0.68rem;font-weight:700;color:#F97316;letter-spacing:0.02em"></span>
       <span class="clock" id="clock">--:--:--</span>
       <span id="live-updated" style="font-size:0.7rem;color:var(--g500)"></span>
@@ -1890,6 +1891,79 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </style>
     <button class="tl-back-btn" onclick="_activatePage('user-intel',false);loadUserIntel()">&#8592; Back to User Intelligence</button>
     <div id="tl-content"><div style="text-align:center;padding:60px;color:var(--g500);font-size:0.82rem">Select a user from User Intelligence to view their timeline.</div></div>
+  </div>
+
+  <!-- ══ EXPENSES ══ -->
+  <div class="page" id="page-expenses">
+    <div class="ph"><h1>🧾 Expenses</h1><p>Monthly spend tracker · Budget vs actual · Add any cost · Recurring auto-carry</p></div>
+    <div class="card" style="margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+        <button onclick="expChangeMonth(-1)" style="border:1px solid var(--g300);background:white;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:0.82rem">← Prev</button>
+        <div style="font-size:1rem;font-weight:800;color:var(--deep);min-width:100px;text-align:center" id="exp-month-label">—</div>
+        <button onclick="expChangeMonth(1)" style="border:1px solid var(--g300);background:white;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:0.82rem">Next →</button>
+        <div style="flex:1"></div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-size:0.78rem;color:var(--g500)">Budget $</span>
+          <input id="exp-budget-input" type="number" min="1" step="1" style="width:90px;border:1px solid var(--g300);border-radius:6px;padding:4px 8px;font-size:0.82rem" placeholder="e.g. 300">
+          <button onclick="expSaveBudget()" style="background:var(--teal);color:white;border:none;border-radius:6px;padding:5px 12px;cursor:pointer;font-size:0.8rem;font-weight:700">Set</button>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:6px">
+        <span>Spent: <strong id="exp-total-spent">—</strong></span>
+        <span>Budget: <strong id="exp-budget-display">—</strong></span>
+        <span id="exp-budget-status" style="font-weight:700">—</span>
+      </div>
+      <div class="prog-bar" style="height:10px"><div class="prog-fill" id="exp-budget-bar" style="width:0%;transition:width 0.4s"></div></div>
+      <div class="metric-row" style="margin-top:16px;margin-bottom:0">
+        <div class="metric"><div class="metric-label">Infrastructure</div><div class="metric-val" id="exp-cat-infrastructure">$0</div><div class="metric-sub">Railway, Supabase, Redis</div></div>
+        <div class="metric"><div class="metric-label">AI / LLM</div><div class="metric-val" id="exp-cat-ai">$0</div><div class="metric-sub">OpenAI, OpenRouter</div></div>
+        <div class="metric"><div class="metric-label">Tools</div><div class="metric-val" id="exp-cat-tools">$0</div><div class="metric-sub">SaaS, subscriptions</div></div>
+        <div class="metric"><div class="metric-label">Marketing</div><div class="metric-val" id="exp-cat-marketing">$0</div><div class="metric-sub">Ads, promos</div></div>
+        <div class="metric"><div class="metric-label">Other</div><div class="metric-val" id="exp-cat-other">$0</div><div class="metric-sub">Misc</div></div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">+ Add Expense</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end">
+        <div style="display:flex;flex-direction:column;gap:4px;flex:2;min-width:140px">
+          <label style="font-size:0.72rem;color:var(--g500);font-weight:700;text-transform:uppercase">Name</label>
+          <input id="exp-name" type="text" placeholder="e.g. Railway Pro" maxlength="80" style="border:1px solid var(--g300);border-radius:6px;padding:7px 10px;font-size:0.82rem">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:0 0 100px">
+          <label style="font-size:0.72rem;color:var(--g500);font-weight:700;text-transform:uppercase">Amount $</label>
+          <input id="exp-amount" type="number" min="0.01" step="0.01" placeholder="0.00" style="border:1px solid var(--g300);border-radius:6px;padding:7px 10px;font-size:0.82rem">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:120px">
+          <label style="font-size:0.72rem;color:var(--g500);font-weight:700;text-transform:uppercase">Category</label>
+          <select id="exp-category" style="border:1px solid var(--g300);border-radius:6px;padding:7px 10px;font-size:0.82rem;background:white">
+            <option value="infrastructure">Infrastructure</option>
+            <option value="ai">AI / LLM</option>
+            <option value="tools">Tools</option>
+            <option value="marketing">Marketing</option>
+            <option value="salary">Salary</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:0 0 130px">
+          <label style="font-size:0.72rem;color:var(--g500);font-weight:700;text-transform:uppercase">Date</label>
+          <input id="exp-date" type="date" style="border:1px solid var(--g300);border-radius:6px;padding:7px 10px;font-size:0.82rem">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px">
+          <label style="font-size:0.72rem;color:var(--g500);font-weight:700;text-transform:uppercase">Note (optional)</label>
+          <input id="exp-note" type="text" maxlength="200" placeholder="e.g. monthly plan" style="border:1px solid var(--g300);border-radius:6px;padding:7px 10px;font-size:0.82rem">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:0 0 auto">
+          <label style="font-size:0.72rem;color:var(--g500);font-weight:700;text-transform:uppercase">Recurring?</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:0.82rem;padding:7px 0"><input id="exp-recurring" type="checkbox"> Monthly repeat</label>
+        </div>
+        <button onclick="expAdd()" style="background:var(--teal);color:white;border:none;border-radius:8px;padding:9px 20px;cursor:pointer;font-size:0.84rem;font-weight:700;align-self:flex-end">Add</button>
+      </div>
+      <div id="exp-add-msg" style="font-size:0.78rem;color:var(--g500);margin-top:6px"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 This Month's Expenses <span class="card-sub" id="exp-list-updated"></span></div>
+      <div id="exp-list"><div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading...</div></div>
+    </div>
   </div>
 
   <div class="page" id="page-reporting">
@@ -4105,7 +4179,7 @@ function tick() {
   var now = new Date();
   document.getElementById('clock').textContent =
     now.toLocaleTimeString('en-CA', { hour12: false });
-  var launch = new Date('2026-05-30T00:00:00-07:00');
+  var launch = new Date('2026-06-15T00:00:00-07:00');
   var diff = launch - now;
   if (diff > 0) {
     var d = Math.floor(diff / 86400000);
@@ -4247,7 +4321,7 @@ document.getElementById('hq-input').addEventListener('keydown', function(e) {
 
 // ═══ CONTENT HUB — DATA + QUEUE SYSTEM ══════════════════════════════════════
 var _BACKEND = 'https://carely-backend-production.up.railway.app';
-var _SECRET  = 'carely-admin-6add43330d2313d8';
+var _SECRET  = 'b00f4fc3fd0333847bbc9513a4c60ffb086f0e5332ef16983c921de115125657';
 
 var CH_ITEMS = [
   // ── TIKTOK BRAND (@carely) ──────────────────────────────────────────────────
@@ -7353,7 +7427,7 @@ function rejectProposal(id) {
 
 // ═══ OBSIDIAN BRAIN ════════════════════════════════════════════════════════
 var BRAIN_BACKEND = 'https://carely-backend-production.up.railway.app';
-var BRAIN_SECRET  = 'carely-admin-6add43330d2313d8';
+var BRAIN_SECRET  = 'b00f4fc3fd0333847bbc9513a4c60ffb086f0e5332ef16983c921de115125657';
 
 var BRAIN_TOPIC_META = {
   product:           { icon: '📱', label: 'Product',           color: '#028090' },
@@ -7839,7 +7913,7 @@ function initBrainGraph() {
 function loadBrain() {
   var st=document.getElementById('brain-status');
   if(st) st.textContent='Loading…';
-  fetch('https://carely-backend-production.up.railway.app/admin/brain-health',{headers:{'x-carely-secret':'carely-admin-6add43330d2313d8'}})
+  fetch('https://carely-backend-production.up.railway.app/admin/brain-health',{headers:{'x-carely-secret':'b00f4fc3fd0333847bbc9513a4c60ffb086f0e5332ef16983c921de115125657'}})
     .then(function(r){return r.json();})
     .then(function(d){
       _brainMemCount=(d&&d.totalEntries)?d.totalEntries:0;
@@ -7862,7 +7936,7 @@ function submitBrainInject() {
   if(msg){msg.textContent='Injecting…';msg.style.color='#fbbf24';}
   fetch('https://carely-backend-production.up.railway.app/admin/brain-inject',{
     method:'POST',
-    headers:{'Content-Type':'application/json','x-carely-secret':'carely-admin-6add43330d2313d8'},
+    headers:{'Content-Type':'application/json','x-carely-secret':'b00f4fc3fd0333847bbc9513a4c60ffb086f0e5332ef16983c921de115125657'},
     body:JSON.stringify({topic:topic?topic.value:'general',key:key.value.trim(),value:val.value.trim()})
   }).then(function(r){return r.json();})
     .then(function(){if(msg){msg.textContent='Injected into brain.';msg.style.color='#02C39A';}val.value='';key.value='';})
@@ -8077,6 +8151,169 @@ function loadAuditLog() {
       wrap.textContent = ''; var er = document.createElement('div'); er.style.cssText = 'color:#dc2626;font-size:0.82rem;padding:20px'; er.textContent = 'Failed to load audit log'; wrap.appendChild(er);
     });
 }
+
+// ── Expenses Tracker ─────────────────────────────────────────────────────────
+(function() {
+  var B = 'https://carely-backend-production.up.railway.app';
+  var H = { 'x-carely-secret': 'b00f4fc3fd0333847bbc9513a4c60ffb086f0e5332ef16983c921de115125657' };
+  var HJ = Object.assign({}, H, { 'Content-Type': 'application/json' });
+  var expMonth = new Date().toISOString().slice(0, 7);
+
+  function setText(id, val) { var e = document.getElementById(id); if (e) e.textContent = val; }
+  function setWidth(id, pct) { var e = document.getElementById(id); if (e) e.style.width = Math.min(100, Math.max(0, pct)) + '%'; }
+
+  var CAT_LABELS = { infrastructure:'Infrastructure', ai:'AI / LLM', tools:'Tools', marketing:'Marketing', salary:'Salary', other:'Other' };
+  var CAT_COLORS = { infrastructure:'#028090', ai:'#7C3AED', tools:'#1E40AF', marketing:'#B91C1C', salary:'#065F46', other:'#92400E' };
+
+  function fmtMonth(ym) {
+    var p = ym.split('-');
+    return new Date(+p[0], +p[1]-1, 1).toLocaleDateString('en-US', { month:'long', year:'numeric' });
+  }
+
+  function makeEl(tag, css, text) {
+    var e = document.createElement(tag);
+    if (css) e.style.cssText = css;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  function buildExpenseRow(expense) {
+    var color = CAT_COLORS[expense.category] || '#7A9490';
+    var tr = document.createElement('tr');
+    var tdDate = document.createElement('td');
+    tdDate.style.cssText = 'font-size:0.78rem;color:var(--g500)';
+    tdDate.textContent = expense.date;
+    var tdName = document.createElement('td');
+    var nameStrong = document.createElement('strong');
+    nameStrong.textContent = expense.name;
+    tdName.appendChild(nameStrong);
+    if (expense.recurring) {
+      var recBadge = makeEl('span', 'display:inline-block;padding:1px 6px;border-radius:10px;font-size:0.65rem;font-weight:700;background:#e0f7f7;color:#028090;margin-left:4px', 'recurring');
+      tdName.appendChild(recBadge);
+    }
+    if (expense.note) {
+      var noteDiv = makeEl('div', 'font-size:0.72rem;color:var(--g500)', expense.note);
+      tdName.appendChild(noteDiv);
+    }
+    var tdCat = document.createElement('td');
+    var catBadge = makeEl('span', 'padding:2px 8px;border-radius:12px;font-size:0.72rem;font-weight:700;background:'+color+'22;color:'+color, CAT_LABELS[expense.category] || expense.category);
+    tdCat.appendChild(catBadge);
+    var tdAmt = makeEl('td', 'text-align:right;font-weight:800;font-size:0.9rem', '$' + expense.amount.toFixed(2));
+    var tdDel = document.createElement('td');
+    tdDel.style.textAlign = 'right';
+    var delBtn = makeEl('button', 'border:none;background:none;cursor:pointer;color:var(--g400);font-size:0.9rem;padding:2px 6px', '✕');
+    delBtn.setAttribute('data-exp-id', expense.id);
+    delBtn.addEventListener('click', function() { window.expDelete(expense.id); });
+    tdDel.appendChild(delBtn);
+    tr.appendChild(tdDate); tr.appendChild(tdName); tr.appendChild(tdCat); tr.appendChild(tdAmt); tr.appendChild(tdDel);
+    return tr;
+  }
+
+  function renderExpenses(expenses, total, budget) {
+    setText('exp-month-label', fmtMonth(expMonth));
+    setText('exp-total-spent', '$' + total.toFixed(2));
+    setText('exp-budget-display', '$' + (budget||0).toFixed(2));
+    var input = document.getElementById('exp-budget-input');
+    if (input && !input.value) input.value = budget || '';
+    var pct = budget > 0 ? (total / budget * 100) : 0;
+    setWidth('exp-budget-bar', pct);
+    var bar = document.getElementById('exp-budget-bar');
+    if (bar) bar.style.background = pct > 100 ? 'var(--red)' : pct > 80 ? 'var(--amber)' : 'var(--mint)';
+    var statusEl = document.getElementById('exp-budget-status');
+    if (statusEl) {
+      var rem = budget - total;
+      statusEl.textContent = budget <= 0 ? 'No budget set' : rem >= 0 ? '$'+rem.toFixed(2)+' remaining ('+Math.round(pct)+'%)' : '$'+Math.abs(rem).toFixed(2)+' over budget!';
+      statusEl.style.color = budget <= 0 ? 'var(--g500)' : rem >= 0 ? (pct > 80 ? 'var(--amber)' : 'var(--mint)') : 'var(--red)';
+    }
+    var cats = { infrastructure:0, ai:0, tools:0, marketing:0, salary:0, other:0 };
+    expenses.forEach(function(e) { cats[e.category] = (cats[e.category]||0) + e.amount; });
+    Object.keys(cats).forEach(function(c) { setText('exp-cat-'+c, '$'+(cats[c]||0).toFixed(2)); });
+    var listEl = document.getElementById('exp-list');
+    var updEl = document.getElementById('exp-list-updated');
+    if (updEl) updEl.textContent = '· ' + new Date().toLocaleTimeString();
+    if (!listEl) return;
+    while (listEl.firstChild) listEl.removeChild(listEl.firstChild);
+    if (!expenses.length) {
+      listEl.appendChild(makeEl('div', 'text-align:center;padding:28px;color:var(--g500);font-size:0.82rem', 'No expenses for this month. Add one above.'));
+      return;
+    }
+    var sorted = expenses.slice().sort(function(a,b){ return b.date.localeCompare(a.date); });
+    var tbl = document.createElement('table'); tbl.className = 'tbl';
+    var thead = document.createElement('thead');
+    var hr = document.createElement('tr');
+    ['Date','Name','Category','Amount',''].forEach(function(h,i) {
+      var th = makeEl('th', i===3?'text-align:right':null, h);
+      hr.appendChild(th);
+    });
+    thead.appendChild(hr); tbl.appendChild(thead);
+    var tbody = document.createElement('tbody');
+    sorted.forEach(function(e) { tbody.appendChild(buildExpenseRow(e)); });
+    tbl.appendChild(tbody);
+    var tfoot = document.createElement('tfoot');
+    var fr = document.createElement('tr');
+    var ftd1 = makeEl('td', 'font-weight:800;padding-top:10px', 'Total'); ftd1.setAttribute('colspan','3');
+    var ftd2 = makeEl('td', 'text-align:right;font-weight:900;font-size:1rem;color:var(--deep)', '$'+total.toFixed(2));
+    var ftd3 = document.createElement('td');
+    fr.appendChild(ftd1); fr.appendChild(ftd2); fr.appendChild(ftd3);
+    tfoot.appendChild(fr); tbl.appendChild(tfoot);
+    listEl.appendChild(tbl);
+  }
+
+  window.loadExpenses = function() {
+    fetch(B + '/admin/expenses?month=' + expMonth, { headers: H })
+      .then(function(r) { return r.json(); })
+      .then(function(d) { renderExpenses(d.expenses||[], d.total||0, d.budget||0); })
+      .catch(function() { var el=document.getElementById('exp-list'); if(el) el.textContent='Could not load expenses.'; });
+  };
+
+  window.expChangeMonth = function(dir) {
+    var p = expMonth.split('-');
+    expMonth = new Date(+p[0], +p[1]-1+dir, 1).toISOString().slice(0,7);
+    window.loadExpenses();
+  };
+
+  window.expSaveBudget = function() {
+    var val = parseFloat(document.getElementById('exp-budget-input').value);
+    if (!val || val <= 0) return;
+    fetch(B+'/admin/expenses/budget', { method:'PUT', headers:HJ, body:JSON.stringify({monthly:val}) })
+      .then(function() { window.loadExpenses(); }).catch(function(){});
+  };
+
+  window.expAdd = function() {
+    var name   = (document.getElementById('exp-name').value||'').trim();
+    var amount = parseFloat(document.getElementById('exp-amount').value);
+    var cat    = document.getElementById('exp-category').value;
+    var date   = document.getElementById('exp-date').value;
+    var note   = (document.getElementById('exp-note').value||'').trim();
+    var recur  = document.getElementById('exp-recurring').checked;
+    var msgEl  = document.getElementById('exp-add-msg');
+    if (!name || !amount || !cat || !date) {
+      if (msgEl) { msgEl.textContent = 'Fill in name, amount, category and date.'; msgEl.style.color = 'var(--red)'; }
+      return;
+    }
+    fetch(B+'/admin/expenses', { method:'POST', headers:HJ, body:JSON.stringify({name:name,amount:amount,category:cat,date:date,recurring:recur,note:note}) })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.ok) {
+          document.getElementById('exp-name').value=''; document.getElementById('exp-amount').value='';
+          document.getElementById('exp-note').value=''; document.getElementById('exp-recurring').checked=false;
+          if (msgEl) { msgEl.textContent='Added: '+name+' — $'+amount.toFixed(2); msgEl.style.color='var(--mint)'; }
+          setTimeout(function(){ if(msgEl) msgEl.textContent=''; }, 3000);
+          window.loadExpenses();
+        } else { if(msgEl){msgEl.textContent=d.message||'Error';msgEl.style.color='var(--red)';} }
+      }).catch(function() { if(msgEl){msgEl.textContent='Could not save.';msgEl.style.color='var(--red)';} });
+  };
+
+  window.expDelete = function(id) {
+    fetch(B+'/admin/expenses/'+id, { method:'DELETE', headers:H })
+      .then(function() { window.loadExpenses(); }).catch(function(){});
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var di = document.getElementById('exp-date');
+    if (di) di.value = new Date().toISOString().slice(0,10);
+  });
+})();
 </script>
 <script src="hq-intel.js?v=20260527h"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a02743d1dbc02724',t:'MTc3OTkwODQ1Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
