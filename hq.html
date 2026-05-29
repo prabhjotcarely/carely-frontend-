@@ -8117,6 +8117,181 @@ function sendUserTargetingBrief() {
     });
 }
 
+// ── Conversion Intel ─────────────────────────────────────────────────────────
+function loadConversionIntel() {
+  var el = document.getElementById('conversion-report-content');
+  var total = document.getElementById('conv-total');
+  var week = document.getElementById('conv-week');
+  var top = document.getElementById('conv-top');
+  if (!el) return;
+  el.textContent = 'Loading…';
+  fetch(_BACKEND + '/admin/conversion/weekly', { headers: { 'x-carely-secret': _SECRET }, signal: AbortSignal.timeout(8000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (total) total.textContent = d.totalSignups || '0';
+      if (week) week.textContent = d.totalSignups || '0';
+      // Find top platform
+      var bp = d.byPlatform || {};
+      var topPlatform = Object.keys(bp).reduce(function(a, b) { return (bp[a] || 0) > (bp[b] || 0) ? a : b; }, 'none');
+      if (top) top.textContent = bp[topPlatform] > 0 ? topPlatform : '—';
+      el.textContent = '';
+      if (d.totalSignups === 0) {
+        var note = document.createElement('div');
+        note.style.cssText = 'color:var(--g500);font-size:0.82rem;padding:12px 0';
+        note.textContent = d.insight || 'No conversions tracked yet. Content agents now include ?ref= links — first attribution will appear once content is posted.';
+        el.appendChild(note); return;
+      }
+      // Platform breakdown
+      var row = document.createElement('div');
+      row.style.cssText = 'display:flex;flex-direction:column;gap:8px';
+      Object.keys(bp).forEach(function(platform) {
+        if (!bp[platform]) return;
+        var line = document.createElement('div');
+        line.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--g50);border-radius:8px;font-size:0.82rem';
+        line.innerHTML = '<span style="font-weight:700;color:var(--deep)">' + platform + '</span><span class="pill green">' + bp[platform] + ' signups</span>';
+        row.appendChild(line);
+      });
+      el.appendChild(row);
+      if (d.insight) {
+        var ins = document.createElement('div');
+        ins.style.cssText = 'font-size:0.78rem;color:var(--g500);margin-top:12px;padding:10px 12px;background:rgba(2,195,154,0.06);border-radius:8px;border-left:3px solid var(--mint)';
+        ins.textContent = d.insight;
+        el.appendChild(ins);
+      }
+    })
+    .catch(function() {
+      if (el) { el.textContent = 'Failed to load — check backend.'; }
+    });
+}
+
+// ── Axel Creative ─────────────────────────────────────────────────────────────
+function loadAxelCreative() {
+  var el = document.getElementById('axel-concepts-content');
+  if (!el) return;
+  el.textContent = 'Loading…';
+  fetch(_BACKEND + '/admin/axel/brief', { headers: { 'x-carely-secret': _SECRET }, signal: AbortSignal.timeout(10000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      el.textContent = '';
+      if (d.error) {
+        var note = document.createElement('div');
+        note.style.cssText = 'color:var(--g500);font-size:0.82rem;padding:12px 0';
+        note.textContent = 'No brief yet — ' + (d.note || 'Axel runs Saturday 8AM PST. Click "Trigger Axel Now" to generate one immediately.');
+        el.appendChild(note); return;
+      }
+      if (d.creativeDirectorNote) {
+        var synthesis = document.createElement('div');
+        synthesis.style.cssText = 'font-size:0.82rem;color:var(--g600);padding:10px 14px;background:rgba(2,195,154,0.06);border-radius:8px;border-left:3px solid var(--mint);margin-bottom:14px;font-style:italic';
+        synthesis.textContent = d.creativeDirectorNote;
+        el.appendChild(synthesis);
+      }
+      (d.concepts || []).forEach(function(c, i) {
+        var card = document.createElement('div');
+        card.style.cssText = 'background:var(--g50);border-radius:10px;padding:14px 16px;margin-bottom:10px;border:1.5px solid var(--g200)';
+        var hdr = document.createElement('div');
+        hdr.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:8px';
+        var title = document.createElement('span');
+        title.style.cssText = 'font-weight:800;font-size:0.85rem;color:var(--deep)';
+        title.textContent = '#' + (i+1) + ' — ' + (c.title || c.concept || 'Concept');
+        var score = document.createElement('span');
+        score.className = 'pill green';
+        score.textContent = 'Score: ' + (c.predictedConversionScore || c.score || '—');
+        hdr.appendChild(title); hdr.appendChild(score); card.appendChild(hdr);
+        if (c.hook || c.description) {
+          var desc = document.createElement('div');
+          desc.style.cssText = 'font-size:0.78rem;color:var(--g600);line-height:1.6';
+          desc.textContent = c.hook || c.description;
+          card.appendChild(desc);
+        }
+        if (c.format) {
+          var fmt = document.createElement('div');
+          fmt.style.cssText = 'font-size:0.72rem;color:var(--g400);margin-top:6px';
+          fmt.textContent = 'Format: ' + c.format;
+          card.appendChild(fmt);
+        }
+        el.appendChild(card);
+      });
+    })
+    .catch(function() {
+      if (el) { el.textContent = 'Failed to load — check backend.'; }
+    });
+}
+function triggerAxel() {
+  var msg = document.getElementById('axel-trigger-msg');
+  if (msg) { msg.textContent = 'Triggering Axel…'; msg.style.color = 'var(--teal)'; }
+  fetch(_BACKEND + '/admin/trigger/axel', { method: 'POST', headers: { 'x-carely-secret': _SECRET } })
+    .then(function(r) { return r.json(); })
+    .then(function() { if (msg) { msg.textContent = 'Running — check Telegram in ~2 minutes.'; } setTimeout(loadAxelCreative, 90000); })
+    .catch(function() { if (msg) { msg.textContent = 'Failed.'; msg.style.color = '#dc2626'; } });
+}
+
+// ── User Intel ────────────────────────────────────────────────────────────────
+var _uiAllUsers = [];
+var _uiFilter = 'all';
+function loadUserIntel() {
+  var wrap = document.getElementById('ui-table-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = '<div style="text-align:center;padding:28px;color:var(--g500);font-size:0.82rem">Loading users…</div>';
+  fetch(_BACKEND + '/admin/users?limit=100', { headers: { 'x-carely-secret': _SECRET }, signal: AbortSignal.timeout(10000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      _uiAllUsers = d.users || [];
+      var cnt = document.getElementById('ui-count');
+      if (cnt) cnt.textContent = _uiAllUsers.length + ' users';
+      renderUserIntelTable(_uiAllUsers);
+    })
+    .catch(function() {
+      if (wrap) wrap.innerHTML = '<div style="text-align:center;padding:28px;color:#dc2626;font-size:0.82rem">Failed to load — check backend.</div>';
+    });
+}
+function renderUserIntelTable(users) {
+  var wrap = document.getElementById('ui-table-wrap');
+  if (!wrap) return;
+  var now = Date.now();
+  var rows = users.map(function(u) {
+    var trialEnd = u.trial_ends_at ? new Date(u.trial_ends_at) : null;
+    var daysLeft = trialEnd ? Math.ceil((trialEnd.getTime() - now) / 86400000) : null;
+    var planClass = u.plan === 'founding' ? 'ui-plan-founding' : u.plan === 'monthly' ? 'ui-plan-monthly' : u.plan === 'annual' ? 'ui-plan-annual' : 'ui-plan-trial';
+    var planLabel = u.plan || 'trial';
+    return '<tr>' +
+      '<td>' + (u.first_name || '—') + '</td>' +
+      '<td style="color:var(--g500)">' + (u.email || '') + '</td>' +
+      '<td><span class="ui-plan ' + planClass + '">' + planLabel + '</span></td>' +
+      '<td style="color:var(--g500)">' + (u.created_at ? new Date(u.created_at).toLocaleDateString('en-CA') : '—') + '</td>' +
+      '<td>' + (daysLeft !== null ? (daysLeft > 0 ? daysLeft + 'd left' : 'expired') : '—') + '</td>' +
+      '<td><button class="ui-timeline-btn" onclick="loadUserTimeline(\'' + u.id + '\')">Timeline</button></td>' +
+      '</tr>';
+  }).join('');
+  wrap.innerHTML = '<table class="ui-table"><thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Joined</th><th>Trial</th><th></th></tr></thead><tbody>' + rows + '</tbody></table>';
+}
+function uiSearchChange() {
+  var q = (document.getElementById('ui-search') || {}).value || '';
+  var filtered = _uiAllUsers.filter(function(u) {
+    return !q || (u.first_name||'').toLowerCase().includes(q.toLowerCase()) || (u.email||'').toLowerCase().includes(q.toLowerCase());
+  });
+  renderUserIntelTable(filtered);
+}
+function setUiFilter(btn, filter) {
+  _uiFilter = filter;
+  document.querySelectorAll('.ui-filter').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  var now = Date.now();
+  var filtered = _uiAllUsers.filter(function(u) {
+    if (filter === 'all') return true;
+    if (filter === 'trial') return u.plan === 'trial' || (!u.plan);
+    if (filter === 'paid') return u.plan === 'monthly' || u.plan === 'annual' || u.plan === 'founding';
+    if (filter === 'expiring') { var te = u.trial_ends_at ? new Date(u.trial_ends_at).getTime() : 0; return te > now && te - now < 3 * 86400000; }
+    return true;
+  });
+  renderUserIntelTable(filtered);
+}
+function exportUserIntelCSV() {
+  if (!_uiAllUsers.length) { alert('Load users first'); return; }
+  var rows = [['Name','Email','Plan','Joined','Trial Ends']].concat(_uiAllUsers.map(function(u) { return [u.first_name||'',u.email||'',u.plan||'trial',u.created_at||'',u.trial_ends_at||'']; }));
+  var csv = rows.map(function(r) { return r.map(function(c) { return '"'+String(c).replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
+  var a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv); a.download = 'carely-users.csv'; a.click();
+}
+
 // ── Audit Log ─────────────────────────────────────────────────────────────────
 function loadAuditLog() {
   var wrap = document.getElementById('audit-feed');
