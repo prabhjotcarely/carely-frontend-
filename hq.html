@@ -855,21 +855,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- ══ CONTENT HUB ══ -->
   <div class="page" id="page-content-hub">
-    <div class="ph"><h1>🎬 Content Hub</h1><p>Brand @carely · Personal Prabh · 3 at a time · Approved archive</p></div>
-    <div class="tabs">
-      <div class="tab active" onclick="switchTab(this,'ch-tiktok');chRender('tiktok')">TikTok</div>
-      <div class="tab" onclick="switchTab(this,'ch-linkedin');chRenderLive('linkedin')">LinkedIn</div>
-      <div class="tab" onclick="switchTab(this,'ch-reddit');chRenderLive('reddit')">Reddit</div>
-      <div class="tab" onclick="switchTab(this,'ch-community');chRenderLive('community')">Community</div>
-      <div class="tab" onclick="switchTab(this,'ch-instagram');chRenderLive('instagram');chRenderInstagram()">Instagram</div>
-      <div class="tab" onclick="switchTab(this,'ch-quora');chRenderLive('quora')">Quora</div>
-      <div class="tab" onclick="switchTab(this,'ch-youtube');chRenderLive('youtube')">YouTube</div>
-      <div class="tab" style="color:var(--mint);font-weight:800" onclick="switchTab(this,'ch-approved');chRenderApproved('all')">✓ Approved</div>
-      <div class="tab" onclick="switchTab(this,'ch-community-intel');chRenderCommunityIntel()">Reddit Intel</div>
-      <div class="tab" onclick="switchTab(this,'ch-platform-intel2');chRenderPlatformIntel()">Platform Intel</div>
-      <div class="tab" onclick="switchTab(this,'ch-pacing');chRenderPacing()">Pacing</div>
-      <div class="tab" onclick="switchTab(this,'ch-rules')">Rules</div>
+    <div class="ph"><h1>🎬 Content Hub</h1><p>Every post goes through here — review, edit, approve, reject</p></div>
+
+    <!-- Status bar -->
+    <div class="metric-row" style="margin-bottom:16px">
+      <div class="metric"><div class="metric-label">Pending</div><div class="metric-val amber" id="ch-count-pending">—</div><div class="metric-sub">Needs review</div></div>
+      <div class="metric"><div class="metric-label">Approved</div><div class="metric-val teal" id="ch-count-approved">—</div><div class="metric-sub">Scheduled to post</div></div>
+      <div class="metric"><div class="metric-label">Posted Today</div><div class="metric-val" id="ch-count-posted">—</div><div class="metric-sub">Live</div></div>
+      <div class="metric"><div class="metric-label">Rejected</div><div class="metric-val" style="color:var(--g400)" id="ch-count-rejected">—</div><div class="metric-sub">This week</div></div>
     </div>
+
+    <!-- Filter tabs + refresh -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div class="tabs" style="margin-bottom:0">
+        <div class="tab active" onclick="chFilter(this,'all')">All</div>
+        <div class="tab" onclick="chFilter(this,'reddit')">Reddit</div>
+        <div class="tab" onclick="chFilter(this,'linkedin')">LinkedIn</div>
+        <div class="tab" onclick="chFilter(this,'instagram')">Instagram</div>
+        <div class="tab" onclick="chFilter(this,'other')">Other</div>
+        <div class="tab" onclick="chFilter(this,'posted')">Posted</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="font-size:0.75rem;color:var(--g400)" id="ch-last-refresh"></div>
+        <button onclick="loadContentHub()" style="font-size:0.73rem;border:1px solid var(--g300);padding:4px 12px;border-radius:6px;background:white;cursor:pointer;color:var(--g500)">Refresh</button>
+      </div>
+    </div>
+
+    <div id="ch-feed">
+      <div class="card" style="text-align:center;padding:36px;color:var(--g500);font-size:0.83rem">Loading drafts...</div>
+    </div>
+  </div>
 
     <div class="tab-panel active" id="ch-tiktok">
       <div class="ch-acc-bar">
@@ -8491,6 +8506,343 @@ function loadAuditLog() {
     var di = document.getElementById('exp-date');
     if (di) di.value = new Date().toISOString().slice(0,10);
   });
+})();
+
+// ══ CONTENT HUB — dynamic draft feed ════════════════════════════════════════
+(function() {
+  var CH_FILTER = 'all';
+  var CH_ALL_DRAFTS = [];
+
+  var CH_PLATFORM_META = {
+    reddit:    { label: 'Reddit',    icon: '🔴', color: '#FF4500' },
+    linkedin:  { label: 'LinkedIn',  icon: '💼', color: '#0A66C2' },
+    instagram: { label: 'Instagram', icon: '📸', color: '#E1306C' },
+    facebook:  { label: 'Facebook',  icon: '👥', color: '#1877F2' },
+    quora:     { label: 'Quora',     icon: '❓', color: '#B92B27' },
+    youtube:   { label: 'YouTube',   icon: '▶️', color: '#FF0000' },
+    tiktok:    { label: 'TikTok',    icon: '🎵', color: '#010101' },
+    community: { label: 'Community', icon: '🌐', color: '#028090' },
+  };
+  var CH_STATUS_META = {
+    pending:      { label: 'Pending Review', cls: 'amber' },
+    approved:     { label: 'Approved',       cls: 'teal'  },
+    ready_to_post:{ label: 'Ready to Post',  cls: 'green' },
+    posted:       { label: 'Posted',         cls: 'green' },
+    rejected:     { label: 'Rejected',       cls: 'grey'  },
+    skipped:      { label: 'Skipped',        cls: 'grey'  },
+  };
+
+  function chScheduledLabel(draft) {
+    if (!draft.scheduledFor) return '';
+    var d = new Date(draft.scheduledFor), now = new Date(), diffMs = d - now;
+    if (diffMs < 0) return 'Was scheduled ' + timeAgo(draft.scheduledFor);
+    var diffH = Math.round(diffMs / 3600000);
+    var timeStr = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/Vancouver' }) + ' PST';
+    if (diffH < 3) return '⏰ Posting in ~' + Math.round(diffMs / 60000) + 'min (' + timeStr + ')';
+    return '📅 Scheduled ' + timeStr;
+  }
+
+  window.chFilter = function(tab, filter) {
+    CH_FILTER = filter;
+    var tabs = tab.parentElement.querySelectorAll('.tab');
+    tabs.forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    renderCH();
+  };
+
+  function renderCH() {
+    var feed = document.getElementById('ch-feed');
+    if (!feed) return;
+    while (feed.firstChild) feed.removeChild(feed.firstChild);
+
+    var filtered = CH_ALL_DRAFTS.filter(function(d) {
+      var status = d.status || 'pending';
+      if (CH_FILTER === 'posted') return status === 'posted' || status === 'ready_to_post';
+      if (CH_FILTER === 'all') return status !== 'posted' && status !== 'ready_to_post' && status !== 'rejected' && status !== 'skipped';
+      if (CH_FILTER === 'other') {
+        var p = (d.platform || '').toLowerCase();
+        return p !== 'reddit' && p !== 'linkedin' && p !== 'instagram' && status !== 'posted' && status !== 'rejected' && status !== 'skipped';
+      }
+      return (d.platform || '').toLowerCase() === CH_FILTER && status !== 'posted' && status !== 'rejected' && status !== 'skipped';
+    });
+
+    filtered.sort(function(a, b) {
+      var sa = a.status || 'pending', sb = b.status || 'pending';
+      if (sa === 'pending' && sb !== 'pending') return -1;
+      if (sb === 'pending' && sa !== 'pending') return 1;
+      var ta = a.scheduledFor ? new Date(a.scheduledFor).getTime() : new Date(a.timestamp).getTime();
+      var tb = b.scheduledFor ? new Date(b.scheduledFor).getTime() : new Date(b.timestamp).getTime();
+      return ta - tb;
+    });
+
+    if (filtered.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'card';
+      empty.style.cssText = 'text-align:center;padding:48px';
+      empty.innerHTML = '<div style="font-size:2rem;margin-bottom:12px">✅</div><div style="color:var(--g500);font-size:0.84rem">All clear — no drafts in this view.</div>';
+      feed.appendChild(empty);
+      return;
+    }
+
+    filtered.forEach(function(draft) {
+      var status = draft.status || 'pending';
+      var platform = (draft.platform || 'community').toLowerCase();
+      var meta = CH_PLATFORM_META[platform] || { label: platform, icon: '📋', color: '#888' };
+      var sMeta = CH_STATUS_META[status] || { label: status, cls: 'grey' };
+      var account = (draft.metadata && draft.metadata.account) ? draft.metadata.account : null;
+      var accountLabel = account === 'prabh' ? 'Prabh personal' : account === 'brand' ? 'Carely brand' : null;
+      var subreddit = (draft.metadata && (draft.metadata.subreddit || draft.metadata.community)) || '';
+      var threadUrl = (draft.metadata && draft.metadata.threadUrl) ? draft.metadata.threadUrl : '';
+      var threadTitle = (draft.metadata && draft.metadata.threadTitle) ? draft.metadata.threadTitle : '';
+      var postType = (draft.metadata && draft.metadata.type) ? draft.metadata.type : draft.contentType || '';
+      var scheduledLabel = chScheduledLabel(draft);
+      var isPending = status === 'pending';
+
+      var card = document.createElement('div');
+      card.className = 'card';
+      card.style.cssText = 'margin-bottom:12px;border-left:3px solid ' + meta.color;
+      card.setAttribute('data-draft-index', draft.index);
+
+      var header = document.createElement('div');
+      header.style.cssText = 'display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px';
+      var platBadge = document.createElement('span');
+      platBadge.style.cssText = 'font-size:0.72rem;font-weight:800;padding:2px 8px;border-radius:5px;background:' + meta.color + '22;color:' + meta.color;
+      platBadge.textContent = meta.icon + ' ' + meta.label.toUpperCase();
+      header.appendChild(platBadge);
+      if (accountLabel) {
+        var accBadge = document.createElement('span');
+        accBadge.className = 'pill ' + (account === 'prabh' ? 'teal' : 'amber');
+        accBadge.textContent = accountLabel;
+        header.appendChild(accBadge);
+      }
+      var statusBadge = document.createElement('span');
+      statusBadge.className = 'pill ' + sMeta.cls;
+      statusBadge.textContent = sMeta.label;
+      statusBadge.setAttribute('id', 'ch-status-' + draft.index);
+      header.appendChild(statusBadge);
+      var timeEl = document.createElement('span');
+      timeEl.style.cssText = 'margin-left:auto;font-size:0.72rem;color:var(--g400)';
+      timeEl.textContent = timeAgo(draft.timestamp);
+      header.appendChild(timeEl);
+      card.appendChild(header);
+
+      if (subreddit || scheduledLabel || postType) {
+        var sub = document.createElement('div');
+        sub.style.cssText = 'font-size:0.75rem;color:var(--g500);margin-bottom:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center';
+        if (subreddit) { var ss = document.createElement('span'); ss.style.fontWeight='700'; ss.textContent='r/'+subreddit.replace('r/',''); sub.appendChild(ss); }
+        if (postType) { var ts = document.createElement('span'); ts.textContent='· '+(postType==='reply'?'Reply':postType==='new_post'?'New post':postType); sub.appendChild(ts); }
+        if (scheduledLabel) { var sc = document.createElement('span'); sc.style.cssText='margin-left:auto;font-weight:600;color:var(--teal)'; sc.textContent=scheduledLabel; sub.appendChild(sc); }
+        card.appendChild(sub);
+      }
+      if (threadTitle && threadUrl) {
+        var thread = document.createElement('div');
+        thread.style.cssText = 'font-size:0.78rem;color:var(--g500);margin-bottom:10px';
+        thread.innerHTML = 'Reply to: <a href="'+threadUrl+'" target="_blank" style="color:var(--teal);text-decoration:none;font-weight:600">'+threadTitle.slice(0,80)+'</a>';
+        card.appendChild(thread);
+      }
+
+      var contentView = document.createElement('div');
+      contentView.style.cssText = 'background:var(--g100);border-radius:8px;padding:12px 14px;font-size:0.83rem;line-height:1.75;color:var(--text);white-space:pre-wrap;max-height:220px;overflow:auto;margin-bottom:12px;font-family:inherit';
+      contentView.textContent = draft.fullContent || draft.contentSnippet || '(no content)';
+      contentView.setAttribute('id', 'ch-view-' + draft.index);
+      card.appendChild(contentView);
+
+      var contentEdit = document.createElement('div');
+      contentEdit.setAttribute('id', 'ch-edit-' + draft.index);
+      contentEdit.style.display = 'none';
+      var textarea = document.createElement('textarea');
+      textarea.style.cssText = 'width:100%;min-height:160px;border:1.5px solid var(--teal);border-radius:8px;padding:12px 14px;font-size:0.83rem;line-height:1.75;font-family:inherit;resize:vertical;box-sizing:border-box;margin-bottom:8px';
+      textarea.value = draft.fullContent || '';
+      textarea.setAttribute('id', 'ch-textarea-' + draft.index);
+      contentEdit.appendChild(textarea);
+      card.appendChild(contentEdit);
+
+      var btnRow = document.createElement('div');
+      btnRow.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;align-items:center';
+      btnRow.setAttribute('id', 'ch-btns-' + draft.index);
+
+      if (isPending) {
+        var approveBtn = document.createElement('button');
+        approveBtn.style.cssText = 'font-size:0.78rem;font-weight:700;padding:7px 16px;border-radius:8px;border:none;background:var(--mint);color:white;cursor:pointer;flex-shrink:0';
+        approveBtn.textContent = draft.scheduledFor && new Date(draft.scheduledFor) > new Date() ? 'Approve (posts at scheduled time)' : 'Approve & Post Now';
+        approveBtn.onclick = (function(idx) { return function() { window.chApproveNew(idx); }; })(draft.index);
+        btnRow.appendChild(approveBtn);
+
+        var editBtn = document.createElement('button');
+        editBtn.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid var(--teal);background:white;color:var(--teal);cursor:pointer;flex-shrink:0';
+        editBtn.textContent = 'Edit';
+        editBtn.setAttribute('id', 'ch-editbtn-' + draft.index);
+        editBtn.onclick = (function(idx) { return function() { window.chStartEditNew(idx); }; })(draft.index);
+        btnRow.appendChild(editBtn);
+
+        var rewriteBtn = document.createElement('button');
+        rewriteBtn.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid #7c3aed;background:white;color:#7c3aed;cursor:pointer;flex-shrink:0';
+        rewriteBtn.textContent = 'Rewrite';
+        rewriteBtn.setAttribute('id', 'ch-rewritebtn-' + draft.index);
+        rewriteBtn.onclick = (function(idx) { return function() { window.chRewriteNew(idx); }; })(draft.index);
+        btnRow.appendChild(rewriteBtn);
+
+        var saveBtn = document.createElement('button');
+        saveBtn.style.cssText = 'font-size:0.78rem;font-weight:700;padding:7px 14px;border-radius:8px;border:none;background:var(--deep);color:white;cursor:pointer;flex-shrink:0;display:none';
+        saveBtn.textContent = 'Save';
+        saveBtn.setAttribute('id', 'ch-savebtn-' + draft.index);
+        saveBtn.onclick = (function(idx) { return function() { window.chSaveEditNew(idx); }; })(draft.index);
+        btnRow.appendChild(saveBtn);
+
+        var cancelEditBtn = document.createElement('button');
+        cancelEditBtn.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g500);cursor:pointer;flex-shrink:0;display:none';
+        cancelEditBtn.textContent = 'Cancel';
+        cancelEditBtn.setAttribute('id', 'ch-cancelbtn-' + draft.index);
+        cancelEditBtn.onclick = (function(idx) { return function() { window.chCancelEditNew(idx); }; })(draft.index);
+        btnRow.appendChild(cancelEditBtn);
+
+        var rejectBtn = document.createElement('button');
+        rejectBtn.style.cssText = 'font-size:0.75rem;font-weight:600;padding:7px 12px;border-radius:8px;border:1.5px solid var(--g300);background:white;color:var(--g400);cursor:pointer;flex-shrink:0;margin-left:auto';
+        rejectBtn.textContent = 'Reject';
+        rejectBtn.onclick = (function(idx) { return function() { window.chRejectNew(idx); }; })(draft.index);
+        btnRow.appendChild(rejectBtn);
+      } else if (status === 'approved') {
+        var mPostedBtn = document.createElement('button');
+        mPostedBtn.style.cssText = 'font-size:0.78rem;font-weight:700;padding:7px 16px;border-radius:8px;border:none;background:var(--teal);color:white;cursor:pointer;flex-shrink:0';
+        mPostedBtn.textContent = 'Mark as Posted';
+        mPostedBtn.onclick = (function(idx) { return function() { window.chMarkPostedNew(idx); }; })(draft.index);
+        btnRow.appendChild(mPostedBtn);
+      } else if (status === 'ready_to_post') {
+        var postUrl = draft.postUrl || '';
+        if (postUrl) {
+          var openLink = document.createElement('a');
+          openLink.href = postUrl; openLink.target = '_blank';
+          openLink.style.cssText = 'font-size:0.78rem;font-weight:700;padding:7px 16px;border-radius:8px;background:var(--teal);color:white;text-decoration:none';
+          openLink.textContent = 'Open & Post';
+          btnRow.appendChild(openLink);
+        }
+        var mBtn2 = document.createElement('button');
+        mBtn2.style.cssText = 'font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1.5px solid var(--teal);background:white;color:var(--teal);cursor:pointer;flex-shrink:0';
+        mBtn2.textContent = 'Mark Posted';
+        mBtn2.onclick = (function(idx) { return function() { window.chMarkPostedNew(idx); }; })(draft.index);
+        btnRow.appendChild(mBtn2);
+      }
+
+      card.appendChild(btnRow);
+      feed.appendChild(card);
+    });
+  }
+
+  window.loadContentHub = function() {
+    var el = document.getElementById('ch-last-refresh');
+    if (el) el.textContent = 'Loading...';
+    fetch(BACKEND + '/admin/content-drafts', { headers: { 'x-carely-secret': SECRET } })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        CH_ALL_DRAFTS = data.drafts || [];
+        var today = new Date().toDateString();
+        var pending  = CH_ALL_DRAFTS.filter(function(d) { return !d.status || d.status === 'pending'; });
+        var approved = CH_ALL_DRAFTS.filter(function(d) { return d.status === 'approved'; });
+        var postedToday = CH_ALL_DRAFTS.filter(function(d) { return d.status === 'posted' && d.postedAt && new Date(d.postedAt).toDateString() === today; });
+        var rejected = CH_ALL_DRAFTS.filter(function(d) { return d.status === 'rejected' || d.status === 'skipped'; });
+        var s = function(id, v) { var e = document.getElementById(id); if (e) e.textContent = v || '0'; };
+        s('ch-count-pending', pending.length); s('ch-count-approved', approved.length);
+        s('ch-count-posted', postedToday.length); s('ch-count-rejected', rejected.length);
+        var ac = document.getElementById('agent-pending-count');
+        if (ac) ac.textContent = pending.length || '—';
+        if (el) el.textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+        renderCH();
+      })
+      .catch(function() {
+        var feed = document.getElementById('ch-feed');
+        if (feed) feed.innerHTML = '<div class="card" style="text-align:center;padding:36px;color:var(--g400)">Content Hub offline — check Railway.</div>';
+        if (el) el.textContent = 'Offline';
+      });
+  };
+
+  window.chApproveNew = function(index) {
+    fetch(BACKEND + '/admin/content-drafts/' + index + '/approve', {
+      method: 'POST', headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ actor: 'Prabh' })
+    }).then(function() { window.loadContentHub(); });
+  };
+  window.chRejectNew = function(index) {
+    var reason = prompt('Rejection reason (optional):') || '';
+    fetch(BACKEND + '/admin/content-drafts/' + index + '/skip', {
+      method: 'POST', headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ actor: 'Prabh', feedback: reason })
+    }).then(function() { window.loadContentHub(); });
+  };
+  window.chMarkPostedNew = function(index) {
+    fetch(BACKEND + '/admin/content-drafts/' + index + '/mark-posted', {
+      method: 'POST', headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ actor: 'Prabh' })
+    }).then(function() { window.loadContentHub(); });
+  };
+  window.chRewriteNew = function(index) {
+    var btn = document.getElementById('ch-rewritebtn-' + index);
+    if (btn) { btn.textContent = 'Rewriting...'; btn.disabled = true; }
+    fetch(BACKEND + '/admin/content-drafts/' + index + '/rewrite', {
+      method: 'POST', headers: { 'x-carely-secret': SECRET, 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    }).then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (btn) { btn.textContent = 'Rewrite'; btn.disabled = false; }
+        if (data.ok && data.draft) {
+          var d = CH_ALL_DRAFTS.find(function(x) { return x.index === index; });
+          if (d) { d.fullContent = data.draft.fullContent; d.contentSnippet = data.draft.contentSnippet; }
+          var v = document.getElementById('ch-view-' + index);
+          if (v) v.textContent = data.draft.fullContent;
+        } else { alert('Rewrite failed — ' + (data.message || 'try again')); }
+      })
+      .catch(function() { if (btn) { btn.textContent = 'Rewrite'; btn.disabled = false; } alert('Rewrite failed'); });
+  };
+  window.chStartEditNew = function(index) {
+    var v=document.getElementById('ch-view-'+index), e=document.getElementById('ch-edit-'+index);
+    var eb=document.getElementById('ch-editbtn-'+index), rb=document.getElementById('ch-rewritebtn-'+index);
+    var sb=document.getElementById('ch-savebtn-'+index), cb=document.getElementById('ch-cancelbtn-'+index);
+    if(v)v.style.display='none'; if(e)e.style.display='block';
+    if(eb)eb.style.display='none'; if(rb)rb.style.display='none';
+    if(sb)sb.style.display='inline-block'; if(cb)cb.style.display='inline-block';
+  };
+  window.chCancelEditNew = function(index) {
+    var v=document.getElementById('ch-view-'+index), e=document.getElementById('ch-edit-'+index);
+    var eb=document.getElementById('ch-editbtn-'+index), rb=document.getElementById('ch-rewritebtn-'+index);
+    var sb=document.getElementById('ch-savebtn-'+index), cb=document.getElementById('ch-cancelbtn-'+index);
+    if(v)v.style.display=''; if(e)e.style.display='none';
+    if(eb)eb.style.display='inline-block'; if(rb)rb.style.display='inline-block';
+    if(sb)sb.style.display='none'; if(cb)cb.style.display='none';
+  };
+  window.chSaveEditNew = function(index) {
+    var ta=document.getElementById('ch-textarea-'+index); if(!ta)return;
+    var content=ta.value.trim(); if(!content)return;
+    var sb=document.getElementById('ch-savebtn-'+index);
+    if(sb){sb.textContent='Saving...';sb.disabled=true;}
+    fetch(BACKEND+'/admin/content-drafts/'+index+'/edit',{
+      method:'PUT',headers:{'x-carely-secret':SECRET,'Content-Type':'application/json'},
+      body:JSON.stringify({content:content,actor:'Prabh'})
+    }).then(function(r){return r.json();})
+      .then(function(){
+        var d=CH_ALL_DRAFTS.find(function(x){return x.index===index;});
+        if(d){d.fullContent=content;d.contentSnippet=content.slice(0,120);}
+        var v=document.getElementById('ch-view-'+index);
+        if(v){v.textContent=content;v.style.display='';}
+        window.chCancelEditNew(index);
+        if(sb){sb.textContent='Save';sb.disabled=false;}
+      })
+      .catch(function(){if(sb){sb.textContent='Save';sb.disabled=false;}alert('Save failed');});
+  };
+
+  // Auto-load when navigating to Content Hub
+  var _origNav = window.nav;
+  if (_origNav) {
+    window.nav = function(el, page) {
+      _origNav(el, page);
+      if (page === 'content-hub') window.loadContentHub();
+    };
+  }
+  // Auto-refresh every 30s
+  setInterval(function() {
+    var feed = document.getElementById('ch-feed');
+    if (feed && document.getElementById('page-content-hub') && document.getElementById('page-content-hub').style.display !== 'none') {
+      window.loadContentHub();
+    }
+  }, 30000);
 })();
 </script>
 <script src="hq-intel.js?v=20260527h"></script>
