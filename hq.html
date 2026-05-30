@@ -4764,7 +4764,8 @@ function _chContentCard(draft, platform) {
   if (draft.metadata && (draft.metadata.page || draft.metadata.community || draft.metadata.subreddit)) {
     var metaBadge = document.createElement('span');
     metaBadge.style.cssText = 'font-size:0.7rem;color:var(--g500)';
-    metaBadge.textContent = draft.metadata.subreddit ? 'r/' + draft.metadata.subreddit : (draft.metadata.page || draft.metadata.community);
+    var communityLabel = draft.metadata.subreddit ? 'r/' + draft.metadata.subreddit : (draft.metadata.page || draft.metadata.community);
+    metaBadge.textContent = (draft.metadata.platform ? draft.metadata.platform + ' · ' : '') + communityLabel;
     hdr.appendChild(metaBadge);
   }
   var timeEl = document.createElement('span');
